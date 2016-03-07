@@ -1,0 +1,5 @@
+INPUT = ../src/ ../tests/ ../README.md
+HAVE_DOT = YES
+FILE_PATTERNS = *.cpp *.h
+RECURSIVE = YES
+PROJECT_NAME = FlappyCxx
