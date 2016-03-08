@@ -2,11 +2,12 @@
 #define GTOOLS_H
 
 #include <memory>
+#include <vector>
 
-#ifdef QT_CORE_LIB
-#include <QDebug>
-#define  LOGI(...) qDebug(__VA_ARGS__)
-#define  LOGE(...) qDebug(__VA_ARGS__)
+#ifndef ANDROID_JNI
+#include <cstdio>
+#define  LOGI(...) printf(__VA_ARGS__)
+#define  LOGE(...) printf(__VA_ARGS__)
 #else
 #include <jni.h>
 #include <android/log.h>

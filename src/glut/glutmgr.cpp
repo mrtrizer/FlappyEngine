@@ -11,29 +11,29 @@
 #include <core/gworldmodel.h>
 #include <shapes/gobjcircle.h>
 #include <core/gobjcamera.h>
+#include <core/gworldctrl.h>
 #include <shapes/gobjrect.h>
-#include <world.h>
-#include <ctrl.h>
+#include <gl/glviewfactory.h>
 
 #include "glutmgr.h"
 
 namespace GLUTMgr {
 
 std::shared_ptr<GLWorldView> gWorldView;
-std::shared_ptr<Ctrl> flappyCtrl;
+std::shared_ptr<GWorldCtrl> gWorldCtrl;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
 void render() {
     gWorldView->redrawWorld();
     glutSwapBuffers();
     glutPostRedisplay();
-    flappyCtrl->step(); //only for test
+    gWorldCtrl->step(); //only for test
 }
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
     gWorldView = std::make_shared<GLWorldView>(glViewFactory);
-    flappyCtrl->setView(gWorldView);
+    gWorldCtrl->setView(gWorldView);
     gWorldView->init();
     gWorldView->resize(width, height);
 }
@@ -41,16 +41,16 @@ void resizeWindow(int width, int height) {
 void mouseFunc(int button, int state,
                int x, int y) {
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        flappyCtrl->mouseClick(x,y);
+        gWorldCtrl->mouseClick(x,y);
 }
 
 void passiveMotionFunc(int x, int y) {
-    flappyCtrl->mouseMove(x,y);
+    gWorldCtrl->mouseMove(x,y);
 }
 
-void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory) {
+void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<GWorldCtrl> gWorldCtrl) {
     GLUTMgr::glViewFactory = glViewFactory;
-    flappyCtrl = std::make_shared<Ctrl>();
+    GLUTMgr::gWorldCtrl = gWorldCtrl;
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -58,7 +58,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glutCreateWindow("FlappyCxx");
     glewInit();
 
-    flappyCtrl->init();
+    gWorldCtrl->init();
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

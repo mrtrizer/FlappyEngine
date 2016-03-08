@@ -5,7 +5,7 @@
 #include <memory>
 #include <cmath>
 
-#ifdef QT_CORE_LIB
+#ifndef ANDROID_JNI
 #include <GL/glew.h>
 #else
 #include <GLES2/gl2.h>
