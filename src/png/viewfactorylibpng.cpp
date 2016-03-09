@@ -54,6 +54,13 @@ std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) con
     int width = png_get_image_width(png_ptr, info_ptr);
     int height = png_get_image_height(png_ptr, info_ptr);
 
+    //TODO: I can fix bitmap format after reading
+    if (png_get_rowbytes(png_ptr,info_ptr) / width != 4) {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        fclose(fp);
+        throw wrong_bitmap_format();
+    }
+
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         fclose(fp);
@@ -66,9 +73,6 @@ std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) con
         row_pointers[y] = img_data + png_get_rowbytes(png_ptr,info_ptr) * y;
 
     png_read_image(png_ptr, row_pointers);
-
-    if (png_get_rowbytes(png_ptr,info_ptr) / width < 4)
-        throw wrong_bitmap_format();
 
     //TODO: Use PNG_TRANSFORM_BGR instead maual RGB switching
     for (int i = 0; i < height*png_get_rowbytes(png_ptr,info_ptr) / 4; i++) {
@@ -84,5 +88,6 @@ std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) con
 
     //TODO: Is it a proper cleanup?
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+    fclose(fp);
     return result;
 }
