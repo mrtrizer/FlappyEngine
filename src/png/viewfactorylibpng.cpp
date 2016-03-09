@@ -3,12 +3,15 @@
 #include "viewfactorylibpng.h"
 #include <gl/gltexture.h>
 
+/// @param resPath Path to resource dir
 ViewFactoryLibPNG::ViewFactoryLibPNG(std::string resPath):
     resPath(resPath){
 
 }
 
-/// http://www.libpng.org/pub/png/book/chapter13.html
+// http://www.libpng.org/pub/png/book/chapter13.html
+/// @param path Relative path to image in resource dir without extension.
+/// An image has to be saved with alpha chanel.
 std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) const {
     std::string fullPath = resPath + "/" + path + ".png";
     FILE *fp = fopen(fullPath.data(), "rb");
