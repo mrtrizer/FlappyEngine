@@ -20,8 +20,7 @@ public:
     void step();
     void setView(const GWorldViewP &gWorldView);
     void setWorld(const GWorldModelP & gWorld);
-    inline int getScore() const {return score;}
-    inline int getBestScore() const {return bestScore;}
+    GWorldModelP getCurWorld() { return curWorld; }
 
 protected:
     virtual void procState() = 0;
@@ -30,8 +29,6 @@ private:
     GWorldModelP curWorld;
     GWorldViewP gWorldView;
     std::queue<GContext> events;
-    int score = 0;
-    int bestScore = 0;
 };
 
 #endif // GWORLDCTRL_H
