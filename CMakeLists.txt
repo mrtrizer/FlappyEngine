@@ -10,25 +10,25 @@ find_package(GLUT)
 find_package(PNG)
 find_package(SDL_image)
 
-if (GLEW_FOUND)
+#if (GLEW_FOUND)
     file(GLOB SOURCES_TMP src/gl/*.cpp )
     set(SOURCES ${SOURCES} ${SOURCES_TMP})
-endif()
+#endif()
 
-if (GLUT_FOUND)
+#if (GLUT_FOUND)
     file(GLOB SOURCES_TMP src/glut/*.cpp)
     set(SOURCES ${SOURCES} ${SOURCES_TMP})
-endif()
+#endif()
 
 if (PNG_FOUND)
     file(GLOB SOURCES_TMP src/png/*.cpp)
     set(SOURCES ${SOURCES} ${SOURCES_TMP})
 endif()
 
-if (SDL_IMAGE_FOUND)
+#if (SDL_IMAGE_FOUND)
     file(GLOB SOURCES_TMP src/sdl/*.cpp)
     set(SOURCES ${SOURCES} ${SOURCES_TMP})
-endif()
+#endif()
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
