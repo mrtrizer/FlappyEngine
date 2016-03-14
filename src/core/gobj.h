@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include <functional>
 
 #include "gtools.h"
 #include "gpos.h"
