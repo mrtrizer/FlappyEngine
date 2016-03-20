@@ -23,7 +23,7 @@ public:
     GWorldModelP getCurWorld() { return curWorld; }
 
 protected:
-    virtual void procState() = 0;
+    virtual void procState(){}
 
 private:
     GWorldModelP curWorld;
