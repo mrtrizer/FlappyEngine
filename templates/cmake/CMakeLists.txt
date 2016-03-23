@@ -8,7 +8,7 @@ add_definitions("-std=c++1y")
 include_directories("./src/" "../../src/")
 add_subdirectory(../../<?engine?> engine)
 
-file(GLOB SOURCES src/*.cpp ../../src/*.cpp)
+file(GLOB SOURCES src/*.cpp ../../src/*.cpp ./*.cpp)
 
 set(EXECUTABLE_NAME <?cmake.exec_name?>)
 
