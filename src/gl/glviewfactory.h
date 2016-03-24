@@ -1,8 +1,9 @@
 #ifndef GLVIEWFACTORY_H
 #define GLVIEWFACTORY_H
 
-#include "core/gviewfactory.h"
 #include <map>
+
+#include <core/gviewfactory.h>
 
 /// @brief GLView factory creates views working with OpenGL.
 /// @details A method for texture loading getGLTexture() has to be implemented

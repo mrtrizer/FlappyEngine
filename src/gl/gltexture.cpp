@@ -1,7 +1,8 @@
 #include <cstring>
 
+#include <core/gtools.h>
+
 #include "gltexture.h"
-#include "core/gtools.h"
 
 GLTexture::GLTexture(const char *bits, int width, int height):
     uvs({{0,1},{0,0},{1,1},{1,0}})

@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "core/gworldview.h"
+#include <core/gworldview.h>
 
 class GLViewFactory;
 

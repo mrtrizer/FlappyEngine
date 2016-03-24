@@ -1,5 +1,6 @@
+#include <core/gpresenter.h>
+
 #include "glviewsprite.h"
-#include "core/gpresenter.h"
 
 static const char spriteVShader[] =
     "attribute vec2 aPosition;\n"

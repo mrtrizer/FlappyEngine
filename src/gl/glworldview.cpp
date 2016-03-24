@@ -5,10 +5,11 @@
 #include <fstream>
 #include <sstream>
 
+#include <core/gworldmodel.h>
+#include <core/gview.h>
+#include <core/gpresenter.h>
+
 #include "glshaderprogram.h"
-#include "core/gworldmodel.h"
-#include "core/gview.h"
-#include "core/gpresenter.h"
 #include "glshaderprogram.h"
 #include "gltools.h"
 #include "glattribarray.h"

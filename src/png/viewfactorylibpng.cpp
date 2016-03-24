@@ -1,7 +1,8 @@
 #include <png.h>
 
-#include "viewfactorylibpng.h"
 #include <gl/gltexture.h>
+
+#include "viewfactorylibpng.h"
 
 /// @param resPath Path to resource dir
 ViewFactoryLibPNG::ViewFactoryLibPNG(std::string resPath):
