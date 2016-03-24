@@ -1,16 +1,21 @@
 #!/usr/bin/python
 import re
 import os
+import sys
 import json
 
-FROM = "templates/cmake/"
-TO = "../projects/cmake/"
-CONFIG = "../"
+assert(len(sys.argv) == 3)
+engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))
+templateDir = os.path.join(engineDir,"templates",sys.argv[2])
+projectDir = os.path.join(os.path.realpath(os.getcwd()),"projects",sys.argv[2])
+configPath = os.path.realpath(sys.argv[1])
 
-configPath = os.path.join(CONFIG,"config.json")
+print("Template: " + templateDir)
+print("Target: " + projectDir)
+print("Config: " + configPath)
+
 jsonFile = open(configPath,'r')
 config = json.load(jsonFile)
-print(config)
 
 def replace(base, config, inData):
     outData = inData;
@@ -18,29 +23,19 @@ def replace(base, config, inData):
         if (isinstance(config[key],dict)):
             outData = replace(key + ".", config[key], outData)
         else:
-            print(r"<?" + base + key + r"?>" + " : " + config[key])
             outData = re.sub("<\?" + base + r""+ key + "\?>",config[key],outData)
     return outData
 
 
-for path, dirs, files in os.walk(FROM):
+for path, dirs, files in os.walk(templateDir):
     for filename in files:
         inPath = os.path.join(path, filename)
-        outPath = os.path.join(TO, filename)
+        outPath = os.path.join(projectDir, filename)
         outDir = os.path.dirname(outPath);
-        print("inPath: " + inPath + " outPath: " + outPath)
         with open(inPath, 'r') as f:
             inData = f.read();
             outData = replace("",config,inData)
-            #print(outData)
-            #outData = re.findall(r"<\?.*?\?>",inData)
-            #print(outData)
             if not os.path.exists(outDir):
                 os.makedirs(outDir)
             out = open(outPath, 'w')
             out.write(outData);
-        #     data = re.sub(r'(\s*function\s+.*\s*{\s*)',
-        #         r'\1echo "The function starts here."',
-        #         f.read())
-        # with open(fullpath, 'w') as f:
-        #     f.write(data)
