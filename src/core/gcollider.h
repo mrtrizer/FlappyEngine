@@ -14,6 +14,11 @@ public:
         GObj(pos)
     {}
     virtual ~GCollider(){}
+    bool isIntersectWith(const GObjP & gObj) const override {
+        return isIntersect(*this, *gObj);
+    }
+private:
+    static bool isIntersect(const GObj &, const GObj &);
 };
 
 class GColliderCircle: public GCollider {

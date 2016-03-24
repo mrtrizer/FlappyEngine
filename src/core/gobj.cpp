@@ -27,7 +27,7 @@ GObj::GObjPList GObj::findIntersectObjs() {
 }
 
 bool GObj::isIntersectWith(const GObjP & gObj) const {
-    return GTools::isIntersect(*this, *gObj);
+    return false;
 }
 
 /// Returns cached position, or calls getAPosRecursive if need
