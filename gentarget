@@ -1,0 +1,44 @@
+#!/usr/bin/python
+import os
+import sys
+import json
+
+import tools
+
+if (len(sys.argv) < 2):
+    print(
+    "FlappyEngine target project generator.\n"
+    "Script creates project for target platform, "
+    "using configuration from config.json\n\n"
+    "Use format:\n"
+    "\tgentarget <platform>\n\n"
+    "For example:\n"
+    "\tgentarget cmake\n")
+    exit(1)
+engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))
+templateDir = os.path.join(engineDir,"templates/targets",sys.argv[1])
+if (not os.path.isdir(templateDir)):
+    print("Target is not supported: " + sys.argv[1])
+    exit(2)
+projectDir = os.path.realpath(os.path.join("projects",sys.argv[1]))
+configPath = os.path.realpath("config.json")
+
+print("Template: " + templateDir)
+print("Target: " + projectDir)
+print("Config: " + configPath)
+
+jsonFile = open(configPath,'r')
+config = json.load(jsonFile)
+
+for path, dirs, files in os.walk(templateDir):
+    for filename in files:
+        inPath = os.path.join(path, filename)
+        outPath = os.path.join(projectDir, filename)
+        outDir = os.path.dirname(outPath)
+        with open(inPath, 'r') as f:
+            inData = f.read()
+            outData = tools.replace("",config,inData)
+            if not os.path.exists(outDir):
+                os.makedirs(outDir)
+            out = open(outPath, 'w')
+            out.write(outData);

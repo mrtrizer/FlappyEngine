@@ -1,0 +1,10 @@
+{
+	"name":"<?name?>",
+	"engine":"./engine/",
+	"src":"./src/",
+	"doc":"./doc/",
+	"res":"./res/",
+	"cmake": {
+		"exec_name":"probuild"
+	}
+}

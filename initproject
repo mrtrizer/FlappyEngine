@@ -1,0 +1,44 @@
+#!/usr/bin/python
+import re
+import os
+import sys
+import json
+
+import tools
+
+if (len(sys.argv) < 2):
+    print(
+    "FlappyEngine project generator.\n"
+    "Script creates base project in current dirrectory.\n"
+    "Project cotains config.json, src and res folders,\n"
+    "using given parameters.\n\n"
+    "Use format:\n"
+    "\tinitproject <name>\n\n"
+    "For example:\n"
+    "\tinitproject MyProject\n")
+    exit(1)
+
+if (os.path.exists("config.json")):
+    print("Project was initialized earlier.\n"
+    "Remove config.json to initialize it again.")
+    exit(2)
+
+engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))
+templateDir = os.path.join(engineDir,"templates/project")
+projectDir = "."
+projectName = sys.argv[1]
+config = {"name":projectName}
+
+for path, dirs, files in os.walk(templateDir):
+    for filename in files:
+        relPath = os.path.relpath(path,templateDir)
+        inPath = os.path.join(path, filename)
+        outPath = os.path.join(projectDir, relPath, filename)
+        outDir = os.path.dirname(outPath)
+        with open(inPath, 'r') as f:
+            inData = f.read()
+            outData = tools.replace("",config,inData)
+            if not os.path.exists(outDir):
+                os.makedirs(outDir)
+            out = open(outPath, 'w')
+            out.write(outData);
