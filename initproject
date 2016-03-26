@@ -24,21 +24,9 @@ if (os.path.exists("config.json")):
     exit(2)
 
 engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))
-templateDir = os.path.join(engineDir,"templates/project")
+templateDir = os.path.join(engineDir, "templates/project")
 projectDir = "."
 projectName = sys.argv[1]
-config = {"name":projectName}
+config = {"name": projectName}
 
-for path, dirs, files in os.walk(templateDir):
-    for filename in files:
-        relPath = os.path.relpath(path,templateDir)
-        inPath = os.path.join(path, filename)
-        outPath = os.path.join(projectDir, relPath, filename)
-        outDir = os.path.dirname(outPath)
-        with open(inPath, 'r') as f:
-            inData = f.read()
-            outData = tools.replace("",config,inData)
-            if not os.path.exists(outDir):
-                os.makedirs(outDir)
-            out = open(outPath, 'w')
-            out.write(outData);
+tools.replaceAll(templateDir, projectDir, config)
