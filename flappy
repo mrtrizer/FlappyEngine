@@ -1,0 +1,12 @@
+#!/usr/bin/python
+import os
+import sys
+import json
+
+import tools
+
+print tools.findProRoot(".")
+print tools.getToolPath(sys.argv[0])
+print tools.printHelp(sys.argv[0], "gentarget")
+
+importlib.import_module('gentarget')

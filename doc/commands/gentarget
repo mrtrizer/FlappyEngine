@@ -1,0 +1,11 @@
+FlappyEngine target project generator.
+Script creates project for target platform,
+using configuration from config.json
+Use format:
+Using:
+
+  flappy gentarget <target>
+
+For example:
+
+  flappy gentarget cmake

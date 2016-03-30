@@ -6,14 +6,7 @@ import json
 import tools
 
 if (len(sys.argv) < 2):
-    print(
-    "FlappyEngine target project generator.\n"
-    "Script creates project for target platform, "
-    "using configuration from config.json\n\n"
-    "Use format:\n"
-    "\tgentarget <platform>\n\n"
-    "For example:\n"
-    "\tgentarget cmake\n")
+    print tools.printHelp(sys.argv[0], "gentarget")
     exit(1)
 engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))
 templateDir = os.path.join(engineDir, "templates/targets", sys.argv[1])

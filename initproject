@@ -8,19 +8,20 @@ import tools
 
 if (len(sys.argv) < 2):
     print(
-    "FlappyEngine project generator.\n"
-    "Script creates base project in current dirrectory.\n"
-    "Project cotains config.json, src and res folders,\n"
-    "using given parameters.\n\n"
-    "Use format:\n"
-    "\tinitproject <name>\n\n"
-    "For example:\n"
-    "\tinitproject MyProject\n")
+        "FlappyEngine project generator.\n"
+        "Script creates base project in current dirrectory.\n"
+        "Project cotains config.json, src and res folders,\n"
+        "using given parameters.\n\n"
+        "Use format:\n"
+        "\tinitproject <name>\n\n"
+        "For example:\n"
+        "\tinitproject MyProject\n")
     exit(1)
 
 if (os.path.exists("config.json")):
-    print("Project was initialized earlier.\n"
-    "Remove config.json to initialize it again.")
+    print(
+        "Project was initialized earlier.\n"
+        "Remove config.json to initialize it again.")
     exit(2)
 
 engineDir = os.path.dirname(os.path.realpath(sys.argv[0]))

@@ -1,0 +1,11 @@
+FlappyEngine project generator.
+Script creates base project in current dirrectory.
+Project cotains config.json, src and res folders,
+using given parameters.
+Using:
+
+  flappy init <name>
+
+For example:
+
+  flappy init MyProject

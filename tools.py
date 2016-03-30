@@ -20,7 +20,9 @@ def replace(base, config, inData):
         if (isinstance(config[key], dict)):
             outData = replace(key + ".", config[key], outData)
         else:
-            outData = re.sub("<\?" + base + r"" + key + "\?>", config[key], outData)
+            outData = re.sub("<\?" + base + r"" + key + "\?>",
+                             config[key],
+                             outData)
     return outData
 
 
@@ -42,3 +44,35 @@ def replaceAll(templateDir, targetDir, config):
                     os.makedirs(outDir)
                 out = open(outPath, 'w')
                 out.write(outData)
+
+
+def copyAll(sourceDir, targetDir):
+    for path, dirs, files in os.walk(sourceDir):
+        print "Path: " + os.path.relpath(path)
+        for fileName in files:
+            print (tools.bcolors.OKGREEN + " [COPY] " +
+                   tools.bcolors.ENDC + fileName)
+            shutil.copy(os.path.join(path, fileName), targetDir)
+
+
+def printHelp(path, name):
+    """Prints help doc from doc/commands"""
+    return open(os.path.join(getToolPath(path),
+                             "doc/commands",
+                             name),
+                'r').read()
+
+
+def findProRoot(path):
+    """Searches a project root with config.json. Returns None if can't find."""
+    proRootPath = os.path.realpath(path)
+    while (proRootPath != "/"):
+        if (os.path.exists(os.path.join(proRootPath, "config.json"))):
+            return proRootPath
+        proRootPath = os.path.realpath(os.path.join(proRootPath, ".."))
+    return None
+
+
+def getToolPath(path):
+    """Returns path to FlappyTools"""
+    return os.path.dirname(os.path.realpath(path))

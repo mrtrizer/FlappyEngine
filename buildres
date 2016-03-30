@@ -19,13 +19,9 @@ if not os.path.exists(outSrcDir):
 resDirs = [engineResDir, "res/"]
 
 print "Resource processing..."
-
 for resDir in resDirs:
-    for path, dirs, files in os.walk(resDir):
-        print "Path: " + os.path.relpath(path)
-        for fileName in files:
-            print tools.bcolors.OKGREEN + " [COPY] " + tools.bcolors.ENDC + fileName
-            shutil.copy(os.path.join(path, fileName), outResDir)
+    tools.copyAll(resDir, outResDir)
+
 print "Config generation..."
 config = {"revision": os.popen("git describe --always").read().strip()}
 tools.replaceAll(templateConfigDir, outSrcDir, config)

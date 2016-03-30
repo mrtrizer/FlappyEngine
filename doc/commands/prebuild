@@ -1,0 +1,8 @@
+Prebuilds project resources and generates config sources.
+Using:
+
+  flappy prebuild <target>
+
+For example:
+
+  flappy prebuild cmake
