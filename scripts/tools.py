@@ -68,4 +68,4 @@ def findProRoot(path):
 
 def getToolPath(path):
     """Returns path to FlappyTools"""
-    return os.path.dirname(os.path.realpath(path))
+    return os.path.join(os.path.dirname(os.path.realpath(path)), "..")

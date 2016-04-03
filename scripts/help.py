@@ -11,9 +11,7 @@ def run(argv, projectDir, engineDir):
     """Prints help doc from doc/commands"""
     text = open(os.path.join(engineDir,
                              "doc/commands",
-                             argv[1] + ".dox"),
+                             argv[1] + ".md"),
                 'r').read()
-    text = re.findall("/\*!((.|\n)*)\*/", text)[0][0]
-    text = re.sub("@.*", "", text)
-    text = re.sub("^\s*\n", "", text)
+    text = re.sub("^.*\n\=*", "", text)
     print text
