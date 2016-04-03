@@ -1,11 +1,13 @@
+flappy init {#init}
+=========
 FlappyEngine project generator.
 Script creates base project in current dirrectory.
 Project cotains config.json, src and res folders,
 using given parameters.
-Using:
+Usage:
 
-  flappy init <name>
+    flappy init <name>
 
-For example:
+Example:
 
-  flappy init MyProject
+    flappy init MyProject

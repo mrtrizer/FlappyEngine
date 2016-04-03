@@ -1,0 +1,11 @@
+#!/usr/bin/python
+import os
+import sys
+import json
+import importlib
+
+import tools
+
+importlib.import_module(sys.argv[1]).run(sys.argv[1:],
+                                         tools.findProRoot("."),
+                                         tools.getToolPath(sys.argv[0]))

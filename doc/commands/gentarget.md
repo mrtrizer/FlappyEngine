@@ -1,11 +1,12 @@
+flappy gentarget {#gentarget}
+=========
 FlappyEngine target project generator.
 Script creates project for target platform,
 using configuration from config.json
-Use format:
-Using:
+Usage:
 
-  flappy gentarget <target>
+    flappy gentarget <target>
 
-For example:
+Example:
 
-  flappy gentarget cmake
+    flappy gentarget cmake

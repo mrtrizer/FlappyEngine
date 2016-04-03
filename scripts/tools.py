@@ -1,6 +1,7 @@
 import re
 import os
 import json
+import shutil
 
 
 class bcolors:
@@ -50,17 +51,9 @@ def copyAll(sourceDir, targetDir):
     for path, dirs, files in os.walk(sourceDir):
         print "Path: " + os.path.relpath(path)
         for fileName in files:
-            print (tools.bcolors.OKGREEN + " [COPY] " +
-                   tools.bcolors.ENDC + fileName)
+            print (bcolors.OKGREEN + " [COPY] " +
+                   bcolors.ENDC + fileName)
             shutil.copy(os.path.join(path, fileName), targetDir)
-
-
-def printHelp(path, name):
-    """Prints help doc from doc/commands"""
-    return open(os.path.join(getToolPath(path),
-                             "doc/commands",
-                             name),
-                'r').read()
 
 
 def findProRoot(path):
