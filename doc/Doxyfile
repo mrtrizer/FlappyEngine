@@ -1,8 +1,0 @@
-INPUT = ../src/ ../tests/ ../README.md ./commands/
-OUTPUT_DIRECTORY = ./build/
-HAVE_DOT = YES
-FILE_PATTERNS = *.cpp *.h *.md
-RECURSIVE = YES
-EXTRACT_ALL = YES
-GENERATE_MAN = YES
-PROJECT_NAME = FlappyCxx
