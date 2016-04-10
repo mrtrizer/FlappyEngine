@@ -16,6 +16,7 @@ HEADERS += \
     $$PWD/core/gpresenter.h \
     $$PWD/core/gworldview.h \
     $$PWD/core/ganimation.h \
+    $$PWD/core/gworldctrl.h \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
@@ -24,7 +25,9 @@ HEADERS += \
     $$PWD/gl/glworldview.h \
     $$PWD/gl/glviewshape.h \
     $$PWD/gl/glviewsprite.h \
-    $$PWD/gl/glview.h
+    $$PWD/gl/glview.h \
+    $$PWD/glut/glutmgr.h \
+    $$PWD/qt/viewfactoryqt.h
 
 
 SOURCES += \
@@ -38,6 +41,7 @@ SOURCES += \
     $$PWD/core/gworldview.cpp \
     $$PWD/core/ganimation.cpp \
     $$PWD/core/gview.cpp \
+    $$PWD/core/gworldctrl.cpp \
     $$PWD/gl/gltools.cpp \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \
@@ -45,6 +49,8 @@ SOURCES += \
     $$PWD/gl/glviewfactory.cpp \
     $$PWD/gl/glworldview.cpp \
     $$PWD/gl/glviewshape.cpp \
-    $$PWD/gl/glviewsprite.cpp
+    $$PWD/gl/glviewsprite.cpp \
+    $$PWD/glut/glutmgr.cpp \
+    $$PWD/qt/viewfactoryqt.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
