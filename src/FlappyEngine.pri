@@ -17,6 +17,7 @@ HEADERS += \
     $$PWD/core/gworldview.h \
     $$PWD/core/ganimation.h \
     $$PWD/core/gworldctrl.h \
+    $$PWD/core/vector2d.h \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
@@ -42,6 +43,7 @@ SOURCES += \
     $$PWD/core/ganimation.cpp \
     $$PWD/core/gview.cpp \
     $$PWD/core/gworldctrl.cpp \
+    $$PWD/core/vector2d.cpp \
     $$PWD/gl/gltools.cpp \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \

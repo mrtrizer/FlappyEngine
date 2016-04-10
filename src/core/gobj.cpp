@@ -26,7 +26,7 @@ GObj::GObjPList GObj::findIntersectObjs() {
     return findIntersectObjs([](const GObjP &){return true;});
 }
 
-bool GObj::isIntersectWith(const GObjP & gObj) const {
+bool GObj::isIntersectWith(const GObjP &) const {
     return false;
 }
 
