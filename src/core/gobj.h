@@ -79,6 +79,5 @@ private:
 };
 
 #define ADD_CHILD(type,...)addChild<type>(std::make_shared<type>(__VA_ARGS__))
-#define POS(x,y,z)(GPos({x,y,z}))
 
 #endif // GOBJ_H

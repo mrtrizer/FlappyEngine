@@ -9,7 +9,7 @@ class GPos {
 public:
     typedef std::vector<float> MvMatrix;
 
-    GPos(float x, float y, float z):
+    GPos(float x, float y, float z = 0):
         x(x),y(y),z(z){}
     virtual const GPos & operator* (const GPos & pos);
     virtual void move(const GPos &);
@@ -20,6 +20,10 @@ public:
     inline float getX() const {return this->x;}
     inline float getY() const {return this->y;}
     inline float getZ() const {return this->z;}
+    GPos operator+(const GPos &) const;
+    GPos & operator+=(const GPos & right);
+    GPos operator-();
+    GPos operator*(const float & right);
 
 private:
     float x;
