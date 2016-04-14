@@ -18,7 +18,6 @@ protected:
     virtual void init() override;
 
 private:
-    std::shared_ptr<GAnimation> sprite;
     std::shared_ptr<GPresenterRect> rect;
 };
 
