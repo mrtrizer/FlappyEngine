@@ -1,0 +1,12 @@
+{
+	"name":"GLShapes",
+	"engine":"../../",
+	"exclude":[],
+	"inc_dirs":[],
+	"cmake": {
+		"exec_name":"GLShapes"
+	},
+	"android": {
+		"id":"glshapes"
+	}
+}
