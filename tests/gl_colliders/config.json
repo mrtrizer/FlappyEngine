@@ -1,12 +1,12 @@
 {
-	"name":"FlappyEngine_gl_shapes",
+	"name":"FlappyEngine_colliders",
 	"engine":"../../",
 	"exclude":[],
 	"inc_dirs":[],
 	"cmake": {
-		"exec_name":"GLShapes"
+		"exec_name":"FEColliders"
 	},
 	"android": {
-		"id":"glshapes"
+		"id":"fecolliders"
 	}
 }
