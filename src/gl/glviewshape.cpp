@@ -10,7 +10,9 @@ static const char shapeVShader[] =
     "}\n";
 
 static const char shapeFShader[] =
+#ifdef GL_ES
     "precision mediump float;\n"
+#endif
     "uniform vec4 uColor;\n"
     "void main() {\n"
     "   gl_FragColor = uColor;\n"

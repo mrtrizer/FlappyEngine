@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <gl/gltools.h> //glew has to be included before glut
+
 #define GLUT_NOT_SUPPORTED "GLUT is not supported on target platform"
 
 #if defined(_WIN32)
@@ -19,7 +21,7 @@
   #endif
 #elif defined(ANDROID_JNI)
   #error GLUT_NOT_SUPPORTED
-#elif defined(_POSIX_VERSION) //all posix
+#elif defined(__unix__)
   #include <GL/glut.h>
 #endif
 
@@ -72,7 +74,9 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
     glutInitWindowSize(400, 600);
     glutCreateWindow("FlappyCxx");
-    //glewInit();
+#ifdef __GLEW_H__
+    glewInit();
+#endif
 
     gWorldCtrl->init();
 

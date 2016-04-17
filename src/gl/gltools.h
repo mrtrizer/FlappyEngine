@@ -22,7 +22,7 @@
 #elif defined(ANDROID_JNI)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
-#elif defined(_POSIX_VERSION) //all posix
+#elif defined(__unix__)
   #include <GL/glew.h>
 #endif
 
