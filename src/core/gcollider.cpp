@@ -35,44 +35,27 @@ bool isIntersect(const GColliderRect &, const GColliderRect &, const GObj &, con
     return false;
 }
 
-/// Done used as exception object when found
-/// appropriate intersection method and contains
-/// intersect checking result.
-/// @see check()
-class Done {
-public:
-    Done(bool result): result(result){}
-    inline bool getResult() const {return result;}
-private:
-    bool result;
-};
-
 /// Template function is used for calling of appropriate
 /// collision checking method.
 /// @see isIntersect()
 template <typename GColliderT1, typename GColliderT2>
-static void check(const GObj &gObj1, const GObj &gObj2) {
-    try { //is it valid cast?
-    auto gColliderT1 = dynamic_cast<const GColliderT1 &>(gObj1);
-    auto gColliderT2 = dynamic_cast<const GColliderT2 &>(gObj2);
-    throw Done(isIntersect(gColliderT1, gColliderT2, gObj1, gObj2)); //allright, return checking result
-    } catch (std::bad_cast &) { //if bad cast, try to reverse and over
-        try {
-        auto gColliderT1 = dynamic_cast<const GColliderT2 &>(gObj1);
-        auto gColliderT2 = dynamic_cast<const GColliderT1 &>(gObj2);
-        throw Done(isIntersect(gColliderT1, gColliderT2, gObj2, gObj1)); //allright, return checking result
-        } catch (std::bad_cast &) {} //we can't cast, ignore checking
-    }
+static bool check(const GObj &gObj1, const GObj &gObj2) {
+    auto gColliderT1 = dynamic_cast<const GColliderT1 *>(&gObj1);
+    auto gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj2);
+    if ((gColliderT1 != nullptr) && (gColliderT2 != nullptr))
+        return isIntersect(*gColliderT1, *gColliderT2, gObj1, gObj2); //allright, return checking result
+    gColliderT1 = dynamic_cast<const GColliderT1 *>(&gObj2);
+    gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj1);
+    if ((gColliderT1 != nullptr) && (gColliderT2 != nullptr))
+        return isIntersect(*gColliderT1, *gColliderT2, gObj2, gObj1); //allright, return checking result
+    return false;
 }
 
 bool GCollider::isIntersect(const GObj &gObj1, const GObj &gObj2) {
-    try { //if checking done, catch Done exception
-        check<GColliderRect, GColliderCircle>(gObj1, gObj2);
-        check<GColliderCircle, GColliderCircle>(gObj1, gObj2);
-        check<GColliderRect, GColliderRect>(gObj1, gObj2);
-    } catch (Done & done) {
-        return done.getResult();
-    }
-    return false;
+    bool result = false;
+    result |= check<GColliderRect, GColliderCircle>(gObj1, gObj2);
+    result |=check<GColliderCircle, GColliderCircle>(gObj1, gObj2);
+    result |=check<GColliderRect, GColliderRect>(gObj1, gObj2);
+    return result;
 }
 
