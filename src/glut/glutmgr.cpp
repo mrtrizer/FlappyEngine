@@ -4,8 +4,24 @@
 #include <fstream>
 #include <sstream>
 
-#include <GL/glew.h>
-#include <GL/glut.h>
+#define GLUT_NOT_SUPPORTED "GLUT is not supported on target platform"
+
+#if defined(_WIN32)
+  #error GLUT_NOT_SUPPORTED
+#elif defined(__APPLE__)
+  #include "TargetConditionals.h"
+  #if TARGET_OS_IPHONE == 1
+    #error GLUT_NOT_SUPPORTED
+  #elif TARGET_OS_MAC == 1
+    #include <GLUT/glut.h>
+  #else
+    #error GLUT_NOT_SUPPORTED
+  #endif
+#elif defined(ANDROID_JNI)
+  #error GLUT_NOT_SUPPORTED
+#elif defined(_POSIX_VERSION) //all posix
+  #include <GL/glut.h>
+#endif
 
 #include <gl/glworldview.h>
 #include <core/gworldmodel.h>
@@ -56,7 +72,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
     glutInitWindowSize(400, 600);
     glutCreateWindow("FlappyCxx");
-    glewInit();
+    //glewInit();
 
     gWorldCtrl->init();
 

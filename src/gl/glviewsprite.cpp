@@ -14,7 +14,9 @@ static const char spriteVShader[] =
     "}\n";
 
 static const char spriteFShader[] =
+#ifdef GL_ES
     "precision mediump float;\n"
+#endif
     "uniform sampler2D uTex;\n"
     "uniform vec4 uColor;\n"
     "varying vec2 vTexCoord;\n"
@@ -71,5 +73,3 @@ void GLViewSprite::update(const GPresenter & presenter){
             {relX + newRelWidth,relY}});
     rect.getVBO(1).writeData(uvs.data(),uvs.size() * sizeof(GLTexture::UV));
 }
-
-

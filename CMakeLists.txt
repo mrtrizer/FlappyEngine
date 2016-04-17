@@ -10,6 +10,7 @@ find_package(GLUT)
 find_package(PNG)
 find_package(SDL_image)
 
+
 if (GLEW_FOUND)
     file(GLOB SOURCES_TMP src/gl/*.cpp )
     set(SOURCES ${SOURCES} ${SOURCES_TMP})
@@ -31,6 +32,11 @@ if (SDL_IMAGE_FOUND)
 endif()
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
+
+find_package(OpenGL)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
 if (GLEW_FOUND)
     target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
