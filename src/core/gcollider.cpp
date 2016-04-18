@@ -41,13 +41,17 @@ bool isIntersect(const GColliderRect &, const GColliderRect &, const GObj &, con
 template <typename GColliderT1, typename GColliderT2>
 static bool check(const GObj &gObj1, const GObj &gObj2) {
     auto gColliderT1 = dynamic_cast<const GColliderT1 *>(&gObj1);
-    auto gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj2);
-    if ((gColliderT1 != nullptr) && (gColliderT2 != nullptr))
-        return isIntersect(*gColliderT1, *gColliderT2, gObj1, gObj2); //allright, return checking result
+    if (gColliderT1 != nullptr) {
+        auto gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj2);
+        if (gColliderT2 != nullptr)
+            return isIntersect(*gColliderT1, *gColliderT2, gObj1, gObj2);
+    }
     gColliderT1 = dynamic_cast<const GColliderT1 *>(&gObj2);
-    gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj1);
-    if ((gColliderT1 != nullptr) && (gColliderT2 != nullptr))
-        return isIntersect(*gColliderT1, *gColliderT2, gObj2, gObj1); //allright, return checking result
+    if (gColliderT1 != nullptr) {
+        auto gColliderT2 = dynamic_cast<const GColliderT2 *>(&gObj1);
+        if (gColliderT2 != nullptr)
+            return isIntersect(*gColliderT1, *gColliderT2, gObj2, gObj1);
+    }
     return false;
 }
 
