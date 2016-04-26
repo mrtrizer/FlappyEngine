@@ -10,7 +10,7 @@ static const char shapeVShader[] =
     "}\n";
 
 static const char shapeFShader[] =
-#ifdef GL_ES
+#if defined(GL_ES) || defined(EMSCRIPTEN)
     "precision mediump float;\n"
 #endif
     "uniform vec4 uColor;\n"
