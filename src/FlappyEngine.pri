@@ -28,7 +28,13 @@ HEADERS += \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
     $$PWD/glut/glutmgr.h \
-    $$PWD/qt/viewfactoryqt.h
+    $$PWD/qt/viewfactoryqt.h \
+    $$PWD/entityx/Entity.h \
+    $$PWD/entityx/Event.h \
+    $$PWD/entityx/System.h \
+    $$PWD/entityx/config.h \
+    $$PWD/entityx/entityx.h \
+    $$PWD/entityx/quick.h
 
 
 SOURCES += \
@@ -53,6 +59,9 @@ SOURCES += \
     $$PWD/gl/glviewshape.cpp \
     $$PWD/gl/glviewsprite.cpp \
     $$PWD/glut/glutmgr.cpp \
-    $$PWD/qt/viewfactoryqt.cpp
+    $$PWD/qt/viewfactoryqt.cpp \
+    $$PWD/entityx/Entity.cc \
+    $$PWD/entityx/Event.cc \
+    $$PWD/entityx/System.cc
 
 LIBS += -lGL -lglut -lGLEW -lGLU
