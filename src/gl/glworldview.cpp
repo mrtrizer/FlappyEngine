@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-#include <core/gworldmodel.h>
 #include <core/gview.h>
 #include <core/gpresenter.h>
 
@@ -37,14 +36,14 @@ void GLWorldView::redraw(GPresenterList &presenterList, GTools::PMatrix &pMatrix
     CHECK_GL_ERROR;
 
     //sort presenters by z (I use z value defined once on object creation)
-    presenterList.sort([](const GObj::GObjP & first, const GObj::GObjP & second) {
-        return first->getStaticZ() < second->getStaticZ();
+        presenterList.sort([](const Visual & first, const Visual & second) {
+        return first.pos.getZ() < second.pos.getZ();
     });
 
     //and draw presenters one by one appying move matrices
     for (auto presenter: presenterList) {
-        auto mvMatrix = presenter->getAPos().getMvMatrix();
-        presenter->getGView(*factory)->redraw(pMatrix.data(), mvMatrix.data());
+        auto mvMatrix = presenter.pos.getMvMatrix();
+        presenter.presenter->getGView(*factory)->redraw(pMatrix.data(), mvMatrix.data());
     }
 
 }

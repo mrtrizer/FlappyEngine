@@ -13,7 +13,7 @@ public:
         GColliderCircle(r,pos)
     {}
     void init() {
-        ADD_CHILD(Presenter,getR() * 2,getR() * 2,GPos(-getR(),-getR(),0));
+        //ADD_CHILD(Presenter,getR() * 2,getR() * 2,GPos(-getR(),-getR(),0));
     }
 };
 
@@ -21,7 +21,7 @@ template<>
 class GObjCircle<GPresenterCircle>: public GColliderCircle {
 public:
     void init() {
-        ADD_CHILD(GPresenterCircle,getR(),GPos(0,0,0));
+        //ADD_CHILD(GPresenterCircle,getR(),GPos(0,0,0));
     }
 };
 
@@ -33,7 +33,7 @@ public:
         name(name)
     {}
     void init() {
-        ADD_CHILD(GPresenterSprite, name, getR() * 2, getR() * 2,GPos(-getR(),-getR(),0));
+        //ADD_CHILD(GPresenterSprite, name, getR() * 2, getR() * 2,GPos(-getR(),-getR(),0));
     }
 private:
     std::string name;

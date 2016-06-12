@@ -2,6 +2,7 @@
 #define GWORLDVIEW_H
 
 #include <memory>
+#include <entityx/entityx.h>
 
 #include "gviewfactory.h"
 #include "gobjcamera.h"
@@ -11,14 +12,19 @@ class GViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class GWorldView {
+class GWorldView: public entityx::System<GWorldView> {
 public:
     typedef std::shared_ptr<GWorldModel> GWorldModelP;
-    typedef std::list<std::shared_ptr<GPresenter>> GPresenterList;
+    struct Visual {
+        std::shared_ptr<GPresenter> presenter;
+        GPos pos;
+    };
+
+    typedef std::list<Visual> GPresenterList;
 
     virtual ~GWorldView();
     void setGWorldModel(GWorldModelP gWorldModel);
-    void redrawWorld();
+    void update(entityx::EntityManager &es, entityx::EventManager &events, entityx::TimeDelta dt) override;
     void resize(int width, int height);
     virtual void init() = 0;
     void updateSize();
@@ -29,6 +35,7 @@ protected:
 private:
     int width = 1;
     int height = 1;
+    bool updateSizeFlag = true;
     GWorldModelP gWorld;
 
     GWorldModelP getGWorld() { return gWorld; }

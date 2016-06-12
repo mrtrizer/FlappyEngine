@@ -1,16 +1,6 @@
 #include "gworldview.h"
-#include "gworldmodel.h"
 
 GWorldView::~GWorldView(){
-    //clean presenters
-    auto objects = getGWorld()->getRoot()->findChilds();
-    for (std::shared_ptr<GObj> gObj: objects) {
-        //If it's a visible object
-        auto presenter = std::dynamic_pointer_cast<GPresenter>(gObj);
-        if (presenter == nullptr)
-            continue;
-        presenter->cleanGView();
-    }
 }
 
 void GWorldView::setGWorldModel(GWorldModelP gWorldModel) {
@@ -18,21 +8,34 @@ void GWorldView::setGWorldModel(GWorldModelP gWorldModel) {
     updateSize();
 }
 
-void GWorldView::redrawWorld() {
-    if (getGWorld() == nullptr)
+void GWorldView::update(entityx::EntityManager &es, entityx::EventManager &events, entityx::TimeDelta dt) {
+
+    GObjCamera* camera = nullptr;
+
+    es.each<GObjCamera>([&camera, this](entityx::Entity entity, GObjCamera &curCamera){
+        camera = &curCamera;
+        if (updateSizeFlag) {
+            updateSizeFlag = false;
+            camera->resize(width, height);
+        }
+    });
+
+    if (camera == nullptr)
         return;
 
     //Calc projection matrix, using GObjCamera
-    auto pMatrix = getGWorld()->getActiveCamera()->getPMatrix();
+    auto pMatrix = camera->getPMatrix();
 
-    std::list<std::shared_ptr<GPresenter>> presenters;
+    GPresenterList presenters;
 
-    getGWorld()->getRoot()->findChilds([&presenters](const GObj::GObjP & i) {
-        auto presenter = std::dynamic_pointer_cast<GPresenter>(i);
-        if (presenter != nullptr)
-            presenters.push_back(presenter);
-        return true;
-    },true);
+
+    es.each<GPresenterRect,GPos>([&presenters](entityx::Entity entity, GPresenterRect &presenter, GPos gpos){
+        presenters.push_back(Visual{std::make_shared<GPresenterRect>(presenter), gpos});
+    });
+
+    es.each<GPresenterSprite,GPos>([&presenters](entityx::Entity entity, GPresenterSprite &presenter, GPos gpos){
+        presenters.push_back(Visual{std::make_shared<GPresenterSprite>(presenter), gpos});
+    });
 
     redraw(presenters, pMatrix);
 }
@@ -46,7 +49,6 @@ void GWorldView::resize(int width, int height) {
 }
 
 void GWorldView::updateSize() {
-    if (gWorld != nullptr)
-        gWorld->getActiveCamera()->resize(width, height);
+    updateSizeFlag = true;
     updateViewPort(width, height);
 }

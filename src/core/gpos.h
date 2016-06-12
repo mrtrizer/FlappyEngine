@@ -11,9 +11,9 @@ public:
 
     GPos(float x, float y, float z = 0):
         x(x),y(y),z(z){}
-    virtual const GPos & operator* (const GPos & pos);
-    virtual void move(const GPos &);
-    virtual MvMatrix getMvMatrix() const;
+    const GPos & operator* (const GPos & pos);
+    void move(const GPos &);
+    MvMatrix getMvMatrix() const;
     inline void setX(float x) {this->x = x;}
     inline void setY(float y) {this->y = y;}
     inline void setZ(float z) {this->z = z;}

@@ -1,6 +1,7 @@
 #include "gpresenter.h"
 #include "gviewfactory.h"
 #include "gview.h"
+#include "gtools.h"
 
 /// Returns GView instance and creates new if gView is nullptr.
 std::shared_ptr<GView> GPresenter::getGView(const GViewFactory &factory) {
@@ -20,7 +21,7 @@ void GPresenter::cleanGView(){
 /// called only if frameN is changed in GPresenterSprite.
 void GPresenter::updateView(){
     if (gView != nullptr)
-        gView->externUpdate(shared_from_this_cast<GPresenter>());
+        gView->externUpdate(shared_from_this());
 }
 
 /// Changes current frame pointer and informs GView about it.

@@ -13,10 +13,9 @@ class GView;
 /// @brief Holds information about object representation need for view objects.
 /// @details Contains a shared pointer to GView object, but doesn't calls any it's
 /// methods except GView::externUpdate to say about state changing.
-class GPresenter : public GObj {
+class GPresenter: public std::enable_shared_from_this<GPresenter> {
 public:
-    GPresenter(const GPos & pos):
-        GObj(pos)
+    GPresenter()
     {}
     virtual ~GPresenter(){}
     std::shared_ptr<GView> getGView(const GViewFactory & factory);
@@ -32,8 +31,7 @@ private:
 /// Represents a circle shape.
 class GPresenterCircle : public GPresenter {
 public:
-    GPresenterCircle(float r, const GPos & pos):
-        GPresenter(pos),
+    GPresenterCircle(float r):
         r(r)
     {}
     virtual ~GPresenterCircle(){}
@@ -47,8 +45,7 @@ private:
 /// Represents a rectangle shape.
 class GPresenterRect : public GPresenter {
 public:
-    GPresenterRect(float width, float height, const GPos & pos):
-        GPresenter(pos),
+    GPresenterRect(float width, float height):
         width(width),
         height(height)
     {}
@@ -65,8 +62,8 @@ private:
 /// @brief Holds a spritesheet params. May be one solid frame or be divided into several equal parts.
 class GPresenterSprite : public GPresenterRect {
 public:
-    GPresenterSprite(std::string path, float width, float height, const GPos & pos = {0,0,0}, int frameCnt = 1):
-        GPresenterRect(width,height,pos),
+    GPresenterSprite(std::string path, float width, float height, int frameCnt = 1):
+        GPresenterRect(width,height),
         path(path),
         frameCnt(frameCnt)
     {}

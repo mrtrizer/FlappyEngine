@@ -13,7 +13,7 @@ public:
         GColliderRect(width,height,pos)
     {}
     void init() {
-        ADD_CHILD(Presenter,getWidth(),getHeight(),GPos(0,0,0));
+        //ADD_CHILD(Presenter,getWidth(),getHeight(),GPos(0,0,0));
     }
 };
 
@@ -24,7 +24,7 @@ public:
         GColliderRect(width,height,pos)
     {}
     void init() {
-        ADD_CHILD(GPresenterCircle,getWidth(),GPos(getWidth() / 2, getHeight() / 2,0));
+        //ADD_CHILD(GPresenterCircle,getWidth(),GPos(getWidth() / 2, getHeight() / 2,0));
     }
 };
 
@@ -36,7 +36,7 @@ public:
         name(name)
     {}
     void init() {
-        ADD_CHILD(GPresenterSprite,name, getWidth(), getHeight(), GPos(0,0,0));
+        //ADD_CHILD(GPresenterSprite,name, getWidth(), getHeight(), GPos(0,0,0));
     }
 private:
     std::string name;

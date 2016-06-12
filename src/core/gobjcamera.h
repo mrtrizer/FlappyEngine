@@ -9,11 +9,9 @@
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class GObjCamera : public GObj
+class GObjCamera
 {
 public:
-    typedef std::shared_ptr<GObjPointer> GObjPointerP;
-
     struct Rect {
         float x1;
         float y1;
@@ -21,12 +19,10 @@ public:
         float y2;
     };
 
-    GObjCamera(float height, float ratio, int windowHeight, const GPos &);
+    GObjCamera(float height, float ratio, int windowHeight);
     void resize(double width, double height);
     Rect getRect() const;
-    virtual GTools::PMatrix getPMatrix() const;
-    void init() override final;
-    void recalc(DeltaT, const GContext &);
+    GTools::PMatrix getPMatrix() const;
 
 private:
     /// Height in game units
@@ -35,7 +31,6 @@ private:
     float ratio;
     /// RealHeight(px) / height(units)
     float coeff;
-    GObjPointerP gObjPointer;
 
 };
 

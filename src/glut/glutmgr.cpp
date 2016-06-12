@@ -26,49 +26,52 @@
 #endif
 
 #include <gl/glworldview.h>
-#include <core/gworldmodel.h>
 #include <shapes/gobjcircle.h>
 #include <core/gobjcamera.h>
-#include <core/gworldctrl.h>
 #include <shapes/gobjrect.h>
 #include <gl/glviewfactory.h>
+#include <core/initsystem.h>
 
 #include "glutmgr.h"
 
 namespace GLUTMgr {
 
 std::shared_ptr<GLWorldView> gWorldView;
-std::shared_ptr<GWorldCtrl> gWorldCtrl;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
+class Application : public entityx::EntityX {
+public:
+    explicit Application() {
+        systems.add<GLWorldView>(GLUTMgr::glViewFactory);
+        systems.add<InitSystem>();
+        systems.configure();
+    }
+
+    void update(entityx::TimeDelta dt) {
+        systems.update_all(dt);
+    }
+};
+
+std::shared_ptr<Application> app;
+
 void render() {
-    gWorldView->redrawWorld();
     glutSwapBuffers();
     glutPostRedisplay();
-    gWorldCtrl->step(); //only for test
+    app->update(0.1);
 }
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
     gWorldView = std::make_shared<GLWorldView>(glViewFactory);
-    gWorldCtrl->setView(gWorldView);
     gWorldView->init();
     gWorldView->resize(width, height);
 }
 
-void mouseFunc(int button, int state,
-               int x, int y) {
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        gWorldCtrl->mouseClick(x,y);
-}
 
-void passiveMotionFunc(int x, int y) {
-    gWorldCtrl->mouseMove(x,y);
-}
-
-void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<GWorldCtrl> gWorldCtrl) {
+void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory) {
     GLUTMgr::glViewFactory = glViewFactory;
-    GLUTMgr::gWorldCtrl = gWorldCtrl;
+
+    app = std::make_shared<Application>();
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -78,10 +81,6 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glewInit();
 #endif
 
-    gWorldCtrl->init();
-
-    glutMouseFunc(mouseFunc);
-    glutPassiveMotionFunc(passiveMotionFunc);
     glutReshapeFunc(resizeWindow);
     glutDisplayFunc(render);
     glutMainLoop();
