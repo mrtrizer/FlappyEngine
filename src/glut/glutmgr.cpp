@@ -37,20 +37,7 @@ namespace GLUTMgr {
 std::shared_ptr<GLWorldView> gWorldView;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
-class Application : public entityx::EntityX {
-public:
-    explicit Application() {
-        systems.add<GLWorldView>(GLUTMgr::glViewFactory);
-        systems.add<InitSystem>();
-        systems.configure();
-    }
-
-    void update(entityx::TimeDelta dt) {
-        systems.update_all(dt);
-    }
-};
-
-std::shared_ptr<Application> app;
+std::shared_ptr<FlappyApp> app;
 
 void render() {
     glutSwapBuffers();
@@ -66,10 +53,12 @@ void resizeWindow(int width, int height) {
 }
 
 
-void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory) {
+void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<FlappyApp> flappyApp) {
     GLUTMgr::glViewFactory = glViewFactory;
 
-    app = std::make_shared<Application>();
+    app = flappyApp;
+    app->systems.add<GLWorldView>(glViewFactory);
+    app->configure();
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);

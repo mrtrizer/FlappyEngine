@@ -27,7 +27,10 @@ HEADERS += \
     $$PWD/entityx/entityx.h \
     $$PWD/entityx/quick.h \
     $$PWD/core/initsystem.h \
-    $$PWD/core/transform.h
+    $$PWD/core/transform.h \
+    $$PWD/core/behaviour.h \
+    $$PWD/core/cbehavoiur.h \
+    $$PWD/core/flappyapp.h
 
 
 SOURCES += \
@@ -50,6 +53,9 @@ SOURCES += \
     $$PWD/entityx/Event.cc \
     $$PWD/entityx/System.cc \
     $$PWD/entityx/help/Pool.cc \
-    $$PWD/core/initsystem.cpp
+    $$PWD/core/initsystem.cpp \
+    $$PWD/core/behaviour.cpp \
+    $$PWD/core/cbehavoiur.cpp \
+    $$PWD/core/flappyapp.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
