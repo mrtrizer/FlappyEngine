@@ -2,8 +2,6 @@
 #include <functional>
 
 #include "gtools.h"
-#include "gcollider.h"
-#include "gobj.h"
 
 /// Common tools for model
 namespace GTools {

@@ -26,9 +26,7 @@
 #endif
 
 #include <gl/glworldview.h>
-#include <shapes/gobjcircle.h>
 #include <core/gobjcamera.h>
-#include <shapes/gobjrect.h>
 #include <gl/glviewfactory.h>
 #include <core/initsystem.h>
 

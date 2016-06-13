@@ -6,6 +6,7 @@
 
 #include "gviewfactory.h"
 #include "gobjcamera.h"
+#include "gpos.h"
 
 class GWorldModel;
 class GViewFactory;

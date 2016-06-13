@@ -5,7 +5,6 @@
 #include <memory>
 
 #include "gtools.h"
-#include "gobj.h"
 
 class GViewFactory;
 class GView;

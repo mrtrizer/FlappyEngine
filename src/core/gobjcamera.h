@@ -1,9 +1,7 @@
 #ifndef GOBJCAMERA_H
 #define GOBJCAMERA_H
 
-#include "gobj.h"
 #include "gtools.h"
-#include "gobjpointer.h"
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View

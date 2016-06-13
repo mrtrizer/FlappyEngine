@@ -1,21 +1,15 @@
 INCLUDEPATH  += $$PWD
 
 HEADERS += \
-    $$PWD/shapes/gobjrect.h \
-    $$PWD/shapes/gobjcircle.h \
-    $$PWD/core/gobj.h \
     $$PWD/core/gobjcamera.h \
-    $$PWD/core/gcollider.h \
     $$PWD/core/gview.h \
     $$PWD/core/gpos.h \
-    $$PWD/core/gobjpointer.h \
     $$PWD/core/gcontext.h \
     $$PWD/core/gtools.h \
     $$PWD/core/gviewfactory.h \
     $$PWD/core/gpresenter.h \
     $$PWD/core/gworldview.h \
     $$PWD/core/ganimation.h \
-    $$PWD/core/vector2d.h \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
@@ -37,15 +31,12 @@ HEADERS += \
 
 
 SOURCES += \
-    $$PWD/core/gobj.cpp \
     $$PWD/core/gobjcamera.cpp \
-    $$PWD/core/gcollider.cpp \
     $$PWD/core/gpos.cpp \
     $$PWD/core/gtools.cpp \
     $$PWD/core/gpresenter.cpp \
     $$PWD/core/gworldview.cpp \
     $$PWD/core/gview.cpp \
-    $$PWD/core/vector2d.cpp \
     $$PWD/gl/gltools.cpp \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \
