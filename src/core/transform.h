@@ -13,10 +13,13 @@ public:
     }
 
     glm::mat4x4 getMvMatrix() {
-        return glm::translate(glm::mat4x4(1.0f), pos);
+        auto translate = glm::translate(glm::mat4x4(1.0f), pos);
+        auto rotate = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+        return rotate;
     }
 
     glm::vec3 pos;
+    float angle;
 };
 
 #endif // TRANSFORM_H

@@ -1,4 +1,6 @@
+#include <glm/gtc/type_ptr.hpp>
 #include "glviewshape.h"
+#include "a.out.h"
 
 static const char shapeVShader[] =
     "attribute vec2 aPosition;\n"
@@ -37,10 +39,10 @@ std::vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int count) 
     return vertexList;
 }
 
-void GLViewShape::draw(const PMatrix pMatrix, const MVMatrix mvMatrix) {
-    getShader()->render(getAttribArray(), [this, mvMatrix, pMatrix](){
-        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,mvMatrix);
-        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,pMatrix);
+void GLViewShape::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
+    getShader()->render(getAttribArray(), [this, mvMatrix, pMartrix](){
+        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,glm::value_ptr(mvMatrix));
+        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,glm::value_ptr(pMartrix));
         glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&colorRGBA));
     });
 }

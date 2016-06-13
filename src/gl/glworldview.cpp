@@ -44,7 +44,7 @@ void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
     //and draw presenters one by one appying move matrices
     for (auto presenter: presenterList) {
         auto mvMatrix = presenter.pos.getMvMatrix();
-        presenter.presenter->getGView(*factory)->redraw(glm::value_ptr(pMatrix), glm::value_ptr(mvMatrix));
+        presenter.presenter->getGView(*factory)->redraw(pMatrix, mvMatrix);
     }
 }
 

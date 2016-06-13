@@ -13,7 +13,7 @@ class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
     GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GPresenterSprite &presenter);
-    void draw(const PMatrix, const MVMatrix) override;
+    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const GPresenter &) override;
 private:
     GLAttribArray rect;

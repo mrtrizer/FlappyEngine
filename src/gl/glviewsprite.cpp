@@ -1,3 +1,4 @@
+#include <glm/gtc/type_ptr.hpp>
 #include <core/gpresenter.h>
 
 #include "glviewsprite.h"
@@ -47,10 +48,10 @@ GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GP
     update(presenter);
 }
 
-void GLViewSprite::draw(const PMatrix pMatrix, const MVMatrix mvMatrix) {
-    getShader()->render(rect, [this, mvMatrix, pMatrix](){
-        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,mvMatrix);
-        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,pMatrix);
+void GLViewSprite::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
+    getShader()->render(rect, [this, mvMatrix, pMartrix](){
+        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,glm::value_ptr(mvMatrix));
+        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,glm::value_ptr(pMartrix));
         glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
         texture->bind(getShader()->findUniform("uTex"), 0);
     });

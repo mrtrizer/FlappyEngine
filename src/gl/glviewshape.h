@@ -20,7 +20,7 @@ public:
     };
 
     GLViewShape();
-    void draw(const PMatrix, const MVMatrix) override;
+    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     virtual const GLAttribArray & getAttribArray() const = 0;
     void setColorRGBA(ColorRGBA colorRGBA){this->colorRGBA = colorRGBA;}
 

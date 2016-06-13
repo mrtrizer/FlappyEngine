@@ -2,6 +2,7 @@
 #define GVIEW_H
 
 #include <memory>
+#include <glm/mat4x4.hpp>
 
 #include "gtools.h"
 
@@ -12,13 +13,11 @@ class GPresenter;
 /// derived classes.
 class GView : public std::enable_shared_from_this<GView> {
 public:
-    typedef float * PMatrix;
-    typedef float * MVMatrix;
     virtual ~GView(){}
-    void redraw(const PMatrix & pMartrix, const MVMatrix & mvMatrix);
+    void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
     void externUpdate(const std::shared_ptr<GPresenter> & gPresenter);
 protected:
-    virtual void draw(const PMatrix, const MVMatrix) = 0;
+    virtual void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) = 0;
     virtual void update(const GPresenter &) {}
 private:
     std::weak_ptr<GPresenter> gPresenter;

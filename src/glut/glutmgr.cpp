@@ -73,7 +73,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-    glutInitWindowSize(400, 600);
+    glutInitWindowSize(600, 600);
     glutCreateWindow("FlappyCxx");
 #ifdef __GLEW_H__
     glewInit();
