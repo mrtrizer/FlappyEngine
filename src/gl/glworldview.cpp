@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <core/gview.h>
 #include <core/gpresenter.h>
 
@@ -31,21 +32,20 @@ GLWorldView::~GLWorldView() {
 
 }
 
-void GLWorldView::redraw(GPresenterList &presenterList, GTools::PMatrix &pMatrix) {
+void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 
     //sort presenters by z (I use z value defined once on object creation)
         presenterList.sort([](const Visual & first, const Visual & second) {
-        return first.pos.getZ() < second.pos.getZ();
+        return first.pos.pos.z < second.pos.pos.z;
     });
 
     //and draw presenters one by one appying move matrices
     for (auto presenter: presenterList) {
         auto mvMatrix = presenter.pos.getMvMatrix();
-        presenter.presenter->getGView(*factory)->redraw(pMatrix.data(), mvMatrix.data());
+        presenter.presenter->getGView(*factory)->redraw(glm::value_ptr(pMatrix), glm::value_ptr(mvMatrix));
     }
-
 }
 
 void GLWorldView::updateViewPort(int width, int height) {

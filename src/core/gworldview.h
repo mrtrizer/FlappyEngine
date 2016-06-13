@@ -3,10 +3,11 @@
 
 #include <memory>
 #include <entityx/entityx.h>
+#include <glm/mat4x4.hpp>
 
 #include "gviewfactory.h"
 #include "gobjcamera.h"
-#include "gpos.h"
+#include "transform.h"
 
 class GWorldModel;
 class GViewFactory;
@@ -18,7 +19,7 @@ public:
     typedef std::shared_ptr<GWorldModel> GWorldModelP;
     struct Visual {
         std::shared_ptr<GPresenter> presenter;
-        GPos pos;
+        Transform pos;
     };
 
     typedef std::list<Visual> GPresenterList;
@@ -31,7 +32,7 @@ public:
     void updateSize();
 
 protected:
-    virtual void redraw(GPresenterList &, GTools::PMatrix &) = 0;
+    virtual void redraw(GPresenterList &, glm::mat4 &) = 0;
 
 private:
     int width = 1;

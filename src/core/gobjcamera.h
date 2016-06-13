@@ -2,6 +2,7 @@
 #define GOBJCAMERA_H
 
 #include "gtools.h"
+#include <glm/mat4x4.hpp>
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View
@@ -20,7 +21,7 @@ public:
     GObjCamera(float height, float ratio, int windowHeight);
     void resize(double width, double height);
     Rect getRect() const;
-    GTools::PMatrix getPMatrix() const;
+    glm::mat4 getPMatrix() const;
 
 private:
     /// Height in game units

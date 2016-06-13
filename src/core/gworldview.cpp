@@ -1,4 +1,5 @@
 #include "gworldview.h"
+#include "transform.h"
 
 GWorldView::~GWorldView(){
 }
@@ -29,11 +30,11 @@ void GWorldView::update(entityx::EntityManager &es, entityx::EventManager &event
     GPresenterList presenters;
 
 
-    es.each<GPresenterRect,GPos>([&presenters](entityx::Entity entity, GPresenterRect &presenter, GPos gpos){
+    es.each<GPresenterRect,Transform>([&presenters](entityx::Entity entity, GPresenterRect &presenter, Transform gpos){
         presenters.push_back(Visual{std::make_shared<GPresenterRect>(presenter), gpos});
     });
 
-    es.each<GPresenterSprite,GPos>([&presenters](entityx::Entity entity, GPresenterSprite &presenter, GPos gpos){
+    es.each<GPresenterSprite,Transform>([&presenters](entityx::Entity entity, GPresenterSprite &presenter, Transform gpos){
         presenters.push_back(Visual{std::make_shared<GPresenterSprite>(presenter), gpos});
     });
 

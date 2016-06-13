@@ -3,7 +3,6 @@ INCLUDEPATH  += $$PWD
 HEADERS += \
     $$PWD/core/gobjcamera.h \
     $$PWD/core/gview.h \
-    $$PWD/core/gpos.h \
     $$PWD/core/gcontext.h \
     $$PWD/core/gtools.h \
     $$PWD/core/gviewfactory.h \
@@ -27,12 +26,12 @@ HEADERS += \
     $$PWD/entityx/config.h \
     $$PWD/entityx/entityx.h \
     $$PWD/entityx/quick.h \
-    $$PWD/core/initsystem.h
+    $$PWD/core/initsystem.h \
+    $$PWD/core/transform.h
 
 
 SOURCES += \
     $$PWD/core/gobjcamera.cpp \
-    $$PWD/core/gpos.cpp \
     $$PWD/core/gtools.cpp \
     $$PWD/core/gpresenter.cpp \
     $$PWD/core/gworldview.cpp \
