@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <core/gview.h>
 #include <core/gpresenter.h>
+#include <core/screenmanager.h>
 
 #include "glshaderprogram.h"
 #include "glshaderprogram.h"
@@ -48,7 +49,7 @@ void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
     }
 }
 
-void GLWorldView::updateViewPort(int width, int height) {
-    glViewport(0, 0, width, height);
+void GLWorldView::updateViewPort() {
+    glViewport(0, 0, ScreenManager::getInst()->width, ScreenManager::getInst()->height);
     CHECK_GL_ERROR;
 }

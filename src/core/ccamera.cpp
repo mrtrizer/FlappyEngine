@@ -2,6 +2,7 @@
 
 #include "ccamera.h"
 #include "gcontext.h"
+#include "screenmanager.h"
 
 CCamera::CCamera(float height, float ratio, int windowHeight):
     height(height),
@@ -10,6 +11,7 @@ CCamera::CCamera(float height, float ratio, int windowHeight):
 }
 
 CCamera::Rect CCamera::getRect() const {
+    float ratio = ScreenManager::getInst()->width / ScreenManager::getInst()->height;
     float offset = height / 2;
     return {
         -offset * ratio,
@@ -19,9 +21,8 @@ CCamera::Rect CCamera::getRect() const {
     };
 }
 
-void CCamera::resize(double width, double height) {
-    this->ratio = width / height;
-    this->coeff = this->height / height;
+void CCamera::resize() {
+    this->coeff = this->height / ScreenManager::getInst()->height;
 }
 
 glm::mat4 CCamera::getPMatrix() const {

@@ -19,7 +19,7 @@ public:
     };
 
     CCamera(float height, float ratio, int windowHeight);
-    void resize(double width, double height);
+    void resize();
     Rect getRect() const;
     glm::mat4 getPMatrix() const;
 

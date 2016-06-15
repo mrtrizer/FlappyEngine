@@ -7,7 +7,7 @@ class Behaviour
 {
 public:
     Behaviour();
-    virtual void update(entityx::Entity e, entityx::TimeDelta dt) {
+    virtual void update(entityx::Entity, entityx::TimeDelta) {
     }
 };
 

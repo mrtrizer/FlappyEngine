@@ -18,7 +18,7 @@ public:
     void redraw(GPresenterList &, glm::mat4 &) override;
     void init() override;
 protected:
-    void updateViewPort(int width, int height) override;
+    void updateViewPort() override;
 private:
     std::shared_ptr<GLViewFactory> factory;
 };

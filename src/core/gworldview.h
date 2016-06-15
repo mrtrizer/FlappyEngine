@@ -26,22 +26,21 @@ public:
 
     virtual ~GWorldView();
     void setGWorldModel(GWorldModelP gWorldModel);
-    void update(entityx::EntityManager &es, entityx::EventManager &events, entityx::TimeDelta dt) override;
+    void update(entityx::EntityManager &es, entityx::EventManager &, entityx::TimeDelta dt) override;
     void resize(int width, int height);
     virtual void init() = 0;
     void updateSize();
+
+    class no_camera {};
 
 protected:
     virtual void redraw(GPresenterList &, glm::mat4 &) = 0;
 
 private:
-    int width = 1;
-    int height = 1;
-    bool updateSizeFlag = true;
     GWorldModelP gWorld;
 
     GWorldModelP getGWorld() { return gWorld; }
-    virtual void updateViewPort(int width, int height) = 0;
+    virtual void updateViewPort() = 0;
 };
 
 #endif // GWORLDVIEW_H

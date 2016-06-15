@@ -31,7 +31,10 @@ HEADERS += \
     $$PWD/core/cpresenter.h \
     $$PWD/core/ccamera.h \
     $$PWD/core/ctransform.h \
-    $$PWD/core/animation.h
+    $$PWD/core/animation.h \
+    $$PWD/core/screenmanager.h \
+    $$PWD/core/prefab.h \
+    $$PWD/prefabs/camera.h
 
 
 SOURCES += \
@@ -59,6 +62,7 @@ SOURCES += \
     $$PWD/core/flappyapp.cpp \
     $$PWD/core/cpresenter.cpp \
     $$PWD/core/ccamera.cpp \
-    $$PWD/core/animation.cpp
+    $$PWD/core/animation.cpp \
+    $$PWD/core/screenmanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

@@ -21,7 +21,7 @@ public:
     std::shared_ptr<GView> getGView(const GViewFactory & factory);
     void cleanGView();
     void updateView();
-    virtual void update(entityx::TimeDelta dt) {}
+    virtual void update(entityx::TimeDelta) {}
 
 protected:
     /// Implement and call appropriate method from factory to get your own instance of GView.
