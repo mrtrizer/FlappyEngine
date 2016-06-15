@@ -3,10 +3,10 @@
 #include <glut/glutmgr.h>
 #include <qt/viewfactoryqt.h>
 
-#include <ctrl.h>
+#include <myflappyapp.h>
 
 int main(int argc, char *argv[])
 {
-    GLUTMgr::initGLUT(argc, argv, std::make_shared<ViewFactoryQt>(":///{?name.lower()?}/res/"), std::make_shared<Ctrl>());
+    GLUTMgr::initGLUT(argc, argv, std::make_shared<ViewFactoryQt>(":///{?name.lower()?}/res/"), std::make_shared<MyFlappyApp>());
     return 0;
 }
