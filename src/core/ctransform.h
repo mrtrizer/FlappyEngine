@@ -5,10 +5,10 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-class Transform
+class CTransform
 {
 public:
-    Transform(float x, float y, float z = 0.0f): pos(x, y, z) {
+    CTransform(float x, float y, float z = 0.0f): pos(x, y, z) {
 
     }
 

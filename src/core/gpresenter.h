@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <entityx/entityx.h>
 
 #include "gtools.h"
 
@@ -20,6 +21,8 @@ public:
     std::shared_ptr<GView> getGView(const GViewFactory & factory);
     void cleanGView();
     void updateView();
+    virtual void update(entityx::TimeDelta dt) {}
+
 protected:
     /// Implement and call appropriate method from factory to get your own instance of GView.
     virtual std::shared_ptr<GView> makeGView(const GViewFactory & factory) = 0;

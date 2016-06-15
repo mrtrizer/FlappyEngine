@@ -1,14 +1,12 @@
 INCLUDEPATH  += $$PWD
 
 HEADERS += \
-    $$PWD/core/gobjcamera.h \
     $$PWD/core/gview.h \
     $$PWD/core/gcontext.h \
     $$PWD/core/gtools.h \
     $$PWD/core/gviewfactory.h \
     $$PWD/core/gpresenter.h \
     $$PWD/core/gworldview.h \
-    $$PWD/core/ganimation.h \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
@@ -27,14 +25,16 @@ HEADERS += \
     $$PWD/entityx/entityx.h \
     $$PWD/entityx/quick.h \
     $$PWD/core/initsystem.h \
-    $$PWD/core/transform.h \
     $$PWD/core/behaviour.h \
     $$PWD/core/cbehavoiur.h \
-    $$PWD/core/flappyapp.h
+    $$PWD/core/flappyapp.h \
+    $$PWD/core/cpresenter.h \
+    $$PWD/core/ccamera.h \
+    $$PWD/core/ctransform.h \
+    $$PWD/core/animation.h
 
 
 SOURCES += \
-    $$PWD/core/gobjcamera.cpp \
     $$PWD/core/gtools.cpp \
     $$PWD/core/gpresenter.cpp \
     $$PWD/core/gworldview.cpp \
@@ -56,6 +56,9 @@ SOURCES += \
     $$PWD/core/initsystem.cpp \
     $$PWD/core/behaviour.cpp \
     $$PWD/core/cbehavoiur.cpp \
-    $$PWD/core/flappyapp.cpp
+    $$PWD/core/flappyapp.cpp \
+    $$PWD/core/cpresenter.cpp \
+    $$PWD/core/ccamera.cpp \
+    $$PWD/core/animation.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

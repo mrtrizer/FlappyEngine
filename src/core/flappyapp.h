@@ -1,16 +1,18 @@
 #ifndef FLAPPYAPP_H
 #define FLAPPYAPP_H
 
+#include <chrono>
 #include <entityx/entityx.h>
 
 class FlappyApp : public entityx::EntityX {
 public:
     explicit FlappyApp();
-    void update(entityx::TimeDelta dt);
+    void update();
     virtual void init() = 0;
     void configure();
 private:
     bool configured = false;
+    std::chrono::steady_clock::time_point lastTime;
 };
 
 #endif // FLAPPYAPP_H

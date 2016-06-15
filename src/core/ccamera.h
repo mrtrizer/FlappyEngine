@@ -1,5 +1,5 @@
-#ifndef GOBJCAMERA_H
-#define GOBJCAMERA_H
+#ifndef CCAMERA_H
+#define CCAMERA_H
 
 #include "gtools.h"
 #include <glm/mat4x4.hpp>
@@ -8,7 +8,7 @@
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class GObjCamera
+class CCamera
 {
 public:
     struct Rect {
@@ -18,7 +18,7 @@ public:
         float y2;
     };
 
-    GObjCamera(float height, float ratio, int windowHeight);
+    CCamera(float height, float ratio, int windowHeight);
     void resize(double width, double height);
     Rect getRect() const;
     glm::mat4 getPMatrix() const;
@@ -33,4 +33,4 @@ private:
 
 };
 
-#endif // GOBJCAMERA_H
+#endif // CCAMERA_H

@@ -1,5 +1,6 @@
 #include "gworldview.h"
-#include "transform.h"
+#include "ctransform.h"
+#include "cpresenter.h"
 
 GWorldView::~GWorldView(){
 }
@@ -11,9 +12,9 @@ void GWorldView::setGWorldModel(GWorldModelP gWorldModel) {
 
 void GWorldView::update(entityx::EntityManager &es, entityx::EventManager &events, entityx::TimeDelta dt) {
 
-    GObjCamera* camera = nullptr;
+    CCamera* camera = nullptr;
 
-    es.each<GObjCamera>([&camera, this](entityx::Entity entity, GObjCamera &curCamera){
+    es.each<CCamera>([&camera, this](entityx::Entity entity, CCamera &curCamera){
         camera = &curCamera;
         if (updateSizeFlag) {
             updateSizeFlag = false;
@@ -29,13 +30,10 @@ void GWorldView::update(entityx::EntityManager &es, entityx::EventManager &event
 
     GPresenterList presenters;
 
-
-    es.each<GPresenterRect,Transform>([&presenters](entityx::Entity entity, GPresenterRect &presenter, Transform gpos){
-        presenters.push_back(Visual{std::make_shared<GPresenterRect>(presenter), gpos});
-    });
-
-    es.each<GPresenterSprite,Transform>([&presenters](entityx::Entity entity, GPresenterSprite &presenter, Transform gpos){
-        presenters.push_back(Visual{std::make_shared<GPresenterSprite>(presenter), gpos});
+    es.each<CPresenter, CTransform>([&presenters, dt](entityx::Entity entity, CPresenter &cpresenter, CTransform gpos){
+        auto presenter = cpresenter.getPresenter();
+        presenter->update(dt);
+        presenters.push_back(Visual{presenter, gpos});
     });
 
     redraw(presenters, pMatrix);

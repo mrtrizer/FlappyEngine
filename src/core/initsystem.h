@@ -2,9 +2,9 @@
 #define INITSYSTEM_H
 
 #include <entityx/entityx.h>
-#include <core/gobjcamera.h>
+#include <core/ccamera.h>
 #include <core/gpresenter.h>
-#include <core/transform.h>
+#include <core/ctransform.h>
 #include <core/cbehavoiur.h>
 
 class InitSystem : public entityx::System<InitSystem>

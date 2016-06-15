@@ -1,15 +1,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "gobjcamera.h"
+#include "ccamera.h"
 #include "gcontext.h"
 
-GObjCamera::GObjCamera(float height, float ratio, int windowHeight):
+CCamera::CCamera(float height, float ratio, int windowHeight):
     height(height),
     ratio(ratio),
     coeff(height / windowHeight) {
 }
 
-GObjCamera::Rect GObjCamera::getRect() const {
+CCamera::Rect CCamera::getRect() const {
     float offset = height / 2;
     return {
         -offset * ratio,
@@ -19,12 +19,12 @@ GObjCamera::Rect GObjCamera::getRect() const {
     };
 }
 
-void GObjCamera::resize(double width, double height) {
+void CCamera::resize(double width, double height) {
     this->ratio = width / height;
     this->coeff = this->height / height;
 }
 
-glm::mat4 GObjCamera::getPMatrix() const {
+glm::mat4 CCamera::getPMatrix() const {
     auto rect = getRect();
     static const float near = -1.0f;
     static const float far = 99.0f;

@@ -26,7 +26,7 @@
 #endif
 
 #include <gl/glworldview.h>
-#include <core/gobjcamera.h>
+#include <core/ccamera.h>
 #include <gl/glviewfactory.h>
 #include <core/initsystem.h>
 
@@ -42,7 +42,7 @@ std::shared_ptr<FlappyApp> app;
 void render() {
     glutSwapBuffers();
     glutPostRedisplay();
-    app->update(0.1);
+    app->update();
 }
 
 void resizeWindow(int width, int height) {

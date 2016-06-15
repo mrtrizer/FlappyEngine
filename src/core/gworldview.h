@@ -6,8 +6,8 @@
 #include <glm/mat4x4.hpp>
 
 #include "gviewfactory.h"
-#include "gobjcamera.h"
-#include "transform.h"
+#include "ccamera.h"
+#include "ctransform.h"
 
 class GWorldModel;
 class GViewFactory;
@@ -19,7 +19,7 @@ public:
     typedef std::shared_ptr<GWorldModel> GWorldModelP;
     struct Visual {
         std::shared_ptr<GPresenter> presenter;
-        Transform pos;
+        CTransform pos;
     };
 
     typedef std::list<Visual> GPresenterList;

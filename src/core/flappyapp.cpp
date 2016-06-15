@@ -1,11 +1,17 @@
+#include <core/initsystem.h>
+
 #include "flappyapp.h"
 
-#include <core/initsystem.h>
+using namespace std;
 
 FlappyApp::FlappyApp() {
 }
 
-void FlappyApp::update(entityx::TimeDelta dt) {
+void FlappyApp::update() {
+    auto newTime = chrono::steady_clock::now();
+    entityx::TimeDelta dt = chrono::duration <float, milli> (newTime - lastTime).count() / 1000.0f;
+    lastTime = newTime;
+
     if (configured)
         systems.update_all(dt);
 }
@@ -15,4 +21,5 @@ void FlappyApp::configure() {
     systems.add<InitSystem>();
     systems.configure();
     configured = true;
+    lastTime = chrono::steady_clock::now();
 }

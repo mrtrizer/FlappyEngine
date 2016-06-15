@@ -1,15 +1,17 @@
 #ifndef GANIMATION_H
 #define GANIMATION_H
 
+#include <entityx/entityx.h>
+
 #include "gpresenter.h"
 
 /// Extends GDecor and allows automatic frame switching with predifined period.
-class GAnimation: public GPresenterSprite
+class SpriteAnimation: public GPresenterSprite
 {
 public:
     /// @param period Period in seconds
-    GAnimation(std::string path, float width, float height, GPos pos, int frameCnt, float period);
-    void recalc(DeltaT, const GContext &) override;
+    SpriteAnimation(std::string path, float width, float height, int frameCnt, float period);
+    void update(entityx::TimeDelta) override;
 private:
     float counter = 0.0;
     float period = 0.0;
