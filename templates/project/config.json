@@ -1,0 +1,12 @@
+{
+	"name":"{!name!}",
+	"engine":"engine/",
+	"exclude":[],
+	"inc_dirs":[],
+	"cmake": {
+		"exec_name":"{!name!}"
+	},
+	"android": {
+		"id":"{?name.lower()?}"
+	}
+}
