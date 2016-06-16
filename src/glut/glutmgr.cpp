@@ -29,6 +29,7 @@
 #include <core/ccamera.h>
 #include <gl/glviewfactory.h>
 #include <core/initsystem.h>
+#include <core/inputmanager.h>
 
 #include "glutmgr.h"
 
@@ -52,6 +53,16 @@ void resizeWindow(int width, int height) {
     gWorldView->resize(width, height);
 }
 
+void mouseFunc(int button, int state, int x, int y) {
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+        InputManager::getInst()->setMouseDown();
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+        InputManager::getInst()->setMouseUp();
+}
+
+void passiveMotionFunc(int x, int y) {
+    InputManager::getInst()->mouseMove(glm::vec3(x,y,0));
+}
 
 void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<FlappyApp> flappyApp) {
     GLUTMgr::glViewFactory = glViewFactory;
@@ -68,6 +79,8 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glewInit();
 #endif
 
+    glutMouseFunc(mouseFunc);
+    glutPassiveMotionFunc(passiveMotionFunc);
     glutReshapeFunc(resizeWindow);
     glutDisplayFunc(render);
     glutMainLoop();

@@ -1,8 +1,11 @@
 #ifndef CCAMERA_H
 #define CCAMERA_H
 
-#include "gtools.h"
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <core/screenmanager.h>
+
+#include "gtools.h"
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View
@@ -19,17 +22,15 @@ public:
     };
 
     CCamera(float height, float ratio, int windowHeight);
-    void resize();
     Rect getRect() const;
     glm::mat4 getPMatrix() const;
+    glm::vec3 screenToScene(glm::vec3 pos) const;
 
 private:
     /// Height in game units
     float height;
     /// RealWidth(px) / RealHeight(px)
     float ratio;
-    /// RealHeight(px) / height(units)
-    float coeff;
 
 };
 

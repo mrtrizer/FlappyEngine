@@ -6,12 +6,11 @@
 
 CCamera::CCamera(float height, float ratio, int windowHeight):
     height(height),
-    ratio(ratio),
-    coeff(height / windowHeight) {
+    ratio(ratio) {
 }
 
 CCamera::Rect CCamera::getRect() const {
-    float ratio = ScreenManager::getInst()->width / ScreenManager::getInst()->height;
+    float ratio = (float)ScreenManager::getInst()->width / ScreenManager::getInst()->height;
     float offset = height / 2;
     return {
         -offset * ratio,
@@ -21,8 +20,11 @@ CCamera::Rect CCamera::getRect() const {
     };
 }
 
-void CCamera::resize() {
-    this->coeff = this->height / ScreenManager::getInst()->height;
+glm::vec3 CCamera::screenToScene(glm::vec3 pos) const {
+    float coeff = this->height / ScreenManager::getInst()->height;
+    glm::vec2 screenSize = ScreenManager::getInst()->getScreenSize() * 0.5f;
+    glm::vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
+    return scenePos * coeff;
 }
 
 glm::mat4 CCamera::getPMatrix() const {

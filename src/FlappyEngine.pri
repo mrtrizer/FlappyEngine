@@ -34,7 +34,9 @@ HEADERS += \
     $$PWD/core/animation.h \
     $$PWD/core/screenmanager.h \
     $$PWD/core/prefab.h \
-    $$PWD/prefabs/camera.h
+    $$PWD/prefabs/camera.h \
+    $$PWD/core/inputmanager.h \
+    $$PWD/core/manager.h
 
 
 SOURCES += \
@@ -63,6 +65,7 @@ SOURCES += \
     $$PWD/core/cpresenter.cpp \
     $$PWD/core/ccamera.cpp \
     $$PWD/core/animation.cpp \
-    $$PWD/core/screenmanager.cpp
+    $$PWD/core/screenmanager.cpp \
+    $$PWD/core/inputmanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

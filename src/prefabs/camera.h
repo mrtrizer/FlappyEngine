@@ -11,7 +11,7 @@ public:
     void init(entityx::EntityManager & entities) override {
         auto camera = entities.create();
         camera.assign<CCamera>(100, 1, 500);
-        camera.assign<CTransform>(0,0,-1)->angle = 1;
+        camera.assign<CTransform>(0,0,-1);
     }
 };
 

@@ -15,8 +15,8 @@ public:
         this->behaviour = behaviour;
     }
 
-    void update(entityx::Entity e, entityx::TimeDelta dt) {
-        behaviour->update(e, dt);
+    void update(entityx::Entity e, entityx::EntityManager& em, entityx::TimeDelta dt) {
+        behaviour->update(e, em, dt);
     }
 
 private:

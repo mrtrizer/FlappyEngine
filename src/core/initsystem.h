@@ -12,8 +12,8 @@ class InitSystem : public entityx::System<InitSystem>
 public:
     InitSystem();
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override {
-        entities.each<CBehavoiur>([dt](entityx::Entity e, CBehavoiur & cBehaviour) {
-            cBehaviour.update(e, dt);
+        entities.each<CBehavoiur>([dt, &entities](entityx::Entity e, CBehavoiur & cBehaviour) {
+            cBehaviour.update(e, entities, dt);
         });
 
         if (first) {
