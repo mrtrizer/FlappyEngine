@@ -2,6 +2,7 @@
 #include "ctransform.h"
 #include "cpresenter.h"
 #include "screenmanager.h"
+#include "scenemanager.h"
 
 GWorldView::~GWorldView(){
 }
@@ -14,12 +15,9 @@ void GWorldView::setGWorldModel(GWorldModelP gWorldModel) {
 void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, entityx::TimeDelta dt) {
 
     CCamera* camera = nullptr;
-    CTransform* cameraTransform = nullptr;
 
-    es.each<CCamera, CTransform>([&camera, &cameraTransform, this]
-                                 (entityx::Entity, CCamera &curCamera, CTransform& transform){
+    es.each<CCamera>([&camera, this] (entityx::Entity, CCamera &curCamera){
         camera = &curCamera;
-        cameraTransform = &transform;
     });
 
     if (camera == nullptr)
@@ -27,14 +25,12 @@ void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, enti
 
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->getPMatrix();
-    pMatrix = glm::translate(pMatrix, cameraTransform->pos);
-    pMatrix = glm::rotate(pMatrix, cameraTransform->angle, glm::vec3(0.0f, 0.0f, 1.0f));
 
     GPresenterList presenters;
 
     es.each<CPresenter, CTransform>([&presenters, dt]
                                     (entityx::Entity entity, CPresenter &cpresenter, CTransform gpos){
-        auto presenter = cpresenter.getPresenter();
+        auto presenter = cpresenter.getImpl();
         presenter->update(dt);
         presenters.push_back(Visual{presenter, gpos});
     });

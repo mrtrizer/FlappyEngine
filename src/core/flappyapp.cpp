@@ -13,6 +13,7 @@ void FlappyApp::update() {
     entityx::TimeDelta dt = chrono::duration <float, milli> (newTime - lastTime).count() / 1000.0f;
     lastTime = newTime;
 
+    SceneManager::getInst()->update(dt);
     InputManager::getInst()->update(dt);
 
     if (configured)
@@ -20,6 +21,7 @@ void FlappyApp::update() {
 }
 
 void FlappyApp::configure() {
+    SceneManager::getInst()->init(&entities);
     init();
     systems.add<InitSystem>();
     systems.configure();

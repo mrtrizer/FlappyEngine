@@ -6,8 +6,7 @@
 class Behaviour
 {
 public:
-    Behaviour();
-    virtual void update(entityx::Entity, entityx::EntityManager&, entityx::TimeDelta) {
+    virtual void update(entityx::Entity, entityx::TimeDelta) {
     }
 };
 

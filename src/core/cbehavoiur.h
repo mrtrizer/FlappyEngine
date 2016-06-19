@@ -5,22 +5,17 @@
 
 #include <entityx/entityx.h>
 
+#include "component.h"
 #include "behaviour.h"
 
-class CBehavoiur
+class CBehavoiur: public ComponentSlot<Behaviour>
 {
 public:
-    CBehavoiur();
-    void setBehaviour(const std::shared_ptr<Behaviour> & behaviour) {
-        this->behaviour = behaviour;
-    }
+    using ComponentSlot<Behaviour>::ComponentSlot;
 
-    void update(entityx::Entity e, entityx::EntityManager& em, entityx::TimeDelta dt) {
-        behaviour->update(e, em, dt);
+    inline void update(entityx::Entity e, entityx::TimeDelta dt) {
+        getImpl()->update(e, dt);
     }
-
-private:
-    std::shared_ptr<Behaviour> behaviour;
 };
 
 #endif // CBEHAVOIUR_H

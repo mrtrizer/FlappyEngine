@@ -1,12 +1,13 @@
 #include <glm/gtc/matrix_transform.hpp>
+#include <core/ctransform.h>
 
 #include "ccamera.h"
-#include "gcontext.h"
 #include "screenmanager.h"
 
-CCamera::CCamera(float height, float ratio, int windowHeight):
+CCamera::CCamera(const entityx::Entity& e, float height, float ratio):
     height(height),
-    ratio(ratio) {
+    ratio(ratio),
+    Component(e){
 }
 
 CCamera::Rect CCamera::getRect() const {
@@ -27,10 +28,16 @@ glm::vec3 CCamera::screenToScene(glm::vec3 pos) const {
     return scenePos * coeff;
 }
 
-glm::mat4 CCamera::getPMatrix() const {
+glm::mat4 CCamera::getPMatrix() {
     auto rect = getRect();
     static const float near = -1.0f;
     static const float far = 99.0f;
 
-    return glm::ortho(rect.x1, rect.x2, rect.y2, rect.y1, near, far);
+    glm::mat4 mvMatrix;
+    entityx::ComponentHandle<CTransform> transform = e.component<CTransform>();
+    if (transform.valid()) {
+        mvMatrix = transform->getMvMatrix();
+    }
+
+    return glm::ortho(rect.x1, rect.x2, rect.y2, rect.y1, near, far) * mvMatrix;
 }

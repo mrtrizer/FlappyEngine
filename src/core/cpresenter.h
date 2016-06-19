@@ -3,21 +3,13 @@
 
 #include <memory>
 
+#include "component.h"
 #include "gpresenter.h"
 
-class CPresenter
+class CPresenter: public ComponentSlot<GPresenter>
 {
 public:
-    CPresenter();
-    inline void setPresenter(std::shared_ptr<GPresenter> presenter) {
-        this->presenter = presenter;
-    }
-    inline std::shared_ptr<GPresenter> getPresenter() const {
-        return presenter;
-    }
-
-private:
-    std::shared_ptr<GPresenter> presenter;
+    using ComponentSlot<GPresenter>::ComponentSlot;
 };
 
 #endif // CPRESENTER_H

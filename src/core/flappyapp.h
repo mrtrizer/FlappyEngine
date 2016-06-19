@@ -3,7 +3,7 @@
 
 #include <chrono>
 #include <entityx/entityx.h>
-#include <core/prefab.h>
+#include <core/scenemanager.h>
 
 class FlappyApp : public entityx::EntityX {
 public:
@@ -11,9 +11,6 @@ public:
     void update();
     virtual void init() = 0;
     void configure();
-    void initPrefab(Prefab && prefab) {
-        prefab.init(entities);
-    }
 
 private:
     bool configured = false;

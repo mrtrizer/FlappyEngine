@@ -2,7 +2,6 @@ INCLUDEPATH  += $$PWD
 
 HEADERS += \
     $$PWD/core/gview.h \
-    $$PWD/core/gcontext.h \
     $$PWD/core/gtools.h \
     $$PWD/core/gviewfactory.h \
     $$PWD/core/gpresenter.h \
@@ -34,9 +33,10 @@ HEADERS += \
     $$PWD/core/animation.h \
     $$PWD/core/screenmanager.h \
     $$PWD/core/prefab.h \
-    $$PWD/prefabs/camera.h \
     $$PWD/core/inputmanager.h \
-    $$PWD/core/manager.h
+    $$PWD/core/manager.h \
+    $$PWD/core/component.h \
+    $$PWD/core/scenemanager.h
 
 
 SOURCES += \
@@ -59,13 +59,13 @@ SOURCES += \
     $$PWD/entityx/System.cc \
     $$PWD/entityx/help/Pool.cc \
     $$PWD/core/initsystem.cpp \
-    $$PWD/core/behaviour.cpp \
     $$PWD/core/cbehavoiur.cpp \
     $$PWD/core/flappyapp.cpp \
     $$PWD/core/cpresenter.cpp \
     $$PWD/core/ccamera.cpp \
     $$PWD/core/animation.cpp \
-    $$PWD/core/screenmanager.cpp \
-    $$PWD/core/inputmanager.cpp
+    $$PWD/core/inputmanager.cpp \
+    $$PWD/core/component.cpp \
+    $$PWD/core/scenemanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

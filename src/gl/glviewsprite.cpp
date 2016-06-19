@@ -30,10 +30,10 @@ GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GP
     rect(GL_TRIANGLE_STRIP),
     texture(glTexture),
     vertexList({
-                {0,0},
-                {0,presenter.getHeight()},
-                {presenter.getWidth(),0},
-                {presenter.getWidth(),presenter.getHeight()} }){
+                {-presenter.getWidth() / 2,-presenter.getHeight() / 2},
+                {-presenter.getWidth() / 2,presenter.getHeight() / 2},
+                {presenter.getWidth() / 2,-presenter.getHeight() / 2},
+                {presenter.getWidth() / 2,presenter.getHeight() / 2} }){
 
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
                                  vertexList.size() * sizeof(GLTools::Vertex),

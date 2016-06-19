@@ -54,6 +54,7 @@ void resizeWindow(int width, int height) {
 }
 
 void mouseFunc(int button, int state, int x, int y) {
+    InputManager::getInst()->mouseMove(glm::vec3(x,y,0));
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
         InputManager::getInst()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
@@ -81,6 +82,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);
+    glutMotionFunc(passiveMotionFunc);
     glutReshapeFunc(resizeWindow);
     glutDisplayFunc(render);
     glutMainLoop();

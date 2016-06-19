@@ -54,7 +54,7 @@ GViewCircle::GViewCircle(int vertexCnt, double r):
     circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array
                                    vertexList.size() * sizeof(GLTools::Vertex), //size
                                    GL_FLOAT,                                    //item format
-                                   getShader()->findAttr("aPosition")            //attribute id
+                                   getShader()->findAttr("aPosition")           //attribute id
                                    );
 }
 

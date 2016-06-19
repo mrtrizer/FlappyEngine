@@ -5,12 +5,14 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-class CTransform
+#include <core/component.h>
+
+class CTransform: public Component
 {
 public:
-    CTransform(float x, float y, float z = 0.0f): pos(x, y, z) {
-
-    }
+    CTransform(const entityx::Entity& e, float x = 0, float y = 0, float z = 0.0f):
+        pos(x, y, z),
+        Component(e) {}
 
     glm::mat4x4 getMvMatrix() {
         auto translate = glm::translate(glm::mat4x4(1.0f), pos);

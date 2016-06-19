@@ -4,14 +4,13 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <core/screenmanager.h>
-
-#include "gtools.h"
+#include <core/component.h>
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class CCamera
+class CCamera : public Component
 {
 public:
     struct Rect {
@@ -21,9 +20,9 @@ public:
         float y2;
     };
 
-    CCamera(float height, float ratio, int windowHeight);
+    CCamera(const entityx::Entity& e, float height = 100, float ratio = 1);
     Rect getRect() const;
-    glm::mat4 getPMatrix() const;
+    glm::mat4 getPMatrix();
     glm::vec3 screenToScene(glm::vec3 pos) const;
 
 private:

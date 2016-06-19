@@ -3,22 +3,18 @@
 
 #include <memory>
 #include <glm/vec2.hpp>
+#include <core/manager.h>
 
-class ScreenManager
+class ScreenManager: public Manager<ScreenManager>
 {
 public:
-    ScreenManager();
-    static std::shared_ptr<ScreenManager> getInst() {return inst == nullptr? inst = std::make_shared<ScreenManager>(): inst;}
-    int width = 1;
-    int height = 1;
-    float coefff = 1.0f;
-
     inline glm::vec2 getScreenSize() const {
         return glm::vec2(width, height);
     }
 
-private:
-    static std::shared_ptr<ScreenManager> inst;
+    int width = 1;
+    int height = 1;
+    float coefff = 1.0f;
 };
 
 #endif // SCREENMANAGER_H
