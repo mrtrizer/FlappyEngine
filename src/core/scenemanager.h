@@ -60,7 +60,7 @@ public:
         prefab.init(*getInst()->entities);
     }
 
-    static EntityHandler&& createEntity() {
+    static EntityHandler createEntity() {
         return EntityHandler(getInst()->entities->create(), getInst()->entities);
     }
 
@@ -70,11 +70,11 @@ public:
         getInst()->curScene = scene;
     }
 
-    static void setMainCamera(const entityx::ComponentHandle<CCamera>& camera) {
+    static void setCamera(const entityx::ComponentHandle<CCamera>& camera) {
         getInst()->camera = camera;
     }
 
-    static entityx::ComponentHandle<CCamera> getMainCamera() {
+    static entityx::ComponentHandle<CCamera> getCamera() {
         return getInst()->camera;
     }
 
