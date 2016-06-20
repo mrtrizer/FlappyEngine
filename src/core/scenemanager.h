@@ -24,6 +24,11 @@ public:
         return entity.assign<ComponentT>(entity, args...);
     }
 
+    template<typename ComponentT>
+    entityx::ComponentHandle<ComponentT> component() {
+        return entity.component<ComponentT>();
+    }
+
     bool isValid() {
         return entity.valid();
     }

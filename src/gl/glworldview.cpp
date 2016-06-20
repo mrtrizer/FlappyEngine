@@ -39,12 +39,12 @@ void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
 
     //sort presenters by z (I use z value defined once on object creation)
         presenterList.sort([](const Visual & first, const Visual & second) {
-        return first.pos.pos.z < second.pos.pos.z;
+        return first.z < second.z;
     });
 
     //and draw presenters one by one appying move matrices
     for (auto presenter: presenterList) {
-        auto mvMatrix = presenter.pos.getMvMatrix();
+        auto mvMatrix = presenter.pos;
         presenter.presenter->getGView(*factory)->redraw(pMatrix, mvMatrix);
     }
 }

@@ -19,7 +19,8 @@ public:
     typedef std::shared_ptr<GWorldModel> GWorldModelP;
     struct Visual {
         std::shared_ptr<GPresenter> presenter;
-        CTransform pos;
+        glm::mat4 pos;
+        float z;
     };
 
     typedef std::list<Visual> GPresenterList;

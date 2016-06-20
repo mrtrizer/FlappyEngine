@@ -28,11 +28,22 @@ void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, enti
 
     GPresenterList presenters;
 
-    es.each<CPresenter, CTransform>([&presenters, dt]
-                                    (entityx::Entity entity, CPresenter &cpresenter, CTransform gpos){
+    es.each<CPresenter>([&presenters, dt]
+                                    (entityx::Entity entity, CPresenter &cpresenter){
         auto presenter = cpresenter.getImpl();
         presenter->update(dt);
-        presenters.push_back(Visual{presenter, gpos});
+        glm::mat4 transformMatrix;
+        CTransform* curTransform = nullptr;
+        float z = 0;
+        auto componentHandle = entity.component<CTransform>();
+        if (componentHandle.valid())
+            curTransform = componentHandle.get();
+        while (curTransform != nullptr) {
+            transformMatrix = curTransform->getMvMatrix() * transformMatrix;
+            z += curTransform->pos.z;
+            curTransform = curTransform->parent;
+        }
+        presenters.push_back(Visual{presenter, transformMatrix, z});
     });
 
     redraw(presenters, pMatrix);
