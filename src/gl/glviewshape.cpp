@@ -1,6 +1,5 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "glviewshape.h"
-#include "a.out.h"
 
 static const char shapeVShader[] =
     "attribute vec2 aPosition;\n"

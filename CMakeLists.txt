@@ -3,7 +3,11 @@ project (FlappyEngine)
 
 add_compile_options("-std=c++1y")
 
-file(GLOB SOURCES src/*.cpp src/core/*.cpp )
+file(GLOB CORE_SOURCES src/*.cpp src/core/*.cpp)
+file(GLOB_RECURSE BOX2D_SOURCE src/box2d/Box2D/)
+file(GLOB_RECURSE GLM_SOURCE src/glm/*.cpp)
+file(GLOB_RECURSE ENTITYX_SOURCE src/entityx/*.cc)
+set(SOURCES ${CORE_SOURCES} ${BOX2D_SOURCE} ${GLM_SOURCE} ${ENTITYX_SOURCE})
 
 find_package(GLEW)
 find_package(GLUT)

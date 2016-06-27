@@ -1,3 +1,0 @@
-[submodule "src/box2d"]
-	path = src/box2d
-	url = https://github.com/erincatto/Box2D.git
