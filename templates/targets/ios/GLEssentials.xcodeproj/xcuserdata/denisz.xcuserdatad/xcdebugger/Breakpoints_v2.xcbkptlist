@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GLEssentials/Source/Classes/OpenGLRenderer.m"
-            timestampString = "488478634.372916"
+            timestampString = "488737166.566813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "631"
-            endingLineNumber = "631"
+            startingLineNumber = "633"
+            endingLineNumber = "633"
             landmarkName = "-initWithDefaultFBO:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GLEssentials/Source/Classes/OpenGLRenderer.m"
-            timestampString = "488478634.372916"
+            timestampString = "488737166.566813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "656"
-            endingLineNumber = "656"
+            startingLineNumber = "658"
+            endingLineNumber = "658"
             landmarkName = "-initWithDefaultFBO:"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GLEssentials/Source/Classes/OpenGLRenderer.m"
-            timestampString = "488479048.059782"
+            timestampString = "488737166.566813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "-render"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GLEssentials/Source/Classes/GLWrapper.cpp"
-            timestampString = "488729034.264666"
+            timestampString = "488738353.158206"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "initCPP()"
             landmarkType = "7">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GLEssentials/Source/Classes/OpenGLRenderer.m"
-            timestampString = "488480152.088337"
+            timestampString = "488737166.566813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "655"
-            endingLineNumber = "655"
+            startingLineNumber = "657"
+            endingLineNumber = "657"
             landmarkName = "-initWithDefaultFBO:"
             landmarkType = "5">
          </BreakpointContent>
@@ -383,6 +383,20 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
             endingLineNumber = "66">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GLEssentials/Source/Classes/GLWrapper.cpp"
+            timestampString = "488735268.880207"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

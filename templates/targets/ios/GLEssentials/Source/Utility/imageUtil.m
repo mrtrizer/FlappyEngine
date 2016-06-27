@@ -65,3 +65,8 @@ void imgDestroyImage(demoImage* image)
 	free(image->data);
 	free(image);
 }
+
+demoImage* getImgByPath(const char* name) {
+    NSString* filePathName = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:name] ofType:@"png"];
+    return imgLoadImage([filePathName cStringUsingEncoding:NSASCIIStringEncoding], false);
+}

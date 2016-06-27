@@ -9,14 +9,12 @@
 #include "ccamera.h"
 #include "ctransform.h"
 
-class GWorldModel;
 class GViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
 class GWorldView: public entityx::System<GWorldView> {
 public:
-    typedef std::shared_ptr<GWorldModel> GWorldModelP;
     struct Visual {
         std::shared_ptr<GPresenter> presenter;
         glm::mat4 pos;
@@ -25,23 +23,24 @@ public:
 
     typedef std::list<Visual> GPresenterList;
 
+    GWorldView() {
+        instance = this;
+    }
     virtual ~GWorldView();
-    void setGWorldModel(GWorldModelP gWorldModel);
     void update(entityx::EntityManager &es, entityx::EventManager &, entityx::TimeDelta dt) override;
     void resize(int width, int height);
     virtual void init() = 0;
     void updateSize();
-
     class no_camera {};
+    
+    static GWorldView* getInst(){return instance;}
 
 protected:
     virtual void redraw(GPresenterList &, glm::mat4 &) = 0;
 
 private:
-    GWorldModelP gWorld;
-
-    GWorldModelP getGWorld() { return gWorld; }
     virtual void updateViewPort() = 0;
+    static GWorldView* instance;
 };
 
 #endif // GWORLDVIEW_H

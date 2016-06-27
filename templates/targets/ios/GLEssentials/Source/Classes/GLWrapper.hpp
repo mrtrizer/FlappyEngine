@@ -15,8 +15,9 @@
 extern "C" {
 #endif
 
-void renderCPP();
-void initCPP();
+    void renderCPP();
+    void initCPP();
+    void setSizeCPP(int width, int height);
 
 #ifdef __cplusplus
 }

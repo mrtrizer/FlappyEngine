@@ -12,6 +12,10 @@
 
 #include "glUtil.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct demoImageRec
 {
 	GLubyte* data;
@@ -29,7 +33,13 @@ typedef struct demoImageRec
 
 demoImage* imgLoadImage(const char* filepathname, int flipVertical);
 
+demoImage* getImgByPath(const char* name);
+    
 void imgDestroyImage(demoImage* image);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__IMAGE_UTIL_H__
 

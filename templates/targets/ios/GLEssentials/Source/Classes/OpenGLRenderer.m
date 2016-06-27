@@ -57,6 +57,8 @@ enum {
 
 	_viewWidth = width;
 	_viewHeight = height;
+    
+    setSizeCPP(width, height);
 }
 
 - (void) render

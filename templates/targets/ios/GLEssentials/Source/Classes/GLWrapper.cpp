@@ -24,16 +24,27 @@
 #include <gl/glworldview.h>
 #include <gl/glviewfactory.h>
 #include <gl/gltexture.h>
+#include "imageUtil.h"
 
 class IOSViewFactory: public GLViewFactory {
 public:
     virtual std::shared_ptr<GLTexture> getGLTexture(std::string path) const {
-        return std::make_shared<GLTexture>(nullptr,100,100);
+        auto img = getImgByPath(path.data());
+        auto texture = std::make_shared<GLTexture>((char*)img->data, (int)img->width, (int)img->height);
+        imgDestroyImage(img);
+        return texture;
     }
 };
 
 entityx::ComponentHandle<GLWorldView> glWorldView;
 std::shared_ptr<FlappyApp> app;
+
+class Rotate: public Behaviour {
+public:
+    void update(entityx::Entity e, entityx::TimeDelta dt) {
+        e.component<CTransform>()->angle += dt;
+    }
+};
 
 class MyFlappyApp : public FlappyApp
 {
@@ -43,7 +54,10 @@ public:
         SceneManager::createEntity().add<CCamera>();
         //Background
         auto sprite = SceneManager::createEntity();
-        sprite.add<CPresenter,GPresenterRect>(10, 10);
+        sprite.add<CPresenter,GPresenterSprite>("demon",30, 30);
+        sprite.add<CTransform>();
+        sprite.add<CBehavoiur, Rotate>();
+        
     }
 };
 
@@ -53,18 +67,17 @@ extern "C" {
 std::shared_ptr<GLViewShape> myRect;
 
 void renderCPP() {
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    
-//    glm::mat4 pMatrix = glm::ortho( -100.f, 100.f, -100.f, 100.f, -1.f, 1.f );
-//    glm::mat4 mvMatrix = glm::mat4(1);
-    
-//    if (myRect != nullptr)
-//        myRect->draw(pMatrix, mvMatrix);
+
     if (app != nullptr)
         app->update();
 
 }
 
+void setSizeCPP(int width, int height) {
+    GWorldView::instance->resize(width,height);
+    //GWorldView::getInst()->resize(width, height);
+}
+    
 void initCPP() {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     CHECK_GL_ERROR;
