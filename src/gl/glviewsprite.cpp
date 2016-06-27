@@ -15,7 +15,7 @@ static const char spriteVShader[] =
     "}\n";
 
 static const char spriteFShader[] =
-#if defined(GL_ES) || defined(EMSCRIPTEN)
+#if defined(GL_ES) || defined(EMSCRIPTEN) || defined(TARGET_OS_IPHONE)
     "precision mediump float;\n"
 #endif
     "uniform sampler2D uTex;\n"

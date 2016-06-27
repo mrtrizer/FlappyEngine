@@ -11,7 +11,7 @@ static const char shapeVShader[] =
     "}\n";
 
 static const char shapeFShader[] =
-#if defined(GL_ES) || defined(EMSCRIPTEN)
+#if defined(GL_ES) || defined(EMSCRIPTEN) || defined(TARGET_OS_IPHONE)
     "precision mediump float;\n"
 #endif
     "uniform vec4 uColor;\n"

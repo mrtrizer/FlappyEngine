@@ -4,12 +4,9 @@
 #include "screenmanager.h"
 #include "scenemanager.h"
 
-GWorldView::~GWorldView(){
-}
+GWorldView* GWorldView::instance = nullptr;
 
-void GWorldView::setGWorldModel(GWorldModelP gWorldModel) {
-    this->gWorld = gWorldModel;
-    updateSize();
+GWorldView::~GWorldView(){
 }
 
 void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, entityx::TimeDelta dt) {
