@@ -13,10 +13,7 @@ class GLWorldView : public GWorldView {
 public:
     GLWorldView(const std::shared_ptr<GLViewFactory> & factory):
         factory(factory)
-    {
-        init();
-        resize(100,100);
-    }
+    {}
     virtual ~GLWorldView();
     void redraw(GPresenterList &, glm::mat4 &) override;
     void init() override;
