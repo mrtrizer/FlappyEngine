@@ -26,6 +26,15 @@
 		3A622B8C1A899CDE00A12489 /* modelUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B7B1A899CDE00A12489 /* modelUtil.c */; };
 		3A622B8D1A899CDE00A12489 /* sourceUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B7D1A899CDE00A12489 /* sourceUtil.c */; };
 		3A622B8E1A899CDE00A12489 /* vectorUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B7F1A899CDE00A12489 /* vectorUtil.c */; };
+		A050A3AF1D2192790035DEC7 /* gl in Resources */ = {isa = PBXBuildFile; fileRef = A050A3AE1D2192790035DEC7 /* gl */; };
+		A050A3C41D2265A40035DEC7 /* glattribarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3B31D2265A40035DEC7 /* glattribarray.cpp */; };
+		A050A3C51D2265A40035DEC7 /* glshaderprogram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3B51D2265A40035DEC7 /* glshaderprogram.cpp */; };
+		A050A3C61D2265A40035DEC7 /* gltexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3B71D2265A40035DEC7 /* gltexture.cpp */; };
+		A050A3C71D2265A40035DEC7 /* gltools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3B91D2265A40035DEC7 /* gltools.cpp */; };
+		A050A3C81D2265A40035DEC7 /* glviewfactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3BC1D2265A40035DEC7 /* glviewfactory.cpp */; };
+		A050A3C91D2265A40035DEC7 /* glviewshape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3BE1D2265A40035DEC7 /* glviewshape.cpp */; };
+		A050A3CA1D2265A40035DEC7 /* glviewsprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3C01D2265A40035DEC7 /* glviewsprite.cpp */; };
+		A050A3CB1D2265A40035DEC7 /* glworldview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3C21D2265A40035DEC7 /* glworldview.cpp */; };
 		A0A0E96E1D1D9129005E2DF2 /* GLWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E96C1D1D9129005E2DF2 /* GLWrapper.cpp */; };
 		A0A0E9A61D215C37005E2DF2 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9861D215C37005E2DF2 /* animation.cpp */; };
 		A0A0E9A71D215C37005E2DF2 /* cbehavoiur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9891D215C37005E2DF2 /* cbehavoiur.cpp */; };
@@ -43,14 +52,6 @@
 		A0A0E9B81D215C6A005E2DF2 /* Entity.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B31D215C6A005E2DF2 /* Entity.cc */; };
 		A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B61D215C6A005E2DF2 /* Event.cc */; };
 		A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9BB1D215C99005E2DF2 /* System.cc */; };
-		A0A0E9CF1D215CAD005E2DF2 /* glattribarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9BE1D215CAD005E2DF2 /* glattribarray.cpp */; };
-		A0A0E9D01D215CAD005E2DF2 /* glshaderprogram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9C01D215CAD005E2DF2 /* glshaderprogram.cpp */; };
-		A0A0E9D11D215CAD005E2DF2 /* gltexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9C21D215CAD005E2DF2 /* gltexture.cpp */; };
-		A0A0E9D21D215CAD005E2DF2 /* gltools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9C41D215CAD005E2DF2 /* gltools.cpp */; };
-		A0A0E9D31D215CAD005E2DF2 /* glviewfactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9C71D215CAD005E2DF2 /* glviewfactory.cpp */; };
-		A0A0E9D41D215CAD005E2DF2 /* glviewshape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9C91D215CAD005E2DF2 /* glviewshape.cpp */; };
-		A0A0E9D51D215CAD005E2DF2 /* glviewsprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9CB1D215CAD005E2DF2 /* glviewsprite.cpp */; };
-		A0A0E9D61D215CAD005E2DF2 /* glworldview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9CD1D215CAD005E2DF2 /* glworldview.cpp */; };
 		A0A0E9D81D215CBD005E2DF2 /* glm in Resources */ = {isa = PBXBuildFile; fileRef = A0A0E9D71D215CBD005E2DF2 /* glm */; };
 		A0A0E9DE1D216A28005E2DF2 /* Pool.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9DA1D216A28005E2DF2 /* Pool.cc */; };
 		A0A0E9DF1D216A28005E2DF2 /* Timer.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9DC1D216A28005E2DF2 /* Timer.cc */; };
@@ -92,6 +93,24 @@
 		3A622B7E1A899CDE00A12489 /* sourceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sourceUtil.h; sourceTree = "<group>"; };
 		3A622B7F1A899CDE00A12489 /* vectorUtil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vectorUtil.c; sourceTree = "<group>"; };
 		3A622B801A899CDE00A12489 /* vectorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vectorUtil.h; sourceTree = "<group>"; };
+		A050A3AE1D2192790035DEC7 /* gl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gl; path = /Users/denisz/Downloads/FlappyTest/engine/src/gl; sourceTree = "<absolute>"; };
+		A050A3B31D2265A40035DEC7 /* glattribarray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glattribarray.cpp; sourceTree = "<group>"; };
+		A050A3B41D2265A40035DEC7 /* glattribarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glattribarray.h; sourceTree = "<group>"; };
+		A050A3B51D2265A40035DEC7 /* glshaderprogram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glshaderprogram.cpp; sourceTree = "<group>"; };
+		A050A3B61D2265A40035DEC7 /* glshaderprogram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glshaderprogram.h; sourceTree = "<group>"; };
+		A050A3B71D2265A40035DEC7 /* gltexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gltexture.cpp; sourceTree = "<group>"; };
+		A050A3B81D2265A40035DEC7 /* gltexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gltexture.h; sourceTree = "<group>"; };
+		A050A3B91D2265A40035DEC7 /* gltools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gltools.cpp; sourceTree = "<group>"; };
+		A050A3BA1D2265A40035DEC7 /* gltools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gltools.h; sourceTree = "<group>"; };
+		A050A3BB1D2265A40035DEC7 /* glview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glview.h; sourceTree = "<group>"; };
+		A050A3BC1D2265A40035DEC7 /* glviewfactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewfactory.cpp; sourceTree = "<group>"; };
+		A050A3BD1D2265A40035DEC7 /* glviewfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewfactory.h; sourceTree = "<group>"; };
+		A050A3BE1D2265A40035DEC7 /* glviewshape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewshape.cpp; sourceTree = "<group>"; };
+		A050A3BF1D2265A40035DEC7 /* glviewshape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewshape.h; sourceTree = "<group>"; };
+		A050A3C01D2265A40035DEC7 /* glviewsprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewsprite.cpp; sourceTree = "<group>"; };
+		A050A3C11D2265A40035DEC7 /* glviewsprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewsprite.h; sourceTree = "<group>"; };
+		A050A3C21D2265A40035DEC7 /* glworldview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glworldview.cpp; sourceTree = "<group>"; };
+		A050A3C31D2265A40035DEC7 /* glworldview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glworldview.h; sourceTree = "<group>"; };
 		A0A0E96C1D1D9129005E2DF2 /* GLWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWrapper.cpp; sourceTree = "<group>"; };
 		A0A0E96D1D1D9129005E2DF2 /* GLWrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLWrapper.hpp; sourceTree = "<group>"; };
 		A0A0E9861D215C37005E2DF2 /* animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
@@ -134,24 +153,7 @@
 		A0A0E9BA1D215C99005E2DF2 /* quick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quick.h; sourceTree = "<group>"; };
 		A0A0E9BB1D215C99005E2DF2 /* System.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cc; sourceTree = "<group>"; };
 		A0A0E9BC1D215C99005E2DF2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
-		A0A0E9BE1D215CAD005E2DF2 /* glattribarray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glattribarray.cpp; sourceTree = "<group>"; };
-		A0A0E9BF1D215CAD005E2DF2 /* glattribarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glattribarray.h; sourceTree = "<group>"; };
-		A0A0E9C01D215CAD005E2DF2 /* glshaderprogram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glshaderprogram.cpp; sourceTree = "<group>"; };
-		A0A0E9C11D215CAD005E2DF2 /* glshaderprogram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glshaderprogram.h; sourceTree = "<group>"; };
-		A0A0E9C21D215CAD005E2DF2 /* gltexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gltexture.cpp; sourceTree = "<group>"; };
-		A0A0E9C31D215CAD005E2DF2 /* gltexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gltexture.h; sourceTree = "<group>"; };
-		A0A0E9C41D215CAD005E2DF2 /* gltools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gltools.cpp; sourceTree = "<group>"; };
-		A0A0E9C51D215CAD005E2DF2 /* gltools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gltools.h; sourceTree = "<group>"; };
-		A0A0E9C61D215CAD005E2DF2 /* glview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glview.h; sourceTree = "<group>"; };
-		A0A0E9C71D215CAD005E2DF2 /* glviewfactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewfactory.cpp; sourceTree = "<group>"; };
-		A0A0E9C81D215CAD005E2DF2 /* glviewfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewfactory.h; sourceTree = "<group>"; };
-		A0A0E9C91D215CAD005E2DF2 /* glviewshape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewshape.cpp; sourceTree = "<group>"; };
-		A0A0E9CA1D215CAD005E2DF2 /* glviewshape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewshape.h; sourceTree = "<group>"; };
-		A0A0E9CB1D215CAD005E2DF2 /* glviewsprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glviewsprite.cpp; sourceTree = "<group>"; };
-		A0A0E9CC1D215CAD005E2DF2 /* glviewsprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewsprite.h; sourceTree = "<group>"; };
-		A0A0E9CD1D215CAD005E2DF2 /* glworldview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glworldview.cpp; sourceTree = "<group>"; };
-		A0A0E9CE1D215CAD005E2DF2 /* glworldview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glworldview.h; sourceTree = "<group>"; };
-		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; path = glm; sourceTree = "<group>"; };
+		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = /Users/denisz/Downloads/FlappyTest/engine/src/glm; sourceTree = "<absolute>"; };
 		A0A0E9D91D216A28005E2DF2 /* NonCopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonCopyable.h; sourceTree = "<group>"; };
 		A0A0E9DA1D216A28005E2DF2 /* Pool.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pool.cc; sourceTree = "<group>"; };
 		A0A0E9DB1D216A28005E2DF2 /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pool.h; sourceTree = "<group>"; };
@@ -296,12 +298,36 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		A050A3B21D22651A0035DEC7 /* gl */ = {
+			isa = PBXGroup;
+			children = (
+				A050A3B31D2265A40035DEC7 /* glattribarray.cpp */,
+				A050A3B41D2265A40035DEC7 /* glattribarray.h */,
+				A050A3B51D2265A40035DEC7 /* glshaderprogram.cpp */,
+				A050A3B61D2265A40035DEC7 /* glshaderprogram.h */,
+				A050A3B71D2265A40035DEC7 /* gltexture.cpp */,
+				A050A3B81D2265A40035DEC7 /* gltexture.h */,
+				A050A3B91D2265A40035DEC7 /* gltools.cpp */,
+				A050A3BA1D2265A40035DEC7 /* gltools.h */,
+				A050A3BB1D2265A40035DEC7 /* glview.h */,
+				A050A3BC1D2265A40035DEC7 /* glviewfactory.cpp */,
+				A050A3BD1D2265A40035DEC7 /* glviewfactory.h */,
+				A050A3BE1D2265A40035DEC7 /* glviewshape.cpp */,
+				A050A3BF1D2265A40035DEC7 /* glviewshape.h */,
+				A050A3C01D2265A40035DEC7 /* glviewsprite.cpp */,
+				A050A3C11D2265A40035DEC7 /* glviewsprite.h */,
+				A050A3C21D2265A40035DEC7 /* glworldview.cpp */,
+				A050A3C31D2265A40035DEC7 /* glworldview.h */,
+			);
+			name = gl;
+			path = ../../../../../engine/src/gl;
+			sourceTree = "<group>";
+		};
 		A0A0E9811D215BAB005E2DF2 /* FlappyEngine */ = {
 			isa = PBXGroup;
 			children = (
-				A0A0E9D71D215CBD005E2DF2 /* glm */,
+				A050A3B21D22651A0035DEC7 /* gl */,
 				A0A0E9851D215BF9005E2DF2 /* core */,
-				A0A0E9831D215BCC005E2DF2 /* gl */,
 				A0A0E9821D215BC2005E2DF2 /* entityx */,
 			);
 			name = FlappyEngine;
@@ -325,30 +351,6 @@
 				A0A0E9B71D215C6A005E2DF2 /* Event.h */,
 			);
 			name = entityx;
-			sourceTree = "<group>";
-		};
-		A0A0E9831D215BCC005E2DF2 /* gl */ = {
-			isa = PBXGroup;
-			children = (
-				A0A0E9BE1D215CAD005E2DF2 /* glattribarray.cpp */,
-				A0A0E9BF1D215CAD005E2DF2 /* glattribarray.h */,
-				A0A0E9C01D215CAD005E2DF2 /* glshaderprogram.cpp */,
-				A0A0E9C11D215CAD005E2DF2 /* glshaderprogram.h */,
-				A0A0E9C21D215CAD005E2DF2 /* gltexture.cpp */,
-				A0A0E9C31D215CAD005E2DF2 /* gltexture.h */,
-				A0A0E9C41D215CAD005E2DF2 /* gltools.cpp */,
-				A0A0E9C51D215CAD005E2DF2 /* gltools.h */,
-				A0A0E9C61D215CAD005E2DF2 /* glview.h */,
-				A0A0E9C71D215CAD005E2DF2 /* glviewfactory.cpp */,
-				A0A0E9C81D215CAD005E2DF2 /* glviewfactory.h */,
-				A0A0E9C91D215CAD005E2DF2 /* glviewshape.cpp */,
-				A0A0E9CA1D215CAD005E2DF2 /* glviewshape.h */,
-				A0A0E9CB1D215CAD005E2DF2 /* glviewsprite.cpp */,
-				A0A0E9CC1D215CAD005E2DF2 /* glviewsprite.h */,
-				A0A0E9CD1D215CAD005E2DF2 /* glworldview.cpp */,
-				A0A0E9CE1D215CAD005E2DF2 /* glworldview.h */,
-			);
-			name = gl;
 			sourceTree = "<group>";
 		};
 		A0A0E9851D215BF9005E2DF2 /* core */ = {
@@ -457,6 +459,7 @@
 				3A4CF8DE1A895B0A00324DBF /* LaunchScreen.xib in Resources */,
 				3A4CF8AF1A89593700324DBF /* reflect.vsh in Resources */,
 				A0A0E9D81D215CBD005E2DF2 /* glm in Resources */,
+				A050A3AF1D2192790035DEC7 /* gl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,42 +471,42 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A622B8B1A899CDE00A12489 /* matrixUtil.c in Sources */,
-				A0A0E9D01D215CAD005E2DF2 /* glshaderprogram.cpp in Sources */,
 				A0A0E9A71D215C37005E2DF2 /* cbehavoiur.cpp in Sources */,
+				A050A3C61D2265A40035DEC7 /* gltexture.cpp in Sources */,
+				A050A3CB1D2265A40035DEC7 /* glworldview.cpp in Sources */,
 				3A622B831A899CDE00A12489 /* ES2Renderer.m in Sources */,
 				3A622B811A899CDE00A12489 /* AppDelegate.m in Sources */,
 				3A622B821A899CDE00A12489 /* EAGLView.m in Sources */,
 				A0A0E9AB1D215C37005E2DF2 /* flappyapp.cpp in Sources */,
+				A050A3C41D2265A40035DEC7 /* glattribarray.cpp in Sources */,
 				A0A0E9AC1D215C37005E2DF2 /* gpresenter.cpp in Sources */,
-				A0A0E9D31D215CAD005E2DF2 /* glviewfactory.cpp in Sources */,
 				A0A0E9DE1D216A28005E2DF2 /* Pool.cc in Sources */,
-				A0A0E9D41D215CAD005E2DF2 /* glviewshape.cpp in Sources */,
 				A0A0E9A91D215C37005E2DF2 /* component.cpp in Sources */,
 				A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */,
-				A0A0E9D11D215CAD005E2DF2 /* gltexture.cpp in Sources */,
 				3A622B8D1A899CDE00A12489 /* sourceUtil.c in Sources */,
 				A0A0E9AD1D215C37005E2DF2 /* gtools.cpp in Sources */,
+				A050A3C91D2265A40035DEC7 /* glviewshape.cpp in Sources */,
+				A050A3C71D2265A40035DEC7 /* gltools.cpp in Sources */,
 				3A622B8E1A899CDE00A12489 /* vectorUtil.c in Sources */,
+				A050A3C81D2265A40035DEC7 /* glviewfactory.cpp in Sources */,
 				3A622B8C1A899CDE00A12489 /* modelUtil.c in Sources */,
 				A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */,
 				A0A0E9B01D215C37005E2DF2 /* initsystem.cpp in Sources */,
 				A0A0E9AE1D215C37005E2DF2 /* gview.cpp in Sources */,
 				A0A0E9B81D215C6A005E2DF2 /* Entity.cc in Sources */,
 				A0A0E96E1D1D9129005E2DF2 /* GLWrapper.cpp in Sources */,
-				A0A0E9CF1D215CAD005E2DF2 /* glattribarray.cpp in Sources */,
 				A0A0E9B11D215C37005E2DF2 /* inputmanager.cpp in Sources */,
-				A0A0E9D51D215CAD005E2DF2 /* glviewsprite.cpp in Sources */,
 				A0A0E9AF1D215C37005E2DF2 /* gworldview.cpp in Sources */,
 				A0A0E9AA1D215C37005E2DF2 /* cpresenter.cpp in Sources */,
+				A050A3C51D2265A40035DEC7 /* glshaderprogram.cpp in Sources */,
 				A0A0E9B21D215C37005E2DF2 /* scenemanager.cpp in Sources */,
 				3A622B891A899CDE00A12489 /* main.m in Sources */,
-				A0A0E9D21D215CAD005E2DF2 /* gltools.cpp in Sources */,
+				A050A3CA1D2265A40035DEC7 /* glviewsprite.cpp in Sources */,
 				A0A0E9A81D215C37005E2DF2 /* ccamera.cpp in Sources */,
 				A0A0E9DF1D216A28005E2DF2 /* Timer.cc in Sources */,
 				3A622B851A899CDE00A12489 /* OpenGLRenderer.m in Sources */,
 				A0A0E9A61D215C37005E2DF2 /* animation.cpp in Sources */,
 				3A622B8A1A899CDE00A12489 /* imageUtil.m in Sources */,
-				A0A0E9D61D215CAD005E2DF2 /* glworldview.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
