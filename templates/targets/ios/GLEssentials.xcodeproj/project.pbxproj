@@ -35,26 +35,26 @@
 		A050A3C91D2265A40035DEC7 /* glviewshape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3BE1D2265A40035DEC7 /* glviewshape.cpp */; };
 		A050A3CA1D2265A40035DEC7 /* glviewsprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3C01D2265A40035DEC7 /* glviewsprite.cpp */; };
 		A050A3CB1D2265A40035DEC7 /* glworldview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3C21D2265A40035DEC7 /* glworldview.cpp */; };
+		A050A3EC1D23FB660035DEC7 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3CC1D23FB660035DEC7 /* animation.cpp */; };
+		A050A3ED1D23FB660035DEC7 /* cbehavoiur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3CF1D23FB660035DEC7 /* cbehavoiur.cpp */; };
+		A050A3EE1D23FB660035DEC7 /* ccamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3D11D23FB660035DEC7 /* ccamera.cpp */; };
+		A050A3EF1D23FB660035DEC7 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3D31D23FB660035DEC7 /* component.cpp */; };
+		A050A3F01D23FB660035DEC7 /* cpresenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3D51D23FB660035DEC7 /* cpresenter.cpp */; };
+		A050A3F11D23FB660035DEC7 /* flappyapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3D81D23FB660035DEC7 /* flappyapp.cpp */; };
+		A050A3F21D23FB660035DEC7 /* gpresenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3DA1D23FB660035DEC7 /* gpresenter.cpp */; };
+		A050A3F31D23FB660035DEC7 /* gtools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3DC1D23FB660035DEC7 /* gtools.cpp */; };
+		A050A3F41D23FB660035DEC7 /* gview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3DE1D23FB660035DEC7 /* gview.cpp */; };
+		A050A3F51D23FB660035DEC7 /* gworldview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3E11D23FB660035DEC7 /* gworldview.cpp */; };
+		A050A3F61D23FB660035DEC7 /* initsystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3E31D23FB660035DEC7 /* initsystem.cpp */; };
+		A050A3F71D23FB660035DEC7 /* inputmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3E51D23FB660035DEC7 /* inputmanager.cpp */; };
+		A050A3F81D23FB660035DEC7 /* scenemanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A050A3E91D23FB660035DEC7 /* scenemanager.cpp */; };
+		A050A4061D23FBDA0035DEC7 /* Pool.cc in Sources */ = {isa = PBXBuildFile; fileRef = A050A4021D23FBDA0035DEC7 /* Pool.cc */; };
+		A050A4071D23FBDA0035DEC7 /* Timer.cc in Sources */ = {isa = PBXBuildFile; fileRef = A050A4041D23FBDA0035DEC7 /* Timer.cc */; };
 		A0A0E96E1D1D9129005E2DF2 /* GLWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E96C1D1D9129005E2DF2 /* GLWrapper.cpp */; };
-		A0A0E9A61D215C37005E2DF2 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9861D215C37005E2DF2 /* animation.cpp */; };
-		A0A0E9A71D215C37005E2DF2 /* cbehavoiur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9891D215C37005E2DF2 /* cbehavoiur.cpp */; };
-		A0A0E9A81D215C37005E2DF2 /* ccamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E98B1D215C37005E2DF2 /* ccamera.cpp */; };
-		A0A0E9A91D215C37005E2DF2 /* component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E98D1D215C37005E2DF2 /* component.cpp */; };
-		A0A0E9AA1D215C37005E2DF2 /* cpresenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E98F1D215C37005E2DF2 /* cpresenter.cpp */; };
-		A0A0E9AB1D215C37005E2DF2 /* flappyapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9921D215C37005E2DF2 /* flappyapp.cpp */; };
-		A0A0E9AC1D215C37005E2DF2 /* gpresenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9941D215C37005E2DF2 /* gpresenter.cpp */; };
-		A0A0E9AD1D215C37005E2DF2 /* gtools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9961D215C37005E2DF2 /* gtools.cpp */; };
-		A0A0E9AE1D215C37005E2DF2 /* gview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9981D215C37005E2DF2 /* gview.cpp */; };
-		A0A0E9AF1D215C37005E2DF2 /* gworldview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E99B1D215C37005E2DF2 /* gworldview.cpp */; };
-		A0A0E9B01D215C37005E2DF2 /* initsystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E99D1D215C37005E2DF2 /* initsystem.cpp */; };
-		A0A0E9B11D215C37005E2DF2 /* inputmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E99F1D215C37005E2DF2 /* inputmanager.cpp */; };
-		A0A0E9B21D215C37005E2DF2 /* scenemanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9A31D215C37005E2DF2 /* scenemanager.cpp */; };
 		A0A0E9B81D215C6A005E2DF2 /* Entity.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B31D215C6A005E2DF2 /* Entity.cc */; };
 		A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B61D215C6A005E2DF2 /* Event.cc */; };
 		A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9BB1D215C99005E2DF2 /* System.cc */; };
 		A0A0E9D81D215CBD005E2DF2 /* glm in Resources */ = {isa = PBXBuildFile; fileRef = A0A0E9D71D215CBD005E2DF2 /* glm */; };
-		A0A0E9DE1D216A28005E2DF2 /* Pool.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9DA1D216A28005E2DF2 /* Pool.cc */; };
-		A0A0E9DF1D216A28005E2DF2 /* Timer.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9DC1D216A28005E2DF2 /* Timer.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,40 +111,45 @@
 		A050A3C11D2265A40035DEC7 /* glviewsprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glviewsprite.h; sourceTree = "<group>"; };
 		A050A3C21D2265A40035DEC7 /* glworldview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glworldview.cpp; sourceTree = "<group>"; };
 		A050A3C31D2265A40035DEC7 /* glworldview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glworldview.h; sourceTree = "<group>"; };
+		A050A3CC1D23FB660035DEC7 /* animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
+		A050A3CD1D23FB660035DEC7 /* animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = animation.h; sourceTree = "<group>"; };
+		A050A3CE1D23FB660035DEC7 /* behaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = behaviour.h; sourceTree = "<group>"; };
+		A050A3CF1D23FB660035DEC7 /* cbehavoiur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cbehavoiur.cpp; sourceTree = "<group>"; };
+		A050A3D01D23FB660035DEC7 /* cbehavoiur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cbehavoiur.h; sourceTree = "<group>"; };
+		A050A3D11D23FB660035DEC7 /* ccamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ccamera.cpp; sourceTree = "<group>"; };
+		A050A3D21D23FB660035DEC7 /* ccamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccamera.h; sourceTree = "<group>"; };
+		A050A3D31D23FB660035DEC7 /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = component.cpp; sourceTree = "<group>"; };
+		A050A3D41D23FB660035DEC7 /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = component.h; sourceTree = "<group>"; };
+		A050A3D51D23FB660035DEC7 /* cpresenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpresenter.cpp; sourceTree = "<group>"; };
+		A050A3D61D23FB660035DEC7 /* cpresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpresenter.h; sourceTree = "<group>"; };
+		A050A3D71D23FB660035DEC7 /* ctransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctransform.h; sourceTree = "<group>"; };
+		A050A3D81D23FB660035DEC7 /* flappyapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flappyapp.cpp; sourceTree = "<group>"; };
+		A050A3D91D23FB660035DEC7 /* flappyapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flappyapp.h; sourceTree = "<group>"; };
+		A050A3DA1D23FB660035DEC7 /* gpresenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpresenter.cpp; sourceTree = "<group>"; };
+		A050A3DB1D23FB660035DEC7 /* gpresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gpresenter.h; sourceTree = "<group>"; };
+		A050A3DC1D23FB660035DEC7 /* gtools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gtools.cpp; sourceTree = "<group>"; };
+		A050A3DD1D23FB660035DEC7 /* gtools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gtools.h; sourceTree = "<group>"; };
+		A050A3DE1D23FB660035DEC7 /* gview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gview.cpp; sourceTree = "<group>"; };
+		A050A3DF1D23FB660035DEC7 /* gview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gview.h; sourceTree = "<group>"; };
+		A050A3E01D23FB660035DEC7 /* gviewfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gviewfactory.h; sourceTree = "<group>"; };
+		A050A3E11D23FB660035DEC7 /* gworldview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gworldview.cpp; sourceTree = "<group>"; };
+		A050A3E21D23FB660035DEC7 /* gworldview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gworldview.h; sourceTree = "<group>"; };
+		A050A3E31D23FB660035DEC7 /* initsystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = initsystem.cpp; sourceTree = "<group>"; };
+		A050A3E41D23FB660035DEC7 /* initsystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initsystem.h; sourceTree = "<group>"; };
+		A050A3E51D23FB660035DEC7 /* inputmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = inputmanager.cpp; sourceTree = "<group>"; };
+		A050A3E61D23FB660035DEC7 /* inputmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inputmanager.h; sourceTree = "<group>"; };
+		A050A3E71D23FB660035DEC7 /* manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = manager.h; sourceTree = "<group>"; };
+		A050A3E81D23FB660035DEC7 /* prefab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefab.h; sourceTree = "<group>"; };
+		A050A3E91D23FB660035DEC7 /* scenemanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenemanager.cpp; sourceTree = "<group>"; };
+		A050A3EA1D23FB660035DEC7 /* scenemanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenemanager.h; sourceTree = "<group>"; };
+		A050A3EB1D23FB660035DEC7 /* screenmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = screenmanager.h; sourceTree = "<group>"; };
+		A050A4011D23FBDA0035DEC7 /* NonCopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonCopyable.h; sourceTree = "<group>"; };
+		A050A4021D23FBDA0035DEC7 /* Pool.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pool.cc; sourceTree = "<group>"; };
+		A050A4031D23FBDA0035DEC7 /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pool.h; sourceTree = "<group>"; };
+		A050A4041D23FBDA0035DEC7 /* Timer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cc; sourceTree = "<group>"; };
+		A050A4051D23FBDA0035DEC7 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		A0A0E96C1D1D9129005E2DF2 /* GLWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWrapper.cpp; sourceTree = "<group>"; };
 		A0A0E96D1D1D9129005E2DF2 /* GLWrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLWrapper.hpp; sourceTree = "<group>"; };
-		A0A0E9861D215C37005E2DF2 /* animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
-		A0A0E9871D215C37005E2DF2 /* animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = animation.h; sourceTree = "<group>"; };
-		A0A0E9881D215C37005E2DF2 /* behaviour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = behaviour.h; sourceTree = "<group>"; };
-		A0A0E9891D215C37005E2DF2 /* cbehavoiur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cbehavoiur.cpp; sourceTree = "<group>"; };
-		A0A0E98A1D215C37005E2DF2 /* cbehavoiur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cbehavoiur.h; sourceTree = "<group>"; };
-		A0A0E98B1D215C37005E2DF2 /* ccamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ccamera.cpp; sourceTree = "<group>"; };
-		A0A0E98C1D215C37005E2DF2 /* ccamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccamera.h; sourceTree = "<group>"; };
-		A0A0E98D1D215C37005E2DF2 /* component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = component.cpp; sourceTree = "<group>"; };
-		A0A0E98E1D215C37005E2DF2 /* component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = component.h; sourceTree = "<group>"; };
-		A0A0E98F1D215C37005E2DF2 /* cpresenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cpresenter.cpp; sourceTree = "<group>"; };
-		A0A0E9901D215C37005E2DF2 /* cpresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpresenter.h; sourceTree = "<group>"; };
-		A0A0E9911D215C37005E2DF2 /* ctransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ctransform.h; sourceTree = "<group>"; };
-		A0A0E9921D215C37005E2DF2 /* flappyapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flappyapp.cpp; sourceTree = "<group>"; };
-		A0A0E9931D215C37005E2DF2 /* flappyapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flappyapp.h; sourceTree = "<group>"; };
-		A0A0E9941D215C37005E2DF2 /* gpresenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpresenter.cpp; sourceTree = "<group>"; };
-		A0A0E9951D215C37005E2DF2 /* gpresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gpresenter.h; sourceTree = "<group>"; };
-		A0A0E9961D215C37005E2DF2 /* gtools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gtools.cpp; sourceTree = "<group>"; };
-		A0A0E9971D215C37005E2DF2 /* gtools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gtools.h; sourceTree = "<group>"; };
-		A0A0E9981D215C37005E2DF2 /* gview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gview.cpp; sourceTree = "<group>"; };
-		A0A0E9991D215C37005E2DF2 /* gview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gview.h; sourceTree = "<group>"; };
-		A0A0E99A1D215C37005E2DF2 /* gviewfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gviewfactory.h; sourceTree = "<group>"; };
-		A0A0E99B1D215C37005E2DF2 /* gworldview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gworldview.cpp; sourceTree = "<group>"; };
-		A0A0E99C1D215C37005E2DF2 /* gworldview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gworldview.h; sourceTree = "<group>"; };
-		A0A0E99D1D215C37005E2DF2 /* initsystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = initsystem.cpp; sourceTree = "<group>"; };
-		A0A0E99E1D215C37005E2DF2 /* initsystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initsystem.h; sourceTree = "<group>"; };
-		A0A0E99F1D215C37005E2DF2 /* inputmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = inputmanager.cpp; sourceTree = "<group>"; };
-		A0A0E9A01D215C37005E2DF2 /* inputmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inputmanager.h; sourceTree = "<group>"; };
-		A0A0E9A11D215C37005E2DF2 /* manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = manager.h; sourceTree = "<group>"; };
-		A0A0E9A21D215C37005E2DF2 /* prefab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefab.h; sourceTree = "<group>"; };
-		A0A0E9A31D215C37005E2DF2 /* scenemanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scenemanager.cpp; sourceTree = "<group>"; };
-		A0A0E9A41D215C37005E2DF2 /* scenemanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scenemanager.h; sourceTree = "<group>"; };
-		A0A0E9A51D215C37005E2DF2 /* screenmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = screenmanager.h; sourceTree = "<group>"; };
 		A0A0E9B31D215C6A005E2DF2 /* Entity.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cc; sourceTree = "<group>"; };
 		A0A0E9B41D215C6A005E2DF2 /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		A0A0E9B51D215C6A005E2DF2 /* entityx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entityx.h; sourceTree = "<group>"; };
@@ -154,11 +159,6 @@
 		A0A0E9BB1D215C99005E2DF2 /* System.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cc; sourceTree = "<group>"; };
 		A0A0E9BC1D215C99005E2DF2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = /Users/denisz/Downloads/FlappyTest/engine/src/glm; sourceTree = "<absolute>"; };
-		A0A0E9D91D216A28005E2DF2 /* NonCopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonCopyable.h; sourceTree = "<group>"; };
-		A0A0E9DA1D216A28005E2DF2 /* Pool.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pool.cc; sourceTree = "<group>"; };
-		A0A0E9DB1D216A28005E2DF2 /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pool.h; sourceTree = "<group>"; };
-		A0A0E9DC1D216A28005E2DF2 /* Timer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cc; sourceTree = "<group>"; };
-		A0A0E9DD1D216A28005E2DF2 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +323,18 @@
 			path = ../../../../../engine/src/gl;
 			sourceTree = "<group>";
 		};
+		A050A3F91D23FBAB0035DEC7 /* help */ = {
+			isa = PBXGroup;
+			children = (
+				A050A4011D23FBDA0035DEC7 /* NonCopyable.h */,
+				A050A4021D23FBDA0035DEC7 /* Pool.cc */,
+				A050A4031D23FBDA0035DEC7 /* Pool.h */,
+				A050A4041D23FBDA0035DEC7 /* Timer.cc */,
+				A050A4051D23FBDA0035DEC7 /* Timer.h */,
+			);
+			path = help;
+			sourceTree = "<group>";
+		};
 		A0A0E9811D215BAB005E2DF2 /* FlappyEngine */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,11 +348,7 @@
 		A0A0E9821D215BC2005E2DF2 /* entityx */ = {
 			isa = PBXGroup;
 			children = (
-				A0A0E9D91D216A28005E2DF2 /* NonCopyable.h */,
-				A0A0E9DA1D216A28005E2DF2 /* Pool.cc */,
-				A0A0E9DB1D216A28005E2DF2 /* Pool.h */,
-				A0A0E9DC1D216A28005E2DF2 /* Timer.cc */,
-				A0A0E9DD1D216A28005E2DF2 /* Timer.h */,
+				A050A3F91D23FBAB0035DEC7 /* help */,
 				A0A0E9BA1D215C99005E2DF2 /* quick.h */,
 				A0A0E9BB1D215C99005E2DF2 /* System.cc */,
 				A0A0E9BC1D215C99005E2DF2 /* System.h */,
@@ -351,45 +359,47 @@
 				A0A0E9B71D215C6A005E2DF2 /* Event.h */,
 			);
 			name = entityx;
+			path = ../../../../../engine/src/entityx;
 			sourceTree = "<group>";
 		};
 		A0A0E9851D215BF9005E2DF2 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				A0A0E9861D215C37005E2DF2 /* animation.cpp */,
-				A0A0E9871D215C37005E2DF2 /* animation.h */,
-				A0A0E9881D215C37005E2DF2 /* behaviour.h */,
-				A0A0E9891D215C37005E2DF2 /* cbehavoiur.cpp */,
-				A0A0E98A1D215C37005E2DF2 /* cbehavoiur.h */,
-				A0A0E98B1D215C37005E2DF2 /* ccamera.cpp */,
-				A0A0E98C1D215C37005E2DF2 /* ccamera.h */,
-				A0A0E98D1D215C37005E2DF2 /* component.cpp */,
-				A0A0E98E1D215C37005E2DF2 /* component.h */,
-				A0A0E98F1D215C37005E2DF2 /* cpresenter.cpp */,
-				A0A0E9901D215C37005E2DF2 /* cpresenter.h */,
-				A0A0E9911D215C37005E2DF2 /* ctransform.h */,
-				A0A0E9921D215C37005E2DF2 /* flappyapp.cpp */,
-				A0A0E9931D215C37005E2DF2 /* flappyapp.h */,
-				A0A0E9941D215C37005E2DF2 /* gpresenter.cpp */,
-				A0A0E9951D215C37005E2DF2 /* gpresenter.h */,
-				A0A0E9961D215C37005E2DF2 /* gtools.cpp */,
-				A0A0E9971D215C37005E2DF2 /* gtools.h */,
-				A0A0E9981D215C37005E2DF2 /* gview.cpp */,
-				A0A0E9991D215C37005E2DF2 /* gview.h */,
-				A0A0E99A1D215C37005E2DF2 /* gviewfactory.h */,
-				A0A0E99B1D215C37005E2DF2 /* gworldview.cpp */,
-				A0A0E99C1D215C37005E2DF2 /* gworldview.h */,
-				A0A0E99D1D215C37005E2DF2 /* initsystem.cpp */,
-				A0A0E99E1D215C37005E2DF2 /* initsystem.h */,
-				A0A0E99F1D215C37005E2DF2 /* inputmanager.cpp */,
-				A0A0E9A01D215C37005E2DF2 /* inputmanager.h */,
-				A0A0E9A11D215C37005E2DF2 /* manager.h */,
-				A0A0E9A21D215C37005E2DF2 /* prefab.h */,
-				A0A0E9A31D215C37005E2DF2 /* scenemanager.cpp */,
-				A0A0E9A41D215C37005E2DF2 /* scenemanager.h */,
-				A0A0E9A51D215C37005E2DF2 /* screenmanager.h */,
+				A050A3CC1D23FB660035DEC7 /* animation.cpp */,
+				A050A3CD1D23FB660035DEC7 /* animation.h */,
+				A050A3CE1D23FB660035DEC7 /* behaviour.h */,
+				A050A3CF1D23FB660035DEC7 /* cbehavoiur.cpp */,
+				A050A3D01D23FB660035DEC7 /* cbehavoiur.h */,
+				A050A3D11D23FB660035DEC7 /* ccamera.cpp */,
+				A050A3D21D23FB660035DEC7 /* ccamera.h */,
+				A050A3D31D23FB660035DEC7 /* component.cpp */,
+				A050A3D41D23FB660035DEC7 /* component.h */,
+				A050A3D51D23FB660035DEC7 /* cpresenter.cpp */,
+				A050A3D61D23FB660035DEC7 /* cpresenter.h */,
+				A050A3D71D23FB660035DEC7 /* ctransform.h */,
+				A050A3D81D23FB660035DEC7 /* flappyapp.cpp */,
+				A050A3D91D23FB660035DEC7 /* flappyapp.h */,
+				A050A3DA1D23FB660035DEC7 /* gpresenter.cpp */,
+				A050A3DB1D23FB660035DEC7 /* gpresenter.h */,
+				A050A3DC1D23FB660035DEC7 /* gtools.cpp */,
+				A050A3DD1D23FB660035DEC7 /* gtools.h */,
+				A050A3DE1D23FB660035DEC7 /* gview.cpp */,
+				A050A3DF1D23FB660035DEC7 /* gview.h */,
+				A050A3E01D23FB660035DEC7 /* gviewfactory.h */,
+				A050A3E11D23FB660035DEC7 /* gworldview.cpp */,
+				A050A3E21D23FB660035DEC7 /* gworldview.h */,
+				A050A3E31D23FB660035DEC7 /* initsystem.cpp */,
+				A050A3E41D23FB660035DEC7 /* initsystem.h */,
+				A050A3E51D23FB660035DEC7 /* inputmanager.cpp */,
+				A050A3E61D23FB660035DEC7 /* inputmanager.h */,
+				A050A3E71D23FB660035DEC7 /* manager.h */,
+				A050A3E81D23FB660035DEC7 /* prefab.h */,
+				A050A3E91D23FB660035DEC7 /* scenemanager.cpp */,
+				A050A3EA1D23FB660035DEC7 /* scenemanager.h */,
+				A050A3EB1D23FB660035DEC7 /* screenmanager.h */,
 			);
 			name = core;
+			path = ../../../../../engine/src/core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -471,42 +481,42 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A622B8B1A899CDE00A12489 /* matrixUtil.c in Sources */,
-				A0A0E9A71D215C37005E2DF2 /* cbehavoiur.cpp in Sources */,
+				A050A3F51D23FB660035DEC7 /* gworldview.cpp in Sources */,
+				A050A3EF1D23FB660035DEC7 /* component.cpp in Sources */,
+				A050A3ED1D23FB660035DEC7 /* cbehavoiur.cpp in Sources */,
 				A050A3C61D2265A40035DEC7 /* gltexture.cpp in Sources */,
+				A050A3F81D23FB660035DEC7 /* scenemanager.cpp in Sources */,
 				A050A3CB1D2265A40035DEC7 /* glworldview.cpp in Sources */,
 				3A622B831A899CDE00A12489 /* ES2Renderer.m in Sources */,
 				3A622B811A899CDE00A12489 /* AppDelegate.m in Sources */,
+				A050A4061D23FBDA0035DEC7 /* Pool.cc in Sources */,
 				3A622B821A899CDE00A12489 /* EAGLView.m in Sources */,
-				A0A0E9AB1D215C37005E2DF2 /* flappyapp.cpp in Sources */,
 				A050A3C41D2265A40035DEC7 /* glattribarray.cpp in Sources */,
-				A0A0E9AC1D215C37005E2DF2 /* gpresenter.cpp in Sources */,
-				A0A0E9DE1D216A28005E2DF2 /* Pool.cc in Sources */,
-				A0A0E9A91D215C37005E2DF2 /* component.cpp in Sources */,
 				A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */,
 				3A622B8D1A899CDE00A12489 /* sourceUtil.c in Sources */,
-				A0A0E9AD1D215C37005E2DF2 /* gtools.cpp in Sources */,
+				A050A3F41D23FB660035DEC7 /* gview.cpp in Sources */,
 				A050A3C91D2265A40035DEC7 /* glviewshape.cpp in Sources */,
 				A050A3C71D2265A40035DEC7 /* gltools.cpp in Sources */,
 				3A622B8E1A899CDE00A12489 /* vectorUtil.c in Sources */,
 				A050A3C81D2265A40035DEC7 /* glviewfactory.cpp in Sources */,
 				3A622B8C1A899CDE00A12489 /* modelUtil.c in Sources */,
 				A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */,
-				A0A0E9B01D215C37005E2DF2 /* initsystem.cpp in Sources */,
-				A0A0E9AE1D215C37005E2DF2 /* gview.cpp in Sources */,
 				A0A0E9B81D215C6A005E2DF2 /* Entity.cc in Sources */,
+				A050A3F31D23FB660035DEC7 /* gtools.cpp in Sources */,
+				A050A3F61D23FB660035DEC7 /* initsystem.cpp in Sources */,
 				A0A0E96E1D1D9129005E2DF2 /* GLWrapper.cpp in Sources */,
-				A0A0E9B11D215C37005E2DF2 /* inputmanager.cpp in Sources */,
-				A0A0E9AF1D215C37005E2DF2 /* gworldview.cpp in Sources */,
-				A0A0E9AA1D215C37005E2DF2 /* cpresenter.cpp in Sources */,
+				A050A3F71D23FB660035DEC7 /* inputmanager.cpp in Sources */,
+				A050A3F21D23FB660035DEC7 /* gpresenter.cpp in Sources */,
 				A050A3C51D2265A40035DEC7 /* glshaderprogram.cpp in Sources */,
-				A0A0E9B21D215C37005E2DF2 /* scenemanager.cpp in Sources */,
+				A050A3F11D23FB660035DEC7 /* flappyapp.cpp in Sources */,
 				3A622B891A899CDE00A12489 /* main.m in Sources */,
 				A050A3CA1D2265A40035DEC7 /* glviewsprite.cpp in Sources */,
-				A0A0E9A81D215C37005E2DF2 /* ccamera.cpp in Sources */,
-				A0A0E9DF1D216A28005E2DF2 /* Timer.cc in Sources */,
+				A050A3EC1D23FB660035DEC7 /* animation.cpp in Sources */,
+				A050A4071D23FBDA0035DEC7 /* Timer.cc in Sources */,
+				A050A3F01D23FB660035DEC7 /* cpresenter.cpp in Sources */,
 				3A622B851A899CDE00A12489 /* OpenGLRenderer.m in Sources */,
-				A0A0E9A61D215C37005E2DF2 /* animation.cpp in Sources */,
 				3A622B8A1A899CDE00A12489 /* imageUtil.m in Sources */,
+				A050A3EE1D23FB660035DEC7 /* ccamera.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
