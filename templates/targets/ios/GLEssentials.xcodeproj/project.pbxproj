@@ -7,12 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A4CF8A31A89593700324DBF /* demon.model in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8901A89593700324DBF /* demon.model */; };
-		3A4CF8A41A89593700324DBF /* demon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8911A89593700324DBF /* demon.png */; };
-		3A4CF8AC1A89593700324DBF /* character.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF89F1A89593700324DBF /* character.fsh */; };
-		3A4CF8AD1A89593700324DBF /* character.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8A01A89593700324DBF /* character.vsh */; };
-		3A4CF8AE1A89593700324DBF /* reflect.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8A11A89593700324DBF /* reflect.fsh */; };
-		3A4CF8AF1A89593700324DBF /* reflect.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8A21A89593700324DBF /* reflect.vsh */; };
 		3A4CF8DD1A895B0700324DBF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8951A89593700324DBF /* Main.storyboard */; };
 		3A4CF8DE1A895B0A00324DBF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8931A89593700324DBF /* LaunchScreen.xib */; };
 		3A4CF8DF1A895B1100324DBF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A4CF8971A89593700324DBF /* Images.xcassets */; };
@@ -55,24 +49,18 @@
 		A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B61D215C6A005E2DF2 /* Event.cc */; };
 		A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9BB1D215C99005E2DF2 /* System.cc */; };
 		A0A0E9D81D215CBD005E2DF2 /* glm in Resources */ = {isa = PBXBuildFile; fileRef = A0A0E9D71D215CBD005E2DF2 /* glm */; };
+		A0D8C6971D24087400B7BBE7 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6941D24087400B7BBE7 /* background.png */; };
+		A0D8C6981D24087400B7BBE7 /* bird.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6951D24087400B7BBE7 /* bird.png */; };
+		A0D8C6991D24087400B7BBE7 /* numbers.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6961D24087400B7BBE7 /* numbers.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3047849F1B323BA9004B5A28 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = Readme.md; path = GLEssentials/Source/Readme.md; sourceTree = "<group>"; };
 		3A4CF8651A8958DD00324DBF /* GLEssentials.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GLEssentials.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A4CF8901A89593700324DBF /* demon.model */ = {isa = PBXFileReference; lastKnownFileType = file; path = demon.model; sourceTree = "<group>"; };
-		3A4CF8911A89593700324DBF /* demon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demon.png; sourceTree = "<group>"; };
 		3A4CF8941A89593700324DBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3A4CF8961A89593700324DBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3A4CF8971A89593700324DBF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3A4CF8981A89593700324DBF /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
-		3A4CF89B1A89593700324DBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3A4CF89C1A89593700324DBF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3A4CF89D1A89593700324DBF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3A4CF89F1A89593700324DBF /* character.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = character.fsh; sourceTree = "<group>"; };
-		3A4CF8A01A89593700324DBF /* character.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = character.vsh; sourceTree = "<group>"; };
-		3A4CF8A11A89593700324DBF /* reflect.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = reflect.fsh; sourceTree = "<group>"; };
-		3A4CF8A21A89593700324DBF /* reflect.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = reflect.vsh; sourceTree = "<group>"; };
 		3A622B631A899CDE00A12489 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A622B641A899CDE00A12489 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3A622B651A899CDE00A12489 /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
@@ -159,6 +147,10 @@
 		A0A0E9BB1D215C99005E2DF2 /* System.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cc; sourceTree = "<group>"; };
 		A0A0E9BC1D215C99005E2DF2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = /Users/denisz/Downloads/FlappyTest/engine/src/glm; sourceTree = "<absolute>"; };
+		A0D8C6921D24063D00B7BBE7 /* myflappyapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myflappyapp.h; sourceTree = "<group>"; };
+		A0D8C6941D24087400B7BBE7 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		A0D8C6951D24087400B7BBE7 /* bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird.png; sourceTree = "<group>"; };
+		A0D8C6961D24087400B7BBE7 /* numbers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = numbers.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,9 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				3A4CF8921A89593700324DBF /* iOS */,
-				3A4CF8991A89593700324DBF /* OSX */,
 				3A4CF88F1A89593700324DBF /* Assets */,
-				3A4CF89E1A89593700324DBF /* Shaders */,
 			);
 			name = Data;
 			path = GLEssentials/Data;
@@ -205,10 +195,12 @@
 		3A4CF88F1A89593700324DBF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				3A4CF8901A89593700324DBF /* demon.model */,
-				3A4CF8911A89593700324DBF /* demon.png */,
+				A0D8C6941D24087400B7BBE7 /* background.png */,
+				A0D8C6951D24087400B7BBE7 /* bird.png */,
+				A0D8C6961D24087400B7BBE7 /* numbers.png */,
 			);
-			path = Assets;
+			name = Assets;
+			path = ../../../../build/res;
 			sourceTree = "<group>";
 		};
 		3A4CF8921A89593700324DBF /* iOS */ = {
@@ -220,27 +212,6 @@
 				3A4CF8981A89593700324DBF /* info.plist */,
 			);
 			path = iOS;
-			sourceTree = "<group>";
-		};
-		3A4CF8991A89593700324DBF /* OSX */ = {
-			isa = PBXGroup;
-			children = (
-				3A4CF89A1A89593700324DBF /* Main.storyboard */,
-				3A4CF89C1A89593700324DBF /* Images.xcassets */,
-				3A4CF89D1A89593700324DBF /* Info.plist */,
-			);
-			path = OSX;
-			sourceTree = "<group>";
-		};
-		3A4CF89E1A89593700324DBF /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				3A4CF89F1A89593700324DBF /* character.fsh */,
-				3A4CF8A01A89593700324DBF /* character.vsh */,
-				3A4CF8A11A89593700324DBF /* reflect.fsh */,
-				3A4CF8A21A89593700324DBF /* reflect.vsh */,
-			);
-			path = Shaders;
 			sourceTree = "<group>";
 		};
 		3A622B601A899CDE00A12489 /* Source */ = {
@@ -257,6 +228,7 @@
 		3A622B611A899CDE00A12489 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A0D8C6911D24061B00B7BBE7 /* game */,
 				A0A0E9811D215BAB005E2DF2 /* FlappyEngine */,
 				3A622B621A899CDE00A12489 /* iOS */,
 				3A622B6B1A899CDE00A12489 /* OpenGLRenderer.h */,
@@ -402,6 +374,15 @@
 			path = ../../../../../engine/src/core;
 			sourceTree = "<group>";
 		};
+		A0D8C6911D24061B00B7BBE7 /* game */ = {
+			isa = PBXGroup;
+			children = (
+				A0D8C6921D24063D00B7BBE7 /* myflappyapp.h */,
+			);
+			name = game;
+			path = ../../../../../src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -459,16 +440,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A4CF8A31A89593700324DBF /* demon.model in Resources */,
 				3A4CF8DF1A895B1100324DBF /* Images.xcassets in Resources */,
-				3A4CF8AD1A89593700324DBF /* character.vsh in Resources */,
-				3A4CF8A41A89593700324DBF /* demon.png in Resources */,
+				A0D8C6971D24087400B7BBE7 /* background.png in Resources */,
+				A0D8C6991D24087400B7BBE7 /* numbers.png in Resources */,
 				3A4CF8DD1A895B0700324DBF /* Main.storyboard in Resources */,
-				3A4CF8AC1A89593700324DBF /* character.fsh in Resources */,
-				3A4CF8AE1A89593700324DBF /* reflect.fsh in Resources */,
 				3A4CF8DE1A895B0A00324DBF /* LaunchScreen.xib in Resources */,
-				3A4CF8AF1A89593700324DBF /* reflect.vsh in Resources */,
 				A0A0E9D81D215CBD005E2DF2 /* glm in Resources */,
+				A0D8C6981D24087400B7BBE7 /* bird.png in Resources */,
 				A050A3AF1D2192790035DEC7 /* gl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,14 +517,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		3A4CF89A1A89593700324DBF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A4CF89B1A89593700324DBF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -567,7 +537,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -609,7 +579,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -638,7 +608,10 @@
 					"$(inherited)",
 					TARGET_IOS,
 				);
-				HEADER_SEARCH_PATHS = ../../engine/src/;
+				HEADER_SEARCH_PATHS = (
+					../../engine/src/,
+					../../src,
+				);
 				INFOPLIST_FILE = GLEssentials/Data/iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -655,7 +628,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = TARGET_IOS;
-				HEADER_SEARCH_PATHS = ../../engine/src/;
+				HEADER_SEARCH_PATHS = (
+					../../engine/src/,
+					../../src,
+				);
 				INFOPLIST_FILE = GLEssentials/Data/iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

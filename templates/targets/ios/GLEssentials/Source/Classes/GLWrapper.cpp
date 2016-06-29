@@ -14,17 +14,12 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <core/scenemanager.h>
-#include <core/cpresenter.h>
-#include <core/ctransform.h>
-#include <core/cbehavoiur.h>
-#include <core/animation.h>
-#include <core/flappyapp.h>
-
 #include <gl/glworldview.h>
 #include <gl/glviewfactory.h>
 #include <gl/gltexture.h>
 #include "imageUtil.h"
+
+#include <myflappyapp.h>
 
 class IOSViewFactory: public GLViewFactory {
 public:
@@ -38,29 +33,6 @@ public:
 
 entityx::ComponentHandle<GLWorldView> glWorldView;
 std::shared_ptr<FlappyApp> app;
-
-class Rotate: public Behaviour {
-public:
-    void update(entityx::Entity e, entityx::TimeDelta dt) {
-        e.component<CTransform>()->angle += dt;
-    }
-};
-
-class MyFlappyApp : public FlappyApp
-{
-public:
-    void init() override {
-        //Camera
-        SceneManager::createEntity().add<CCamera>();
-        //Background
-        auto sprite = SceneManager::createEntity();
-        sprite.add<CPresenter,GPresenterSprite>("demon",30, 30);
-        sprite.add<CTransform>();
-        sprite.add<CBehavoiur, Rotate>();
-        
-    }
-};
-
 
 extern "C" {
 

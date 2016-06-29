@@ -8,6 +8,14 @@
 #include <core/animation.h>
 #include <core/flappyapp.h>
 
+class Rotate: public Behaviour {
+public:
+    void update(entityx::Entity e, entityx::TimeDelta dt) {
+        e.component<CTransform>()->angle += dt;
+    }
+};
+
+
 class MyFlappyApp : public FlappyApp
 {
 public:
@@ -16,7 +24,10 @@ public:
         SceneManager::createEntity().add<CCamera>();
         //Background
         auto sprite = SceneManager::createEntity();
-        sprite.add<CPresenter,GPresenterRect>(10, 10);
+        sprite.add<CPresenter,GPresenterSprite>("bird",30, 30, 2);
+        sprite.add<CTransform>();
+        sprite.add<CBehavoiur, Rotate>();
+        
     }
 };
 
