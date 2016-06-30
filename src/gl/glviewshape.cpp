@@ -51,7 +51,7 @@ GViewCircle::GViewCircle(int vertexCnt, double r):
     circle(GL_TRIANGLE_FAN){
     std::vector<GLTools::Vertex> vertexList = circleTriangleFan(r,vertexCnt);
     circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array
-                                   vertexList.size() * sizeof(GLTools::Vertex), //size
+                                   static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex), //size
                                    GL_FLOAT,                                    //item format
                                    getShader()->findAttr("aPosition")           //attribute id
                                    );
@@ -67,7 +67,7 @@ GViewRect::GViewRect(float width, float height):
                                                 {width,height}
                                             });
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
-                                 vertexList.size() * sizeof(GLTools::Vertex),
+                                 static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 }

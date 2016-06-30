@@ -40,12 +40,12 @@ GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GP
                 {presenter.getWidth() / 2,presenter.getHeight() / 2} }){
 
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
-                                 vertexList.size() * sizeof(GLTools::Vertex),
+                                 static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 
     rect.addVBO<GLTexture::UV>(texture->getUVs().data(),
-                                texture->getUVs().size() * sizeof(GLTexture::UV),
+                                static_cast<int>(texture->getUVs().size()) * sizeof(GLTexture::UV),
                                 GL_FLOAT,
                                 getShader()->findAttr("aTexCoord"));
 
@@ -76,5 +76,5 @@ void GLViewSprite::update(const GPresenter & presenter){
             {relX,relY},
             {relX + newRelWidth,relY + newRelHeight},
             {relX + newRelWidth,relY}});
-    rect.getVBO(1).writeData(uvs.data(),uvs.size() * sizeof(GLTexture::UV));
+    rect.getVBO(1).writeData(uvs.data(),static_cast<int>(uvs.size()) * sizeof(GLTexture::UV));
 }

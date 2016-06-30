@@ -8,5 +8,8 @@
 	},
 	"android": {
 		"id":"{?name.lower()?}"
+	},
+	"ios": {
+		"bundle_id":"com.flappyapp.{?name.lower()?}"
 	}
 }
