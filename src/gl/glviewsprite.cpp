@@ -22,7 +22,11 @@ static const char spriteFShader[] =
     "uniform vec4 uColor;\n"
     "varying vec2 vTexCoord;\n"
     "void main() {\n"
+#if defined(TARGET_OS_IPHONE)
+    "   gl_FragColor = texture2D(uTex,vTexCoord).rgba;\n"
+#else
     "   gl_FragColor = texture2D(uTex,vTexCoord).bgra;\n"
+#endif
     "}\n";
 
 GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GPresenterSprite & presenter) :
