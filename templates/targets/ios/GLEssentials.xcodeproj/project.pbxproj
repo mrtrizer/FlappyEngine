@@ -147,10 +147,11 @@
 		A0A0E9BB1D215C99005E2DF2 /* System.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cc; sourceTree = "<group>"; };
 		A0A0E9BC1D215C99005E2DF2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = /Users/denisz/Downloads/FlappyTest/engine/src/glm; sourceTree = "<absolute>"; };
-		A0D8C6921D24063D00B7BBE7 /* myflappyapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myflappyapp.h; sourceTree = "<group>"; };
 		A0D8C6941D24087400B7BBE7 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		A0D8C6951D24087400B7BBE7 /* bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird.png; sourceTree = "<group>"; };
 		A0D8C6961D24087400B7BBE7 /* numbers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = numbers.png; sourceTree = "<group>"; };
+		{?printXCodeFileList(fileList(projectDir + "/src/",".h"))?}
+		{?printXCodeFileList(fileList(projectDir + "/src/",".cpp"))?}
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -377,7 +378,8 @@
 		A0D8C6911D24061B00B7BBE7 /* game */ = {
 			isa = PBXGroup;
 			children = (
-				A0D8C6921D24063D00B7BBE7 /* myflappyapp.h */,
+{?printXCodeHashList(fileList(projectDir + "/src/",".h"))?}
+{?printXCodeHashList(fileList(projectDir + "/src/",".cpp"))?}
 			);
 			name = game;
 			path = ../../../../../src;
