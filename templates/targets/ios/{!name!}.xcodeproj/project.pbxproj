@@ -48,7 +48,6 @@
 		A0A0E9B81D215C6A005E2DF2 /* Entity.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B31D215C6A005E2DF2 /* Entity.cc */; };
 		A0A0E9B91D215C6A005E2DF2 /* Event.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9B61D215C6A005E2DF2 /* Event.cc */; };
 		A0A0E9BD1D215C99005E2DF2 /* System.cc in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E9BB1D215C99005E2DF2 /* System.cc */; };
-		A0A0E9D81D215CBD005E2DF2 /* glm in Resources */ = {isa = PBXBuildFile; fileRef = A0A0E9D71D215CBD005E2DF2 /* glm */; };
 		A0D8C6971D24087400B7BBE7 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6941D24087400B7BBE7 /* background.png */; };
 		A0D8C6981D24087400B7BBE7 /* bird.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6951D24087400B7BBE7 /* bird.png */; };
 		A0D8C6991D24087400B7BBE7 /* numbers.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D8C6961D24087400B7BBE7 /* numbers.png */; };
@@ -80,7 +79,6 @@
 		3A622B7E1A899CDE00A12489 /* sourceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sourceUtil.h; sourceTree = "<group>"; };
 		3A622B7F1A899CDE00A12489 /* vectorUtil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vectorUtil.c; sourceTree = "<group>"; };
 		3A622B801A899CDE00A12489 /* vectorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vectorUtil.h; sourceTree = "<group>"; };
-		A050A3AE1D2192790035DEC7 /* gl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gl; path = /Users/denisz/Downloads/FlappyTest/engine/src/gl; sourceTree = "<absolute>"; };
 		A050A3B31D2265A40035DEC7 /* glattribarray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glattribarray.cpp; sourceTree = "<group>"; };
 		A050A3B41D2265A40035DEC7 /* glattribarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glattribarray.h; sourceTree = "<group>"; };
 		A050A3B51D2265A40035DEC7 /* glshaderprogram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glshaderprogram.cpp; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 		A0A0E9BA1D215C99005E2DF2 /* quick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quick.h; sourceTree = "<group>"; };
 		A0A0E9BB1D215C99005E2DF2 /* System.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cc; sourceTree = "<group>"; };
 		A0A0E9BC1D215C99005E2DF2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
-		A0A0E9D71D215CBD005E2DF2 /* glm */ = {isa = PBXFileReference; lastKnownFileType = folder; name = glm; path = /Users/denisz/Downloads/FlappyTest/engine/src/glm; sourceTree = "<absolute>"; };
 		A0D8C6941D24087400B7BBE7 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		A0D8C6951D24087400B7BBE7 /* bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird.png; sourceTree = "<group>"; };
 		A0D8C6961D24087400B7BBE7 /* numbers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = numbers.png; sourceTree = "<group>"; };
@@ -445,7 +442,6 @@
 				A0D8C6991D24087400B7BBE7 /* numbers.png in Resources */,
 				3A4CF8DD1A895B0700324DBF /* Main.storyboard in Resources */,
 				3A4CF8DE1A895B0A00324DBF /* LaunchScreen.xib in Resources */,
-				A0A0E9D81D215CBD005E2DF2 /* glm in Resources */,
 				A0D8C6981D24087400B7BBE7 /* bird.png in Resources */,
 				A050A3AF1D2192790035DEC7 /* gl in Resources */,
 			);
