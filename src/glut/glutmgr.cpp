@@ -69,8 +69,6 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     GLUTMgr::glViewFactory = glViewFactory;
 
     app = flappyApp;
-    app->systems.add<GLWorldView>(glViewFactory);
-    app->configure();
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -79,6 +77,9 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
 #ifdef __GLEW_H__
     glewInit();
 #endif
+
+    app->systems.add<GLWorldView>(glViewFactory);
+    app->configure();
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

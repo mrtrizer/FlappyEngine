@@ -15,14 +15,14 @@ static const char spriteVShader[] =
     "}\n";
 
 static const char spriteFShader[] =
-#if defined(GL_ES) || defined(EMSCRIPTEN) || defined(TARGET_OS_IPHONE)
+#if defined(GL_ES) || EMSCRIPTEN || TARGET_OS_IPHONE == 1
     "precision mediump float;\n"
 #endif
     "uniform sampler2D uTex;\n"
     "uniform vec4 uColor;\n"
     "varying vec2 vTexCoord;\n"
     "void main() {\n"
-#if defined(TARGET_OS_IPHONE)
+#if TARGET_OS_IPHONE == 1
     "   gl_FragColor = texture2D(uTex,vTexCoord).rgba;\n"
 #else
     "   gl_FragColor = texture2D(uTex,vTexCoord).bgra;\n"
