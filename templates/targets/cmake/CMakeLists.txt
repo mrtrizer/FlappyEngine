@@ -10,7 +10,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 if (NOT ${CMAKE_CURRENT_LIST_DIR} MATCHES ${CMAKE_BINARY_DIR})
     add_custom_target(PreBuildResCp ALL
-        COMMAND cp ${CMAKE_CURRENT_LIST_DIR}/res ${CMAKE_BINARY_DIR} -R
+        COMMAND cp -R ${CMAKE_CURRENT_LIST_DIR}/res ${CMAKE_BINARY_DIR}
     )
 endif()
 
