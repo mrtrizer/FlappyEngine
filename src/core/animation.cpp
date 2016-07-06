@@ -6,7 +6,7 @@ SpriteAnimation::SpriteAnimation(std::string path, float width, float height, in
 
 }
 
-void SpriteAnimation::update(entityx::TimeDelta dt) {
+void SpriteAnimation::update(TimeDelta dt) {
     counter += dt;
     if (counter > period) {
         counter = 0;

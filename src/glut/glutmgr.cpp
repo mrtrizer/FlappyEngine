@@ -28,7 +28,6 @@
 #include <gl/glworldview.h>
 #include <core/ccamera.h>
 #include <gl/glviewfactory.h>
-#include <core/initsystem.h>
 #include <core/inputmanager.h>
 
 #include "glutmgr.h"
@@ -78,7 +77,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glewInit();
 #endif
 
-    app->systems.add<GLWorldView>(glViewFactory);
+    app->setWorldView(std::make_shared<GLWorldView>(glViewFactory));
     app->configure();
 
     glutMouseFunc(mouseFunc);

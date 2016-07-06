@@ -3,11 +3,17 @@
 
 #include "ccamera.h"
 #include "screenmanager.h"
+#include "scenemanager.h"
 
-CCamera::CCamera(const entityx::Entity& e, float height, float ratio):
+CCamera::CCamera(float height, float ratio):
     height(height),
-    ratio(ratio),
-    Component(e){
+    ratio(ratio){
+
+}
+
+void CCamera::init() {
+    if (SceneManager::getInst()->getCamera() == nullptr)
+        SceneManager::setCamera(shared_from_this());
 }
 
 CCamera::Rect CCamera::getRect() const {
@@ -34,8 +40,8 @@ glm::mat4 CCamera::getPMatrix() {
     static const float far = 99.0f;
 
     glm::mat4 mvMatrix;
-    entityx::ComponentHandle<CTransform> transform = e.component<CTransform>();
-    if (transform.valid()) {
+    auto transform = getEntity()->get<CTransform>();
+    if (transform != nullptr) {
         mvMatrix = transform->getMvMatrix();
     }
 

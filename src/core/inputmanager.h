@@ -2,8 +2,8 @@
 #define INPUTMANAGER_H
 
 #include <glm/vec3.hpp>
-#include <entityx/entityx.h>
 #include <core/gtools.h>
+#include <core/entitymanager.h>
 
 #include "manager.h"
 
@@ -17,7 +17,7 @@ public:
     bool isMousePressed();
     glm::vec3 getMousePos();
 
-    void update(entityx::TimeDelta);
+    void update(TimeDelta);
     void setMouseDown();
     void setMouseUp();
     void mouseMove(glm::vec3 mousePos);

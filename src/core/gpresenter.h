@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include <entityx/entityx.h>
+#include <core/entitymanager.h>
 
 #include "gtools.h"
 
@@ -13,7 +13,7 @@ class GView;
 /// @brief Holds information about object representation need for view objects.
 /// @details Contains a shared pointer to GView object, but doesn't calls any it's
 /// methods except GView::externUpdate to say about state changing.
-class GPresenter: public std::enable_shared_from_this<GPresenter> {
+class GPresenter: public BaseComponent<GPresenter>, public std::enable_shared_from_this<GPresenter> {
 public:
     GPresenter()
     {}
@@ -21,7 +21,7 @@ public:
     std::shared_ptr<GView> getGView(const GViewFactory & factory);
     void cleanGView();
     void updateView();
-    virtual void update(entityx::TimeDelta) {}
+    virtual void update(TimeDelta) {}
 
 protected:
     /// Implement and call appropriate method from factory to get your own instance of GView.

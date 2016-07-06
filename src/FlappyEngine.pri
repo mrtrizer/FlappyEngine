@@ -18,17 +18,8 @@ HEADERS += \
     $$PWD/gl/glview.h \
     $$PWD/glut/glutmgr.h \
     $$PWD/qt/viewfactoryqt.h \
-    $$PWD/entityx/Entity.h \
-    $$PWD/entityx/Event.h \
-    $$PWD/entityx/System.h \
-    $$PWD/entityx/config.h \
-    $$PWD/entityx/entityx.h \
-    $$PWD/entityx/quick.h \
-    $$PWD/core/initsystem.h \
-    $$PWD/core/behaviour.h \
-    $$PWD/core/cbehavoiur.h \
+    $$PWD/core/entitymanager.h \
     $$PWD/core/flappyapp.h \
-    $$PWD/core/cpresenter.h \
     $$PWD/core/ccamera.h \
     $$PWD/core/ctransform.h \
     $$PWD/core/animation.h \
@@ -36,7 +27,6 @@ HEADERS += \
     $$PWD/core/prefab.h \
     $$PWD/core/inputmanager.h \
     $$PWD/core/manager.h \
-    $$PWD/core/component.h \
     $$PWD/core/scenemanager.h \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.h \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.h \
@@ -85,13 +75,6 @@ HEADERS += \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.h \
     $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.h \
     $$PWD/box2d/Box2D/Box2D/Box2D.h \
-    $$PWD/entityx/3rdparty/catch.hpp \
-    $$PWD/entityx/3rdparty/simplesignal.h \
-    $$PWD/entityx/deps/Dependencies.h \
-    $$PWD/entityx/help/NonCopyable.h \
-    $$PWD/entityx/help/Pool.h \
-    $$PWD/entityx/help/Timer.h \
-    $$PWD/entityx/tags/TagsComponent.h \
     $$PWD/glm/detail/_features.hpp \
     $$PWD/glm/detail/_fixes.hpp \
     $$PWD/glm/detail/_noise.hpp \
@@ -254,18 +237,10 @@ SOURCES += \
     $$PWD/gl/glviewsprite.cpp \
     $$PWD/glut/glutmgr.cpp \
     $$PWD/qt/viewfactoryqt.cpp \
-    $$PWD/entityx/Entity.cc \
-    $$PWD/entityx/Event.cc \
-    $$PWD/entityx/System.cc \
-    $$PWD/entityx/help/Pool.cc \
-    $$PWD/core/initsystem.cpp \
-    $$PWD/core/cbehavoiur.cpp \
     $$PWD/core/flappyapp.cpp \
-    $$PWD/core/cpresenter.cpp \
     $$PWD/core/ccamera.cpp \
     $$PWD/core/animation.cpp \
     $$PWD/core/inputmanager.cpp \
-    $$PWD/core/component.cpp \
     $$PWD/core/scenemanager.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp \
@@ -313,6 +288,6 @@ SOURCES += \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2World.cpp \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp \
     $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.cpp \
-    $$PWD/entityx/help/Timer.cc
+    $$PWD/core/entitymanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

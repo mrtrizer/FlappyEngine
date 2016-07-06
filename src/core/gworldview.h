@@ -2,7 +2,6 @@
 #define GWORLDVIEW_H
 
 #include <memory>
-#include <entityx/entityx.h>
 #include <glm/mat4x4.hpp>
 
 #include "gviewfactory.h"
@@ -13,7 +12,7 @@ class GViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class GWorldView: public entityx::System<GWorldView> {
+class GWorldView {
 public:
     struct Visual {
         std::shared_ptr<GPresenter> presenter;
@@ -29,7 +28,7 @@ public:
     typedef std::list<Visual> GPresenterList;
 
     virtual ~GWorldView();
-    void update(entityx::EntityManager &es, entityx::EventManager &, entityx::TimeDelta dt) override;
+    void update(TimeDelta dt);
     void resize(int width, int height);
     virtual void init() = 0;
     void updateSize();

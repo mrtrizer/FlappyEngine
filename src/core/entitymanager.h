@@ -1,11 +1,3 @@
-//
-//  EntityManager.h
-//  ComponentManager
-//
-//  Created by Denis Zdorovtsov on 05.07.16.
-//  Copyright © 2016 Denis Zdorovtsov. All rights reserved.
-//
-
 #ifndef EntityManager_h
 #define EntityManager_h
 
@@ -14,18 +6,34 @@
 #include <map>
 #include <functional>
 
+#include "manager.h"
+
+
 class Entity;
+
+typedef float TimeDelta;
 
 class Component {
     friend class Entity;
 public:
-    virtual void update(float dt) {
+    virtual void update(TimeDelta dt) {
         
     }
+    virtual void init() {
+
+    }
+
+    virtual std::size_t getHash() = 0;
     
     inline std::shared_ptr<Entity> getEntity() const { return entity.lock(); }
 private:
     std::weak_ptr<Entity> entity;
+};
+
+template <typename Dirived>
+class BaseComponent: public Component {
+public:
+    virtual std::size_t getHash() override {return typeid(Dirived).hash_code();}
 };
 
 class Entity: public std::enable_shared_from_this<Entity> {
@@ -34,6 +42,7 @@ public:
     std::shared_ptr<ComponentT> add(Args ... args) {
         auto component = std::make_shared<ComponentT>(args...);
         component->entity = shared_from_this();
+        component->init();
         components.push_back(component);
         return component;
     }
@@ -42,8 +51,7 @@ public:
     std::shared_ptr<ComponentT> get() const {
         std::size_t hash = typeid(ComponentT).hash_code();
         for (auto component: components) {
-            Component& curComponent = *component.get();
-            if (typeid(curComponent).hash_code() == hash)
+            if (component->getHash() == hash)
                 return std::dynamic_pointer_cast<ComponentT>(component);
         }
         return nullptr;
@@ -54,14 +62,13 @@ public:
         std::size_t hash = typeid(ComponentT).hash_code();
         std::list<std::shared_ptr<ComponentT>> list;
         for (auto component: components) {
-            Component& curComponent = *component.get();
-            if (typeid(curComponent).hash_code() == hash)
+            if (component->getHash() == hash)
                 list.push_back(std::dynamic_pointer_cast<ComponentT>(component));
         }
         return list;
     }
     
-    void update(float dt) {
+    void update(TimeDelta dt) {
         for (auto component: components)
             component->update(dt);
     }
@@ -69,20 +76,22 @@ private:
     std::list<std::shared_ptr<Component>> components;
 };
 
-class EntityMgr {
-public:
-    void update(float dt) {
+class EntityManager: public Manager<EntityManager> {
+public:    
+    void update(TimeDelta dt) {
         for (auto entity: entities)
             entity->update(dt);
     }
-    
-    std::shared_ptr<Entity> create() {
-        auto entity = std::make_shared<Entity>();
-        entities.push_back(entity);
-        return entity;
+
+    void reset() {
+        entities.clear();
+    }
+
+    static std::shared_ptr<Entity> CREATE(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){}) {
+        getInst()->create(func);
     }
     
-    std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func) {
+    std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){}) {
         auto entity = std::make_shared<Entity>();
         entities.push_back(entity);
         func(entity);
@@ -122,12 +131,9 @@ private:
     }
 };
 
-template <> bool EntityMgr::check <void> (std::shared_ptr<Entity> entity) {
-    return true;
-}
 
-#define CREATE(func) entityMgr.create([](std::shared_ptr<Entity> e) func)
-#define FIND(func) entityMgr.find([](const Entity* e) func)
-#define EACH(func,...) entityMgr.each <__VA_ARGS__> ([](std::shared_ptr<Entity> entity) func);
+#define E [](std::shared_ptr<Entity> e)
+#define CREATE(func) EntityManager::getInst()->create([](std::shared_ptr<Entity> e) func)
+
 
 #endif /* EntityManager_h */

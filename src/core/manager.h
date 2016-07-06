@@ -15,4 +15,5 @@ private:
 template <typename Derived>
 std::shared_ptr<Derived> Manager<Derived>::inst = nullptr;
 
+
 #endif // MANAGER_H

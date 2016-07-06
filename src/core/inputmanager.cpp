@@ -20,7 +20,7 @@ glm::vec3 InputManager::getMousePos() {
     return mousePos;
 }
 
-void InputManager::update(entityx::TimeDelta) {
+void InputManager::update(TimeDelta) {
     if (--mouseDown < 0)
         mouseDown = 0;
     if (--mouseUp < 0)

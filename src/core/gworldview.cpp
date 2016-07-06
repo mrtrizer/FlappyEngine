@@ -1,6 +1,6 @@
 #include "gworldview.h"
 #include "ctransform.h"
-#include "cpresenter.h"
+#include "gpresenter.h"
 #include "screenmanager.h"
 #include "scenemanager.h"
 
@@ -9,12 +9,12 @@ GWorldView* GWorldView::instance = nullptr;
 GWorldView::~GWorldView(){
 }
 
-void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, entityx::TimeDelta dt) {
+void GWorldView::update(TimeDelta dt) {
 
-    CCamera* camera = nullptr;
+    std::shared_ptr<CCamera> camera;
 
-    es.each<CCamera>([&camera, this] (entityx::Entity, CCamera &curCamera){
-        camera = &curCamera;
+    EntityManager::getInst()->each<CCamera>([&camera, this] (std::shared_ptr<Entity> e){
+        camera = e->get<CCamera>();
     });
 
     if (camera == nullptr)
@@ -25,20 +25,17 @@ void GWorldView::update(entityx::EntityManager &es, entityx::EventManager&, enti
 
     GPresenterList presenters;
 
-    es.each<CPresenter>([&presenters, dt]
-                                    (entityx::Entity entity, CPresenter &cpresenter){
-        auto presenter = cpresenter.getImpl();
+    EntityManager::getInst()->each<GPresenter>([&presenters, dt]
+                                    (std::shared_ptr<Entity> e){
+        auto presenter = e->get<GPresenter>();
         presenter->update(dt);
         glm::mat4 transformMatrix;
-        CTransform* curTransform = nullptr;
         float z = 0;
-        auto componentHandle = entity.component<CTransform>();
-        if (componentHandle.valid())
-            curTransform = componentHandle.get();
+        auto curTransform = e->get<CTransform>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
             z += curTransform->pos.z;
-            curTransform = curTransform->parent;
+            curTransform = curTransform->parent.lock();
         }
         presenters.push_back(Visual{presenter, transformMatrix, z});
     });
