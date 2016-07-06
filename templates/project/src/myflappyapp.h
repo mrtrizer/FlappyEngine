@@ -2,16 +2,36 @@
 #define MYFLAPPYAPP_H
 
 #include <core/scenemanager.h>
-#include <core/cpresenter.h>
 #include <core/ctransform.h>
-#include <core/cbehavoiur.h>
 #include <core/animation.h>
 #include <core/flappyapp.h>
+#include <core/entitymanager.h>
+#include <core/inputmanager.h>
 
-class Rotate: public Behaviour {
+class Rotate: public BaseComponent<Rotate> {
 public:
-    void update(entityx::Entity e, entityx::TimeDelta dt) {
-        e.component<CTransform>()->angle += dt;
+    void update(TimeDelta dt) {
+        getEntity()->get<CTransform>()->angle += dt * getAngle();
+    }
+
+    virtual float getAngle() {
+        return 1.0f;
+    }
+};
+
+class RotateRight: public Rotate {
+public:
+    float getAngle() {
+        return -2.0f;
+    }
+};
+
+class Move: public BaseComponent<Move> {
+public:
+    void update(TimeDelta dt) {
+        getEntity()->get<CTransform>()->pos =
+                SceneManager::getInst()->getCamera()->screenToScene(InputManager::getInst()->getMousePos());
+        //Scene::getCamera()->screenToScene(Input::getMousePos());
     }
 };
 
@@ -21,12 +41,24 @@ class MyFlappyApp : public FlappyApp
 public:
     void init() override {
         //Camera
-        SceneManager::createEntity().add<CCamera>();
+        CREATE({
+                    e->add<CCamera>();
+               });
+
         //Background
-        auto sprite = SceneManager::createEntity();
-        sprite.add<CPresenter,GPresenterSprite>("bird",30, 30, 2);
-        sprite.add<CTransform>();
-        sprite.add<CBehavoiur, Rotate>();
+        CREATE({
+                    e->add<GPresenterSprite>("background",200, 200, 1);
+                    e->add<CTransform>();
+                    e->add<RotateRight>();
+               });
+
+        //Bird
+        CREATE({
+                    e->add<GPresenterSprite>("bird",30, 30, 2);
+                    e->add<CTransform>();
+                    e->add<Rotate>();
+                    e->add<Move>();
+               });
         
     }
 };
