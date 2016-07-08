@@ -79,8 +79,15 @@ private:
 class EntityManager: public Manager<EntityManager> {
 public:    
     void update(TimeDelta dt) {
+        for (auto entity: removeList)
+            entities.remove(entity);
         for (auto entity: entities)
             entity->update(dt);
+    }
+
+    void remove(std::shared_ptr<Entity> entity) {
+        removeList.remove(entity);
+        removeList.push_back(entity);
     }
 
     void reset() {
@@ -124,6 +131,7 @@ public:
     }
 private:
     std::list<std::shared_ptr<Entity>> entities;
+    std::list<std::shared_ptr<Entity>> removeList;
     
     template <typename ComponentT = void, typename ... Components>
     bool check(std::shared_ptr<Entity> entity) {
