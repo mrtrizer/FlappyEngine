@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <core/entitymanager.h>
+#include <glm/glm.hpp>
 
 #include "gtools.h"
 
@@ -21,6 +22,7 @@ public:
     std::shared_ptr<GView> getGView(const GViewFactory & factory);
     void cleanGView();
     void updateView();
+    virtual glm::vec3 getSize() {return glm::vec3();}
     virtual void update(TimeDelta) {}
 
 protected:
@@ -38,6 +40,7 @@ public:
     {}
     virtual ~GPresenterCircle(){}
     inline float getR_() const { return r; }
+    virtual glm::vec3 getSize() {return glm::vec3(r * 2,r * 2,0);}
 protected:
     virtual std::shared_ptr<GView> makeGView(const GViewFactory & factory) override;
 private:
@@ -51,6 +54,7 @@ public:
         width(width),
         height(height)
     {}
+    virtual glm::vec3 getSize() {return glm::vec3(width,height,0);}
     virtual ~GPresenterRect(){}
     inline float getWidth() const { return width; }
     inline float getHeight() const { return height; }

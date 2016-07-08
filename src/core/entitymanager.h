@@ -133,7 +133,7 @@ private:
 
 
 #define E [](std::shared_ptr<Entity> e)
-#define CREATE(func) EntityManager::getInst()->create([](std::shared_ptr<Entity> e) func)
+#define CREATE(func) EntityManager::getInst()->create([=, this](std::shared_ptr<Entity> e) func)
 
 
 #endif /* EntityManager_h */
