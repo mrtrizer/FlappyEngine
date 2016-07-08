@@ -219,7 +219,8 @@ HEADERS += \
     $$PWD/glm/vec4.hpp \
     $$PWD/glm/vector_relational.hpp \
     $$PWD/png/viewfactorylibpng.h \
-    $$PWD/sdl/viewfactorysdl.h
+    $$PWD/sdl/viewfactorysdl.h \
+    $$PWD/ui/button.h
 
 
 SOURCES += \
@@ -288,6 +289,7 @@ SOURCES += \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2World.cpp \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp \
     $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.cpp \
-    $$PWD/core/entitymanager.cpp
+    $$PWD/core/entitymanager.cpp \
+    $$PWD/ui/button.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
