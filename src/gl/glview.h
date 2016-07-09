@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "core/gview.h"
+#include "core/view.h"
 #include "glshaderprogram.h"
 
 /// @brief Holds a shader shared pointer.
@@ -13,7 +13,7 @@
 /// You need to remove all instances of derived class to
 /// destroy the instance of GLShaderProgram.
 template<typename Derived>
-class GLView: public GView
+class GLView: public View
 {
 public:
     GLView(const char * vSource, const char * fSource) {

@@ -26,7 +26,7 @@
   #include <GL/glew.h>
 #endif
 
-#include <core/gtools.h>
+#include <core/tools.h>
 
 /// Contains tools for work with OpenGL
 namespace GLTools {

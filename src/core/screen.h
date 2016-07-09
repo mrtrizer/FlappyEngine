@@ -5,7 +5,7 @@
 #include <glm/vec2.hpp>
 #include <core/manager.h>
 
-class ScreenManager: public Manager<ScreenManager>
+class Screen: public Manager<Screen>
 {
 public:
     inline glm::vec2 getScreenSize() const {

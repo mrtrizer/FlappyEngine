@@ -16,7 +16,7 @@ typedef float TimeDelta;
 class Component {
     friend class Entity;
 public:
-    virtual void update(TimeDelta dt) {
+    virtual void update(TimeDelta) {
         
     }
     virtual void init() {
@@ -93,10 +93,6 @@ public:
     void reset() {
         entities.clear();
     }
-
-    static std::shared_ptr<Entity> CREATE(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){}) {
-        getInst()->create(func);
-    }
     
     std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){}) {
         auto entity = std::make_shared<Entity>();
@@ -140,8 +136,8 @@ private:
 };
 
 
-#define E [](std::shared_ptr<Entity> e)
-#define CREATE(func) EntityManager::getInst()->create([=, this](std::shared_ptr<Entity> e) func)
+typedef std::shared_ptr<Entity> EP;
+void CREATE(std::function<void(std::shared_ptr<Entity>)> func);
 
 
 #endif /* EntityManager_h */

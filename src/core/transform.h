@@ -9,10 +9,10 @@
 
 #include <core/entitymanager.h>
 
-class CTransform: public BaseComponent<CTransform>
+class Transform: public BaseComponent<Transform>
 {
 public:
-    CTransform(float x = 0, float y = 0, float z = 0.0f):
+    Transform(float x = 0, float y = 0, float z = 0.0f):
         pos(x, y, z){}
 
     glm::mat4x4 getMvMatrix() {
@@ -25,7 +25,7 @@ public:
     glm::vec3 pos;
     float angle;
     float scale = 1.0f;
-    std::weak_ptr<CTransform> parent;
+    std::weak_ptr<Transform> parent;
 };
 
 #endif // TRANSFORM_H

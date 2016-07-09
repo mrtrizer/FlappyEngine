@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include <core/gtools.h>
+#include <core/tools.h>
 
 #include "gltexture.h"
 
@@ -19,7 +19,7 @@ GLTexture::GLTexture(const char *bits, int width, int height):
     CHECK_GL_ERROR;
 
     //check width and height
-    if ((width == height) && GTools::isPowOfTwo(width) && GTools::isPowOfTwo(height)) {
+    if ((width == height) && Tools::isPowOfTwo(width) && Tools::isPowOfTwo(height)) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      width, width, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      static_cast<const GLvoid*>(bits));

@@ -2,17 +2,11 @@ INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/box2d/Box2D
 
 HEADERS += \
-    $$PWD/core/gview.h \
-    $$PWD/core/gtools.h \
-    $$PWD/core/gviewfactory.h \
-    $$PWD/core/gpresenter.h \
-    $$PWD/core/gworldview.h \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
     $$PWD/gl/gltexture.h \
     $$PWD/gl/glviewfactory.h \
-    $$PWD/gl/glworldview.h \
     $$PWD/gl/glviewshape.h \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
@@ -20,14 +14,9 @@ HEADERS += \
     $$PWD/qt/viewfactoryqt.h \
     $$PWD/core/entitymanager.h \
     $$PWD/core/flappyapp.h \
-    $$PWD/core/ccamera.h \
-    $$PWD/core/ctransform.h \
     $$PWD/core/animation.h \
-    $$PWD/core/screenmanager.h \
     $$PWD/core/prefab.h \
-    $$PWD/core/inputmanager.h \
     $$PWD/core/manager.h \
-    $$PWD/core/scenemanager.h \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.h \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.h \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2EdgeShape.h \
@@ -220,14 +209,21 @@ HEADERS += \
     $$PWD/glm/vector_relational.hpp \
     $$PWD/png/viewfactorylibpng.h \
     $$PWD/sdl/viewfactorysdl.h \
-    $$PWD/ui/button.h
+    $$PWD/ui/button.h \
+    $$PWD/core/camera.h \
+    $$PWD/core/transform.h \
+    $$PWD/core/view.h \
+    $$PWD/core/presenter.h \
+    $$PWD/core/tools.h \
+    $$PWD/core/viewfactory.h \
+    $$PWD/core/screen.h \
+    $$PWD/core/input.h \
+    $$PWD/core/scene.h \
+    $$PWD/core/viewmanager.h \
+    $$PWD/gl/glviewmanager.h
 
 
 SOURCES += \
-    $$PWD/core/gtools.cpp \
-    $$PWD/core/gpresenter.cpp \
-    $$PWD/core/gworldview.cpp \
-    $$PWD/core/gview.cpp \
     $$PWD/gl/gltools.cpp \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \
@@ -239,10 +235,7 @@ SOURCES += \
     $$PWD/glut/glutmgr.cpp \
     $$PWD/qt/viewfactoryqt.cpp \
     $$PWD/core/flappyapp.cpp \
-    $$PWD/core/ccamera.cpp \
     $$PWD/core/animation.cpp \
-    $$PWD/core/inputmanager.cpp \
-    $$PWD/core/scenemanager.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2EdgeShape.cpp \
@@ -290,6 +283,13 @@ SOURCES += \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp \
     $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.cpp \
     $$PWD/core/entitymanager.cpp \
-    $$PWD/ui/button.cpp
+    $$PWD/ui/button.cpp \
+    $$PWD/core/camera.cpp \
+    $$PWD/core/view.cpp \
+    $$PWD/core/tools.cpp \
+    $$PWD/core/presenter.cpp \
+    $$PWD/core/viewmanager.cpp \
+    $$PWD/core/scene.cpp \
+    $$PWD/core/input.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

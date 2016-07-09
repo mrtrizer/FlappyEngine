@@ -1,5 +1,5 @@
 #include <glm/gtc/type_ptr.hpp>
-#include <core/gpresenter.h>
+#include <core/presenter.h>
 
 #include "glviewsprite.h"
 
@@ -29,7 +29,7 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const GPresenterSprite & presenter) :
+GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     rect(GL_TRIANGLE_STRIP),
     texture(glTexture),
@@ -61,8 +61,8 @@ void GLViewSprite::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
     });
 }
 
-void GLViewSprite::update(const GPresenter & presenter){
-    auto & presenterSprite = dynamic_cast<const GPresenterSprite &>(presenter);
+void GLViewSprite::update(const Presenter & presenter){
+    auto & presenterSprite = dynamic_cast<const Sprite &>(presenter);
     int frameCnt = presenterSprite.getFrameCnt();
     int frameN = presenterSprite.getFrameN();
     float relWidth = texture->getRelWidth();

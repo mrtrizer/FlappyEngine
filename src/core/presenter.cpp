@@ -1,10 +1,10 @@
-#include "gpresenter.h"
-#include "gviewfactory.h"
-#include "gview.h"
-#include "gtools.h"
+#include "presenter.h"
+#include "viewfactory.h"
+#include "view.h"
+#include "tools.h"
 
 /// Returns GView instance and creates new if gView is nullptr.
-std::shared_ptr<GView> GPresenter::getGView(const GViewFactory &factory) {
+std::shared_ptr<View> Presenter::getGView(const ViewFactory &factory) {
     if (gView == nullptr)
         gView = makeGView(factory);
     return gView;
@@ -12,32 +12,32 @@ std::shared_ptr<GView> GPresenter::getGView(const GViewFactory &factory) {
 
 /// Clear a shared pointer to GView instance. Used by GWorldView destructor.
 /// shared pointer will reinitilized in next getGView call.
-void GPresenter::cleanGView(){
+void Presenter::cleanGView(){
     gView = nullptr;
 }
 
 /// Calls GView::externUpdate if gView is set.
 /// The idea is not entirely implemented. This method is
 /// called only if frameN is changed in GPresenterSprite.
-void GPresenter::updateView(){
+void Presenter::updateView(){
     if (gView != nullptr)
         gView->externUpdate(shared_from_this());
 }
 
 /// Changes current frame pointer and informs GView about it.
-void GPresenterSprite::setFrameN(int frameN) {
+void Sprite::setFrameN(int frameN) {
     this->frameN = frameN;
     updateView();
 }
 
-std::shared_ptr<GView> GPresenterSprite::makeGView(const GViewFactory &factory) {
+std::shared_ptr<View> Sprite::makeGView(const ViewFactory &factory) {
     return factory.getGViewSprite(*this);
 }
 
-std::shared_ptr<GView> GPresenterCircle::makeGView(const GViewFactory &factory) {
+std::shared_ptr<View> CircleShape::makeGView(const ViewFactory &factory) {
     return factory.getGViewCircle(*this);
 }
 
-std::shared_ptr<GView> GPresenterRect::makeGView(const GViewFactory &factory) {
+std::shared_ptr<View> RectShape::makeGView(const ViewFactory &factory) {
     return factory.getGViewRect(*this);
 }

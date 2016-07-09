@@ -1,7 +1,7 @@
 #include "animation.h"
 
 SpriteAnimation::SpriteAnimation(std::string path, float width, float height, int frameCnt, float period) :
-    GPresenterSprite(path,width, height, frameCnt),
+    Sprite(path,width, height, frameCnt),
     period(period) {
 
 }

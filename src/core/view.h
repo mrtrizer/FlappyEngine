@@ -4,23 +4,23 @@
 #include <memory>
 #include <glm/mat4x4.hpp>
 
-#include "gtools.h"
+#include "tools.h"
 
-class GPresenter;
+class Presenter;
 
 /// @brief Interface for all object views.
 /// Contains abstract draw() method for implementation in
 /// derived classes.
-class GView : public std::enable_shared_from_this<GView> {
+class View : public std::enable_shared_from_this<View> {
 public:
-    virtual ~GView(){}
+    virtual ~View(){}
     void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
-    void externUpdate(const std::shared_ptr<GPresenter> & gPresenter);
+    void externUpdate(const std::shared_ptr<Presenter> & gPresenter);
 protected:
     virtual void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) = 0;
-    virtual void update(const GPresenter &) {}
+    virtual void update(const Presenter &) {}
 private:
-    std::weak_ptr<GPresenter> gPresenter;
+    std::weak_ptr<Presenter> gPresenter;
 };
 
 #endif // GVIEW_H

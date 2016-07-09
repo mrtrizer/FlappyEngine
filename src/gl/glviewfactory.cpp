@@ -2,8 +2,8 @@
 #include "glviewshape.h"
 #include "glviewsprite.h"
 
-GViewFactory::GViewP GLViewFactory::getGViewSprite(const GPresenter &presenter) const {
-    auto & presenterSprite = dynamic_cast<const GPresenterSprite &>(presenter);
+ViewFactory::GViewP GLViewFactory::getGViewSprite(const Presenter &presenter) const {
+    auto & presenterSprite = dynamic_cast<const Sprite &>(presenter);
     std::shared_ptr<GLTexture> texture;
     auto texturePath = presenterSprite.getPath();
     auto mapIter = textureMap.find(texturePath);
@@ -16,12 +16,12 @@ GViewFactory::GViewP GLViewFactory::getGViewSprite(const GPresenter &presenter) 
     return std::make_shared<GLViewSprite>(texture,presenterSprite);
 }
 
-GViewFactory::GViewP GLViewFactory::getGViewCircle(const GPresenter &presenter) const {
-    auto & presenterCircle = dynamic_cast<const GPresenterCircle &>(presenter);
+ViewFactory::GViewP GLViewFactory::getGViewCircle(const Presenter &presenter) const {
+    auto & presenterCircle = dynamic_cast<const CircleShape &>(presenter);
     return std::make_shared<GViewCircle>(CIRCLE_VERTEX_CNT, presenterCircle.getR_());
 }
 
-GViewFactory::GViewP GLViewFactory::getGViewRect(const GPresenter &presenter) const {
-    auto & presenterRect = dynamic_cast<const GPresenterRect &>(presenter);
+ViewFactory::GViewP GLViewFactory::getGViewRect(const Presenter &presenter) const {
+    auto & presenterRect = dynamic_cast<const RectShape &>(presenter);
     return std::make_shared<GViewRect>(presenterRect.getWidth(), presenterRect.getHeight());
 }

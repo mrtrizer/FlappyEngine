@@ -2,15 +2,15 @@
 #define INPUTMANAGER_H
 
 #include <glm/vec3.hpp>
-#include <core/gtools.h>
+#include <core/tools.h>
 #include <core/entitymanager.h>
 
 #include "manager.h"
 
-class InputManager: public Manager<InputManager>
+class Input: public Manager<Input>
 {
 public:
-    InputManager();
+    Input();
 
     bool isMouseDown();
     bool isMouseUp();

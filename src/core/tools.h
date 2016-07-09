@@ -16,12 +16,8 @@
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #endif
 
-class GObj;
-class GColliderCircle;
-class GColliderRect;
-
 /// Gives some common tools
-namespace GTools
+namespace Tools
 {
     typedef std::vector<float> PMatrix;
     bool isPowOfTwo(int x);

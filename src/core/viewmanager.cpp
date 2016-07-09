@@ -1,20 +1,20 @@
-#include "gworldview.h"
-#include "ctransform.h"
-#include "gpresenter.h"
-#include "screenmanager.h"
-#include "scenemanager.h"
+#include "viewmanager.h"
+#include "transform.h"
+#include "presenter.h"
+#include "screen.h"
+#include "scene.h"
 
-GWorldView* GWorldView::instance = nullptr;
+ViewManager* ViewManager::instance = nullptr;
 
-GWorldView::~GWorldView(){
+ViewManager::~ViewManager(){
 }
 
-void GWorldView::update(TimeDelta dt) {
+void ViewManager::update(TimeDelta dt) {
 
-    std::shared_ptr<CCamera> camera;
+    std::shared_ptr<Camera> camera;
 
-    EntityManager::getInst()->each<CCamera>([&camera, this] (std::shared_ptr<Entity> e){
-        camera = e->get<CCamera>();
+    EntityManager::getInst()->each<Camera>([&camera, this] (std::shared_ptr<Entity> e){
+        camera = e->get<Camera>();
     });
 
     if (camera == nullptr)
@@ -25,13 +25,13 @@ void GWorldView::update(TimeDelta dt) {
 
     GPresenterList presenters;
 
-    EntityManager::getInst()->each<GPresenter>([&presenters, dt]
+    EntityManager::getInst()->each<Presenter>([&presenters, dt]
                                     (std::shared_ptr<Entity> e){
-        auto presenter = e->get<GPresenter>();
+        auto presenter = e->get<Presenter>();
         presenter->update(dt);
         glm::mat4 transformMatrix;
         float z = 0;
-        auto curTransform = e->get<CTransform>();
+        auto curTransform = e->get<Transform>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
             z += curTransform->pos.z;
@@ -43,14 +43,14 @@ void GWorldView::update(TimeDelta dt) {
     redraw(presenters, pMatrix);
 }
 
-void GWorldView::resize(int width, int height) {
+void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw std::runtime_error("Invalid screen size. Has to be > 0.");
-    ScreenManager::getInst()->width = width;
-    ScreenManager::getInst()->height = height;
+    Screen::getInst()->width = width;
+    Screen::getInst()->height = height;
     updateSize();
 }
 
-void GWorldView::updateSize() {
+void ViewManager::updateSize() {
     updateViewPort();
 }
