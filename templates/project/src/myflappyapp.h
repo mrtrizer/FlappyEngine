@@ -30,10 +30,9 @@ public:
 class BasketCtrl: public BaseComponent<BasketCtrl> {
 public:
     void update(TimeDelta) {
-        EntityManager::getInst()->each<MoveUp>(
-           [this](std::shared_ptr<Entity> e) {
+        EACH<MoveUp>([this](EP e) {
                if (glm::distance(e->get<Transform>()->pos, getEntity()->get<Transform>()->pos) < 15) {
-                   EntityManager::getInst()->remove(e);
+                   REMOVE(e);
                    if (e->get<MoveUp>()->color == color)
                         getEntity()->get<Transform>()->scale -= 0.1f;
                }

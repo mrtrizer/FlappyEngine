@@ -138,6 +138,12 @@ private:
 
 typedef std::shared_ptr<Entity> EP;
 void CREATE(std::function<void(std::shared_ptr<Entity>)> func);
-
+void REMOVE(std::shared_ptr<Entity> entity);
+std::list<std::shared_ptr<Entity>> FINDALL(std::function<bool(const Entity*)> check);
+std::shared_ptr<Entity> FIND(std::function<bool(const Entity*)> check);
+template <typename ... Components>
+void EACH(std::function<void(std::shared_ptr<Entity>)> func) {
+    EntityManager::getInst()->each<Components...>(func);
+}
 
 #endif /* EntityManager_h */
