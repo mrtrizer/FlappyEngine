@@ -40,7 +40,7 @@ glm::mat4 Camera::getPMatrix() {
     static const float far = 99.0f;
 
     glm::mat4 mvMatrix;
-    auto transform = getEntity()->get<Transform>();
+    auto transform = entity()->get<Transform>();
     if (transform != nullptr) {
         mvMatrix = transform->getMvMatrix();
     }

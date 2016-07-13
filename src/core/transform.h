@@ -9,11 +9,15 @@
 
 #include <core/entitymanager.h>
 
-class Transform: public BaseComponent<Transform>
+class Transform: public BaseComponent<Transform>, public std::enable_shared_from_this<Transform>
 {
 public:
     Transform(float x = 0, float y = 0, float z = 0.0f):
         pos(x, y, z){}
+
+    void init() override {
+        entity()->_transform = shared_from_this();
+    }
 
     glm::mat4x4 getMvMatrix() {
         auto translateM = glm::translate(glm::mat4x4(1.0f), pos);

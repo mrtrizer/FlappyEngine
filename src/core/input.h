@@ -12,16 +12,21 @@ class Input: public Manager<Input>
 public:
     Input();
 
-    bool isMouseDown();
-    bool isMouseUp();
-    bool isMousePressed();
-    glm::vec3 getMousePos();
+    static bool isMouseDown() {return getInst()->isMouseDown_();}
+    static bool isMouseUp() {return getInst()->isMouseUp_();}
+    static bool isMousePressed() {return getInst()->isMousePressed_();}
+    static glm::vec3 getMousePos() {return getInst()->getMousePos_();}
 
     void update(TimeDelta);
     void setMouseDown();
     void setMouseUp();
     void mouseMove(glm::vec3 mousePos);
 private:
+    bool isMouseDown_();
+    bool isMouseUp_();
+    bool isMousePressed_();
+    glm::vec3 getMousePos_();
+
     glm::vec3 mousePos;
     int mouseDown = 0;
     int mouseUp = 0;

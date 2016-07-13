@@ -4,19 +4,19 @@ Input::Input()
 {
 
 }
-bool Input::isMouseDown() {
+bool Input::isMouseDown_() {
     return mouseDown == 1;
 }
 
-bool Input::isMouseUp() {
+bool Input::isMouseUp_() {
     return mouseUp == 1;
 }
 
-bool Input::isMousePressed() {
+bool Input::isMousePressed_() {
     return mousePressed;
 }
 
-glm::vec3 Input::getMousePos() {
+glm::vec3 Input::getMousePos_() {
     return mousePos;
 }
 

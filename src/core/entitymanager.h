@@ -8,7 +8,7 @@
 
 #include "manager.h"
 
-
+class Transform;
 class Entity;
 
 typedef float TimeDelta;
@@ -25,9 +25,9 @@ public:
 
     virtual std::size_t getHash() = 0;
     
-    inline std::shared_ptr<Entity> getEntity() const { return entity.lock(); }
+    inline std::shared_ptr<Entity> entity() const { return _entity.lock(); }
 private:
-    std::weak_ptr<Entity> entity;
+    std::weak_ptr<Entity> _entity;
 };
 
 template <typename Dirived>
@@ -37,22 +37,24 @@ public:
 };
 
 class Entity: public std::enable_shared_from_this<Entity> {
+    friend class Transform;
 public:
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> add(Args ... args) {
         auto component = std::make_shared<ComponentT>(args...);
-        component->entity = shared_from_this();
+        component->_entity = shared_from_this();
         component->init();
         components.push_back(component);
         return component;
     }
     
+    //TODO: How to optomize? Dynamic cast for every component is bad idea.
     template<typename ComponentT>
     std::shared_ptr<ComponentT> get() const {
-        std::size_t hash = typeid(ComponentT).hash_code();
         for (auto component: components) {
-            if (component->getHash() == hash)
-                return std::dynamic_pointer_cast<ComponentT>(component);
+            auto cast = std::dynamic_pointer_cast<ComponentT>(component);
+            if (cast != nullptr)
+                return cast;
         }
         return nullptr;
     }
@@ -72,8 +74,12 @@ public:
         for (auto component: components)
             component->update(dt);
     }
+
+    std::shared_ptr<Transform> transform() { return _transform; }
+
 private:
     std::list<std::shared_ptr<Component>> components;
+    std::shared_ptr<Transform> _transform;
 };
 
 class EntityManager: public Manager<EntityManager> {

@@ -10,20 +10,20 @@ void Button::update(TimeDelta) {
         if (isInField()) {
             if (onClick != nullptr)
                 onClick();
-            getEntity()->get<Transform>()->scale = 0.95f;
+            entity()->get<Transform>()->scale = 0.95f;
         }
     }
     if (Input::getInst()->isMouseUp()) {
         if (isInField()) {
-            getEntity()->get<Transform>()->scale = 1.0f;
+            entity()->get<Transform>()->scale = 1.0f;
         }
     }
 }
 
 bool Button::isInField() {
     auto pos = Scene::getInst()->getCamera()->screenToScene(Input::getInst()->getMousePos());
-    auto buttonPos = getEntity()->get<Transform>()->pos;
-    auto size = getEntity()->get<Presenter>()->getSize() * 0.5f;
+    auto buttonPos = entity()->get<Transform>()->pos;
+    auto size = entity()->get<Presenter>()->getSize() * 0.5f;
     auto diff = pos - buttonPos;
     return (glm::abs(diff.x) < size.x) && (glm::abs(diff.y) < size.y);
 }
