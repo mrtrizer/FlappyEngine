@@ -1,5 +1,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <core/presenter.h>
+#include <core/sprite.h>
 
 #include "glviewsprite.h"
 

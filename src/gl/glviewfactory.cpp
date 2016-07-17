@@ -1,3 +1,7 @@
+#include <core/sprite.h>
+#include <core/rectshape.h>
+#include <core/circleshape.h>
+
 #include "glviewfactory.h"
 #include "glviewshape.h"
 #include "glviewsprite.h"

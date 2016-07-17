@@ -2,6 +2,7 @@
 #define GANIMATION_H
 
 #include "presenter.h"
+#include "sprite.h"
 
 class SpriteAnimation: public Sprite
 {

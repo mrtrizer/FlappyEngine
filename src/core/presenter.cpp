@@ -23,21 +23,3 @@ void Presenter::updateView(){
     if (gView != nullptr)
         gView->externUpdate(shared_from_this());
 }
-
-/// Changes current frame pointer and informs GView about it.
-void Sprite::setFrameN(int frameN) {
-    this->frameN = frameN;
-    updateView();
-}
-
-std::shared_ptr<View> Sprite::makeGView(const ViewFactory &factory) {
-    return factory.getGViewSprite(*this);
-}
-
-std::shared_ptr<View> CircleShape::makeGView(const ViewFactory &factory) {
-    return factory.getGViewCircle(*this);
-}
-
-std::shared_ptr<View> RectShape::makeGView(const ViewFactory &factory) {
-    return factory.getGViewRect(*this);
-}
