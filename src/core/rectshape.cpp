@@ -2,5 +2,5 @@
 #include "viewfactory.h"
 
 std::shared_ptr<View> RectShape::makeGView(const ViewFactory &factory) {
-    return factory.getGViewRect(*this);
+    return factory.get(*this);
 }

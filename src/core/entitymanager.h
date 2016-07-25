@@ -16,16 +16,14 @@ typedef float TimeDelta;
 class Component {
     friend class Entity;
 public:
-    virtual void update(TimeDelta) {
-        
-    }
-    virtual void init() {
+    virtual ~Component() {}
 
-    }
+    virtual void update(TimeDelta) {}
+    virtual void init() {}
 
     virtual std::size_t getHash() = 0;
     
-    inline std::shared_ptr<Entity> entity() const { return _entity.lock(); }
+    std::shared_ptr<Entity> entity() const { return _entity.lock(); }
 private:
     std::weak_ptr<Entity> _entity;
 };

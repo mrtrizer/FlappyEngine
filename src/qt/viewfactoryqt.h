@@ -9,7 +9,7 @@ class ViewFactoryQt :public GLViewFactory
 {
 public:
     ViewFactoryQt(QString path);
-    virtual std::shared_ptr<GLTexture> getGLTexture(std::string name) const override;
+    virtual std::shared_ptr<Texture> getTexture(std::string name) const override;
 private:
     QString path;
 };

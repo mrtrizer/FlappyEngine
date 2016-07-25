@@ -30,10 +30,10 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const Sprite & presenter) :
+GLViewSprite::GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     rect(GL_TRIANGLE_STRIP),
-    texture(glTexture),
+    texture(std::dynamic_pointer_cast<GLTexture>(glTexture)),
     vertexList({
                 {-presenter.getWidth() / 2,-presenter.getHeight() / 2},
                 {-presenter.getWidth() / 2,presenter.getHeight() / 2},

@@ -12,7 +12,7 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const std::shared_ptr<GLTexture> &glTexture, const Sprite &presenter);
+    GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Sprite &presenter);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const Presenter &) override;
 private:

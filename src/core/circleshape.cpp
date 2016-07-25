@@ -2,5 +2,5 @@
 #include "circleshape.h"
 
 std::shared_ptr<View> CircleShape::makeGView(const ViewFactory &factory) {
-    return factory.getGViewCircle(*this);
+    return factory.get(*this);
 }

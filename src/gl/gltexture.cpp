@@ -4,8 +4,7 @@
 
 #include "gltexture.h"
 
-GLTexture::GLTexture(const char *bits, int width, int height):
-    uvs({{0,1},{0,0},{1,1},{1,0}})
+GLTexture::GLTexture(const char *bits, int width, int height)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     CHECK_GL_ERROR;

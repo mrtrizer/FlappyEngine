@@ -10,7 +10,7 @@ public:
         r(r)
     {}
     virtual ~CircleShape(){}
-    inline float getR_() const { return r; }
+    float getR_() const { return r; }
     virtual glm::vec3 getSize() {return glm::vec3(r * 2,r * 2,0);}
 protected:
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;

@@ -10,7 +10,7 @@ class GLTexture;
 class ViewFactorySDL: public GLViewFactory {
 public:
     ViewFactorySDL(std::string resPath);
-    std::shared_ptr<GLTexture> getGLTexture(std::string path) const;
+    std::shared_ptr<Texture> getTexture(std::string path) const override;
 
     ///Error on texture loading
     class loading_error {};

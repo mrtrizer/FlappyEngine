@@ -8,5 +8,5 @@ void Sprite::setFrameN(int frameN) {
 }
 
 std::shared_ptr<View> Sprite::makeGView(const ViewFactory &factory) {
-    return factory.getGViewSprite(*this);
+    return factory.get(*this);
 }

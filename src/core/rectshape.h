@@ -12,8 +12,8 @@ public:
     {}
     virtual glm::vec3 getSize() {return glm::vec3(width,height,0);}
     virtual ~RectShape(){}
-    inline float getWidth() const { return width; }
-    inline float getHeight() const { return height; }
+    float getWidth() const { return width; }
+    float getHeight() const { return height; }
 protected:
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
 private:

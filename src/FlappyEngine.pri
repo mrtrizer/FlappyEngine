@@ -223,7 +223,8 @@ HEADERS += \
     $$PWD/gl/glviewmanager.h \
     $$PWD/core/circleshape.h \
     $$PWD/core/rectshape.h \
-    $$PWD/core/sprite.h
+    $$PWD/core/sprite.h \
+    $$PWD/core/texture.h
 
 
 SOURCES += \

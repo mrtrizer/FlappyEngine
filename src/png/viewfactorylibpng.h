@@ -10,7 +10,7 @@ class GLTexture;
 class ViewFactoryLibPNG: public GLViewFactory {
 public:
     ViewFactoryLibPNG(std::string resPath);
-    std::shared_ptr<GLTexture> getGLTexture(std::string path) const;
+    std::shared_ptr<Texture> getTexture(std::string path) const override;
 
     class file_open_error {};
     /// Wrong file format (after checking png signature)
