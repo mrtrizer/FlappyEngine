@@ -28,27 +28,4 @@ private:
     ColorRGBA colorRGBA;
 };
 
-/// Circle shape (GL_TRIANGLE_FAN, vertexCnt points around the center point)
-class GViewCircle: public GLViewShape {
-public:
-    GViewCircle(int vertexCnt, double r);
-    const GLAttribArray & getAttribArray() const override {return circle; }
-
-private:
-    int vertexCnt;
-    GLAttribArray circle;
-
-    std::vector<GLTools::Vertex> circleTriangleFan(float r, int count);
-};
-
-/// Rect shape (GL_TRIANGLE_STRIP, two triangles with a common side)
-class GViewRect: public GLViewShape {
-public:
-    GViewRect(float width, float height);
-    const GLAttribArray & getAttribArray() const override {return rect;}
-
-private:
-    GLAttribArray rect;
-};
-
 #endif // GVIEWSHAPE_H

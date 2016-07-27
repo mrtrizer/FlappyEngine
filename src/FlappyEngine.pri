@@ -224,7 +224,9 @@ HEADERS += \
     $$PWD/core/circleshape.h \
     $$PWD/core/rectshape.h \
     $$PWD/core/sprite.h \
-    $$PWD/core/texture.h
+    $$PWD/core/texture.h \
+    $$PWD/gl/glviewcircle.h \
+    $$PWD/gl/glviewrect.h
 
 
 SOURCES += \
@@ -297,6 +299,8 @@ SOURCES += \
     $$PWD/core/input.cpp \
     $$PWD/core/circleshape.cpp \
     $$PWD/core/rectshape.cpp \
-    $$PWD/core/sprite.cpp
+    $$PWD/core/sprite.cpp \
+    $$PWD/gl/glviewcircle.cpp \
+    $$PWD/gl/glviewrect.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

@@ -3,7 +3,8 @@
 #include <core/circleshape.h>
 
 #include "glviewfactory.h"
-#include "glviewshape.h"
+#include "glviewrect.h"
+#include "glviewcircle.h"
 #include "glviewsprite.h"
 
 template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenter) const {
