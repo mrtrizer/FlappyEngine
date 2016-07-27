@@ -2,18 +2,18 @@
 
 #include <core/scene.h>
 #include <core/transform.h>
-#include <core/input.h>
+#include <core/inputmgr.h>
 #include <core/presenter.h>
 
 void Button::update(TimeDelta) {
-    if (Input::getInst()->isMouseDown()) {
+    if (InputMgr::getInst()->isMouseDown()) {
         if (isInField()) {
             if (onClick != nullptr)
                 onClick();
             entity()->get<Transform>()->scale = 0.95f;
         }
     }
-    if (Input::getInst()->isMouseUp()) {
+    if (InputMgr::getInst()->isMouseUp()) {
         if (isInField()) {
             entity()->get<Transform>()->scale = 1.0f;
         }
@@ -21,7 +21,7 @@ void Button::update(TimeDelta) {
 }
 
 bool Button::isInField() {
-    auto pos = Scene::getInst()->getCamera()->screenToScene(Input::getInst()->getMousePos());
+    auto pos = Scene::getInst()->getCamera()->screenToScene(InputMgr::getInst()->getMousePos());
     auto buttonPos = entity()->get<Transform>()->pos;
     auto size = entity()->get<Presenter>()->getSize() * 0.5f;
     auto diff = pos - buttonPos;

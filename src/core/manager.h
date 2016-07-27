@@ -8,7 +8,10 @@ class Manager
 {
 public:
     static std::shared_ptr<Derived> getInst() {return inst == nullptr? inst = std::make_shared<Derived>(): inst;}
+    Manager() {}
 private:
+    Manager(const Manager&) = delete;
+
     static std::shared_ptr<Derived> inst;
 };
 

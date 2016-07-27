@@ -28,7 +28,7 @@
 #include <gl/glviewmanager.h>
 #include <core/camera.h>
 #include <gl/glviewfactory.h>
-#include <core/input.h>
+#include <core/inputmgr.h>
 
 #include "glutmgr.h"
 
@@ -53,15 +53,15 @@ void resizeWindow(int width, int height) {
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    Input::getInst()->mouseMove(glm::vec3(x,y,0));
+    InputMgr::getInst()->mouseMove(glm::vec3(x,y,0));
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        Input::getInst()->setMouseDown();
+        InputMgr::getInst()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        Input::getInst()->setMouseUp();
+        InputMgr::getInst()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    Input::getInst()->mouseMove(glm::vec3(x,y,0));
+    InputMgr::getInst()->mouseMove(glm::vec3(x,y,0));
 }
 
 void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<FlappyApp> flappyApp) {

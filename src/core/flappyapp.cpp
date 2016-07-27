@@ -1,4 +1,4 @@
-#include <core/input.h>
+#include <core/inputmgr.h>
 
 #include "flappyapp.h"
 
@@ -12,7 +12,7 @@ void FlappyApp::update() {
     TimeDelta dt = chrono::duration <float, milli> (newTime - lastTime).count() / 1000.0f;
     lastTime = newTime;
 
-    Input::getInst()->update(dt);
+    InputMgr::getInst()->update(dt);
     EntityManager::getInst()->update(dt);
     worldView->update(dt);
 }
