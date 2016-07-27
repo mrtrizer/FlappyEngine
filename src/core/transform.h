@@ -12,24 +12,31 @@
 class Transform: public Component, public std::enable_shared_from_this<Transform>
 {
 public:
-    Transform(float x = 0, float y = 0, float z = 0.0f):
-        pos(x, y, z){}
+    void init() override;
+    glm::mat4x4 getMvMatrix();
 
-    void init() override {
-        entity()->m_transform = shared_from_this();
-    }
+    glm::vec3 pos() const {return m_pos;}
+    float angle() const {return m_angle;}
+    glm::vec3 scale() const {return m_scale;}
+    std::shared_ptr<Transform> parent() {return m_parent.lock();}
 
-    glm::mat4x4 getMvMatrix() {
-        auto translateM = glm::translate(glm::mat4x4(1.0f), pos);
-        auto rotateM = glm::rotate(translateM, angle, glm::vec3(0.0f, 0.0f, 1.0f));
-        auto scaleM = glm::scale(rotateM, glm::vec3(scale, scale, scale));
-        return scaleM;
-    }
+    void setPos(const glm::vec3& pos) {m_pos = pos;}
+    void move(const glm::vec3& offset) {m_pos += offset;}
 
-    glm::vec3 pos;
-    float angle;
-    float scale = 1.0f;
-    std::weak_ptr<Transform> parent;
+    void setAngle(float angle) {m_angle = angle;}
+
+    void setScale(const glm::vec3& scale) {m_scale = scale;}
+    void setScale(float offset) {m_scale = glm::vec3(offset, offset, offset);}
+    void stretch(float offset) {m_scale += glm::vec3(offset, offset, offset);}
+    void stretch(const glm::vec3& offset) {m_scale += offset;}
+
+    void setParent(const std::shared_ptr<Transform>& parent) {m_parent = parent;}
+
+private:
+    glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
+    glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};
+    float m_angle = 0.0f;
+    std::weak_ptr<Transform> m_parent;
 };
 
 #endif // TRANSFORM_H

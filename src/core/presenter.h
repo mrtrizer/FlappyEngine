@@ -22,7 +22,7 @@ public:
     std::shared_ptr<View> getGView(const ViewFactory & factory);
     void cleanGView();
     void updateView();
-    virtual glm::vec3 getSize() {return glm::vec3();}
+    virtual glm::vec3 size() {return glm::vec3();}
     virtual void update(TimeDelta) {}
 
 protected:

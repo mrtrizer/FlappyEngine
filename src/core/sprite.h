@@ -8,23 +8,23 @@ class Sprite : public RectShape {
 public:
     Sprite(std::string path, float width, float height, int frameCnt = 1):
         RectShape(width,height),
-        path(path),
-        frameCnt(frameCnt)
+        m_path(path),
+        m_frameCnt(frameCnt)
     {}
     virtual ~Sprite(){}
-    inline std::string getPath() const { return path; }
-    inline int getFrameCnt() const { return frameCnt; }
-    void setFrameN(int frameN);
-    inline int getFrameN() const { return frameN; }
+    inline std::string path() const { return m_path; }
+    inline int frameCnt() const { return m_frameCnt; }
+    void setFrameN(int m_frameN);
+    inline int getFrameN() const { return m_frameN; }
 
 protected:
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
 private:
-    std::string path;
+    std::string m_path;
     /// Current frame pointer
-    int frameN = 0;
+    int m_frameN = 0;
     /// Summary frame count
-    int frameCnt = 1;
+    int m_frameCnt = 1;
 };
 
 #endif // SPRITE_H

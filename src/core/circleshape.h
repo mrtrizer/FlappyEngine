@@ -3,19 +3,20 @@
 
 #include "presenter.h"
 
+// TODO: Replace r with width and height
 /// Represents a circle shape.
 class CircleShape  : public Presenter {
 public:
     CircleShape(float r):
-        r(r)
+        m_r(r)
     {}
     virtual ~CircleShape(){}
-    float getR_() const { return r; }
-    virtual glm::vec3 getSize() {return glm::vec3(r * 2,r * 2,0);}
+    float r() const { return m_r; }
+    virtual glm::vec3 size() {return glm::vec3(m_r * 2,m_r * 2,0);}
 protected:
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
 private:
-    float r;
+    float m_r;
 };
 
 #endif // CIRCLESHAPE_H

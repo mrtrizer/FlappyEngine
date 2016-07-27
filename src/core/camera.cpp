@@ -6,8 +6,8 @@
 #include "scenemgr.h"
 
 Camera::Camera(float height, float ratio):
-    height(height),
-    ratio(ratio){
+    m_height(height),
+    m_ratio(ratio){
 
 }
 
@@ -16,9 +16,9 @@ void Camera::init() {
         Scene::setCamera(shared_from_this());
 }
 
-Camera::Rect Camera::getRect() const {
+Camera::Rect Camera::rect() const {
     float ratio = (float)ScreenMgr::getInst()->width() / ScreenMgr::getInst()->height();
-    float offset = height / 2;
+    float offset = m_height / 2;
     return {
         -offset * ratio,
         offset,
@@ -28,14 +28,14 @@ Camera::Rect Camera::getRect() const {
 }
 
 glm::vec3 Camera::screenToScene(glm::vec3 pos) const {
-    float coeff = this->height / ScreenMgr::getInst()->height();
+    float coeff = this->m_height / ScreenMgr::getInst()->height();
     glm::vec2 screenSize = ScreenMgr::getInst()->screenSize() * 0.5f;
     glm::vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }
 
-glm::mat4 Camera::getPMatrix() {
-    auto rect = getRect();
+glm::mat4 Camera::pMatrix() {
+    auto curRect = rect();
     static const float near = -1.0f;
     static const float far = 99.0f;
 
@@ -45,5 +45,5 @@ glm::mat4 Camera::getPMatrix() {
         mvMatrix = transform->getMvMatrix();
     }
 
-    return glm::ortho(rect.x1, rect.x2, rect.y2, rect.y1, near, far) * mvMatrix;
+    return glm::ortho(curRect.x1, curRect.x2, curRect.y2, curRect.y1, near, far) * mvMatrix;
 }

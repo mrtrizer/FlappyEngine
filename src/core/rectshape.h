@@ -7,17 +7,17 @@
 class RectShape : public Presenter {
 public:
     RectShape(float width, float height):
-        width(width),
-        height(height)
+        m_width(width),
+        m_height(height)
     {}
-    virtual glm::vec3 getSize() {return glm::vec3(width,height,0);}
+    virtual glm::vec3 size() {return glm::vec3(m_width,m_height,0);}
     virtual ~RectShape(){}
-    float getWidth() const { return width; }
-    float getHeight() const { return height; }
+    float width() const { return m_width; }
+    float height() const { return m_height; }
 protected:
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
 private:
-    float width;
-    float height;
+    float m_width;
+    float m_height;
 };
 #endif // RECTSHAPE_H

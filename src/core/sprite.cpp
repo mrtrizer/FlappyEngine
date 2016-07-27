@@ -3,7 +3,7 @@
 
 /// Changes current frame pointer and informs GView about it.
 void Sprite::setFrameN(int frameN) {
-    this->frameN = frameN;
+    this->m_frameN = frameN;
     updateView();
 }
 

@@ -304,6 +304,7 @@ SOURCES += \
     $$PWD/core/inputmgr.cpp \
     $$PWD/core/scenemgr.cpp \
     $$PWD/core/screenmgr.cpp \
-    $$PWD/core/entitymgr.cpp
+    $$PWD/core/entitymgr.cpp \
+    $$PWD/core/transform.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

@@ -21,7 +21,7 @@ void ViewManager::update(TimeDelta dt) {
         throw no_camera();
 
     //Calc projection matrix, using GObjCamera
-    auto pMatrix = camera->getPMatrix();
+    auto pMatrix = camera->pMatrix();
 
     GPresenterList presenters;
 
@@ -33,8 +33,8 @@ void ViewManager::update(TimeDelta dt) {
         auto curTransform = e->get<Transform>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
-            z += curTransform->pos.z;
-            curTransform = curTransform->parent.lock();
+            z += curTransform->pos().z;
+            curTransform = curTransform->parent();
         }
         presenters.push_back(Visual{presenter, transformMatrix, z});
     });

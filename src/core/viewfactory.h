@@ -27,7 +27,7 @@ private:
     using TextureMap = std::map<std::string,std::shared_ptr<Texture>>;
 
     const int CIRCLE_VERTEX_CNT = 30;
-    mutable TextureMap textureMap;
+    mutable TextureMap m_textureMap;
 };
 
 #endif // GVIEWFACTORY_H

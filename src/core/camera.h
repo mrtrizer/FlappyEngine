@@ -20,17 +20,17 @@ public:
         float y2;
     };
 
-    Camera(float height = 100, float ratio = 1);
-    Rect getRect() const;
-    glm::mat4 getPMatrix();
+    Camera(float m_height = 100, float m_ratio = 1);
+    Rect rect() const;
+    glm::mat4 pMatrix();
     glm::vec3 screenToScene(glm::vec3 pos) const;
     void init();
 
 private:
     /// Height in game units
-    float height;
+    float m_height;
     /// RealWidth(px) / RealHeight(px)
-    float ratio;
+    float m_ratio;
 
 };
 

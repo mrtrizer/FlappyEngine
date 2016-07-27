@@ -35,18 +35,18 @@ GLViewSprite::GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Spri
     rect(GL_TRIANGLE_STRIP),
     texture(std::dynamic_pointer_cast<GLTexture>(glTexture)),
     vertexList({
-                {-presenter.getWidth() / 2,-presenter.getHeight() / 2},
-                {-presenter.getWidth() / 2,presenter.getHeight() / 2},
-                {presenter.getWidth() / 2,-presenter.getHeight() / 2},
-                {presenter.getWidth() / 2,presenter.getHeight() / 2} }){
+                {-presenter.width() / 2,-presenter.height() / 2},
+                {-presenter.width() / 2,presenter.height() / 2},
+                {presenter.width() / 2,-presenter.height() / 2},
+                {presenter.width() / 2,presenter.height() / 2} }){
 
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
                                  static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 
-    rect.addVBO<GLTexture::UV>(texture->getUVs().data(),
-                                static_cast<int>(texture->getUVs().size()) * sizeof(GLTexture::UV),
+    rect.addVBO<GLTexture::UV>(texture->uvs().data(),
+                                static_cast<int>(texture->uvs().size()) * sizeof(GLTexture::UV),
                                 GL_FLOAT,
                                 getShader()->findAttr("aTexCoord"));
 
@@ -64,10 +64,10 @@ void GLViewSprite::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
 
 void GLViewSprite::update(const Presenter & presenter){
     auto & presenterSprite = dynamic_cast<const Sprite &>(presenter);
-    int frameCnt = presenterSprite.getFrameCnt();
+    int frameCnt = presenterSprite.frameCnt();
     int frameN = presenterSprite.getFrameN();
-    float relWidth = texture->getRelWidth();
-    float relHeight = texture->getRelHeight();
+    float relWidth = texture->relWidth();
+    float relHeight = texture->relHeight();
     float newRelWidth = relWidth / frameCnt;
     float newRelHeight = relHeight;
     float relX = newRelWidth * frameN;

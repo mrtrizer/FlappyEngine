@@ -9,16 +9,18 @@ FlappyApp::FlappyApp() {
 
 void FlappyApp::update() {
     auto newTime = chrono::steady_clock::now();
-    TimeDelta dt = chrono::duration <float, milli> (newTime - lastTime).count() / 1000.0f;
-    lastTime = newTime;
+    TimeDelta dt = chrono::duration <float, milli> (newTime - m_lastTime).count() / 1000.0f;
+    m_lastTime = newTime;
 
+//    m_inputMgr->update(dt);
+//    m_entityMgr->update(dt);
     InputMgr::getInst()->update(dt);
     EntityMgr::getInst()->update(dt);
-    worldView->update(dt);
+    m_viewManager->update(dt);
 }
 
 void FlappyApp::configure() {
     init();
-    configured = true;
-    lastTime = chrono::steady_clock::now();
+    m_configured = true;
+    m_lastTime = chrono::steady_clock::now();
 }
