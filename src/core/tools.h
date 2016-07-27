@@ -6,8 +6,16 @@
 
 #ifndef ANDROID_JNI
 #include <cstdio>
-#define  LOGI(...) printf(__VA_ARGS__)
-#define  LOGE(...) printf(__VA_ARGS__)
+template <typename ... Args>
+void LOGI(Args ... args) {
+    std::printf(args...);
+}
+
+template <typename ... Args>
+void LOGE(Args ... args) {
+    LOGI(args...);
+}
+
 #else
 #include <jni.h>
 #include <android/log.h>

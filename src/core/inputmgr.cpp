@@ -1,10 +1,5 @@
 #include "inputmgr.h"
 
-InputMgr::InputMgr()
-{
-
-}
-
 bool InputMgr::isMouseDown() const {
     return m_mouseDown == 1;
 }

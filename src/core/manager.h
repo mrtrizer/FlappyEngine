@@ -7,16 +7,14 @@ template <typename Derived>
 class Manager
 {
 public:
-    static std::shared_ptr<Derived> getInst() {return inst == nullptr? inst = std::make_shared<Derived>(): inst;}
+    static Derived* getInst() {
+        static Derived inst;
+        return &inst;
+    }
     Manager() {}
-private:
+
     Manager(const Manager&) = delete;
-
-    static std::shared_ptr<Derived> inst;
+    void operator=(Manager const&) = delete;
 };
-
-template <typename Derived>
-std::shared_ptr<Derived> Manager<Derived>::inst = nullptr;
-
 
 #endif // MANAGER_H

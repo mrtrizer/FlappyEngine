@@ -216,8 +216,6 @@ HEADERS += \
     $$PWD/core/presenter.h \
     $$PWD/core/tools.h \
     $$PWD/core/viewfactory.h \
-    $$PWD/core/screen.h \
-    $$PWD/core/scene.h \
     $$PWD/core/viewmanager.h \
     $$PWD/gl/glviewmanager.h \
     $$PWD/core/circleshape.h \
@@ -226,7 +224,11 @@ HEADERS += \
     $$PWD/core/texture.h \
     $$PWD/gl/glviewcircle.h \
     $$PWD/gl/glviewrect.h \
-    $$PWD/core/inputmgr.h
+    $$PWD/core/inputmgr.h \
+    $$PWD/core/scenemgr.h \
+    $$PWD/core/screenmgr.h \
+    $$PWD/core/entity.h \
+    $$PWD/core/component.h
 
 
 SOURCES += \
@@ -295,12 +297,13 @@ SOURCES += \
     $$PWD/core/tools.cpp \
     $$PWD/core/presenter.cpp \
     $$PWD/core/viewmanager.cpp \
-    $$PWD/core/scene.cpp \
     $$PWD/core/circleshape.cpp \
     $$PWD/core/rectshape.cpp \
     $$PWD/core/sprite.cpp \
     $$PWD/gl/glviewcircle.cpp \
     $$PWD/gl/glviewrect.cpp \
-    $$PWD/core/inputmgr.cpp
+    $$PWD/core/inputmgr.cpp \
+    $$PWD/core/scenemgr.cpp \
+    $$PWD/core/screenmgr.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

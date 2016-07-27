@@ -13,7 +13,7 @@ void FlappyApp::update() {
     lastTime = newTime;
 
     InputMgr::getInst()->update(dt);
-    EntityManager::getInst()->update(dt);
+    EntityMgr::getInst()->update(dt);
     worldView->update(dt);
 }
 

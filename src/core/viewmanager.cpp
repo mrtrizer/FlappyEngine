@@ -1,8 +1,8 @@
 #include "viewmanager.h"
 #include "transform.h"
 #include "presenter.h"
-#include "screen.h"
-#include "scene.h"
+#include "screenmgr.h"
+#include "scenemgr.h"
 
 ViewManager* ViewManager::instance = nullptr;
 
@@ -13,7 +13,7 @@ void ViewManager::update(TimeDelta dt) {
 
     std::shared_ptr<Camera> camera;
 
-    EntityManager::getInst()->each<Camera>([&camera, this] (std::shared_ptr<Entity> e){
+    EntityMgr::getInst()->each<Camera>([&camera, this] (std::shared_ptr<Entity> e){
         camera = e->get<Camera>();
     });
 
@@ -25,7 +25,7 @@ void ViewManager::update(TimeDelta dt) {
 
     GPresenterList presenters;
 
-    EntityManager::getInst()->each<Presenter>([&presenters, dt]
+    EntityMgr::getInst()->each<Presenter>([&presenters, dt]
                                     (std::shared_ptr<Entity> e){
         auto presenter = e->get<Presenter>();
         presenter->update(dt);
@@ -46,8 +46,7 @@ void ViewManager::update(TimeDelta dt) {
 void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw std::runtime_error("Invalid screen size. Has to be > 0.");
-    Screen::getInst()->width = width;
-    Screen::getInst()->height = height;
+    ScreenMgr::getInst()->resize(width, height);
     updateSize();
 }
 

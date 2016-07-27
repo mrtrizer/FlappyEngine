@@ -3,7 +3,7 @@
 
 #include <chrono>
 #include <core/entitymanager.h>
-#include <core/scene.h>
+#include <core/scenemgr.h>
 #include <core/viewmanager.h>
 
 class FlappyApp {

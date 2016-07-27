@@ -14,7 +14,7 @@ class View;
 /// @brief Holds information about object representation need for view objects.
 /// @details Contains a shared pointer to GView object, but doesn't calls any it's
 /// methods except GView::externUpdate to say about state changing.
-class Presenter: public BaseComponent<Presenter>, public std::enable_shared_from_this<Presenter> {
+class Presenter: public Component, public std::enable_shared_from_this<Presenter> {
 public:
     Presenter()
     {}

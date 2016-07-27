@@ -3,7 +3,7 @@
 
 #include <core/entitymanager.h>
 
-class Button: public BaseComponent<Button> {
+class Button: public Component {
 public:
     void update(TimeDelta dt);
 

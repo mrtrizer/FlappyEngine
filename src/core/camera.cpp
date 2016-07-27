@@ -2,8 +2,8 @@
 #include <core/transform.h>
 
 #include "camera.h"
-#include "screen.h"
-#include "scene.h"
+#include "screenmgr.h"
+#include "scenemgr.h"
 
 Camera::Camera(float height, float ratio):
     height(height),
@@ -12,12 +12,12 @@ Camera::Camera(float height, float ratio):
 }
 
 void Camera::init() {
-    if (Scene::getInst()->getCamera() == nullptr)
+    if (Scene::camera() == nullptr)
         Scene::setCamera(shared_from_this());
 }
 
 Camera::Rect Camera::getRect() const {
-    float ratio = (float)Screen::getInst()->width / Screen::getInst()->height;
+    float ratio = (float)ScreenMgr::getInst()->width() / ScreenMgr::getInst()->height();
     float offset = height / 2;
     return {
         -offset * ratio,
@@ -28,8 +28,8 @@ Camera::Rect Camera::getRect() const {
 }
 
 glm::vec3 Camera::screenToScene(glm::vec3 pos) const {
-    float coeff = this->height / Screen::getInst()->height;
-    glm::vec2 screenSize = Screen::getInst()->getScreenSize() * 0.5f;
+    float coeff = this->height / ScreenMgr::getInst()->height();
+    glm::vec2 screenSize = ScreenMgr::getInst()->screenSize() * 0.5f;
     glm::vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

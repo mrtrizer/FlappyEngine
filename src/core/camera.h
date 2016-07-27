@@ -3,14 +3,14 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <core/screen.h>
+#include <core/screenmgr.h>
 #include <core/entitymanager.h>
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class Camera : public BaseComponent<Camera>, public std::enable_shared_from_this<Camera>
+class Camera : public Component, public std::enable_shared_from_this<Camera>
 {
 public:
     struct Rect {

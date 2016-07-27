@@ -1,21 +1,25 @@
 #include "entitymanager.h"
 
-template <> bool EntityManager::check <void> (std::shared_ptr<Entity>) {
+template <> bool EntityMgr::check <void> (std::shared_ptr<Entity>) {
     return true;
 }
 
-void CREATE(std::function<void(std::shared_ptr<Entity>)> func) {
-    EntityManager::getInst()->create(func);
+namespace EM {
+
+void create(std::function<void(std::shared_ptr<Entity>)> func) {
+    EntityMgr::getInst()->create(func);
 }
 
-void REMOVE(std::shared_ptr<Entity> entity) {
-    EntityManager::getInst()->remove(entity);
+void remove(std::shared_ptr<Entity> entity) {
+    EntityMgr::getInst()->remove(entity);
 }
 
-std::list<std::shared_ptr<Entity>> FINDALL(std::function<bool(const Entity*)> check) {
-    return EntityManager::getInst()->findAll(check);
+std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check) {
+    return EntityMgr::getInst()->findAll(check);
 }
 
-std::shared_ptr<Entity> FIND(std::function<bool(const Entity*)> check) {
-    return EntityManager::getInst()->find(check);
+std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check) {
+    return EntityMgr::getInst()->find(check);
+}
+
 }

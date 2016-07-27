@@ -9,8 +9,6 @@
 class InputMgr: public Manager<InputMgr>
 {
 public:
-    InputMgr();
-
     bool isMouseDown() const;
     bool isMouseUp() const;
     bool isMousePressed() const;
@@ -28,7 +26,8 @@ private:
     bool m_mousePressed = false;
 };
 
-namespace Input {
+namespace Input
+{
     inline bool isMouseDown() {return InputMgr::getInst()->isMouseDown();}
     inline bool isMouseUp() {return InputMgr::getInst()->isMouseUp();}
     inline bool isMousePressed() {return InputMgr::getInst()->isMousePressed();}
