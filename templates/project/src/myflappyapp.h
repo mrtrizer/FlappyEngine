@@ -4,39 +4,39 @@
 #include <functional>
 #include <glm/gtc/random.hpp>
 
-#include <core/scene.h>
+#include <core/scenemgr.h>
 #include <core/transform.h>
 #include <core/animation.h>
 #include <core/flappyapp.h>
-#include <core/entitymanager.h>
-#include <core/input.h>
+#include <core/entitymgr.h>
+#include <core/inputmgr.h>
 #include <ui/button.h>
 
-class BallCtrl: public BaseComponent<BallCtrl> {
+class BallCtrl: public Component {
 public:
     void update(TimeDelta dt) {
-        slideSpeed += dt * (slideSpeed > 0?-5:5);
-        entity()->transform()->pos.y += speed * dt;
-        entity()->transform()->pos.x += slideSpeed * dt;
-        if (entity()->transform()->pos.y > 40)
-            REMOVE(entity());
+        m_slideSpeed += dt * (m_slideSpeed > 0?-5:5);
+        entity()->transform()->move(glm::vec3(0, m_speed * dt, 0));
+        entity()->transform()->move(glm::vec3(m_slideSpeed * dt, 0, 0));
+        if (entity()->transform()->pos().y > 40)
+            EM::remove(entity());
     }
 
-    float speed = 15;
-    float slideSpeed = 0;
+    float m_speed = 15;
+    float m_slideSpeed = 0;
     std::string color;
 };
 
-class BasketCtrl: public BaseComponent<BasketCtrl> {
+class BasketCtrl: public Component {
 public:
     void update(TimeDelta) {
-        EACH<BallCtrl>([this](EP e) {
-            float r = entity()->get<Sprite>()->getWidth() * 0.5f * entity()->transform()->scale;
-            float minDist = e->get<Sprite>()->getWidth() * 0.5f + r;
-            if (glm::distance(e->transform()->pos, entity()->transform()->pos) < minDist) {
-                REMOVE(e);
+        EM::each<BallCtrl>([this](EP e) {
+            float r = entity()->get<Sprite>()->width() * 0.5f * entity()->transform()->scale().x;
+            float minDist = e->get<Sprite>()->width() * 0.5f + r;
+            if (glm::distance(e->transform()->pos(), entity()->transform()->pos()) < minDist) {
+                EM::remove(e);
                 if (e->get<BallCtrl>()->color == color)
-                    entity()->transform()->scale -= 0.1f;
+                    entity()->transform()->stretch(-0.1f);
             }
         });
     }
@@ -46,48 +46,48 @@ public:
 void createBall() {
     const char*  colors [] = {"red", "green", "blue"};
     std::string color = colors[glm::linearRand(0, 2)];
-    CREATE([=](EP e) {
+    EM::create([=](EP e) {
         e->add<Sprite>(std::string("orb_") + color,10, 10);
         float randX = glm::linearRand(-30, 30);
-        e->add<Transform>()->pos = glm::vec3(randX,-50, 0);
+        e->add<Transform>()->setPos(glm::vec3(randX,-50, 0));
         e->add<BallCtrl>()->color = color;
     });
 }
 
 void createBasket(std::string color, glm::vec2 pos) {
-    CREATE([=](EP e){
+    EM::create([=](EP e){
         e->add<Sprite>(std::string("orb_") + color,20, 20);
-        e->add<Transform>()->pos = glm::vec3(pos, 0);
+        e->add<Transform>()->setPos(glm::vec3(pos, 0));
         e->add<BasketCtrl>()->color = color;
     });
 }
 
-class GameCtrl: public BaseComponent<GameCtrl> {
+class GameCtrl: public Component {
 public:
     void update(TimeDelta dt) {
-        _time += dt;
-        if (_time > spawnTime) {
-            _time = 0;
+        m_time += dt;
+        if (m_time > spawnTime) {
+            m_time = 0;
             createBall();
         }
         if (Input::isMouseDown())
-            _mouseDownPos = Input::getMousePos();
+            m_mouseDownPos = Input::getMousePos();
         if (Input::isMouseUp())
-            EACH<BallCtrl>([this](EP e) {
+            EM::each<BallCtrl>([this](EP e) {
                 auto ballCtrl = e->get<BallCtrl>();
-                if (_mouseDownPos.x - Input::getMousePos().x > 0)
-                    ballCtrl->slideSpeed = glm::max(-30.0f, ballCtrl->slideSpeed - 10);
+                if (m_mouseDownPos.x - Input::getMousePos().x > 0)
+                    ballCtrl->m_slideSpeed = glm::max(-30.0f, ballCtrl->m_slideSpeed - 10);
                 else
-                    ballCtrl->slideSpeed = glm::min(30.0f, ballCtrl->slideSpeed + 10);
+                    ballCtrl->m_slideSpeed = glm::min(30.0f, ballCtrl->m_slideSpeed + 10);
             });
     }
 
     float spawnTime = 2.0f;
 
 private:
-    float _time = 0;
-    glm::vec3 _mouseDownPos;
-    std::string _color;
+    float m_time = 0;
+    glm::vec3 m_mouseDownPos;
+    std::string m_color;
 };
 
 class MyFlappyApp : public FlappyApp
@@ -95,17 +95,17 @@ class MyFlappyApp : public FlappyApp
 public:
     void init() override {
         //Camera
-        CREATE([=](EP e){
+        EM::create([=](EP e){
             e->add<Camera>();
         });
 
         //Game controller
-        CREATE([=](EP e){
+        EM::create([=](EP e){
             e->add<GameCtrl>();
         });
 
         //Background
-        CREATE([=](EP e){
+        EM::create([=](EP e){
             e->add<Sprite>("background",200, 200, 1);
             e->add<Transform>();
         });
