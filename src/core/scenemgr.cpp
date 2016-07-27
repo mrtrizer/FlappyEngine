@@ -5,9 +5,9 @@ void SceneMgr::initPrefab(Prefab && prefab) {
 }
 
 void SceneMgr::setCamera(const std::shared_ptr<Camera>& camera) {
-    getInst()->m_camera = camera;
+    m_camera = camera;
 }
 
 std::shared_ptr<Camera> SceneMgr::camera() {
-    return getInst()->m_camera;
+    return m_camera;
 }

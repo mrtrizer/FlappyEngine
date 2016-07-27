@@ -13,7 +13,7 @@ void ViewManager::update(TimeDelta dt) {
 
     std::shared_ptr<Camera> camera;
 
-    EntityMgr::getInst()->each<Camera>([&camera, this] (EP e){
+    EM::each<Camera>([&camera, this] (EP e){
         camera = e->get<Camera>();
     });
 
@@ -25,7 +25,7 @@ void ViewManager::update(TimeDelta dt) {
 
     GPresenterList presenters;
 
-    EntityMgr::getInst()->each<Presenter>([&presenters, dt] (EP e){
+    EM::each<Presenter>([&presenters, dt] (EP e){
         auto presenter = e->get<Presenter>();
         presenter->update(dt);
         glm::mat4 transformMatrix;
@@ -45,7 +45,7 @@ void ViewManager::update(TimeDelta dt) {
 void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw std::runtime_error("Invalid screen size. Has to be > 0.");
-    ScreenMgr::getInst()->resize(width, height);
+    FlappyApp::inst().screenMgr()->resize(width, height);
     updateSize();
 }
 

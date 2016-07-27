@@ -228,7 +228,8 @@ HEADERS += \
     $$PWD/core/screenmgr.h \
     $$PWD/core/entity.h \
     $$PWD/core/component.h \
-    $$PWD/core/entitymgr.h
+    $$PWD/core/entitymgr.h \
+    $$PWD/core/gamemgr.h
 
 
 SOURCES += \
@@ -305,6 +306,7 @@ SOURCES += \
     $$PWD/core/scenemgr.cpp \
     $$PWD/core/screenmgr.cpp \
     $$PWD/core/entitymgr.cpp \
-    $$PWD/core/transform.cpp
+    $$PWD/core/transform.cpp \
+    $$PWD/core/gamemgr.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

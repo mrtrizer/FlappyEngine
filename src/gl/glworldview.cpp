@@ -50,6 +50,6 @@ void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
 }
 
 void GLWorldView::updateViewPort() {
-    glViewport(0, 0, ScreenMgr::getInst()->width(), ScreenMgr::getInst()->height());
+    glViewport(0, 0, FlappyApp::inst().screenMgr()->width(), FlappyApp::inst().screenMgr()->height());
     CHECK_GL_ERROR;
 }

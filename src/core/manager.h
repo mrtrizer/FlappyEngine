@@ -7,10 +7,10 @@ template <typename Derived>
 class Manager
 {
 public:
-    static Derived* getInst() {
-        static Derived inst;
-        return &inst;
-    }
+//    static Derived* getInst() {
+//        static Derived inst;
+//        return &inst;
+//    }
     Manager() {}
 
     Manager(const Manager&) = delete;

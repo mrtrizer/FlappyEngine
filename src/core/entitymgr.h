@@ -7,6 +7,7 @@
 #include <functional>
 
 #include <core/entity.h>
+#include <core/flappyapp.h>
 
 #include "manager.h"
 
@@ -52,7 +53,7 @@ namespace EM {
     std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {
-        EntityMgr::getInst()->each<Components...>(func);
+        FlappyApp::inst().entityMgr()->each<Components...>(func);
     }
 }
 

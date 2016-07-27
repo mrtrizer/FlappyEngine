@@ -47,18 +47,18 @@ std::list<std::shared_ptr<Entity>> EntityMgr::findAll(std::function<bool(const E
 namespace EM {
 
     void create(std::function<void(std::shared_ptr<Entity>)> func) {
-        EntityMgr::getInst()->create(func);
+        FlappyApp::inst().entityMgr()->create(func);
     }
 
     void remove(std::shared_ptr<Entity> entity) {
-        EntityMgr::getInst()->remove(entity);
+        FlappyApp::inst().entityMgr()->remove(entity);
     }
 
     std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check) {
-        return EntityMgr::getInst()->findAll(check);
+        return FlappyApp::inst().entityMgr()->findAll(check);
     }
 
     std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check) {
-        return EntityMgr::getInst()->find(check);
+        return FlappyApp::inst().entityMgr()->find(check);
     }
 }

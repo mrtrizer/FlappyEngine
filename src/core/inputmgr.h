@@ -28,10 +28,10 @@ private:
 
 namespace Input
 {
-    inline bool isMouseDown() {return InputMgr::getInst()->isMouseDown();}
-    inline bool isMouseUp() {return InputMgr::getInst()->isMouseUp();}
-    inline bool isMousePressed() {return InputMgr::getInst()->isMousePressed();}
-    inline glm::vec3 getMousePos() {return InputMgr::getInst()->getMousePos();}
+    inline bool isMouseDown() {return FlappyApp::inst().inputMgr()->isMouseDown();}
+    inline bool isMouseUp() {return FlappyApp::inst().inputMgr()->isMouseUp();}
+    inline bool isMousePressed() {return FlappyApp::inst().inputMgr()->isMousePressed();}
+    inline glm::vec3 getMousePos() {return FlappyApp::inst().inputMgr()->getMousePos();}
 }
 
 #endif // INPUTMANAGER_H

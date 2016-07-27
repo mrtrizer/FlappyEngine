@@ -37,12 +37,10 @@ namespace GLUTMgr {
 std::shared_ptr<GLWorldView> gWorldView;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
-std::shared_ptr<FlappyApp> app;
-
 void render() {
     glutSwapBuffers();
     glutPostRedisplay();
-    app->update();
+    FlappyApp::inst().update();
 }
 
 void resizeWindow(int width, int height) {
@@ -53,21 +51,19 @@ void resizeWindow(int width, int height) {
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    InputMgr::getInst()->mouseMove(glm::vec3(x,y,0));
+    FlappyApp::inst().inputMgr()->mouseMove(glm::vec3(x,y,0));
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        InputMgr::getInst()->setMouseDown();
+        FlappyApp::inst().inputMgr()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        InputMgr::getInst()->setMouseUp();
+        FlappyApp::inst().inputMgr()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    InputMgr::getInst()->mouseMove(glm::vec3(x,y,0));
+    FlappyApp::inst().inputMgr()->mouseMove(glm::vec3(x,y,0));
 }
 
-void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory, std::shared_ptr<FlappyApp> flappyApp) {
+void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactory) {
     GLUTMgr::glViewFactory = glViewFactory;
-
-    app = flappyApp;
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -77,8 +73,9 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
     glewInit();
 #endif
 
-    app->setWorldView(std::make_shared<GLWorldView>(glViewFactory));
-    app->configure();
+    // TODO: Order is important
+    FlappyApp::inst().configure();
+    FlappyApp::inst().setWorldView(std::make_shared<GLWorldView>(glViewFactory));
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

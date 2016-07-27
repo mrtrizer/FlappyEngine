@@ -17,7 +17,7 @@ void Camera::init() {
 }
 
 Camera::Rect Camera::rect() const {
-    float ratio = (float)ScreenMgr::getInst()->width() / ScreenMgr::getInst()->height();
+    float ratio = (float)Screen::screenSize().x / Screen::screenSize().y;
     float offset = m_height / 2;
     return {
         -offset * ratio,
@@ -28,8 +28,8 @@ Camera::Rect Camera::rect() const {
 }
 
 glm::vec3 Camera::screenToScene(glm::vec3 pos) const {
-    float coeff = this->m_height / ScreenMgr::getInst()->height();
-    glm::vec2 screenSize = ScreenMgr::getInst()->screenSize() * 0.5f;
+    float coeff = this->m_height / Screen::screenSize().y;
+    glm::vec2 screenSize = Screen::screenSize() * 0.5f;
     glm::vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

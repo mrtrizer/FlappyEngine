@@ -6,14 +6,14 @@
 #include <core/presenter.h>
 
 void Button::update(TimeDelta) {
-    if (InputMgr::getInst()->isMouseDown()) {
+    if (Input::isMouseDown()) {
         if (isInField()) {
             if (onClick != nullptr)
                 onClick();
             entity()->get<Transform>()->setScale(0.95f);
         }
     }
-    if (InputMgr::getInst()->isMouseUp()) {
+    if (Input::isMouseUp()) {
         if (isInField()) {
             entity()->get<Transform>()->setScale(1.0f);
         }
@@ -21,7 +21,7 @@ void Button::update(TimeDelta) {
 }
 
 bool Button::isInField() {
-    auto pos = SceneMgr::getInst()->camera()->screenToScene(InputMgr::getInst()->getMousePos());
+    auto pos = Scene::camera()->screenToScene(Input::getMousePos());
     auto buttonPos = entity()->get<Transform>()->pos();
     auto size = entity()->get<Presenter>()->size() * 0.5f;
     auto diff = pos - buttonPos;
