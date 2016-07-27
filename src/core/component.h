@@ -10,8 +10,10 @@ using TimeDelta = float;
 class Component {
     friend class Entity;
 public:
+    Component(){}
+    Component(const Component&) = delete;
+    void operator=(const Component&) = delete;
     virtual ~Component() {}
-
     virtual void update(TimeDelta) {}
     virtual void init() {}
 

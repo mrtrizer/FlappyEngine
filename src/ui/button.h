@@ -1,7 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 
 class Button: public Component {
 public:

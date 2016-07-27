@@ -2,7 +2,7 @@
 #define FLAPPYAPP_H
 
 #include <chrono>
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 #include <core/scenemgr.h>
 #include <core/viewmanager.h>
 

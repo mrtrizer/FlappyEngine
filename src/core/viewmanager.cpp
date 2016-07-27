@@ -13,7 +13,7 @@ void ViewManager::update(TimeDelta dt) {
 
     std::shared_ptr<Camera> camera;
 
-    EntityMgr::getInst()->each<Camera>([&camera, this] (std::shared_ptr<Entity> e){
+    EntityMgr::getInst()->each<Camera>([&camera, this] (EP e){
         camera = e->get<Camera>();
     });
 
@@ -25,8 +25,7 @@ void ViewManager::update(TimeDelta dt) {
 
     GPresenterList presenters;
 
-    EntityMgr::getInst()->each<Presenter>([&presenters, dt]
-                                    (std::shared_ptr<Entity> e){
+    EntityMgr::getInst()->each<Presenter>([&presenters, dt] (EP e){
         auto presenter = e->get<Presenter>();
         presenter->update(dt);
         glm::mat4 transformMatrix;

@@ -4,7 +4,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <core/screenmgr.h>
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View

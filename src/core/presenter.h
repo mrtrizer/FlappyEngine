@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 #include <glm/glm.hpp>
 
 #include "tools.h"

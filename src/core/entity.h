@@ -8,6 +8,10 @@ class Transform;
 class Entity: public std::enable_shared_from_this<Entity> {
     friend class Transform;
 public:
+    Entity(){}
+    Entity(const Entity&) = delete;
+    void operator=(const Entity&) = delete;
+
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> add(Args ... args) {
         auto component = std::make_shared<ComponentT>(args...);
@@ -17,7 +21,8 @@ public:
         return component;
     }
 
-    //TODO: How to optomize? Dynamic cast for every component is bad idea.
+    // TODO: How to optomize? Dynamic cast for every component is bad idea.
+    // We can store all presenters in separate list
     template<typename ComponentT>
     std::shared_ptr<ComponentT> get() const {
         for (auto component: m_components) {
@@ -40,6 +45,7 @@ public:
         return list;
     }
 
+    // TODO: Move to cpp
     void update(TimeDelta dt) {
         for (auto component: m_components)
             component->update(dt);

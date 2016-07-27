@@ -3,7 +3,7 @@
 
 #include <glm/vec3.hpp>
 #include <core/tools.h>
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 #include <core/manager.h>
 
 class InputMgr: public Manager<InputMgr>

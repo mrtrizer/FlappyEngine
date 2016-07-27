@@ -12,7 +12,6 @@ HEADERS += \
     $$PWD/gl/glview.h \
     $$PWD/glut/glutmgr.h \
     $$PWD/qt/viewfactoryqt.h \
-    $$PWD/core/entitymanager.h \
     $$PWD/core/flappyapp.h \
     $$PWD/core/animation.h \
     $$PWD/core/prefab.h \
@@ -228,7 +227,8 @@ HEADERS += \
     $$PWD/core/scenemgr.h \
     $$PWD/core/screenmgr.h \
     $$PWD/core/entity.h \
-    $$PWD/core/component.h
+    $$PWD/core/component.h \
+    $$PWD/core/entitymgr.h
 
 
 SOURCES += \
@@ -290,7 +290,6 @@ SOURCES += \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2World.cpp \
     $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp \
     $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.cpp \
-    $$PWD/core/entitymanager.cpp \
     $$PWD/ui/button.cpp \
     $$PWD/core/camera.cpp \
     $$PWD/core/view.cpp \
@@ -304,6 +303,7 @@ SOURCES += \
     $$PWD/gl/glviewrect.cpp \
     $$PWD/core/inputmgr.cpp \
     $$PWD/core/scenemgr.cpp \
-    $$PWD/core/screenmgr.cpp
+    $$PWD/core/screenmgr.cpp \
+    $$PWD/core/entitymgr.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

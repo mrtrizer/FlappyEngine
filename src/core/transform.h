@@ -7,7 +7,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <core/entitymanager.h>
+#include <core/entitymgr.h>
 
 class Transform: public Component, public std::enable_shared_from_this<Transform>
 {
