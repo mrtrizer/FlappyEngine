@@ -25,7 +25,7 @@
   #include <GL/glut.h>
 #endif
 
-#include <gl/glviewmanager.h>
+#include <gl/glviewmgr.h>
 #include <core/camera.h>
 #include <gl/glviewfactory.h>
 #include <core/inputmgr.h>
@@ -34,7 +34,7 @@
 
 namespace GLUTMgr {
 
-std::shared_ptr<GLWorldView> gWorldView;
+std::shared_ptr<GLViewMgr> gWorldView;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
 void render() {
@@ -45,7 +45,7 @@ void render() {
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
-    gWorldView = std::make_shared<GLWorldView>(glViewFactory);
+    gWorldView = std::make_shared<GLViewMgr>(glViewFactory);
     gWorldView->init();
     gWorldView->resize(width, height);
 }
@@ -67,6 +67,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+    //TODO: Ways to control size of window
     glutInitWindowSize(600, 600);
     glutCreateWindow("FlappyCxx");
 #ifdef __GLEW_H__
@@ -75,7 +76,7 @@ void initGLUT(int argc, char** argv, std::shared_ptr<GLViewFactory> glViewFactor
 
     // TODO: Order is important
     FlappyApp::inst().configure();
-    FlappyApp::inst().setWorldView(std::make_shared<GLWorldView>(glViewFactory));
+    FlappyApp::inst().setWorldView(std::make_shared<GLViewMgr>(glViewFactory));
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

@@ -1,15 +1,15 @@
-#include "viewmanager.h"
+#include "viewmgr.h"
 #include "transform.h"
 #include "presenter.h"
 #include "screenmgr.h"
 #include "scenemgr.h"
 
-ViewManager* ViewManager::instance = nullptr;
+ViewMgr* ViewMgr::instance = nullptr;
 
-ViewManager::~ViewManager(){
+ViewMgr::~ViewMgr(){
 }
 
-void ViewManager::update(TimeDelta dt) {
+void ViewMgr::update(TimeDelta dt) {
 
     std::shared_ptr<Camera> camera;
 
@@ -42,13 +42,13 @@ void ViewManager::update(TimeDelta dt) {
     redraw(presenters, pMatrix);
 }
 
-void ViewManager::resize(int width, int height) {
+void ViewMgr::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw std::runtime_error("Invalid screen size. Has to be > 0.");
     FlappyApp::inst().screenMgr()->resize(width, height);
     updateSize();
 }
 
-void ViewManager::updateSize() {
+void ViewMgr::updateSize() {
     updateViewPort();
 }

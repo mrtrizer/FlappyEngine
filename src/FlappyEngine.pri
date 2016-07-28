@@ -215,8 +215,6 @@ HEADERS += \
     $$PWD/core/presenter.h \
     $$PWD/core/tools.h \
     $$PWD/core/viewfactory.h \
-    $$PWD/core/viewmanager.h \
-    $$PWD/gl/glviewmanager.h \
     $$PWD/core/circleshape.h \
     $$PWD/core/rectshape.h \
     $$PWD/core/sprite.h \
@@ -229,7 +227,9 @@ HEADERS += \
     $$PWD/core/entity.h \
     $$PWD/core/component.h \
     $$PWD/core/entitymgr.h \
-    $$PWD/core/gamemgr.h
+    $$PWD/core/gamemgr.h \
+    $$PWD/core/viewmgr.h \
+    $$PWD/gl/glviewmgr.h
 
 
 SOURCES += \
@@ -238,7 +238,6 @@ SOURCES += \
     $$PWD/gl/glattribarray.cpp \
     $$PWD/gl/gltexture.cpp \
     $$PWD/gl/glviewfactory.cpp \
-    $$PWD/gl/glworldview.cpp \
     $$PWD/gl/glviewshape.cpp \
     $$PWD/gl/glviewsprite.cpp \
     $$PWD/glut/glutmgr.cpp \
@@ -296,7 +295,6 @@ SOURCES += \
     $$PWD/core/view.cpp \
     $$PWD/core/tools.cpp \
     $$PWD/core/presenter.cpp \
-    $$PWD/core/viewmanager.cpp \
     $$PWD/core/circleshape.cpp \
     $$PWD/core/rectshape.cpp \
     $$PWD/core/sprite.cpp \
@@ -307,6 +305,8 @@ SOURCES += \
     $$PWD/core/screenmgr.cpp \
     $$PWD/core/entitymgr.cpp \
     $$PWD/core/transform.cpp \
-    $$PWD/core/gamemgr.cpp
+    $$PWD/core/gamemgr.cpp \
+    $$PWD/core/viewmgr.cpp \
+    $$PWD/gl/glviewmgr.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

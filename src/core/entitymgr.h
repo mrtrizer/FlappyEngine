@@ -47,10 +47,18 @@ private:
 using EP = std::shared_ptr<Entity>;
 
 namespace EM {
-    void create(std::function<void(std::shared_ptr<Entity>)> func);
-    void remove(std::shared_ptr<Entity> entity);
-    std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check);
-    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
+    inline void create(std::function<void(std::shared_ptr<Entity>)> func) {
+        FlappyApp::inst().entityMgr()->create(func);
+    }
+    inline void remove(std::shared_ptr<Entity> entity) {
+        FlappyApp::inst().entityMgr()->remove(entity);
+    }
+    inline std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check) {
+        return FlappyApp::inst().entityMgr()->findAll(check);
+    }
+    inline std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check) {
+        return FlappyApp::inst().entityMgr()->find(check);
+    }
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {
         FlappyApp::inst().entityMgr()->each<Components...>(func);

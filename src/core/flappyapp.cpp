@@ -1,6 +1,6 @@
 #include <core/entitymgr.h>
 #include <core/scenemgr.h>
-#include <core/viewmanager.h>
+#include <core/viewmgr.h>
 #include <core/inputmgr.h>
 #include <core/gamemgr.h>
 #include <myflappyapp.h>

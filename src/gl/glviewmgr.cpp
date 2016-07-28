@@ -1,4 +1,4 @@
-#include "glviewmanager.h"
+#include "glviewmgr.h"
 
 #include <string>
 #include <iostream>
@@ -18,7 +18,7 @@
 
 using namespace std;
 
-void GLWorldView::init() {
+void GLViewMgr::init() {
     LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
     glClearColor(0.0, 0.0, 0.0, 0.0);
     CHECK_GL_ERROR;
@@ -29,11 +29,11 @@ void GLWorldView::init() {
     updateSize();
 }
 
-GLWorldView::~GLWorldView() {
+GLViewMgr::~GLViewMgr() {
 
 }
 
-void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
+void GLViewMgr::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 
@@ -49,7 +49,7 @@ void GLWorldView::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
     }
 }
 
-void GLWorldView::updateViewPort() {
+void GLViewMgr::updateViewPort() {
     glViewport(0, 0, FlappyApp::inst().screenMgr()->width(), FlappyApp::inst().screenMgr()->height());
     CHECK_GL_ERROR;
 }

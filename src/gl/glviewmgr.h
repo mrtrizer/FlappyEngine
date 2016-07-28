@@ -3,21 +3,21 @@
 
 #include <vector>
 
-#include <core/viewmanager.h>
+#include <core/viewmgr.h>
 
 class GLViewFactory;
 
 /// View implementation for work with OpenGL.
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
-class GLWorldView : public ViewManager {
+class GLViewMgr : public ViewMgr {
 public:
-    GLWorldView(const std::shared_ptr<GLViewFactory> & factory):
+    GLViewMgr(const std::shared_ptr<GLViewFactory> & factory):
         factory(factory)
     {
         init();
         resize(100,100);
     }
-    virtual ~GLWorldView();
+    virtual ~GLViewMgr();
     void redraw(GPresenterList &, glm::mat4 &) override;
     void init() override;
 protected:

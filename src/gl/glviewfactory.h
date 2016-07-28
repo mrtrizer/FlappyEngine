@@ -9,6 +9,7 @@
 /// @details A method for texture loading getGLTexture() has to be implemented
 /// to work with GViewSprite. But can be stubed and return
 /// something like little black square if not used.
+/// See specialization of get template function in .cpp.
 class GLViewFactory: public ViewFactory {
 
 };

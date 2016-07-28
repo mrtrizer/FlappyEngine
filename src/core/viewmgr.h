@@ -12,7 +12,7 @@ class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager {
+class ViewMgr {
 public:
     struct Visual {
         std::shared_ptr<Presenter> presenter;
@@ -21,13 +21,13 @@ public:
     };
 
     
-    ViewManager() {
+    ViewMgr() {
         instance = this;
     }
     
     typedef std::list<Visual> GPresenterList;
 
-    virtual ~ViewManager();
+    virtual ~ViewMgr();
     void update(TimeDelta dt);
     void resize(int width, int height);
     virtual void init() = 0;
@@ -35,7 +35,7 @@ public:
 
     class no_camera {};
 
-    static ViewManager* instance;
+    static ViewMgr* instance;
     
 protected:
     virtual void redraw(GPresenterList &, glm::mat4 &) = 0;
