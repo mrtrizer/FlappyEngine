@@ -7,8 +7,7 @@
 #include "glviewcircle.h"
 #include "glviewsprite.h"
 
-template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenter) const {
-    auto & presenterSprite = dynamic_cast<const Sprite &>(presenter);
+template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenterSprite) const {
     std::shared_ptr<Texture> texture;
     auto texturePath = presenterSprite.path();
     auto mapIter = m_textureMap.find(texturePath);
@@ -21,12 +20,10 @@ template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& present
     return std::make_shared<GLViewSprite>(texture,presenterSprite);
 }
 
-template <> std::shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape& presenter) const {
-    auto & presenterCircle = dynamic_cast<const CircleShape &>(presenter);
-    return std::make_shared<GViewCircle>(CIRCLE_VERTEX_CNT, presenterCircle.r());
+template <> std::shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape& presenterCircle) const {
+    return std::make_shared<GViewCircle>(CIRCLE_VERTEX_CNT, presenterCircle.width());
 }
 
-template <> std::shared_ptr<View> ViewFactory::get<RectShape>(const RectShape& presenter) const {
-    auto & presenterRect = dynamic_cast<const RectShape &>(presenter);
+template <> std::shared_ptr<View> ViewFactory::get<RectShape>(const RectShape& presenterRect) const {
     return std::make_shared<GViewRect>(presenterRect.width(), presenterRect.height());
 }
