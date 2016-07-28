@@ -34,7 +34,6 @@
 
 namespace GLUTMgr {
 
-std::shared_ptr<GLViewMgr> gWorldView;
 std::shared_ptr<GLViewFactory> glViewFactory;
 
 void render() {
@@ -45,9 +44,10 @@ void render() {
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
-    gWorldView = std::make_shared<GLViewMgr>(glViewFactory);
-    gWorldView->init();
-    gWorldView->resize(width, height);
+    auto viewMgr = std::make_shared<GLViewMgr>(glViewFactory);
+    FlappyApp::inst().setWorldView(viewMgr);
+    viewMgr->init();
+    viewMgr->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {

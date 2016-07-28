@@ -21,8 +21,6 @@ public:
     /// Should be specialized for every child of Presenter
     template <typename PresenterT>
     std::shared_ptr<View> get(const PresenterT&) const;
-
-    virtual std::shared_ptr<Texture> getTexture(std::string path) const = 0;
 private:
     using TextureMap = std::map<std::string,std::shared_ptr<Texture>>;
 

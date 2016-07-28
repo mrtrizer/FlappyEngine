@@ -9,6 +9,7 @@ class InputMgr;
 class SceneMgr;
 class ScreenMgr;
 class GameMgr;
+class ResourceMgr;
 
 class FlappyApp {
 public:
@@ -26,12 +27,14 @@ public:
 
     void setWorldView(std::shared_ptr<ViewMgr> worldView) { m_viewMgr = worldView; }
     void setGameMgr(std::shared_ptr<GameMgr> gameMgr) {m_gameMgr = gameMgr;}
+    void setResourceMgr(std::shared_ptr<ResourceMgr> resourceMgr) {m_resourceMgr = resourceMgr;}
 
     std::shared_ptr<ViewMgr> viewMgr() const {return m_viewMgr;}
     std::shared_ptr<EntityMgr> entityMgr() const {return m_entityMgr;}
     std::shared_ptr<InputMgr> inputMgr() const {return m_inputMgr;}
     std::shared_ptr<SceneMgr> sceneMgr() const {return m_sceneMgr;}
     std::shared_ptr<ScreenMgr> screenMgr() const {return m_screenMgr;}
+    std::shared_ptr<ResourceMgr> resourceMgr() const {return m_resourceMgr;}
 
 private:
     bool m_configured = false;
@@ -42,6 +45,7 @@ private:
     std::shared_ptr<SceneMgr> m_sceneMgr;
     std::shared_ptr<ScreenMgr> m_screenMgr;
     std::shared_ptr<GameMgr> m_gameMgr;
+    std::shared_ptr<ResourceMgr> m_resourceMgr;
 };
 
 #endif // FLAPPYAPP_H

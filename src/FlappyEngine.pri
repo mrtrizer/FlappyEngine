@@ -11,7 +11,6 @@ HEADERS += \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
     $$PWD/glut/glutmgr.h \
-    $$PWD/qt/viewfactoryqt.h \
     $$PWD/core/flappyapp.h \
     $$PWD/core/animation.h \
     $$PWD/core/prefab.h \
@@ -229,7 +228,9 @@ HEADERS += \
     $$PWD/core/entitymgr.h \
     $$PWD/core/gamemgr.h \
     $$PWD/core/viewmgr.h \
-    $$PWD/gl/glviewmgr.h
+    $$PWD/gl/glviewmgr.h \
+    $$PWD/core/resourcemgr.h \
+    $$PWD/qt/qtresourcemgr.h
 
 
 SOURCES += \
@@ -241,7 +242,6 @@ SOURCES += \
     $$PWD/gl/glviewshape.cpp \
     $$PWD/gl/glviewsprite.cpp \
     $$PWD/glut/glutmgr.cpp \
-    $$PWD/qt/viewfactoryqt.cpp \
     $$PWD/core/flappyapp.cpp \
     $$PWD/core/animation.cpp \
     $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp \
@@ -307,6 +307,8 @@ SOURCES += \
     $$PWD/core/transform.cpp \
     $$PWD/core/gamemgr.cpp \
     $$PWD/core/viewmgr.cpp \
-    $$PWD/gl/glviewmgr.cpp
+    $$PWD/gl/glviewmgr.cpp \
+    $$PWD/core/resourcemgr.cpp \
+    $$PWD/qt/qtresourcemgr.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

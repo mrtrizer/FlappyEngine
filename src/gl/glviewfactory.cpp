@@ -1,6 +1,7 @@
 #include <core/sprite.h>
 #include <core/rectshape.h>
 #include <core/circleshape.h>
+#include <core/resourcemgr.h>
 
 #include "glviewfactory.h"
 #include "glviewrect.h"
@@ -12,7 +13,7 @@ template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& present
     auto texturePath = presenterSprite.path();
     auto mapIter = m_textureMap.find(texturePath);
     if (mapIter == m_textureMap.end()) {
-        texture = getTexture(presenterSprite.path());
+        texture = FlappyApp::inst().resourceMgr()->getTexture(presenterSprite.path());
         m_textureMap[texturePath] = texture;
     } else {
         texture = mapIter->second;
