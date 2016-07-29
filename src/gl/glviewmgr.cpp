@@ -33,7 +33,7 @@ GLViewMgr::~GLViewMgr() {
 
 }
 
-void GLViewMgr::redraw(GPresenterList &presenterList, glm::mat4 &pMatrix) {
+void GLViewMgr::redraw(std::list<Visual> &presenterList, glm::mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 

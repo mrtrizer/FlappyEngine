@@ -1,5 +1,4 @@
-#ifndef GPRESENTER_H
-#define GPRESENTER_H
+#pragma once
 
 #include <string>
 #include <memory>
@@ -29,7 +28,5 @@ protected:
     /// Implement and call appropriate method from factory to get your own instance of GView.
     virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) = 0;
 private:
-    std::shared_ptr<View> gView;
+    std::shared_ptr<View> m_view;
 };
-
-#endif // GPRESENTER_H

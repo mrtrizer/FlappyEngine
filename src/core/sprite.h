@@ -1,5 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 #include "rectshape.h"
 
@@ -26,5 +25,3 @@ private:
     /// Summary frame count
     int m_frameCnt = 1;
 };
-
-#endif // SPRITE_H

@@ -1,7 +1,7 @@
-#include <glm/gtc/matrix_transform.hpp>
-#include <core/transform.h>
-
 #include "camera.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include "transform.h"
 #include "screenmgr.h"
 #include "scenemgr.h"
 
@@ -27,7 +27,7 @@ Camera::Rect Camera::rect() const {
     };
 }
 
-glm::vec3 Camera::screenToScene(glm::vec3 pos) const {
+glm::vec3 Camera::screenToScene(const glm::vec3 &pos) const {
     float coeff = this->m_height / Screen::screenSize().y;
     glm::vec2 screenSize = Screen::screenSize() * 0.5f;
     glm::vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);

@@ -1,7 +1,8 @@
-#ifndef MANAGER_H
-#define MANAGER_H
+#pragma once
 
 #include <memory>
+
+#include "tools.h"
 
 template <typename Derived>
 class Manager
@@ -11,6 +12,6 @@ public:
 
     Manager(const Manager&) = delete;
     void operator=(Manager const&) = delete;
-};
 
-#endif // MANAGER_H
+    virtual void update(TimeDelta){}
+};

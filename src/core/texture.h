@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#pragma once
 
 #include <vector>
 
@@ -26,5 +25,3 @@ protected:
     /// Relative height (0.0 to 1.0)
     float m_relHeight = 1.0;
 };
-
-#endif // TEXTURE_H

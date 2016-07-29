@@ -1,7 +1,7 @@
-#ifndef FLAPPYAPP_H
-#define FLAPPYAPP_H
+#pragma once
 
 #include <chrono>
+#include <memory>
 
 class ViewMgr;
 class EntityMgr;
@@ -47,5 +47,3 @@ private:
     std::shared_ptr<GameMgr> m_gameMgr;
     std::shared_ptr<ResourceMgr> m_resourceMgr;
 };
-
-#endif // FLAPPYAPP_H

@@ -1,10 +1,9 @@
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#pragma once
 
 #include <glm/vec3.hpp>
-#include <core/tools.h>
-#include <core/entitymgr.h>
-#include <core/manager.h>
+
+#include "manager.h"
+#include "tools.h"
 
 class InputMgr: public Manager<InputMgr>
 {
@@ -28,10 +27,8 @@ private:
 
 namespace Input
 {
-    inline bool isMouseDown() {return FlappyApp::inst().inputMgr()->isMouseDown();}
-    inline bool isMouseUp() {return FlappyApp::inst().inputMgr()->isMouseUp();}
-    inline bool isMousePressed() {return FlappyApp::inst().inputMgr()->isMousePressed();}
-    inline glm::vec3 getMousePos() {return FlappyApp::inst().inputMgr()->getMousePos();}
+    bool isMouseDown();
+    bool isMouseUp();
+    bool isMousePressed();
+    glm::vec3 getMousePos();
 }
-
-#endif // INPUTMANAGER_H

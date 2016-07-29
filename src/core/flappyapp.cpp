@@ -1,11 +1,12 @@
-#include <core/entitymgr.h>
-#include <core/scenemgr.h>
-#include <core/viewmgr.h>
-#include <core/inputmgr.h>
-#include <core/gamemgr.h>
-#include <myflappyapp.h>
-
 #include "flappyapp.h"
+
+#include "entitymgr.h"
+#include "scenemgr.h"
+#include "screenmgr.h"
+#include "viewmgr.h"
+#include "inputmgr.h"
+#include "gamemgr.h"
+#include "myflappyapp.h"
 
 using namespace std;
 

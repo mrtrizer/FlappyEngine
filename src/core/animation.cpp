@@ -1,6 +1,6 @@
 #include "animation.h"
 
-SpriteAnimation::SpriteAnimation(std::string path, float width, float height, int frameCnt, float period) :
+SpriteAnimation::SpriteAnimation(const std::string &path, float width, float height, int frameCnt, float period) :
     Sprite(path,width, height, frameCnt),
     m_period(period) {
 

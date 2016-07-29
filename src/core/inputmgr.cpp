@@ -1,5 +1,7 @@
 #include "inputmgr.h"
 
+#include "flappyapp.h"
+
 bool InputMgr::isMouseDown() const {
     return m_mouseDown == 1;
 }
@@ -35,4 +37,20 @@ void InputMgr::setMouseUp() {
 
 void InputMgr::mouseMove(const glm::vec3 &mousePos) {
     this->m_mousePos = mousePos;
+}
+
+namespace Input
+{
+    bool isMouseDown() {
+        return FlappyApp::inst().inputMgr()->isMouseDown();
+    }
+    bool isMouseUp() {
+        return FlappyApp::inst().inputMgr()->isMouseUp();
+    }
+    bool isMousePressed() {
+        return FlappyApp::inst().inputMgr()->isMousePressed();
+    }
+    glm::vec3 getMousePos() {
+        return FlappyApp::inst().inputMgr()->getMousePos();
+    }
 }

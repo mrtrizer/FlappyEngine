@@ -1,14 +1,12 @@
-#ifndef EntityManager_h
-#define EntityManager_h
+#pragma once
 
 #include <list>
 #include <typeinfo>
 #include <map>
 #include <functional>
 
-#include <core/entity.h>
-#include <core/flappyapp.h>
-
+#include "entity.h"
+#include "flappyapp.h"
 #include "manager.h"
 
 class Entity;
@@ -47,22 +45,12 @@ private:
 using EP = std::shared_ptr<Entity>;
 
 namespace EM {
-    inline void create(std::function<void(std::shared_ptr<Entity>)> func) {
-        FlappyApp::inst().entityMgr()->create(func);
-    }
-    inline void remove(std::shared_ptr<Entity> entity) {
-        FlappyApp::inst().entityMgr()->remove(entity);
-    }
-    inline std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check) {
-        return FlappyApp::inst().entityMgr()->findAll(check);
-    }
-    inline std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check) {
-        return FlappyApp::inst().entityMgr()->find(check);
-    }
+    void create(std::function<void(std::shared_ptr<Entity>)> func);
+    void remove(std::shared_ptr<Entity> entity);
+    std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check);
+    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {
         FlappyApp::inst().entityMgr()->each<Components...>(func);
     }
 }
-
-#endif /* EntityManager_h */

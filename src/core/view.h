@@ -1,5 +1,4 @@
-#ifndef GVIEW_H
-#define GVIEW_H
+#pragma once
 
 #include <memory>
 #include <glm/mat4x4.hpp>
@@ -22,5 +21,3 @@ protected:
 private:
     std::weak_ptr<Presenter> m_gPresenter;
 };
-
-#endif // GVIEW_H

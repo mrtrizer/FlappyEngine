@@ -22,7 +22,7 @@ template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& present
 }
 
 template <> std::shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape& presenterCircle) const {
-    return std::make_shared<GViewCircle>(CIRCLE_VERTEX_CNT, presenterCircle.width());
+    return std::make_shared<GViewCircle>(m_circleVectexCnt, presenterCircle.width());
 }
 
 template <> std::shared_ptr<View> ViewFactory::get<RectShape>(const RectShape& presenterRect) const {

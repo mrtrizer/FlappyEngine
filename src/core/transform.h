@@ -1,5 +1,4 @@
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
+#pragma once
 
 #include <memory>
 
@@ -38,5 +37,3 @@ private:
     float m_angle = 0.0f;
     std::weak_ptr<Transform> m_parent;
 };
-
-#endif // TRANSFORM_H

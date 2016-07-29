@@ -18,7 +18,7 @@ public:
         resize(100,100);
     }
     virtual ~GLViewMgr();
-    void redraw(GPresenterList &, glm::mat4 &) override;
+    void redraw(std::list<Visual> &, glm::mat4 &) override;
     void init() override;
 protected:
     void updateViewPort() override;

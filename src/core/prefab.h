@@ -1,10 +1,7 @@
-#ifndef PREFAB_H
-#define PREFAB_H
+#pragma once
 
 class Prefab
 {
 public:
     virtual void init() = 0;
 };
-
-#endif // PREFAB_H

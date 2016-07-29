@@ -1,11 +1,10 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#pragma once
 
 #include <memory>
 
-class Entity;
+#include "tools.h"
 
-using TimeDelta = float;
+class Entity;
 
 class Component {
     friend class Entity;
@@ -21,5 +20,3 @@ public:
 private:
     std::weak_ptr<Entity> m_entity;
 };
-
-#endif // COMPONENT_H

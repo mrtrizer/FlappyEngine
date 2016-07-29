@@ -1,5 +1,4 @@
-#ifndef RECTSHAPE_H
-#define RECTSHAPE_H
+#pragma once
 
 #include "presenter.h"
 
@@ -15,9 +14,8 @@ public:
     float width() const { return m_width; }
     float height() const { return m_height; }
 protected:
-    virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
+    virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) override;
 private:
     float m_width;
     float m_height;
 };
-#endif // RECTSHAPE_H

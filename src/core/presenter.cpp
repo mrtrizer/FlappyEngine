@@ -5,21 +5,21 @@
 
 /// Returns GView instance and creates new if gView is nullptr.
 std::shared_ptr<View> Presenter::getGView(const ViewFactory &factory) {
-    if (gView == nullptr)
-        gView = makeGView(factory);
-    return gView;
+    if (m_view == nullptr)
+        m_view = makeGView(factory);
+    return m_view;
 }
 
 /// Clear a shared pointer to GView instance. Used by GWorldView destructor.
 /// shared pointer will reinitilized in next getGView call.
 void Presenter::cleanGView(){
-    gView = nullptr;
+    m_view = nullptr;
 }
 
 /// Calls GView::externUpdate if gView is set.
 /// The idea is not entirely implemented. This method is
 /// called only if frameN is changed in GPresenterSprite.
 void Presenter::updateView(){
-    if (gView != nullptr)
-        gView->externUpdate(shared_from_this());
+    if (m_view != nullptr)
+        m_view->externUpdate(shared_from_this());
 }

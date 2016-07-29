@@ -8,10 +8,10 @@
 class QtResourceMgr :public ResourceMgr
 {
 public:
-    QtResourceMgr(QString path);
-    virtual std::shared_ptr<Texture> getTexture(std::string name) const override;
+    QtResourceMgr(QString m_path);
+    virtual std::shared_ptr<Texture> getTexture(const std::string& name) const override;
 private:
-    QString path;
+    QString m_path;
 };
 
 #endif // QTRESOURCEMGR_H

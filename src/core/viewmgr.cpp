@@ -2,12 +2,7 @@
 #include "transform.h"
 #include "presenter.h"
 #include "screenmgr.h"
-#include "scenemgr.h"
-
-ViewMgr* ViewMgr::instance = nullptr;
-
-ViewMgr::~ViewMgr(){
-}
+#include "scenemgr.h"`
 
 void ViewMgr::update(TimeDelta dt) {
 
@@ -23,7 +18,7 @@ void ViewMgr::update(TimeDelta dt) {
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();
 
-    GPresenterList presenters;
+    std::list<Visual> presenters;
 
     EM::each<Presenter>([&presenters, dt] (EP e){
         auto presenter = e->get<Presenter>();

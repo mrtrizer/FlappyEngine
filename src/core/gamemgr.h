@@ -1,5 +1,4 @@
-#ifndef GAMEMGR_H
-#define GAMEMGR_H
+#pragma once
 
 #include <core/manager.h>
 
@@ -9,5 +8,3 @@ public:
     GameMgr();
     virtual void init() = 0;
 };
-
-#endif // GAMEMGR_H

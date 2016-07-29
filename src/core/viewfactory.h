@@ -1,5 +1,4 @@
-#ifndef GVIEWFACTORY_H
-#define GVIEWFACTORY_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -24,8 +23,6 @@ public:
 private:
     using TextureMap = std::map<std::string,std::shared_ptr<Texture>>;
 
-    const int CIRCLE_VERTEX_CNT = 30;
+    const int m_circleVectexCnt = 30;
     mutable TextureMap m_textureMap;
 };
-
-#endif // GVIEWFACTORY_H

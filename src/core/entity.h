@@ -1,7 +1,6 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
-#include <core/component.h>
+#include "component.h"
 
 class Transform;
 
@@ -57,5 +56,3 @@ private:
     std::list<std::shared_ptr<Component>> m_components;
     std::shared_ptr<Transform> m_transform;
 };
-
-#endif // ENTITY_H

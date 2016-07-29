@@ -1,9 +1,9 @@
-#ifndef GWORLDVIEW_H
-#define GWORLDVIEW_H
+#pragma once
 
 #include <memory>
 #include <glm/mat4x4.hpp>
 
+#include "viewmgr.h"
 #include "viewfactory.h"
 #include "camera.h"
 #include "transform.h"
@@ -12,7 +12,7 @@ class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewMgr {
+class ViewMgr: public Manager<ViewMgr> {
 public:
     struct Visual {
         std::shared_ptr<Presenter> presenter;
@@ -20,29 +20,16 @@ public:
         float z;
     };
 
-    
-    ViewMgr() {
-        instance = this;
-    }
-    
-    typedef std::list<Visual> GPresenterList;
-
-    virtual ~ViewMgr();
     void update(TimeDelta dt);
     void resize(int width, int height);
     virtual void init() = 0;
     void updateSize();
 
     class no_camera {};
-
-    static ViewMgr* instance;
     
 protected:
-    virtual void redraw(GPresenterList &, glm::mat4 &) = 0;
+    virtual void redraw(std::list<Visual> &, glm::mat4 &) = 0;
 
 private:
     virtual void updateViewPort() = 0;
-    
 };
-
-#endif // GWORLDVIEW_H

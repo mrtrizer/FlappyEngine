@@ -1,10 +1,11 @@
-#ifndef SCREENMANAGER_H
-#define SCREENMANAGER_H
+#pragma once
 
 #include <memory>
+
 #include <glm/vec2.hpp>
-#include <core/manager.h>
-#include <core/flappyapp.h>
+
+#include "manager.h"
+#include "flappyapp.h"
 
 class ScreenMgr: public Manager<ScreenMgr>
 {
@@ -25,5 +26,3 @@ namespace Screen
 {
     inline glm::vec2 screenSize() {return FlappyApp::inst().screenMgr()->screenSize();}
 }
-
-#endif // SCREENMANAGER_H

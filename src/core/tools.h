@@ -1,5 +1,4 @@
-#ifndef GTOOLS_H
-#define GTOOLS_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -34,4 +33,4 @@ namespace Tools
     class unknown_intersect_obj {};
 }
 
-#endif // GTOOLS_H
+using TimeDelta = float;
