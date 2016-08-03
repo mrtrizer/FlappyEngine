@@ -6,7 +6,7 @@
 #include "viewmgr.h"
 #include "inputmgr.h"
 #include "gamemgr.h"
-#include "myflappyapp.h"
+#include "mygamemgr.h"
 
 namespace flappy {
 
