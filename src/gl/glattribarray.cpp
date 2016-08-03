@@ -1,5 +1,7 @@
 #include "glattribarray.h"
 
+namespace flappy {
+
 ///@param size Count of items for glDrawArrays()
 GLAttribArray::GLAttribArray(Method method, Size size):
     size(size),
@@ -31,3 +33,5 @@ void GLAttribArray::unbind() const {
         CHECK_GL_ERROR;
     }
 }
+
+} // flappy

@@ -1,5 +1,4 @@
-#ifndef GLTOOLS_H
-#define GLTOOLS_H
+#pragma once
 
 #include <cstdio>
 #include <memory>
@@ -28,20 +27,22 @@
 
 #include <core/tools.h>
 
+namespace flappy {
+
 /// Contains tools for work with OpenGL
 namespace GLTools {
 
-typedef float R;
+    typedef float R;
 
-struct Vertex {
-  GLfloat x;
-  GLfloat y;
-};
+    struct Vertex {
+      GLfloat x;
+      GLfloat y;
+    };
 
-void checkOpenGLerror(const char * = "", const char * = "", int = 0);
+    void checkOpenGLerror(const char * = "", const char * = "", int = 0);
 
 }
 
-#define CHECK_GL_ERROR GLTools::checkOpenGLerror(__FILE__, __FUNCTION__, __LINE__)
+} // flappy
 
-#endif // GLTOOLS_H
+#define CHECK_GL_ERROR GLTools::checkOpenGLerror(__FILE__, __FUNCTION__, __LINE__)

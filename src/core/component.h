@@ -4,6 +4,10 @@
 
 #include "tools.h"
 
+namespace flappy {
+
+using namespace std;
+
 class Entity;
 
 class Component {
@@ -16,7 +20,9 @@ public:
     virtual void update(TimeDelta) {}
     virtual void init() {}
 
-    std::shared_ptr<Entity> entity() const { return m_entity.lock(); }
+    shared_ptr<Entity> entity() const { return m_entity.lock(); }
 private:
-    std::weak_ptr<Entity> m_entity;
+    weak_ptr<Entity> m_entity;
 };
+
+} // flappy

@@ -3,8 +3,10 @@
 #include "view.h"
 #include "tools.h"
 
+namespace flappy {
+
 /// Returns GView instance and creates new if gView is nullptr.
-std::shared_ptr<View> Presenter::getGView(const ViewFactory &factory) {
+shared_ptr<View> Presenter::getGView(const ViewFactory &factory) {
     if (m_view == nullptr)
         m_view = makeGView(factory);
     return m_view;
@@ -23,3 +25,5 @@ void Presenter::updateView(){
     if (m_view != nullptr)
         m_view->externUpdate(shared_from_this());
 }
+
+} // flappy

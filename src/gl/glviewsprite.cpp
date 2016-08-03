@@ -4,6 +4,8 @@
 
 #include "glviewsprite.h"
 
+namespace flappy {
+
 static const char spriteVShader[] =
     "attribute vec2 aPosition;\n"
     "attribute vec2 aTexCoord;\n"
@@ -30,10 +32,10 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Sprite & presenter) :
+GLViewSprite::GLViewSprite(const shared_ptr<Texture> &glTexture, const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     rect(GL_TRIANGLE_STRIP),
-    texture(std::dynamic_pointer_cast<GLTexture>(glTexture)),
+    texture(dynamic_pointer_cast<GLTexture>(glTexture)),
     vertexList({
                 {-presenter.width() / 2,-presenter.height() / 2},
                 {-presenter.width() / 2,presenter.height() / 2},
@@ -53,10 +55,10 @@ GLViewSprite::GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Spri
     update(presenter);
 }
 
-void GLViewSprite::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
+void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     getShader()->render(rect, [this, mvMatrix, pMartrix](){
-        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,glm::value_ptr(mvMatrix));
-        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,glm::value_ptr(pMartrix));
+        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
         glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
         texture->bind(getShader()->findUniform("uTex"), 0);
     });
@@ -72,10 +74,12 @@ void GLViewSprite::update(const Presenter & presenter){
     float newRelHeight = relHeight;
     float relX = newRelWidth * frameN;
     float relY = 0;
-    std::vector<GLTexture::UV> uvs({
+    vector<GLTexture::UV> uvs({
             {relX,relY + newRelHeight},
             {relX,relY},
             {relX + newRelWidth,relY + newRelHeight},
             {relX + newRelWidth,relY}});
     rect.getVBO(1).writeData(uvs.data(),static_cast<int>(uvs.size()) * sizeof(GLTexture::UV));
 }
+
+} // flappy

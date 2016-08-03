@@ -1,11 +1,12 @@
-#ifndef GLTEXTURE_H
-#define GLTEXTURE_H
+#pragma once
 
 #include <vector>
 
 #include <core/texture.h>
 #include "gltools.h"
 #include "glshaderprogram.h"
+
+namespace flappy {
 
 /// @brief Holds and manages texture id.
 /// @details Auto resizes an image if not fit to
@@ -21,4 +22,4 @@ private:
     GLuint texture;
 };
 
-#endif // GLTEXTURE_H
+} // flappy

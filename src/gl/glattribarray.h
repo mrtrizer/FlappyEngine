@@ -1,9 +1,12 @@
-#ifndef GL_ATTRIBARRAY_H
-#define GL_ATTRIBARRAY_H
+#pragma once
 
 #include <vector>
 
 #include "gltools.h"
+
+namespace flappy {
+
+using namespace std;
 
 class VBO {
     friend class GLAttribArray;
@@ -12,7 +15,7 @@ public:
     template<typename ItemType>
     void writeData(const ItemType * buf, int bufSize) {
         if (bufSize > size)
-            throw std::runtime_error("New buffer is larger than old one.");
+            throw runtime_error("New buffer is larger than old one.");
         glBindBuffer(GL_ARRAY_BUFFER, id);
         CHECK_GL_ERROR;
         glBufferSubData(GL_ARRAY_BUFFER, 0, bufSize, buf);
@@ -65,11 +68,11 @@ public:
         glBufferData(GL_ARRAY_BUFFER, bufSize, buf, GL_DYNAMIC_DRAW);
         CHECK_GL_ERROR;
         if (itemType != GL_FLOAT)
-            std::runtime_error("Now only GL_FLOAT items supported!");
+            runtime_error("Now only GL_FLOAT items supported!");
     }
 
 private:
-    typedef std::vector<VBO> VBOBufs;
+    typedef vector<VBO> VBOBufs;
     typedef GLuint Id;
     Id id;
     Size size;
@@ -77,4 +80,5 @@ private:
     Method method;
 };
 
-#endif // GL_ATTRIBARRAY_H
+} // flappy
+

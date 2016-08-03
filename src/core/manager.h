@@ -4,6 +4,8 @@
 
 #include "tools.h"
 
+namespace flappy {
+
 template <typename Derived>
 class Manager
 {
@@ -15,3 +17,5 @@ public:
 
     virtual void update(TimeDelta){}
 };
+
+} // flappy

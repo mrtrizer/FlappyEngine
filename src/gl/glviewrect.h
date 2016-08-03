@@ -1,7 +1,8 @@
-#ifndef GLSHAPERECT_H
-#define GLSHAPERECT_H
+#pragma once
 
 #include "glviewshape.h"
+
+namespace flappy {
 
 /// Rect shape (GL_TRIANGLE_STRIP, two triangles with a common side)
 class GViewRect: public GLViewShape {
@@ -13,4 +14,4 @@ private:
     GLAttribArray rect;
 };
 
-#endif // GLSHAPERECT_H
+} // flappy

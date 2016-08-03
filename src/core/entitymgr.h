@@ -9,48 +9,54 @@
 #include "flappyapp.h"
 #include "manager.h"
 
+namespace flappy {
+
+using namespace std;
+
 class Entity;
 
 class EntityMgr: public Manager<EntityMgr> {
 public:    
     void update(TimeDelta dt);
 
-    void remove(std::shared_ptr<Entity> entity);
+    void remove(shared_ptr<Entity> entity);
 
     void reset();
 
-    std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){});
+    shared_ptr<Entity> create(function<void(shared_ptr<Entity>)> func = [](shared_ptr<Entity>){});
 
-    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
+    shared_ptr<Entity> find(function<bool(const Entity*)> check);
 
-    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const Entity*)> check);
+    list<shared_ptr<Entity>> findAll(function<bool(const Entity*)> check);
 
     template <typename ... Components>
-    void each(std::function<void(std::shared_ptr<Entity>)> func) {
+    void each(function<void(shared_ptr<Entity>)> func) {
         for (auto entity: m_entities) {
             if (check<Components...>(entity))
                 func(entity);
         }
     }
 private:
-    std::list<std::shared_ptr<Entity>> m_entities;
-    std::list<std::shared_ptr<Entity>> m_removeList;
+    list<shared_ptr<Entity>> m_entities;
+    list<shared_ptr<Entity>> m_removeList;
     
     template <typename ComponentT = void, typename ... Components>
-    bool check(std::shared_ptr<Entity> entity) {
+    bool check(shared_ptr<Entity> entity) {
         return check<Components...>(entity) && (entity->get<ComponentT>() != nullptr);
     }
 };
 
-using EP = std::shared_ptr<Entity>;
+using EP = shared_ptr<Entity>;
 
 namespace EM {
-    void create(std::function<void(std::shared_ptr<Entity>)> func);
-    void remove(std::shared_ptr<Entity> entity);
-    std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check);
-    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
+    void create(function<void(shared_ptr<Entity>)> func);
+    void remove(shared_ptr<Entity> entity);
+    list<shared_ptr<Entity>> findall(function<bool(const Entity*)> check);
+    shared_ptr<Entity> find(function<bool(const Entity*)> check);
     template <typename ... Components>
-    void each(std::function<void(std::shared_ptr<Entity>)> func) {
+    void each(function<void(shared_ptr<Entity>)> func) {
         FlappyApp::inst().entityMgr()->each<Components...>(func);
     }
 }
+
+} // flappy

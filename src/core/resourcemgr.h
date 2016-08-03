@@ -3,11 +3,17 @@
 #include <core/manager.h>
 #include <core/texture.h>
 
+namespace flappy {
+
+using namespace std;
+
 class ResourceMgr: public Manager<ResourceMgr>
 {
 public:
-    virtual std::shared_ptr<Texture> getTexture(const std::string& path) const = 0 ;
+    virtual shared_ptr<Texture> getTexture(const string& path) const = 0 ;
 
     template <typename Type>
-    std::shared_ptr<Type> get(const std::string& path) const {}
+    shared_ptr<Type> get(const string& path) const {}
 };
+
+} // flappy

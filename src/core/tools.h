@@ -3,11 +3,15 @@
 #include <memory>
 #include <vector>
 
+namespace flappy {
+
+using namespace std;
+
 #ifndef ANDROID_JNI
 #include <cstdio>
 template <typename ... Args>
 void LOGI(Args ... args) {
-    std::printf(args...);
+    printf(args...);
 }
 
 template <typename ... Args>
@@ -26,7 +30,7 @@ void LOGE(Args ... args) {
 /// Gives some common tools
 namespace Tools
 {
-    typedef std::vector<float> PMatrix;
+    typedef vector<float> PMatrix;
     bool isPowOfTwo(int x);
 
     class not_implemented {};
@@ -34,3 +38,5 @@ namespace Tools
 }
 
 using TimeDelta = float;
+
+} // flappy

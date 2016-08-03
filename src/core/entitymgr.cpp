@@ -1,6 +1,8 @@
 #include "entitymgr.h"
 
-template <> bool EntityMgr::check <void> (std::shared_ptr<Entity>) {
+namespace flappy {
+
+template <> bool EntityMgr::check <void> (shared_ptr<Entity>) {
     return true;
 }
 
@@ -11,7 +13,7 @@ void EntityMgr::update(TimeDelta dt) {
         entity->update(dt);
 }
 
-void EntityMgr::remove(std::shared_ptr<Entity> entity) {
+void EntityMgr::remove(shared_ptr<Entity> entity) {
     m_removeList.remove(entity);
     m_removeList.push_back(entity);
 }
@@ -20,14 +22,14 @@ void EntityMgr::reset() {
     m_entities.clear();
 }
 
-std::shared_ptr<Entity> EntityMgr::create(std::function<void(std::shared_ptr<Entity>)> func) {
-    auto entity = std::make_shared<Entity>();
+shared_ptr<Entity> EntityMgr::create(function<void(shared_ptr<Entity>)> func) {
+    auto entity = make_shared<Entity>();
     m_entities.push_back(entity);
     func(entity);
     return entity;
 }
 
-std::shared_ptr<Entity> EntityMgr::find(std::function<bool(const Entity*)> check) {
+shared_ptr<Entity> EntityMgr::find(function<bool(const Entity*)> check) {
     for (auto entity: m_entities) {
         if (check(entity.get()))
             return entity;
@@ -35,8 +37,8 @@ std::shared_ptr<Entity> EntityMgr::find(std::function<bool(const Entity*)> check
     return nullptr;
 }
 
-std::list<std::shared_ptr<Entity>> EntityMgr::findAll(std::function<bool(const Entity*)> check) {
-    std::list<std::shared_ptr<Entity>> list;
+list<shared_ptr<Entity>> EntityMgr::findAll(function<bool(const Entity*)> check) {
+    list<shared_ptr<Entity>> list;
     for (auto entity: m_entities) {
         if (check(entity.get()))
             list.push_back(entity);
@@ -45,16 +47,18 @@ std::list<std::shared_ptr<Entity>> EntityMgr::findAll(std::function<bool(const E
 }
 
 namespace EM {
-    void create(std::function<void(std::shared_ptr<Entity>)> func) {
+    void create(function<void(shared_ptr<Entity>)> func) {
         FlappyApp::inst().entityMgr()->create(func);
     }
-    void remove(std::shared_ptr<Entity> entity) {
+    void remove(shared_ptr<Entity> entity) {
         FlappyApp::inst().entityMgr()->remove(entity);
     }
-    std::list<std::shared_ptr<Entity>> findall(std::function<bool(const Entity*)> check) {
+    list<shared_ptr<Entity>> findall(function<bool(const Entity*)> check) {
         return FlappyApp::inst().entityMgr()->findAll(check);
     }
-    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check) {
+    shared_ptr<Entity> find(function<bool(const Entity*)> check) {
         return FlappyApp::inst().entityMgr()->find(check);
     }
 }
+
+} // flappy

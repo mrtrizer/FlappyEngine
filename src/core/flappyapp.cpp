@@ -8,7 +8,10 @@
 #include "gamemgr.h"
 #include "myflappyapp.h"
 
+namespace flappy {
+
 using namespace std;
+using namespace game;
 
 void FlappyApp::update() {
     auto newTime = chrono::steady_clock::now();
@@ -23,10 +26,12 @@ void FlappyApp::update() {
 void FlappyApp::configure() {
     m_configured = true;
     m_lastTime = chrono::steady_clock::now();
-    m_inputMgr = std::make_shared<InputMgr>();
-    m_entityMgr = std::make_shared<EntityMgr>();
-    m_sceneMgr = std::make_shared<SceneMgr>();
-    m_screenMgr = std::make_shared<ScreenMgr>();
-    m_gameMgr = std::make_shared<MyGameMgr>();
+    m_inputMgr = make_shared<InputMgr>();
+    m_entityMgr = make_shared<EntityMgr>();
+    m_sceneMgr = make_shared<SceneMgr>();
+    m_screenMgr = make_shared<ScreenMgr>();
+    m_gameMgr = make_shared<MyGameMgr>();
     m_gameMgr->init();
 }
+
+} // flappy

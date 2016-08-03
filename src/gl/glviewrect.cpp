@@ -1,9 +1,11 @@
 #include "glviewrect.h"
 
+namespace flappy {
+
 GViewRect::GViewRect(float width, float height):
     rect(GL_TRIANGLE_STRIP){
 
-    std::vector<GLTools::Vertex> vertexList({
+    vector<GLTools::Vertex> vertexList({
                   {-width / 2,-height / 2},
                   {-width / 2,height / 2},
                   {width / 2,-height / 2},
@@ -14,3 +16,5 @@ GViewRect::GViewRect(float width, float height):
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 }
+
+} // flappy

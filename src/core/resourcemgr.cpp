@@ -1,5 +1,9 @@
 #include "resourcemgr.h"
 
-template<> std::shared_ptr<Texture> ResourceMgr::get<Texture>(const std::string& path) const {
+namespace flappy {
+
+template<> shared_ptr<Texture> ResourceMgr::get<Texture>(const string& path) const {
     return getTexture(path);
 }
+
+} // flappy

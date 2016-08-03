@@ -4,6 +4,8 @@
 
 #include "gltexture.h"
 
+namespace flappy {
+
 GLTexture::GLTexture(const char *bits, int width, int height)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
@@ -49,7 +51,7 @@ GLTexture::GLTexture(const char *bits, int width, int height)
         char * newPixBuf = new char[newWidth * newWidth * 4]();
         //image will be located at the top left corner of newPixBuf
         for (int i = 0; i < height; i++)
-            std::memcpy(&newPixBuf[i * newWidth * 4], &bits[i * width * 4], width * 4);
+            memcpy(&newPixBuf[i * newWidth * 4], &bits[i * width * 4], width * 4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      newWidth, newWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      static_cast<const GLvoid*>(newPixBuf));
@@ -75,4 +77,4 @@ void GLTexture::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
     CHECK_GL_ERROR;
 }
 
-
+} // flappy

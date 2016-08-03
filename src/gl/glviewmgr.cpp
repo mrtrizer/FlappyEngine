@@ -16,6 +16,9 @@
 #include "glattribarray.h"
 #include "glviewfactory.h"
 
+namespace flappy {
+
+
 using namespace std;
 
 void GLViewMgr::init() {
@@ -33,7 +36,7 @@ GLViewMgr::~GLViewMgr() {
 
 }
 
-void GLViewMgr::redraw(std::list<Visual> &presenterList, glm::mat4 &pMatrix) {
+void GLViewMgr::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 
@@ -53,3 +56,5 @@ void GLViewMgr::updateViewPort() {
     glViewport(0, 0, FlappyApp::inst().screenMgr()->width(), FlappyApp::inst().screenMgr()->height());
     CHECK_GL_ERROR;
 }
+
+} // flappy

@@ -1,6 +1,10 @@
 #include "animation.h"
 
-SpriteAnimation::SpriteAnimation(const std::string &path, float width, float height, int frameCnt, float period) :
+namespace flappy {
+
+using namespace std;
+
+SpriteAnimation::SpriteAnimation(const string &path, float width, float height, int frameCnt, float period) :
     Sprite(path,width, height, frameCnt),
     m_period(period) {
 
@@ -16,3 +20,5 @@ void SpriteAnimation::update(TimeDelta dt) {
         setFrameN(m_curFrame);
     }
 }
+
+} // flappy

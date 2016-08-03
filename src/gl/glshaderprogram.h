@@ -1,10 +1,11 @@
-#ifndef GL_SHADER_PROGRAM_H
-#define GL_SHADER_PROGRAM_H
+#pragma once
 
 #include <iostream>
 #include <functional>
 
 #include "gltools.h"
+
+namespace flappy {
 
 class GLAttribArray;
 
@@ -16,7 +17,7 @@ public:
     typedef GLint AttribLocation;
     typedef GLint UniformLocation;
     typedef const char * Name;
-    typedef const std::function<void()>& UniformFunc;
+    typedef const function<void()>& UniformFunc;
 
     GLShaderProgram(VertexSource, FragmentSource);
     ~GLShaderProgram();
@@ -42,4 +43,4 @@ private:
     GLuint loadShader(ShaderType, ShaderSource);
 };
 
-#endif // GL_SHADER_PROGRAM_H
+} // flappy

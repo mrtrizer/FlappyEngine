@@ -1,16 +1,19 @@
-#ifndef VIEW_FACTORY_LIB_PNG_H
-#define VIEW_FACTORY_LIB_PNG_H
+#pragma once
 
 #include <string>
 
 #include <gl/glviewfactory.h>
 
+namespace flappy {
+
+using namespace std;
+
 class GLTexture;
 
 class ViewFactoryLibPNG: public GLViewFactory {
 public:
-    ViewFactoryLibPNG(std::string resPath);
-    std::shared_ptr<Texture> getTexture(std::string path) const override;
+    ViewFactoryLibPNG(string resPath);
+    shared_ptr<Texture> getTexture(string path) const override;
 
     class file_open_error {};
     /// Wrong file format (after checking png signature)
@@ -23,7 +26,7 @@ public:
     class wrong_bitmap_format {};
 
 private:
-    std::string resPath;
+    string resPath;
 };
 
-#endif //VIEW_FACTORY_LIB_PNG_H
+} // flappy

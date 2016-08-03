@@ -6,6 +6,10 @@
 #include "texture.h"
 #include "presenter.h"
 
+namespace flappy {
+
+using namespace std;
+
 class View;
 
 /// @brief Abstract fabric of GView
@@ -19,10 +23,12 @@ public:
 
     /// Should be specialized for every child of Presenter
     template <typename PresenterT>
-    std::shared_ptr<View> get(const PresenterT&) const;
+    shared_ptr<View> get(const PresenterT&) const;
 private:
-    using TextureMap = std::map<std::string,std::shared_ptr<Texture>>;
+    using TextureMap = map<string,shared_ptr<Texture>>;
 
     const int m_circleVectexCnt = 30;
     mutable TextureMap m_textureMap;
 };
+
+} // flappy

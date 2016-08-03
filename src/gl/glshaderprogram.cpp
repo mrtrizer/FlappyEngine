@@ -4,6 +4,8 @@
 #include "glshaderprogram.h"
 #include "glattribarray.h"
 
+namespace flappy {
+
 using namespace std;
 
 /// The macro prints a build log of shader. It used in constructor and laodShader methods.
@@ -13,7 +15,7 @@ using namespace std;
     if (infoLen) { \
         char buf[infoLen]; \
         glGet ## type ## InfoLog(instance, infoLen, NULL, buf); \
-        std::cout << "Could not compile shader:" << std::endl << buf << std::endl; \
+        cout << "Could not compile shader:" << endl << buf << endl; \
     } \
 }
 
@@ -103,3 +105,5 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, ShaderSource source) {
     }
     return shader;
 }
+
+} // flappy

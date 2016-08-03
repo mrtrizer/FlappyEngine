@@ -7,10 +7,14 @@
 #include "manager.h"
 #include "flappyapp.h"
 
+namespace flappy {
+
+using namespace glm;
+
 class ScreenMgr: public Manager<ScreenMgr>
 {
 public:
-    glm::vec2 screenSize() const;
+    vec2 screenSize() const;
     void resize(int width, int height);
 
     int width() const {return m_width;}
@@ -24,5 +28,7 @@ private:
 
 namespace Screen
 {
-    inline glm::vec2 screenSize() {return FlappyApp::inst().screenMgr()->screenSize();}
+    inline vec2 screenSize() {return FlappyApp::inst().screenMgr()->screenSize();}
 }
+
+} // flappy

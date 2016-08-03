@@ -1,10 +1,14 @@
-#ifndef GVIEWSPRITE_H
-#define GVIEWSPRITE_H
+#pragma once
 
 #include "glview.h"
 #include "glshaderprogram.h"
 #include "glattribarray.h"
 #include "gltexture.h"
+
+namespace flappy {
+
+using namespace std;
+using namespace glm;
 
 class Sprite;
 
@@ -12,13 +16,13 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const std::shared_ptr<Texture> &glTexture, const Sprite &presenter);
-    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
+    GLViewSprite(const shared_ptr<Texture> &glTexture, const Sprite &presenter);
+    void draw(const mat4 & pMartrix, const mat4 & mvMatrix) override;
     void update(const Presenter &) override;
 private:
     GLAttribArray rect;
-    std::shared_ptr<GLTexture> texture;
-    std::vector<GLTools::Vertex> vertexList;
+    shared_ptr<GLTexture> texture;
+    vector<GLTools::Vertex> vertexList;
 };
 
-#endif // GVIEWSPRITE_H
+} // flappy

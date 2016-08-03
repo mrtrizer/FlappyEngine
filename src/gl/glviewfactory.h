@@ -1,9 +1,10 @@
-#ifndef GLVIEWFACTORY_H
-#define GLVIEWFACTORY_H
+#pragma once
 
 #include <map>
 
 #include <core/viewfactory.h>
+
+namespace flappy {
 
 /// @brief GLView factory creates views working with OpenGL.
 /// @details A method for texture loading getGLTexture() has to be implemented
@@ -14,4 +15,4 @@ class GLViewFactory: public ViewFactory {
 
 };
 
-#endif // GLVIEWFACTORY_H
+} // flappy

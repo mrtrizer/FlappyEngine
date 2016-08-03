@@ -1,6 +1,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "glviewshape.h"
 
+namespace flappy {
+
 static const char shapeVShader[] =
     "attribute vec2 aPosition;\n"
     "uniform mat4 uMVMatrix;\n"
@@ -25,10 +27,12 @@ GLViewShape::GLViewShape() :
 
 }
 
-void GLViewShape::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
+void GLViewShape::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     getShader()->render(getAttribArray(), [this, mvMatrix, pMartrix](){
-        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,glm::value_ptr(mvMatrix));
-        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,glm::value_ptr(pMartrix));
+        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
         glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&colorRGBA));
     });
 }
+
+} // flappy

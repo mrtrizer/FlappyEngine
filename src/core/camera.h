@@ -4,11 +4,16 @@
 #include <glm/vec3.hpp>
 #include "component.h"
 
+namespace flappy {
+
+using namespace std;
+using namespace glm;
+
 /// @brief Game camera. Contains screen parameters.
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class Camera : public Component, public std::enable_shared_from_this<Camera>
+class Camera : public Component, public enable_shared_from_this<Camera>
 {
 public:
     struct Rect {
@@ -20,8 +25,8 @@ public:
 
     Camera(float m_height = 100, float m_ratio = 1);
     Rect rect() const;
-    glm::mat4 pMatrix();
-    glm::vec3 screenToScene(const glm::vec3& pos) const;
+    mat4 pMatrix();
+    vec3 screenToScene(const vec3& pos) const;
     void init();
 
 private:
@@ -31,3 +36,5 @@ private:
     float m_ratio;
 
 };
+
+} // flappy

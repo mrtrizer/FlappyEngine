@@ -1,10 +1,13 @@
-#ifndef GLVIEW_H
-#define GLVIEW_H
+#pragma once
 
 #include <memory>
 
 #include "core/view.h"
 #include "glshaderprogram.h"
+
+namespace flappy {
+
+using namespace std;
 
 /// @brief Holds a shader shared pointer.
 /// @details Takes a pointer from static weak pointer.
@@ -19,18 +22,18 @@ public:
     GLView(const char * vSource, const char * fSource) {
         //TODO: move to getShader for garaties of calling in GL context?
         if (weakShader.expired())
-            weakShader = shader = std::make_shared<GLShaderProgram>(vSource, fSource);
+            weakShader = shader = make_shared<GLShaderProgram>(vSource, fSource);
         else
             shader = weakShader.lock();
     }
 protected:
-    std::shared_ptr<GLShaderProgram> getShader(){return shader;}
+    shared_ptr<GLShaderProgram> getShader(){return shader;}
 private:
-    static std::weak_ptr<GLShaderProgram> weakShader;
-    std::shared_ptr<GLShaderProgram> shader;
+    static weak_ptr<GLShaderProgram> weakShader;
+    shared_ptr<GLShaderProgram> shader;
 };
 
 template<typename Derived>
-std::weak_ptr<GLShaderProgram> GLView<Derived>::weakShader;
+weak_ptr<GLShaderProgram> GLView<Derived>::weakShader;
 
-#endif // GLVIEW_H
+} // flappy

@@ -2,11 +2,13 @@
 #include "transform.h"
 #include "presenter.h"
 #include "screenmgr.h"
-#include "scenemgr.h"`
+#include "scenemgr.h"
+
+namespace flappy {
 
 void ViewMgr::update(TimeDelta dt) {
 
-    std::shared_ptr<Camera> camera;
+    shared_ptr<Camera> camera;
 
     EM::each<Camera>([&camera, this] (EP e){
         camera = e->get<Camera>();
@@ -18,12 +20,12 @@ void ViewMgr::update(TimeDelta dt) {
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();
 
-    std::list<Visual> presenters;
+    list<Visual> presenters;
 
     EM::each<Presenter>([&presenters, dt] (EP e){
         auto presenter = e->get<Presenter>();
         presenter->update(dt);
-        glm::mat4 transformMatrix;
+        mat4 transformMatrix;
         float z = 0;
         auto curTransform = e->get<Transform>();
         while (curTransform != nullptr) {
@@ -39,7 +41,7 @@ void ViewMgr::update(TimeDelta dt) {
 
 void ViewMgr::resize(int width, int height) {
     if (width < 1 || height < 1)
-        throw std::runtime_error("Invalid screen size. Has to be > 0.");
+        throw runtime_error("Invalid screen size. Has to be > 0.");
     FlappyApp::inst().screenMgr()->resize(width, height);
     updateSize();
 }
@@ -47,3 +49,5 @@ void ViewMgr::resize(int width, int height) {
 void ViewMgr::updateSize() {
     updateViewPort();
 }
+
+} // flappy

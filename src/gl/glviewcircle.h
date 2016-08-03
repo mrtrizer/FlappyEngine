@@ -1,7 +1,10 @@
-#ifndef GLSHAPECIRCLE_H
-#define GLSHAPECIRCLE_H
+#pragma once
 
 #include "glviewshape.h"
+
+namespace flappy {
+
+using namespace std;
 
 /// Circle shape (GL_TRIANGLE_FAN, vertexCnt points around the center point)
 class GViewCircle: public GLViewShape {
@@ -13,6 +16,7 @@ private:
     int vertexCnt;
     GLAttribArray circle;
 
-    std::vector<GLTools::Vertex> circleTriangleFan(float r, int count);
+    vector<GLTools::Vertex> circleTriangleFan(float r, int count);
 };
-#endif // GLSHAPECIRCLE_H
+
+} // flappy

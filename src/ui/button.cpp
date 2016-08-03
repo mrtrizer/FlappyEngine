@@ -5,6 +5,8 @@
 #include <core/inputmgr.h>
 #include <core/presenter.h>
 
+namespace flappy {
+
 void Button::update(TimeDelta) {
     if (Input::isMouseDown()) {
         if (isInField()) {
@@ -25,5 +27,7 @@ bool Button::isInField() {
     auto buttonPos = entity()->get<Transform>()->pos();
     auto size = entity()->get<Presenter>()->size() * 0.5f;
     auto diff = pos - buttonPos;
-    return (glm::abs(diff.x) < size.x) && (glm::abs(diff.y) < size.y);
+    return (abs(diff.x) < size.x) && (abs(diff.y) < size.y);
 }
+
+} // flappy
