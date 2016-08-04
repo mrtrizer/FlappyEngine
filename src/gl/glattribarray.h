@@ -36,16 +36,15 @@ private:
 /// @see Shader
 class GLAttribArray {
 public:
-    typedef int Size;
-    typedef unsigned int Method;
+    using Method = unsigned int;
 
-    explicit GLAttribArray(Method = GL_TRIANGLES, Size = -1);
+    explicit GLAttribArray(Method = GL_TRIANGLES, int size = -1);
     ~GLAttribArray();
 
     void bind() const;
     void unbind() const;
 
-    inline Size getSize() const {return size;}
+    inline int getSize() const {return size;}
     inline Method getMethod() const {return method;}
 
     VBO & getVBO(int n) {return vboBufs[n];}
@@ -72,10 +71,9 @@ public:
     }
 
 private:
-    typedef vector<VBO> VBOBufs;
-    typedef GLuint Id;
-    Id id;
-    Size size;
+    using VBOBufs = vector<VBO>;
+    GLuint id;
+    int size;
     VBOBufs vboBufs; //need only to cleanup vbos
     Method method;
 };

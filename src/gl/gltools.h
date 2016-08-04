@@ -32,8 +32,6 @@ namespace flappy {
 /// Contains tools for work with OpenGL
 namespace GLTools {
 
-    typedef float R;
-
     struct Vertex {
       GLfloat x;
       GLfloat y;

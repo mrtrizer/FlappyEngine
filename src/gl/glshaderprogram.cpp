@@ -22,7 +22,7 @@ using namespace std;
 /// Takes GLSL sources from nullterm strings.
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
-GLShaderProgram::GLShaderProgram(VertexSource vertexSource, FragmentSource fragmentSource) {
+GLShaderProgram::GLShaderProgram(const string& vertexSource, const string& fragmentSource) {
     vertexShader = loadShader(GL_VERTEX_SHADER, vertexSource);
     fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentSource);
 
@@ -54,13 +54,13 @@ GLShaderProgram::~GLShaderProgram() {
     CHECK_GL_ERROR;
 }
 
-GLShaderProgram::AttribLocation GLShaderProgram::findAttr(Name name) const {
+GLShaderProgram::AttribLocation GLShaderProgram::findAttr(const char* name) const {
     AttribLocation result = glGetAttribLocation(getProgram(), name);
     CHECK_GL_ERROR;
     return result;
 }
 
-GLShaderProgram::UniformLocation GLShaderProgram::findUniform(Name name) const {
+GLShaderProgram::UniformLocation GLShaderProgram::findUniform(const char* name) const {
     UniformLocation result = glGetUniformLocation(getProgram(), name);
     CHECK_GL_ERROR;
     return result;
@@ -79,7 +79,7 @@ void GLShaderProgram::unbind() const {
 /// @param attribArray VBOs
 /// @param uniformFunc Define uniforms here with glUniform...() methods.
 /// @see AttribArray
-void GLShaderProgram::render(const GLAttribArray & attribArray, UniformFunc uniformFunc = [](){}) const {
+void GLShaderProgram::render(const GLAttribArray & attribArray, function<void()> uniformFunc = [](){}) const {
     bind();
     uniformFunc();
     attribArray.bind();
@@ -88,11 +88,12 @@ void GLShaderProgram::render(const GLAttribArray & attribArray, UniformFunc unif
     unbind();
 }
 
-GLuint GLShaderProgram::loadShader(ShaderType shaderType, ShaderSource source) {
+GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) {
     GLuint shader = glCreateShader(shaderType);
     if (shader == 0)
         throw shader_init_failed();
-    glShaderSource(shader, 1, &source, NULL);
+    auto sourceStrPtr = source.c_str();
+    glShaderSource(shader, 1, &sourceStrPtr, NULL);
     CHECK_GL_ERROR;
     glCompileShader(shader);
     CHECK_GL_ERROR;

@@ -11,19 +11,15 @@ class GLAttribArray;
 
 class GLShaderProgram {
 public:
-    typedef const char * VertexSource;
-    typedef const char * FragmentSource;
-    typedef GLuint Program;
-    typedef GLint AttribLocation;
-    typedef GLint UniformLocation;
-    typedef const char * Name;
-    typedef const function<void()>& UniformFunc;
+    using Program = GLuint;
+    using AttribLocation = GLint;
+    using UniformLocation = GLint;
 
-    GLShaderProgram(VertexSource, FragmentSource);
+    GLShaderProgram(const string& vertexSource, const string& fragmentSource);
     ~GLShaderProgram();
-    void render(const GLAttribArray &, UniformFunc) const;
-    AttribLocation findAttr(Name) const;
-    UniformLocation findUniform(Name) const;
+    void render(const GLAttribArray &, function<void()>) const;
+    AttribLocation findAttr(const char*) const;
+    UniformLocation findUniform(const char*) const;
     inline Program getProgram() const {return program;}
 
     class shader_init_failed {};
@@ -33,14 +29,13 @@ protected:
     void unbind() const;
 
 private:
-    typedef GLenum ShaderType;
-    typedef const char * ShaderSource;
+    using ShaderType = GLenum;
 
     GLuint fragmentShader;
     GLuint vertexShader;
     Program program;
 
-    GLuint loadShader(ShaderType, ShaderSource);
+    GLuint loadShader(ShaderType, const string& source);
 };
 
 } // flappy

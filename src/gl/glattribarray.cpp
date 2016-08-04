@@ -3,7 +3,7 @@
 namespace flappy {
 
 ///@param size Count of items for glDrawArrays()
-GLAttribArray::GLAttribArray(Method method, Size size):
+GLAttribArray::GLAttribArray(Method method, int size):
     size(size),
     method(method){
 }

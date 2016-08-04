@@ -30,7 +30,7 @@ void LOGE(Args ... args) {
 /// Gives some common tools
 namespace Tools
 {
-    typedef vector<float> PMatrix;
+    using PMatrix = vector<float>;
     bool isPowOfTwo(int x);
 
     class not_implemented {};
