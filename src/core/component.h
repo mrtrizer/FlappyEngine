@@ -28,15 +28,19 @@ protected:
     weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
 
 private:
-    void setFlappyApp(weak_ptr<FlappyApp> flappyApp) {m_flappyApp = flappyApp;}
+    void setFlappyApp(weak_ptr<FlappyApp> flappyApp) {
+        m_flappyApp = flappyApp;
+        m_flappyAppPtr = flappyApp.lock().get();
+    }
     void setEntity(weak_ptr<Entity> entity) {m_entity = entity;}
 
     weak_ptr<FlappyApp> m_flappyApp;
+    FlappyApp* m_flappyAppPtr; // optimization of MGR
     weak_ptr<Entity> m_entity;
 public:
     template <typename Mgr> inline
-    constexpr auto MGR() const -> decltype(flappyApp().lock()->MGR<Mgr>()) {
-        return flappyApp().lock()->MGR<Mgr>();
+    constexpr auto MGR() const -> decltype(m_flappyAppPtr->MGR<Mgr>()) {
+        return m_flappyAppPtr->MGR<Mgr>();
     }
 };
 

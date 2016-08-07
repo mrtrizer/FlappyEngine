@@ -4,8 +4,6 @@
 #include <memory>
 #include <vector>
 
-
-
 namespace flappy {
 
 using namespace std;

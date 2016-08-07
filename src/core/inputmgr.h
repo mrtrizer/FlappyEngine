@@ -30,4 +30,6 @@ private:
     bool m_mousePressed = false;
 };
 
+#define INPUT MGR<InputMgr>()
+
 } // flappy

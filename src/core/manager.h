@@ -38,14 +38,18 @@ protected:
     weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
 
 private:
-    void setFlappyApp(weak_ptr<FlappyApp> flappyApp) {m_flappyApp = flappyApp;}
+    void setFlappyApp(weak_ptr<FlappyApp> flappyApp) {
+        m_flappyApp = flappyApp;
+        m_flappyAppPtr = flappyApp.lock().get();
+    }
 
     weak_ptr<FlappyApp> m_flappyApp;
+    FlappyApp* m_flappyAppPtr; // optimization of MGR
 
 public:
     template <typename Mgr>
-    auto MGR() const -> decltype(flappyApp().lock()->MGR<Mgr>()) {
-        return flappyApp().lock()->MGR<Mgr>();
+    constexpr auto MGR() const -> decltype(m_flappyAppPtr->MGR<Mgr>()) {
+        return m_flappyAppPtr->MGR<Mgr>();
     }
 };
 

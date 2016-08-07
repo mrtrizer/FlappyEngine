@@ -47,5 +47,6 @@ private:
 };
 
 using EP = shared_ptr<Entity>;
+#define EM MGR<EntityMgr>()
 
 } // flappy
