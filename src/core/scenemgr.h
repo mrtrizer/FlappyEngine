@@ -20,10 +20,4 @@ private:
     shared_ptr<Camera> m_camera;
 };
 
-namespace Scene {
-    void initPrefab(Prefab && prefab);
-    void setCamera(const shared_ptr<Camera>& camera);
-    shared_ptr<Camera> camera();
-}
-
 } // flappy

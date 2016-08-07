@@ -40,20 +40,4 @@ void InputMgr::mouseMove(const vec3 &mousePos) {
     this->m_mousePos = mousePos;
 }
 
-namespace Input
-{
-    bool isMouseDown() {
-        return FlappyApp::inst().inputMgr()->isMouseDown();
-    }
-    bool isMouseUp() {
-        return FlappyApp::inst().inputMgr()->isMouseUp();
-    }
-    bool isMousePressed() {
-        return FlappyApp::inst().inputMgr()->isMousePressed();
-    }
-    vec3 getMousePos() {
-        return FlappyApp::inst().inputMgr()->getMousePos();
-    }
-}
-
 } // flappy

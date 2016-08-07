@@ -26,9 +26,4 @@ private:
     float m_coefff = 1.0f;
 };
 
-namespace Screen
-{
-    inline vec2 screenSize() {return FlappyApp::inst().screenMgr()->screenSize();}
-}
-
 } // flappy

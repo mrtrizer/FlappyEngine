@@ -10,19 +10,20 @@ void ViewMgr::update(TimeDelta dt) {
 
     shared_ptr<Camera> camera;
 
-    EM::each<Camera>([&camera, this] (EP e){
+    MGR<EntityMgr>()->each<Camera>([&camera, this] (EP e){
         camera = e->get<Camera>();
     });
 
     if (camera == nullptr)
-        throw no_camera();
+        //throw no_camera();
+        return;
 
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();
 
     list<Visual> presenters;
 
-    EM::each<Presenter>([&presenters, dt] (EP e){
+    MGR<EntityMgr>()->each<Presenter>([&presenters, dt] (EP e){
         auto presenter = e->get<Presenter>();
         presenter->update(dt);
         mat4 transformMatrix;
@@ -42,7 +43,7 @@ void ViewMgr::update(TimeDelta dt) {
 void ViewMgr::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw runtime_error("Invalid screen size. Has to be > 0.");
-    FlappyApp::inst().screenMgr()->resize(width, height);
+    MGR<ScreenMgr>()->resize(width, height);
     updateSize();
 }
 

@@ -9,7 +9,8 @@ namespace flappy {
 class GLViewFactory;
 
 namespace GLUTMgr {
-    void initGLUT(int argc, char** argv, shared_ptr<GLViewFactory> glViewFactory);
+    void initGLUT(int argc, char** argv, FlappyApp &flappyApp);
+    int mainLoop();
 }
 
 } // flappy

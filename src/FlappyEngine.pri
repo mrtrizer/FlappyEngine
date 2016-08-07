@@ -309,6 +309,7 @@ SOURCES += \
     $$PWD/core/viewmgr.cpp \
     $$PWD/gl/glviewmgr.cpp \
     $$PWD/core/resourcemgr.cpp \
-    $$PWD/qt/qtresourcemgr.cpp
+    $$PWD/qt/qtresourcemgr.cpp \
+    $$PWD/core/manager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

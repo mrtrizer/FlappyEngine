@@ -8,7 +8,6 @@ class GameMgr : public Manager<GameMgr>
 {
 public:
     GameMgr();
-    virtual void init() = 0;
 };
 
 } // flappy

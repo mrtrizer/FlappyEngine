@@ -2,6 +2,9 @@
 
 #include <chrono>
 #include <memory>
+#include <vector>
+
+
 
 namespace flappy {
 
@@ -9,11 +12,9 @@ using namespace std;
 
 class ViewMgr;
 class EntityMgr;
-class InputMgr;
-class SceneMgr;
-class ScreenMgr;
 class GameMgr;
 class ResourceMgr;
+class IManager;
 
 class FlappyApp {
 public:
@@ -27,29 +28,33 @@ public:
     }
 
     void update();
-    void configure();
+    void init();
 
-    void setWorldView(shared_ptr<ViewMgr> worldView) { m_viewMgr = worldView; }
-    void setGameMgr(shared_ptr<GameMgr> gameMgr) {m_gameMgr = gameMgr;}
-    void setResourceMgr(shared_ptr<ResourceMgr> resourceMgr) {m_resourceMgr = resourceMgr;}
+    template <typename Mgr> inline
+    Mgr* MGR() {
+        return reinterpret_cast<Mgr*>(m_mgrList[Mgr::counter.id()].get());
+    }
 
-    shared_ptr<ViewMgr> viewMgr() const {return m_viewMgr;}
-    shared_ptr<EntityMgr> entityMgr() const {return m_entityMgr;}
-    shared_ptr<InputMgr> inputMgr() const {return m_inputMgr;}
-    shared_ptr<SceneMgr> sceneMgr() const {return m_sceneMgr;}
-    shared_ptr<ScreenMgr> screenMgr() const {return m_screenMgr;}
-    shared_ptr<ResourceMgr> resourceMgr() const {return m_resourceMgr;}
+    template <typename Mgr, typename...T> inline
+    void createMgr(T&&...args) {
+        addMgr<Mgr>(make_shared<Mgr>(forward<T>(args)...));
+    }
+
+    template <typename IMgr, typename Mgr, typename ... T> inline
+    void overrideMgr(T&&...args) {
+        setMgrAtPos(IMgr::counter.id(), make_shared<Mgr>(forward<T>(args)...));
+    }
+
+    template <typename Mgr> inline
+    void addMgr(shared_ptr<Mgr> mgr) {
+        setMgrAtPos(Mgr::counter.id(), mgr);
+    }
+
+    void setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr);
 
 private:
-    bool m_configured = false;
     chrono::steady_clock::time_point m_lastTime;
-    shared_ptr<ViewMgr> m_viewMgr;
-    shared_ptr<EntityMgr> m_entityMgr;
-    shared_ptr<InputMgr> m_inputMgr;
-    shared_ptr<SceneMgr> m_sceneMgr;
-    shared_ptr<ScreenMgr> m_screenMgr;
-    shared_ptr<GameMgr> m_gameMgr;
-    shared_ptr<ResourceMgr> m_resourceMgr;
+    vector<shared_ptr<IManager>> m_mgrList;
 };
 
 } // flappy

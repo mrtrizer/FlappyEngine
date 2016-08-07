@@ -7,6 +7,8 @@
 #include "inputmgr.h"
 #include "gamemgr.h"
 #include "mygamemgr.h"
+#include <core/manager.h>
+#include <core/resourcemgr.h>
 
 namespace flappy {
 
@@ -18,20 +20,20 @@ void FlappyApp::update() {
     TimeDelta dt = chrono::duration <float, milli> (newTime - m_lastTime).count() / 1000.0f;
     m_lastTime = newTime;
 
-    m_inputMgr->update(dt);
-    m_entityMgr->update(dt);
-    m_viewMgr->update(dt);
+    for (auto mgr: m_mgrList)
+        mgr->update(dt);
 }
 
-void FlappyApp::configure() {
-    m_configured = true;
+void FlappyApp::setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr) {
+    if (m_mgrList.size() <= pos)
+        m_mgrList.resize(pos + 1);
+    m_mgrList[pos] = mgr;
+}
+
+void FlappyApp::init() {
     m_lastTime = chrono::steady_clock::now();
-    m_inputMgr = make_shared<InputMgr>();
-    m_entityMgr = make_shared<EntityMgr>();
-    m_sceneMgr = make_shared<SceneMgr>();
-    m_screenMgr = make_shared<ScreenMgr>();
-    m_gameMgr = make_shared<MyGameMgr>();
-    m_gameMgr->init();
+    for (auto mgr: m_mgrList)
+        mgr->init();
 }
 
 } // flappy

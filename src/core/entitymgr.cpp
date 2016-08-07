@@ -46,19 +46,4 @@ list<shared_ptr<Entity>> EntityMgr::findAll(function<bool(const Entity*)> check)
     return list;
 }
 
-namespace EM {
-    void create(function<void(shared_ptr<Entity>)> func) {
-        FlappyApp::inst().entityMgr()->create(func);
-    }
-    void remove(shared_ptr<Entity> entity) {
-        FlappyApp::inst().entityMgr()->remove(entity);
-    }
-    list<shared_ptr<Entity>> findall(function<bool(const Entity*)> check) {
-        return FlappyApp::inst().entityMgr()->findAll(check);
-    }
-    shared_ptr<Entity> find(function<bool(const Entity*)> check) {
-        return FlappyApp::inst().entityMgr()->find(check);
-    }
-}
-
 } // flappy

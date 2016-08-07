@@ -15,7 +15,7 @@ template <> shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenterSpr
     auto texturePath = presenterSprite.path();
     auto mapIter = m_textureMap.find(texturePath);
     if (mapIter == m_textureMap.end()) {
-        texture = FlappyApp::inst().resourceMgr()->getTexture(presenterSprite.path());
+        texture = FlappyApp::inst().MGR<ResourceMgr>()->getTexture(presenterSprite.path());
         m_textureMap[texturePath] = texture;
     } else {
         texture = mapIter->second;

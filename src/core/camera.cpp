@@ -14,12 +14,12 @@ Camera::Camera(float height, float ratio):
 }
 
 void Camera::init() {
-    if (Scene::camera() == nullptr)
-        Scene::setCamera(shared_from_this());
+    if (MGR<SceneMgr>()->camera() == nullptr)
+        MGR<SceneMgr>()->setCamera(shared_from_this());
 }
 
 Camera::Rect Camera::rect() const {
-    float ratio = (float)Screen::screenSize().x / Screen::screenSize().y;
+    float ratio = (float)MGR<ScreenMgr>()->screenSize().x / MGR<ScreenMgr>()->screenSize().y;
     float offset = m_height / 2;
     return {
         -offset * ratio,
@@ -30,8 +30,8 @@ Camera::Rect Camera::rect() const {
 }
 
 vec3 Camera::screenToScene(const vec3 &pos) const {
-    float coeff = this->m_height / Screen::screenSize().y;
-    vec2 screenSize = Screen::screenSize() * 0.5f;
+    float coeff = this->m_height / MGR<ScreenMgr>()->screenSize().y;
+    vec2 screenSize = MGR<ScreenMgr>()->screenSize() * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

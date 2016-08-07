@@ -48,15 +48,4 @@ private:
 
 using EP = shared_ptr<Entity>;
 
-namespace EM {
-    void create(function<void(shared_ptr<Entity>)> func);
-    void remove(shared_ptr<Entity> entity);
-    list<shared_ptr<Entity>> findall(function<bool(const Entity*)> check);
-    shared_ptr<Entity> find(function<bool(const Entity*)> check);
-    template <typename ... Components>
-    void each(function<void(shared_ptr<Entity>)> func) {
-        FlappyApp::inst().entityMgr()->each<Components...>(func);
-    }
-}
-
 } // flappy

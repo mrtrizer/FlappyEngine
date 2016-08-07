@@ -53,7 +53,7 @@ void GLViewMgr::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
 }
 
 void GLViewMgr::updateViewPort() {
-    glViewport(0, 0, FlappyApp::inst().screenMgr()->width(), FlappyApp::inst().screenMgr()->height());
+    glViewport(0, 0, MGR<ScreenMgr>()->width(), MGR<ScreenMgr>()->height());
     CHECK_GL_ERROR;
 }
 

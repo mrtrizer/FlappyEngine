@@ -18,7 +18,7 @@ public:
     bool isMousePressed() const;
     vec3 getMousePos() const;
 
-    void update(TimeDelta);
+    void update(TimeDelta) override;
     void setMouseDown();
     void setMouseUp();
     void mouseMove(const vec3& m_mousePos);
@@ -29,13 +29,5 @@ private:
     int m_mouseUp = 0;
     bool m_mousePressed = false;
 };
-
-namespace Input
-{
-    bool isMouseDown();
-    bool isMouseUp();
-    bool isMousePressed();
-    vec3 getMousePos();
-}
 
 } // flappy

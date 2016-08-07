@@ -16,18 +16,4 @@ shared_ptr<Camera> SceneMgr::camera() {
     return m_camera;
 }
 
-namespace Scene {
-    void initPrefab(Prefab && prefab) {
-        return FlappyApp::inst().sceneMgr()->initPrefab(move(prefab));
-    }
-
-    void setCamera(const shared_ptr<Camera>& camera) {
-        FlappyApp::inst().sceneMgr()->setCamera(camera);
-    }
-
-    shared_ptr<Camera> camera() {
-        return FlappyApp::inst().sceneMgr()->camera();
-    }
-}
-
 } // flappy
