@@ -28,6 +28,7 @@ void FlappyApp::setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr) {
     if (m_mgrList.size() <= pos)
         m_mgrList.resize(pos + 1);
     m_mgrList[pos] = mgr;
+    mgr->setFlappyApp(shared_from_this());
 }
 
 void FlappyApp::init() {

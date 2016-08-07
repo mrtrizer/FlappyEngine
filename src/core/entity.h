@@ -11,14 +11,15 @@ class Transform;
 class Entity: public enable_shared_from_this<Entity> {
     friend class Transform;
 public:
-    Entity(){}
+    Entity(weak_ptr<FlappyApp> flappyApp):m_flappyApp(flappyApp){}
     Entity(const Entity&) = delete;
     void operator=(const Entity&) = delete;
 
     template <typename ComponentT, typename ... Args>
     shared_ptr<ComponentT> add(Args ... args) {
         auto component = make_shared<ComponentT>(args...);
-        component->m_entity = shared_from_this();
+        component->setEntity(shared_from_this());
+        component->setFlappyApp(flappyApp());
         component->init();
         m_components.push_back(component);
         return component;
@@ -56,9 +57,14 @@ public:
 
     shared_ptr<Transform> transform() { return m_transform; }
 
+protected:
+    weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
+
 private:
     list<shared_ptr<Component>> m_components;
     shared_ptr<Transform> m_transform;
+
+    weak_ptr<FlappyApp> m_flappyApp;
 };
 
 } // flappy

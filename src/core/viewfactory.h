@@ -19,16 +19,26 @@ class View;
 class ViewFactory
 {
 public:
+    ViewFactory(weak_ptr<FlappyApp> flappyApp):
+        m_flappyApp(flappyApp) {
+
+    }
+
     virtual ~ViewFactory() {}
 
     /// Should be specialized for every child of Presenter
     template <typename PresenterT>
     shared_ptr<View> get(const PresenterT&) const;
+protected:
+    weak_ptr<FlappyApp> flappyApp() const { return m_flappyApp; }
+
 private:
     using TextureMap = map<string,shared_ptr<Texture>>;
 
     const int m_circleVectexCnt = 30;
     mutable TextureMap m_textureMap;
+
+    weak_ptr<FlappyApp> m_flappyApp;
 };
 
 } // flappy

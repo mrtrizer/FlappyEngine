@@ -36,7 +36,7 @@ namespace flappy {
 
 namespace GLUTMgr {
 
-FlappyApp* flappyApp;
+shared_ptr<FlappyApp> flappyApp;
 
 void render() {
     glutSwapBuffers();
@@ -46,7 +46,7 @@ void render() {
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
-    auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>());
+    auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>(flappyApp));
     flappyApp->addMgr(viewMgr);
     viewMgr->init();
     viewMgr->resize(width, height);
@@ -61,11 +61,11 @@ void mouseFunc(int button, int state, int x, int y) {
 }
 
 void passiveMotionFunc(int x, int y) {
-    FlappyApp::inst().MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
+    flappyApp->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
 }
 
-void initGLUT(int argc, char** argv, FlappyApp& flappyApp) {
-    GLUTMgr::flappyApp = &flappyApp;
+void initGLUT(int argc, char** argv, shared_ptr<FlappyApp> flappyApp) {
+    GLUTMgr::flappyApp = flappyApp;
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -76,7 +76,7 @@ void initGLUT(int argc, char** argv, FlappyApp& flappyApp) {
     glewInit();
 #endif
 
-    flappyApp.createMgr<GLViewMgr>(make_shared<GLViewFactory>());
+    flappyApp->createMgr<GLViewMgr>(make_shared<GLViewFactory>(flappyApp));
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

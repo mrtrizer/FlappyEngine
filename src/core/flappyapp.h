@@ -16,16 +16,11 @@ class GameMgr;
 class ResourceMgr;
 class IManager;
 
-class FlappyApp {
+class FlappyApp : public enable_shared_from_this<FlappyApp> {
 public:
     FlappyApp() {}
     FlappyApp(const FlappyApp&) = delete;
     void operator=(const FlappyApp&) = delete;
-
-    static FlappyApp& inst() {
-        static FlappyApp s_flappy;
-        return s_flappy;
-    }
 
     void update();
     void init();

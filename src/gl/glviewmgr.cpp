@@ -22,6 +22,7 @@ namespace flappy {
 using namespace std;
 
 void GLViewMgr::init() {
+    resize(100,100);
     LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
     glClearColor(0.0, 0.0, 0.0, 0.0);
     CHECK_GL_ERROR;

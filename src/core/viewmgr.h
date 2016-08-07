@@ -27,7 +27,6 @@ public:
 
     void update(TimeDelta dt);
     void resize(int width, int height);
-    virtual void init() = 0;
     void updateSize();
 
     class no_camera {};

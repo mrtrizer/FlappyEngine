@@ -23,7 +23,7 @@ void EntityMgr::reset() {
 }
 
 shared_ptr<Entity> EntityMgr::create(function<void(shared_ptr<Entity>)> func) {
-    auto entity = make_shared<Entity>();
+    auto entity = make_shared<Entity>(flappyApp());
     m_entities.push_back(entity);
     func(entity);
     return entity;

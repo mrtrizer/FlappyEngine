@@ -18,8 +18,7 @@ public:
     GLViewMgr(const shared_ptr<GLViewFactory> & factory):
         factory(factory)
     {
-        init();
-        resize(100,100);
+
     }
     virtual ~GLViewMgr();
     void redraw(list<Visual> &, mat4 &) override;

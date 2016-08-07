@@ -12,7 +12,8 @@ namespace flappy {
 /// something like little black square if not used.
 /// See specialization of get template function in .cpp.
 class GLViewFactory: public ViewFactory {
-
+public:
+    using ViewFactory::ViewFactory;
 };
 
 } // flappy
