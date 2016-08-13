@@ -10,9 +10,6 @@
 
 namespace flappy {
 
-using namespace std;
-using namespace glm;
-
 class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
@@ -20,8 +17,8 @@ class ViewFactory;
 class ViewMgr: public Manager<ViewMgr> {
 public:
     struct Visual {
-        shared_ptr<Presenter> presenter;
-        mat4 pos;
+        std::shared_ptr<Presenter> presenter;
+        glm::mat4 pos;
         float z;
     };
 
@@ -32,7 +29,7 @@ public:
     class no_camera {};
     
 protected:
-    virtual void redraw(list<Visual> &, mat4 &) = 0;
+    virtual void redraw(std::list<Visual> &, glm::mat4 &) = 0;
 
 private:
     virtual void updateViewPort() = 0;

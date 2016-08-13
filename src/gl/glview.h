@@ -7,8 +7,6 @@
 
 namespace flappy {
 
-using namespace std;
-
 /// @brief Holds a shader shared pointer.
 /// @details Takes a pointer from static weak pointer.
 /// So, it is only one instance of a shader in the program.
@@ -20,6 +18,7 @@ class GLView: public View
 {
 public:
     GLView(const char * vSource, const char * fSource) {
+        using namespace std;
         //TODO: move to getShader for garaties of calling in GL context?
         if (weakShader.expired())
             weakShader = shader = make_shared<GLShaderProgram>(vSource, fSource);
@@ -27,13 +26,13 @@ public:
             shader = weakShader.lock();
     }
 protected:
-    shared_ptr<GLShaderProgram> getShader(){return shader;}
+    std::shared_ptr<GLShaderProgram> getShader(){return shader;}
 private:
-    static weak_ptr<GLShaderProgram> weakShader;
-    shared_ptr<GLShaderProgram> shader;
+    static std::weak_ptr<GLShaderProgram> weakShader;
+    std::shared_ptr<GLShaderProgram> shader;
 };
 
 template<typename Derived>
-weak_ptr<GLShaderProgram> GLView<Derived>::weakShader;
+std::weak_ptr<GLShaderProgram> GLView<Derived>::weakShader;
 
 } // flappy

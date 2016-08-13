@@ -36,6 +36,8 @@ namespace flappy {
 
 namespace GLUTMgr {
 
+using namespace std;
+
 shared_ptr<FlappyApp> flappyApp;
 
 void render() {

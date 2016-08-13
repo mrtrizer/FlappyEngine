@@ -4,6 +4,8 @@
 
 namespace flappy {
 
+using namespace std;
+
 void SceneMgr::initPrefab(Prefab && prefab) {
     prefab.init();
 }

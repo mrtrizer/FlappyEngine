@@ -2,6 +2,8 @@
 
 namespace flappy {
 
+using namespace std;
+
 GViewRect::GViewRect(float width, float height):
     rect(GL_TRIANGLE_STRIP){
 

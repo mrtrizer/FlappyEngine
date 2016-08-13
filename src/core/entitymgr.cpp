@@ -2,6 +2,8 @@
 
 namespace flappy {
 
+using namespace std;
+
 template <> bool EntityMgr::check <void> (shared_ptr<Entity>) {
     return true;
 }

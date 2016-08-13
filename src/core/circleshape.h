@@ -4,14 +4,12 @@
 
 namespace flappy {
 
-using namespace std;
-
 /// Represents a circle shape.
 class CircleShape  : public RectShape {
 public:
     using RectShape::RectShape;
 protected:
-    virtual shared_ptr<View> makeGView(const ViewFactory& factory) override;
+    virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) override;
 };
 
 } // flappy

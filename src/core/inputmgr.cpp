@@ -3,6 +3,8 @@
 
 namespace flappy {
 
+using namespace glm;
+
 bool InputMgr::isMouseDown() const {
     return m_mouseDown == 1;
 }

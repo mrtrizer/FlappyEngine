@@ -83,7 +83,7 @@ void GLShaderProgram::render(const GLAttribArray & attribArray, function<void()>
     bind();
     uniformFunc();
     attribArray.bind();
-    glDrawArrays(attribArray.getMethod(), 0, attribArray.getSize());
+    glDrawArrays(attribArray.method(), 0, attribArray.size());
     attribArray.unbind();
     unbind();
 }

@@ -6,15 +6,13 @@
 
 namespace flappy {
 
-using namespace std;
-
 class ViewMgr;
 class EntityMgr;
 class GameMgr;
 class ResourceMgr;
 class IManager;
 
-class FlappyApp : public enable_shared_from_this<FlappyApp> {
+class FlappyApp : public std::enable_shared_from_this<FlappyApp> {
 public:
     FlappyApp() {}
     FlappyApp(const FlappyApp&) = delete;
@@ -30,24 +28,24 @@ public:
 
     template <typename Mgr, typename...T> inline
     void createMgr(T&&...args) {
-        addMgr<Mgr>(make_shared<Mgr>(forward<T>(args)...));
+        addMgr<Mgr>(std::make_shared<Mgr>(std::forward<T>(args)...));
     }
 
     template <typename IMgr, typename Mgr, typename ... T> inline
     void overrideMgr(T&&...args) {
-        setMgrAtPos(IMgr::counter.id(), make_shared<Mgr>(forward<T>(args)...));
+        setMgrAtPos(IMgr::counter.id(), std::make_shared<Mgr>(std::forward<T>(args)...));
     }
 
     template <typename Mgr> inline
-    void addMgr(shared_ptr<Mgr> mgr) {
+    void addMgr(std::shared_ptr<Mgr> mgr) {
         setMgrAtPos(Mgr::counter.id(), mgr);
     }
 
-    void setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr);
+    void setMgrAtPos(unsigned int pos, std::shared_ptr<IManager> mgr);
 
 private:
-    chrono::steady_clock::time_point m_lastTime;
-    vector<shared_ptr<IManager>> m_mgrList;
+    std::chrono::steady_clock::time_point m_lastTime;
+    std::vector<std::shared_ptr<IManager>> m_mgrList;
 };
 
 } // flappy

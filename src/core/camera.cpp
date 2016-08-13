@@ -7,9 +7,12 @@
 
 namespace flappy {
 
-Camera::Camera(float height, float ratio):
-    m_height(height),
-    m_ratio(ratio){
+using namespace std;
+using namespace glm;
+using namespace Tools;
+
+Camera::Camera(float height):
+    m_height(height){
 
 }
 
@@ -18,7 +21,7 @@ void Camera::init() {
         MGR<SceneMgr>()->setCamera(shared_from_this());
 }
 
-Camera::Rect Camera::rect() const {
+Rect Camera::rect() const {
     float ratio = (float)MGR<ScreenMgr>()->screenSize().x / MGR<ScreenMgr>()->screenSize().y;
     float offset = m_height / 2;
     return {

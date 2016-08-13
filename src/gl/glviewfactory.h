@@ -16,4 +16,12 @@ public:
     using ViewFactory::ViewFactory;
 };
 
+class Sprite;
+class CircleShape;
+class RectShape;
+
+template <> std::shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenterSprite) const;
+template <> std::shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape& presenterCircle) const;
+template <> std::shared_ptr<View> ViewFactory::get<RectShape>(const RectShape& presenterRect) const;
+
 } // flappy

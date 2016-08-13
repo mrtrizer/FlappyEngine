@@ -9,12 +9,10 @@
 
 namespace flappy {
 
-using namespace glm;
-
 class ScreenMgr: public Manager<ScreenMgr>
 {
 public:
-    vec2 screenSize() const;
+    glm::vec2 screenSize() const;
     void resize(int width, int height);
 
     int width() const {return m_width;}
@@ -23,7 +21,6 @@ public:
 private:
     int m_width = 1;
     int m_height = 1;
-    float m_coefff = 1.0f;
 };
 
 } // flappy

@@ -6,6 +6,9 @@
 
 namespace flappy {
 
+using namespace glm;
+using namespace std;
+
 static const char spriteVShader[] =
     "attribute vec2 aPosition;\n"
     "attribute vec2 aTexCoord;\n"
@@ -32,44 +35,53 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const shared_ptr<Texture> &glTexture, const Sprite & presenter) :
+GLViewSprite::GLViewSprite(const shared_ptr<ResourceHandler<Texture>> &glTexture, const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     rect(GL_TRIANGLE_STRIP),
-    texture(dynamic_pointer_cast<GLTexture>(glTexture)),
-    vertexList({
-                {-presenter.width() / 2,-presenter.height() / 2},
+    texture(glTexture),
+    vertexList{ {-presenter.width() / 2,-presenter.height() / 2},
                 {-presenter.width() / 2,presenter.height() / 2},
                 {presenter.width() / 2,-presenter.height() / 2},
-                {presenter.width() / 2,presenter.height() / 2} }){
+                {presenter.width() / 2,presenter.height() / 2} },
+    lastFrameCount(presenter.frameCnt()),
+    lastFrameN(presenter.frameN())
+{
+    if (texture->ready())
+        updateVBOs();
+}
 
+void GLViewSprite::updateVBOs() {
+    rect.reset(GL_TRIANGLE_STRIP);
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
                                  static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 
-    rect.addVBO<GLTexture::UV>(texture->uvs().data(),
-                                static_cast<int>(texture->uvs().size()) * sizeof(GLTexture::UV),
+    rect.addVBO<GLTexture::UV>(texture->resource().uvs().data(),
+                                static_cast<int>(texture->resource().uvs().size()) * sizeof(GLTexture::UV),
                                 GL_FLOAT,
                                 getShader()->findAttr("aTexCoord"));
 
-    update(presenter);
+    updateFrame(lastFrameCount, lastFrameN);
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    getShader()->render(rect, [this, mvMatrix, pMartrix](){
-        glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
-        glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-        glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
-        texture->bind(getShader()->findUniform("uTex"), 0);
-    });
+    if (texture->ready()) {
+        if (texture->updated()) {
+            updateVBOs();
+        }
+        getShader()->render(rect, [this, mvMatrix, pMartrix](){
+            glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+            glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
+            glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
+            dynamic_cast<GLTexture&>(texture->resource()).bind(getShader()->findUniform("uTex"), 0);
+        });
+    }
 }
 
-void GLViewSprite::update(const Presenter & presenter){
-    auto & presenterSprite = dynamic_cast<const Sprite &>(presenter);
-    int frameCnt = presenterSprite.frameCnt();
-    int frameN = presenterSprite.getFrameN();
-    float relWidth = texture->relWidth();
-    float relHeight = texture->relHeight();
+void GLViewSprite::updateFrame(int frameCnt, int frameN) {
+    float relWidth = texture->resource().relWidth();
+    float relHeight = texture->resource().relHeight();
     float newRelWidth = relWidth / frameCnt;
     float newRelHeight = relHeight;
     float relX = newRelWidth * frameN;
@@ -79,7 +91,12 @@ void GLViewSprite::update(const Presenter & presenter){
             {relX,relY},
             {relX + newRelWidth,relY + newRelHeight},
             {relX + newRelWidth,relY}});
-    rect.getVBO(1).writeData(uvs.data(),static_cast<int>(uvs.size()) * sizeof(GLTexture::UV));
+    rect.vbo(1).writeData(uvs.data(),int(uvs.size()) * sizeof(GLTexture::UV));
+}
+
+void GLViewSprite::update(const Presenter & presenter){
+    auto & presenterSprite = static_cast<const Sprite &>(presenter);
+    updateFrame(presenterSprite.frameN(), presenterSprite.frameCnt());
 }
 
 } // flappy

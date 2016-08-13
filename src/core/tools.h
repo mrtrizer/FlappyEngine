@@ -5,13 +5,11 @@
 
 namespace flappy {
 
-using namespace std;
-
 #ifndef ANDROID_JNI
 #include <cstdio>
 template <typename ... Args>
-void LOGI(Args ... args) {
-    printf(args...);
+void LOGI(const char* format, Args ... args) {
+    std::printf(format, args...);
 }
 
 template <typename ... Args>
@@ -30,7 +28,14 @@ void LOGE(Args ... args) {
 /// Gives some common tools
 namespace Tools
 {
-    using PMatrix = vector<float>;
+    struct Rect {
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+    };
+
+    using PMatrix = std::vector<float>;
     bool isPowOfTwo(int x);
 
     class not_implemented {};

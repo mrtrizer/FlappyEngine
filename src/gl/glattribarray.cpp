@@ -4,19 +4,16 @@ namespace flappy {
 
 ///@param size Count of items for glDrawArrays()
 GLAttribArray::GLAttribArray(Method method, int size):
-    size(size),
-    method(method){
+    m_size(size),
+    m_method(method){
 }
 
 GLAttribArray::~GLAttribArray() {
-    for (VBO i: vboBufs) {
-        glDeleteBuffers(1,&i.id);
-        CHECK_GL_ERROR;
-    }
+    reset();
 }
 
 void GLAttribArray::bind() const {
-    for (auto vbo: vboBufs) {
+    for (auto vbo: m_vboBufs) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
         CHECK_GL_ERROR;
         glVertexAttribPointer(vbo.attr, vbo.componentCount, vbo.itemType, GL_FALSE, 0, 0);
@@ -28,7 +25,7 @@ void GLAttribArray::bind() const {
 }
 
 void GLAttribArray::unbind() const {
-    for (auto vbo: vboBufs) {
+    for (auto vbo: m_vboBufs) {
         glDisableVertexAttribArray(vbo.attr);
         CHECK_GL_ERROR;
     }

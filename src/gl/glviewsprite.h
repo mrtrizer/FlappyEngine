@@ -4,11 +4,9 @@
 #include "glshaderprogram.h"
 #include "glattribarray.h"
 #include "gltexture.h"
+#include <core/resourcemgr.h>
 
 namespace flappy {
-
-using namespace std;
-using namespace glm;
 
 class Sprite;
 
@@ -16,13 +14,19 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const shared_ptr<Texture> &glTexture, const Sprite &presenter);
-    void draw(const mat4 & pMartrix, const mat4 & mvMatrix) override;
+    GLViewSprite(const std::shared_ptr<ResourceHandler<Texture>> &glTexture, const Sprite &presenter);
+    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const Presenter &) override;
+
 private:
     GLAttribArray rect;
-    shared_ptr<GLTexture> texture;
-    vector<GLTools::Vertex> vertexList;
+    std::shared_ptr<ResourceHandler<Texture>> texture;
+    std::vector<GLTools::Vertex> vertexList;
+    int lastFrameCount;
+    int lastFrameN;
+
+    void updateFrame(int frameCnt, int frameN);
+    void updateVBOs();
 };
 
 } // flappy

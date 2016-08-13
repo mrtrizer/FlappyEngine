@@ -11,42 +11,40 @@
 
 namespace flappy {
 
-using namespace std;
-
 class Entity;
 
 class EntityMgr: public Manager<EntityMgr> {
 public:    
     void update(TimeDelta dt);
 
-    void remove(shared_ptr<Entity> entity);
+    void remove(std::shared_ptr<Entity> entity);
 
     void reset();
 
-    shared_ptr<Entity> create(function<void(shared_ptr<Entity>)> func = [](shared_ptr<Entity>){});
+    std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){});
 
-    shared_ptr<Entity> find(function<bool(const Entity*)> check);
+    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
 
-    list<shared_ptr<Entity>> findAll(function<bool(const Entity*)> check);
+    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const Entity*)> check);
 
     template <typename ... Components>
-    void each(function<void(shared_ptr<Entity>)> func) {
+    void each(std::function<void(std::shared_ptr<Entity>)> func) {
         for (auto entity: m_entities) {
             if (check<Components...>(entity))
                 func(entity);
         }
     }
 private:
-    list<shared_ptr<Entity>> m_entities;
-    list<shared_ptr<Entity>> m_removeList;
+    std::list<std::shared_ptr<Entity>> m_entities;
+    std::list<std::shared_ptr<Entity>> m_removeList;
     
     template <typename ComponentT = void, typename ... Components>
-    bool check(shared_ptr<Entity> entity) {
+    bool check(std::shared_ptr<Entity> entity) {
         return check<Components...>(entity) && (entity->get<ComponentT>() != nullptr);
     }
 };
 
-using EP = shared_ptr<Entity>;
+using EP = std::shared_ptr<Entity>;
 #define EM MGR<EntityMgr>()
 
 } // flappy

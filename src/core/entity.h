@@ -1,22 +1,22 @@
 #pragma once
 
 #include "component.h"
+#include "tools.h"
 
 namespace flappy {
 
-using namespace std;
-
 class Transform;
 
-class Entity: public enable_shared_from_this<Entity> {
+class Entity: public std::enable_shared_from_this<Entity> {
     friend class Transform;
 public:
-    Entity(weak_ptr<FlappyApp> flappyApp):m_flappyApp(flappyApp){}
+    Entity(std::weak_ptr<FlappyApp> flappyApp):m_flappyApp(flappyApp){}
     Entity(const Entity&) = delete;
     void operator=(const Entity&) = delete;
 
     template <typename ComponentT, typename ... Args>
-    shared_ptr<ComponentT> add(Args ... args) {
+    std::shared_ptr<ComponentT> add(Args ... args) {
+        using namespace std;
         auto component = make_shared<ComponentT>(args...);
         component->setEntity(shared_from_this());
         component->setFlappyApp(flappyApp());
@@ -28,7 +28,8 @@ public:
     // TODO: How to optomize? Dynamic cast for every component is bad idea.
     // We can store all presenters in separate list
     template<typename ComponentT>
-    shared_ptr<ComponentT> get() const {
+    std::shared_ptr<ComponentT> get() const {
+        using namespace std;
         for (auto component: m_components) {
             auto cast = dynamic_pointer_cast<ComponentT>(component);
             if (cast != nullptr)
@@ -38,9 +39,9 @@ public:
     }
 
     template<typename ComponentT>
-    list<shared_ptr<ComponentT>> getAll() const {
-        size_t hash = typeid(ComponentT).hash_code();
-        list<shared_ptr<ComponentT>> list;
+    std::list<std::shared_ptr<ComponentT>> getAll() const {
+        using namespace std;
+        std::list<std::shared_ptr<ComponentT>> list;
         for (auto component: m_components) {
             auto cast = dynamic_pointer_cast<ComponentT>(component);
             if (cast != nullptr)
@@ -55,16 +56,16 @@ public:
             component->update(dt);
     }
 
-    shared_ptr<Transform> transform() { return m_transform; }
+    std::shared_ptr<Transform> transform() { return m_transform; }
 
 protected:
-    weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
+    std::weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
 
 private:
-    list<shared_ptr<Component>> m_components;
-    shared_ptr<Transform> m_transform;
+    std::list<std::shared_ptr<Component>> m_components;
+    std::shared_ptr<Transform> m_transform;
 
-    weak_ptr<FlappyApp> m_flappyApp;
+    std::weak_ptr<FlappyApp> m_flappyApp;
 };
 
 } // flappy

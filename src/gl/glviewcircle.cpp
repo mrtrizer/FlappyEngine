@@ -2,6 +2,8 @@
 
 namespace flappy {
 
+using namespace std;
+
 /// Generates vertices for circle drawing in GL_TRIANGLE_FAN format
 /// @param count Count of vertices ( >= 3).
 vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int count) {
@@ -16,7 +18,6 @@ vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int count) {
 }
 
 GViewCircle::GViewCircle(int vertexCnt, double r):
-    vertexCnt(vertexCnt),
     circle(GL_TRIANGLE_FAN){
     vector<GLTools::Vertex> vertexList = circleTriangleFan(r,vertexCnt);
     circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array

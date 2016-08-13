@@ -6,6 +6,9 @@
 
 namespace flappy {
 
+using namespace std;
+using namespace glm;
+
 void ViewMgr::update(TimeDelta dt) {
 
     shared_ptr<Camera> camera;

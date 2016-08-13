@@ -3,6 +3,8 @@
 
 namespace flappy {
 
+using namespace glm;
+
 static const char shapeVShader[] =
     "attribute vec2 aPosition;\n"
     "uniform mat4 uMVMatrix;\n"

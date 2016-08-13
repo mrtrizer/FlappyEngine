@@ -18,7 +18,7 @@
 
 namespace flappy {
 
-
+using namespace glm;
 using namespace std;
 
 void GLViewMgr::init() {

@@ -15,9 +15,9 @@ public:
     using AttribLocation = GLint;
     using UniformLocation = GLint;
 
-    GLShaderProgram(const string& vertexSource, const string& fragmentSource);
+    GLShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);
     ~GLShaderProgram();
-    void render(const GLAttribArray &, function<void()>) const;
+    void render(const GLAttribArray &, std::function<void()>) const;
     AttribLocation findAttr(const char*) const;
     UniformLocation findUniform(const char*) const;
     inline Program getProgram() const {return program;}
@@ -35,7 +35,7 @@ private:
     GLuint vertexShader;
     Program program;
 
-    GLuint loadShader(ShaderType, const string& source);
+    GLuint loadShader(ShaderType, const std::string& source);
 };
 
 } // flappy

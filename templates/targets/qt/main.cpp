@@ -11,6 +11,7 @@
 #include <mygamemgr.h>
 
 using namespace flappy;
+using namespace std;
 
 int main(int argc, char *argv[])
 {

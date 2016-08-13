@@ -2,6 +2,8 @@
 
 namespace flappy {
 
+using namespace glm;
+
 vec2 ScreenMgr::screenSize() const {
     return vec2(m_width, m_height);
 }

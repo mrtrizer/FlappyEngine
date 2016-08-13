@@ -6,8 +6,6 @@
 
 namespace flappy {
 
-using namespace std;
-
 class GLTexture;
 
 class ViewFactorySDL: public GLViewFactory {

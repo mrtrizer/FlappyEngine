@@ -8,7 +8,7 @@ class Button: public Component {
 public:
     void update(TimeDelta dt);
 
-    function<void()> onClick;
+    std::function<void()> onClick;
 
 private:
     bool isInField();

@@ -6,27 +6,24 @@
 
 namespace flappy {
 
-using namespace std;
-using namespace glm;
-
 class GLViewFactory;
 
 /// View implementation for work with OpenGL.
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
 class GLViewMgr : public ViewMgr {
 public:
-    GLViewMgr(const shared_ptr<GLViewFactory> & factory):
+    GLViewMgr(const std::shared_ptr<GLViewFactory> & factory):
         factory(factory)
     {
 
     }
     virtual ~GLViewMgr();
-    void redraw(list<Visual> &, mat4 &) override;
+    void redraw(std::list<Visual> &, glm::mat4 &) override;
     void init() override;
 protected:
     void updateViewPort() override;
 private:
-    shared_ptr<GLViewFactory> factory;
+    std::shared_ptr<GLViewFactory> factory;
 };
 
 } // flappy

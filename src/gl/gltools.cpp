@@ -8,6 +8,8 @@ namespace flappy {
 
 namespace GLTools {
 
+using namespace std;
+
 //TODO: How to get an error description without GLUT?
 void checkOpenGLerror(const char * file, const char * func, int line) {
     GLenum errCode = glGetError();
