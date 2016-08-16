@@ -13,9 +13,14 @@ namespace flappy {
 using namespace std;
 
 template <> shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenterSprite) const {
-    shared_ptr<ResourceHandler<Texture>> texture;
     auto texturePath = presenterSprite.path();
-    texture = flappyApp().lock()->MGR<ResourceMgr>()->get<Texture>(texturePath);
+    bool isImgPath = true;
+    for (char& c: texturePath)
+        if (c == ':')
+            isImgPath = false;
+    if (isImgPath)
+        texturePath = string(":") + texturePath;
+    auto texture = flappyApp().lock()->MGR<ResourceMgr>()->get<Quad>(texturePath);
     return make_shared<GLViewSprite>(texture,presenterSprite);
 }
 

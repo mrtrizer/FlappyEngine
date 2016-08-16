@@ -19,7 +19,7 @@ unique_ptr<Texture> QtResourceMgr::getTexture(const string& name) const {
 }
 
 unique_ptr<Atlas> QtResourceMgr::getAtlas(const string&) const {
-    return move(unique_ptr<Atlas>(new Atlas()));
+    return move(unique_ptr<Atlas>(new Atlas("")));
 }
 
 

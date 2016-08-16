@@ -2,13 +2,20 @@
 
 namespace flappy {
 
-Atlas::Atlas()
+using namespace std;
+using namespace Tools;
+
+Atlas::Atlas(const string& dependence): m_dependence(dependence)
 {
 
 }
 
-Tools::Rect Atlas::getRect(std::string) {
-    return Tools::Rect{0.0f, 0.0f, 1.0f, 1.0f};
+Rect Atlas::rect(const string& name) {
+    return m_rectMap[name];
+}
+
+void Atlas::addRect(const string& name, const Rect& rect) {
+    m_rectMap[name] = rect;
 }
 
 } // flappy

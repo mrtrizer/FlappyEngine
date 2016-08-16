@@ -9,7 +9,7 @@ class SpriteAnimation: public Sprite
 public:
     // TODO: Make setter functions instead of cotr arguments
     /// @param period Period in seconds
-    SpriteAnimation(const std::string& path, float width, float height, int frameCnt, float period);
+    SpriteAnimation(const std::string& path, float width, float height, float period);
     void update(TimeDelta) override;
 private:
     float m_counter = 0.0;

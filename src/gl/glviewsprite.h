@@ -14,18 +14,16 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const std::shared_ptr<ResourceHandler<Texture>> &glTexture, const Sprite &presenter);
+    GLViewSprite(const std::shared_ptr<ResourceHandler<Quad> > &glTexture, const Sprite &presenter);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const Presenter &) override;
 
 private:
-    GLAttribArray rect;
-    std::shared_ptr<ResourceHandler<Texture>> texture;
-    std::vector<GLTools::Vertex> vertexList;
-    int lastFrameCount;
-    int lastFrameN;
+    GLAttribArray m_rect;
+    std::shared_ptr<ResourceHandler<Quad>> m_texture;
+    std::vector<GLTools::Vertex> m_vertexList;
 
-    void updateFrame(int frameCnt, int frameN);
+    void updateFrame();
     void updateVBOs();
 };
 
