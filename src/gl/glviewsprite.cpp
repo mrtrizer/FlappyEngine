@@ -1,8 +1,11 @@
+#include "glviewsprite.h"
+
 #include <glm/gtc/type_ptr.hpp>
 #include <core/presenter.h>
 #include <core/sprite.h>
-
-#include "glviewsprite.h"
+#include <gl/glshaderprogram.h>
+#include <gl/gltexture.h>
+#include <core/resourcemgr.h>
 
 namespace flappy {
 
@@ -35,17 +38,17 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const shared_ptr<ResourceHandler<Quad>> &glTexture, const Sprite & presenter) :
+GLViewSprite::GLViewSprite(const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     m_rect(GL_TRIANGLE_STRIP),
-    m_texture(glTexture),
     m_vertexList{ {-presenter.width() / 2,-presenter.height() / 2},
                 {-presenter.width() / 2,presenter.height() / 2},
                 {presenter.width() / 2,-presenter.height() / 2},
                 {presenter.width() / 2,presenter.height() / 2} }
 {
-    if (m_texture->ready())
-        updateVBOs();
+    m_quad = presenter.quad();
+    if (m_quad->ready())
+        updateFrame();
 }
 
 void GLViewSprite::updateVBOs() {
@@ -55,33 +58,35 @@ void GLViewSprite::updateVBOs() {
                                  GL_FLOAT,
                                  getShader()->findAttr("aPosition"));
 
-    auto texture = m_texture->resource().texture();
+    auto texture = m_quad->resource().texture();
     m_rect.addVBO<GLTexture::UV>(texture->resource().uvs().data(),
                                 static_cast<int>(texture->resource().uvs().size()) * sizeof(GLTexture::UV),
                                 GL_FLOAT,
                                 getShader()->findAttr("aTexCoord"));
 
-    updateFrame();
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    if (m_texture->ready()) {
-        if (m_texture->updated()) {
-            updateVBOs();
+    if (m_quad != nullptr)
+        if (m_quad->ready()) {
+            if (m_quad->updated()) {
+                updateFrame();
+            }
+            getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
+                auto texture = m_quad->resource().texture();
+                glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+                glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
+                glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
+                dynamic_cast<GLTexture&>(texture->resource()).bind(getShader()->findUniform("uTex"), 0);
+            });
         }
-        getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
-            auto texture = m_texture->resource().texture();
-            glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
-            glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-            glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
-            dynamic_cast<GLTexture&>(texture->resource()).bind(getShader()->findUniform("uTex"), 0);
-        });
-    }
 }
 
 void GLViewSprite::updateFrame() {
-    auto texture = m_texture->resource().texture();
-    auto rect = m_texture->resource().rect();
+    if (m_rect.size() != 4 * sizeof(GLTexture::UV))
+        updateVBOs();
+    auto texture = m_quad->resource().texture();
+    auto rect = m_quad->resource().rect();
     float relWidth = texture->resource().relWidth();
     float relHeight = texture->resource().relHeight();
     float newRelWidth = relWidth * (rect.x2 - rect.x1);
@@ -97,8 +102,10 @@ void GLViewSprite::updateFrame() {
 }
 
 void GLViewSprite::update(const Presenter & presenter){
-    //auto & presenterSprite = static_cast<const Sprite &>(presenter);
-    updateFrame();
+    auto & presenterSprite = static_cast<const Sprite &>(presenter);
+    m_quad = presenterSprite.quad();
+    if (m_quad->ready())
+        updateFrame();
 }
 
 } // flappy

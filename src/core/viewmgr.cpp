@@ -17,9 +17,10 @@ void ViewMgr::update(TimeDelta dt) {
         camera = e->get<Camera>();
     });
 
-    if (camera == nullptr)
-        //throw no_camera();
+    if (camera == nullptr) {
+        LOGI("No any active cameras on scene!\n");
         return;
+    }
 
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();

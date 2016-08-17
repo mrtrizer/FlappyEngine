@@ -44,6 +44,10 @@ private:
     }
 };
 
+template <> inline bool EntityMgr::check <void> (std::shared_ptr<Entity>) {
+    return true;
+}
+
 using EP = std::shared_ptr<Entity>;
 #define EM MGR<EntityMgr>()
 

@@ -1,12 +1,14 @@
 #pragma once
 
 #include "glview.h"
-#include "glshaderprogram.h"
 #include "glattribarray.h"
-#include "gltexture.h"
-#include <core/resourcemgr.h>
 
 namespace flappy {
+
+template <typename T>
+class ResourceHandler;
+
+class Quad;
 
 class Sprite;
 
@@ -14,14 +16,16 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const std::shared_ptr<ResourceHandler<Quad> > &glTexture, const Sprite &presenter);
+    GLViewSprite(const Sprite &presenter);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const Presenter &) override;
 
 private:
     GLAttribArray m_rect;
-    std::shared_ptr<ResourceHandler<Quad>> m_texture;
+
     std::vector<GLTools::Vertex> m_vertexList;
+
+    std::shared_ptr<ResourceHandler<Quad>> m_quad;
 
     void updateFrame();
     void updateVBOs();

@@ -10,6 +10,7 @@
 
 namespace flappy {
 
+class Presenter;
 class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.

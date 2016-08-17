@@ -139,6 +139,7 @@ void ResourceHandler<ResourceT>::load(std::shared_ptr<ResourceMgr> resourceMgr, 
     m_newResource = resourceMgr->loadRes<ResourceT>(path);
 }
 
+// FIXME: It's called too often (25%).
 template <typename ResourceT>
 void ResourceHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResourceMgr> resourceMgr)
 {

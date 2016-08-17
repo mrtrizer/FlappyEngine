@@ -4,10 +4,6 @@ namespace flappy {
 
 using namespace std;
 
-template <> bool EntityMgr::check <void> (shared_ptr<Entity>) {
-    return true;
-}
-
 void EntityMgr::update(TimeDelta dt) {
     for (auto entity: m_removeList)
         m_entities.remove(entity);

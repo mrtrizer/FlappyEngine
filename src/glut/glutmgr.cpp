@@ -48,7 +48,7 @@ void render() {
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
-    auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>(flappyApp));
+    auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>());
     flappyApp->addMgr(viewMgr);
     viewMgr->init();
     viewMgr->resize(width, height);
@@ -78,7 +78,7 @@ void initGLUT(int argc, char** argv, shared_ptr<FlappyApp> flappyApp) {
     glewInit();
 #endif
 
-    flappyApp->createMgr<GLViewMgr>(make_shared<GLViewFactory>(flappyApp));
+    flappyApp->createMgr<GLViewMgr>(make_shared<GLViewFactory>());
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

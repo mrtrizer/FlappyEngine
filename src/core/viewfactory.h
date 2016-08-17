@@ -3,9 +3,6 @@
 #include <memory>
 #include <string>
 
-#include "texture.h"
-#include "presenter.h"
-
 namespace flappy {
 
 class View;
@@ -17,23 +14,15 @@ class View;
 class ViewFactory
 {
 public:
-    ViewFactory(std::weak_ptr<FlappyApp> flappyApp):
-        m_flappyApp(flappyApp) {
-
-    }
+    ViewFactory(){}
 
     virtual ~ViewFactory() {}
 
     /// Should be specialized for every child of Presenter
     template <typename PresenterT>
     std::shared_ptr<View> get(const PresenterT&) const;
-protected:
-    std::weak_ptr<FlappyApp> flappyApp() const { return m_flappyApp; }
-
 private:
     const int m_circleVectexCnt = 30;
-
-    std::weak_ptr<FlappyApp> m_flappyApp;
 };
 
 } // flappy
