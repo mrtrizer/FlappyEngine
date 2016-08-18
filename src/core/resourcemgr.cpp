@@ -18,25 +18,27 @@ void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResourceMgr> resour
 }
 
 template<>
-unique_ptr<Texture> ResourceMgr::loadRes<Texture>(const string& path) const
+unique_ptr<Texture> ResourceMgr::load<Texture>(const string& path) const
 {
     return getTexture(path);
 }
 
 template<>
-unique_ptr<Atlas> ResourceMgr::loadRes<Atlas>(const string& path) const
+unique_ptr<Atlas> ResourceMgr::load<Atlas>(const string& path) const
 {
     return getAtlas(path);
 }
 
 void ResourceMgr::update(TimeDelta)
 {
-    for (auto i = m_resourceMap.begin(); i != m_resourceMap.end(); i++) {
+    for (auto i = m_resourceMap.begin(); i != m_resourceMap.end(); ) {
         i->second->update();
         if (i->second->markedReload())
             i->second->reloadFromSource(shared_from_this());
-        //if (i->second.use_count() == 1)
-         //   i = m_resourceMap.erase(i);
+        if (i->second.use_count() == 1)
+            i = m_resourceMap.erase(i);
+        else
+            i++;
     }
 }
 

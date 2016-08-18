@@ -89,13 +89,15 @@ private:
     }
     void load(std::shared_ptr<ResourceMgr> resourceMgr, const std::string& path);
 
-    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResourceMgr> resourceMgr) {
+    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResourceMgr> resourceMgr)
+    {
         m_newResource = std::move(newResource);
         m_markReload = false;
         procNewResource(resourceMgr);
     }
 
-    void procNewResource(std::shared_ptr<ResourceMgr> ) {
+    void procNewResource(std::shared_ptr<ResourceMgr> )
+    {
         // Do nothing. No default implementation.
     }
 };
@@ -104,7 +106,8 @@ class ResourceMgr: public Manager<ResourceMgr>, public std::enable_shared_from_t
 {
 public:
     template <typename ResourceT>
-    void set(const std::string& path, ResourceT&& resource) {
+    void set(const std::string& path, ResourceT&& resource)
+    {
         using namespace std;
         using ResourceTD = typename decay<ResourceT>::type;
         auto newRes = unique_ptr<ResourceTD>(new ResourceTD(forward<ResourceT>(resource)));
@@ -112,7 +115,8 @@ public:
     }
 
     template <typename ResourceT>
-    std::shared_ptr<ResourceHandler<ResourceT>> get(const std::string& path) {
+    std::shared_ptr<ResourceHandler<ResourceT>> get(const std::string& path)
+    {
         using namespace std;
         if (m_resourceMap.count(path) == 0)
             m_resourceMap.emplace(path, make_shared<ResourceHandler<ResourceT>>(path));
@@ -122,9 +126,11 @@ public:
     void update(TimeDelta) override;
 
     template <typename Type>
-    std::unique_ptr<Type> loadRes(const std::string& path) const {
+    std::unique_ptr<Type> load(const std::string& path) const
+    {
         throw std::runtime_error(path + " Can't be loaded. Template was not specialized for this type of resources.");
-        return nullptr; }
+        return nullptr;
+    }
 
 private:
     std::unordered_map<std::string, std::shared_ptr<IResourceHandler>> m_resourceMap;
@@ -136,26 +142,27 @@ private:
 template <typename ResourceT>
 void ResourceHandler<ResourceT>::load(std::shared_ptr<ResourceMgr> resourceMgr, const std::string& path)
 {
-    m_newResource = resourceMgr->loadRes<ResourceT>(path);
+    m_newResource = resourceMgr->load<ResourceT>(path);
 }
 
-// FIXME: It's called too often (25%).
 template <typename ResourceT>
 void ResourceHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResourceMgr> resourceMgr)
 {
-    setNewResource(std::move(resourceMgr->loadRes<ResourceT>(m_name)), resourceMgr);
+    setNewResource(std::move(resourceMgr->load<ResourceT>(m_name)), resourceMgr);
 }
 
 template <>
 void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResourceMgr> resourceMgr);
 
 template<>
-std::unique_ptr<Texture> ResourceMgr::loadRes<Texture>(const std::string& path) const;
+std::unique_ptr<Texture> ResourceMgr::load<Texture>(const std::string& path) const;
 
 template<>
-std::unique_ptr<Atlas> ResourceMgr::loadRes<Atlas>(const std::string& path) const;
+std::unique_ptr<Atlas> ResourceMgr::load<Atlas>(const std::string& path) const;
 
 template <>
 std::shared_ptr<ResourceHandler<Quad>> ResourceMgr::get<Quad>(const std::string& path);
 
 } // flappy
+
+#define RES_MGR MGR<ResourceMgr>()
