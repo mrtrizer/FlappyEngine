@@ -8,13 +8,15 @@
 
 namespace game {
 
+using namespace std;
 using namespace glm;
+using namespace flappy;
 
-void createBall() {
+void GameCtrl::createBall() {
     const char*  colors [] = {"red", "green", "blue"};
     string color = colors[linearRand(0, 2)];
-    EM::create([=](EP e) {
-        e->add<Sprite>(string("orb_") + color,10, 10);
+    EM->create([=](EP e) {
+        e->add<Sprite>(string("atlas_baskets:") + color,10, 10);
         float randX = linearRand(-30, 30);
         e->add<Transform>()->setPos(vec3(randX,-50, 0));
         e->add<BallCtrl>()->color = color;
@@ -28,15 +30,15 @@ void GameCtrl::update(TimeDelta dt) {
         m_time = 0;
         createBall();
     }
-    if (Input::isMouseDown())
-        m_mouseDownPos = Input::getMousePos();
-    if (Input::isMouseUp())
-        EM::each<BallCtrl>([this](EP e) {
+    if (INPUT->isMouseDown())
+        m_mouseDownPos = INPUT->getMousePos();
+    if (INPUT->isMouseUp())
+        EM->each<BallCtrl>([this](EP e) {
             auto ballCtrl = e->get<BallCtrl>();
-            if (m_mouseDownPos.x - Input::getMousePos().x > 0)
-                ballCtrl->m_slideSpeed = glm::max(-30.0f, ballCtrl->m_slideSpeed - 10);
+            if (m_mouseDownPos.x - INPUT->getMousePos().x > 0)
+                ballCtrl->slideSpeed = glm::max(-30.0f, ballCtrl->slideSpeed - 10);
             else
-                ballCtrl->m_slideSpeed = glm::min(30.0f, ballCtrl->m_slideSpeed + 10);
+                ballCtrl->slideSpeed = glm::min(30.0f, ballCtrl->slideSpeed + 10);
         });
 }
 

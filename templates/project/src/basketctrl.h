@@ -4,12 +4,10 @@
 
 namespace game {
 
-using namespace flappy;
-
-class BasketCtrl: public Component {
+class BasketCtrl: public flappy::Component {
 public:
-    void update(TimeDelta);
-    string color;
+    void update(flappy::TimeDelta);
+    std::string color;
 };
 
 } // game

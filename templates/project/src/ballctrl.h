@@ -4,15 +4,13 @@
 
 namespace game {
 
-using namespace flappy;
-
-class BallCtrl: public Component {
+class BallCtrl: public flappy::Component {
 public:
-    void update(TimeDelta dt);
+    void update(flappy::TimeDelta dt);
 
-    float m_speed = 15;
-    float m_slideSpeed = 0;
-    string color;
+    float speed = 15;
+    float slideSpeed = 0;
+    std::string color;
 };
 
 } // game

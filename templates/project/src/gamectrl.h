@@ -5,19 +5,18 @@
 
 namespace game {
 
-using namespace flappy;
-using namespace glm;
-
-class GameCtrl: public Component {
+class GameCtrl: public flappy::Component {
 public:
-    void update(TimeDelta dt);
+    void update(flappy::TimeDelta dt);
 
     float spawnTime = 2.0f;
 
 private:
     float m_time = 0;
-    vec3 m_mouseDownPos;
-    string m_color;
+    glm::vec3 m_mouseDownPos;
+    std::string m_color;
+
+    void createBall();
 };
 
 } // game

@@ -18,14 +18,12 @@
 
 namespace game {
 
-using namespace glm;
-using namespace flappy;
-using namespace std;
-
-class MyGameMgr : public GameMgr
+class MyGameMgr : public flappy::GameMgr
 {
 public:
     void init() override;
+private:
+    void createBasket(std::string spritePath, glm::vec2 pos);
 };
 
 } // game
