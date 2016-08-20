@@ -20,6 +20,4 @@ script:
  - cd targets/qt
  - qmake tests.pro
  - make
-
-after_success:
-  - ./tests
+ - ./tests

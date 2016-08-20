@@ -1,6 +1,6 @@
 QT += core
 
-TARGET = test
+TARGET = {!name!}
 CONFIG += console
 CONFIG -= app_bundle
 
