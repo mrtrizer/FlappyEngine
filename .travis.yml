@@ -21,3 +21,6 @@ script:
  - cd targets/qt
  - qmake testproject.pro
  - make
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
