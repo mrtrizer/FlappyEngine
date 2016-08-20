@@ -2,16 +2,20 @@
 
 #include <string>
 
-#include <gl/glviewfactory.h>
+#include <core/iresourceloader.h>
+#include <core/atlas.h>
+#include <core/texture.h>
 
 namespace flappy {
 
-class GLTexture;
+class Texture;
 
-class ViewFactoryLibPNG: public GLViewFactory {
+class LibPNGResourceLoader :public IResourceLoader
+{
 public:
-    ViewFactoryLibPNG(string resPath);
-    shared_ptr<Texture> getTexture(string path) const override;
+    LibPNGResourceLoader(std::string path);
+    virtual std::unique_ptr<Texture> getTexture(const std::string& name) const override;
+    virtual std::unique_ptr<Atlas> getAtlas(const std::string& name) const override {return nullptr;}
 
     class file_open_error {};
     /// Wrong file format (after checking png signature)
@@ -22,9 +26,9 @@ public:
     class read_error {};
     /// An alpha chanel is missed. Save image with alpha chanel.
     class wrong_bitmap_format {};
-
 private:
-    string resPath;
+    std::string m_path;
 };
 
 } // flappy
+

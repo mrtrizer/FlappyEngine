@@ -1,23 +1,27 @@
 #include <SDL/SDL_image.h>
 
-#include "viewfactorysdl.h"
+#include "sdlresourceloader.h"
 #include <gl/gltexture.h>
 
+namespace flappy {
+
+using namespace std;
+
 /// @param resPath Path to resource dir
-ViewFactorySDL::ViewFactorySDL(std::string resPath):
-    resPath(resPath){
+SDLResourceLoader::SDLResourceLoader(string path):
+    m_path(path){
 
 }
 
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-std::shared_ptr<GLTexture> ViewFactorySDL::getGLTexture(std::string path) const {
-    std::string fullPath = resPath + "/" + path + ".png";
+unique_ptr<Texture> SDLResourceLoader::getTexture(const string& path) const {
+    string fullPath = m_path + "/" + path + ".png";
 
     SDL_Surface *image;
     if(!(image = IMG_Load(fullPath.data()))) {
-        throw loading_error();
+        throw file_open_error();
     }
 
     //TODO: Any other ways to switch R and B components?
@@ -29,7 +33,9 @@ std::shared_ptr<GLTexture> ViewFactorySDL::getGLTexture(std::string path) const 
         pixels[i * 4 + 2] = c;
     }
 
-    auto result = std::make_shared<GLTexture>((char *)image->pixels, image->w, image->h);
+    auto result = unique_ptr<GLTexture>(new GLTexture((char *)image->pixels, image->w, image->h));
 
-    return result;
+    return move(result);
+}
+
 }

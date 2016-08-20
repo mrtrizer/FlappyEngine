@@ -2,19 +2,23 @@
 
 #include <gl/gltexture.h>
 
-#include "viewfactorylibpng.h"
+#include "libpngresourceloader.h"
+
+namespace flappy {
+
+using namespace std;
 
 /// @param resPath Path to resource dir
-ViewFactoryLibPNG::ViewFactoryLibPNG(std::string resPath):
-    resPath(resPath){
+LibPNGResourceLoader::LibPNGResourceLoader(string path):
+    m_path(path){
 
 }
 
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) const {
-    std::string fullPath = resPath + "/" + path + ".png";
+unique_ptr<Texture> LibPNGResourceLoader::getTexture(const string& path) const {
+    string fullPath = m_path + "/" + path + ".png";
     FILE *fp = fopen(fullPath.data(), "rb");
     if (!fp)
         throw file_open_error();
@@ -82,7 +86,7 @@ std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) con
         img_data[i * 4 + 2] = c;
     }
 
-    auto result = std::make_shared<GLTexture>((char *)img_data, width, height);
+    auto result = unique_ptr<GLTexture>(new GLTexture((char *)img_data, width, height));
 
     delete [] row_pointers;
     delete [] img_data;
@@ -90,5 +94,7 @@ std::shared_ptr<GLTexture> ViewFactoryLibPNG::getGLTexture(std::string path) con
     //TODO: Is it a proper cleanup?
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
     fclose(fp);
-    return result;
+    return move(result);
 }
+
+} // flappy
