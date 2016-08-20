@@ -1,0 +1,23 @@
+language: cpp
+compiler: gcc
+sudo: required
+dist: trusty
+
+before_install:
+ - git submodule update --init --recursive
+ - git clone https://github.com/mrtrizer/FlappyTools.git flappytools
+ - cd flappytools
+ - cmake -G "Unix Makefiles"
+ - sudo make install
+ - cd ..
+ - flappy init testproject ..
+ - cd testproject
+ - flappy prebuild qt
+ - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq qt55base libglew-dev mesa-common-dev freeglut3-dev
+
+script:
+ - cd targets/qt
+ - qmake FlappyEngineTest.pro
+ - make
