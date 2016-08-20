@@ -10,8 +10,7 @@ before_install:
  - cmake -G "Unix Makefiles"
  - sudo make install
  - cd ..
- - flappy init testproject ..
- - cd testproject
+ - cd tests
  - flappy prebuild qt
  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
  - sudo apt-get update -qq
@@ -19,8 +18,8 @@ before_install:
 
 script:
  - cd targets/qt
- - qmake testproject.pro
+ - qmake tests.pro
  - make
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - ./tests
