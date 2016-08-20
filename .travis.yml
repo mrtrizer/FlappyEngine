@@ -19,5 +19,5 @@ before_install:
 
 script:
  - cd targets/qt
- - qmake FlappyEngineTest.pro
+ - qmake testproject.pro
  - make
