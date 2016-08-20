@@ -1,0 +1,16 @@
+{
+	"name":"tests",
+	"engine":"..",
+	"exclude":[],
+	"inc_dirs":[],
+	"console_mode": true,
+	"cmake": {
+		"exec_name":"tests"
+	},
+	"android": {
+		"id":"tests"
+	},
+	"ios": {
+		"bundle_id":"com.flappyapp.tests"
+	}
+}

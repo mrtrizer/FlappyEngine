@@ -34,7 +34,8 @@ void FlappyApp::setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr) {
 void FlappyApp::init() {
     m_lastTime = chrono::steady_clock::now();
     for (auto mgr: m_mgrList)
-        mgr->init();
+        if (mgr != nullptr)
+            mgr->init();
 }
 
 } // flappy

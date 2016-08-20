@@ -17,15 +17,17 @@ class EntityMgr: public Manager<EntityMgr> {
 public:    
     void update(TimeDelta dt);
 
+    /// Entity will be removed right on update
     void remove(std::shared_ptr<Entity> entity);
 
+    /// All entities will be removed on next update
     void reset();
 
-    std::shared_ptr<Entity> create(std::function<void(std::shared_ptr<Entity>)> func = [](std::shared_ptr<Entity>){});
+    std::shared_ptr<Entity> create(std::function<void(const std::shared_ptr<Entity>&)> func = [](const std::shared_ptr<Entity>&){});
 
-    std::shared_ptr<Entity> find(std::function<bool(const Entity*)> check);
+    std::shared_ptr<Entity> find(std::function<bool(const std::shared_ptr<Entity>&)> check);
 
-    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const Entity*)> check);
+    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const std::shared_ptr<Entity>&)> check = [](const std::shared_ptr<Entity>&){return true;});
 
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {
@@ -48,7 +50,7 @@ template <> inline bool EntityMgr::check <void> (std::shared_ptr<Entity>) {
     return true;
 }
 
-using EP = std::shared_ptr<Entity>;
+using EP = const std::shared_ptr<Entity>&;
 #define EM MGR<EntityMgr>()
 
 } // flappy

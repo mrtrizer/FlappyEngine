@@ -17,28 +17,28 @@ void EntityMgr::remove(shared_ptr<Entity> entity) {
 }
 
 void EntityMgr::reset() {
-    m_entities.clear();
+    m_removeList = m_entities;
 }
 
-shared_ptr<Entity> EntityMgr::create(function<void(shared_ptr<Entity>)> func) {
+shared_ptr<Entity> EntityMgr::create(function<void(const std::shared_ptr<Entity>&)> func) {
     auto entity = make_shared<Entity>(flappyApp());
     m_entities.push_back(entity);
     func(entity);
     return entity;
 }
 
-shared_ptr<Entity> EntityMgr::find(function<bool(const Entity*)> check) {
+shared_ptr<Entity> EntityMgr::find(std::function<bool(const std::shared_ptr<Entity>&)> check) {
     for (auto entity: m_entities) {
-        if (check(entity.get()))
+        if (check(entity))
             return entity;
     }
     return nullptr;
 }
 
-list<shared_ptr<Entity>> EntityMgr::findAll(function<bool(const Entity*)> check) {
+list<shared_ptr<Entity>> EntityMgr::findAll(function<bool(const std::shared_ptr<Entity>&)> check) {
     list<shared_ptr<Entity>> list;
     for (auto entity: m_entities) {
-        if (check(entity.get()))
+        if (check(entity))
             list.push_back(entity);
     }
     return list;
