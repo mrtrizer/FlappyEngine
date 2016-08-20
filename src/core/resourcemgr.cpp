@@ -20,13 +20,13 @@ void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResourceMgr> resour
 template<>
 unique_ptr<Texture> ResourceMgr::load<Texture>(const string& path) const
 {
-    return getTexture(path);
+    return m_resourceLoader->getTexture(path);
 }
 
 template<>
 unique_ptr<Atlas> ResourceMgr::load<Atlas>(const string& path) const
 {
-    return getAtlas(path);
+    return m_resourceLoader->getAtlas(path);
 }
 
 void ResourceMgr::update(TimeDelta)

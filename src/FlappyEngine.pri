@@ -230,9 +230,10 @@ HEADERS += \
     $$PWD/core/viewmgr.h \
     $$PWD/gl/glviewmgr.h \
     $$PWD/core/resourcemgr.h \
-    $$PWD/qt/qtresourcemgr.h \
     $$PWD/core/atlas.h \
-    $$PWD/core/quad.h
+    $$PWD/core/quad.h \
+    $$PWD/core/iresourceloader.h \
+    $$PWD/qt/qtresourceloader.h
 
 
 SOURCES += \
@@ -311,9 +312,9 @@ SOURCES += \
     $$PWD/core/viewmgr.cpp \
     $$PWD/gl/glviewmgr.cpp \
     $$PWD/core/resourcemgr.cpp \
-    $$PWD/qt/qtresourcemgr.cpp \
     $$PWD/core/manager.cpp \
     $$PWD/core/atlas.cpp \
-    $$PWD/core/quad.cpp
+    $$PWD/core/quad.cpp \
+    $$PWD/qt/qtresourceloader.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

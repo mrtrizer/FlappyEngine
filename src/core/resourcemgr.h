@@ -4,7 +4,7 @@
 #include <list>
 
 #include <core/manager.h>
-
+#include <core/iresourceloader.h>
 #include <core/atlas.h>
 #include <core/quad.h>
 
@@ -105,6 +105,10 @@ private:
 class ResourceMgr: public Manager<ResourceMgr>, public std::enable_shared_from_this<ResourceMgr>
 {
 public:
+    ResourceMgr(std::shared_ptr<IResourceLoader> resourceLoader):
+        m_resourceLoader(resourceLoader)
+    {}
+
     template <typename ResourceT>
     void set(const std::string& path, ResourceT&& resource)
     {
@@ -134,9 +138,7 @@ public:
 
 private:
     std::unordered_map<std::string, std::shared_ptr<IResourceHandler>> m_resourceMap;
-
-    virtual std::unique_ptr<Texture> getTexture(const std::string& name) const = 0;
-    virtual std::unique_ptr<Atlas> getAtlas(const std::string& name) const = 0;
+    std::shared_ptr<IResourceLoader> m_resourceLoader;
 };
 
 template <typename ResourceT>

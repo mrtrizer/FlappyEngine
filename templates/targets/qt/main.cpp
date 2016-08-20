@@ -1,7 +1,7 @@
 #include <memory>
 
 #include <glut/glutmgr.h>
-#include <qt/qtresourcemgr.h>
+#include <qt/qtresourceloader.h>
 #include <gl/glviewfactory.h>
 #include <core/flappyapp.h>
 #include <core/inputmgr.h>
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 {
     auto flappyApp = make_shared<FlappyApp>();
 
-    flappyApp->createMgr<QtResourceMgr>(":///{?name.lower()?}/res/");
+    flappyApp->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
     flappyApp->createMgr<game::MyGameMgr>();
     flappyApp->createMgr<EntityMgr>();
     flappyApp->createMgr<SceneMgr>();
