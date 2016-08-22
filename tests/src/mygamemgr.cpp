@@ -10,7 +10,8 @@ using namespace flappy;
 
 void MyGameMgr::init() {
     Catch::Session session; // There must be exactly once instance
-    char* argv[1];
+    session.configData().showDurations = Catch::ShowDurations::Always;
+    char* argv[1] = {"flappy"};
     if (session.applyCommandLine(1, argv) == 0)
         session.run();
     else

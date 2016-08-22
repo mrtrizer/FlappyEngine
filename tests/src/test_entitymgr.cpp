@@ -35,7 +35,7 @@ private:
     IMock* m_mockComponent;
 };
 
-TEST_CASE( "update()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::update()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,update));
     Fake(Method(mock,init));
@@ -48,7 +48,7 @@ TEST_CASE( "update()", "[EntityMgr]" ) {
     Verify(Method(mock,init), Method(mock,update).Using(1)).Exactly(1);
 }
 
-TEST_CASE( "reset()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::reset()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     REQUIRE(entityMgr.findAll().size() == 1);
@@ -57,13 +57,21 @@ TEST_CASE( "reset()", "[EntityMgr]" ) {
     REQUIRE(entityMgr.findAll().size() == 0);
 }
 
-TEST_CASE( "create()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::create()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     REQUIRE( entityMgr.findAll().size() == 1);
 }
 
-TEST_CASE( "find()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::create(std::function)") {
+    EntityMgr entityMgr;
+    auto entity1 = entityMgr.create([](EP e){
+        e->add<TestComponent>();
+    });
+    REQUIRE(entityMgr.findAll().size() == 1);
+}
+
+TEST_CASE( "EntityMgr::find()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
@@ -71,7 +79,7 @@ TEST_CASE( "find()", "[EntityMgr]" ) {
     REQUIRE(entityMgr.find([entity2](EP e){return e == entity2;}) == entity2);
 }
 
-TEST_CASE( "findAll()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::findAll()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
@@ -80,7 +88,7 @@ TEST_CASE( "findAll()", "[EntityMgr]" ) {
     REQUIRE(entityMgr.findAll([](EP){return false;}).size() == 0);
 }
 
-TEST_CASE( "each()", "[EntityMgr]" ) {
+TEST_CASE( "EntityMgr::each()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
