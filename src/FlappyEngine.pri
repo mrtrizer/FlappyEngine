@@ -205,8 +205,6 @@ HEADERS += \
     $$PWD/glm/vec3.hpp \
     $$PWD/glm/vec4.hpp \
     $$PWD/glm/vector_relational.hpp \
-    $$PWD/png/viewfactorylibpng.h \
-    $$PWD/sdl/viewfactorysdl.h \
     $$PWD/ui/button.h \
     $$PWD/core/camera.h \
     $$PWD/core/transform.h \
