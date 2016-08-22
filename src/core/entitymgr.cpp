@@ -27,6 +27,12 @@ shared_ptr<Entity> EntityMgr::create(function<void(const std::shared_ptr<Entity>
     return entity;
 }
 
+shared_ptr<Entity> EntityMgr::create() {
+    auto entity = make_shared<Entity>(flappyApp());
+    m_entities.push_back(entity);
+    return entity;
+}
+
 shared_ptr<Entity> EntityMgr::find(std::function<bool(const std::shared_ptr<Entity>&)> check) {
     for (auto entity: m_entities) {
         if (check(entity))

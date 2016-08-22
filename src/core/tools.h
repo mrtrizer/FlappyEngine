@@ -2,15 +2,33 @@
 
 #include <memory>
 #include <vector>
+#include <cstdio>
+#include <iostream>
 
 namespace flappy {
 
-#ifndef ANDROID_JNI
-#include <cstdio>
-template <typename ... Args>
-void LOGI(const char* format, Args ... args) {
-    std::printf(format, args...);
+inline void LOGI_default(const char* s) {
+    while (*s) {
+        if (*s == '%' && *++s != '%')
+            return;
+        std::cout << *s++;
+    }
 }
+
+template<typename T, typename... Args>
+void LOGI_default(const char* s, const T& value, const Args&... args) {
+    while (*s) {
+        if (*s == '%' && *++s != '%') {
+            std::cout << value;
+            return LOGI_default(++s, args...);
+        }
+        std::cout << *s++;
+    }
+}
+
+#ifndef ANDROID_JNI
+
+#define LOGI(...)  std::printf(__VA_ARGS__)
 
 template <typename ... Args>
 void LOGE(Args ... args) {

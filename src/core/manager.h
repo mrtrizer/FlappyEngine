@@ -35,7 +35,7 @@ public:
     virtual void init(){}
 
 protected:
-    std::weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
+    const std::weak_ptr<FlappyApp>& flappyApp() const {return m_flappyApp;}
 
 private:
     void setFlappyApp(std::weak_ptr<FlappyApp> flappyApp) {

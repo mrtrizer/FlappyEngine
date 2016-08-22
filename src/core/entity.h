@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "component.h"
 #include "tools.h"
 

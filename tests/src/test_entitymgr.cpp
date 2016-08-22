@@ -51,16 +51,16 @@ TEST_CASE( "EntityMgr::update()") {
 TEST_CASE( "EntityMgr::reset()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
-    REQUIRE(entityMgr.findAll().size() == 1);
+    REQUIRE(entityMgr.entities().size() == 1);
     entityMgr.reset();
     entityMgr.update(1);
-    REQUIRE(entityMgr.findAll().size() == 0);
+    REQUIRE(entityMgr.entities().size() == 0);
 }
 
 TEST_CASE( "EntityMgr::create()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
-    REQUIRE( entityMgr.findAll().size() == 1);
+    REQUIRE( entityMgr.entities().size() == 1);
 }
 
 TEST_CASE( "EntityMgr::create(std::function)") {
@@ -68,7 +68,7 @@ TEST_CASE( "EntityMgr::create(std::function)") {
     auto entity1 = entityMgr.create([](EP e){
         e->add<TestComponent>();
     });
-    REQUIRE(entityMgr.findAll().size() == 1);
+    REQUIRE(entityMgr.entities().size() == 1);
 }
 
 TEST_CASE( "EntityMgr::find()") {
@@ -83,7 +83,7 @@ TEST_CASE( "EntityMgr::findAll()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
-    REQUIRE(entityMgr.findAll().size() == 2);
+    REQUIRE(entityMgr.entities().size() == 2);
     REQUIRE(entityMgr.findAll([](EP){return true;}).size() == 2);
     REQUIRE(entityMgr.findAll([](EP){return false;}).size() == 0);
 }
@@ -95,7 +95,7 @@ TEST_CASE( "EntityMgr::each()") {
     auto entity3 = entityMgr.create();
     entity1->add<TestComponent>();
     entity2->add<TestComponent>();
-    int componentCount;
+    unsigned componentCount = 0;
     entityMgr.each<TestComponent>([&componentCount](EP){
         componentCount++;
     });

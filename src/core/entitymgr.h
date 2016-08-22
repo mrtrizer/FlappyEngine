@@ -23,11 +23,15 @@ public:
     /// All entities will be removed on next update
     void reset();
 
-    std::shared_ptr<Entity> create(std::function<void(const std::shared_ptr<Entity>&)> func = [](const std::shared_ptr<Entity>&){});
+    std::shared_ptr<Entity> create(std::function<void(const std::shared_ptr<Entity>&)> func);
+
+    std::shared_ptr<Entity> create();
 
     std::shared_ptr<Entity> find(std::function<bool(const std::shared_ptr<Entity>&)> check);
 
-    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const std::shared_ptr<Entity>&)> check = [](const std::shared_ptr<Entity>&){return true;});
+    std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const std::shared_ptr<Entity>&)> check);
+
+    std::list<std::shared_ptr<Entity>> entities() {return m_entities;}
 
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {
