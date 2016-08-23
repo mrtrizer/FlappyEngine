@@ -35,6 +35,10 @@ private:
     IMock* m_mockComponent;
 };
 
+class TestComponentEmpty: public Component {
+
+};
+
 TEST_CASE( "EntityMgr::update()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,update));
@@ -46,6 +50,15 @@ TEST_CASE( "EntityMgr::update()") {
     entityMgr.update(1);
 
     Verify(Method(mock,init), Method(mock,update).Using(1)).Exactly(1);
+}
+
+TEST_CASE( "EntityMgr::remove()") {
+    EntityMgr entityMgr;
+    auto entity1 = entityMgr.create();
+    REQUIRE(entityMgr.entities().size() == 1);
+    entityMgr.remove(entity1);
+    entityMgr.update(1);
+    REQUIRE(entityMgr.entities().size() == 0);
 }
 
 TEST_CASE( "EntityMgr::reset()") {
@@ -73,14 +86,19 @@ TEST_CASE( "EntityMgr::create(std::function)") {
 
 TEST_CASE( "EntityMgr::find()") {
     EntityMgr entityMgr;
+    REQUIRE(entityMgr.find([](EP){return true;}) == nullptr);
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     auto entity3 = entityMgr.create();
     REQUIRE(entityMgr.find([entity2](EP e){return e == entity2;}) == entity2);
+    entityMgr.remove(entity3);
+    entityMgr.update(1);
+    REQUIRE(entityMgr.find([entity3](EP e){return e == entity3;}) == nullptr);
 }
 
 TEST_CASE( "EntityMgr::findAll()") {
     EntityMgr entityMgr;
+    REQUIRE(entityMgr.findAll([](EP){return true;}).size() == 0);
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     REQUIRE(entityMgr.entities().size() == 2);
@@ -99,12 +117,19 @@ TEST_CASE( "EntityMgr::entities()") {
 
 TEST_CASE( "EntityMgr::each()") {
     EntityMgr entityMgr;
+    unsigned componentCount = 0;
+    entityMgr.each<TestComponent>([&componentCount](EP){
+        componentCount++;
+    });
+    REQUIRE(componentCount == 0);
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     auto entity3 = entityMgr.create();
+    auto entity4 = entityMgr.create();
     entity1->add<TestComponent>();
     entity2->add<TestComponent>();
-    unsigned componentCount = 0;
+    entity3->add<TestComponentEmpty>();
+    componentCount = 0;
     entityMgr.each<TestComponent>([&componentCount](EP){
         componentCount++;
     });

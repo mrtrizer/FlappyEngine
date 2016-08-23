@@ -37,9 +37,16 @@ private:
     IMock* m_mockComponent;
 };
 
+class TestComponentEmpty: public Component {
+
+};
+
 TEST_CASE( "Entity::add()" ) {
     auto flappyApp = std::make_shared<FlappyApp>();
     auto entity = std::make_shared<Entity>(flappyApp);
+    REQUIRE(entity->get<TestComponent>() == nullptr);
+    entity->add<TestComponentEmpty>();
+    REQUIRE(entity->get<TestComponent>() == nullptr);
     auto component = entity->add<TestComponent>();
     REQUIRE(entity->get<TestComponent>() == component);
     entity->add<TestComponent>();
@@ -49,6 +56,9 @@ TEST_CASE( "Entity::add()" ) {
 TEST_CASE( "Entity::get()") {
     auto flappyApp = std::make_shared<FlappyApp>();
     auto entity = std::make_shared<Entity>(flappyApp);
+    REQUIRE(entity->get<TestComponent>() == nullptr);
+    entity->add<TestComponentEmpty>();
+    REQUIRE(entity->get<TestComponent>() == nullptr);
     auto component = entity->add<TestComponent>();
     REQUIRE(entity->get<TestComponent>() == component);
     entity->add<TestComponent>();

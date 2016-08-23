@@ -42,7 +42,7 @@ TEST_CASE( "Component::update()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,update));
 
-    auto component = make_shared<TestComponent>(&mock.get());
+    shared_ptr<Component> component = make_shared<TestComponent>(&mock.get());
 
     component->update(1);
 
@@ -53,7 +53,7 @@ TEST_CASE( "Component::init()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,init));
 
-    auto component = make_shared<TestComponent>(&mock.get());
+    shared_ptr<Component> component = make_shared<TestComponent>(&mock.get());
 
     component->init();
 
