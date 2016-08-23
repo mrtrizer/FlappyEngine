@@ -4,6 +4,10 @@
 	"exclude":[],
 	"inc_dirs":[],
 	"console_mode": true,
+	"qt, cmake": {
+		"libs": "-lgcov",
+		"cxxflags": "-O0 -fprofile-arcs -ftest-coverage"
+	},
 	"cmake": {
 		"exec_name":"tests"
 	},

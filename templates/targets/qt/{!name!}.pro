@@ -15,6 +15,11 @@ QMAKE_CXXFLAGS += -std=c++11
 DEFINES += VIEW_TYPE=GL
 DEFINES += QT_NO_KEYWORDS
 
+{?IFDEF qt ?}
+{? "LIBS += " + qt["libs"] if "libs" in qt else "" ?}
+{? "QMAKE_CXXFLAGS += " + qt["cxxflags"] if "cxxflags" in qt else "" ?}
+{?ENDIF?}
+
 SOURCES += main.cpp
 HEADERS += ../../build/src/config.h
 

@@ -88,6 +88,15 @@ TEST_CASE( "EntityMgr::findAll()") {
     REQUIRE(entityMgr.findAll([](EP){return false;}).size() == 0);
 }
 
+TEST_CASE( "EntityMgr::entities()") {
+    EntityMgr entityMgr;
+    auto entity1 = entityMgr.create();
+    auto entity2 = entityMgr.create();
+    REQUIRE(entityMgr.entities().size() == 2);
+    REQUIRE(entityMgr.entities().back() == entity2);
+    REQUIRE(entityMgr.entities().front() == entity1);
+}
+
 TEST_CASE( "EntityMgr::each()") {
     EntityMgr entityMgr;
     auto entity1 = entityMgr.create();
