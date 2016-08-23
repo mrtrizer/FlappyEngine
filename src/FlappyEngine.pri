@@ -15,53 +15,6 @@ HEADERS += \
     $$PWD/core/animation.h \
     $$PWD/core/prefab.h \
     $$PWD/core/manager.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2EdgeShape.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2PolygonShape.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2Shape.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2BroadPhase.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2Collision.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2Distance.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2DynamicTree.h \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2TimeOfImpact.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2BlockAllocator.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Draw.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2GrowableStack.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Math.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Settings.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2StackAllocator.h \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Timer.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2Contact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2GearJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2Joint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Body.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2ContactManager.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Fixture.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Island.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2TimeStep.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2World.h \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.h \
-    $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.h \
-    $$PWD/box2d/Box2D/Box2D/Box2D.h \
     $$PWD/glm/detail/_features.hpp \
     $$PWD/glm/detail/_fixes.hpp \
     $$PWD/glm/detail/_noise.hpp \
@@ -205,8 +158,6 @@ HEADERS += \
     $$PWD/glm/vec3.hpp \
     $$PWD/glm/vec4.hpp \
     $$PWD/glm/vector_relational.hpp \
-    $$PWD/png/viewfactorylibpng.h \
-    $$PWD/sdl/viewfactorysdl.h \
     $$PWD/ui/button.h \
     $$PWD/core/camera.h \
     $$PWD/core/transform.h \
@@ -247,52 +198,6 @@ SOURCES += \
     $$PWD/glut/glutmgr.cpp \
     $$PWD/core/flappyapp.cpp \
     $$PWD/core/animation.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2EdgeShape.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/Shapes/b2PolygonShape.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2BroadPhase.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2CollideCircle.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2CollideEdge.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2CollidePolygon.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2Collision.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2Distance.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2DynamicTree.cpp \
-    $$PWD/box2d/Box2D/Box2D/Collision/b2TimeOfImpact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2BlockAllocator.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Draw.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Math.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Settings.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2StackAllocator.cpp \
-    $$PWD/box2d/Box2D/Box2D/Common/b2Timer.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2Contact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2GearJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2Joint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Body.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2ContactManager.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Fixture.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2Island.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2World.cpp \
-    $$PWD/box2d/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp \
-    $$PWD/box2d/Box2D/Box2D/Rope/b2Rope.cpp \
     $$PWD/ui/button.cpp \
     $$PWD/core/camera.cpp \
     $$PWD/core/view.cpp \
