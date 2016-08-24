@@ -6,7 +6,7 @@
 	"console_mode": true,
 	"qt, cmake": {
 		"libs": "-lgcov",
-		"cxxflags": "-O0 -fprofile-arcs -ftest-coverage"
+		"cxxflags": "-O0 -fprofile-arcs -ftest-coverage --coverage"
 	},
 	"cmake": {
 		"exec_name":"tests"
