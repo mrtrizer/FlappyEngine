@@ -21,21 +21,27 @@ private:
     int m_curId = 0;
 };
 
-//TODO: Rename. It's not an interface anymore
-class IManager
+class AbstractManager
 {
     friend class FlappyApp;
 public:
-    IManager() {}
+    AbstractManager() {}
 
-    IManager(const IManager&) = delete;
-    void operator=(IManager const&) = delete;
+    AbstractManager(const AbstractManager&) = delete;
+    void operator=(AbstractManager const&) = delete;
 
-    virtual void update(TimeDelta){}
+    void tryInit()
+    {
+        if (!m_initialized) {
+            init();
+            m_initialized = true;
+        }
+    }
     virtual void init(){}
 
 protected:
     const std::weak_ptr<FlappyApp>& flappyApp() const {return m_flappyApp;}
+    virtual void update(TimeDelta){}
 
 private:
     void setFlappyApp(std::weak_ptr<FlappyApp> flappyApp) {
@@ -45,6 +51,7 @@ private:
 
     std::weak_ptr<FlappyApp> m_flappyApp;
     FlappyApp* m_flappyAppPtr; // optimization of MGR
+    bool m_initialized = false;
 
 public:
     template <typename Mgr>
@@ -54,7 +61,7 @@ public:
 };
 
 template <typename Derived>
-class Manager: public IManager
+class Manager: public AbstractManager
 {
 public:
     static ManagerCounter counter;

@@ -15,16 +15,28 @@ namespace flappy {
 using namespace std;
 using namespace game;
 
+FlappyApp::FlappyApp(int argc, const char **argv):
+    m_args(argc)
+{
+    if (argv == nullptr) {
+        m_args[0] = "flappy";
+    } else {
+        for (int i = 0; i < argc; i++)
+            m_args[i] = argv[i];
+    }
+}
+
 void FlappyApp::update() {
     auto newTime = chrono::steady_clock::now();
     TimeDelta dt = chrono::duration <float, milli> (newTime - m_lastTime).count() / 1000.0f;
     m_lastTime = newTime;
 
     for (auto mgr: m_mgrList)
-        mgr->update(dt);
+        if (mgr != nullptr)
+            mgr->update(dt);
 }
 
-void FlappyApp::setMgrAtPos(unsigned int pos, shared_ptr<IManager> mgr) {
+void FlappyApp::setMgrAtPos(unsigned int pos, shared_ptr<AbstractManager> mgr) {
     if (m_mgrList.size() <= pos)
         m_mgrList.resize(pos + 1);
     m_mgrList[pos] = mgr;
@@ -35,7 +47,7 @@ void FlappyApp::init() {
     m_lastTime = chrono::steady_clock::now();
     for (auto mgr: m_mgrList)
         if (mgr != nullptr)
-            mgr->init();
+            mgr->tryInit();
 }
 
 } // flappy

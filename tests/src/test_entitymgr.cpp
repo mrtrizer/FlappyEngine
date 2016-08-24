@@ -87,6 +87,7 @@ TEST_CASE( "EntityMgr::create(std::function)") {
 TEST_CASE( "EntityMgr::find()") {
     EntityMgr entityMgr;
     REQUIRE(entityMgr.find([](EP){return true;}) == nullptr);
+    REQUIRE(entityMgr.find([](EP){return false;}) == nullptr);
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     auto entity3 = entityMgr.create();
@@ -99,6 +100,7 @@ TEST_CASE( "EntityMgr::find()") {
 TEST_CASE( "EntityMgr::findAll()") {
     EntityMgr entityMgr;
     REQUIRE(entityMgr.findAll([](EP){return true;}).size() == 0);
+    REQUIRE(entityMgr.findAll([](EP){return false;}).size() == 0);
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     REQUIRE(entityMgr.entities().size() == 2);

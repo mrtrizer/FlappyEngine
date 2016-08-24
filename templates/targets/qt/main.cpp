@@ -16,9 +16,9 @@
 using namespace flappy;
 using namespace std;
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
-    auto flappyApp = make_shared<FlappyApp>();
+    auto flappyApp = make_shared<FlappyApp>(argc, argv);
 {?IF not console_mode?}
     flappyApp->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
     flappyApp->createMgr<EntityMgr>();

@@ -2,6 +2,7 @@
 #include "catch.hpp"
 
 #include "mygamemgr.h"
+#include <core/flappyapp.h>
 
 namespace game {
 
@@ -9,10 +10,10 @@ using namespace std;
 using namespace flappy;
 
 void MyGameMgr::init() {
-    Catch::Session session; // There must be exactly once instance
+    Catch::Session session;
     session.configData().showDurations = Catch::ShowDurations::Always;
-    const char* argv[1] = {"flappy"};
-    if (session.applyCommandLine(1, argv) == 0)
+    auto args = flappyApp().lock()->args();
+    if (session.applyCommandLine(args.size(), args.data()) == 0)
         session.run();
     else
         throw runtime_error("Catch command line error.");
