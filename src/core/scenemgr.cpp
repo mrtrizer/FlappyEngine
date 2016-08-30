@@ -1,21 +1,15 @@
 #include "scenemgr.h"
 
-#include "flappyapp.h"
+#include <core/camera.h>
 
 namespace flappy {
 
 using namespace std;
 
-void SceneMgr::initPrefab(Prefab && prefab) {
-    prefab.init();
-}
-
-void SceneMgr::setCamera(const shared_ptr<Camera>& camera) {
-    m_camera = camera;
-}
-
-shared_ptr<Camera> SceneMgr::camera() {
-    return m_camera;
+void SceneMgr::setScene(const shared_ptr<Scene>& scene) {
+    m_scene = scene;
+    m_scene->setParent(managerList());
+    m_scene->init();
 }
 
 } // flappy

@@ -16,9 +16,9 @@
 using namespace flappy;
 using namespace std;
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
-    auto flappyApp = make_shared<FlappyApp>(argc, argv);
+    auto flappyApp = make_shared<FlappyApp>(argc, const_cast<const char **>(argv));
 {?IF not console_mode?}
     flappyApp->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
     flappyApp->createMgr<EntityMgr>();
@@ -27,11 +27,15 @@ int main(int argc, const char *argv[])
     flappyApp->createMgr<InputMgr>();
     GLUTMgr::initGLUT(argc, argv, flappyApp);
 {?ENDIF?}
+{?IF console_mode?}
     flappyApp->createMgr<game::MyGameMgr>();
+{?ENDIF}
 
     flappyApp->init();
 
 {?IF not console_mode?}
+    flappyApp->MGR<SceneMgr>()->setScene(make_shared<game::MyScene>());
+
     return GLUTMgr::mainLoop();
 {?ENDIF?}
 {?IF console_mode?}

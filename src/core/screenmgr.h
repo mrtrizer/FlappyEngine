@@ -5,7 +5,6 @@
 #include <glm/vec2.hpp>
 
 #include "manager.h"
-#include "flappyapp.h"
 
 namespace flappy {
 

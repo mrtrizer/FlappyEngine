@@ -21,14 +21,14 @@ void EntityMgr::reset() {
 }
 
 shared_ptr<Entity> EntityMgr::create(function<void(const std::shared_ptr<Entity>&)> func) {
-    auto entity = make_shared<Entity>(flappyApp());
+    auto entity = make_shared<Entity>(managerList());
     m_entities.push_back(entity);
     func(entity);
     return entity;
 }
 
 shared_ptr<Entity> EntityMgr::create() {
-    auto entity = make_shared<Entity>(flappyApp());
+    auto entity = make_shared<Entity>(managerList());
     m_entities.push_back(entity);
     return entity;
 }

@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "entity.h"
-#include "flappyapp.h"
+#include "managerlist.h"
 #include "manager.h"
 
 namespace flappy {

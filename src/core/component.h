@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
 #include <core/tools.h>
 
 namespace flappy {
@@ -22,23 +22,23 @@ public:
 
     std::shared_ptr<Entity> entity() const { return m_entity.lock(); }
 
-protected:
-    std::weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
-
 private:
-    void setFlappyApp(std::weak_ptr<FlappyApp> flappyApp) {
-        m_flappyApp = flappyApp;
-        m_flappyAppPtr = flappyApp.lock().get();
-    }
-    void setEntity(std::weak_ptr<Entity> entity) {m_entity = entity;}
 
-    std::weak_ptr<FlappyApp> m_flappyApp;
-    FlappyApp* m_flappyAppPtr; // optimization of MGR
+    void setEntity(std::weak_ptr<Entity> entity) {m_entity = entity;}
     std::weak_ptr<Entity> m_entity;
+
+    void setManagerList(std::weak_ptr<ManagerList> managerList) {
+        m_managerList = managerList;
+        m_managerListPtr = managerList.lock().get();
+    }
+
+    std::weak_ptr<ManagerList> m_managerList;
+    ManagerList* m_managerListPtr; // optimization of MGR
+
 public:
-    template <typename Mgr> inline
-    constexpr auto MGR() const -> decltype(m_flappyAppPtr->MGR<Mgr>()) {
-        return m_flappyAppPtr->MGR<Mgr>();
+    template <typename Mgr>
+    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Mgr>()) {
+        return m_managerListPtr->MGR<Mgr>();
     }
 };
 

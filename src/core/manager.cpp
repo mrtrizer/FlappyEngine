@@ -2,6 +2,6 @@
 
 namespace flappy {
 
-int ManagerCounter::m_count = 0;
+unsigned ManagerCounter::m_count = 0;
 
 } // flappy

@@ -12,7 +12,7 @@ class Transform;
 class Entity: public std::enable_shared_from_this<Entity> {
     friend class Transform;
 public:
-    Entity(std::weak_ptr<FlappyApp> flappyApp):m_flappyApp(flappyApp){}
+    Entity(std::weak_ptr<ManagerList> managerList):m_managerList(managerList){}
     Entity(const Entity&) = delete;
     void operator=(const Entity&) = delete;
 
@@ -21,7 +21,7 @@ public:
         using namespace std;
         auto component = make_shared<ComponentT>(args...);
         component->setEntity(shared_from_this());
-        component->setFlappyApp(flappyApp());
+        component->setManagerList(managerList());
         component->init();
         m_components.push_back(component);
         return component;
@@ -61,13 +61,13 @@ public:
     std::shared_ptr<Transform> transform() { return m_transform; }
 
 protected:
-    std::weak_ptr<FlappyApp> flappyApp() const {return m_flappyApp;}
+    std::weak_ptr<ManagerList> managerList() const {return m_managerList;}
 
 private:
     std::list<std::shared_ptr<Component>> m_components;
     std::shared_ptr<Transform> m_transform;
 
-    std::weak_ptr<FlappyApp> m_flappyApp;
+    std::weak_ptr<ManagerList> m_managerList;
 };
 
 } // flappy

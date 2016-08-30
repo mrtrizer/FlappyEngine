@@ -3,7 +3,7 @@
 #include <memory>
 
 #include <core/tools.h>
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
 
 namespace flappy {
 
@@ -14,16 +14,16 @@ public:
         m_curId(m_count) {
         m_count++;
     }
-    int id() {return m_curId;}
-    static int count() {return m_count;}
+    unsigned id() {return m_curId;}
+    static unsigned count() {return m_count;}
 private:
-    static int m_count;
-    int m_curId = 0;
+    static unsigned m_count;
+    unsigned m_curId = 0;
 };
 
 class AbstractManager
 {
-    friend class FlappyApp;
+    friend class ManagerList;
 public:
     AbstractManager() {}
 
@@ -40,23 +40,23 @@ public:
     virtual void init(){}
 
 protected:
-    const std::weak_ptr<FlappyApp>& flappyApp() const {return m_flappyApp;}
+    const std::weak_ptr<ManagerList>& managerList() const {return m_managerList;}
     virtual void update(TimeDelta){}
 
 private:
-    void setFlappyApp(std::weak_ptr<FlappyApp> flappyApp) {
-        m_flappyApp = flappyApp;
-        m_flappyAppPtr = flappyApp.lock().get();
+    void setManagerList(std::weak_ptr<ManagerList> managerList) {
+        m_managerList = managerList;
+        m_managerListPtr = managerList.lock().get();
     }
 
-    std::weak_ptr<FlappyApp> m_flappyApp;
-    FlappyApp* m_flappyAppPtr; // optimization of MGR
+    std::weak_ptr<ManagerList> m_managerList;
+    ManagerList* m_managerListPtr; // optimization of MGR
     bool m_initialized = false;
 
 public:
     template <typename Mgr>
-    constexpr auto MGR() const -> decltype(m_flappyAppPtr->MGR<Mgr>()) {
-        return m_flappyAppPtr->MGR<Mgr>();
+    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Mgr>()) {
+        return m_managerListPtr->MGR<Mgr>();
     }
 };
 

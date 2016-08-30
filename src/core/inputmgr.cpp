@@ -1,5 +1,4 @@
 #include "inputmgr.h"
-#include "flappyapp.h"
 
 namespace flappy {
 

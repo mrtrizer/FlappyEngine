@@ -13,7 +13,6 @@ HEADERS += \
     $$PWD/glut/glutmgr.h \
     $$PWD/core/flappyapp.h \
     $$PWD/core/animation.h \
-    $$PWD/core/prefab.h \
     $$PWD/core/manager.h \
     $$PWD/glm/detail/_features.hpp \
     $$PWD/glm/detail/_fixes.hpp \
@@ -184,7 +183,8 @@ HEADERS += \
     $$PWD/core/atlas.h \
     $$PWD/core/quad.h \
     $$PWD/core/iresourceloader.h \
-    $$PWD/qt/qtresourceloader.h
+    $$PWD/qt/qtresourceloader.h \
+    $$PWD/core/managerlist.h
 
 
 SOURCES += \
@@ -220,6 +220,7 @@ SOURCES += \
     $$PWD/core/manager.cpp \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
-    $$PWD/qt/qtresourceloader.cpp
+    $$PWD/qt/qtresourceloader.cpp \
+    $$PWD/core/managerlist.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
