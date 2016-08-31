@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 
 #include <gl/gltools.h> //glew has to be included before glut
 
@@ -29,46 +30,56 @@
 #include <core/camera.h>
 #include <gl/glviewfactory.h>
 #include <core/inputmgr.h>
+#include <core/appmgr.h>
 
-#include "glutmgr.h"
+#include "glutinit.h"
 
 namespace flappy {
 
-namespace GLUTMgr {
+namespace GLUTInit {
 
 using namespace std;
 
-shared_ptr<FlappyApp> flappyApp;
+shared_ptr<ManagerList> managerList;
+char** argv = nullptr;
+int argc = 0;
 
 void render() {
     glutSwapBuffers();
     glutPostRedisplay();
-    flappyApp->update();
+    managerList->update();
 }
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
     auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>());
-    flappyApp->addMgr(viewMgr);
+    managerList->addMgr(viewMgr);
     viewMgr->init();
     viewMgr->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    flappyApp->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
+    managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        flappyApp->MGR<InputMgr>()->setMouseDown();
+        managerList->MGR<InputMgr>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        flappyApp->MGR<InputMgr>()->setMouseUp();
+        managerList->MGR<InputMgr>()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    flappyApp->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
+    managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
 }
 
-void initGLUT(int argc, char** argv, shared_ptr<FlappyApp> flappyApp) {
-    GLUTMgr::flappyApp = flappyApp;
+void initGLUT(shared_ptr<ManagerList> managerList) {
+    GLUTInit::managerList = managerList;
 
+    auto args = managerList->MGR<AppMgr>()->args();
+    argv = new char*[args.size()];
+    for (unsigned i = 0; i < args.size(); i++) {
+        argv[i] = new char[args[i].size()];
+        std::strcpy(argv[i],args[i].data());
+    }
+    argc = args.size();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
     //TODO: Ways to control size of window
@@ -78,7 +89,7 @@ void initGLUT(int argc, char** argv, shared_ptr<FlappyApp> flappyApp) {
     glewInit();
 #endif
 
-    flappyApp->createMgr<GLViewMgr>(make_shared<GLViewFactory>());
+    managerList->createMgr<GLViewMgr>(make_shared<GLViewFactory>());
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

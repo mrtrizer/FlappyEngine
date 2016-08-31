@@ -6,7 +6,7 @@
 #include <core/component.h>
 #include <core/entity.h>
 #include <core/transform.h>
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
 
 using namespace flappy;
 using namespace fakeit;
@@ -61,8 +61,8 @@ TEST_CASE( "Component::init()") {
 }
 
 TEST_CASE( "Component::entity()" ) {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     entity->add<TestComponent>();
     REQUIRE(entity->get<TestComponent>()->entity() == entity);
 }

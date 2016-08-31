@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
 #include <core/manager.h>
 
 using namespace flappy;
@@ -40,65 +40,65 @@ class TestManagerEmpty1: public Manager<TestManagerEmpty1> {};
 class TestManagerEmpty2: public Manager<TestManagerEmpty2> {};
 class TestManagerOverride: public Manager<TestManager> {};
 
-TEST_CASE( "FlappyApp::update()") {
+TEST_CASE( "ManagerList::update()") {
     Mock<TestManager::IMock> mock;
     Fake(Method(mock,update));
 
-    auto flappyApp = make_shared<FlappyApp>();
-    flappyApp->update();
-    flappyApp->createMgr<TestManager>(&mock.get());
-    flappyApp->createMgr<TestManagerEmpty1>();
-    flappyApp->update();
+    auto managerList = make_shared<ManagerList>();
+    managerList->update();
+    managerList->createMgr<TestManager>(&mock.get());
+    managerList->createMgr<TestManagerEmpty1>();
+    managerList->update();
 
     Verify(Method(mock,update)).Exactly(1);
 }
 
-TEST_CASE( "FlappyApp::init()") {
+TEST_CASE( "ManagerList::init()") {
     Mock<TestManager::IMock> mock;
     Fake(Method(mock,init));
 
-    auto flappyApp = make_shared<FlappyApp>();
-    flappyApp->init();
-    flappyApp->createMgr<TestManager>(&mock.get());
-    flappyApp->createMgr<TestManagerEmpty1>();
-    flappyApp->init();
-    flappyApp->init(); // souldn't be initialized twice
+    auto managerList = make_shared<ManagerList>();
+    managerList->init();
+    managerList->createMgr<TestManager>(&mock.get());
+    managerList->createMgr<TestManagerEmpty1>();
+    managerList->init();
+    managerList->init(); // souldn't be initialized twice
 
     Verify(Method(mock,init)).Exactly(1);
 }
 
 
-TEST_CASE( "FlappyApp::createMgr()") {
-    auto flappyApp = make_shared<FlappyApp>();
-    flappyApp->createMgr<TestManager>();
-    flappyApp->createMgr<TestManagerEmpty1>();
-    flappyApp->init();
-    REQUIRE(typeid(*flappyApp->MGR<TestManager>()) == typeid(TestManager));
-    REQUIRE(flappyApp->MGR<TestManagerEmpty2>() == nullptr);
+TEST_CASE( "ManagerList::createMgr()") {
+    auto managerList = make_shared<ManagerList>();
+    managerList->createMgr<TestManager>();
+    managerList->createMgr<TestManagerEmpty1>();
+    managerList->init();
+    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManager));
+    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
 }
 
-TEST_CASE( "FlappyApp::overrideMgr()") {
-    auto flappyApp = make_shared<FlappyApp>();
-    flappyApp->overrideMgr<TestManager, TestManagerOverride>();
-    flappyApp->init();
-    REQUIRE(typeid(*flappyApp->MGR<TestManager>()) == typeid(TestManagerOverride));
-    REQUIRE(flappyApp->MGR<TestManagerEmpty2>() == nullptr);
+TEST_CASE( "ManagerList::overrideMgr()") {
+    auto managerList = make_shared<ManagerList>();
+    managerList->overrideMgr<TestManager, TestManagerOverride>();
+    managerList->init();
+    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManagerOverride));
+    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
 }
 
-TEST_CASE( "FlappyApp::MGR()") {
-    auto flappyApp = make_shared<FlappyApp>();
-    REQUIRE(flappyApp->MGR<TestManager>() == nullptr);
-    REQUIRE(flappyApp->MGR<TestManagerEmpty2>() == nullptr);
-    flappyApp->createMgr<TestManager>();
-    flappyApp->init();
-    REQUIRE(typeid(*flappyApp->MGR<TestManager>()) == typeid(TestManager));
-    REQUIRE(flappyApp->MGR<TestManagerEmpty2>() == nullptr);
+TEST_CASE( "ManagerList::MGR()") {
+    auto managerList = make_shared<ManagerList>();
+    REQUIRE(managerList->MGR<TestManager>() == nullptr);
+    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    managerList->createMgr<TestManager>();
+    managerList->init();
+    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManager));
+    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
 }
 
-TEST_CASE( "FlappyApp::args()") {
-    auto flappyApp1 = make_shared<FlappyApp>();
-    REQUIRE(string(flappyApp1->args()[0]) == "flappy");
-    const char* args[] = {"test", "test_arg"};
-    auto flappyApp2 = make_shared<FlappyApp>(2, args);
-    REQUIRE(string(flappyApp2->args()[1]) == "test_arg");
-}
+//TEST_CASE( "ManagerList::args()") {
+//    auto managerList1 = make_shared<ManagerList>();
+//    REQUIRE(string(managerList1->args()[0]) == "flappy");
+//    const char* args[] = {"test", "test_arg"};
+//    auto managerList2 = make_shared<ManagerList>(2, args);
+//    REQUIRE(string(managerList2->args()[1]) == "test_arg");
+//}

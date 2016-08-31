@@ -5,7 +5,7 @@
 
 #include <core/entity.h>
 #include <core/transform.h>
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
 
 using namespace flappy;
 using namespace fakeit;
@@ -42,8 +42,8 @@ class TestComponentEmpty: public Component {
 };
 
 TEST_CASE( "Entity::add()" ) {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     REQUIRE(entity->get<TestComponent>() == nullptr);
     entity->add<TestComponentEmpty>();
     REQUIRE(entity->get<TestComponent>() == nullptr);
@@ -54,8 +54,8 @@ TEST_CASE( "Entity::add()" ) {
 }
 
 TEST_CASE( "Entity::get()") {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     REQUIRE(entity->get<TestComponent>() == nullptr);
     entity->add<TestComponentEmpty>();
     REQUIRE(entity->get<TestComponent>() == nullptr);
@@ -66,8 +66,8 @@ TEST_CASE( "Entity::get()") {
 }
 
 TEST_CASE( "Entity::getAll()") {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     auto component1 = entity->add<TestComponent>();
     REQUIRE(entity->getAll<TestComponent>().front() == component1);
     auto component2 = entity->add<TestComponent>();
@@ -78,8 +78,8 @@ TEST_CASE( "Entity::getAll()") {
 }
 
 TEST_CASE( "Entity::update()") {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     entity->add<TestComponent>();
 
     Mock<TestComponent::IMock> mock;
@@ -93,8 +93,8 @@ TEST_CASE( "Entity::update()") {
 }
 
 TEST_CASE( "Entity::transform()") {
-    auto flappyApp = std::make_shared<FlappyApp>();
-    auto entity = std::make_shared<Entity>(flappyApp);
+    auto managerList = std::make_shared<ManagerList>();
+    auto entity = std::make_shared<Entity>(managerList);
     auto transform = entity->add<Transform>();
     entity->transform() == transform;
 }

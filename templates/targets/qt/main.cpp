@@ -1,7 +1,7 @@
 #include <memory>
 
 {?IF not console_mode?}
-#include <glut/glutmgr.h>
+#include <glut/glutinit.h>
 #include <qt/qtresourceloader.h>
 #include <gl/glviewfactory.h>
 #include <core/resourcemgr.h>
@@ -10,7 +10,8 @@
 #include <core/scenemgr.h>
 #include <core/screenmgr.h>
 {?ENDIF?}
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
+#include <core/appmgr.h>
 #include <mygamemgr.h>
 
 using namespace flappy;
@@ -18,25 +19,28 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    auto flappyApp = make_shared<FlappyApp>(argc, const_cast<const char **>(argv));
+    auto managerList = make_shared<ManagerList>();
+    managerList->createMgr<AppMgr>(argc, argv);
 {?IF not console_mode?}
-    flappyApp->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
-    flappyApp->createMgr<EntityMgr>();
-    flappyApp->createMgr<SceneMgr>();
-    flappyApp->createMgr<ScreenMgr>();
-    flappyApp->createMgr<InputMgr>();
-    GLUTMgr::initGLUT(argc, argv, flappyApp);
+    managerList->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
+    managerList->createMgr<EntityMgr>();
+    managerList->createMgr<SceneMgr>();
+    managerList->createMgr<ScreenMgr>();
+    managerList->createMgr<InputMgr>();
+
+
+    GLUTInit::initGLUT(managerList);
 {?ENDIF?}
 {?IF console_mode?}
-    flappyApp->createMgr<game::MyGameMgr>();
+    managerList->createMgr<game::MyGameMgr>();
 {?ENDIF?}
 
-    flappyApp->init();
+    managerList->init();
 
 {?IF not console_mode?}
-    flappyApp->MGR<SceneMgr>()->setScene(make_shared<game::MyScene>());
+    managerList->MGR<SceneMgr>()->setScene(make_shared<game::MyScene>());
 
-    return GLUTMgr::mainLoop();
+    return GLUTInit::mainLoop();
 {?ENDIF?}
 {?IF console_mode?}
     return 0;

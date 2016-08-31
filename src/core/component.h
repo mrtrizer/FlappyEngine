@@ -10,7 +10,7 @@ namespace flappy {
 class Entity;
 
 class Component {
-    friend class FlappyApp;
+    friend class ManagerList;
     friend class Entity;
 public:
     Component(){}

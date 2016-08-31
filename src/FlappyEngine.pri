@@ -10,8 +10,6 @@ HEADERS += \
     $$PWD/gl/glviewshape.h \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
-    $$PWD/glut/glutmgr.h \
-    $$PWD/core/flappyapp.h \
     $$PWD/core/animation.h \
     $$PWD/core/manager.h \
     $$PWD/glm/detail/_features.hpp \
@@ -184,7 +182,9 @@ HEADERS += \
     $$PWD/core/quad.h \
     $$PWD/core/iresourceloader.h \
     $$PWD/qt/qtresourceloader.h \
-    $$PWD/core/managerlist.h
+    $$PWD/core/managerlist.h \
+    $$PWD/core/appmgr.h \
+    $$PWD/glut/glutinit.h
 
 
 SOURCES += \
@@ -195,8 +195,6 @@ SOURCES += \
     $$PWD/gl/glviewfactory.cpp \
     $$PWD/gl/glviewshape.cpp \
     $$PWD/gl/glviewsprite.cpp \
-    $$PWD/glut/glutmgr.cpp \
-    $$PWD/core/flappyapp.cpp \
     $$PWD/core/animation.cpp \
     $$PWD/ui/button.cpp \
     $$PWD/core/camera.cpp \
@@ -221,6 +219,8 @@ SOURCES += \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
     $$PWD/qt/qtresourceloader.cpp \
-    $$PWD/core/managerlist.cpp
+    $$PWD/core/managerlist.cpp \
+    $$PWD/core/appmgr.cpp \
+    $$PWD/glut/glutinit.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
