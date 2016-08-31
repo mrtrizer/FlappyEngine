@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {?ENDIF?}
 {?IF console_mode?}
     flappyApp->createMgr<game::MyGameMgr>();
-{?ENDIF}
+{?ENDIF?}
 
     flappyApp->init();
 
