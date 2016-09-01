@@ -17,8 +17,9 @@ Camera::Camera(float height):
 }
 
 void Camera::init() {
-    if (MGR<SceneMgr>()->camera() == nullptr)
-        MGR<SceneMgr>()->setCamera(shared_from_this());
+    if (auto scene = MGR<SceneMgr>()->scene())
+        if (scene->camera() == nullptr)
+            scene->setCamera(shared_from_this());
 }
 
 Rect Camera::rect() const {
