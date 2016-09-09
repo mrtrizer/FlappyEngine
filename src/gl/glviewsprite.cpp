@@ -41,10 +41,10 @@ static const char spriteFShader[] =
 GLViewSprite::GLViewSprite(const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     m_rect(GL_TRIANGLE_STRIP),
-    m_vertexList{ {-presenter.width() / 2,-presenter.height() / 2},
-                {-presenter.width() / 2,presenter.height() / 2},
-                {presenter.width() / 2,-presenter.height() / 2},
-                {presenter.width() / 2,presenter.height() / 2} }
+    m_vertexList{ {-presenter.size().x / 2,-presenter.size().y / 2},
+                {-presenter.size().x / 2,presenter.size().y / 2},
+                {presenter.size().x / 2,-presenter.size().y / 2},
+                {presenter.size().x / 2,presenter.size().y / 2} }
 {
     m_quad = presenter.quad();
     if (m_quad->ready())

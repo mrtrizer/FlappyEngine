@@ -18,7 +18,7 @@ public:
     static unsigned count() {return m_count;}
 private:
     static unsigned m_count;
-    unsigned m_curId = 0;
+    const unsigned m_curId = 0;
 };
 
 class AbstractManager
@@ -50,7 +50,7 @@ private:
     }
 
     std::weak_ptr<ManagerList> m_managerList;
-    ManagerList* m_managerListPtr; // optimization of MGR
+    ManagerList* m_managerListPtr = nullptr; // optimization of MGR
     bool m_initialized = false;
 
 public:

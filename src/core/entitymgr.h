@@ -31,7 +31,7 @@ public:
 
     std::list<std::shared_ptr<Entity>> findAll(std::function<bool(const std::shared_ptr<Entity>&)> check);
 
-    std::list<std::shared_ptr<Entity>> entities() {return m_entities;}
+    std::list<std::shared_ptr<Entity>> entities() const {return m_entities;}
 
     template <typename ... Components>
     void each(std::function<void(std::shared_ptr<Entity>)> func) {

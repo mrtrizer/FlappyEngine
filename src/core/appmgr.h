@@ -7,7 +7,7 @@ namespace flappy {
 class AppMgr: public Manager<AppMgr>
 {
 public:
-    AppMgr(int argc = 1, char **argv = nullptr);
+    AppMgr(int argc = 1, const char* const* argv = nullptr);
 
     std::vector<std::string> args() { return m_args; }
 

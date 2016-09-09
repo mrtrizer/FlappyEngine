@@ -4,10 +4,13 @@ namespace flappy {
 
 using namespace std;
 
-SpriteAnimation::SpriteAnimation(const string &path, float width, float height, float period) :
-    Sprite(path,width, height),
-    m_period(period) {
+SpriteAnimation::SpriteAnimation() {
 
+}
+
+void SpriteAnimation::setPeriod(float period) {
+    m_period = period;
+    updateView();
 }
 
 void SpriteAnimation::update(TimeDelta dt) {

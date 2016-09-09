@@ -17,11 +17,11 @@ template <> shared_ptr<View> ViewFactory::get<Sprite>(const Sprite& presenterSpr
 }
 
 template <> shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape& presenterCircle) const {
-    return make_shared<GViewCircle>(m_circleVectexCnt, presenterCircle.width());
+    return make_shared<GViewCircle>(m_circleVectexCnt, presenterCircle.size().x);
 }
 
 template <> shared_ptr<View> ViewFactory::get<RectShape>(const RectShape& presenterRect) const {
-    return make_shared<GViewRect>(presenterRect.width(), presenterRect.height());
+    return make_shared<GViewRect>(presenterRect.size().x, presenterRect.size().y);
 }
 
 } // flappy

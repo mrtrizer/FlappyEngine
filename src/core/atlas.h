@@ -10,6 +10,7 @@ class Atlas
 {
 public:
     Atlas(const std::string& dependence);
+    /// Can't be const because m_rectMap[] is not const
     Tools::Rect rect(const std::string& name);
     void addRect(const std::string& name, const Tools::Rect &rect);
     std::string dependence() const {return m_dependence; }

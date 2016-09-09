@@ -15,7 +15,7 @@ class Component {
 public:
     Component(){}
     Component(const Component&) = delete;
-    void operator=(const Component&) = delete;
+    Component& operator=(const Component&) = delete;
     virtual ~Component() {}
     virtual void update(TimeDelta) {}
     virtual void init() {}
@@ -33,7 +33,7 @@ private:
     }
 
     std::weak_ptr<ManagerList> m_managerList;
-    ManagerList* m_managerListPtr; // optimization of MGR
+    ManagerList* m_managerListPtr = nullptr; // optimization of MGR
 
 public:
     template <typename Mgr>

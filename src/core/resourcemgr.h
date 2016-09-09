@@ -39,7 +39,7 @@ public:
     ResourceT& resource() { return *m_resource; }
     void update() override
     {
-        if (m_dependencies.size() > 0) { // check dependencies first, if there are any dependencies
+        if (!m_dependencies.empty()) { // check dependencies first, if there are any dependencies
             if (!m_dependenciesReady) { // dependencies are not ready yet
                 bool ready = true;
                 for (auto& dependence: m_dependencies)
@@ -96,10 +96,9 @@ private:
         procNewResource(resourceMgr);
     }
 
-    void procNewResource(std::shared_ptr<ResourceMgr> )
-    {
-        // Do nothing. No default implementation.
-    }
+    /// No default implementation. Do not remove.
+    void procNewResource(std::shared_ptr<ResourceMgr> ) {}
+
 };
 
 class ResourceMgr: public Manager<ResourceMgr>, public std::enable_shared_from_this<ResourceMgr>

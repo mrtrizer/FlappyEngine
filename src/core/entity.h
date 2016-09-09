@@ -14,7 +14,7 @@ class Entity: public std::enable_shared_from_this<Entity> {
 public:
     Entity(std::weak_ptr<ManagerList> managerList):m_managerList(managerList){}
     Entity(const Entity&) = delete;
-    void operator=(const Entity&) = delete;
+    Entity& operator=(const Entity&) = delete;
 
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> add(Args ... args) {
