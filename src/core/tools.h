@@ -53,6 +53,13 @@ namespace Tools
         float y2;
     };
 
+    struct ColorRGBA {
+        float r;
+        float g;
+        float b;
+        float a;
+    };
+
     using PMatrix = std::vector<float>;
     bool isPowOfTwo(int x);
 

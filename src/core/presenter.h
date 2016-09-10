@@ -2,9 +2,11 @@
 
 #include <string>
 #include <memory>
-#include <core/entitymgr.h>
-#include <glm/glm.hpp>
 
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+
+#include "entitymgr.h"
 #include "tools.h"
 
 namespace flappy {

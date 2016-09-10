@@ -11,7 +11,7 @@ INCLUDEPATH += ../../build/src/
 
 include("../../{!engine!}/src/FlappyEngine.pri")
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++1y
 DEFINES += VIEW_TYPE=GL
 DEFINES += QT_NO_KEYWORDS
 

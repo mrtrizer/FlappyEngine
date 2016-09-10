@@ -1,5 +1,4 @@
 #include "circleshape.h"
-
 #include "viewfactory.h"
 
 namespace flappy {
