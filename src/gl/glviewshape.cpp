@@ -1,4 +1,6 @@
 #include <glm/gtc/type_ptr.hpp>
+#include <core/rectshape.h>
+
 #include "glviewshape.h"
 
 namespace flappy {
@@ -27,6 +29,11 @@ GLViewShape::GLViewShape() :
     GLView(shapeVShader, shapeFShader),
     colorRGBA({1.0f, 1.0f, 1.0f, 1.0f}){
 
+}
+
+void GLViewShape::update(const Presenter& presenter) {
+    auto& rect = static_cast<const RectShape&>(presenter);
+    setColorRGBA({rect.color().r(), rect.color().g(), rect.color().b(), rect.color().a()});
 }
 
 void GLViewShape::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {

@@ -4,15 +4,16 @@ namespace flappy {
 
 using namespace std;
 
-GViewRect::GViewRect(float width, float height):
-    rect(GL_TRIANGLE_STRIP){
-
+GViewRect::GViewRect():
+    rect(GL_TRIANGLE_STRIP)
+{
     vector<GLTools::Vertex> vertexList({
-                  {-width / 2,-height / 2},
-                  {-width / 2,height / 2},
-                  {width / 2,-height / 2},
-                  {width / 2,height / 2}
+                  {-0.5f,-0.5f},
+                  {-0.5f,0.5f},
+                  {0.5f,-0.5f},
+                  {0.5f,0.5f}
               });
+
     rect.addVBO<GLTools::Vertex>(vertexList.data(),
                                  static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
                                  GL_FLOAT,

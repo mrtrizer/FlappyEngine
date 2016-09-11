@@ -41,10 +41,10 @@ static const char spriteFShader[] =
 GLViewSprite::GLViewSprite(const Sprite & presenter) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     m_rect(GL_TRIANGLE_STRIP),
-    m_vertexList{ {-presenter.size().x / 2,-presenter.size().y / 2},
-                {-presenter.size().x / 2,presenter.size().y / 2},
-                {presenter.size().x / 2,-presenter.size().y / 2},
-                {presenter.size().x / 2,presenter.size().y / 2} }
+    m_vertexList{ {-0.5f, -0.5f},
+                {-0.5f, 0.5f},
+                {0.5f, -0.5f},
+                {0.5f, 0.5f} }
 {
     m_quad = presenter.quad();
     if (m_quad->ready())
@@ -103,9 +103,11 @@ void GLViewSprite::updateFrame() {
 
 void GLViewSprite::update(const Presenter & presenter){
     auto & presenterSprite = static_cast<const Sprite &>(presenter);
+
     m_quad = presenterSprite.quad();
     if (m_quad->ready())
         updateFrame();
+
 }
 
 } // flappy

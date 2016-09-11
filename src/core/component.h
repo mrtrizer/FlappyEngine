@@ -8,6 +8,7 @@
 namespace flappy {
 
 class Entity;
+class Transform;
 
 class Component {
     friend class ManagerList;

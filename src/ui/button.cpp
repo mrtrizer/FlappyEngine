@@ -26,7 +26,7 @@ bool Button::isInField() {
     if (auto scene = MGR<SceneMgr>()->scene()) {
         auto pos = scene->camera()->screenToScene(MGR<InputMgr>()->getMousePos());
         auto buttonPos = entity()->get<Transform>()->pos();
-        auto size = entity()->get<Presenter>()->size() * 0.5f;
+        auto size = 0.5f * entity()->transform()->scale();
         auto diff = pos - buttonPos;
         return (abs(diff.x) < size.x) && (abs(diff.y) < size.y);
     } else {

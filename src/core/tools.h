@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <iostream>
 
+#include <glm/vec2.hpp>
+
 namespace flappy {
 
 inline void LOGI_default(const char* s) {
@@ -47,17 +49,11 @@ void LOGE(Args ... args) {
 namespace Tools
 {
     struct Rect {
+        glm::vec2 size() {return {x2 - x1, y2 - y1};}
         float x1;
         float y1;
         float x2;
         float y2;
-    };
-
-    struct ColorRGBA {
-        float r;
-        float g;
-        float b;
-        float a;
     };
 
     using PMatrix = std::vector<float>;

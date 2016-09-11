@@ -28,9 +28,4 @@ void Presenter::updateView(){
         m_view->externUpdate(shared_from_this());
 }
 
-void Presenter::setSize(const glm::vec3& size) {
-    m_size = size;
-    updateView();
-}
-
 } // flappy

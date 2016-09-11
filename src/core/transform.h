@@ -22,11 +22,15 @@ public:
     std::shared_ptr<Transform> parent() {return m_parent.lock();}
 
     void setPos(const glm::vec3& pos) {m_pos = pos;}
+    void move(const glm::vec2& offset) {m_pos += glm::vec3(offset, 0.0f);}
     void move(const glm::vec3& offset) {m_pos += offset;}
+
+    void rotate(float angle) {m_angle += angle;}
 
     void setAngle(float angle) {m_angle = angle;}
 
     void setScale(const glm::vec3& scale) {m_scale = scale;}
+    void setScale(const glm::vec2& scale) {m_scale = glm::vec3(scale, 0.0f);}
     void setScale(float offset) {m_scale = glm::vec3(offset, offset, offset);}
     void stretch(float offset) {m_scale += glm::vec3(offset, offset, offset);}
     void stretch(const glm::vec3& offset) {m_scale += offset;}

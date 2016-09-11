@@ -6,6 +6,7 @@
 
 namespace flappy {
 
+using namespace glm;
 using namespace std;
 using namespace Tools;
 
