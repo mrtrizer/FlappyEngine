@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_RUNNER
-#include "catch.hpp"
+#include "catch.h"
 
 #include "mygamemgr.h"
 #include <core/appmgr.h>

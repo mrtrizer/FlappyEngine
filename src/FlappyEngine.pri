@@ -1,5 +1,4 @@
 INCLUDEPATH += $$PWD
-INCLUDEPATH += $$PWD/box2d/Box2D
 
 HEADERS += \
     $$PWD/gl/gltools.h \
@@ -184,7 +183,8 @@ HEADERS += \
     $$PWD/core/managerlist.h \
     $$PWD/core/appmgr.h \
     $$PWD/glut/glutinit.h \
-    $$PWD/core/color.h
+    $$PWD/core/color.h \
+    $$PWD/core/scene.h
 
 
 SOURCES += \

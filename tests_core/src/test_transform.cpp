@@ -1,5 +1,5 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "catch.h"
+#include "fakeit.h"
 
 #include <memory>
 

@@ -25,9 +25,6 @@ void ManagerList::setMgrAtPos(unsigned int pos, shared_ptr<AbstractManager> mgr)
 
 void ManagerList::init() {
     m_lastTime = chrono::steady_clock::now();
-    for (auto mgr: m_mgrList)
-        if (mgr != nullptr)
-            mgr->tryInit();
 }
 
 } // flappy

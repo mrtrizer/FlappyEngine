@@ -1,5 +1,5 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "catch.h"
+#include "fakeit.h"
 
 #include <memory>
 
@@ -7,39 +7,11 @@
 #include <core/transform.h>
 #include <core/managerlist.h>
 
+#include "testcomponent.h"
+
 using namespace flappy;
 using namespace fakeit;
 using namespace std;
-
-class TestComponent: public Component {
-public:
-    class IMock {
-    public:
-        virtual void init() = 0;
-        virtual void update(TimeDelta dt) = 0;
-    };
-
-    TestComponent(IMock* mockComponent = nullptr):
-        m_mockComponent (mockComponent)
-    {}
-
-    void init() override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-
-    void update(TimeDelta dt) override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->update(dt);
-    }
-
-private:
-    IMock* m_mockComponent;
-};
-
-class TestComponentEmpty: public Component {
-
-};
 
 TEST_CASE( "Entity::add()" ) {
     auto managerList = std::make_shared<ManagerList>();

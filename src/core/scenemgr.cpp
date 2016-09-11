@@ -1,6 +1,6 @@
 #include "scenemgr.h"
 
-#include <core/camera.h>
+#include "scene.h"
 
 namespace flappy {
 

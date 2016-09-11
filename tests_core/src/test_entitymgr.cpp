@@ -1,43 +1,15 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "catch.h"
+#include "fakeit.h"
 
 #include <memory>
 
 #include <core/entitymgr.h>
 
+#include "testcomponent.h"
+
 using namespace flappy;
 using namespace fakeit;
 using namespace std;
-
-class TestComponent: public Component {
-public:
-    class IMock {
-    public:
-        virtual void init() = 0;
-        virtual void update(TimeDelta dt) = 0;
-    };
-
-    TestComponent(IMock* mockComponent = nullptr):
-        m_mockComponent (mockComponent)
-    {}
-
-    void init() override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-
-    void update(TimeDelta dt) override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->update(dt);
-    }
-
-private:
-    IMock* m_mockComponent;
-};
-
-class TestComponentEmpty: public Component {
-
-};
 
 TEST_CASE( "EntityMgr::update()") {
     Mock<TestComponent::IMock> mock;
@@ -92,6 +64,7 @@ TEST_CASE( "EntityMgr::find()") {
     auto entity2 = entityMgr.create();
     auto entity3 = entityMgr.create();
     REQUIRE(entityMgr.find([entity2](EP e){return e == entity2;}) == entity2);
+    REQUIRE(entityMgr.find([](EP){return false;}) == nullptr);
     entityMgr.remove(entity3);
     entityMgr.update(1);
     REQUIRE(entityMgr.find([entity3](EP e){return e == entity3;}) == nullptr);
@@ -117,13 +90,19 @@ TEST_CASE( "EntityMgr::entities()") {
     REQUIRE(entityMgr.entities().front() == entity1);
 }
 
-TEST_CASE( "EntityMgr::each()") {
+TEST_CASE( "EntityMgr::each() [empty list]") {
     EntityMgr entityMgr;
     unsigned componentCount = 0;
     entityMgr.each<TestComponent>([&componentCount](EP){
         componentCount++;
     });
     REQUIRE(componentCount == 0);
+}
+
+TEST_CASE( "EntityMgr::each() [one component]") {
+    EntityMgr entityMgr;
+    unsigned componentCount = 0;
+
     auto entity1 = entityMgr.create();
     auto entity2 = entityMgr.create();
     auto entity3 = entityMgr.create();
@@ -131,9 +110,27 @@ TEST_CASE( "EntityMgr::each()") {
     entity1->add<TestComponent>();
     entity2->add<TestComponent>();
     entity3->add<TestComponentEmpty>();
-    componentCount = 0;
+
     entityMgr.each<TestComponent>([&componentCount](EP){
         componentCount++;
     });
     REQUIRE(componentCount == 2);
+}
+
+TEST_CASE( "EntityMgr::each() [multiple components]") {
+    EntityMgr entityMgr;
+    unsigned componentCount = 0;
+    auto entity1 = entityMgr.create();
+    auto entity2 = entityMgr.create();
+    auto entity3 = entityMgr.create();
+    auto entity4 = entityMgr.create();
+    entity1->add<TestComponent>();
+    entity2->add<TestComponent>();
+    entity2->add<TestComponentEmpty>();
+    entity3->add<TestComponentEmpty>();
+
+    entityMgr.each<TestComponent, TestComponentEmpty>([&componentCount](EP){
+        componentCount++;
+    });
+    REQUIRE(componentCount == 1);
 }

@@ -1,9 +1,11 @@
 #include "camera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+
 #include "transform.h"
 #include "screenmgr.h"
 #include "scenemgr.h"
+#include "scene.h"
 
 namespace flappy {
 

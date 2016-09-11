@@ -1,50 +1,28 @@
-#include "catch.hpp"
-#include "fakeit.hpp"
+#include "catch.h"
+#include "fakeit.h"
 
 #include <memory>
 
-#include <core/component.h>
 #include <core/entity.h>
+#include <core/entitymgr.h>
 #include <core/transform.h>
 #include <core/managerlist.h>
+#include <core/entitymgr.h>
+
+#include "testmanager.h"
+#include "testcomponent.h"
 
 using namespace flappy;
 using namespace fakeit;
 using namespace std;
 
-class TestComponent: public Component {
-public:
-    class IMock {
-    public:
-        virtual void init() = 0;
-        virtual void update(TimeDelta dt) = 0;
-    };
-
-    TestComponent(IMock* mockComponent = nullptr):
-        m_mockComponent (mockComponent)
-    {}
-
-    void init() override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-
-    void update(TimeDelta dt) override {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->update(dt);
-    }
-
-private:
-    IMock* m_mockComponent;
-};
-
 TEST_CASE( "Component::update()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,update));
 
-    shared_ptr<Component> component = make_shared<TestComponent>(&mock.get());
+    shared_ptr<Component> testComponent = make_shared<TestComponent>(&mock.get());
 
-    component->update(1);
+    testComponent->update(1);
 
     Verify(Method(mock,update).Using(1)).Exactly(1);
 }
@@ -65,4 +43,20 @@ TEST_CASE( "Component::entity()" ) {
     auto entity = std::make_shared<Entity>(managerList);
     entity->add<TestComponent>();
     REQUIRE(entity->get<TestComponent>()->entity() == entity);
+}
+
+TEST_CASE( "Component::MGR()" ) {
+    Mock<TestManager::IMock> mock;
+    Fake(Method(mock,init));
+    Fake(Method(mock,test));
+
+    auto managerList = make_shared<ManagerList>();
+    managerList->createMgr<TestManager>(&mock.get());
+    managerList->createMgr<EntityMgr>();
+    managerList->init();
+    auto entity = managerList->MGR<EntityMgr>()->create();
+    auto component = entity->add<Component>();
+    component->MGR<TestManager>()->test();
+
+    Verify(Method(mock, init), Method(mock,test)).Exactly(1);
 }

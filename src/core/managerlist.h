@@ -32,6 +32,7 @@ public:
     template <typename Mgr, typename...T> inline
     void createMgr(T&&...args) {
         addMgr<Mgr>(std::make_shared<Mgr>(std::forward<T>(args)...));
+        MGR<Mgr>()->init();
     }
 
     template <typename IMgr, typename Mgr, typename ... T> inline

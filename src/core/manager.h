@@ -30,18 +30,10 @@ public:
     AbstractManager(const AbstractManager&) = delete;
     void operator=(AbstractManager const&) = delete;
 
-    void tryInit()
-    {
-        if (!m_initialized) {
-            init();
-            m_initialized = true;
-        }
-    }
-    virtual void init(){}
-
 protected:
     const std::weak_ptr<ManagerList>& managerList() const {return m_managerList;}
     virtual void update(TimeDelta){}
+    virtual void init(){}
 
 private:
     void setManagerList(std::weak_ptr<ManagerList> managerList) {
@@ -51,7 +43,6 @@ private:
 
     std::weak_ptr<ManagerList> m_managerList;
     ManagerList* m_managerListPtr = nullptr; // optimization of MGR
-    bool m_initialized = false;
 
 public:
     template <typename Mgr>

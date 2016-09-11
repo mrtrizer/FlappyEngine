@@ -1,6 +1,7 @@
 #include "button.h"
 
 #include <core/scenemgr.h>
+#include <core/scene.h>
 #include <core/transform.h>
 #include <core/inputmgr.h>
 #include <core/presenter.h>
