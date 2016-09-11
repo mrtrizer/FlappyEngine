@@ -32,9 +32,9 @@ static const char spriteFShader[] =
     "varying vec2 vTexCoord;\n"
     "void main() {\n"
 #if TARGET_OS_IPHONE == 1
-    "   gl_FragColor = texture2D(uTex,vTexCoord).rgba;\n"
+    "   gl_FragColor = texture2D(uTex,vTexCoord).rgba * uColor;\n"
 #else
-    "   gl_FragColor = texture2D(uTex,vTexCoord).bgra;\n"
+    "   gl_FragColor = texture2D(uTex,vTexCoord).bgra * uColor;\n"
 #endif
     "}\n";
 
@@ -70,7 +70,7 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
                 auto texture = m_quad->resource().texture();
                 glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
                 glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-                glUniform4f(getShader()->findUniform("uColor"),0,0,0,1);
+                glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
                 dynamic_cast<GLTexture&>(texture->resource()).bind(getShader()->findUniform("uTex"), 0);
             });
         }
@@ -96,9 +96,9 @@ void GLViewSprite::updateFrame() {
 }
 
 void GLViewSprite::update(const Presenter & presenter){
-    auto & presenterSprite = static_cast<const Sprite &>(presenter);
-
-    m_quad = presenterSprite.quad();
+    auto & sprite = static_cast<const Sprite &>(presenter);
+    m_colorRGBA = GLTools::GLColorRGBA(sprite.color());
+    m_quad = sprite.quad();
     if (m_quad->ready())
         updateFrame();
 

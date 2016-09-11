@@ -28,13 +28,13 @@ void Color::setRGBA(float r, float g, float b, float a) {
     setA(a);
 }
 
-std::string Color::toString() {
+std::string Color::toString() const {
     std::stringstream ss;
     ss << std::hex << std::setfill('0') << std::setw(8) << toRGBAHex();
     return ss.str();
 }
 
-uint32_t Color::toRGBAHex() {
+uint32_t Color::toRGBAHex() const {
     uint32_t hex = 0;
     hex += uint32_t(255 * m_r) << 6 * 4;
     hex += uint32_t(255 * m_g) << 4 * 4;

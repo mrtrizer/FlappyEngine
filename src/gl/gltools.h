@@ -27,7 +27,10 @@
 
 #include <core/tools.h>
 
+
 namespace flappy {
+
+class Color;
 
 /// Contains tools for work with OpenGL
 namespace GLTools {
@@ -35,6 +38,15 @@ namespace GLTools {
     struct Vertex {
       GLfloat x;
       GLfloat y;
+    };
+
+    struct GLColorRGBA {
+        GLColorRGBA() = default;
+        explicit GLColorRGBA(const Color& color);
+        GLfloat r = 1.0f;
+        GLfloat g = 1.0f;
+        GLfloat b = 1.0f;
+        GLfloat a = 1.0f;
     };
 
     void checkOpenGLerror(const char * = "", const char * = "", int = 0);

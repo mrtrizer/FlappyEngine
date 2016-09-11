@@ -17,7 +17,7 @@ void BasketCtrl::update(TimeDelta) {
         if (distance(e->transform()->pos(), entity()->transform()->pos()) < minDist) {
             EM->remove(e);
             if (e->get<BallCtrl>()->color == color())
-                entity()->transform()->stretch(-0.1f);
+                entity()->transform()->stretch(-1.0f);
         }
     });
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <core/color.h>
+
 #include "glview.h"
 #include "glattribarray.h"
 
@@ -22,6 +24,8 @@ public:
 
 private:
     GLAttribArray m_rect;
+
+    GLTools::GLColorRGBA m_colorRGBA;
 
     std::vector<GLTools::Vertex> m_vertexList;
 

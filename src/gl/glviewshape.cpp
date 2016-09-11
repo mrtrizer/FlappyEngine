@@ -26,14 +26,12 @@ static const char shapeFShader[] =
     "}\n";
 
 GLViewShape::GLViewShape() :
-    GLView(shapeVShader, shapeFShader),
-    m_colorRGBA({1.0f, 1.0f, 1.0f, 1.0f}){
-
-}
+    GLView(shapeVShader, shapeFShader)
+{}
 
 void GLViewShape::update(const Presenter& presenter) {
-    auto& rect = static_cast<const RectShape&>(presenter);
-    setColorRGBA({rect.color().r(), rect.color().g(), rect.color().b(), rect.color().a()});
+    auto& shape = static_cast<const RectShape&>(presenter);
+    m_colorRGBA = GLTools::GLColorRGBA(shape.color());
 }
 
 void GLViewShape::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {

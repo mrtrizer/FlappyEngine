@@ -2,6 +2,8 @@
 #include <exception>
 #include <sstream>
 
+#include <core/color.h>
+
 #include "gltools.h"
 
 namespace flappy {
@@ -23,6 +25,13 @@ void checkOpenGLerror(const char * file, const char * func, int line) {
 #endif
     }
 }
+
+GLColorRGBA::GLColorRGBA(const Color& color):
+    r(color.r()),
+    g(color.g()),
+    b(color.b()),
+    a(color.a())
+{}
 
 } // GLTools
 
