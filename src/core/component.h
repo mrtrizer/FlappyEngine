@@ -37,9 +37,9 @@ private:
     ManagerList* m_managerListPtr = nullptr; // optimization of MGR
 
 public:
-    template <typename Mgr>
-    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Mgr>()) {
-        return m_managerListPtr->MGR<Mgr>();
+    template <typename Manager>
+    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Manager>()) {
+        return m_managerListPtr->MGR<Manager>();
     }
 };
 

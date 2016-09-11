@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-class ResourceMgr;
+class ResManager;
 class Texture;
 class Atlas;
 
@@ -15,10 +15,10 @@ class ResourceHandler;
 
 class Quad {
 public:
-    Quad(std::shared_ptr<ResourceHandler<Atlas>> atlas, const std::string& quadName, std::shared_ptr<ResourceMgr> resourceMgr):
+    Quad(std::shared_ptr<ResourceHandler<Atlas>> atlas, const std::string& quadName, std::shared_ptr<ResManager> resourceManager):
         m_atlas(atlas),
         m_quadName(quadName),
-        m_resourceMgr(resourceMgr)
+        m_resourceManager(resourceManager)
     {}
     Tools::Rect rect();
     std::shared_ptr<ResourceHandler<Texture>> texture();
@@ -26,7 +26,7 @@ public:
 private:
     std::shared_ptr<ResourceHandler<Atlas>> m_atlas;
     std::string m_quadName;
-    std::shared_ptr<ResourceMgr> m_resourceMgr;
+    std::shared_ptr<ResManager> m_resourceManager;
 };
 
 } // flappy

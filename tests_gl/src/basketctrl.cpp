@@ -1,6 +1,6 @@
 #include "basketctrl.h"
 
-#include <core/entitymgr.h>
+#include <core/entitymanager.h>
 #include <core/sprite.h>
 #include <core/transform.h>
 

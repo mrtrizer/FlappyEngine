@@ -14,7 +14,7 @@ void Sprite::setPath(const std::string& path)
             isImgPath = false;
     if (isImgPath)
         quadPath = std::string(":") + quadPath;
-    m_quad = MGR<ResourceMgr>()->get<Quad>(quadPath);
+    m_quad = MGR<ResManager>()->get<Quad>(quadPath);
     updateView();
 }
 

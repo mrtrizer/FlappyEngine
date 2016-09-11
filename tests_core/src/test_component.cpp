@@ -4,10 +4,10 @@
 #include <memory>
 
 #include <core/entity.h>
-#include <core/entitymgr.h>
+#include <core/entitymanager.h>
 #include <core/transform.h>
 #include <core/managerlist.h>
-#include <core/entitymgr.h>
+#include <core/entitymanager.h>
 
 #include "testmanager.h"
 #include "testcomponent.h"
@@ -52,9 +52,9 @@ TEST_CASE( "Component::MGR()" ) {
 
     auto managerList = make_shared<ManagerList>();
     managerList->create<TestManager>(&mock.get());
-    managerList->create<EntityMgr>();
+    managerList->create<EntityManager>();
     managerList->init();
-    auto entity = managerList->MGR<EntityMgr>()->create();
+    auto entity = managerList->MGR<EntityManager>()->create();
     auto component = entity->create<Component>();
     component->MGR<TestManager>()->test();
 

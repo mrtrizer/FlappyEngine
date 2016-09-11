@@ -4,7 +4,7 @@ namespace flappy {
 
 using namespace std;
 
-GViewRect::GViewRect():
+GLViewRect::GLViewRect():
     m_rect(GL_TRIANGLE_STRIP)
 {
     vector<GLTools::Vertex> vertexList({
@@ -14,10 +14,7 @@ GViewRect::GViewRect():
                   {0.5f,0.5f}
               });
 
-    m_rect.addVBO<GLTools::Vertex>(vertexList.data(),
-                                 static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex),
-                                 GL_FLOAT,
-                                 getShader()->findAttr("aPosition"));
+    m_rect.addVBO<GLTools::Vertex>(vertexList, getShader()->findAttr("aPosition"));
 }
 
 } // flappy

@@ -1,10 +1,10 @@
-#include "appmgr.h"
+#include "appmanager.h"
 
 namespace flappy {
 
 using namespace std;
 
-AppMgr::AppMgr(int argc, const char * const *argv):
+AppManager::AppManager(int argc, const char * const *argv):
     m_args(argc)
 {
     if (argv == nullptr) {

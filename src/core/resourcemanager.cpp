@@ -1,4 +1,4 @@
-#include "resourcemgr.h"
+#include "resourcemanager.h"
 
 #include <sstream>
 
@@ -10,26 +10,26 @@ using namespace std;
 using namespace Tools;
 
 template <>
-void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResourceMgr> resourceMgr)
+void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resourceManager)
 {
     m_updated = false;
     m_resource = std::move(m_newResource);
-    addDependency(resourceMgr->get<Texture>(m_resource->dependence()));
+    addDependency(resourceManager->get<Texture>(m_resource->dependence()));
 }
 
 template<>
-unique_ptr<Texture> ResourceMgr::load<Texture>(const string& path) const
+unique_ptr<Texture> ResManager::load<Texture>(const string& path) const
 {
     return m_resourceLoader->getTexture(path);
 }
 
 template<>
-unique_ptr<Atlas> ResourceMgr::load<Atlas>(const string& path) const
+unique_ptr<Atlas> ResManager::load<Atlas>(const string& path) const
 {
     return m_resourceLoader->getAtlas(path);
 }
 
-void ResourceMgr::update(TimeDelta)
+void ResManager::update(TimeDelta)
 {
     for (auto i = m_resourceMap.begin(); i != m_resourceMap.end(); ) {
         i->second->update();
@@ -54,7 +54,7 @@ std::vector<std::string> split(const std::string &s, char delim)
 }
 
 template <>
-shared_ptr<ResourceHandler<Quad>> ResourceMgr::get<Quad>(const string& path)
+shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const string& path)
 {
     using namespace std;
 
@@ -76,7 +76,7 @@ shared_ptr<ResourceHandler<Quad>> ResourceMgr::get<Quad>(const string& path)
             ;{
                 auto atlas = Atlas(textureName); // create atlas dependent from image
                 atlas.addRect(quadName,{0,0,1,1});
-                MGR<ResourceMgr>()->set(atlasName, std::move(atlas));
+                MGR<ResManager>()->set(atlasName, std::move(atlas));
             }
             auto quadHandler = make_shared<ResourceHandler<Quad>>(path, unique_ptr<Quad>(new Quad(get<Atlas>(atlasName), quadName, shared_from_this())), shared_from_this());
             quadHandler->addDependency(get<Atlas>(atlasName));

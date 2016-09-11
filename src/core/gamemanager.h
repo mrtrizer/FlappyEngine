@@ -4,10 +4,10 @@
 
 namespace flappy {
 
-class GameMgr : public Manager<GameMgr>
+class GameManager : public Manager<GameManager>
 {
 public:
-    GameMgr();
+    GameManager();
 };
 
 } // flappy

@@ -1,7 +1,7 @@
 #include <core/sprite.h>
 #include <core/rectshape.h>
 #include <core/circleshape.h>
-#include <core/resourcemgr.h>
+#include <core/resourcemanager.h>
 
 #include "glviewfactory.h"
 #include "glviewrect.h"
@@ -21,7 +21,7 @@ template <> shared_ptr<View> ViewFactory::get<CircleShape>(const CircleShape&) c
 }
 
 template <> shared_ptr<View> ViewFactory::get<RectShape>(const RectShape&) const {
-    return make_shared<GViewRect>();
+    return make_shared<GLViewRect>();
 }
 
 } // flappy

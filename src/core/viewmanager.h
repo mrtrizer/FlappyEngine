@@ -3,7 +3,7 @@
 #include <memory>
 #include <glm/mat4x4.hpp>
 
-#include "viewmgr.h"
+#include "viewmanager.h"
 #include "viewfactory.h"
 #include "camera.h"
 #include "transform.h"
@@ -15,7 +15,7 @@ class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewMgr: public Manager<ViewMgr> {
+class ViewManager: public Manager<ViewManager> {
 public:
     struct Visual {
         std::shared_ptr<Presenter> presenter;

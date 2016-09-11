@@ -2,7 +2,7 @@
 
 #include "rectshape.h"
 
-#include <core/resourcemgr.h>
+#include <core/resourcemanager.h>
 
 namespace flappy {
 

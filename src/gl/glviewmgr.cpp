@@ -1,4 +1,4 @@
-#include "glviewmgr.h"
+#include "glviewmanager.h"
 
 #include <string>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <core/view.h>
 #include <core/presenter.h>
-#include <core/screenmgr.h>
+#include <core/screenmanager.h>
 
 #include "glshaderprogram.h"
 #include "glshaderprogram.h"
@@ -21,7 +21,7 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-void GLViewMgr::init() {
+void GLViewManager::init() {
     resize(100,100);
     LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -33,11 +33,11 @@ void GLViewMgr::init() {
     updateSize();
 }
 
-GLViewMgr::~GLViewMgr() {
+GLViewManager::~GLViewManager() {
 
 }
 
-void GLViewMgr::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
+void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 
@@ -53,8 +53,8 @@ void GLViewMgr::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     }
 }
 
-void GLViewMgr::updateViewPort() {
-    glViewport(0, 0, MGR<ScreenMgr>()->width(), MGR<ScreenMgr>()->height());
+void GLViewManager::updateViewPort() {
+    glViewport(0, 0, MGR<ScreenManager>()->width(), MGR<ScreenManager>()->height());
     CHECK_GL_ERROR;
 }
 

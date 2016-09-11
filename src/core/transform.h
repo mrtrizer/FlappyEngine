@@ -6,7 +6,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <core/entitymgr.h>
+#include <core/entitymanager.h>
 
 namespace flappy {
 

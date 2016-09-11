@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class ScreenMgr: public Manager<ScreenMgr>
+class ScreenManager: public Manager<ScreenManager>
 {
 public:
     glm::vec2 screenSize() const;

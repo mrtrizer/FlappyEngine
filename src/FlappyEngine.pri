@@ -166,25 +166,25 @@ HEADERS += \
     $$PWD/core/texture.h \
     $$PWD/gl/glviewcircle.h \
     $$PWD/gl/glviewrect.h \
-    $$PWD/core/inputmgr.h \
-    $$PWD/core/scenemgr.h \
-    $$PWD/core/screenmgr.h \
     $$PWD/core/entity.h \
     $$PWD/core/component.h \
-    $$PWD/core/entitymgr.h \
-    $$PWD/core/gamemgr.h \
-    $$PWD/core/viewmgr.h \
-    $$PWD/gl/glviewmgr.h \
-    $$PWD/core/resourcemgr.h \
     $$PWD/core/atlas.h \
     $$PWD/core/quad.h \
     $$PWD/core/iresourceloader.h \
     $$PWD/qt/qtresourceloader.h \
     $$PWD/core/managerlist.h \
-    $$PWD/core/appmgr.h \
     $$PWD/glut/glutinit.h \
     $$PWD/core/color.h \
-    $$PWD/core/scene.h
+    $$PWD/core/scene.h \
+    $$PWD/core/appmanager.h \
+    $$PWD/core/entitymanager.h \
+    $$PWD/core/gamemanager.h \
+    $$PWD/core/inputmanager.h \
+    $$PWD/core/scenemanager.h \
+    $$PWD/core/screenmanager.h \
+    $$PWD/gl/glviewmanager.h \
+    $$PWD/core/resourcemanager.h \
+    $$PWD/core/viewmanager.h
 
 
 SOURCES += \
@@ -205,22 +205,22 @@ SOURCES += \
     $$PWD/core/sprite.cpp \
     $$PWD/gl/glviewcircle.cpp \
     $$PWD/gl/glviewrect.cpp \
-    $$PWD/core/inputmgr.cpp \
-    $$PWD/core/scenemgr.cpp \
-    $$PWD/core/screenmgr.cpp \
-    $$PWD/core/entitymgr.cpp \
     $$PWD/core/transform.cpp \
-    $$PWD/core/gamemgr.cpp \
-    $$PWD/core/viewmgr.cpp \
     $$PWD/gl/glviewmgr.cpp \
-    $$PWD/core/resourcemgr.cpp \
     $$PWD/core/manager.cpp \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
     $$PWD/qt/qtresourceloader.cpp \
     $$PWD/core/managerlist.cpp \
-    $$PWD/core/appmgr.cpp \
     $$PWD/glut/glutinit.cpp \
-    $$PWD/core/color.cpp
+    $$PWD/core/color.cpp \
+    $$PWD/core/appmanager.cpp \
+    $$PWD/core/entitymanager.cpp \
+    $$PWD/core/gamemanager.cpp \
+    $$PWD/core/inputmanager.cpp \
+    $$PWD/core/resourcemanager.cpp \
+    $$PWD/core/scenemanager.cpp \
+    $$PWD/core/screenmanager.cpp \
+    $$PWD/core/viewmanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

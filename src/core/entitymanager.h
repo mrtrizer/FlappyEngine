@@ -13,7 +13,7 @@ namespace flappy {
 
 class Entity;
 
-class EntityMgr: public Manager<EntityMgr> {
+class EntityManager: public Manager<EntityManager> {
 public:    
     void update(TimeDelta dt);
 
@@ -50,11 +50,11 @@ private:
     }
 };
 
-template <> inline bool EntityMgr::check <void> (std::shared_ptr<Entity>) {
+template <> inline bool EntityManager::check <void> (std::shared_ptr<Entity>) {
     return true;
 }
 
 using EP = const std::shared_ptr<Entity>&;
-#define EM MGR<EntityMgr>()
+#define EM MGR<EntityManager>()
 
 } // flappy

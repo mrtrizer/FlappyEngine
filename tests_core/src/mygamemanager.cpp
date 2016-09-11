@@ -1,18 +1,18 @@
 #define CATCH_CONFIG_RUNNER
 #include "catch.h"
 
-#include "mygamemgr.h"
-#include <core/appmgr.h>
+#include "mygamemanager.h"
+#include <core/appmanager.h>
 
 namespace game {
 
 using namespace std;
 using namespace flappy;
 
-void MyGameMgr::init() {
+void MyGameManager::init() {
     Catch::Session session;
     session.configData().showDurations = Catch::ShowDurations::Always;
-    auto args = MGR<AppMgr>()->args();
+    auto args = MGR<AppManager>()->args();
     const char* argv[args.size()];
     for (unsigned i = 0; i < args.size(); i++)
         argv[i] = args[i].data();

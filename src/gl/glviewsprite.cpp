@@ -5,7 +5,7 @@
 #include <core/sprite.h>
 #include <gl/glshaderprogram.h>
 #include <gl/gltexture.h>
-#include <core/resourcemgr.h>
+#include <core/resourcemanager.h>
 
 namespace flappy {
 
@@ -53,16 +53,10 @@ GLViewSprite::GLViewSprite(const Sprite & presenter) :
 
 void GLViewSprite::updateVBOs() {
     m_rect.reset(GL_TRIANGLE_STRIP);
-    m_rect.addVBO<GLTools::Vertex>(m_vertexList.data(),
-                                 static_cast<int>(m_vertexList.size()) * sizeof(GLTools::Vertex),
-                                 GL_FLOAT,
-                                 getShader()->findAttr("aPosition"));
+    m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
 
     auto texture = m_quad->resource().texture();
-    m_rect.addVBO<GLTexture::UV>(texture->resource().uvs().data(),
-                                static_cast<int>(texture->resource().uvs().size()) * sizeof(GLTexture::UV),
-                                GL_FLOAT,
-                                getShader()->findAttr("aTexCoord"));
+    m_rect.addVBO<GLTexture::UV>(texture->resource().uvs(), getShader()->findAttr("aTexCoord"));
 
 }
 

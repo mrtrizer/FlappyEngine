@@ -58,9 +58,15 @@ public:
         m_method = method;
     }
 
+    // TODO: Take vector<ItemType> as first argument
+    // TODO: Automatic size determination
+    // TODO: Automatic OpenGL type determination
     template<typename ItemType>
-    void addVBO(const ItemType * buf, int bufSize, int itemType, GLint attr) {
+    void addVBO(const std::vector<ItemType> vertexList, GLint attr) {
         using namespace std;
+        const auto itemType = GL_FLOAT;
+        const int bufSize = int(vertexList.size() * sizeof(GLTools::Vertex));
+        const ItemType* buf = vertexList.data();
         VBO vbo;
         vbo.m_componentCount = sizeof(ItemType) / 4;
         vbo.m_itemType = itemType;
@@ -76,8 +82,6 @@ public:
         CHECK_GL_ERROR;
         glBufferData(GL_ARRAY_BUFFER, bufSize, buf, GL_DYNAMIC_DRAW);
         CHECK_GL_ERROR;
-        if (itemType != GL_FLOAT)
-            runtime_error("Now only GL_FLOAT items supported!");
     }
 
 private:

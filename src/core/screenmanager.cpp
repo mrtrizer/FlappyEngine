@@ -1,14 +1,14 @@
-#include "screenmgr.h"
+#include "screenmanager.h"
 
 namespace flappy {
 
 using namespace glm;
 
-vec2 ScreenMgr::screenSize() const {
+vec2 ScreenManager::screenSize() const {
     return vec2(m_width, m_height);
 }
 
-void ScreenMgr::resize(int width, int height) {
+void ScreenManager::resize(int width, int height) {
     m_width = width;
     m_height = height;
 }

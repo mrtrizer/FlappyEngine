@@ -6,7 +6,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-#include "entitymgr.h"
+#include "entitymanager.h"
 #include "tools.h"
 
 namespace flappy {

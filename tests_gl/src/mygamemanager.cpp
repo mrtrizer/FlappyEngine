@@ -1,7 +1,7 @@
-#include "mygamemgr.h"
+#include "mygamemanager.h"
 #include <core/texture.h>
 #include <core/atlas.h>
-#include <core/resourcemgr.h>
+#include <core/resourcemanager.h>
 #include <core/sprite.h>
 
 namespace game {

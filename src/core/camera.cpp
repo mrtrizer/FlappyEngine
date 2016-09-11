@@ -3,8 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "transform.h"
-#include "screenmgr.h"
-#include "scenemgr.h"
+#include "screenmanager.h"
+#include "scenemanager.h"
 #include "scene.h"
 
 namespace flappy {
@@ -19,13 +19,13 @@ Camera::Camera(float height):
 }
 
 void Camera::init() {
-    if (auto scene = MGR<SceneMgr>()->scene())
+    if (auto scene = MGR<SceneManager>()->scene())
         if (scene->camera() == nullptr)
             scene->setCamera(shared_from_this());
 }
 
 Rect Camera::rect() const {
-    float ratio = (float)MGR<ScreenMgr>()->screenSize().x / MGR<ScreenMgr>()->screenSize().y;
+    float ratio = (float)MGR<ScreenManager>()->screenSize().x / MGR<ScreenManager>()->screenSize().y;
     float offset = m_height / 2;
     return {
         -offset * ratio,
@@ -36,8 +36,8 @@ Rect Camera::rect() const {
 }
 
 vec3 Camera::screenToScene(const vec3 &pos) const {
-    float coeff = this->m_height / MGR<ScreenMgr>()->screenSize().y;
-    vec2 screenSize = MGR<ScreenMgr>()->screenSize() * 0.5f;
+    float coeff = this->m_height / MGR<ScreenManager>()->screenSize().y;
+    vec2 screenSize = MGR<ScreenManager>()->screenSize() * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

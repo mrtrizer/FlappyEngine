@@ -12,7 +12,7 @@ namespace flappy {
 
 class Texture;
 class Atlas;
-class ResourceMgr;
+class ResManager;
 
 class IResourceHandler {
 public:
@@ -21,17 +21,17 @@ public:
     virtual bool ready() const = 0;
     virtual bool updated() const = 0;
     virtual bool markedReload() const = 0;
-    virtual void reloadFromSource(std::shared_ptr<ResourceMgr> resourceMgr) = 0;
+    virtual void reloadFromSource(std::shared_ptr<ResManager> resourceManager) = 0;
 };
 
 template <typename ResourceT>
 class ResourceHandler: public IResourceHandler {
-    friend class ResourceMgr;
+    friend class ResManager;
 public:
-    ResourceHandler(std::string name, std::unique_ptr<ResourceT>&& resource, std::shared_ptr<ResourceMgr> resourceMgr):
+    ResourceHandler(std::string name, std::unique_ptr<ResourceT>&& resource, std::shared_ptr<ResManager> resourceManager):
         m_name(name)
     {
-        setNewResource(std::move(resource), resourceMgr);
+        setNewResource(std::move(resource), resourceManager);
     }
     ResourceHandler(std::string name): m_markReload(true), m_name(name) {}
     bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
@@ -67,7 +67,7 @@ public:
         }
     }
     bool markedReload() const override {return m_markReload;}
-    void reloadFromSource(std::shared_ptr<ResourceMgr> resourceMgr) override;
+    void reloadFromSource(std::shared_ptr<ResManager> resourceManager) override;
 
 private:
     std::unique_ptr<ResourceT> m_newResource = nullptr;
@@ -87,24 +87,24 @@ private:
     {
         m_markReload = true;
     }
-    void load(std::shared_ptr<ResourceMgr> resourceMgr, const std::string& path);
+    void load(std::shared_ptr<ResManager> resourceManager, const std::string& path);
 
-    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResourceMgr> resourceMgr)
+    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResManager> resourceManager)
     {
         m_newResource = std::move(newResource);
         m_markReload = false;
-        procNewResource(resourceMgr);
+        procNewResource(resourceManager);
     }
 
     /// No default implementation. Do not remove.
-    void procNewResource(std::shared_ptr<ResourceMgr> ) {}
+    void procNewResource(std::shared_ptr<ResManager> ) {}
 
 };
 
-class ResourceMgr: public Manager<ResourceMgr>, public std::enable_shared_from_this<ResourceMgr>
+class ResManager: public Manager<ResManager>, public std::enable_shared_from_this<ResManager>
 {
 public:
-    ResourceMgr(std::shared_ptr<IResourceLoader> resourceLoader):
+    ResManager(std::shared_ptr<IResourceLoader> resourceLoader):
         m_resourceLoader(resourceLoader)
     {}
 
@@ -141,29 +141,29 @@ private:
 };
 
 template <typename ResourceT>
-void ResourceHandler<ResourceT>::load(std::shared_ptr<ResourceMgr> resourceMgr, const std::string& path)
+void ResourceHandler<ResourceT>::load(std::shared_ptr<ResManager> resourceManager, const std::string& path)
 {
-    m_newResource = resourceMgr->load<ResourceT>(path);
+    m_newResource = resourceManager->load<ResourceT>(path);
 }
 
 template <typename ResourceT>
-void ResourceHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResourceMgr> resourceMgr)
+void ResourceHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResManager> resourceManager)
 {
-    setNewResource(std::move(resourceMgr->load<ResourceT>(m_name)), resourceMgr);
+    setNewResource(std::move(resourceManager->load<ResourceT>(m_name)), resourceManager);
 }
 
 template <>
-void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResourceMgr> resourceMgr);
+void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resourceManager);
 
 template<>
-std::unique_ptr<Texture> ResourceMgr::load<Texture>(const std::string& path) const;
+std::unique_ptr<Texture> ResManager::load<Texture>(const std::string& path) const;
 
 template<>
-std::unique_ptr<Atlas> ResourceMgr::load<Atlas>(const std::string& path) const;
+std::unique_ptr<Atlas> ResManager::load<Atlas>(const std::string& path) const;
 
 template <>
-std::shared_ptr<ResourceHandler<Quad>> ResourceMgr::get<Quad>(const std::string& path);
+std::shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const std::string& path);
 
 } // flappy
 
-#define RES_MGR MGR<ResourceMgr>()
+#define RES_MGR MGR<ResManager>()

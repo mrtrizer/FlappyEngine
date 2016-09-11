@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/entitymgr.h>
+#include <core/entitymanager.h>
 
 namespace flappy {
 

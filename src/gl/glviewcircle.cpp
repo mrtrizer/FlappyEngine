@@ -27,11 +27,7 @@ GViewCircle::GViewCircle(int vertexCount):
     m_vertexCount(vertexCount)
 {
     vector<GLTools::Vertex> vertexList = circleTriangleFan(0.5f, m_vertexCount);
-    m_circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array
-                                   static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex), //size
-                                   GL_FLOAT,                                    //item format
-                                   getShader()->findAttr("aPosition")           //attribute id
-                                   );
+    m_circle.addVBO<GLTools::Vertex>(vertexList, getShader()->findAttr("aPosition"));
 }
 
 } // flappy

@@ -7,7 +7,7 @@
 
 namespace flappy {
 
-class InputMgr: public Manager<InputMgr>
+class InputManager: public Manager<InputManager>
 {
 public:
     bool isMouseDown() const;
@@ -27,6 +27,6 @@ private:
     bool m_mousePressed = false;
 };
 
-#define INPUT MGR<InputMgr>()
+#define INPUT MGR<InputManager>()
 
 } // flappy

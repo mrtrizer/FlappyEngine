@@ -4,10 +4,10 @@
 
 namespace flappy {
 
-class AppMgr: public Manager<AppMgr>
+class AppManager: public Manager<AppManager>
 {
 public:
-    AppMgr(int argc = 1, const char* const* argv = nullptr);
+    AppManager(int argc = 1, const char* const* argv = nullptr);
 
     std::vector<std::string> args() { return m_args; }
 

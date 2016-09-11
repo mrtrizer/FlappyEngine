@@ -6,7 +6,7 @@ namespace flappy {
 
 class Scene;
 
-class SceneMgr: public Manager<SceneMgr>
+class SceneManager: public Manager<SceneManager>
 {
 public:
     void setScene(const std::shared_ptr<Scene>& scene);

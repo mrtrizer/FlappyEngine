@@ -2,7 +2,7 @@
 
 #include <glm/gtc/random.hpp>
 #include <core/sprite.h>
-#include <core/inputmgr.h>
+#include <core/inputmanager.h>
 #include <core/circleshape.h>
 
 #include "ballctrl.h"

@@ -45,6 +45,9 @@ void LOGE(Args ... args) {
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #endif
 
+#define VOID_VALUE ([](){})()
+#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), value;
+
 /// Gives some common tools
 namespace Tools
 {
