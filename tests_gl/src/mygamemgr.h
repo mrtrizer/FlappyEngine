@@ -3,7 +3,7 @@
 #include <functional>
 #include <glm/gtc/random.hpp>
 
-#include <core/scenemgr.h>
+#include <core/scene.h>
 #include <core/transform.h>
 #include <core/entitymgr.h>
 #include <core/inputmgr.h>

@@ -30,18 +30,18 @@ public:
     }
 
     template <typename Mgr, typename...T> inline
-    void createMgr(T&&...args) {
-        addMgr<Mgr>(std::make_shared<Mgr>(std::forward<T>(args)...));
+    void create(T&&...args) {
+        add<Mgr>(std::make_shared<Mgr>(std::forward<T>(args)...));
         MGR<Mgr>()->init();
     }
 
     template <typename IMgr, typename Mgr, typename ... T> inline
-    void overrideMgr(T&&...args) {
+    void override(T&&...args) {
         setMgrAtPos(IMgr::counter.id(), std::make_shared<Mgr>(std::forward<T>(args)...));
     }
 
     template <typename Mgr> inline
-    void addMgr(std::shared_ptr<Mgr> mgr) {
+    void add(std::shared_ptr<Mgr> mgr) {
         setMgrAtPos(Mgr::counter.id(), mgr);
     }
 

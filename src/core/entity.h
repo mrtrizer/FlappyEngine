@@ -17,7 +17,7 @@ public:
     Entity& operator=(const Entity&) = delete;
 
     template <typename ComponentT, typename ... Args>
-    std::shared_ptr<ComponentT> add(Args ... args) {
+    std::shared_ptr<ComponentT> create(Args ... args) {
         using namespace std;
         auto component = make_shared<ComponentT>(args...);
         component->setEntity(shared_from_this());

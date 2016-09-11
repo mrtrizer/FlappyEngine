@@ -20,19 +20,19 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     auto managerList = make_shared<ManagerList>();
-    managerList->createMgr<AppMgr>(argc, argv);
+    managerList->create<AppMgr>(argc, argv);
 {?IF not console_mode?}
-    managerList->createMgr<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
-    managerList->createMgr<EntityMgr>();
-    managerList->createMgr<SceneMgr>();
-    managerList->createMgr<ScreenMgr>();
-    managerList->createMgr<InputMgr>();
+    managerList->create<ResourceMgr>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
+    managerList->create<EntityMgr>();
+    managerList->create<SceneMgr>();
+    managerList->create<ScreenMgr>();
+    managerList->create<InputMgr>();
 
 
     GLUTInit::initGLUT(managerList);
 {?ENDIF?}
 {?IF console_mode?}
-    managerList->createMgr<game::MyGameMgr>();
+    managerList->create<game::MyGameMgr>();
 {?ENDIF?}
 
     managerList->init();

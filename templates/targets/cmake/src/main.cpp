@@ -25,17 +25,17 @@ int main(int argc, char *argv[])
     auto flappyApp = make_shared<FlappyApp>();
 {?IF not console_mode?}
 #ifdef PNG_FOUND
-    flappyApp->createMgr<ResourceMgr>(make_shared<LibPNGResourceLoader>("./res/"));
+    flappyApp->create<ResourceMgr>(make_shared<LibPNGResourceLoader>("./res/"));
 #elif SDL_IMAGE_FOUND
-    flappyApp->createMgr<ResourceMgr>(make_shared<SDLResourceLoader>("./res/"));
+    flappyApp->create<ResourceMgr>(make_shared<SDLResourceLoader>("./res/"));
 #endif
-    flappyApp->createMgr<EntityMgr>();
-    flappyApp->createMgr<SceneMgr>();
-    flappyApp->createMgr<ScreenMgr>();
-    flappyApp->createMgr<InputMgr>();
+    flappyApp->create<EntityMgr>();
+    flappyApp->create<SceneMgr>();
+    flappyApp->create<ScreenMgr>();
+    flappyApp->create<InputMgr>();
     GLUTMgr::initGLUT(argc, argv, flappyApp);
 {?ENDIF?}
-    flappyApp->createMgr<game::MyGameMgr>();
+    flappyApp->create<game::MyGameMgr>();
 
     flappyApp->init();
 

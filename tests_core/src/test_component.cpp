@@ -41,7 +41,7 @@ TEST_CASE( "Component::init()") {
 TEST_CASE( "Component::entity()" ) {
     auto managerList = std::make_shared<ManagerList>();
     auto entity = std::make_shared<Entity>(managerList);
-    entity->add<TestComponent>();
+    entity->create<TestComponent>();
     REQUIRE(entity->get<TestComponent>()->entity() == entity);
 }
 
@@ -51,11 +51,11 @@ TEST_CASE( "Component::MGR()" ) {
     Fake(Method(mock,test));
 
     auto managerList = make_shared<ManagerList>();
-    managerList->createMgr<TestManager>(&mock.get());
-    managerList->createMgr<EntityMgr>();
+    managerList->create<TestManager>(&mock.get());
+    managerList->create<EntityMgr>();
     managerList->init();
     auto entity = managerList->MGR<EntityMgr>()->create();
-    auto component = entity->add<Component>();
+    auto component = entity->create<Component>();
     component->MGR<TestManager>()->test();
 
     Verify(Method(mock, init), Method(mock,test)).Exactly(1);

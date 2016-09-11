@@ -19,20 +19,20 @@ void GameCtrl::createBall() {
     EM->create([=](EP e) {
         switch (linearRand(0,2)) {
         case 0:
-            e->add<Sprite>()->setPath(string("atlas_baskets:") + color);
+            e->create<Sprite>()->setPath(string("atlas_baskets:") + color);
             break;
         case 1:
-            e->add<CircleShape>()->setColor({0,0,0});
+            e->create<CircleShape>()->setColor({0,0,0});
             break;
         case 2:
-            e->add<RectShape>()->setColor({0,0.5f,0,0.5f});
+            e->create<RectShape>()->setColor({0,0.5f,0,0.5f});
             break;
         }
         float randX = linearRand(-30, 30);
-        auto transform = e->add<Transform>();
+        auto transform = e->create<Transform>();
         transform->setPos({randX,-50, 0});
         transform->setScale(10);
-        e->add<BallCtrl>()->color = color;
+        e->create<BallCtrl>()->color = color;
     });
 }
 

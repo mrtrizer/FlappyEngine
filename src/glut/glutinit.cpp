@@ -53,7 +53,7 @@ void render() {
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
     auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>());
-    g_managerList->addMgr(viewMgr);
+    g_managerList->add(viewMgr);
     viewMgr->init();
     viewMgr->resize(width, height);
 }
@@ -89,7 +89,7 @@ void initGLUT(shared_ptr<ManagerList> managerList) {
     glewInit();
 #endif
 
-    managerList->createMgr<GLViewMgr>(make_shared<GLViewFactory>());
+    managerList->create<GLViewMgr>(make_shared<GLViewFactory>());
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

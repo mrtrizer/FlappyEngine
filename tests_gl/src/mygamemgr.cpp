@@ -12,14 +12,14 @@ using namespace flappy;
 
 void MyScene::createBasket(string color, vec2 pos) {
     EM->create([=](EP e) {
-        auto sprite = e->add<Sprite>();
+        auto sprite = e->create<Sprite>();
         sprite->setPath(string("atlas_baskets:") + color);
 
-        auto transform = e->add<Transform>();
+        auto transform = e->create<Transform>();
         transform->setPos(vec3(pos, 0));
         transform->setScale(20);
 
-        e->add<BasketCtrl>()->setColor(color);
+        e->create<BasketCtrl>()->setColor(color);
     });
 }
 
@@ -32,19 +32,19 @@ void MyScene::init() {
 
     //Camera
     EM->create([=](EP e){
-        e->add<Camera>();
+        e->create<Camera>();
     });
 
     //Game controller
     EM  ->create([=](EP e){
-        e->add<GameCtrl>();
+        e->create<GameCtrl>();
     });
 
     //Background
     EM->create([=](EP e){
-        auto sprite = e->add<Sprite>();
+        auto sprite = e->create<Sprite>();
         sprite->setPath("img_background");
-        auto transform = e->add<Transform>();
+        auto transform = e->create<Transform>();
         transform->setScale(200);
     });
 
