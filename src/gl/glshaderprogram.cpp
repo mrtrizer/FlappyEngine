@@ -23,34 +23,34 @@ using namespace std;
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
 GLShaderProgram::GLShaderProgram(const string& vertexSource, const string& fragmentSource) {
-    vertexShader = loadShader(GL_VERTEX_SHADER, vertexSource);
-    fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentSource);
+    m_vertexShader = loadShader(GL_VERTEX_SHADER, vertexSource);
+    m_fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentSource);
 
-    program = glCreateProgram();
-    if (program) {
-        glAttachShader(program, vertexShader);
+    m_program = glCreateProgram();
+    if (m_program) {
+        glAttachShader(m_program, m_vertexShader);
         CHECK_GL_ERROR;
-        glAttachShader(program, fragmentShader);
+        glAttachShader(m_program, m_fragmentShader);
         CHECK_GL_ERROR;
-        glLinkProgram(program);
+        glLinkProgram(m_program);
         CHECK_GL_ERROR;
         GLint linkStatus = GL_FALSE;
-        glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+        glGetProgramiv(m_program, GL_LINK_STATUS, &linkStatus);
         if (linkStatus != GL_TRUE) {
-            PRINT_INFO(Program, program);
-            glDeleteProgram(program);
-            program = 0;
+            PRINT_INFO(Program, m_program);
+            glDeleteProgram(m_program);
+            m_program = 0;
         }
     }
 }
 
 GLShaderProgram::~GLShaderProgram() {
     //TODO: Is it a proper cleanup?
-    glDetachShader(program, vertexShader);
+    glDetachShader(m_program, m_vertexShader);
     CHECK_GL_ERROR;
-    glDetachShader(program, fragmentShader);
+    glDetachShader(m_program, m_fragmentShader);
     CHECK_GL_ERROR;
-    glDeleteProgram(program);
+    glDeleteProgram(m_program);
     CHECK_GL_ERROR;
 }
 

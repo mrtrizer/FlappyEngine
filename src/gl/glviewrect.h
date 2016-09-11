@@ -8,10 +8,10 @@ namespace flappy {
 class GViewRect: public GLViewShape {
 public:
     GViewRect();
-    const GLAttribArray & getAttribArray() const override {return rect;}
+    const GLAttribArray & getAttribArray() const override {return m_rect;}
 
 private:
-    GLAttribArray rect;
+    GLAttribArray m_rect;
 };
 
 } // flappy

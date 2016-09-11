@@ -24,10 +24,10 @@ public:
     void update(const Presenter& presenter) override;
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     virtual const GLAttribArray & getAttribArray() const = 0;
-    void setColorRGBA(ColorRGBA colorRGBA){this->colorRGBA = colorRGBA;}
+    void setColorRGBA(ColorRGBA colorRGBA){this->m_colorRGBA = colorRGBA;}
 
 private:
-    ColorRGBA colorRGBA;
+    ColorRGBA m_colorRGBA;
 };
 
 } // flappy

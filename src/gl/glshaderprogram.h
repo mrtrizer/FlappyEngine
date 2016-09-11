@@ -20,7 +20,7 @@ public:
     void render(const GLAttribArray &, std::function<void()>) const;
     AttribLocation findAttr(const char*) const;
     UniformLocation findUniform(const char*) const;
-    inline Program getProgram() const {return program;}
+    inline Program getProgram() const {return m_program;}
 
     class shader_init_failed {};
 
@@ -31,9 +31,9 @@ protected:
 private:
     using ShaderType = GLenum;
 
-    GLuint fragmentShader;
-    GLuint vertexShader;
-    Program program;
+    GLuint m_fragmentShader;
+    GLuint m_vertexShader;
+    Program m_program;
 
     GLuint loadShader(ShaderType, const std::string& source);
 };

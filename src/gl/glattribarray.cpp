@@ -14,11 +14,11 @@ GLAttribArray::~GLAttribArray() {
 
 void GLAttribArray::bind() const {
     for (auto vbo: m_vboBufs) {
-        glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo.m_id);
         CHECK_GL_ERROR;
-        glVertexAttribPointer(vbo.attr, vbo.componentCount, vbo.itemType, GL_FALSE, 0, 0);
+        glVertexAttribPointer(vbo.m_attr, vbo.m_componentCount, vbo.m_itemType, GL_FALSE, 0, 0);
         CHECK_GL_ERROR;
-        glEnableVertexAttribArray(vbo.attr);
+        glEnableVertexAttribArray(vbo.m_attr);
         CHECK_GL_ERROR;
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
@@ -26,7 +26,7 @@ void GLAttribArray::bind() const {
 
 void GLAttribArray::unbind() const {
     for (auto vbo: m_vboBufs) {
-        glDisableVertexAttribArray(vbo.attr);
+        glDisableVertexAttribArray(vbo.m_attr);
         CHECK_GL_ERROR;
     }
 }

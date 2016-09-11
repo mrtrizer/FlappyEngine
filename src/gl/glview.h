@@ -20,19 +20,19 @@ public:
     GLView(const char * vSource, const char * fSource) {
         using namespace std;
         //TODO: move to getShader for garaties of calling in GL context?
-        if (weakShader.expired())
-            weakShader = shader = make_shared<GLShaderProgram>(vSource, fSource);
+        if (m_weakShader.expired())
+            m_weakShader = m_shader = make_shared<GLShaderProgram>(vSource, fSource);
         else
-            shader = weakShader.lock();
+            m_shader = m_weakShader.lock();
     }
 protected:
-    std::shared_ptr<GLShaderProgram> getShader(){return shader;}
+    std::shared_ptr<GLShaderProgram> getShader(){return m_shader;}
 private:
-    static std::weak_ptr<GLShaderProgram> weakShader;
-    std::shared_ptr<GLShaderProgram> shader;
+    static std::weak_ptr<GLShaderProgram> m_weakShader;
+    std::shared_ptr<GLShaderProgram> m_shader;
 };
 
 template<typename Derived>
-std::weak_ptr<GLShaderProgram> GLView<Derived>::weakShader;
+std::weak_ptr<GLShaderProgram> GLView<Derived>::m_weakShader;
 
 } // flappy

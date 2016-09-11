@@ -19,7 +19,7 @@ public:
     void bind(GLShaderProgram::UniformLocation uniformLoc, int n);
 
 private:
-    GLuint texture;
+    GLuint m_texture;
 };
 
 } // flappy

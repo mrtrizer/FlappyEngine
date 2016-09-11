@@ -10,8 +10,8 @@ namespace flappy {
 void Button::update(TimeDelta) {
     if (MGR<InputMgr>()->isMouseDown()) {
         if (isInField()) {
-            if (onClick != nullptr)
-                onClick();
+            if (m_onClick != nullptr)
+                m_onClick();
             entity()->get<Transform>()->setScale(0.95f);
         }
     }

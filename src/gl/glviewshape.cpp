@@ -27,7 +27,7 @@ static const char shapeFShader[] =
 
 GLViewShape::GLViewShape() :
     GLView(shapeVShader, shapeFShader),
-    colorRGBA({1.0f, 1.0f, 1.0f, 1.0f}){
+    m_colorRGBA({1.0f, 1.0f, 1.0f, 1.0f}){
 
 }
 
@@ -40,7 +40,7 @@ void GLViewShape::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     getShader()->render(getAttribArray(), [this, mvMatrix, pMartrix](){
         glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
         glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-        glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&colorRGBA));
+        glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
     });
 }
 

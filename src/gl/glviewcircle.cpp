@@ -23,11 +23,11 @@ vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int vertexCount)
 }
 
 GViewCircle::GViewCircle(int vertexCount):
-    circle(GL_TRIANGLE_FAN),
+    m_circle(GL_TRIANGLE_FAN),
     m_vertexCount(vertexCount)
 {
     vector<GLTools::Vertex> vertexList = circleTriangleFan(0.5f, m_vertexCount);
-    circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array
+    m_circle.addVBO<GLTools::Vertex>(vertexList.data(),                           //data array
                                    static_cast<int>(vertexList.size()) * sizeof(GLTools::Vertex), //size
                                    GL_FLOAT,                                    //item format
                                    getShader()->findAttr("aPosition")           //attribute id

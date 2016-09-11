@@ -8,10 +8,10 @@ namespace flappy {
 class GViewCircle: public GLViewShape {
 public:
     GViewCircle(int vertexCount);
-    const GLAttribArray& getAttribArray() const override {return circle; }
+    const GLAttribArray& getAttribArray() const override {return m_circle; }
 
 private:
-    GLAttribArray circle;
+    GLAttribArray m_circle;
     int m_vertexCount = 32;
 
     std::vector<GLTools::Vertex> circleTriangleFan(float r, int vertexCount);

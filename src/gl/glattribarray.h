@@ -13,9 +13,9 @@ public:
     template<typename ItemType>
     void writeData(const ItemType * buf, int bufSize) {
         using namespace std;
-        if (bufSize > size)
+        if (bufSize > m_size)
             throw runtime_error("New buffer is larger than old one.");
-        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
         CHECK_GL_ERROR;
         glBufferSubData(GL_ARRAY_BUFFER, 0, bufSize, buf);
         CHECK_GL_ERROR;
@@ -23,11 +23,11 @@ public:
         CHECK_GL_ERROR;
     }
 private:
-    int itemType;
-    int componentCount;
-    GLint attr;
-    GLuint id;
-    int size;
+    int m_itemType;
+    int m_componentCount;
+    GLint m_attr;
+    GLuint m_id;
+    int m_size;
 };
 
 /// Contains VBOs, draw method and item count for drawArrays().
@@ -50,7 +50,7 @@ public:
 
     void reset(Method method = GL_TRIANGLES) {
         for (VBO i: m_vboBufs) {
-            glDeleteBuffers(1,&i.id);
+            glDeleteBuffers(1,&i.m_id);
             CHECK_GL_ERROR;
         }
         m_vboBufs.clear();
@@ -62,17 +62,17 @@ public:
     void addVBO(const ItemType * buf, int bufSize, int itemType, GLint attr) {
         using namespace std;
         VBO vbo;
-        vbo.componentCount = sizeof(ItemType) / 4;
-        vbo.itemType = itemType;
-        vbo.attr = attr;
-        vbo.size = bufSize;
+        vbo.m_componentCount = sizeof(ItemType) / 4;
+        vbo.m_itemType = itemType;
+        vbo.m_attr = attr;
+        vbo.m_size = bufSize;
         int count = bufSize / sizeof(ItemType);
         if ((count < m_size) || (m_size == -1)) //I keep min count of attrib items to use in drawArrays
             m_size = count;
-        glGenBuffers(1, &vbo.id);
+        glGenBuffers(1, &vbo.m_id);
         CHECK_GL_ERROR;
         m_vboBufs.push_back(vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo.id);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo.m_id);
         CHECK_GL_ERROR;
         glBufferData(GL_ARRAY_BUFFER, bufSize, buf, GL_DYNAMIC_DRAW);
         CHECK_GL_ERROR;

@@ -10,9 +10,9 @@ GLTexture::GLTexture(const char *bits, int width, int height)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     CHECK_GL_ERROR;
-    glGenTextures(1, &texture);
+    glGenTextures(1, &m_texture);
     CHECK_GL_ERROR;
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
     CHECK_GL_ERROR;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     CHECK_GL_ERROR;
@@ -64,14 +64,14 @@ GLTexture::GLTexture(const char *bits, int width, int height)
 }
 
 GLTexture::~GLTexture() {
-    glDeleteTextures(1,&texture);
+    glDeleteTextures(1,&m_texture);
     CHECK_GL_ERROR;
 }
 
 void GLTexture::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
     glActiveTexture(GL_TEXTURE0 + n);
     CHECK_GL_ERROR;
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
     CHECK_GL_ERROR;
     glUniform1i(uniformLoc, 0);
     CHECK_GL_ERROR;

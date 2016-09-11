@@ -13,7 +13,7 @@ class GLViewFactory;
 class GLViewMgr : public ViewMgr {
 public:
     GLViewMgr(const std::shared_ptr<GLViewFactory> & factory):
-        factory(factory)
+        m_factory(factory)
     {
 
     }
@@ -23,7 +23,7 @@ public:
 protected:
     void updateViewPort() override;
 private:
-    std::shared_ptr<GLViewFactory> factory;
+    std::shared_ptr<GLViewFactory> m_factory;
 };
 
 } // flappy

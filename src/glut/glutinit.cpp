@@ -40,47 +40,47 @@ namespace GLUTInit {
 
 using namespace std;
 
-shared_ptr<ManagerList> managerList;
-char** argv = nullptr;
-int argc = 0;
+shared_ptr<ManagerList> g_managerList;
+char** g_argv = nullptr;
+int g_argc = 0;
 
 void render() {
     glutSwapBuffers();
     glutPostRedisplay();
-    managerList->update();
+    g_managerList->update();
 }
 
 void resizeWindow(int width, int height) {
     //I create new view for constructor/destructor testing
     auto viewMgr = make_shared<GLViewMgr>(make_shared<GLViewFactory>());
-    managerList->addMgr(viewMgr);
+    g_managerList->addMgr(viewMgr);
     viewMgr->init();
     viewMgr->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
+    g_managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        managerList->MGR<InputMgr>()->setMouseDown();
+        g_managerList->MGR<InputMgr>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        managerList->MGR<InputMgr>()->setMouseUp();
+        g_managerList->MGR<InputMgr>()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
+    g_managerList->MGR<InputMgr>()->mouseMove(glm::vec3(x,y,0));
 }
 
 void initGLUT(shared_ptr<ManagerList> managerList) {
-    GLUTInit::managerList = managerList;
+    GLUTInit::g_managerList = managerList;
 
     auto args = managerList->MGR<AppMgr>()->args();
-    argv = new char*[args.size()];
+    g_argv = new char*[args.size()];
     for (unsigned i = 0; i < args.size(); i++) {
-        argv[i] = new char[args[i].size()];
-        std::strcpy(argv[i],args[i].data());
+        g_argv[i] = new char[args[i].size()];
+        std::strcpy(g_argv[i],args[i].data());
     }
-    argc = args.size();
-    glutInit(&argc, argv);
+    g_argc = args.size();
+    glutInit(&g_argc, g_argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
     //TODO: Ways to control size of window
     glutInitWindowSize(600, 600);

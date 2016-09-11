@@ -10,7 +10,7 @@ before_install:
  - cmake -G "Unix Makefiles"
  - sudo make install
  - cd ..
- - cd tests
+ - cd tests_core
  - flappy prebuild qt
  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
  - sudo apt-get update -qq
