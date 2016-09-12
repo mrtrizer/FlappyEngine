@@ -15,7 +15,7 @@ class ViewFactory;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager: public Manager<ViewManager> {
+class ViewManager: public Manager {
 public:
     struct Visual {
         std::shared_ptr<Presenter> presenter;

@@ -7,7 +7,7 @@
 
 namespace flappy {
 
-class InputManager: public Manager<InputManager>
+class InputManager: public Manager
 {
 public:
     bool mouseDown() const;

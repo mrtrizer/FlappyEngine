@@ -4,7 +4,7 @@
 
 namespace game {
 
-class MyGameManager : public flappy::Manager<MyGameManager>
+class MyGameManager : public flappy::Manager
 {
 public:
     void init() override;

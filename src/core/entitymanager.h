@@ -13,7 +13,7 @@ namespace flappy {
 
 class Entity;
 
-class EntityManager: public Manager<EntityManager> {
+class EntityManager: public Manager {
 public:    
     void update(TimeDelta dt);
 

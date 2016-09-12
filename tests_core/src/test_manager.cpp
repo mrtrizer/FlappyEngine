@@ -11,4 +11,4 @@
 using namespace flappy;
 using namespace std;
 
-// Nothing to test. Tested in previous tests.
+// There are nothing to test. Tested in previous tests.

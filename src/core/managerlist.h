@@ -4,9 +4,11 @@
 #include <memory>
 #include <vector>
 
+#include "classid.h"
+
 namespace flappy {
 
-class AbstractManager;
+class Manager;
 
 class ManagerList : public std::enable_shared_from_this<ManagerList> {
 public:
@@ -18,9 +20,9 @@ public:
     template <typename ManagerT> inline
     std::shared_ptr<ManagerT> MGR() {
         using namespace std;
-        shared_ptr<AbstractManager> manager = nullptr;
-        if (m_managerList.size() > ManagerT::counter.id())
-            manager = m_managerList[ManagerT::counter.id()];
+        shared_ptr<Manager> manager = nullptr;
+        if (m_managerList.size() > ClassId<Manager, ManagerT>::id())
+            manager = m_managerList[ClassId<Manager, ManagerT>::id()];
         if (manager) { //if found
             return static_pointer_cast<ManagerT>(manager);
         } else { //search in parent
@@ -42,13 +44,13 @@ public:
     template <typename DestManagerT, typename ManagerT, typename ... ArgsT> inline
     std::shared_ptr<ManagerT> override(ArgsT&&...args) {
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
-        setManagerAtPos(DestManagerT::counter.id(), manager);
+        setManagerAtPos(ClassId<Manager, DestManagerT>::id(), manager);
         return manager;
     }
 
     template <typename ManagerT> inline
     void add(const std::shared_ptr<ManagerT>& manager) {
-        setManagerAtPos(ManagerT::counter.id(), manager);
+        setManagerAtPos(ClassId<Manager, ManagerT>::id(), manager);
     }
 
     void setParent(const std::weak_ptr<ManagerList>& parent) {
@@ -57,10 +59,10 @@ public:
 
 private:
     std::chrono::steady_clock::time_point m_lastTime;
-    std::vector<std::shared_ptr<AbstractManager>> m_managerList;
+    std::vector<std::shared_ptr<Manager>> m_managerList;
     std::weak_ptr<ManagerList> m_parent;
 
-    void setManagerAtPos(unsigned int pos, std::shared_ptr<AbstractManager> manager);
+    void setManagerAtPos(unsigned int pos, std::shared_ptr<Manager> manager);
 };
 
 } // flappy

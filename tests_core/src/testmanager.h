@@ -2,7 +2,7 @@
 
 #include <core/manager.h>
 
-class TestManager: public flappy::Manager<TestManager> {
+class TestManager: public flappy::Manager {
 public:
     class IMock {
     public:
@@ -34,6 +34,6 @@ private:
     IMock* m_mockComponent;
 };
 
-class TestManagerEmpty1: public flappy::Manager<TestManagerEmpty1> {};
-class TestManagerEmpty2: public flappy::Manager<TestManagerEmpty2> {};
-class TestManagerOverride: public flappy::Manager<TestManager> {};
+class TestManagerEmpty1: public flappy::Manager {};
+class TestManagerEmpty2: public flappy::Manager {};
+class TestManagerOverride: public flappy::Manager {};

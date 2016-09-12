@@ -4,31 +4,18 @@
 
 #include <core/tools.h>
 #include <core/managerlist.h>
+#include <core/classid.h>
 
 namespace flappy {
 
-/// Gives index for every Manager
-class ManagerCounter {
-public:
-    ManagerCounter():
-        m_curId(m_count) {
-        m_count++;
-    }
-    unsigned id() {return m_curId;}
-    static unsigned count() {return m_count;}
-private:
-    static unsigned m_count;
-    const unsigned m_curId = 0;
-};
-
-class AbstractManager
+class Manager
 {
     friend class ManagerList;
 public:
-    AbstractManager() = default;
-    virtual ~AbstractManager() = default;
-    AbstractManager(const AbstractManager&) = delete;
-    void operator=(AbstractManager const&) = delete;
+    Manager() = default;
+    virtual ~Manager() = default;
+    Manager(const Manager&) = delete;
+    void operator=(Manager const&) = delete;
 
 protected:
     const std::weak_ptr<ManagerList>& managerList() const {return m_managerList;}
@@ -50,15 +37,5 @@ public:
         return m_managerListPtr->MGR<Mgr>();
     }
 };
-
-template <typename Derived>
-class Manager: public AbstractManager
-{
-public:
-    static ManagerCounter counter;
-};
-
-template <typename Derived>
-ManagerCounter Manager<Derived>::counter;
 
 } // flappy

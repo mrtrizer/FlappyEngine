@@ -101,7 +101,7 @@ private:
 
 };
 
-class ResManager: public Manager<ResManager>, public std::enable_shared_from_this<ResManager>
+class ResManager: public Manager, public std::enable_shared_from_this<ResManager>
 {
 public:
     ResManager(std::shared_ptr<IResourceLoader> resourceLoader):

@@ -183,7 +183,8 @@ HEADERS += \
     $$PWD/core/screenmanager.h \
     $$PWD/gl/glviewmanager.h \
     $$PWD/core/resourcemanager.h \
-    $$PWD/core/viewmanager.h
+    $$PWD/core/viewmanager.h \
+    $$PWD/core/classid.h
 
 
 SOURCES += \
@@ -206,7 +207,6 @@ SOURCES += \
     $$PWD/gl/glviewrect.cpp \
     $$PWD/core/transform.cpp \
     $$PWD/gl/glviewmgr.cpp \
-    $$PWD/core/manager.cpp \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
     $$PWD/qt/qtresourceloader.cpp \
