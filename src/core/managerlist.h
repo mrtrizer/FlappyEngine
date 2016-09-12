@@ -15,39 +15,43 @@ public:
     void init();
 
     // TODO: What about returing of pointer or reference?
-    template <typename Manager> inline
-    std::shared_ptr<Manager> MGR() {
+    template <typename ManagerT> inline
+    std::shared_ptr<ManagerT> MGR() {
         using namespace std;
         shared_ptr<AbstractManager> manager = nullptr;
-        if (m_managerList.size() > Manager::counter.id())
-            manager = m_managerList[Manager::counter.id()];
+        if (m_managerList.size() > ManagerT::counter.id())
+            manager = m_managerList[ManagerT::counter.id()];
         if (manager) { //if found
-            return static_pointer_cast<Manager>(manager);
+            return static_pointer_cast<ManagerT>(manager);
         } else { //search in parent
             if (auto parent = m_parent.lock())
-                return parent->MGR<Manager>();
+                return parent->MGR<ManagerT>();
             else
                 return nullptr;
         }
     }
 
-    template <typename Manager, typename...T> inline
-    void create(T&&...args) {
-        add<Manager>(std::make_shared<Manager>(std::forward<T>(args)...));
-        MGR<Manager>()->init();
+    template <typename ManagerT, typename...ArgsT> inline
+    std::shared_ptr<ManagerT> create(ArgsT&&...args) {
+        auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
+        add<ManagerT>(manager);
+        manager->init();
+        return manager;
     }
 
-    template <typename IManager, typename Manager, typename ... T> inline
-    void override(T&&...args) {
-        setManagerAtPos(IManager::counter.id(), std::make_shared<Manager>(std::forward<T>(args)...));
+    template <typename DestManagerT, typename ManagerT, typename ... ArgsT> inline
+    std::shared_ptr<ManagerT> override(ArgsT&&...args) {
+        auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
+        setManagerAtPos(DestManagerT::counter.id(), manager);
+        return manager;
     }
 
-    template <typename Manager> inline
-    void add(std::shared_ptr<Manager> manager) {
-        setManagerAtPos(Manager::counter.id(), manager);
+    template <typename ManagerT> inline
+    void add(const std::shared_ptr<ManagerT>& manager) {
+        setManagerAtPos(ManagerT::counter.id(), manager);
     }
 
-    void setParent(std::weak_ptr<ManagerList> parent) {
+    void setParent(const std::weak_ptr<ManagerList>& parent) {
         m_parent = parent;
     }
 
