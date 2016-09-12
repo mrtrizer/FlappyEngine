@@ -13,7 +13,7 @@ public:
 
 private:
     float m_time = 0;
-    glm::vec3 m_mouseDownPos;
+    glm::vec2 m_mouseDownPos;
     std::string m_color;
 
     void createBall();

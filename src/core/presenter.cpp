@@ -30,4 +30,9 @@ void Presenter::updateView(){
         m_view->externUpdate(shared_from_this());
 }
 
+void Presenter::setColor(const Color& color) {
+    m_color = color;
+    updateView();
+}
+
 } // flappy

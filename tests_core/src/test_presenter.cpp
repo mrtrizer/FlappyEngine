@@ -33,7 +33,7 @@ private:
     IMock& m_mock;
 };
 
-TEST_CASE( "Presenter::getGView") {
+TEST_CASE("Presenter::getGView") {
     Mock<TestPresenter::IMock> mock;
     Fake(Method(mock,makeGView));
     auto testPresenter = std::make_shared<TestPresenter> (mock.get());
@@ -42,7 +42,7 @@ TEST_CASE( "Presenter::getGView") {
     Verify(Method(mock,makeGView)).Exactly(1);
 }
 
-TEST_CASE( "Presenter::cleanGView") {
+TEST_CASE("Presenter::cleanGView") {
     Mock<TestPresenter::IMock> mock;
     Fake(Method(mock,makeGView));
     auto testPresenter = std::make_shared<TestPresenter> (mock.get());
@@ -50,4 +50,15 @@ TEST_CASE( "Presenter::cleanGView") {
     testPresenter->cleanGView();
     testPresenter->getGView(ViewFactory());
     Verify(Method(mock,makeGView)).Exactly(2);
+}
+
+TEST_CASE("Presenter::setColor() Presenter::color()") {
+    Mock<TestPresenter::IMock> mock;
+    auto testPresenter = std::make_shared<TestPresenter> (mock.get());
+    auto color = Color{0.1f,0.2f,0.3f,0.4f};
+    testPresenter->setColor(color);
+    REQUIRE(testPresenter->color().r() == color.r());
+    REQUIRE(testPresenter->color().g() == color.g());
+    REQUIRE(testPresenter->color().b() == color.b());
+    REQUIRE(testPresenter->color().a() == color.a());
 }

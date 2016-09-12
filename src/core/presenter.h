@@ -6,6 +6,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+#include "color.h"
 #include "entitymanager.h"
 #include "tools.h"
 
@@ -25,12 +26,15 @@ public:
     void cleanGView();
     void updateView();
     virtual void update(TimeDelta) {}
+    void setColor(const Color& color);
+    Color color() const { return m_color; }
 
 protected:
     /// Implement and call appropriate method from factory to get your own instance of GView.
     virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) = 0;
 private:
-    std::shared_ptr<View> m_view = nullptr;\
+    std::shared_ptr<View> m_view = nullptr;
+    Color m_color;
 };
 
 } // flappy

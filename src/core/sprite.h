@@ -9,7 +9,7 @@ namespace flappy {
 class Quad;
 
 /// @brief Holds a spritesheet params. May be one solid frame or be divided into several equal parts.
-class Sprite : public RectShape {
+class Sprite : public Presenter {
 public:
     void setPath(const std::string& path);
     std::string path() const { return m_path; }

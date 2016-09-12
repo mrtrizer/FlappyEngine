@@ -46,12 +46,12 @@ void GameCtrl::update(TimeDelta dt) {
         m_time = 0;
         createBall();
     }
-    if (INPUT->isMouseDown())
-        m_mouseDownPos = INPUT->getMousePos();
-    if (INPUT->isMouseUp())
+    if (INPUT->mouseDown())
+        m_mouseDownPos = INPUT->mousePos();
+    if (INPUT->mouseUp())
         EM->each<BallCtrl>([this](EP e) {
             auto ballCtrl = e->get<BallCtrl>();
-            if (m_mouseDownPos.x - INPUT->getMousePos().x > 0)
+            if (m_mouseDownPos.x - INPUT->mousePos().x > 0)
                 ballCtrl->slideSpeed = glm::max(-30.0f, ballCtrl->slideSpeed - 10);
             else
                 ballCtrl->slideSpeed = glm::min(30.0f, ballCtrl->slideSpeed + 10);
