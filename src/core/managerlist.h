@@ -14,13 +14,15 @@ public:
     void update();
     void init();
 
+    // TODO: What about returing of pointer or reference?
     template <typename Manager> inline
-    Manager* MGR() { //TODO: Can I return refrence to shared_ptr?
-        AbstractManager* manager = nullptr;
-        if (m_managerList.size() >= Manager::counter.id() + 1) //TODO: Can I avoid this checking?
-            manager = m_managerList[Manager::counter.id()].get();
+    std::shared_ptr<Manager> MGR() {
+        using namespace std;
+        shared_ptr<AbstractManager> manager = nullptr;
+        if (m_managerList.size() > Manager::counter.id())
+            manager = m_managerList[Manager::counter.id()];
         if (manager) { //if found
-            return reinterpret_cast<Manager*>(manager);
+            return static_pointer_cast<Manager>(manager);
         } else { //search in parent
             if (auto parent = m_parent.lock())
                 return parent->MGR<Manager>();

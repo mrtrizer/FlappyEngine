@@ -178,7 +178,6 @@ HEADERS += \
     $$PWD/core/scene.h \
     $$PWD/core/appmanager.h \
     $$PWD/core/entitymanager.h \
-    $$PWD/core/gamemanager.h \
     $$PWD/core/inputmanager.h \
     $$PWD/core/scenemanager.h \
     $$PWD/core/screenmanager.h \
@@ -216,11 +215,10 @@ SOURCES += \
     $$PWD/core/color.cpp \
     $$PWD/core/appmanager.cpp \
     $$PWD/core/entitymanager.cpp \
-    $$PWD/core/gamemanager.cpp \
     $$PWD/core/inputmanager.cpp \
-    $$PWD/core/resourcemanager.cpp \
     $$PWD/core/scenemanager.cpp \
     $$PWD/core/screenmanager.cpp \
-    $$PWD/core/viewmanager.cpp
+    $$PWD/core/viewmanager.cpp \
+    $$PWD/core/resmanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

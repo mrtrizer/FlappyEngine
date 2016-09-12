@@ -1,10 +1,10 @@
 #pragma once
 
-#include <core/gamemanager.h>
+#include <core/manager.h>
 
 namespace game {
 
-class MyGameManager : public flappy::GameManager
+class MyGameManager : public flappy::Manager<MyGameManager>
 {
 public:
     void init() override;

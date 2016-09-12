@@ -7,7 +7,6 @@
 #include <core/transform.h>
 #include <core/entitymanager.h>
 #include <core/inputmanager.h>
-#include <core/gamemanager.h>
 #include <ui/button.h>
 
 #include "ballctrl.h"
