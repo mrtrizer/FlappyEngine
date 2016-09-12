@@ -6,21 +6,30 @@ dist: trusty
 before_install:
  - git submodule update --init --recursive
  - git clone https://github.com/mrtrizer/FlappyTools.git flappytools
- - cd flappytools
+ - pushd flappytools
  - cmake -G "Unix Makefiles"
  - sudo make install
- - cd ..
- - cd tests_core
- - flappy prebuild qt
+ - popd
  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
  - sudo apt-get update -qq
  - sudo apt-get install -qq qt55base libglew-dev mesa-common-dev freeglut3-dev
 
 script:
- - cd targets/qt
- - qmake tests.pro
+#opengl test project
+ - pushd tests_gl
+ - flappy prebuild qt
+ - pushd targets/qt
+ - qmake tests_gl.pro
  - make
- - ./tests
+ - popd
+ - popd
+#core tests
+ - cd tests_core
+ - flappy prebuild qt
+ - cd targets/qt
+ - qmake tests_core.pro
+ - make
+ - ./tests_core
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

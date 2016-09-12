@@ -1,14 +1,14 @@
 {
-	"name":"testproject",
+	"name":"tests_gl",
 	"engine":"..",
 	"exclude":[],
 	"inc_dirs":[],
 	"console_mode":false,
 	"cmake": {
-		"exec_name":"testproject"
+		"exec_name":"tests_gl"
 	},
 	"android": {
-		"id":"testproject"
+		"id":"tests_gl"
 	},
 	"ios": {
 		"bundle_id":"com.flappyapp.testproject"

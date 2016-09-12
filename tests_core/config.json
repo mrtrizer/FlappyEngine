@@ -1,5 +1,5 @@
 {
-	"name":"tests",
+	"name":"tests_core",
 	"engine":"..",
 	"exclude":[],
 	"inc_dirs":[],
@@ -9,10 +9,10 @@
 		"cxxflags": "-O0 -fprofile-arcs -ftest-coverage --coverage"
 	},
 	"cmake": {
-		"exec_name":"tests"
+		"exec_name":"tests_core"
 	},
 	"android": {
-		"id":"tests"
+		"id":"tests_core"
 	},
 	"ios": {
 		"bundle_id":"com.flappyapp.tests"
