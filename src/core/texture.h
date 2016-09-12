@@ -12,7 +12,7 @@ public:
     };
 
     Texture():m_uvs({{0,1},{0,0},{1,1},{1,0}}) {}
-    virtual ~Texture() {}
+    virtual ~Texture() = default;
 
     std::vector<UV> uvs() const { return m_uvs; }
     float relWidth() const {return m_relWidth;}

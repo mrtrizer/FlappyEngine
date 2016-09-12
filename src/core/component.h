@@ -14,10 +14,10 @@ class Component {
     friend class ManagerList;
     friend class Entity;
 public:
-    Component(){}
+    Component() = default;
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
-    virtual ~Component() {}
+    virtual ~Component() = default;
     virtual void update(TimeDelta) {}
     virtual void init() {}
 

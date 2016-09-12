@@ -7,8 +7,3 @@
 
 using namespace flappy;
 using namespace std;
-
-
-TEST_CASE( "RectShape::") {
-    REQUIRE(true);
-}

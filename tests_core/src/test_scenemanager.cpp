@@ -4,11 +4,11 @@
 #include <memory>
 
 #include <core/managerlist.h>
+#include <core/scenemanager.h>
 
 using namespace flappy;
 using namespace std;
 
 
-TEST_CASE( "SceneManager::") {
-    REQUIRE(true);
+TEST_CASE( "SceneManager::setScene() SceneManager::scene()") {
 }

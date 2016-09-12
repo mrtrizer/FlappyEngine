@@ -35,7 +35,7 @@ Rect Camera::rect() const {
     };
 }
 
-vec3 Camera::screenToScene(const vec3 &pos) const {
+vec3 Camera::screenToScene(const vec2 &pos) const {
     float coeff = this->m_height / MGR<ScreenManager>()->screenSize().y;
     vec2 screenSize = MGR<ScreenManager>()->screenSize() * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);

@@ -11,7 +11,11 @@ Atlas::Atlas(const string& dependence): m_dependence(dependence)
 }
 
 Rect Atlas::rect(const string& name) {
-    return m_rectMap[name];
+    auto rectIter = m_rectMap.find(name);
+    if (rectIter != m_rectMap.end())
+        return rectIter->second;
+    LOGE("Rect with name %s is not found in atlas.", name.data());
+    return {0,0,1,1};
 }
 
 void Atlas::addRect(const string& name, const Rect& rect) {

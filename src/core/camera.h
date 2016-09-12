@@ -17,7 +17,7 @@ public:
     Camera(float m_height = 100);
     Tools::Rect rect() const;
     glm::mat4 pMatrix();
-    glm::vec3 screenToScene(const glm::vec3& pos) const;
+    glm::vec3 screenToScene(const glm::vec2 &pos) const;
     void init();
 
 private:

@@ -10,7 +10,7 @@ class Atlas;
 class IResourceLoader
 {
 public:
-    virtual ~IResourceLoader(){}
+    virtual ~IResourceLoader() = default;
     virtual std::unique_ptr<Texture> getTexture(const std::string& name) const = 0;
     virtual std::unique_ptr<Atlas> getAtlas(const std::string& name) const = 0;
 };

@@ -14,9 +14,9 @@ class View;
 class ViewFactory
 {
 public:
-    ViewFactory(){}
+    ViewFactory() = default;
 
-    virtual ~ViewFactory() {}
+    virtual ~ViewFactory()  = default;
 
     /// Should be specialized for every child of Presenter
     template <typename PresenterT>

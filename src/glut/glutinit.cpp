@@ -59,7 +59,7 @@ void resizeWindow(int width, int height) {
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    g_managerList->MGR<InputManager>()->mouseMove(glm::vec3(x,y,0));
+    g_managerList->MGR<InputManager>()->setMousePos({x,y});
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
         g_managerList->MGR<InputManager>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
@@ -67,7 +67,7 @@ void mouseFunc(int button, int state, int x, int y) {
 }
 
 void passiveMotionFunc(int x, int y) {
-    g_managerList->MGR<InputManager>()->mouseMove(glm::vec3(x,y,0));
+    g_managerList->MGR<InputManager>()->setMousePos({x,y});
 }
 
 void initGLUT(shared_ptr<ManagerList> managerList) {

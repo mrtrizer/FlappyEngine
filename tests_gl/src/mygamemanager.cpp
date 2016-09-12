@@ -24,7 +24,7 @@ void MyScene::createBasket(string color, vec2 pos) {
 }
 
 void MyScene::init() {
-    Atlas atlas("img_baskets");
+    auto atlas = Atlas("img_baskets");
     atlas.addRect("blue",{0,0,0.333f,1});
     atlas.addRect("green",{0.333f,0,0.333f * 2.0f,1.0f});
     atlas.addRect("red",{0.333f * 2.0f,0,0.333 * 3.0f,1.0f});

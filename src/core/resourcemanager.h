@@ -16,7 +16,7 @@ class ResManager;
 
 class IResourceHandler {
 public:
-    virtual ~IResourceHandler() noexcept {}
+    virtual ~IResourceHandler() = default;
     virtual void update() = 0;
     virtual bool ready() const = 0;
     virtual bool updated() const = 0;

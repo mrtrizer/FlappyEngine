@@ -4,11 +4,11 @@
 #include <memory>
 
 #include <core/managerlist.h>
+#include <core/manager.h>
+
+#include "testmanager.h"
 
 using namespace flappy;
 using namespace std;
 
-
-TEST_CASE( "Manager::") {
-    REQUIRE(true);
-}
+// Nothing to test. Tested in previous tests.

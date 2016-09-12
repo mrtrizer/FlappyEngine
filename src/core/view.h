@@ -14,7 +14,7 @@ class Presenter;
 /// derived classes.
 class View : public std::enable_shared_from_this<View> {
 public:
-    virtual ~View(){}
+    virtual ~View() = default;
     void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
     void externUpdate(const std::shared_ptr<Presenter> & m_gPresenter);
 protected:

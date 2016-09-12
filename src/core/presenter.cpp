@@ -8,7 +8,7 @@ namespace flappy {
 using namespace std;
 
 /// Returns GView instance and creates new if gView is nullptr.
-shared_ptr<View> Presenter::getGView(const ViewFactory &factory) {
+shared_ptr<View> Presenter::getGView(const ViewFactory& factory) {
     if (m_view == nullptr) {
         m_view = makeGView(factory);
         updateView();

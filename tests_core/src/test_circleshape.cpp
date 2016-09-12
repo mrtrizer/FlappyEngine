@@ -10,5 +10,5 @@ using namespace std;
 
 
 TEST_CASE( "CircleShape::") {
-    REQUIRE(true);
+
 }

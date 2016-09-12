@@ -9,7 +9,7 @@ namespace flappy {
 class Atlas
 {
 public:
-    Atlas(const std::string& dependence);
+    Atlas(const std::string& dependence = "__img_missing__");
     /// Can't be const because m_rectMap[] is not const
     Tools::Rect rect(const std::string& name);
     void addRect(const std::string& name, const Tools::Rect &rect);

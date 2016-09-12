@@ -7,7 +7,7 @@ namespace flappy {
 
 class Scene: public ManagerList {
 public:
-    virtual ~Scene(){}
+    virtual ~Scene() = default;
     virtual void init() = 0;
     void setCamera(const std::shared_ptr<Camera>& camera) { m_camera = camera; }
     std::shared_ptr<Camera> camera() const { return m_camera; }

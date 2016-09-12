@@ -25,8 +25,8 @@ class AbstractManager
 {
     friend class ManagerList;
 public:
-    AbstractManager() {}
-
+    AbstractManager() = default;
+    virtual ~AbstractManager() = default;
     AbstractManager(const AbstractManager&) = delete;
     void operator=(AbstractManager const&) = delete;
 
@@ -45,9 +45,9 @@ private:
     ManagerList* m_managerListPtr = nullptr; // optimization of MGR
 
 public:
-    template <typename Manager>
-    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Manager>()) {
-        return m_managerListPtr->MGR<Manager>();
+    template <typename Mgr>
+    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Mgr>()) {
+        return m_managerListPtr->MGR<Mgr>();
     }
 };
 

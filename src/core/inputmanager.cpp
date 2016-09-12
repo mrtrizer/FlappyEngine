@@ -4,19 +4,19 @@ namespace flappy {
 
 using namespace glm;
 
-bool InputManager::isMouseDown() const {
+bool InputManager::mouseDown() const {
     return m_mouseDown == 1;
 }
 
-bool InputManager::isMouseUp() const {
+bool InputManager::mouseUp() const {
     return m_mouseUp == 1;
 }
 
-bool InputManager::isMousePressed() const {
+bool InputManager::mousePressed() const {
     return m_mousePressed;
 }
 
-vec3 InputManager::getMousePos() const {
+vec2 InputManager::mousePos() const {
     return m_mousePos;
 }
 
@@ -37,7 +37,7 @@ void InputManager::setMouseUp() {
     m_mousePressed = false;
 }
 
-void InputManager::mouseMove(const vec3 &mousePos) {
+void InputManager::setMousePos(const vec2 &mousePos) {
     this->m_mousePos = mousePos;
 }
 

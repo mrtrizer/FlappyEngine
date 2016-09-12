@@ -4,11 +4,14 @@
 #include <memory>
 
 #include <core/managerlist.h>
+#include <core/sprite.h>
 
 using namespace flappy;
 using namespace std;
 
 
-TEST_CASE( "Sprite::") {
-    REQUIRE(true);
+TEST_CASE( "Sprite::setPath() path()") {
+}
+
+TEST_CASE( "Sprite::quad()") {
 }

@@ -9,14 +9,14 @@
 namespace flappy {
 
 void Button::update(TimeDelta) {
-    if (MGR<InputManager>()->isMouseDown()) {
+    if (MGR<InputManager>()->mouseDown()) {
         if (isInField()) {
             if (m_onClick != nullptr)
                 m_onClick();
             entity()->get<Transform>()->setScale(0.95f);
         }
     }
-    if (MGR<InputManager>()->isMouseUp()) {
+    if (MGR<InputManager>()->mouseUp()) {
         if (isInField()) {
             entity()->get<Transform>()->setScale(1.0f);
         }
@@ -25,7 +25,7 @@ void Button::update(TimeDelta) {
 
 bool Button::isInField() {
     if (auto scene = MGR<SceneManager>()->scene()) {
-        auto pos = scene->camera()->screenToScene(MGR<InputManager>()->getMousePos());
+        auto pos = scene->camera()->screenToScene(MGR<InputManager>()->mousePos());
         auto buttonPos = entity()->get<Transform>()->pos();
         auto size = 0.5f * entity()->transform()->scale();
         auto diff = pos - buttonPos;

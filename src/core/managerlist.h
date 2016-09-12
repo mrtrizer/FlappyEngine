@@ -10,7 +10,7 @@ class AbstractManager;
 
 class ManagerList : public std::enable_shared_from_this<ManagerList> {
 public:
-    virtual ~ManagerList(){}
+    virtual ~ManagerList() = default;
     void update();
     void init();
 
