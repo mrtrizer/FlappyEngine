@@ -7,7 +7,7 @@ namespace flappy {
 /// Represents a circle shape.
 class CircleShape  : public Presenter {
 public:
-    int id() override {return ClassId<Presenter,CircleShape>::id(); }
+    unsigned id() override {return ClassId<Presenter,CircleShape>::id(); }
 };
 
 } // flappy

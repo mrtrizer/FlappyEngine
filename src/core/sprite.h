@@ -14,7 +14,7 @@ public:
     void setPath(const std::string& path);
     std::string path() const { return m_path; }
 
-    int id() override {return ClassId<Presenter,Sprite>::id(); }
+    unsigned id() override {return ClassId<Presenter,Sprite>::id(); }
 
     const std::shared_ptr<ResourceHandler<Quad>> quad() const { return m_quad; }
 

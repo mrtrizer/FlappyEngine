@@ -23,7 +23,7 @@ unsigned ClassCounter<BaseClass>::m_count = 0;
 template <typename BaseClass, typename DerivedClass>
 class ClassId {
 public:
-    constexpr static int id() {return m_counter.id();}
+    constexpr static unsigned id() {return m_counter.id();}
 private:
     static ClassCounter<BaseClass> m_counter;
 };

@@ -50,7 +50,7 @@ void ViewManager::update(TimeDelta dt) {
 }
 
 void ViewManager::addPresenter(const std::shared_ptr<Presenter>& presenter) {
-    int id = presenter->id();
+    unsigned id = presenter->id();
     if (m_bindings.size() <= id)
         return ERROR_MSG(VOID_VALUE, "Presenter component %d was not binded.", id);
     if (m_bindings[id] == nullptr)

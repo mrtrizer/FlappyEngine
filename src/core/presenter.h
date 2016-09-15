@@ -26,7 +26,7 @@ public:
     virtual void update(TimeDelta) {}
     void setColor(const Color& color);
     Color color() const { return m_color; }
-    virtual int id() = 0;
+    virtual unsigned id() = 0;
     void init() override;
     void setView(std::weak_ptr<View> view) { m_view = view; }
 
