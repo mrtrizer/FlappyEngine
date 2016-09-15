@@ -18,7 +18,7 @@ class Sprite;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite(const Sprite &presenter);
+    GLViewSprite();
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     void update(const Presenter &) override;
 

@@ -23,7 +23,6 @@ public:
 private:
     /// Height in game units
     float m_height;
-
 };
 
 } // flappy

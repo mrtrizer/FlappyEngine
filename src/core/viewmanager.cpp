@@ -25,23 +25,39 @@ void ViewManager::update(TimeDelta dt) {
     //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();
 
-    list<Visual> presenters;
-
-    MGR<EntityManager>()->each<Presenter>([&presenters, dt] (EP e){
-        auto presenter = e->get<Presenter>();
-        presenter->update(dt);
+    for (auto i = m_visuals.begin(); i !=  m_visuals.end(); ) {
+        auto& visual = *i;
+        if (visual.presenter.use_count() == 1) {
+            i = m_visuals.erase(i);
+            continue;
+        } else {
+            i++;
+        }
+        visual.presenter->update(dt);
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = e->get<Transform>();
+        auto curTransform = visual.presenter->entity()->get<Transform>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
             z += curTransform->pos().z;
             curTransform = curTransform->parent();
         }
-        presenters.push_back(Visual{presenter, transformMatrix, z});
-    });
+        visual.pos = transformMatrix;
+        visual.z = z;
+    };
 
-    redraw(presenters, pMatrix);
+    redraw(m_visuals, pMatrix);
+}
+
+void ViewManager::addPresenter(const std::shared_ptr<Presenter>& presenter) {
+    int id = presenter->id();
+    if (m_bindings.size() <= id)
+        return ERROR_MSG(VOID_VALUE, "Presenter component %d was not binded.", id);
+    if (m_bindings[id] == nullptr)
+        return ERROR_MSG(VOID_VALUE, "Presenter component %d was not binded.", id);
+    auto visual = Visual{presenter, m_bindings[id]->build(), {}, 0};
+    presenter->setView(visual.view);
+    m_visuals.push_back(visual);
 }
 
 void ViewManager::resize(int width, int height) {

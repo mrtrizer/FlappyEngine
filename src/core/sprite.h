@@ -14,10 +14,9 @@ public:
     void setPath(const std::string& path);
     std::string path() const { return m_path; }
 
-    const std::shared_ptr<ResourceHandler<Quad>> quad() const { return m_quad; }
+    int id() override {return ClassId<Presenter,Sprite>::id(); }
 
-protected:
-    virtual std::shared_ptr<View> makeGView(const ViewFactory & factory) override;
+    const std::shared_ptr<ResourceHandler<Quad>> quad() const { return m_quad; }
 
 private:
     std::shared_ptr<ResourceHandler<Quad>> m_quad;

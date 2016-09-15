@@ -65,7 +65,7 @@ public:
     void addVBO(const std::vector<ItemType> vertexList, GLint attr) {
         using namespace std;
         const auto itemType = GL_FLOAT;
-        const int bufSize = int(vertexList.size() * sizeof(GLTools::Vertex));
+        const int bufSize = int(vertexList.size() * sizeof(ItemType));
         const ItemType* buf = vertexList.data();
         VBO vbo;
         vbo.m_componentCount = sizeof(ItemType) / 4;

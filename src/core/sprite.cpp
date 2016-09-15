@@ -1,5 +1,4 @@
 #include "sprite.h"
-#include "viewfactory.h"
 
 namespace flappy {
 
@@ -16,10 +15,6 @@ void Sprite::setPath(const std::string& path)
         quadPath = std::string(":") + quadPath;
     m_quad = MGR<ResManager>()->get<Quad>(quadPath);
     updateView();
-}
-
-shared_ptr<View> Sprite::makeGView(const ViewFactory &factory) {
-    return factory.get(*this);
 }
 
 } // flappy

@@ -10,7 +10,7 @@ using namespace glm;
 
 /// Generates vertices for circle drawing in GL_TRIANGLE_FAN format
 /// @param count Count of vertices ( >= 3).
-vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int vertexCount)
+vector<GLTools::Vertex> GLViewCircle::circleTriangleFan(float r, int vertexCount)
 {
     if (vertexCount < 3)
         throw runtime_error("Too few vertices in circle (has to be >= 3).");
@@ -22,7 +22,7 @@ vector<GLTools::Vertex> GViewCircle::circleTriangleFan(float r, int vertexCount)
     return vertexList;
 }
 
-GViewCircle::GViewCircle(int vertexCount):
+GLViewCircle::GLViewCircle(int vertexCount):
     m_circle(GL_TRIANGLE_FAN),
     m_vertexCount(vertexCount)
 {

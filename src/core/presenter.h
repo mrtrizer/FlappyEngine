@@ -22,18 +22,16 @@ class Presenter: public Component, public std::enable_shared_from_this<Presenter
 public:
     Presenter() = default;
     virtual ~Presenter() = default;
-    std::shared_ptr<View> getGView(const ViewFactory& factory);
-    void cleanGView();
     void updateView();
     virtual void update(TimeDelta) {}
     void setColor(const Color& color);
     Color color() const { return m_color; }
+    virtual int id() = 0;
+    void init() override;
+    void setView(std::weak_ptr<View> view) { m_view = view; }
 
-protected:
-    /// Implement and call appropriate method from factory to get your own instance of GView.
-    virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) = 0;
 private:
-    std::shared_ptr<View> m_view = nullptr;
+    std::weak_ptr<View> m_view;
     Color m_color;
 };
 

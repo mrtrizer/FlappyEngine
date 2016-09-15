@@ -5,9 +5,9 @@
 namespace flappy {
 
 /// Circle shape (GL_TRIANGLE_FAN, vertexCnt points around the center point)
-class GViewCircle: public GLViewShape {
+class GLViewCircle: public GLViewShape {
 public:
-    GViewCircle(int vertexCount);
+    GLViewCircle(int vertexCount = 32);
     const GLAttribArray& getAttribArray() const override {return m_circle; }
 
 private:

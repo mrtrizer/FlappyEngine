@@ -3,7 +3,6 @@
 {?IF not console_mode?}
 #include <glut/glutinit.h>
 #include <qt/qtresourceloader.h>
-#include <gl/glviewfactory.h>
 #include <core/resourcemanager.h>
 #include <core/inputmanager.h>
 #include <core/entitymanager.h>

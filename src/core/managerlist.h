@@ -33,6 +33,7 @@ public:
         }
     }
 
+    /// Create manager with initialization
     template <typename ManagerT, typename...ArgsT> inline
     std::shared_ptr<ManagerT> create(ArgsT&&...args) {
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
@@ -41,13 +42,16 @@ public:
         return manager;
     }
 
+    /// Override manager interface with initialization
     template <typename DestManagerT, typename ManagerT, typename ... ArgsT> inline
     std::shared_ptr<ManagerT> override(ArgsT&&...args) {
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
         setManagerAtPos(ClassId<Manager, DestManagerT>::id(), manager);
+        manager->init();
         return manager;
     }
 
+    /// Add without initialization
     template <typename ManagerT> inline
     void add(const std::shared_ptr<ManagerT>& manager) {
         setManagerAtPos(ClassId<Manager, ManagerT>::id(), manager);

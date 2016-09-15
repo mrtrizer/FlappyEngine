@@ -7,8 +7,7 @@ namespace flappy {
 
 /// Represents a rectangle shape.
 class RectShape : public Presenter {
-protected:
-    virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) override;
+    int id() override {return ClassId<Presenter,RectShape>::id(); }
 };
 
 } // flappy

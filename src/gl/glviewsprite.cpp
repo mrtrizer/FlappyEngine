@@ -38,7 +38,7 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(const Sprite & presenter) :
+GLViewSprite::GLViewSprite() :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     m_rect(GL_TRIANGLE_STRIP),
     m_vertexList{ {-0.5f, -0.5f},
@@ -46,9 +46,6 @@ GLViewSprite::GLViewSprite(const Sprite & presenter) :
                 {0.5f, -0.5f},
                 {0.5f, 0.5f} }
 {
-    m_quad = presenter.quad();
-    if (m_quad->ready())
-        updateFrame();
 }
 
 void GLViewSprite::updateVBOs() {

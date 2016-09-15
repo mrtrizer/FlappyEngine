@@ -28,13 +28,19 @@
 
 #include <gl/glviewmanager.h>
 #include <core/camera.h>
-#include <gl/glviewfactory.h>
 #include <core/inputmanager.h>
 #include <core/appmanager.h>
+#include <gl/glviewcircle.h>
+#include <gl/glviewrect.h>
+#include <gl/glviewsprite.h>
 
 #include "glutinit.h"
 
 namespace flappy {
+
+class CircleShape;
+class RectShape;
+class Sprite;
 
 namespace GLUTInit {
 
@@ -51,11 +57,7 @@ void render() {
 }
 
 void resizeWindow(int width, int height) {
-    //I create new view for constructor/destructor testing
-    auto viewManager = make_shared<GLViewManager>(make_shared<GLViewFactory>());
-    g_managerList->add(viewManager);
-    viewManager->init();
-    viewManager->resize(width, height);
+    g_managerList->MGR<ViewManager>()->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
@@ -89,7 +91,10 @@ void initGLUT(shared_ptr<ManagerList> managerList) {
     glewInit();
 #endif
 
-    managerList->create<GLViewManager>(make_shared<GLViewFactory>());
+    auto manager = managerList->override<ViewManager, GLViewManager>();
+    manager->bind<CircleShape,GLViewCircle>();
+    manager->bind<RectShape,GLViewRect>();
+    manager->bind<Sprite,GLViewSprite>();
 
     glutMouseFunc(mouseFunc);
     glutPassiveMotionFunc(passiveMotionFunc);

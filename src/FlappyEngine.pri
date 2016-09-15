@@ -5,7 +5,6 @@ HEADERS += \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
     $$PWD/gl/gltexture.h \
-    $$PWD/gl/glviewfactory.h \
     $$PWD/gl/glviewshape.h \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
@@ -159,7 +158,6 @@ HEADERS += \
     $$PWD/core/view.h \
     $$PWD/core/presenter.h \
     $$PWD/core/tools.h \
-    $$PWD/core/viewfactory.h \
     $$PWD/core/circleshape.h \
     $$PWD/core/rectshape.h \
     $$PWD/core/sprite.h \
@@ -192,7 +190,6 @@ SOURCES += \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \
     $$PWD/gl/gltexture.cpp \
-    $$PWD/gl/glviewfactory.cpp \
     $$PWD/gl/glviewshape.cpp \
     $$PWD/gl/glviewsprite.cpp \
     $$PWD/ui/button.cpp \
@@ -200,13 +197,10 @@ SOURCES += \
     $$PWD/core/view.cpp \
     $$PWD/core/tools.cpp \
     $$PWD/core/presenter.cpp \
-    $$PWD/core/circleshape.cpp \
-    $$PWD/core/rectshape.cpp \
     $$PWD/core/sprite.cpp \
     $$PWD/gl/glviewcircle.cpp \
     $$PWD/gl/glviewrect.cpp \
     $$PWD/core/transform.cpp \
-    $$PWD/gl/glviewmgr.cpp \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
     $$PWD/qt/qtresourceloader.cpp \
@@ -219,6 +213,7 @@ SOURCES += \
     $$PWD/core/scenemanager.cpp \
     $$PWD/core/screenmanager.cpp \
     $$PWD/core/viewmanager.cpp \
-    $$PWD/core/resmanager.cpp
+    $$PWD/core/resmanager.cpp \
+    $$PWD/gl/glviewmanager.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

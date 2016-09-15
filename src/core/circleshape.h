@@ -6,8 +6,8 @@ namespace flappy {
 
 /// Represents a circle shape.
 class CircleShape  : public Presenter {
-protected:
-    virtual std::shared_ptr<View> makeGView(const ViewFactory& factory) override;
+public:
+    int id() override {return ClassId<Presenter,CircleShape>::id(); }
 };
 
 } // flappy

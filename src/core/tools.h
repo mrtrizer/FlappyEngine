@@ -30,7 +30,7 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 
 #ifndef ANDROID_JNI
 
-#define LOGI(...)  std::printf(__VA_ARGS__)
+#define LOGI(...)  std::printf(__VA_ARGS__), std::printf("\n")
 
 template <typename ... Args>
 void LOGE(Args ... args) {

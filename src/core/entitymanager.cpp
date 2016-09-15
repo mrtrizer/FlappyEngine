@@ -7,6 +7,7 @@ using namespace std;
 void EntityManager::update(TimeDelta dt) {
     for (auto entity: m_removeList)
         m_entities.remove(entity);
+    m_removeList.clear();
     for (auto entity: m_entities)
         entity->update(dt);
 }
