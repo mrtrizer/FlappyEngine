@@ -14,7 +14,8 @@ namespace flappy {
 class Camera : public Component, public std::enable_shared_from_this<Camera>
 {
 public:
-    Camera(float m_height = 100);
+    Camera() = default;
+    void setHeight(float height) {m_height = height;}
     Tools::Rect rect() const;
     glm::mat4 pMatrix();
     glm::vec3 screenToScene(const glm::vec2 &pos) const;
@@ -22,7 +23,7 @@ public:
 
 private:
     /// Height in game units
-    float m_height;
+    float m_height = 100;
 };
 
 } // flappy

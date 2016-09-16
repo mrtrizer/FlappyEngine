@@ -20,7 +20,6 @@ class View;
 /// methods except GView::externUpdate to say about state changing.
 class Presenter: public Component, public std::enable_shared_from_this<Presenter> {
 public:
-    Presenter() = default;
     virtual ~Presenter() = default;
     void updateView();
     virtual void update(TimeDelta) {}
@@ -33,6 +32,17 @@ public:
 private:
     std::weak_ptr<View> m_view;
     Color m_color;
+};
+
+/// Represents a circle shape.
+class CircleShape  : public Presenter {
+public:
+    unsigned id() override {return ClassId<Presenter,CircleShape>::id(); }
+};
+
+/// Represents a rectangle shape.
+class RectShape : public Presenter {
+    unsigned id() override {return ClassId<Presenter,RectShape>::id(); }
 };
 
 } // flappy

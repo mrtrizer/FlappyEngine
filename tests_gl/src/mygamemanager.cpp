@@ -3,7 +3,7 @@
 #include <core/atlas.h>
 #include <core/resourcemanager.h>
 #include <core/sprite.h>
-#include <core/rectshape.h>
+#include <core/presenter.h>
 
 namespace game {
 

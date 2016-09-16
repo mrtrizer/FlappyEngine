@@ -1,7 +1,6 @@
 #include "glviewcircle.h"
 
 #include <core/presenter.h>
-#include <core/circleshape.h>
 
 namespace flappy {
 

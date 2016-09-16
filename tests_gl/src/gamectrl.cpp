@@ -3,7 +3,7 @@
 #include <glm/gtc/random.hpp>
 #include <core/sprite.h>
 #include <core/inputmanager.h>
-#include <core/circleshape.h>
+#include <core/presenter.h>
 
 #include "ballctrl.h"
 

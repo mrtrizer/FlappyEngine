@@ -158,8 +158,6 @@ HEADERS += \
     $$PWD/core/view.h \
     $$PWD/core/presenter.h \
     $$PWD/core/tools.h \
-    $$PWD/core/circleshape.h \
-    $$PWD/core/rectshape.h \
     $$PWD/core/sprite.h \
     $$PWD/core/texture.h \
     $$PWD/gl/glviewcircle.h \

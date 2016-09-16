@@ -1,8 +1,8 @@
 #pragma once
 
-#include "rectshape.h"
+#include "presenter.h"
 
-#include <core/resourcemanager.h>
+#include "resourcemanager.h"
 
 namespace flappy {
 

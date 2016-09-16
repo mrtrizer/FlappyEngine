@@ -20,7 +20,12 @@ void ManagerList::setManagerAtPos(unsigned int pos, shared_ptr<Manager> manager)
     if (m_managerList.size() <= pos)
         m_managerList.resize(pos + 1);
     m_managerList[pos] = manager;
-    manager->setManagerList(shared_from_this());
+    try {
+        manager->setManagerList(shared_from_this());
+    } catch (std::bad_weak_ptr) {
+        LOGE("ManagerList was created out of std::shared_ptr.");
+        throw;
+    }
 }
 
 void ManagerList::init() {

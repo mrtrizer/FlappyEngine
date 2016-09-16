@@ -34,6 +34,7 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 
 template <typename ... Args>
 void LOGE(Args ... args) {
+    std::printf("\x1b[31m [ERROR] \x1b[0m");
     LOGI(args...);
 }
 

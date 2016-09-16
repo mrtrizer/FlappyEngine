@@ -13,19 +13,23 @@ using namespace std;
 using namespace glm;
 using namespace Tools;
 
-Camera::Camera(float height):
-    m_height(height){
-
-}
-
 void Camera::init() {
-    if (auto scene = MGR<SceneManager>()->scene())
-        if (scene->camera() == nullptr)
-            scene->setCamera(shared_from_this());
+    auto sceneManager = MGR<SceneManager>();
+    if (sceneManager == nullptr)
+        return;
+    auto scene = sceneManager->scene();
+    if (scene == nullptr)
+        return;
+    if (scene->camera() == nullptr)
+        scene->setCamera(shared_from_this());
 }
 
 Rect Camera::rect() const {
-    float ratio = (float)MGR<ScreenManager>()->screenSize().x / MGR<ScreenManager>()->screenSize().y;
+    auto screenManager = MGR<ScreenManager>();
+    if (screenManager == nullptr)
+        return {0,0,0,0};
+    auto screenSize = screenManager->screenSize();
+    float ratio = screenSize.x / screenSize.y;
     float offset = m_height / 2;
     return {
         -offset * ratio,
@@ -49,9 +53,8 @@ mat4 Camera::pMatrix() {
 
     mat4 mvMatrix;
     auto transform = entity()->get<Transform>();
-    if (transform != nullptr) {
+    if (transform != nullptr)
         mvMatrix = transform->getMvMatrix();
-    }
 
     return ortho(curRect.x1, curRect.x2, curRect.y2, curRect.y1, near, far) * mvMatrix;
 }
