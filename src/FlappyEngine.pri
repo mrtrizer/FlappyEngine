@@ -182,7 +182,8 @@ HEADERS += \
     $$PWD/gl/glviewmanager.h \
     $$PWD/core/resourcemanager.h \
     $$PWD/core/viewmanager.h \
-    $$PWD/core/classid.h
+    $$PWD/core/classid.h \
+    $$PWD/core/eventsystem.h
 
 
 SOURCES += \
@@ -214,6 +215,7 @@ SOURCES += \
     $$PWD/core/screenmanager.cpp \
     $$PWD/core/viewmanager.cpp \
     $$PWD/core/resmanager.cpp \
-    $$PWD/gl/glviewmanager.cpp
+    $$PWD/gl/glviewmanager.cpp \
+    $$PWD/core/eventsystem.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU
