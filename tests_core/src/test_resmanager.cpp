@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <core/managerlist.h>
-#include <core/resourcemanager.h>
+#include <core/resmanager.h>
 
 using namespace flappy;
 using namespace std;

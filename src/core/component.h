@@ -18,8 +18,8 @@ public:
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
     virtual ~Component() = default;
-    virtual void update(TimeDelta) {}
-    virtual void init() {}
+    virtual void update(TimeDelta) {} //TODO: Hide to private
+    virtual void init() {} //TODO: Hide to private
 
     std::shared_ptr<Entity> entity() const { return m_entity.lock(); }
 
@@ -30,16 +30,14 @@ private:
 
     void setManagerList(std::weak_ptr<ManagerList> managerList) {
         m_managerList = managerList;
-        m_managerListPtr = managerList.lock().get();
     }
 
     std::weak_ptr<ManagerList> m_managerList;
-    ManagerList* m_managerListPtr = nullptr; // optimization of MGR
 
 public:
     template <typename Manager>
-    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Manager>()) {
-        return m_managerListPtr->MGR<Manager>();
+    constexpr auto MGR() const -> decltype(m_managerList.lock()->MGR<Manager>()) {
+        return m_managerList.lock()->MGR<Manager>();
     }
 };
 

@@ -1,7 +1,7 @@
 #include "mygamemanager.h"
 #include <core/texture.h>
 #include <core/atlas.h>
-#include <core/resourcemanager.h>
+#include <core/resmanager.h>
 #include <core/sprite.h>
 #include <core/presenter.h>
 

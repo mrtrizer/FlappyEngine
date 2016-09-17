@@ -2,7 +2,7 @@
 
 #include "presenter.h"
 
-#include "resourcemanager.h"
+#include "resmanager.h"
 
 namespace flappy {
 

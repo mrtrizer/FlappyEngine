@@ -26,7 +26,7 @@ public:
 private:
     std::shared_ptr<ResourceHandler<Atlas>> m_atlas;
     std::string m_quadName;
-    std::shared_ptr<ResManager> m_resourceManager;
+    std::weak_ptr<ResManager> m_resourceManager;
 };
 
 } // flappy

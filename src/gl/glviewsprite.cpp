@@ -5,7 +5,7 @@
 #include <core/sprite.h>
 #include <gl/glshaderprogram.h>
 #include <gl/gltexture.h>
-#include <core/resourcemanager.h>
+#include <core/resmanager.h>
 
 namespace flappy {
 

@@ -178,10 +178,10 @@ HEADERS += \
     $$PWD/core/scenemanager.h \
     $$PWD/core/screenmanager.h \
     $$PWD/gl/glviewmanager.h \
-    $$PWD/core/resourcemanager.h \
     $$PWD/core/viewmanager.h \
     $$PWD/core/classid.h \
-    $$PWD/core/eventsystem.h
+    $$PWD/core/eventsystem.h \
+    $$PWD/core/resmanager.h
 
 
 SOURCES += \
