@@ -6,6 +6,7 @@
 #include <gl/glshaderprogram.h>
 #include <gl/gltexture.h>
 #include <core/resmanager.h>
+#include <core/quad.h>
 
 namespace flappy {
 

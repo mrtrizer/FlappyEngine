@@ -3,19 +3,14 @@
 #include <sstream>
 
 #include "texture.h"
+#include "atlas.h"
+#include "quad.h"
 
 namespace flappy {
 
 using namespace std;
 using namespace Tools;
 
-template <>
-void ResHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resManager)
-{
-    m_updated = false;
-    m_resource = std::move(m_newResource);
-    addDependency(resManager->get<Texture>(m_resource->dependence()));
-}
 
 template<>
 unique_ptr<Texture> ResManager::load<Texture>(const string& path) const
