@@ -30,13 +30,9 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 
 #ifndef ANDROID_JNI
 
-#define LOGI(...)  std::printf(__VA_ARGS__), std::printf("\n")
+#define LOGI(...) std::printf("\x1b[32m [INFO] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
 
-template <typename ... Args>
-void LOGE(Args ... args) {
-    std::printf("\x1b[31m [ERROR] \x1b[0m");
-    LOGI(args...);
-}
+#define LOGE(...) std::printf("\x1b[31m [ERROR] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
 
 #else
 #include <jni.h>
