@@ -10,11 +10,11 @@ using namespace std;
 using namespace Tools;
 
 template <>
-void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resourceManager)
+void ResHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resManager)
 {
     m_updated = false;
     m_resource = std::move(m_newResource);
-    addDependency(resourceManager->get<Texture>(m_resource->dependence()));
+    addDependency(resManager->get<Texture>(m_resource->dependence()));
 }
 
 template<>
@@ -54,7 +54,7 @@ std::vector<std::string> split(const std::string &s, char delim)
 }
 
 template <>
-shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const string& path)
+shared_ptr<ResHandler<Quad>> ResManager::get<Quad>(const string& path)
 {
     using namespace std;
 
@@ -67,7 +67,7 @@ shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const string& path)
             string atlasName = splittedPath[0];// get atlas name
             auto atlas = get<Atlas>(atlasName);
             string quadName = splittedPath[1]; // get quad name in atlas
-            auto quadHandler = make_shared<ResourceHandler<Quad>>(path, unique_ptr<Quad>(new Quad(atlas, quadName, shared_from_this())), shared_from_this());
+            auto quadHandler = make_shared<ResHandler<Quad>>(path, unique_ptr<Quad>(new Quad(atlas, quadName, shared_from_this())), shared_from_this());
             quadHandler->addDependency(atlas);
             m_resourceMap.emplace(path, quadHandler);
         } else { // if just image path
@@ -78,12 +78,12 @@ shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const string& path)
                 atlas.addRect(quadName,{0,0,1,1});
                 MGR<ResManager>()->set(atlasName, std::move(atlas));
             }
-            auto quadHandler = make_shared<ResourceHandler<Quad>>(path, unique_ptr<Quad>(new Quad(get<Atlas>(atlasName), quadName, shared_from_this())), shared_from_this());
+            auto quadHandler = make_shared<ResHandler<Quad>>(path, unique_ptr<Quad>(new Quad(get<Atlas>(atlasName), quadName, shared_from_this())), shared_from_this());
             quadHandler->addDependency(get<Atlas>(atlasName));
             m_resourceMap.emplace(path, quadHandler);
         }
     }
-    return dynamic_pointer_cast<ResourceHandler<Quad>>(m_resourceMap[path]);
+    return dynamic_pointer_cast<ResHandler<Quad>>(m_resourceMap[path]);
 }
 
 } // flappy

@@ -14,26 +14,26 @@ class Texture;
 class Atlas;
 class ResManager;
 
-class IResourceHandler {
+class IResHandler {
 public:
-    virtual ~IResourceHandler() = default;
+    virtual ~IResHandler() = default;
     virtual void update() = 0;
     virtual bool ready() const = 0;
     virtual bool updated() const = 0;
     virtual bool markedReload() const = 0;
-    virtual void reloadFromSource(std::shared_ptr<ResManager> resourceManager) = 0;
+    virtual void reloadFromSource(std::shared_ptr<ResManager> resManager) = 0;
 };
 
 template <typename ResourceT>
-class ResourceHandler: public IResourceHandler {
+class ResHandler: public IResHandler {
     friend class ResManager;
 public:
-    ResourceHandler(std::string name, std::unique_ptr<ResourceT>&& resource, std::shared_ptr<ResManager> resourceManager):
+    ResHandler(std::string name, std::unique_ptr<ResourceT>&& resource, std::shared_ptr<ResManager> resManager):
         m_name(name)
     {
-        setNewResource(std::move(resource), resourceManager);
+        setNewResource(std::move(resource), resManager);
     }
-    ResourceHandler(std::string name): m_markReload(true), m_name(name) {}
+    ResHandler(std::string name): m_markReload(true), m_name(name) {}
     bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
     bool updated() const override { return m_updated; }
     ResourceT& resource() { return *m_resource; }
@@ -67,18 +67,18 @@ public:
         }
     }
     bool markedReload() const override {return m_markReload;}
-    void reloadFromSource(std::shared_ptr<ResManager> resourceManager) override;
+    void reloadFromSource(std::shared_ptr<ResManager> resManager) override;
 
 private:
     std::unique_ptr<ResourceT> m_newResource = nullptr;
     std::unique_ptr<ResourceT> m_resource = nullptr;
-    std::list<std::shared_ptr<IResourceHandler>> m_dependencies;
+    std::list<std::shared_ptr<IResHandler>> m_dependencies;
     bool m_updated = false;
     bool m_dependenciesReady = false;
     bool m_markReload = false;
     std::string m_name;
 
-    void addDependency(std::shared_ptr<IResourceHandler> handler)
+    void addDependency(std::shared_ptr<IResHandler> handler)
     {
         m_dependenciesReady = false;
         m_dependencies.push_back(handler);
@@ -87,13 +87,13 @@ private:
     {
         m_markReload = true;
     }
-    void load(std::shared_ptr<ResManager> resourceManager, const std::string& path);
+    void load(std::shared_ptr<ResManager> resManager, const std::string& path);
 
-    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResManager> resourceManager)
+    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResManager> resManager)
     {
         m_newResource = std::move(newResource);
         m_markReload = false;
-        procNewResource(resourceManager);
+        procNewResource(resManager);
     }
 
     /// No default implementation. Do not remove.
@@ -114,16 +114,16 @@ public:
         using namespace std;
         using ResourceTD = typename decay<ResourceT>::type;
         auto newRes = unique_ptr<ResourceTD>(new ResourceTD(forward<ResourceT>(resource)));
-        m_resourceMap.emplace(path, make_shared<ResourceHandler<ResourceTD>>(path, std::move(newRes), shared_from_this()));
+        m_resourceMap.emplace(path, make_shared<ResHandler<ResourceTD>>(path, std::move(newRes), shared_from_this()));
     }
 
     template <typename ResourceT>
-    std::shared_ptr<ResourceHandler<ResourceT>> get(const std::string& path)
+    std::shared_ptr<ResHandler<ResourceT>> get(const std::string& path)
     {
         using namespace std;
         if (m_resourceMap.count(path) == 0)
-            m_resourceMap.emplace(path, make_shared<ResourceHandler<ResourceT>>(path));
-        return dynamic_pointer_cast<ResourceHandler<ResourceT>>(m_resourceMap[path]);
+            m_resourceMap.emplace(path, make_shared<ResHandler<ResourceT>>(path));
+        return dynamic_pointer_cast<ResHandler<ResourceT>>(m_resourceMap[path]);
     }
 
     void update(TimeDelta) override;
@@ -136,24 +136,24 @@ public:
     }
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<IResourceHandler>> m_resourceMap;
+    std::unordered_map<std::string, std::shared_ptr<IResHandler>> m_resourceMap;
     std::shared_ptr<IResourceLoader> m_resourceLoader;
 };
 
 template <typename ResourceT>
-void ResourceHandler<ResourceT>::load(std::shared_ptr<ResManager> resourceManager, const std::string& path)
+void ResHandler<ResourceT>::load(std::shared_ptr<ResManager> resManager, const std::string& path)
 {
-    m_newResource = resourceManager->load<ResourceT>(path);
+    m_newResource = resManager->load<ResourceT>(path);
 }
 
 template <typename ResourceT>
-void ResourceHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResManager> resourceManager)
+void ResHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResManager> resManager)
 {
-    setNewResource(std::move(resourceManager->load<ResourceT>(m_name)), resourceManager);
+    setNewResource(std::move(resManager->load<ResourceT>(m_name)), resManager);
 }
 
 template <>
-void ResourceHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resourceManager);
+void ResHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resManager);
 
 template<>
 std::unique_ptr<Texture> ResManager::load<Texture>(const std::string& path) const;
@@ -162,7 +162,7 @@ template<>
 std::unique_ptr<Atlas> ResManager::load<Atlas>(const std::string& path) const;
 
 template <>
-std::shared_ptr<ResourceHandler<Quad>> ResManager::get<Quad>(const std::string& path);
+std::shared_ptr<ResHandler<Quad>> ResManager::get<Quad>(const std::string& path);
 
 } // flappy
 

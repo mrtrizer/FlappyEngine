@@ -8,7 +8,7 @@
 namespace flappy {
 
 template <typename T>
-class ResourceHandler;
+class ResHandler;
 
 class Quad;
 
@@ -29,7 +29,7 @@ private:
 
     std::vector<GLTools::Vertex> m_vertexList;
 
-    std::shared_ptr<ResourceHandler<Quad>> m_quad;
+    std::shared_ptr<ResHandler<Quad>> m_quad;
 
     void updateFrame();
     void updateVBOs();

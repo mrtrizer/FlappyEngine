@@ -11,22 +11,22 @@ class Texture;
 class Atlas;
 
 template<typename ResourceT>
-class ResourceHandler;
+class ResHandler;
 
 class Quad {
 public:
-    Quad(std::shared_ptr<ResourceHandler<Atlas>> atlas, const std::string& quadName, std::shared_ptr<ResManager> resourceManager):
+    Quad(std::shared_ptr<ResHandler<Atlas>> atlas, const std::string& quadName, std::shared_ptr<ResManager> resManager):
         m_atlas(atlas),
         m_quadName(quadName),
-        m_resourceManager(resourceManager)
+        m_resManager(resManager)
     {}
     Tools::Rect rect();
-    std::shared_ptr<ResourceHandler<Texture>> texture();
+    std::shared_ptr<ResHandler<Texture>> texture();
 
 private:
-    std::shared_ptr<ResourceHandler<Atlas>> m_atlas;
+    std::shared_ptr<ResHandler<Atlas>> m_atlas;
     std::string m_quadName;
-    std::weak_ptr<ResManager> m_resourceManager;
+    std::weak_ptr<ResManager> m_resManager;
 };
 
 } // flappy

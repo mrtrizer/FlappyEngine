@@ -16,10 +16,10 @@ public:
 
     unsigned id() override {return ClassId<Presenter,Sprite>::id(); }
 
-    const std::shared_ptr<ResourceHandler<Quad>> quad() const { return m_quad; }
+    const std::shared_ptr<ResHandler<Quad>> quad() const { return m_quad; }
 
 private:
-    std::shared_ptr<ResourceHandler<Quad>> m_quad;
+    std::shared_ptr<ResHandler<Quad>> m_quad;
     std::string m_path;
 };
 
