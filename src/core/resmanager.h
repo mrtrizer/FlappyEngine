@@ -16,6 +16,9 @@ class Quad;
 
 class ResManager: public Manager, public std::enable_shared_from_this<ResManager>
 {
+    template <typename ResT>
+    friend class ResHandler;
+
 public:
     ResManager(std::shared_ptr<IResourceLoader> resourceLoader):
         m_resourceLoader(resourceLoader)
@@ -41,26 +44,17 @@ public:
 
     void update(TimeDelta) override;
 
+private:
+    std::unordered_map<std::string, std::shared_ptr<IResHandler>> m_resourceMap;
+    std::shared_ptr<IResourceLoader> m_resourceLoader;
+
     template <typename Type>
     std::unique_ptr<Type> load(const std::string& path) const
     {
         throw std::runtime_error(path + " Can't be loaded. Template was not specialized for this type of resources.");
         return nullptr;
     }
-
-private:
-    std::unordered_map<std::string, std::shared_ptr<IResHandler>> m_resourceMap;
-    std::shared_ptr<IResourceLoader> m_resourceLoader;
 };
-
-template <typename ResourceT>
-void ResHandler<ResourceT>::reloadFromSource(std::shared_ptr<ResManager> resManager)
-{
-    setNewResource(std::move(resManager->load<ResourceT>(m_name)), resManager);
-}
-
-template <>
-void ResHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resManager);
 
 template<>
 std::unique_ptr<Texture> ResManager::load<Texture>(const std::string& path) const;

@@ -19,11 +19,11 @@ public:
     virtual void reloadFromSource(std::shared_ptr<ResManager> resManager) = 0;
 };
 
-template <typename ResourceT>
+template <typename ResT>
 class ResHandler: public IResHandler {
     friend class ResManager;
 public:
-    ResHandler(std::string name, std::unique_ptr<ResourceT>&& resource, std::shared_ptr<ResManager> resManager):
+    ResHandler(std::string name, std::unique_ptr<ResT>&& resource, std::shared_ptr<ResManager> resManager):
         m_name(name)
     {
         setNewResource(std::move(resource), resManager);
@@ -31,7 +31,7 @@ public:
     ResHandler(std::string name): m_markReload(true), m_name(name) {}
     bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
     bool updated() const override { return m_updated; }
-    ResourceT& resource() { return *m_resource; }
+    ResT& resource() { return *m_resource; }
     void update() override
     {
         if (!m_dependencies.empty()) { // check dependencies first, if there are any dependencies
@@ -62,11 +62,19 @@ public:
         }
     }
     bool markedReload() const override {return m_markReload;}
-    void reloadFromSource(std::shared_ptr<ResManager> resManager) override;
+
+    template <typename ResManagerT>
+    void reloadFromSource_(std::shared_ptr<ResManagerT> resManager) {
+        setNewResource(std::move(resManager->load<ResT>(m_name)), resManager);
+    }
+
+    void reloadFromSource(std::shared_ptr<ResManager> resManager) override {
+        reloadFromSource_(resManager);
+    }
 
 private:
-    std::unique_ptr<ResourceT> m_newResource = nullptr;
-    std::unique_ptr<ResourceT> m_resource = nullptr;
+    std::unique_ptr<ResT> m_newResource = nullptr;
+    std::unique_ptr<ResT> m_resource = nullptr;
     std::list<std::shared_ptr<IResHandler>> m_dependencies;
     bool m_updated = false;
     bool m_dependenciesReady = false;
@@ -85,10 +93,10 @@ private:
 
     template <typename ResManagerT>
     void load(std::shared_ptr<ResManagerT> resManager, const std::string& path) {
-        m_newResource = resManager->load<ResourceT>(path);
+        m_newResource = resManager->load<ResT>(path);
     }
 
-    void setNewResource(std::unique_ptr<ResourceT>&& newResource, std::shared_ptr<ResManager> resManager)
+    void setNewResource(std::unique_ptr<ResT>&& newResource, std::shared_ptr<ResManager> resManager)
     {
         m_newResource = std::move(newResource);
         m_markReload = false;
@@ -99,5 +107,9 @@ private:
     void procNewResource(std::shared_ptr<ResManager> ) {}
 
 };
+
+template <>
+void ResHandler<Atlas>::procNewResource(std::shared_ptr<ResManager> resManager);
+
 
 } // flappy

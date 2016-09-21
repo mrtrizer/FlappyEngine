@@ -7,7 +7,7 @@ using namespace std;
 void Sprite::setPath(const std::string& path)
 {
     auto quadPath = path;
-    bool isImgPath = true;
+    bool isImgPath = true; // convert image path to quad path
     for (char& c: quadPath)
         if (c == ':')
             isImgPath = false;

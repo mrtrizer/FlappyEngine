@@ -48,6 +48,7 @@ std::vector<std::string> split(const std::string &s, char delim)
     return elems;
 }
 
+/// Quad name should contain colon to distinguish image from quad with same name
 template <>
 shared_ptr<ResHandler<Quad>> ResManager::get<Quad>(const string& path)
 {
@@ -55,26 +56,33 @@ shared_ptr<ResHandler<Quad>> ResManager::get<Quad>(const string& path)
 
     if (m_resourceMap.count(path) == 0) {
         auto splittedPath = split(path, ':');
-        if (splittedPath.size() != 2)
+        string atlasPath;
+        string quadPath;
+        if (splittedPath.size() == 2) {
+            atlasPath = splittedPath[0];
+            quadPath = splittedPath[1];
+        } else {
             throw runtime_error("wrong path format");
-        string textureName = splittedPath[1];
-        if (splittedPath[0].size() > 0) { // if atlas path, load atlas
-            string atlasName = splittedPath[0];// get atlas name
-            auto atlas = get<Atlas>(atlasName);
-            string quadName = splittedPath[1]; // get quad name in atlas
-            auto quadHandler = make_shared<ResHandler<Quad>>(path, unique_ptr<Quad>(new Quad(atlas, quadName, shared_from_this())), shared_from_this());
+        }
+
+        if (!atlasPath.empty()) { // if atlas path, load atlas
+            auto atlas = get<Atlas>(atlasPath);
+            auto quad = unique_ptr<Quad>(new Quad(atlas, quadPath, shared_from_this()));
+            auto quadHandler = make_shared<ResHandler<Quad>>(path, std::move(quad), shared_from_this());
             quadHandler->addDependency(atlas);
             m_resourceMap.emplace(path, quadHandler);
         } else { // if just image path
-            string quadName = "__full__";
-            string atlasName = string("atlas_full__") + textureName;
-            ;{
+            string textureName = quadPath;
+            string defaultQuadName = "__full__";
+            string defaultAtlasName = string("atlas_full__") + textureName;
+            {
                 auto atlas = Atlas(textureName); // create atlas dependent from image
-                atlas.addRect(quadName,{0,0,1,1});
-                MGR<ResManager>()->set(atlasName, std::move(atlas));
+                atlas.addRect(defaultQuadName,{0,0,1,1});
+                MGR<ResManager>()->set(defaultAtlasName, std::move(atlas));
             }
-            auto quadHandler = make_shared<ResHandler<Quad>>(path, unique_ptr<Quad>(new Quad(get<Atlas>(atlasName), quadName, shared_from_this())), shared_from_this());
-            quadHandler->addDependency(get<Atlas>(atlasName));
+            auto defaultQuad = unique_ptr<Quad>(new Quad(get<Atlas>(defaultAtlasName), defaultQuadName, shared_from_this()));
+            auto quadHandler = make_shared<ResHandler<Quad>>(path, std::move(defaultQuad), shared_from_this());
+            quadHandler->addDependency(get<Atlas>(defaultAtlasName));
             m_resourceMap.emplace(path, quadHandler);
         }
     }
