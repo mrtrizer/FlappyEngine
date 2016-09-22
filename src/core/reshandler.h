@@ -63,13 +63,12 @@ public:
     }
     bool markedReload() const override {return m_markReload;}
 
-    template <typename ResManagerT>
-    void reloadFromSource_(std::shared_ptr<ResManagerT> resManager) {
-        setNewResource(std::move(resManager->load<ResT>(m_name)), resManager);
-    }
-
     void reloadFromSource(std::shared_ptr<ResManager> resManager) override {
-        reloadFromSource_(resManager);
+        // ResManager is incomplete class becouse of dependency loop
+        // but I also can't move the method to .cpp becouse of template class
+        [this](auto autoResManager){
+            setNewResource(std::move(autoResManager->template load<ResT>(m_name)), autoResManager);
+        }(resManager);
     }
 
 private:
@@ -89,11 +88,6 @@ private:
     void reload()
     {
         m_markReload = true;
-    }
-
-    template <typename ResManagerT>
-    void load(std::shared_ptr<ResManagerT> resManager, const std::string& path) {
-        m_newResource = resManager->load<ResT>(path);
     }
 
     void setNewResource(std::unique_ptr<ResT>&& newResource, std::shared_ptr<ResManager> resManager)
