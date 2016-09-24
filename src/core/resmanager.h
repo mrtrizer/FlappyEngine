@@ -30,15 +30,20 @@ public:
         using namespace std;
         using ResourceTD = typename decay<ResourceT>::type;
         auto newRes = unique_ptr<ResourceTD>(new ResourceTD(forward<ResourceT>(resource)));
-        m_resourceMap.emplace(path, make_shared<ResHandler<ResourceTD>>(path, std::move(newRes), shared_from_this()));
+        auto resHandler = make_shared<ResHandler<ResourceTD>>(path);
+        resHandler->setNewResource(std::move(newRes), shared_from_this());
+        m_resourceMap.emplace(path, std::move(resHandler));
     }
 
     template <typename ResourceT>
     std::shared_ptr<ResHandler<ResourceT>> get(const std::string& path)
     {
         using namespace std;
-        if (m_resourceMap.count(path) == 0)
-            m_resourceMap.emplace(path, make_shared<ResHandler<ResourceT>>(path));
+        if (m_resourceMap.count(path) == 0) {
+            auto resHandler = make_shared<ResHandler<ResourceT>>(path);
+            initRes<ResourceT>(resHandler);
+            m_resourceMap.emplace(path, resHandler);
+        }
         return dynamic_pointer_cast<ResHandler<ResourceT>>(m_resourceMap[path]);
     }
 
@@ -54,6 +59,11 @@ private:
         throw std::runtime_error(path + " Can't be loaded. Template was not specialized for this type of resources.");
         return nullptr;
     }
+
+    template <typename ResourceT>
+    void initRes(std::shared_ptr<ResHandler<ResourceT>>) {
+
+    }
 };
 
 template<>
@@ -63,7 +73,7 @@ template<>
 std::unique_ptr<Atlas> ResManager::load<Atlas>(const std::string& path) const;
 
 template <>
-std::shared_ptr<ResHandler<Quad>> ResManager::get<Quad>(const std::string& path);
+void ResManager::initRes<Quad>(std::shared_ptr<ResHandler<Quad>>);
 
 } // flappy
 

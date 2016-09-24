@@ -23,12 +23,7 @@ template <typename ResT>
 class ResHandler: public IResHandler {
     friend class ResManager;
 public:
-    ResHandler(std::string name, std::unique_ptr<ResT>&& resource, std::shared_ptr<ResManager> resManager):
-        m_name(name)
-    {
-        setNewResource(std::move(resource), resManager);
-    }
-    ResHandler(std::string name): m_markReload(true), m_name(name) {}
+    ResHandler(std::string name): m_markReload(true), m_path(name) {}
     bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
     bool updated() const override { return m_updated; }
     ResT& resource() { return *m_resource; }
@@ -67,8 +62,16 @@ public:
         // ResManager is incomplete class becouse of dependency loop
         // but I also can't move the method to .cpp becouse of template class
         [this](auto autoResManager){
-            setNewResource(std::move(autoResManager->template load<ResT>(m_name)), autoResManager);
+            setNewResource(std::move(autoResManager->template load<ResT>(m_path)), autoResManager);
         }(resManager);
+    }
+
+    std::string path() const {
+        return m_path;
+    }
+
+    int id() const {
+        return ClassId<ResT>::id();
     }
 
 private:
@@ -78,7 +81,7 @@ private:
     bool m_updated = false;
     bool m_dependenciesReady = false;
     bool m_markReload = false;
-    std::string m_name;
+    std::string m_path;
 
     void addDependency(std::shared_ptr<IResHandler> handler)
     {

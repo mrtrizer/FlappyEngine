@@ -1,4 +1,5 @@
 #include "sprite.h"
+#include "quad.h"
 
 namespace flappy {
 
