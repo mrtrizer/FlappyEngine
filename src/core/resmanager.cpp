@@ -13,18 +13,18 @@ using namespace Tools;
 
 void ResManager::update(TimeDelta)
 {
-    for (unsigned j = 0; j < m_resourceMap.size(); j++) {
-        auto factory = m_factories[j];
-        if (factory == nullptr)
-            continue;
-        auto map = m_resourceMap[j];
+    for (unsigned resId = 0; resId < m_resourceMaps.size(); resId++) {
+        auto factory = Tools::resizeAndGet(m_factories, resId);
+        auto map = m_resourceMaps[resId];
         for (auto i = map.begin(); i != map.end(); ) {
-            i->second->update();
-            if (i->second->markedReload()) {
-                auto res = factory->load(i->second->path());
-                i->second->setNewResource(res);
-                factory->initHandler(i->second, res, shared_from_this());
+            if (factory != nullptr) { // load only with factory
+                if (i->second->loading()) {
+                    auto res = factory->load(i->second->path());
+                    i->second->setNewResource(res);
+                    factory->initHandler(i->second, res, shared_from_this());
+                }
             }
+            i->second->update();
             if (i->second.use_count() == 1)
                 i = map.erase(i);
             else

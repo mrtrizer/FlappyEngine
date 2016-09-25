@@ -31,7 +31,7 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 #ifndef ANDROID_JNI
 
 #define LOGI(...) std::printf("\x1b[32m [INFO] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
-
+#define LOGW(...) std::printf("\x1b[33m [WARNING] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
 #define LOGE(...) std::printf("\x1b[31m [ERROR] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
 
 #else
@@ -39,6 +39,7 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 #include <android/log.h>
 #define  LOG_TAG    "libgl2jni"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define  LOGW(...)  __android_log_print(ANDROID_LOG_WARNING,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #endif
 
@@ -58,6 +59,13 @@ namespace Tools
 
     using PMatrix = std::vector<float>;
     bool isPowOfTwo(int x);
+
+    template <typename T>
+    T& resizeAndGet(std::vector<T>& vector, unsigned pos) {
+        if (vector.size() <= pos)
+            vector.resize(pos + 1);
+        return vector[pos];
+    }
 
     class not_implemented {};
     class unknown_intersect_obj {};

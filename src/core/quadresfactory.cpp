@@ -32,7 +32,7 @@ void QuadResFactory::initRes(std::shared_ptr<IResHandler> quadHandler, std::shar
         {
             auto atlas = Atlas(textureName); // create atlas dependent from image
             atlas.addRect(defaultQuadName,{0,0,1,1});
-            resManager->set<Atlas>(defaultAtlasName, atlas);
+            resManager->set(defaultAtlasName, atlas);
         }
         auto defaultAtlas = resManager->get<Atlas>(defaultAtlasName);
         auto defaultQuad = make_shared<Quad>(defaultAtlas, defaultQuadName, resManager);

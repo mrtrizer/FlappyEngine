@@ -4,7 +4,6 @@
 #include <list>
 
 #include "manager.h"
-#include "iresourceloader.h"
 #include "res.h"
 #include "reshandler.h"
 
@@ -23,75 +22,74 @@ public:
     virtual void initHandler(std::shared_ptr<IResHandler>, std::shared_ptr<IRes>, std::shared_ptr<ResManager>) {}
 };
 
-class ResManager: public Manager, public std::enable_shared_from_this<ResManager>
+class ResManager final: public Manager, public std::enable_shared_from_this<ResManager>
 {
     template <typename ResT>
     friend class ResHandler;
 
 public:
+    ResManager() = default;
+    ResManager(const ResManager&) = delete;
+    ResManager(ResManager&&) = default;
+    ~ResManager() = default;
+    ResManager& operator=(const ResManager&) = delete;
+    ResManager& operator=(ResManager&&) = default;
 
     template <typename ResT>
     void bind(std::shared_ptr<IResFactory> factory) {
         const unsigned resId = ClassId<IRes, ResT>::id();
-        if (m_factories.size() <= resId)
-            m_factories.resize(resId + 1);
-        m_factories[resId] = factory;
+        Tools::resizeAndGet(m_factories, resId) = factory;
     }
 
-    template <typename ResourceT>
-    void set(const std::string& path, ResourceT& resource)
+    template <typename ResT>
+    void set(const std::string& path, ResT&& resource)
     {
         using namespace std;
 
-        const unsigned resId = ClassId<IRes, ResourceT>::id();
+        const unsigned resId = ClassId<IRes, decay_t<ResT>>::id();
 
-        if (m_resourceMap.size() <= resId)
-            m_resourceMap.resize(resId + 1);
+        auto& resList = Tools::resizeAndGet(m_resourceMaps, resId);
 
-        using ResourceTD = typename decay<ResourceT>::type;
-        auto newRes = make_shared<ResourceTD>(forward<ResourceT>(resource));
-        auto resHandler = make_shared<ResHandler<ResourceTD>>(path);
+
+        auto newRes = make_shared<decay_t<ResT>>(forward<ResT>(resource));
+        shared_ptr<ResHandler<decay_t<ResT>>> resHandler;
+        auto handlerIter = resList.find(path);
+        if (handlerIter == resList.end()) {
+            resHandler = make_shared<ResHandler<decay_t<ResT>>>(path);
+        } else {
+            resHandler = static_pointer_cast<ResHandler<decay_t<ResT>>>(handlerIter->second);
+        }
         resHandler->setNewResource(newRes);
 
-        auto factory = m_factories[resId];
-        if (!factory)
-            return ERROR_MSG(VOID_VALUE,"Resource type is not registered!");
+        if (auto factory = Tools::resizeAndGet(m_factories, resId))
+            factory->initHandler(resHandler, newRes, shared_from_this());
 
-        factory->initHandler(resHandler, newRes, shared_from_this());
-
-        m_resourceMap[resId].emplace(path, std::move(resHandler));
+        resList.emplace(path, std::move(resHandler));
     }
 
-    template <typename ResourceT>
-    std::shared_ptr<ResHandler<ResourceT>> get(const std::string& path)
+    template <typename ResT>
+    std::shared_ptr<ResHandler<ResT>> get(const std::string& path)
     {
         using namespace std;
 
-        const unsigned resId = ClassId<IRes, ResourceT>::id();
+        const unsigned resId = ClassId<IRes, ResT>::id();
 
-        //TODO: Factory length check
+        auto& resList = Tools::resizeAndGet(m_resourceMaps, resId);
 
-        if (m_resourceMap.size() <= resId)
-            m_resourceMap.resize(resId + 1);
-
-        auto factory = m_factories[resId];
-        if (!factory)
-            return ERROR_MSG(nullptr,"Resource type is not registered!");
-
-        if (m_resourceMap[resId].count(path) == 0) {
-            auto resHandler = make_shared<ResHandler<ResourceT>>(path);
-            factory->initRes(resHandler, shared_from_this());
-            m_resourceMap[resId].emplace(path, resHandler);
+        if (resList.count(path) == 0) {
+            auto resHandler = make_shared<ResHandler<ResT>>(path);
+            if (auto factory = Tools::resizeAndGet(m_factories, resId))
+                factory->initRes(resHandler, shared_from_this());
+            resList.emplace(path, resHandler);
         }
-        return dynamic_pointer_cast<ResHandler<ResourceT>>(m_resourceMap[resId][path]);
+        return static_pointer_cast<ResHandler<ResT>>(resList[path]);
     }
 
     void update(TimeDelta) override;
 
 private:
-    std::vector<std::unordered_map<std::string, std::shared_ptr<IResHandler>>> m_resourceMap;
+    std::vector<std::unordered_map<std::string, std::shared_ptr<IResHandler>>> m_resourceMaps;
     std::vector<std::shared_ptr<IResFactory>> m_factories;
-
 };
 
 } // flappy

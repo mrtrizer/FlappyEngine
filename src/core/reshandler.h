@@ -13,24 +13,28 @@ class Atlas;
 
 class IResHandler {
 public:
+    IResHandler() = default;
+    IResHandler(const IResHandler&) = delete;
+    IResHandler(IResHandler&&) = default;
     virtual ~IResHandler() = default;
+    IResHandler& operator=(const IResHandler&) = delete;
+    IResHandler& operator=(IResHandler&&) = default;
+
     virtual void update() = 0;
     virtual bool ready() const = 0;
     virtual bool updated() const = 0;
-    virtual bool markedReload() const = 0;
+    virtual bool loading() const = 0;
     virtual void setNewResource(std::shared_ptr<IRes>) = 0;
     virtual std::string path() const = 0;
     virtual void addDependency(std::shared_ptr<IResHandler> handler) = 0;
 };
 
 template <typename ResT>
-class ResHandler: public IResHandler {
+class ResHandler final: public IResHandler {
     friend class ResManager;
 public:
-    ResHandler(std::string name): m_markReload(true), m_path(name) {}
-    bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
-    bool updated() const override { return m_updated; }
-    ResT& resource() { return *m_resource; }
+    ResHandler(const std::string& name): m_loading(true), m_path(name) {}
+
     void update() override
     {
         if (!m_dependencies.empty()) { // check dependencies first, if there are any dependencies
@@ -60,22 +64,13 @@ public:
             }
         }
     }
-    bool markedReload() const override {return m_markReload;}
-
-    std::string path() const override {
-        return m_path;
-    }
-
-    unsigned id() const {
-        return ClassId<IRes, ResT>::id();
-    }
 
     void setNewResource(std::shared_ptr<IRes> newResource) override
     {
         if (newResource->id() != ClassId<IRes, ResT>::id())
             return ERROR_MSG(VOID_VALUE, "Resource type mismatch");
         m_newResource = std::dynamic_pointer_cast<ResT>(newResource);
-        m_markReload = false;
+        m_loading = false;
         m_dependencies.clear();
     }
 
@@ -85,20 +80,28 @@ public:
         m_dependencies.push_back(handler);
     }
 
+    bool ready() const override  { return m_resource != nullptr && m_dependenciesReady; }
+
+    bool updated() const override { return m_updated; }
+
+    std::shared_ptr<ResT> resource() { return m_resource; }
+
+    bool loading() const override {return m_loading;}
+
+    std::string path() const override { return m_path; }
+
+    unsigned id() const { return ClassId<IRes, ResT>::id(); }
+
+    void reload() { m_loading = true; }
+
 private:
     std::shared_ptr<ResT> m_newResource = nullptr;
     std::shared_ptr<ResT> m_resource = nullptr;
     std::list<std::shared_ptr<IResHandler>> m_dependencies;
     bool m_updated = false;
     bool m_dependenciesReady = false;
-    bool m_markReload = false;
+    bool m_loading = false;
     std::string m_path;
-
-    void reload()
-    {
-        m_markReload = true;
-    }
-
 };
 
 } // flappy

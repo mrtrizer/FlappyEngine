@@ -11,13 +11,13 @@ using namespace std;
 using namespace Tools;
 
 Rect Quad::rect() {
-    return m_atlas->resource().rect(m_quadName);
+    return m_atlas->resource()->rect(m_quadName);
 }
 
 std::shared_ptr<ResHandler<Texture>> Quad::texture() {
     if (!m_atlas->ready())
         return nullptr;
-    return m_resManager.lock()->get<Texture>(m_atlas->resource().dependence());
+    return m_resManager.lock()->get<Texture>(m_atlas->resource()->dependence());
 }
 
 } // flappy

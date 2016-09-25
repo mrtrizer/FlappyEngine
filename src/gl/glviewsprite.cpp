@@ -53,8 +53,8 @@ void GLViewSprite::updateVBOs() {
     m_rect.reset(GL_TRIANGLE_STRIP);
     m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
 
-    auto texture = m_quad->resource().texture();
-    m_rect.addVBO<GLTexture::UV>(texture->resource().uvs(), getShader()->findAttr("aTexCoord"));
+    auto texture = m_quad->resource()->texture();
+    m_rect.addVBO<GLTexture::UV>(texture->resource()->uvs(), getShader()->findAttr("aTexCoord"));
 
 }
 
@@ -65,11 +65,12 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
                 updateFrame();
             }
             getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
-                auto texture = m_quad->resource().texture();
+                auto texture = m_quad->resource()->texture();
                 glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
                 glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
                 glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
-                dynamic_cast<GLTexture&>(texture->resource()).bind(getShader()->findUniform("uTex"), 0);
+                auto glTexture = static_pointer_cast<GLTexture>(texture->resource());
+                glTexture->bind(getShader()->findUniform("uTex"), 0);
             });
         }
 }
@@ -77,10 +78,10 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 void GLViewSprite::updateFrame() {
     if (m_rect.size() != 4 * sizeof(GLTexture::UV))
         updateVBOs();
-    auto texture = m_quad->resource().texture();
-    auto rect = m_quad->resource().rect();
-    float relWidth = texture->resource().relWidth();
-    float relHeight = texture->resource().relHeight();
+    auto texture = m_quad->resource()->texture();
+    auto rect = m_quad->resource()->rect();
+    float relWidth = texture->resource()->relWidth();
+    float relHeight = texture->resource()->relHeight();
     float newRelWidth = relWidth * (rect.x2 - rect.x1);
     float newRelHeight = relHeight * (rect.y2 - rect.y1);
     float relX = rect.x1 * relWidth;
