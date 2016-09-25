@@ -167,7 +167,6 @@ HEADERS += \
     $$PWD/core/atlas.h \
     $$PWD/core/quad.h \
     $$PWD/core/iresourceloader.h \
-    $$PWD/qt/qtresourceloader.h \
     $$PWD/core/managerlist.h \
     $$PWD/glut/glutinit.h \
     $$PWD/core/color.h \
@@ -182,7 +181,11 @@ HEADERS += \
     $$PWD/core/classid.h \
     $$PWD/core/eventsystem.h \
     $$PWD/core/resmanager.h \
-    $$PWD/core/reshandler.h
+    $$PWD/core/reshandler.h \
+    $$PWD/core/res.h \
+    $$PWD/qt/qttextureresfactory.h \
+    $$PWD/core/atlasresfactory.h \
+    $$PWD/core/quadresfactory.h
 
 
 SOURCES += \
@@ -203,7 +206,6 @@ SOURCES += \
     $$PWD/core/transform.cpp \
     $$PWD/core/atlas.cpp \
     $$PWD/core/quad.cpp \
-    $$PWD/qt/qtresourceloader.cpp \
     $$PWD/core/managerlist.cpp \
     $$PWD/glut/glutinit.cpp \
     $$PWD/core/color.cpp \
@@ -216,6 +218,9 @@ SOURCES += \
     $$PWD/core/resmanager.cpp \
     $$PWD/gl/glviewmanager.cpp \
     $$PWD/core/eventsystem.cpp \
-    $$PWD/core/reshandler.cpp
+    $$PWD/core/reshandler.cpp \
+    $$PWD/qt/qttextureresfactory.cpp \
+    $$PWD/core/atlasresfactory.cpp \
+    $$PWD/core/quadresfactory.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

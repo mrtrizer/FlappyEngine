@@ -5,7 +5,7 @@
 
 #include "manager.h"
 #include "iresourceloader.h"
-
+#include "res.h"
 #include "reshandler.h"
 
 namespace flappy {
@@ -14,66 +14,85 @@ class Texture;
 class Atlas;
 class Quad;
 
+class ResManager;
+
+class IResFactory {
+public:
+    virtual std::shared_ptr<IRes> load(const std::string&) { return nullptr; }
+    virtual void initRes(std::shared_ptr<IResHandler>, std::shared_ptr<ResManager>) {}
+    virtual void initHandler(std::shared_ptr<IResHandler>, std::shared_ptr<IRes>, std::shared_ptr<ResManager>) {}
+};
+
 class ResManager: public Manager, public std::enable_shared_from_this<ResManager>
 {
     template <typename ResT>
     friend class ResHandler;
 
 public:
-    ResManager(std::shared_ptr<IResourceLoader> resourceLoader):
-        m_resourceLoader(resourceLoader)
-    {}
+
+    template <typename ResT>
+    void bind(std::shared_ptr<IResFactory> factory) {
+        const unsigned resId = ClassId<IRes, ResT>::id();
+        if (m_factories.size() <= resId)
+            m_factories.resize(resId + 1);
+        m_factories[resId] = factory;
+    }
 
     template <typename ResourceT>
-    void set(const std::string& path, ResourceT&& resource)
+    void set(const std::string& path, ResourceT& resource)
     {
         using namespace std;
+
+        const unsigned resId = ClassId<IRes, ResourceT>::id();
+
+        if (m_resourceMap.size() <= resId)
+            m_resourceMap.resize(resId + 1);
+
         using ResourceTD = typename decay<ResourceT>::type;
-        auto newRes = unique_ptr<ResourceTD>(new ResourceTD(forward<ResourceT>(resource)));
+        auto newRes = make_shared<ResourceTD>(forward<ResourceT>(resource));
         auto resHandler = make_shared<ResHandler<ResourceTD>>(path);
-        resHandler->setNewResource(std::move(newRes), shared_from_this());
-        m_resourceMap.emplace(path, std::move(resHandler));
+        resHandler->setNewResource(newRes);
+
+        auto factory = m_factories[resId];
+        if (!factory)
+            return ERROR_MSG(VOID_VALUE,"Resource type is not registered!");
+
+        factory->initHandler(resHandler, newRes, shared_from_this());
+
+        m_resourceMap[resId].emplace(path, std::move(resHandler));
     }
 
     template <typename ResourceT>
     std::shared_ptr<ResHandler<ResourceT>> get(const std::string& path)
     {
         using namespace std;
-        if (m_resourceMap.count(path) == 0) {
+
+        const unsigned resId = ClassId<IRes, ResourceT>::id();
+
+        //TODO: Factory length check
+
+        if (m_resourceMap.size() <= resId)
+            m_resourceMap.resize(resId + 1);
+
+        auto factory = m_factories[resId];
+        if (!factory)
+            return ERROR_MSG(nullptr,"Resource type is not registered!");
+
+        if (m_resourceMap[resId].count(path) == 0) {
             auto resHandler = make_shared<ResHandler<ResourceT>>(path);
-            initRes<ResourceT>(resHandler);
-            m_resourceMap.emplace(path, resHandler);
+            factory->initRes(resHandler, shared_from_this());
+            m_resourceMap[resId].emplace(path, resHandler);
         }
-        return dynamic_pointer_cast<ResHandler<ResourceT>>(m_resourceMap[path]);
+        return dynamic_pointer_cast<ResHandler<ResourceT>>(m_resourceMap[resId][path]);
     }
 
     void update(TimeDelta) override;
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<IResHandler>> m_resourceMap;
-    std::shared_ptr<IResourceLoader> m_resourceLoader;
+    std::vector<std::unordered_map<std::string, std::shared_ptr<IResHandler>>> m_resourceMap;
+    std::vector<std::shared_ptr<IResFactory>> m_factories;
 
-    template <typename Type>
-    std::unique_ptr<Type> load(const std::string& path) const
-    {
-        throw std::runtime_error(path + " Can't be loaded. Template was not specialized for this type of resources.");
-        return nullptr;
-    }
-
-    template <typename ResourceT>
-    void initRes(std::shared_ptr<ResHandler<ResourceT>>) {
-
-    }
 };
-
-template<>
-std::unique_ptr<Texture> ResManager::load<Texture>(const std::string& path) const;
-
-template<>
-std::unique_ptr<Atlas> ResManager::load<Atlas>(const std::string& path) const;
-
-template <>
-void ResManager::initRes<Quad>(std::shared_ptr<ResHandler<Quad>>);
 
 } // flappy
 

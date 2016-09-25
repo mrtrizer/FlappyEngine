@@ -2,12 +2,14 @@
 
 {?IF not console_mode?}
 #include <glut/glutinit.h>
-#include <qt/qtresourceloader.h>
+#include <qt/qttextureresfactory.h>
 #include <core/resmanager.h>
 #include <core/inputmanager.h>
 #include <core/entitymanager.h>
 #include <core/scenemanager.h>
 #include <core/screenmanager.h>
+#include <core/atlasresfactory.h>
+#include <core/quadresfactory.h>
 {?ENDIF?}
 #include <core/managerlist.h>
 #include <core/appmanager.h>
@@ -21,12 +23,14 @@ int main(int argc, char *argv[])
     auto managerList = make_shared<ManagerList>();
     managerList->create<AppManager>(argc, argv);
 {?IF not console_mode?}
-    managerList->create<ResManager>(make_shared<QtResourceLoader>(":///{?name.lower()?}/res/"));
+    auto resManager = managerList->create<ResManager>();
+    resManager->bind<Texture>(make_shared<QtTextureResFactory>(":///tests_gl/res/"));
+    resManager->bind<Atlas>(make_shared<AtlasResFactory>());
+    resManager->bind<Quad>(make_shared<QuadResFactory>());
     managerList->create<EntityManager>();
     managerList->create<SceneManager>();
     managerList->create<ScreenManager>();
     managerList->create<InputManager>();
-
 
     GLUTInit::initGLUT(managerList);
 {?ENDIF?}

@@ -2,7 +2,8 @@
 
 #include <glm/vec2.hpp>
 
-#include <core/tools.h>
+#include "tools.h"
+#include "res.h"
 
 namespace flappy {
 
@@ -13,7 +14,7 @@ class Atlas;
 template<typename ResourceT>
 class ResHandler;
 
-class Quad {
+class Quad: public Res<Quad> {
 public:
     Quad(std::shared_ptr<ResHandler<Atlas>> atlas, const std::string& quadName, std::shared_ptr<ResManager> resManager):
         m_atlas(atlas),

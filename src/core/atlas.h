@@ -3,10 +3,11 @@
 #include <unordered_map>
 
 #include "tools.h"
+#include "res.h"
 
 namespace flappy {
 
-class Atlas
+class Atlas: public Res<Atlas>
 {
 public:
     Atlas(const std::string& dependence = "__img_missing__");
