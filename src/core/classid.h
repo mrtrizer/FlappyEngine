@@ -3,7 +3,7 @@
 namespace flappy {
 
 /// Gives index for every class, derived from BaseClass
-template <typename BaseClass>
+template <typename Context>
 class ClassCounter {
 public:
     ClassCounter():
@@ -17,18 +17,18 @@ private:
     const unsigned m_curId = 0;
 };
 
-template <typename BaseClass>
-unsigned ClassCounter<BaseClass>::m_count = 0;
+template <typename Context>
+unsigned ClassCounter<Context>::m_count = 0;
 
-template <typename BaseClass, typename DerivedClass>
+template <typename Context, typename Class>
 class ClassId {
 public:
     constexpr static unsigned id() {return m_counter.id();}
 private:
-    static ClassCounter<BaseClass> m_counter;
+    static ClassCounter<Context> m_counter;
 };
 
-template <typename BaseClass, typename DerivedClass>
-ClassCounter<BaseClass> ClassId<BaseClass, DerivedClass>::m_counter;
+template <typename Context, typename Class>
+ClassCounter<Context> ClassId<Context, Class>::m_counter;
 
 } // flappy
