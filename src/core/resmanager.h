@@ -42,7 +42,7 @@ public:
     }
 
     template <typename ResT>
-    void set(const std::string& path, ResT&& resource)
+    auto set(const std::string& path, ResT&& resource)
     {
         using namespace std;
 
@@ -56,6 +56,7 @@ public:
         auto handlerIter = resList.find(path);
         if (handlerIter == resList.end()) {
             resHandler = make_shared<ResHandler<decay_t<ResT>>>(path);
+            resList.emplace(path, resHandler);
         } else {
             resHandler = static_pointer_cast<ResHandler<decay_t<ResT>>>(handlerIter->second);
         }
@@ -64,7 +65,7 @@ public:
         if (auto factory = Tools::resizeAndGet(m_factories, resId))
             factory->initHandler(resHandler, newRes, shared_from_this());
 
-        resList.emplace(path, std::move(resHandler));
+        return resHandler;
     }
 
     template <typename ResT>

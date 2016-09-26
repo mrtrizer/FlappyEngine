@@ -15,7 +15,7 @@ void ResManager::update(TimeDelta)
 {
     for (unsigned resId = 0; resId < m_resourceMaps.size(); resId++) {
         auto factory = Tools::resizeAndGet(m_factories, resId);
-        auto map = m_resourceMaps[resId];
+        auto& map = m_resourceMaps[resId];
         for (auto i = map.begin(); i != map.end(); ) {
             if (factory != nullptr) { // load only with factory
                 if (i->second->loading()) {
