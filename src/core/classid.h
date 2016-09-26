@@ -2,7 +2,6 @@
 
 namespace flappy {
 
-/// Gives index for every class, derived from BaseClass
 template <typename Context>
 class ClassCounter {
 public:
@@ -23,6 +22,8 @@ unsigned ClassCounter<Context>::m_count = 0;
 template <typename Context, typename Class>
 class ClassId {
 public:
+    /// Returns serial ids for classes in a context.
+    /// Base or client classes can be used as a context.
     constexpr static unsigned id() {return m_counter.id();}
 private:
     static ClassCounter<Context> m_counter;
