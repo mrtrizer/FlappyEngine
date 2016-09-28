@@ -46,10 +46,6 @@ public:
                     m_dependenciesReady = true; // now, all dependencies are ready
                     m_updated = true;
                 }
-            } else { // all dependencies are ready and one of dependencies is updated
-                for (auto& dependence: m_dependencies)
-                    if (dependence->updated())
-                        m_updated = true;
             }
         } else {
             m_dependenciesReady = true;
@@ -61,6 +57,10 @@ public:
                 m_updated = true;
             } else {
                 m_updated = false;
+                 // all dependencies are ready and one of dependencies is updated
+                for (auto& dependence: m_dependencies)
+                    if (dependence->updated())
+                        m_updated = true;
             }
         }
     }
@@ -72,6 +72,7 @@ public:
         m_newResource = std::dynamic_pointer_cast<ResT>(newResource);
         m_loading = false;
         m_dependencies.clear();
+        m_updated = true;
     }
 
     void addDependency(std::shared_ptr<IResHandler> handler) override
