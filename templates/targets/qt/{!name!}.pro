@@ -11,6 +11,7 @@ INCLUDEPATH += ../../build/src/
 {?printList(inc_dirs,"INCLUDEPATH += ../../*\n")?}
 
 include("../../{!engine!}/src/FlappyEngine.pri")
+{?printList(moduleNames,"include(*.pri)\n")?}
 
 QMAKE_CXXFLAGS += -std=c++1y
 DEFINES += VIEW_TYPE=GL

@@ -1,0 +1,9 @@
+{
+	"name":"test",
+    "src": [
+        "test.cpp"
+    ],
+    "include": [
+        "."
+    ]
+}

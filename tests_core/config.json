@@ -3,6 +3,9 @@
 	"engine":"..",
 	"exclude":[],
 	"inc_dirs":[],
+	"modules":[
+		"modules/test"
+	],
 	"console_mode": true,
 	"qt, cmake": {
 		"libs": "-lgcov",
