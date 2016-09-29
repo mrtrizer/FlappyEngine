@@ -1,20 +1,22 @@
 #include <memory>
 
 {?IF not console_mode?}
-#include <glut/glutmanager.h>
+#include <glut/glutinit.h>
 #ifdef PNG_FOUND
-#include <png/libpngresourceloader.h>
+#include <png/libpngtexturefactory.h>
 #elif SDL_IMAGE_FOUND
-#include <sdl/sdlresourceloader.h>
+#include <sdl/sdltexturefactory.h>
 #endif
-#include <gl/glviewfactory.h>
-#include <core/resourcemanager.h>
+#include <core/resmanager.h>
 #include <core/inputmanager.h>
 #include <core/entitymanager.h>
 #include <core/scenemanager.h>
 #include <core/screenmanager.h>
+#include <core/atlasresfactory.h>
+#include <core/quadresfactory.h>
 {?ENDIF?}
-#include <core/flappyapp.h>
+#include <core/managerlist.h>
+#include <core/appmanager.h>
 #include <mygamemanager.h>
 
 using namespace flappy;
@@ -22,25 +24,34 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    auto flappyApp = make_shared<FlappyApp>();
+    auto managerList = make_shared<ManagerList>();
+    managerList->create<AppManager>(argc, argv);
 {?IF not console_mode?}
+    auto resManager = managerList->create<ResManager>();
 #ifdef PNG_FOUND
-    flappyApp->create<ResManager>(make_shared<LibPNGResourceLoader>("./res/"));
+    resManager->bind<Texture>(make_shared<LibPNGTextureFactory>("./res/"));
 #elif SDL_IMAGE_FOUND
-    flappyApp->create<ResManager>(make_shared<SDLResourceLoader>("./res/"));
+    fresManager->bind<Texture>(make_shared<SDLTextureFactory>("./res/"));
 #endif
-    flappyApp->create<EntityManager>();
-    flappyApp->create<SceneManager>();
-    flappyApp->create<ScreenManager>();
-    flappyApp->create<InputManager>();
-    GLUTManager::initGLUT(argc, argv, flappyApp);
-{?ENDIF?}
-    flappyApp->create<game::MyGameManager>();
+    resManager->bind<Atlas>(make_shared<AtlasResFactory>());
+    resManager->bind<Quad>(make_shared<QuadResFactory>());
+    managerList->create<EntityManager>();
+    managerList->create<SceneManager>();
+    managerList->create<ScreenManager>();
+    managerList->create<InputManager>();
 
-    flappyApp->init();
+    GLUTInit::initGLUT(managerList);
+{?ENDIF?}
+{?IF console_mode?}
+    managerList->create<game::MyGameManager>();
+{?ENDIF?}
+
+    managerList->init();
 
 {?IF not console_mode?}
-    return GLUTManager::mainLoop();
+    managerList->MGR<SceneManager>()->setScene(make_shared<game::MyScene>());
+
+    return GLUTInit::mainLoop();
 {?ENDIF?}
 {?IF console_mode?}
     return 0;

@@ -2,14 +2,14 @@
 
 #include <gl/gltexture.h>
 
-#include "libpngresourceloader.h"
+#include "libpngtexturefactory.h"
 
 namespace flappy {
 
 using namespace std;
 
 /// @param resPath Path to resource dir
-LibPNGResourceLoader::LibPNGResourceLoader(string path):
+LibPNGTextureFactory::LibPNGTextureFactory(string path):
     m_path(path){
 
 }
@@ -17,7 +17,7 @@ LibPNGResourceLoader::LibPNGResourceLoader(string path):
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-unique_ptr<Texture> LibPNGResourceLoader::getTexture(const string& path) const {
+std::shared_ptr<IRes> LibPNGTextureFactory::load(const string& path) {
     string fullPath = m_path + "/" + path + ".png";
     FILE *fp = fopen(fullPath.data(), "rb");
     if (!fp)
@@ -86,7 +86,7 @@ unique_ptr<Texture> LibPNGResourceLoader::getTexture(const string& path) const {
         img_data[i * 4 + 2] = c;
     }
 
-    auto result = unique_ptr<GLTexture>(new GLTexture((char *)img_data, width, height));
+    auto result = make_shared<GLTexture>((char *)img_data, width, height);
 
     delete [] row_pointers;
     delete [] img_data;

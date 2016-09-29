@@ -1,6 +1,6 @@
 #include <SDL/SDL_image.h>
 
-#include "sdlresourceloader.h"
+#include "sdltexturefactory.h"
 #include <gl/gltexture.h>
 
 namespace flappy {
@@ -8,7 +8,7 @@ namespace flappy {
 using namespace std;
 
 /// @param resPath Path to resource dir
-SDLResourceLoader::SDLResourceLoader(string path):
+SDLTextureFactory::SDLTextureFactory(string path):
     m_path(path){
 
 }
@@ -16,7 +16,7 @@ SDLResourceLoader::SDLResourceLoader(string path):
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-unique_ptr<Texture> SDLResourceLoader::getTexture(const string& path) const {
+std::shared_ptr<IRes> SDLTextureFactory::getTexture(const string& path) {
     string fullPath = m_path + "/" + path + ".png";
 
     SDL_Surface *image;
@@ -33,7 +33,7 @@ unique_ptr<Texture> SDLResourceLoader::getTexture(const string& path) const {
         pixels[i * 4 + 2] = c;
     }
 
-    auto result = unique_ptr<GLTexture>(new GLTexture((char *)image->pixels, image->w, image->h));
+    auto result = make_shared<GLTexture>((char *)image->pixels, image->w, image->h);
 
     return move(result);
 }

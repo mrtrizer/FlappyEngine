@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <core/iresourceloader.h>
+#include <core/resmanager.h>
 #include <core/atlas.h>
 #include <core/texture.h>
 
@@ -10,12 +10,11 @@ namespace flappy {
 
 class Texture;
 
-class LibPNGResourceLoader :public IResourceLoader
+class LibPNGTextureFactory :public IResFactory
 {
 public:
-    LibPNGResourceLoader(std::string path);
-    virtual std::unique_ptr<Texture> getTexture(const std::string& name) const override;
-    virtual std::unique_ptr<Atlas> getAtlas(const std::string& name) const override {return nullptr;}
+    LibPNGTextureFactory(std::string path);
+    std::shared_ptr<IRes> load(const std::string& path) override;
 
     class file_open_error {};
     /// Wrong file format (after checking png signature)
@@ -31,4 +30,3 @@ private:
 };
 
 } // flappy
-
