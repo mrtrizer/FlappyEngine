@@ -23,7 +23,7 @@
 		A0A0E96E1D1D9129005E2DF2 /* GLWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0A0E96C1D1D9129005E2DF2 /* GLWrapper.cpp */; };
 		{?printXCodeBuildFileList(fileList(projectDir + "/engine/src/core/",".cpp"))?}
 		{?printXCodeBuildFileList(fileList(projectDir + "/engine/src/gl/",".cpp"))?}
-		{?printXCodeBuildFileList(fileList(projectDir + "/targets/ios/res/",".png"))?}
+		{?printXCodeBuildFileList(fileList(projectDir + "/build/res/",".png"))?}
 		{?printXCodeBuildFileList(fileList(projectDir + "/src/",".cpp"))?}
 
 /* End PBXBuildFile section */
@@ -60,7 +60,7 @@
 {?printXCodeFileList(fileList(projectDir + "/engine/src/core/",".cpp"))?}
 {?printXCodeFileList(fileList(projectDir + "/engine/src/gl/",".h"))?}
 {?printXCodeFileList(fileList(projectDir + "/engine/src/gl/",".cpp"))?}
-{?printXCodeFileList(fileList(projectDir + "/targets/ios/res/",".png"))?}
+{?printXCodeFileList(fileList(projectDir + "/build/res/",".png"))?}
 {?printXCodeFileList(fileList(projectDir + "/src/",".h"))?}
 {?printXCodeFileList(fileList(projectDir + "/src/",".cpp"))?}
 /* End PBXFileReference section */
@@ -204,7 +204,7 @@
 		3A4CF88F1A89593700324DBF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-{?printXCodeHashList(fileList(projectDir + "/targets/ios/res/",".png"))?}
+{?printXCodeHashList(fileList(projectDir + "/build/res/",".png"))?}
 			);
 			name = Assets;
 			path = ../../res;
@@ -281,7 +281,7 @@
 				3A4CF8DF1A895B1100324DBF /* Images.xcassets in Resources */,
 				3A4CF8DD1A895B0700324DBF /* Main.storyboard in Resources */,
 				3A4CF8DE1A895B0A00324DBF /* LaunchScreen.xib in Resources */,
-{?printXCodeBuildHashList(fileList(projectDir + "/targets/ios/res/",".png"))?}
+{?printXCodeBuildHashList(fileList(projectDir + "/build/res/",".png"))?}
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
