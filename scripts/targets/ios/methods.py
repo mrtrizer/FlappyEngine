@@ -15,11 +15,29 @@ def printXCodeFileList(list):
         text += line
     return text
 
+def printXCodeBuildFileList(list):
+    text = ""
+    for item in list:
+        line = "$hash$ /* $name$ */ = {isa = PBXBuildFile; fileRef = $file_hash$ /* $name$ */; };\n"
+        line = re.sub("\$name\$", os.path.basename(item), line)
+        line = re.sub("\$file_hash\$", md5.new(item).hexdigest()[:24].upper(), line)
+        line = re.sub("\$hash\$", md5.new(item + "The B52's").hexdigest()[:24].upper(), line)
+        text += line
+    return text
 
 def printXCodeHashList(list):
     text = ""
     for item in list:
         line = re.sub("\$", os.path.basename(item), "% /* $ */,\n")
         line = re.sub("\%", md5.new(item).hexdigest()[:24].upper(), line)
+        text += line
+    return text
+
+def printXCodeBuildHashList(list):
+    text = ""
+    for item in list:
+        line = "$hash$ /* $name$ */,\n"
+        line = re.sub("\$name\$", os.path.basename(item), line)
+        line = re.sub("\$hash\$", md5.new(item + "The B52's").hexdigest()[:24].upper(), line)
         text += line
     return text

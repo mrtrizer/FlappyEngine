@@ -20,16 +20,19 @@ template <typename Context>
 unsigned ClassCounter<Context>::m_count = 0;
 
 template <typename Context, typename Class>
-class ClassId {
+class ClassId_ {
 public:
     /// Returns serial ids for classes in a context.
     /// Base or client classes can be used as a context.
-    constexpr static unsigned id() {return m_counter.id();}
+    static unsigned id() {return m_counter.id();}
 private:
     static ClassCounter<Context> m_counter;
 };
 
 template <typename Context, typename Class>
-ClassCounter<Context> ClassId<Context, Class>::m_counter;
+ClassCounter<Context> ClassId_<Context, Class>::m_counter;
 
+template <typename Context, typename Class>
+using ClassId = ClassId_<std::decay_t<Context>, std::decay_t<Class>>;
+    
 } // flappy

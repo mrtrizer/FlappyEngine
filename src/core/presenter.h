@@ -22,7 +22,7 @@ class Presenter: public Component, public std::enable_shared_from_this<Presenter
 public:
     virtual ~Presenter() = default;
     void updateView();
-    virtual void update(TimeDelta) {}
+    void update(TimeDelta) override {}
     void setColor(const Color& color);
     Color color() const { return m_color; }
     virtual unsigned id() = 0;
