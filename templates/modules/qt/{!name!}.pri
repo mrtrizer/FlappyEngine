@@ -1,3 +1,3 @@
-{?printList(include,"INCLUDEPATH +=  ../../" + modulePath + "/*\n")?}
+{?printList(include,"INCLUDEPATH +=  ../../" + path + "/*\n")?}
 
-{?printList(src,"SOURCES += ../../" + modulePath + "/*\n")?}
+{?printList(src,"SOURCES += ../../" + path + "/*\n")?}
