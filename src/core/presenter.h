@@ -28,6 +28,7 @@ public:
     virtual unsigned id() = 0;
     void init() override;
     void setView(std::weak_ptr<View> view) { m_view = view; }
+    std::weak_ptr<View> view() { return m_view; }
 
 private:
     std::weak_ptr<View> m_view;

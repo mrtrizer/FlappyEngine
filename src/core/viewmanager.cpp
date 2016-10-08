@@ -64,10 +64,6 @@ void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw runtime_error("Invalid screen size. Has to be > 0.");
     MGR<ScreenManager>()->resize(width, height);
-    updateSize();
-}
-
-void ViewManager::updateSize() {
     updateViewPort();
 }
 

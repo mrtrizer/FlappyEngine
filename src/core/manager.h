@@ -25,16 +25,17 @@ protected:
 private:
     void setManagerList(std::weak_ptr<ManagerList> managerList) {
         m_managerList = managerList;
-        m_managerListPtr = managerList.lock().get();
     }
 
     std::weak_ptr<ManagerList> m_managerList;
-    ManagerList* m_managerListPtr = nullptr; // optimization of MGR
 
 public:
     template <typename Mgr>
-    constexpr auto MGR() const -> decltype(m_managerListPtr->MGR<Mgr>()) {
-        return m_managerListPtr->MGR<Mgr>();
+    constexpr auto MGR() const -> decltype(m_managerList.lock()->MGR<Mgr>()) {
+        auto managerListSPtr = m_managerList.lock();
+        if (!managerListSPtr)
+            throw std::runtime_error("This Manager should be created inside ManagerList. Use ManagerList::create<ManagerT>() function.");
+        return managerListSPtr->MGR<Mgr>();
     }
 };
 

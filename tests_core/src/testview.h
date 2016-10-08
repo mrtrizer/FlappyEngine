@@ -11,14 +11,17 @@ public:
         void virtual update() = 0;
     };
 
-    TestView(IMock* mock): m_mock(mock) {}
+    TestView(IMock* mock = nullptr): m_mock(mock) {}
+    void setMock(IMock* mock) { m_mock = mock; }
 
 protected:
     void draw(const glm::mat4&, const glm::mat4&) override {
-        m_mock->draw();
+        if (m_mock)
+            m_mock->draw();
     }
     void update(const flappy::Presenter&) override {
-        m_mock->update();
+        if (m_mock)
+            m_mock->update();
     }
 private:
     IMock* m_mock = nullptr;

@@ -30,7 +30,7 @@ void GLViewManager::init() {
     CHECK_GL_ERROR;
     glEnable (GL_BLEND);
     CHECK_GL_ERROR;
-    updateSize();
+    updateViewPort();
 }
 
 void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {

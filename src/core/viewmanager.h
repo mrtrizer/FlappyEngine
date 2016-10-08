@@ -15,6 +15,7 @@ class View;
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
 class ViewManager: public Manager {
+private:
     class IViewFactory {
     public:
         virtual ~IViewFactory() = default;
@@ -28,6 +29,24 @@ class ViewManager: public Manager {
     };
 
 public:
+    void update(TimeDelta dt);
+    void resize(int width, int height);
+
+    /// Assing custom View for Presenter
+    template <typename PresenterT, typename ViewT>
+    void bind() {
+        if (m_bindings.size() <= ClassId<Presenter, PresenterT>::id())
+            m_bindings.resize(ClassId<Presenter,PresenterT>::id() + 1);
+        m_bindings[ClassId<Presenter,PresenterT>::id()] = std::make_shared<ViewFactory<ViewT>>();
+    }
+    
+    /// Create View for particular presenter.
+    /// @details Before using of this method, you need assign
+    /// custom View implementation for Presenter,
+    /// using bind() method.
+    void addPresenter(const std::shared_ptr<Presenter>& presenter);
+
+protected:
     struct Visual {
         std::shared_ptr<Presenter> presenter;
         std::shared_ptr<View> view;
@@ -35,22 +54,6 @@ public:
         float z;
     };
 
-    void update(TimeDelta dt);
-    void resize(int width, int height);
-    void updateSize();
-
-    template <typename PresenterT, typename ViewT>
-    void bind() {
-        if (m_bindings.size() <= ClassId<Presenter, PresenterT>::id())
-            m_bindings.resize(ClassId<Presenter,PresenterT>::id() + 1);
-        m_bindings[ClassId<Presenter,PresenterT>::id()] = std::make_shared<ViewFactory<ViewT>>();
-    }
-
-    class no_camera {};
-    
-    void addPresenter(const std::shared_ptr<Presenter>& presenter);
-
-protected:
     virtual void redraw(std::list<Visual> &, glm::mat4 &) = 0;
 
 private:
