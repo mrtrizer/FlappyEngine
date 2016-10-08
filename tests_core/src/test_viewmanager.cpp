@@ -31,6 +31,7 @@ TEST_CASE( "ViewManager::update()") {
     Mock<TestView::IMock> mock;
 
     Fake(Method(mock, draw));
+    Fake(Method(mock, update));
 
     auto managerList = std::make_shared<ManagerList>();
     auto entityManager = managerList->create<EntityManager>();
@@ -42,7 +43,6 @@ TEST_CASE( "ViewManager::update()") {
 
     auto circleEntity = entityManager->create();
     auto circleShape = circleEntity->create<CircleShape>();
-    viewManager->addPresenter(circleShape);
 
     auto view = static_pointer_cast<TestView>(circleShape->view().lock());
 
@@ -50,7 +50,7 @@ TEST_CASE( "ViewManager::update()") {
 
     viewManager->update(1);
 
-    Verify(Method(mock, draw)).Exactly(1);
+    Verify(Method(mock,update), Method(mock, draw)).Exactly(1);
 
 }
 
