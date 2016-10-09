@@ -2,20 +2,21 @@
 
 #include <memory>
 
-#include <core/tools.h>
-#include <core/managerlist.h>
-#include <core/classid.h>
+#include "tools.h"
+#include "managerlist.h"
+#include "classid.h"
+#include "dependent.h"
 
 namespace flappy {
 
-class Manager
+class BaseManager
 {
     friend class ManagerList;
 public:
-    Manager() = default;
-    virtual ~Manager() = default;
-    Manager(const Manager&) = delete;
-    void operator=(Manager const&) = delete;
+    BaseManager() = default;
+    virtual ~BaseManager() = default;
+    BaseManager(const BaseManager&) = delete;
+    void operator=(BaseManager const&) = delete;
 
 protected:
     const std::weak_ptr<ManagerList>& managerList() const {return m_managerList;}
@@ -23,6 +24,10 @@ protected:
     virtual void init(){}
 
 private:
+    static bool satisfied(std::function<bool(unsigned)>) {
+        return true;
+    }
+
     void setManagerList(std::weak_ptr<ManagerList> managerList) {
         m_managerList = managerList;
     }
@@ -36,6 +41,15 @@ public:
         if (!managerListSPtr)
             throw std::runtime_error("This Manager should be created inside ManagerList. Use ManagerList::create<ManagerT>() function.");
         return managerListSPtr->MGR<Mgr>();
+    }
+};
+
+template <typename ... Dependency>
+class Manager: public BaseManager, public Dependent<BaseManager, Dependency...>
+{
+public:
+    static bool satisfied(std::function<bool(unsigned)> check) {
+        return Dependent<BaseManager, Dependency...>::dependenceSatisfied(check);
     }
 };
 

@@ -166,7 +166,6 @@ HEADERS += \
     $$PWD/core/component.h \
     $$PWD/core/atlas.h \
     $$PWD/core/quad.h \
-    $$PWD/core/iresourceloader.h \
     $$PWD/core/managerlist.h \
     $$PWD/glut/glutinit.h \
     $$PWD/core/color.h \
@@ -185,7 +184,8 @@ HEADERS += \
     $$PWD/core/res.h \
     $$PWD/qt/qttextureresfactory.h \
     $$PWD/core/atlasresfactory.h \
-    $$PWD/core/quadresfactory.h
+    $$PWD/core/quadresfactory.h \
+    $$PWD/core/dependent.h
 
 
 SOURCES += \

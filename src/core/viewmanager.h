@@ -6,15 +6,18 @@
 #include "viewmanager.h"
 #include "camera.h"
 #include "transform.h"
+#include "dependent.h"
 
 namespace flappy {
 
 class Presenter;
 class View;
+class EntityManager;
+class ScreenManager;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager: public Manager {
+class ViewManager: public Manager<EntityManager, ScreenManager> {
 private:
     class IViewFactory {
     public:

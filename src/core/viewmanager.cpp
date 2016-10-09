@@ -17,12 +17,9 @@ void ViewManager::update(TimeDelta dt) {
         camera = e->get<Camera>();
     });
 
-    if (camera == nullptr) {
-        LOGI("No any active cameras on scene!\n");
-        return;
-    }
+    if (camera == nullptr)
+        return ERROR_MSG(VOID_VALUE, "No active cameras in scene!\n");
 
-    //Calc projection matrix, using GObjCamera
     auto pMatrix = camera->pMatrix();
 
     for (auto i = m_visuals.begin(); i !=  m_visuals.end(); ) {
@@ -62,7 +59,7 @@ void ViewManager::addPresenter(const std::shared_ptr<Presenter>& presenter) {
 
 void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
-        throw runtime_error("Invalid screen size. Has to be > 0.");
+        throw runtime_error("Invalid screen size. It should be greater then 0.");
     MGR<ScreenManager>()->resize(width, height);
     updateViewPort();
 }

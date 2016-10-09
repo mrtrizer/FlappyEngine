@@ -8,6 +8,9 @@ namespace flappy {
 using namespace std;
 
 void Presenter::init() {
+    auto viewManager = MGR<ViewManager>();
+    if (!viewManager)
+        return ERROR_MSG(VOID_VALUE, "ViewManager is not installed.");
     MGR<ViewManager>()->addPresenter(shared_from_this());
     updateView();
 }

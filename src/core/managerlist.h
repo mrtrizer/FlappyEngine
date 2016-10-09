@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class Manager;
+class BaseManager;
 
 class ManagerList : public std::enable_shared_from_this<ManagerList> {
 public:
@@ -17,12 +17,12 @@ public:
     void init();
 
     // TODO: What about returing of pointer or reference?
-    template <typename ManagerT> inline
+    template <typename ManagerT>
     std::shared_ptr<ManagerT> MGR() {
         using namespace std;
-        shared_ptr<Manager> manager = nullptr;
-        if (m_managerList.size() > ClassId<Manager, ManagerT>::id())
-            manager = m_managerList[ClassId<Manager, ManagerT>::id()];
+        shared_ptr<BaseManager> manager = nullptr;
+        if (m_managerList.size() > ClassId<BaseManager, ManagerT>::id())
+            manager = m_managerList[ClassId<BaseManager, ManagerT>::id()];
         if (manager) { //if found
             return static_pointer_cast<ManagerT>(manager);
         } else { //search in parent
@@ -34,8 +34,10 @@ public:
     }
 
     /// Create manager with initialization
-    template <typename ManagerT, typename...ArgsT> inline
+    template <typename ManagerT, typename...ArgsT>
     std::shared_ptr<ManagerT> create(ArgsT&&...args) {
+        if (!checkSatisfied<ManagerT>())
+            return nullptr;
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
         add<ManagerT>(manager);
         manager->init();
@@ -43,18 +45,20 @@ public:
     }
 
     /// Override manager interface with initialization
-    template <typename DestManagerT, typename ManagerT, typename ... ArgsT> inline
+    template <typename DestManagerT, typename ManagerT, typename ... ArgsT>
     std::shared_ptr<ManagerT> override(ArgsT&&...args) {
+        if (!checkSatisfied<ManagerT>())
+            return nullptr;
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
-        setManagerAtPos(ClassId<Manager, DestManagerT>::id(), manager);
+        setManagerAtPos(ClassId<BaseManager, DestManagerT>::id(), manager);
         manager->init();
         return manager;
     }
 
     /// Add without initialization
-    template <typename ManagerT> inline
+    template <typename ManagerT>
     void add(const std::shared_ptr<ManagerT>& manager) {
-        setManagerAtPos(ClassId<Manager, ManagerT>::id(), manager);
+        setManagerAtPos(ClassId<BaseManager, ManagerT>::id(), manager);
     }
 
     void setParent(const std::weak_ptr<ManagerList>& parent) {
@@ -63,10 +67,15 @@ public:
 
 private:
     std::chrono::steady_clock::time_point m_lastTime;
-    std::vector<std::shared_ptr<Manager>> m_managerList;
+    std::vector<std::shared_ptr<BaseManager>> m_managerList;
     std::weak_ptr<ManagerList> m_parent;
 
-    void setManagerAtPos(unsigned int pos, std::shared_ptr<Manager> manager);
+    void setManagerAtPos(unsigned int pos, std::shared_ptr<BaseManager> manager);
+    template <typename ManagerT>
+    bool checkSatisfied() {
+        return ManagerT::satisfied(
+          [this](unsigned id){return (m_managerList.size() > id) && (m_managerList[id] != nullptr);});
+    }
 };
 
 } // flappy

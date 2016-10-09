@@ -6,6 +6,7 @@
 #include <core/managerlist.h>
 #include <core/viewmanager.h>
 #include <core/presenter.h>
+#include <core/screenmanager.h>
 
 #include "testview.h"
 
@@ -34,6 +35,7 @@ TEST_CASE( "ViewManager::update()") {
     Fake(Method(mock, update));
 
     auto managerList = std::make_shared<ManagerList>();
+    managerList->create<ScreenManager>();
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create(); // ViewManager can't render without camera
     auto camera = entity->create<Camera>();

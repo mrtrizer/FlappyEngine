@@ -22,7 +22,7 @@ public:
     virtual void initHandler(std::shared_ptr<IResHandler>, std::shared_ptr<IRes>, std::shared_ptr<ResManager>) {}
 };
 
-class ResManager final: public Manager, public std::enable_shared_from_this<ResManager>
+class ResManager final: public Manager<>, public std::enable_shared_from_this<ResManager>
 {
     template <typename ResT>
     friend class ResHandler;

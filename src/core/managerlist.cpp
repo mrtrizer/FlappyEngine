@@ -16,7 +16,7 @@ void ManagerList::update() {
             manager->update(dt);
 }
 
-void ManagerList::setManagerAtPos(unsigned int pos, shared_ptr<Manager> manager) {
+void ManagerList::setManagerAtPos(unsigned int pos, shared_ptr<BaseManager> manager) {
     if (m_managerList.size() <= pos)
         m_managerList.resize(pos + 1);
     m_managerList[pos] = manager;

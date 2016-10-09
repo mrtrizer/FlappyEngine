@@ -43,8 +43,8 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #endif
 
-#define VOID_VALUE ([](){})()
-#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), value;
+#define VOID_VALUE void()
+#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), LOGE("%s:%d\n %s \n", __FILE__, __LINE__, __PRETTY_FUNCTION__), value;
 
 /// Gives some common tools
 namespace Tools
