@@ -3,7 +3,10 @@
     "src": [
         "test.cpp"
     ],
-    "include": [
+	"include": [
+		"test.h"
+	],
+    "include_path": [
         "."
     ]
 }

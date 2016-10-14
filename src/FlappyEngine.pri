@@ -185,7 +185,9 @@ HEADERS += \
     $$PWD/qt/qttextureresfactory.h \
     $$PWD/core/atlasresfactory.h \
     $$PWD/core/quadresfactory.h \
-    $$PWD/core/dependent.h
+    $$PWD/core/dependent.h \
+    $$PWD/core/textfile.h \
+    $$PWD/qt/desktoptextfilefactory.h
 
 
 SOURCES += \
