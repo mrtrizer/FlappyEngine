@@ -35,11 +35,13 @@ TEST_CASE( "ViewManager::update()") {
     Fake(Method(mock, update));
 
     auto managerList = std::make_shared<ManagerList>();
-    managerList->create<ScreenManager>();
+    managerList->create<ScreenManager>(); // ViewManager depends from ScreenManager
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create(); // ViewManager can't render without camera
     auto camera = entity->create<Camera>();
     auto viewManager = managerList->override<ViewManager,TestViewManager>();
+
+    REQUIRE(viewManager != nullptr);
 
     viewManager->bind<CircleShape, TestView>();
 

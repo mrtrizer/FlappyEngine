@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "classid.h"
+#include "tools.h"
 
 namespace flappy {
 
@@ -55,6 +56,11 @@ public:
         return manager;
     }
 
+    template <typename ManagerT>
+    void remove() {
+        removeManagerAtPos(ClassId<BaseManager, ManagerT>::id());
+    }
+
     /// Add without initialization
     template <typename ManagerT>
     void add(const std::shared_ptr<ManagerT>& manager) {
@@ -70,7 +76,8 @@ private:
     std::vector<std::shared_ptr<BaseManager>> m_managerList;
     std::weak_ptr<ManagerList> m_parent;
 
-    void setManagerAtPos(unsigned int pos, std::shared_ptr<BaseManager> manager);
+    void setManagerAtPos(unsigned pos, std::shared_ptr<BaseManager> manager);
+    void removeManagerAtPos(unsigned pos);
     template <typename ManagerT>
     bool checkSatisfied() {
         return ManagerT::satisfied(

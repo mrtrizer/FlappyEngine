@@ -16,7 +16,7 @@ void ManagerList::update() {
             manager->update(dt);
 }
 
-void ManagerList::setManagerAtPos(unsigned int pos, shared_ptr<BaseManager> manager) {
+void ManagerList::setManagerAtPos(unsigned pos, shared_ptr<BaseManager> manager) {
     if (m_managerList.size() <= pos)
         m_managerList.resize(pos + 1);
     m_managerList[pos] = manager;
@@ -26,6 +26,22 @@ void ManagerList::setManagerAtPos(unsigned int pos, shared_ptr<BaseManager> mana
         LOGE("ManagerList was created out of std::shared_ptr.");
         throw;
     }
+}
+
+void ManagerList::removeManagerAtPos(unsigned pos) {
+    bool hasDependent = false;
+    for (auto& manager: m_managerList) {
+        if (manager == nullptr)
+            continue;
+        if (!manager->checkSatisfied([pos](unsigned id){return id != pos;})) {
+            hasDependent = true;
+            break;
+        }
+    }
+    if (hasDependent)
+        return ERROR_MSG(VOID_VALUE, "Can't remove manager. It has dependent");
+
+    Tools::resizeAndGet(m_managerList, pos) = nullptr;
 }
 
 void ManagerList::init() {

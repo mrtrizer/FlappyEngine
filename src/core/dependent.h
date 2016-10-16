@@ -25,8 +25,9 @@ protected:
     static bool defined(CheckFunction check) {
         if (check(ClassId<Context, Dependency>::id()))
             return defined<sizeof...(Args), Args...>(check);
-        else
-            return ERROR_MSG(false, "Dependent Manager is not defined.");
+        else {
+            return ERROR_MSG(false, "Dependence %s is not defined.", typeName<Dependency>().c_str());
+        }
     }
 };
 

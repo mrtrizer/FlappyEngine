@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdio>
 #include <iostream>
+#include <regex>
 
 #include <glm/vec2.hpp>
 
@@ -28,6 +29,15 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
     }
 }
 
+template <typename Type>
+std::string typeName() {
+    std::regex regex("Type = (.*?);");
+    std::smatch match;
+    std::string str(__PRETTY_FUNCTION__);
+    std::regex_search(str, match, regex);
+    return match[1].str();
+}
+
 #ifndef ANDROID_JNI
 
 #define LOGI(...) std::printf("\x1b[32m [INFO] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
@@ -44,7 +54,7 @@ void LOGI_default(const char* s, const T& value, const Args&... args) {
 #endif
 
 #define VOID_VALUE void()
-#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), LOGE("%s:%d\n %s \n", __FILE__, __LINE__, __PRETTY_FUNCTION__), value;
+#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), LOGE("%s:%d\n", __FILE__, __LINE__), value;
 
 /// Gives some common tools
 namespace Tools

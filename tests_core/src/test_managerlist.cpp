@@ -27,13 +27,32 @@ TEST_CASE( "ManagerList::init() ManagerList::update()") {
     Verify(Method(mock,init), Method(mock,update)).Exactly(1);
 }
 
-TEST_CASE( "ManagerList::create()") {
+TEST_CASE( "ManagerList::create() ManagerList::remove()") {
     auto managerList = make_shared<ManagerList>();
     managerList->create<TestManager>();
     managerList->create<TestManagerEmpty1>();
     managerList->init();
     REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManager));
     REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    managerList->remove<TestManager>();
+    REQUIRE(managerList->MGR<TestManager>() == nullptr);
+}
+
+TEST_CASE( "ManagerList::create() ManagerList::remove() [with dependencies]") {
+    auto managerList = make_shared<ManagerList>();
+    auto testManager = managerList->create<TestManagerDependent>();
+    REQUIRE(testManager == nullptr); // can't be created without dependence
+    managerList->create<TestManagerDependence>(); // add dependence
+    testManager = managerList->create<TestManagerDependent>(); // try create again
+    REQUIRE(typeid(*testManager) == typeid(TestManagerDependent));
+    managerList->init();
+    REQUIRE(typeid(*managerList->MGR<TestManagerDependent>()) == typeid(TestManagerDependent)); // manager was added
+    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr); //just check
+    managerList->remove<TestManagerDependence>(); // try to remove dependence
+    REQUIRE(typeid(*managerList->MGR<TestManagerDependence>()) == typeid(TestManagerDependence)); //should not be removed
+    managerList->remove<TestManagerDependent>(); // remove dependent
+    managerList->remove<TestManagerDependence>(); // try to remove dependence again
+    REQUIRE(managerList->MGR<TestManagerDependence>() == nullptr); // should be successful removed
 }
 
 TEST_CASE( "ManagerList::override()") {
