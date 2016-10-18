@@ -74,7 +74,7 @@ namespace Tools
     T& resizeAndGet(std::vector<T>& vector, unsigned pos) {
         if (vector.size() <= pos)
             vector.resize(pos + 1);
-        return vector[pos];
+        return vector.at(pos);
     }
 
     class not_implemented {};

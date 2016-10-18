@@ -75,15 +75,16 @@ public:
 
         const unsigned resId = ClassId<IRes, ResT>::id();
 
-        auto& resList = Tools::resizeAndGet(m_resourceMaps, resId);
+        if (m_resourceMaps.size() <= resId)
+            m_resourceMaps.resize(resId + 1);
 
-        if (resList.count(path) == 0) {
+        if (m_resourceMaps[resId].count(path) == 0) {
             auto resHandler = make_shared<ResHandler<ResT>>(path);
             if (auto factory = Tools::resizeAndGet(m_factories, resId))
                 factory->initRes(resHandler, shared_from_this());
-            resList.emplace(path, resHandler);
+            m_resourceMaps[resId][path] = resHandler;
         }
-        return static_pointer_cast<ResHandler<ResT>>(resList[path]);
+        return static_pointer_cast<ResHandler<ResT>>(m_resourceMaps[resId][path]);
     }
 
     void update(TimeDelta) override;

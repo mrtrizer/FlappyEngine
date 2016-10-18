@@ -3,6 +3,8 @@
 	"engine":"..",
 	"exclude":[],
 	"inc_dirs":[],
+	"scene_header":"menuscene.h",
+	"scene_class":"game::MenuScene",
 	"console_mode":false,
 	"cmake": {
 		"exec_name":"tests_gl"

@@ -1,4 +1,4 @@
-#include "mygamemanager.h"
+#include "gamescene.h"
 #include <core/texture.h>
 #include <core/atlas.h>
 #include <core/resmanager.h>
@@ -11,7 +11,7 @@ using namespace std;
 using namespace glm;
 using namespace flappy;
 
-void MyScene::createBasket(string color, vec2 pos) {
+void GameScene::createBasket(string color, vec2 pos) {
     EM->create([=](EP e) {
         auto sprite = e->create<Sprite>();
         sprite->setPath(string("atlas_baskets:") + color);
@@ -24,7 +24,7 @@ void MyScene::createBasket(string color, vec2 pos) {
     });
 }
 
-void MyScene::init() {
+void GameScene::init() {
     auto atlas = Atlas("img_baskets");
     atlas.addRect("blue",{0,0,0.333f,1});
     atlas.addRect("green",{0.333f,0,0.333f * 2.0f,1.0f});

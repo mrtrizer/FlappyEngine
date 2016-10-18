@@ -15,7 +15,7 @@
 
 namespace game {
 
-class MyScene : public flappy::Scene {
+class GameScene : public flappy::Scene {
 public:
     void init() override;
 

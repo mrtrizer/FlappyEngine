@@ -13,7 +13,7 @@
 {?ENDIF?}
 #include <core/managerlist.h>
 #include <core/appmanager.h>
-#include <mygamemanager.h>
+#include <{!scene_header!}>
 
 using namespace flappy;
 using namespace std;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     managerList->init();
 
 {?IF not console_mode?}
-    managerList->MGR<SceneManager>()->setScene(make_shared<game::MyScene>());
+    managerList->MGR<SceneManager>()->setScene(make_shared<{!scene_class!}>());
 
     return GLUTInit::mainLoop();
 {?ENDIF?}
