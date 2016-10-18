@@ -21,7 +21,7 @@ void MenuScene::init() {
         auto sprite = e->create<Sprite>();
         sprite->setPath("img_background");
         auto transform = e->create<Transform>();
-        transform->setScale(200);
+        transform->setScale(2);
     });
 
     $(EntityManager)->create([=](EP e) {
@@ -32,7 +32,7 @@ void MenuScene::init() {
         auto sprite = e->create<Sprite>();
         sprite->setPath("img_play");
         auto transform = e->create<Transform>();
-        transform->setScale(10);
+        transform->setScale(0.5f);
     });
 }
 

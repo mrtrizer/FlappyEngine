@@ -32,7 +32,6 @@ private:
     std::shared_ptr<ResHandler<Quad>> m_quad;
 
     void updateFrame();
-    void updateVBOs();
 };
 
 } // flappy

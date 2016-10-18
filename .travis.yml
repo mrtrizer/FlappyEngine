@@ -29,8 +29,6 @@ script:
  - popd
 #core tests
  - cd tests_core
- - flappy prebuild qt
- - cd targets/qt
  - qmake tests_core.pro
  - make
  - ./tests_core

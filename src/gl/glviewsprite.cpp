@@ -49,21 +49,11 @@ GLViewSprite::GLViewSprite() :
 {
 }
 
-void GLViewSprite::updateVBOs() {
-    m_rect.reset(GL_TRIANGLE_STRIP);
-    m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
-
-    auto texture = m_quad->resource()->texture();
-    m_rect.addVBO<GLTexture::UV>(texture->resource()->uvs(), getShader()->findAttr("aTexCoord"));
-
-}
-
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_quad != nullptr)
         if (m_quad->ready()) {
-            if (m_quad->updated()) {
+            if (m_quad->updated())
                 updateFrame();
-            }
             getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
                 auto texture = m_quad->resource()->texture();
                 glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
@@ -76,14 +66,15 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 }
 
 void GLViewSprite::updateFrame() {
-    if (m_rect.size() != 4 * sizeof(GLTexture::UV))
-        updateVBOs();
     auto texture = m_quad->resource()->texture();
+
     auto rect = m_quad->resource()->rect();
+    float quadWidth = rect.x2 - rect.x1;
+    float quadHeight = rect.y2 - rect.y1;
     float relWidth = texture->resource()->relWidth();
     float relHeight = texture->resource()->relHeight();
-    float newRelWidth = relWidth * (rect.x2 - rect.x1);
-    float newRelHeight = relHeight * (rect.y2 - rect.y1);
+    float newRelWidth = relWidth * quadWidth;
+    float newRelHeight = relHeight * quadHeight;
     float relX = rect.x1 * relWidth;
     float relY = rect.y1 * relHeight;
     vector<GLTexture::UV> uvs({
@@ -91,7 +82,19 @@ void GLViewSprite::updateFrame() {
             {relX, relY},
             {relX + newRelWidth, relY + newRelHeight},
             {relX + newRelWidth, relY}});
-    m_rect.vbo(1).writeData(uvs.data(),int(uvs.size()) * sizeof(GLTexture::UV));
+
+    m_rect.reset(GL_TRIANGLE_STRIP);
+
+    m_rect.addVBO<GLTexture::UV>(uvs, getShader()->findAttr("aTexCoord"));
+
+    const float factor = 100.0f;
+
+    m_vertexList = { {-0.5f * newRelWidth * factor, -0.5f * newRelHeight * factor},
+                {-0.5f * newRelWidth * factor, 0.5f * newRelHeight * factor},
+                {0.5f * newRelWidth * factor, -0.5f * newRelHeight * factor},
+                {0.5f * newRelWidth * factor, 0.5f * newRelHeight * factor} };
+
+    m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
 }
 
 void GLViewSprite::update(const Presenter & presenter){
