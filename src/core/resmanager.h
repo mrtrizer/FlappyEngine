@@ -6,21 +6,13 @@
 #include "manager.h"
 #include "res.h"
 #include "reshandler.h"
+#include "iresfactory.h"
 
 namespace flappy {
 
 class Texture;
 class Atlas;
 class Quad;
-
-class ResManager;
-
-class IResFactory {
-public:
-    virtual std::shared_ptr<IRes> load(const std::string&) { return nullptr; }
-    virtual void initRes(std::shared_ptr<IResHandler>, std::shared_ptr<ResManager>) {}
-    virtual void initHandler(std::shared_ptr<IResHandler>, std::shared_ptr<IRes>, std::shared_ptr<ResManager>) {}
-};
 
 class ResManager final: public Manager<>, public std::enable_shared_from_this<ResManager>
 {
@@ -63,7 +55,7 @@ public:
         resHandler->setNewResource(newRes);
 
         if (auto factory = Tools::resizeAndGet(m_factories, resId))
-            factory->initHandler(resHandler, newRes, shared_from_this());
+            factory->updateHandler(resHandler, newRes, shared_from_this());
 
         return resHandler;
     }
@@ -81,7 +73,7 @@ public:
         if (m_resourceMaps[resId].count(path) == 0) {
             auto resHandler = make_shared<ResHandler<ResT>>(path);
             if (auto factory = Tools::resizeAndGet(m_factories, resId))
-                factory->initRes(resHandler, shared_from_this());
+                factory->initHandler(resHandler, shared_from_this());
             m_resourceMaps[resId][path] = resHandler;
         }
         return static_pointer_cast<ResHandler<ResT>>(m_resourceMaps[resId][path]);

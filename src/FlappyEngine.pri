@@ -182,12 +182,13 @@ HEADERS += \
     $$PWD/core/resmanager.h \
     $$PWD/core/reshandler.h \
     $$PWD/core/res.h \
-    $$PWD/qt/qttextureresfactory.h \
     $$PWD/core/atlasresfactory.h \
     $$PWD/core/quadresfactory.h \
     $$PWD/core/dependent.h \
     $$PWD/core/textfile.h \
-    $$PWD/qt/desktoptextfilefactory.h
+    $$PWD/qt/TextFileFactoryDesktop.h \
+    $$PWD/qt/TextureFactoryQt.h \
+    $$PWD/core/iresfactory.h
 
 
 SOURCES += \
@@ -221,8 +222,9 @@ SOURCES += \
     $$PWD/gl/glviewmanager.cpp \
     $$PWD/core/eventsystem.cpp \
     $$PWD/core/reshandler.cpp \
-    $$PWD/qt/qttextureresfactory.cpp \
     $$PWD/core/atlasresfactory.cpp \
-    $$PWD/core/quadresfactory.cpp
+    $$PWD/core/quadresfactory.cpp \
+    $$PWD/qt/TextureFactoryQt.cpp \
+    $$PWD/qt/TextFileFactoryDesktop.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

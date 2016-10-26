@@ -7,7 +7,7 @@
 #include <core/managerlist.h>
 #include <core/resmanager.h>
 #include <core/textfile.h>
-#include <qt/desktoptextfilefactory.h>
+#include <qt/TextFileFactoryDesktop.h>
 
 using namespace flappy;
 using namespace std;
@@ -15,7 +15,7 @@ using namespace std;
 
 TEST_CASE( "TextFile::text()") {
     auto resManager = std::make_shared<ResManager>();
-    resManager->bind<TextFile>(std::make_shared<DesktopTextFileFactory>("./"));
+    resManager->bind<TextFile>(std::make_shared<TextFileFactoryDesktop>("./"));
     ofstream myfile ("example.txt");
     REQUIRE(myfile.is_open());
     myfile << "Test text";

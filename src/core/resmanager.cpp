@@ -21,7 +21,7 @@ void ResManager::update(TimeDelta)
                 if (i->second->loading()) {
                     auto res = factory->load(i->second->path());
                     i->second->setNewResource(res);
-                    factory->initHandler(i->second, res, shared_from_this());
+                    factory->updateHandler(i->second, res, shared_from_this());
                 }
             }
             i->second->update();

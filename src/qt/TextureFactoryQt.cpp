@@ -1,4 +1,4 @@
-#include "qttextureresfactory.h"
+#include "TextureFactoryQt.h"
 
 #include <memory>
 
@@ -11,7 +11,7 @@ namespace flappy {
 
 using namespace std;
 
-std::shared_ptr<IRes> QtTextureResFactory::load(const std::string& path) {
+std::shared_ptr<IRes> TextureFactoryQt::load(const std::string& path) {
     QImage image(QString::fromStdString(m_path + path + ".png"));
     const char * bits = reinterpret_cast<char *>(image.bits());
     auto result = make_shared<GLTexture>(bits, image.width(), image.height());

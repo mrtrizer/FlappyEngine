@@ -1,14 +1,16 @@
 #include "quadresfactory.h"
 
 #include <sstream>
+
 #include "quad.h"
 #include "atlas.h"
+#include "resmanager.h"
 
 namespace flappy {
 
 using namespace std;
 
-void QuadResFactory::initRes(std::shared_ptr<IResHandler> quadHandler, std::shared_ptr<ResManager> resManager)  {
+void QuadResFactory::initHandler(std::shared_ptr<IResHandler> quadHandler, std::shared_ptr<ResManager> resManager)  {
     auto path = quadHandler->path();
     auto splittedPath = split(path, ':');
     string atlasPath;
