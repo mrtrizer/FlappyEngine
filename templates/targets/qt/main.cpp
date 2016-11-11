@@ -1,7 +1,7 @@
 #include <memory>
 
 #include <glut/glutinit.h>
-#include <qt/qttextureresfactory.h>
+#include <qt/TextureFactoryQt.h>
 #include <core/resmanager.h>
 #include <core/inputmanager.h>
 #include <core/entitymanager.h>
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     auto managerList = make_shared<ManagerList>();
     managerList->create<AppManager>(argc, argv);
     auto resManager = managerList->create<ResManager>();
-    resManager->bind<Texture>(make_shared<QtTextureResFactory>(":///tests_gl/res/"));
+    resManager->bind<Texture>(make_shared<TextureFactoryQt>(":///tests_gl/res/"));
     resManager->bind<Atlas>(make_shared<AtlasResFactory>());
     resManager->bind<Quad>(make_shared<QuadResFactory>());
     managerList->create<EntityManager>();
