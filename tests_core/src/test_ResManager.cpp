@@ -17,6 +17,9 @@ namespace {
 class TestRes: public Res {
 public:
     TestRes(std::string testStr): testStr(testStr) {}
+    std::list<std::shared_ptr<Res>> dependencyList() const override {
+        return {};
+    }
     std::string testStr;
 };
 
