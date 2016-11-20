@@ -4,7 +4,6 @@
 #include <memory>
 
 #include <core/managerlist.h>
-#include <core/sprite.h>
 
 using namespace flappy;
 using namespace std;

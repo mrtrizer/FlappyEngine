@@ -2,11 +2,9 @@
 
 #include "presenter.h"
 
-#include "resmanager.h"
-
 namespace flappy {
 
-class Quad;
+class QuadRes;
 
 /// @brief Holds a spritesheet params. May be one solid frame or be divided into several equal parts.
 class Sprite : public Presenter {
@@ -16,10 +14,10 @@ public:
 
     unsigned id() override {return ClassId<Presenter,Sprite>::id(); }
 
-    const std::shared_ptr<ResHandler<Quad>> quad() const { return m_quad; }
+    const std::shared_ptr<QuadRes> quad() const { return m_quad; }
 
 private:
-    std::shared_ptr<ResHandler<Quad>> m_quad;
+    std::shared_ptr<QuadRes> m_quad;
     std::string m_path;
 };
 

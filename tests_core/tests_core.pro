@@ -20,38 +20,35 @@ DEFINES += QT_NO_KEYWORDS
 LIBS += -lgcov
 QMAKE_CXXFLAGS += -O0 -fprofile-arcs -ftest-coverage --coverage
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    src/test_TextRes.cpp \
+    src/test_JsonRes.cpp \
+    src/test_ResManager.cpp
 
-SOURCES += src/./test_entity.cpp
-SOURCES += src/./test_sprite.cpp
-SOURCES += src/./test_screenmanager.cpp
-SOURCES += src/./test_atlas.cpp
-SOURCES += src/./test_appmanager.cpp
-SOURCES += src/./test_camera.cpp
-SOURCES += src/./test_scenemanager.cpp
-SOURCES += src/./test_quad.cpp
-SOURCES += src/./test_presenter.cpp
-SOURCES += src/./test_inputmanager.cpp
-SOURCES += src/./test_scene.cpp
-SOURCES += src/./test_view.cpp
-SOURCES += src/./test_color.cpp
-SOURCES += src/./test_component.cpp
-SOURCES += src/./test_eventsystem.cpp
-SOURCES += src/./test_tools.cpp
-SOURCES += src/./test_manager.cpp
-SOURCES += src/./test_classid.cpp
-SOURCES += src/./test_reshandler.cpp
-SOURCES += src/./test_managerlist.cpp
-SOURCES += src/./test_textfile.cpp
-SOURCES += src/./test_texture.cpp
-SOURCES += src/./test_transform.cpp
-SOURCES += src/./test_entitymanager.cpp
-SOURCES += src/./test_resmanager.cpp
-SOURCES += src/./test_viewmanager.cpp
+SOURCES += src/./test_entity.cpp \
+    src/test_sprite.cpp \
+    src/test_screenmanager.cpp \
+    src/test_appmanager.cpp \
+    src/test_camera.cpp \
+    src/test_scenemanager.cpp \
+    src/test_presenter.cpp \
+    src/test_inputmanager.cpp \
+    src/test_scene.cpp \
+    src/test_view.cpp \
+    src/test_color.cpp \
+    src/test_component.cpp \
+    src/test_eventsystem.cpp \
+    src/test_tools.cpp \
+    src/test_manager.cpp \
+    src/test_classid.cpp \
+    src/test_managerlist.cpp \
+    src/test_transform.cpp \
+    src/test_entitymanager.cpp \
+    src/test_viewmanager.cpp
 
-HEADERS += src/./testscene.h
-HEADERS += src/./catch.h
-HEADERS += src/./testcomponent.h
-HEADERS += src/./testview.h
-HEADERS += src/./fakeit.h
-HEADERS += src/./testmanager.h
+HEADERS += src/./testscene.h \
+    src/catch.h \
+    src/testcomponent.h \
+    src/testview.h \
+    src/fakeit.h \
+    src/testmanager.h

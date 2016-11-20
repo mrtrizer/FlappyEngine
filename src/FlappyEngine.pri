@@ -4,7 +4,6 @@ HEADERS += \
     $$PWD/gl/gltools.h \
     $$PWD/gl/glshaderprogram.h \
     $$PWD/gl/glattribarray.h \
-    $$PWD/gl/gltexture.h \
     $$PWD/gl/glviewshape.h \
     $$PWD/gl/glviewsprite.h \
     $$PWD/gl/glview.h \
@@ -159,13 +158,10 @@ HEADERS += \
     $$PWD/core/presenter.h \
     $$PWD/core/tools.h \
     $$PWD/core/sprite.h \
-    $$PWD/core/texture.h \
     $$PWD/gl/glviewcircle.h \
     $$PWD/gl/glviewrect.h \
     $$PWD/core/entity.h \
     $$PWD/core/component.h \
-    $$PWD/core/atlas.h \
-    $$PWD/core/quad.h \
     $$PWD/core/managerlist.h \
     $$PWD/glut/glutinit.h \
     $$PWD/core/color.h \
@@ -179,38 +175,37 @@ HEADERS += \
     $$PWD/core/viewmanager.h \
     $$PWD/core/classid.h \
     $$PWD/core/eventsystem.h \
-    $$PWD/core/resmanager.h \
-    $$PWD/core/reshandler.h \
-    $$PWD/core/res.h \
-    $$PWD/core/atlasresfactory.h \
-    $$PWD/core/quadresfactory.h \
     $$PWD/core/dependent.h \
-    $$PWD/core/textfile.h \
-    $$PWD/qt/TextFileFactoryDesktop.h \
-    $$PWD/qt/TextureFactoryQt.h \
-    $$PWD/core/iresfactory.h
+    $$PWD/managers/ResManager/ResManager.h \
+    $$PWD/managers/ResManager/Res.h \
+    $$PWD/managers/ResManager/ResFactory.h \
+    $$PWD/resources/TextRes.h \
+    $$PWD/qt/resources/StdTextFileResFactory.h \
+    $$PWD/core/IFileMonitor.h \
+    $$PWD/qt/QtFileMonitor.h \
+    $$PWD/resources/JsonRes.h \
+    $$PWD/managers/ResManager/ResKeeper.h \
+    $$PWD/managers/ResManager/FileResFactory.h \
+    $$PWD/managers/ResManager/DefaultResFactory.h \
+    $$PWD/resources/TextureRes.h \
+    $$PWD/qt/resources/QtTextureResFactory.h \
+    $$PWD/resources/AtlasRes.h \
+    $$PWD/resources/QuadRes.h \
+    $$PWD/resources/QuadResFactory.h \
+    $$PWD/gl/resources/GLTextureRes.h
 
 
 SOURCES += \
     $$PWD/gl/gltools.cpp \
     $$PWD/gl/glshaderprogram.cpp \
     $$PWD/gl/glattribarray.cpp \
-    $$PWD/gl/gltexture.cpp \
-    $$PWD/gl/glviewshape.cpp \
-    $$PWD/gl/glviewsprite.cpp \
     $$PWD/ui/button.cpp \
     $$PWD/core/camera.cpp \
     $$PWD/core/view.cpp \
     $$PWD/core/tools.cpp \
     $$PWD/core/presenter.cpp \
-    $$PWD/core/sprite.cpp \
-    $$PWD/gl/glviewcircle.cpp \
-    $$PWD/gl/glviewrect.cpp \
     $$PWD/core/transform.cpp \
-    $$PWD/core/atlas.cpp \
-    $$PWD/core/quad.cpp \
     $$PWD/core/managerlist.cpp \
-    $$PWD/glut/glutinit.cpp \
     $$PWD/core/color.cpp \
     $$PWD/core/appmanager.cpp \
     $$PWD/core/entitymanager.cpp \
@@ -218,13 +213,22 @@ SOURCES += \
     $$PWD/core/scenemanager.cpp \
     $$PWD/core/screenmanager.cpp \
     $$PWD/core/viewmanager.cpp \
-    $$PWD/core/resmanager.cpp \
     $$PWD/gl/glviewmanager.cpp \
     $$PWD/core/eventsystem.cpp \
-    $$PWD/core/reshandler.cpp \
-    $$PWD/core/atlasresfactory.cpp \
-    $$PWD/core/quadresfactory.cpp \
-    $$PWD/qt/TextureFactoryQt.cpp \
-    $$PWD/qt/TextFileFactoryDesktop.cpp
+    $$PWD/managers/ResManager/ResManager.cpp \
+    $$PWD/qt/resources/StdTextFileResFactory.cpp \
+    $$PWD/qt/QtFileMonitor.cpp \
+    $$PWD/managers/ResManager/ResKeeper.cpp \
+    $$PWD/managers/ResManager/FileResFactory.cpp \
+    $$PWD/qt/resources/QtTextureResFactory.cpp \
+    $$PWD/resources/AtlasRes.cpp \
+    $$PWD/core/sprite.cpp \
+    $$PWD/glut/glutinit.cpp \
+    $$PWD/gl/glviewshape.cpp \
+    $$PWD/gl/glviewsprite.cpp \
+    $$PWD/gl/glviewcircle.cpp \
+    $$PWD/gl/glviewrect.cpp \
+    $$PWD/resources/QuadResFactory.cpp \
+    $$PWD/gl/resources/GLTextureRes.cpp
 
 LIBS += -lGL -lglut -lGLEW -lGLU

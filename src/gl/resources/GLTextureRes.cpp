@@ -2,11 +2,11 @@
 
 #include <core/tools.h>
 
-#include "gltexture.h"
+#include "GLTextureRes.h"
 
 namespace flappy {
 
-GLTexture::GLTexture(const char *bits, int width, int height)
+GLTexture::GLTexture(const char *bitmapData, int width, int height)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     CHECK_GL_ERROR;
@@ -23,7 +23,7 @@ GLTexture::GLTexture(const char *bits, int width, int height)
     if ((width == height) && Tools::isPowOfTwo(width) && Tools::isPowOfTwo(height)) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      width, width, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     static_cast<const GLvoid*>(bits));
+                     static_cast<const GLvoid*>(bitmapData));
         CHECK_GL_ERROR;
 
     } else {
@@ -51,7 +51,7 @@ GLTexture::GLTexture(const char *bits, int width, int height)
         char * newPixBuf = new char[newWidth * newWidth * 4]();
         //image will be located at the top left corner of newPixBuf
         for (int i = 0; i < height; i++)
-            memcpy(&newPixBuf[i * newWidth * 4], &bits[i * width * 4], width * 4);
+            memcpy(&newPixBuf[i * newWidth * 4], &bitmapData[i * width * 4], width * 4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      newWidth, newWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      static_cast<const GLvoid*>(newPixBuf));

@@ -1,5 +1,7 @@
 #include "sprite.h"
-#include "quad.h"
+
+#include <managers/ResManager/ResManager.h>
+#include <resources/QuadRes.h>
 
 namespace flappy {
 
@@ -14,7 +16,7 @@ void Sprite::setPath(const std::string& path)
             isImgPath = false;
     if (isImgPath)
         quadPath = std::string(":") + quadPath;
-    m_quad = MGR<ResManager>()->get<Quad>(quadPath);
+    m_quad = MGR<ResManager>()->getRes<QuadRes>(quadPath);
     updateView();
 }
 

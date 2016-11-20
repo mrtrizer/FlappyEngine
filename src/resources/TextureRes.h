@@ -2,22 +2,24 @@
 
 #include <vector>
 
-#include "res.h"
+#include <managers/ResManager/Res.h>
 
 namespace flappy {
 
-class Texture: public Res<Texture> {
+class TextureRes: public Res {
 public:
     struct UV {
         float u;
         float v;
     };
 
-    Texture():m_uvs({{0,1},{0,0},{1,1},{1,0}}) {}
+    TextureRes():m_uvs({{0,1},{0,0},{1,1},{1,0}}) {}
 
     std::vector<UV> uvs() const { return m_uvs; }
     float relWidth() const {return m_relWidth;}
     float relHeight() const {return m_relHeight;}
+
+    std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
 // TODO: Make private
 protected:

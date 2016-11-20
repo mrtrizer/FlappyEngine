@@ -10,7 +10,7 @@ namespace flappy {
 template <typename T>
 class ResHandler;
 
-class Quad;
+class QuadRes;
 
 class Sprite;
 
@@ -29,7 +29,7 @@ private:
 
     std::vector<GLTools::Vertex> m_vertexList;
 
-    std::shared_ptr<ResHandler<Quad>> m_quad;
+    std::shared_ptr<QuadRes> m_quad;
 
     void updateFrame();
 };

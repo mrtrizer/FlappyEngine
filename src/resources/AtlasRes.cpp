@@ -1,16 +1,11 @@
-#include "atlas.h"
+#include "AtlasRes.h"
 
 namespace flappy {
 
 using namespace std;
 using namespace Tools;
 
-Atlas::Atlas(const string& dependence): m_dependence(dependence)
-{
-
-}
-
-Rect Atlas::rect(const string& name) {
+Rect AtlasRes::rect(const string& name) const {
     auto rectIter = m_rectMap.find(name);
     if (rectIter != m_rectMap.end())
         return rectIter->second;
@@ -18,8 +13,8 @@ Rect Atlas::rect(const string& name) {
     return {0,0,1,1};
 }
 
-void Atlas::addRect(const string& name, const Rect& rect) {
-    m_rectMap[name] = rect;
+void AtlasRes::addRect(const string& name, const Rect& rect) {
+    m_rectMap.emplace(name, rect);
 }
 
 } // flappy

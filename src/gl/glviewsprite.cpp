@@ -4,9 +4,9 @@
 #include <core/presenter.h>
 #include <core/sprite.h>
 #include <gl/glshaderprogram.h>
-#include <gl/gltexture.h>
-#include <core/resmanager.h>
-#include <core/quad.h>
+#include <gl/resources/GLTextureRes.h>
+#include <managers/ResManager/ResManager.h>
+#include <resources/QuadRes.h>
 
 namespace flappy {
 
@@ -50,29 +50,30 @@ GLViewSprite::GLViewSprite() :
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    if (m_quad != nullptr)
-        if (m_quad->ready()) {
-            if (m_quad->updated())
-                updateFrame();
-            getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
-                auto texture = m_quad->resource()->texture();
-                glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
-                glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-                glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
-                auto glTexture = static_pointer_cast<GLTexture>(texture->resource());
-                glTexture->bind(getShader()->findUniform("uTex"), 0);
-            });
+    if (m_quad != nullptr) {
+        if (m_quad->nextRes() != m_quad) {
+            m_quad = static_pointer_cast<QuadRes>(m_quad->nextRes());
+            updateFrame();
         }
+        getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
+            auto texture = m_quad->texture();
+            glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+            glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
+            glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
+            auto glTexture = static_pointer_cast<GLTexture>(texture);
+            glTexture->bind(getShader()->findUniform("uTex"), 0);
+        });
+    }
 }
 
 void GLViewSprite::updateFrame() {
-    auto texture = m_quad->resource()->texture();
+    auto texture = m_quad->texture();
 
-    auto rect = m_quad->resource()->rect();
+    auto rect = m_quad->rect();
     float quadWidth = rect.x2 - rect.x1;
     float quadHeight = rect.y2 - rect.y1;
-    float relWidth = texture->resource()->relWidth();
-    float relHeight = texture->resource()->relHeight();
+    float relWidth = texture->relWidth();
+    float relHeight = texture->relHeight();
     float newRelWidth = relWidth * quadWidth;
     float newRelHeight = relHeight * quadHeight;
     float relX = rect.x1 * relWidth;
@@ -101,9 +102,7 @@ void GLViewSprite::update(const Presenter & presenter){
     auto & sprite = static_cast<const Sprite &>(presenter);
     m_colorRGBA = GLTools::GLColorRGBA(sprite.color());
     m_quad = sprite.quad();
-    if (m_quad->ready())
-        updateFrame();
-
+    updateFrame();
 }
 
 } // flappy

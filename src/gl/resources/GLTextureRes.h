@@ -2,19 +2,19 @@
 
 #include <vector>
 
-#include <core/texture.h>
-#include "gltools.h"
-#include "glshaderprogram.h"
+#include <resources/TextureRes.h>
+#include <gl/gltools.h>
+#include <gl/glshaderprogram.h>
 
 namespace flappy {
 
 /// @brief Holds and manages texture id.
-/// @details Auto resizes an image if not fit to
+/// @details Auto resizes an image if it not fit to
 /// w == h == x^2 and saves uv coordinates
 /// of image corners.
-class GLTexture: public Texture {
+class GLTexture: public TextureRes {
 public:
-    GLTexture(const char * bits, int width, int height);
+    GLTexture(const char* bitmapData, int width, int height);
     ~GLTexture();
     void bind(GLShaderProgram::UniformLocation uniformLoc, int n);
 
