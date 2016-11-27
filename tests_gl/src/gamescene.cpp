@@ -13,11 +13,11 @@ using namespace flappy;
 void GameScene::createBasket(string color, vec2 pos) {
     EM->create([=](EP e) {
         auto sprite = e->create<Sprite>();
-        sprite->setPath(string("atlas_baskets:") + color);
+        sprite->setPath(string("img_baskets:") + color);
 
         auto transform = e->create<Transform>();
         transform->setPos(vec3(pos, 0));
-        transform->setScale(20);
+        transform->setScale(1);
 
         e->create<BasketCtrl>()->setColor(color);
     });
@@ -28,7 +28,7 @@ void GameScene::init() {
     atlas->addRect("blue",{0,0,0.333f,1});
     atlas->addRect("green",{0.333f,0,0.333f * 2.0f,1.0f});
     atlas->addRect("red",{0.333f * 2.0f,0,0.333 * 3.0f,1.0f});
-    MGR<ResManager>()->setRes<AtlasRes>("atlas_baskets", atlas);
+    MGR<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
 
     //Camera
     EM->create([=](EP e){
@@ -45,7 +45,7 @@ void GameScene::init() {
         auto sprite = e->create<Sprite>();
         sprite->setPath("img_background");
         auto transform = e->create<Transform>();
-        transform->setScale(200);
+        transform->setScale(2);
     });
 
     //Baskets

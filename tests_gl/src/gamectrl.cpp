@@ -17,11 +17,18 @@ void GameCtrl::createBall() {
     const char*  colors [] = {"red", "green", "blue"};
     string color = colors[linearRand(0, 2)];
     EM->create([=](EP e) {
+        float randX = linearRand(-30, 30);
+        auto transform = e->create<Transform>();
+        transform->setPos({randX,-50, 0});
+
+        transform->setScale(10);
+
         switch (linearRand(0,2)) {
         case 0: {
             auto sprite = e->create<Sprite>();
-            sprite->setPath(string("atlas_baskets:") + color);
+            sprite->setPath(string("img_baskets:") + color);
             sprite->setColor({1,1,1,0.5f});
+            transform->setScale(0.5f);
             break;
         }
         case 1:
@@ -31,10 +38,9 @@ void GameCtrl::createBall() {
             e->create<RectShape>()->setColor({0,1,0,0.5f});
             break;
         }
-        float randX = linearRand(-30, 30);
-        auto transform = e->create<Transform>();
-        transform->setPos({randX,-50, 0});
-        transform->setScale(10);
+
+
+
         e->create<BallCtrl>()->color = color;
     });
 }

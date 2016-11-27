@@ -35,3 +35,5 @@ QMAKE_EXTRA_TARGETS += prebuildTarget
 PRE_TARGETDEPS += prebuild
 
 RESOURCES += res.qrc
+
+OTHER_FILES += {?projectDir + "/config.json"?}
