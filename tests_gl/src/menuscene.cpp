@@ -4,6 +4,8 @@
 #include <ui/button.h>
 #include <core/sprite.h>
 #include <core/transform.h>
+#include <resources/QuadRes.h>
+#include <managers/ResManager/ResManager.h>
 
 namespace game {
 
@@ -19,7 +21,7 @@ void MenuScene::init() {
     //Background
     EM->create([=](EP e){
         auto sprite = e->create<Sprite>();
-        sprite->setPath("img_background");
+        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
         auto transform = e->create<Transform>();
         transform->setScale(2);
     });
@@ -30,7 +32,7 @@ void MenuScene::init() {
             LOGI("Click");
         });
         auto sprite = e->create<Sprite>();
-        sprite->setPath("img_play");
+        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_play"));
         auto transform = e->create<Transform>();
         transform->setScale(0.5f);
     });

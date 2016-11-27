@@ -3,6 +3,7 @@
 #include <managers/ResManager/ResManager.h>
 #include <core/sprite.h>
 #include <core/presenter.h>
+#include <resources/QuadRes.h>
 
 namespace game {
 
@@ -13,7 +14,7 @@ using namespace flappy;
 void GameScene::createBasket(string color, vec2 pos) {
     EM->create([=](EP e) {
         auto sprite = e->create<Sprite>();
-        sprite->setPath(string("img_baskets:") + color);
+        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_baskets:" + color));
 
         auto transform = e->create<Transform>();
         transform->setPos(vec3(pos, 0));
@@ -43,7 +44,7 @@ void GameScene::init() {
     //Background
     EM->create([=](EP e){
         auto sprite = e->create<Sprite>();
-        sprite->setPath("img_background");
+        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
         auto transform = e->create<Transform>();
         transform->setScale(2);
     });

@@ -4,6 +4,8 @@
 #include <core/sprite.h>
 #include <core/inputmanager.h>
 #include <core/presenter.h>
+#include <resources/QuadRes.h>
+#include <managers/ResManager/ResManager.h>
 
 #include "ballctrl.h"
 
@@ -26,7 +28,7 @@ void GameCtrl::createBall() {
         switch (linearRand(0,2)) {
         case 0: {
             auto sprite = e->create<Sprite>();
-            sprite->setPath(string("img_baskets:") + color);
+            sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_baskets:" + color));
             sprite->setColor({1,1,1,0.5f});
             transform->setScale(0.5f);
             break;
