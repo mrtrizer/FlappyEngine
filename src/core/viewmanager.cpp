@@ -3,6 +3,7 @@
 #include "presenter.h"
 #include "screenmanager.h"
 #include "scenemanager.h"
+#include "scene.h"
 
 namespace flappy {
 
@@ -10,17 +11,6 @@ using namespace std;
 using namespace glm;
 
 void ViewManager::update(TimeDelta dt) {
-
-    shared_ptr<Camera> camera;
-
-    MGR<EntityManager>()->each<Camera>([&camera, this] (EP e){
-        camera = e->get<Camera>();
-    });
-
-    if (camera == nullptr)
-        return ERROR_MSG(VOID_VALUE, "No active cameras in scene!\n");
-
-    auto pMatrix = camera->pMatrix();
 
     for (auto i = m_visuals.begin(); i !=  m_visuals.end(); ) {
         auto& visual = *i;
@@ -43,13 +33,22 @@ void ViewManager::update(TimeDelta dt) {
         visual.z = z;
     };
 
+    auto scene = MGR<SceneManager>()->scene();
+    if (scene == nullptr)
+        return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
+
+    auto camera = scene->camera();
+
+    if (camera == nullptr)
+        return ERROR_MSG(VOID_VALUE, "No main camera in scene!\n");
+
+    auto pMatrix = camera->pMatrix();
+
     redraw(m_visuals, pMatrix);
 }
 
 void ViewManager::addPresenter(const std::shared_ptr<Presenter>& presenter) {
     unsigned id = presenter->id();
-    if (m_bindings.size() <= id)
-        return ERROR_MSG(VOID_VALUE, "Presenter component %d was not binded.", id);
     if (m_bindings[id] == nullptr)
         return ERROR_MSG(VOID_VALUE, "Presenter component %d was not binded.", id);
     auto visual = Visual{presenter, m_bindings[id]->build(), {}, 0};

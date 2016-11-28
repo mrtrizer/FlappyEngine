@@ -17,8 +17,6 @@ void ManagerList::update() {
 }
 
 void ManagerList::setManagerAtPos(unsigned pos, shared_ptr<BaseManager> manager) {
-    if (m_managerList.size() <= pos)
-        m_managerList.resize(pos + 1);
     m_managerList[pos] = manager;
     try {
         manager->setManagerList(shared_from_this());
@@ -29,19 +27,8 @@ void ManagerList::setManagerAtPos(unsigned pos, shared_ptr<BaseManager> manager)
 }
 
 void ManagerList::removeManagerAtPos(unsigned pos) {
-    bool hasDependent = false;
-    for (auto& manager: m_managerList) {
-        if (manager == nullptr)
-            continue;
-        if (!manager->checkSatisfied([pos](unsigned id){return id != pos;})) {
-            hasDependent = true;
-            break;
-        }
-    }
-    if (hasDependent)
-        return ERROR_MSG(VOID_VALUE, "Can't remove manager. It has dependent");
 
-    Tools::resizeAndGet(m_managerList, pos) = nullptr;
+    m_managerList[pos] = nullptr;
 }
 
 void ManagerList::init() {

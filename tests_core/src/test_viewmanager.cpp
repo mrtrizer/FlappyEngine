@@ -7,8 +7,10 @@
 #include <core/viewmanager.h>
 #include <core/presenter.h>
 #include <core/screenmanager.h>
+#include <core/scenemanager.h>
 
 #include "testview.h"
+#include "testscene.h"
 
 using namespace flappy;
 using namespace std;
@@ -36,6 +38,8 @@ TEST_CASE( "ViewManager::update()") {
 
     auto managerList = std::make_shared<ManagerList>();
     managerList->create<ScreenManager>(); // ViewManager depends from ScreenManager
+    auto sceneManager = managerList->create<SceneManager>(); // ViewManager dependes from SceneManager
+    sceneManager->setScene(std::make_shared<TestScene>());
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create(); // ViewManager can't render without camera
     auto camera = entity->create<Camera>();
@@ -52,7 +56,8 @@ TEST_CASE( "ViewManager::update()") {
 
     view->setMock(&mock.get());
 
-    viewManager->update(1);
+    managerList->update();
+    managerList->update();
 
     Verify(Method(mock,update), Method(mock, draw)).Exactly(1);
 

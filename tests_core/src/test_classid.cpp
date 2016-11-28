@@ -18,4 +18,5 @@ TEST_CASE( "ClassId::id()") {
     REQUIRE((ClassId<A,B>::id() == 1));
     REQUIRE((ClassId<A,C>::id() == 2));
     REQUIRE((ClassId<A,B>::id() == 1));
+    REQUIRE(ClassCounter<A>::count() == 3);
 }

@@ -13,17 +13,15 @@ class BaseManager;
 
 class ManagerList : public std::enable_shared_from_this<ManagerList> {
 public:
+    ManagerList(): m_managerList(ClassCounter<BaseManager>::count()) {}
     virtual ~ManagerList() = default;
     void update();
     void init();
 
-    // TODO: What about returing of pointer or reference?
     template <typename ManagerT>
     std::shared_ptr<ManagerT> MGR() {
         using namespace std;
-        shared_ptr<BaseManager> manager = nullptr;
-        if (m_managerList.size() > ClassId<BaseManager, ManagerT>::id())
-            manager = m_managerList[ClassId<BaseManager, ManagerT>::id()];
+        shared_ptr<BaseManager> manager = m_managerList[ClassId<BaseManager, ManagerT>::id()];
         if (manager) { //if found
             return static_pointer_cast<ManagerT>(manager);
         } else { //search in parent
@@ -31,14 +29,13 @@ public:
                 return parent->MGR<ManagerT>();
             else
                 return nullptr;
+                //throw std::runtime_error("Manager is not initialized: " + typeName<ManagerT>());
         }
     }
 
     /// Create manager with initialization
     template <typename ManagerT, typename...ArgsT>
     std::shared_ptr<ManagerT> create(ArgsT&&...args) {
-        if (!checkSatisfied<ManagerT>())
-            return nullptr;
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
         add<ManagerT>(manager);
         manager->init();
@@ -48,8 +45,6 @@ public:
     /// Override manager interface with initialization
     template <typename DestManagerT, typename ManagerT, typename ... ArgsT>
     std::shared_ptr<ManagerT> override(ArgsT&&...args) {
-        if (!checkSatisfied<ManagerT>())
-            return nullptr;
         auto manager = std::make_shared<ManagerT>(std::forward<ArgsT>(args)...);
         setManagerAtPos(ClassId<BaseManager, DestManagerT>::id(), manager);
         manager->init();
@@ -78,11 +73,6 @@ private:
 
     void setManagerAtPos(unsigned pos, std::shared_ptr<BaseManager> manager);
     void removeManagerAtPos(unsigned pos);
-    template <typename ManagerT>
-    bool checkSatisfied() {
-        return ManagerT::satisfied(
-          [this](unsigned id){return (m_managerList.size() > id) && (m_managerList[id] != nullptr);});
-    }
 };
 
 } // flappy

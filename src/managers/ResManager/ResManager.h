@@ -12,10 +12,10 @@ namespace flappy {
 class Res;
 class ResFactory;
 
-class ResManager final: public Manager<>, public std::enable_shared_from_this<ResManager>
+class ResManager final: public Manager, public std::enable_shared_from_this<ResManager>
 {
 public:
-    ResManager() = default;
+    ResManager():m_resTypeVector(ClassCounter<Res>::count()) {}
     virtual ~ResManager() = default;
     ResManager(const ResManager&) = delete;
     ResManager& operator=(const ResManager&) = delete;
@@ -72,13 +72,7 @@ private:
     template <typename ResT>
     ResType& getResType()
     {
-        const unsigned resId = ClassId<Res, ResT>::id();
-
-        if (m_resTypeVector.size() <= resId) {
-            m_resTypeVector.resize(resId + 1);
-        }
-
-        return m_resTypeVector[resId];
+        return m_resTypeVector[ClassId<Res, ResT>::id()];
     }
 };
 

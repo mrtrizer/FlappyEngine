@@ -4,7 +4,7 @@
 
 namespace flappy {
 
-class AppManager: public Manager<>
+class AppManager: public Manager
 {
 public:
     AppManager(int argc = 1, const char* const* argv = nullptr);

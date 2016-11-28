@@ -6,14 +6,16 @@ namespace flappy {
 
 class Scene;
 
-class SceneManager: public Manager<>
+class SceneManager: public Manager
 {
 public:
-    void setScene(const std::shared_ptr<Scene>& scene);
+    void setScene(std::shared_ptr<Scene> scene);
     std::shared_ptr<Scene> scene() const { return m_scene; }
+    void update(float) override;
 
 private:
     std::shared_ptr<Scene> m_scene;
+    std::shared_ptr<Scene> m_nextScene;
 };
 
 } // flappy

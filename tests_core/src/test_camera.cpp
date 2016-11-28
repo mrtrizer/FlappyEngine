@@ -59,6 +59,7 @@ TEST_CASE( "Camera::init()") {
     auto entity = entityManager->create();
     auto camera1 = entity->create<Camera>(); //Without Scene
     sceneManager->setScene(std::make_shared<TestScene>());
+    sceneManager->update(1);
     auto camera2 = entity->create<Camera>(); //With TestScene
     REQUIRE(sceneManager->scene()->camera() == camera2);
 }

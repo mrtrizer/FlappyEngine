@@ -17,7 +17,7 @@ class ScreenManager;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager: public Manager<EntityManager, ScreenManager> {
+class ViewManager: public Manager {
 private:
     class IViewFactory {
     public:
@@ -32,14 +32,14 @@ private:
     };
 
 public:
+    ViewManager(): m_bindings(ClassCounter<Presenter>::count()) {}
+
     void update(TimeDelta dt);
     void resize(int width, int height);
 
     /// Assing custom View for Presenter
     template <typename PresenterT, typename ViewT>
     void bind() {
-        if (m_bindings.size() <= ClassId<Presenter, PresenterT>::id())
-            m_bindings.resize(ClassId<Presenter,PresenterT>::id() + 1);
         m_bindings[ClassId<Presenter,PresenterT>::id()] = std::make_shared<ViewFactory<ViewT>>();
     }
     

@@ -3,8 +3,6 @@
 #include <list>
 #include <memory>
 
-#include <core/classid.h>
-
 namespace flappy {
 
 class Res: public std::enable_shared_from_this<Res> {

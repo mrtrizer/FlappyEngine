@@ -6,10 +6,25 @@ namespace flappy {
 
 using namespace std;
 
-void SceneManager::setScene(const shared_ptr<Scene>& scene) {
-    m_scene = scene;
-    m_scene->setParent(managerList());
-    m_scene->init();
+void SceneManager::update(float) {
+    if (m_nextScene != nullptr) {
+        m_scene = m_nextScene;
+        m_nextScene = nullptr;
+    }
+    m_scene->update();
 }
+
+void SceneManager::setScene(std::shared_ptr<Scene> scene) {
+    m_nextScene = scene;
+    if (m_nextScene != nullptr) {
+        m_nextScene->setParent(managerList());
+        m_nextScene->init();
+    }
+    if (m_scene == nullptr) {
+        m_scene = m_nextScene;
+        m_nextScene = nullptr;
+    }
+}
+
 
 } // flappy

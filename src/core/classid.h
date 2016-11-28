@@ -9,7 +9,8 @@ public:
         m_curId(m_count) {
         m_count++;
     }
-    unsigned id() {return m_curId;}
+    unsigned id() { return m_curId; }
+    static unsigned count() { return m_count; }
 private:
     static unsigned m_count;
     const unsigned m_curId;
