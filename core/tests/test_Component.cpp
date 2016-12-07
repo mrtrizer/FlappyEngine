@@ -9,8 +9,8 @@
 #include <ManagerList.h>
 #include <EntityManager.h>
 
-#include "testmanager.h"
-#include "testcomponent.h"
+#include "TestManager.h"
+#include "TestComponent.h"
 
 using namespace flappy;
 using namespace fakeit;

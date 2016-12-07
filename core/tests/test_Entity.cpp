@@ -7,7 +7,7 @@
 #include <TransformComponent.h>
 #include <ManagerList.h>
 
-#include "testcomponent.h"
+#include "TestComponent.h"
 
 using namespace flappy;
 using namespace fakeit;

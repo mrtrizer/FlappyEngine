@@ -6,7 +6,7 @@
 #include <ManagerList.h>
 #include <Manager.h>
 
-#include "testmanager.h"
+#include "TestManager.h"
 
 using namespace flappy;
 using namespace fakeit;

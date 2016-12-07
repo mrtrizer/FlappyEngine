@@ -9,8 +9,8 @@
 #include <ScreenManager.h>
 #include <SceneManager.h>
 
-#include "testview.h"
-#include "testscene.h"
+#include "TestView.h"
+#include "TestScene.h"
 
 using namespace flappy;
 using namespace std;

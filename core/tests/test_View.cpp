@@ -6,7 +6,7 @@
 #include <ManagerList.h>
 #include <PresenterComponent.h>
 
-#include "testview.h"
+#include "TestView.h"
 
 using namespace flappy;
 using namespace std;

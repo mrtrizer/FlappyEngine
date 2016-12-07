@@ -11,7 +11,7 @@
 #include <EntityManager.h>
 #include <SceneManager.h>
 
-#include "testscene.h"
+#include "TestScene.h"
 
 using namespace flappy;
 using namespace std;
