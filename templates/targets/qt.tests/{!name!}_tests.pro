@@ -1,6 +1,6 @@
 QT += core
 
-TARGET = {!name!}
+TARGET = {!name!}_tests
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++14
