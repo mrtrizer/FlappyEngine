@@ -1,9 +1,17 @@
 {
 	"name":"tests_gl",
+	"modules":[
+		"../core",
+		"../modules/gl",
+		"../modules/glut",
+		"../modules/json",
+		"../modules/qt",
+		"../modules/ui"
+	],
 	"engine":"..",
 	"exclude":[],
 	"inc_dirs":[],
-    "scene_header":"menuscene.h",
+    "scene_header":"MenuScene.h",
     "scene_class":"game::MenuScene",
 	"console_mode":false,
 	"cmake": {

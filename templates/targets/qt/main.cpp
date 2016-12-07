@@ -1,18 +1,18 @@
 #include <memory>
 
-#include <glut/glutinit.h>
-#include <qt/resources/QtTextureResFactory.h>
-#include <managers/ResManager/ResManager.h>
-#include <core/inputmanager.h>
-#include <core/entitymanager.h>
-#include <core/scenemanager.h>
-#include <core/screenmanager.h>
-#include <core/managerlist.h>
-#include <core/appmanager.h>
-#include <qt/QtFileMonitor.h>
-#include <resources/QuadRes.h>
-#include <resources/TextureRes.h>
-#include <resources/QuadResFactory.h>
+#include <GlutInit.h>
+#include <QtTextureResFactory.h>
+#include <ResManager.h>
+#include <InputManager.h>
+#include <EntityManager.h>
+#include <SceneManager.h>
+#include <ScreenManager.h>
+#include <AppManager.h>
+#include <ManagerList.h>
+#include <QtFileMonitor.h>
+#include <QuadRes.h>
+#include <TextureRes.h>
+#include <QuadResFactory.h>
 
 #include <{!scene_header!}>
 

@@ -1,0 +1,10 @@
+{
+    "name":"glut",
+    "src_dirs": [
+        "./src"
+    ],
+    "src_exclude": [],
+    "include": [
+        "./src"
+    ]
+}
