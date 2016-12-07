@@ -22,16 +22,17 @@ script:
 #opengl test project
  - pushd tests_gl
  - flappy prebuild qt
+ - flappy prebuild qt.tests
  - pushd targets/qt
  - qmake tests_gl.pro
  - make
  - popd
- - popd
-#core tests
- - cd tests_core
- - qmake tests_core.pro
+ - pushd targets/qt.tests
+ - qmake tests_gl_tests.pro
  - make
- - ./tests_core
+ - ./tests_gl_tests
+ - popd
+ - popd
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
