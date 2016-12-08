@@ -22,10 +22,14 @@ def fileListExt(rootPath, sourceDirs, targetExt=None):
     fileList = []
     for relSourceDir in sourceDirs:
         sourceDir = os.path.join(rootPath, relSourceDir);
+
         for path, dirs, files in os.walk(sourceDir):
             for fileName in files:
                 ext = os.path.splitext(fileName)[1]
-                filePath = os.path.join(os.path.relpath(sourceDir, rootPath), fileName)
+                relPath = os.path.relpath(path, rootPath);
+                print path
+                print relPath
+                filePath = os.path.join(relPath, fileName)
                 if ((ext == targetExt) or (targetExt is None)):
                     fileList.append(filePath)
     return fileList
