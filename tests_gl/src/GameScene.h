@@ -7,7 +7,7 @@
 #include <TransformComponent.h>
 #include <EntityManager.h>
 #include <InputManager.h>
-#include <Button.h>
+#include <ButtonComponent.h>
 
 #include "BallCtrl.h"
 #include "BasketCtrl.h"

@@ -1,0 +1,13 @@
+{
+    "name":"Core",
+    "src_dirs": [
+        "./src"
+    ],
+    "src_exclude": [
+        "./glm/detail"
+    ],
+    "include": [
+        "./src",
+        "./libs"
+    ]
+}

@@ -1,7 +1,7 @@
 #include "MenuScene.h"
 
 #include <EntityManager.h>
-#include <Button.h>
+#include <ButtonComponent.h>
 #include <SpriteComponent.h>
 #include <TransformComponent.h>
 #include <QuadRes.h>
@@ -27,7 +27,7 @@ void MenuScene::init() {
     });
 
     $(EntityManager)->create([=](EP e) {
-        auto button = e->create<Button>();
+        auto button = e->create<ButtonComponent>();
         button->setOnClick([]{
             LOGI("Click");
         });

@@ -37,7 +37,7 @@ void GameScene::init() {
     });
 
     //Game controller
-    EM  ->create([=](EP e){
+    EM->create([=](EP e){
         e->create<GameCtrl>();
     });
 

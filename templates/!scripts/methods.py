@@ -27,8 +27,6 @@ def fileListExt(rootPath, sourceDirs, targetExt=None):
             for fileName in files:
                 ext = os.path.splitext(fileName)[1]
                 relPath = os.path.relpath(path, rootPath);
-                print path
-                print relPath
                 filePath = os.path.join(relPath, fileName)
                 if ((ext == targetExt) or (targetExt is None)):
                     fileList.append(filePath)

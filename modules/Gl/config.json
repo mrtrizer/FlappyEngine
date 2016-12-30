@@ -1,0 +1,10 @@
+{
+    "name":"Gl",
+    "src_dirs": [
+        "./src"
+    ],
+    "src_exclude": [],
+    "include": [
+        "./src"
+    ]
+}

@@ -1,12 +1,18 @@
 {
 	"name":"tests_gl",
 	"modules":[
-		"../core",
-		"../modules/gl",
-		"../modules/glut",
-		"../modules/json",
-		"../modules/qt",
-		"../modules/ui"
+		"../modules/Core",
+        "../modules/CoreComponents",
+        "../modules/CoreResources",
+        "../modules/EventBus",
+        "../modules/ResManager",
+        "../modules/ViewManager",
+		"../modules/Gl",
+		"../modules/Glut",
+		"../modules/JsonRes",
+		"../modules/Qt",
+		"../modules/UiComponents",
+        "../modules/Tools"
 	],
 	"engine":"..",
 	"exclude":[],
