@@ -1,5 +1,4 @@
 #include "catch.h"
-#include "fakeit.h"
 
 #include <memory>
 
@@ -7,28 +6,19 @@
 #include <Tools.h>
 
 using namespace flappy;
-using namespace fakeit;
-namespace {
 
-struct IMockHandler {
-    virtual void func() = 0;
-};
-
-}
-
-TEST_CASE( "EventSystem::subscribe() EventSystem::post() EventSystem::exec() [queued call]") {
-    Mock<IMockHandler> mock;
-    Fake(Method(mock,func));
+TEST_CASE( "EventSystem::subscribe() EventSystem::post()") {
+    bool checkFlag = false;
 
     struct TestEvent {};
     EventBus eventSystem;
     { // Subscription life time
-        auto subscription = eventSystem.subscribe([&mock](TestEvent) {
-            mock.get().func();
+        auto subscription = eventSystem.subscribe([&checkFlag](TestEvent) {
+            checkFlag = true;
         });
         eventSystem.post(TestEvent());
     }
 
-    Verify(Method(mock,func)).Exactly(1);
+    REQUIRE(checkFlag == true);
 }
 
