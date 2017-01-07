@@ -11,23 +11,29 @@ using namespace flappy;
 using namespace std;
 using namespace Tools;
 
+TEST_CASE( "AtlasRes::addRect() AtlasRes::rect() default") {
+    AtlasRes atlas;
+    auto defaultRect = Rect{0.0f,0.0f,1.0f,1.0f};
+    auto defaultSize = glm::vec2{0.0f, 0.0f};
+    auto spriteInfo = atlas.spriteInfo("sprite1");
+    REQUIRE(spriteInfo.rectInAtlas == defaultRect);
+    REQUIRE(spriteInfo.size == defaultSize);
+}
+
 TEST_CASE( "AtlasRes::addRect() AtlasRes::rect()") {
     AtlasRes atlas;
-    auto defaultRect = Rect{0,0,1,1};
-    REQUIRE(atlas.rect("rect1").x1 == defaultRect.x1);
-    REQUIRE(atlas.rect("rect1").x2 == defaultRect.x2);
-    REQUIRE(atlas.rect("rect1").y1 == defaultRect.y1);
-    REQUIRE(atlas.rect("rect1").y2 == defaultRect.y2);
-    auto rect1 = Rect{0,0,1,0.5f};
-    atlas.addRect("rect1",rect1);
-    REQUIRE(atlas.rect("rect1").x1 == rect1.x1);
-    REQUIRE(atlas.rect("rect1").x2 == rect1.x2);
-    REQUIRE(atlas.rect("rect1").y1 == rect1.y1);
-    REQUIRE(atlas.rect("rect1").y2 == rect1.y2);
-    auto rect2 = Rect{0,0.5f,1,1};
-    atlas.addRect("rect2",rect2);
-    REQUIRE(atlas.rect("rect2").x1 == rect2.x1);
-    REQUIRE(atlas.rect("rect2").x2 == rect2.x2);
-    REQUIRE(atlas.rect("rect2").y1 == rect2.y1);
-    REQUIRE(atlas.rect("rect2").y2 == rect2.y2);
+    { // first adding
+        auto spriteInfo1 = AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,0.5f}, {1.0f, 1.0f});
+        atlas.addSpriteInfo("sprite1",spriteInfo1);
+        auto spriteInfo = atlas.spriteInfo("sprite1");
+        REQUIRE(spriteInfo.rectInAtlas == spriteInfo1.rectInAtlas);
+        REQUIRE(spriteInfo.size == spriteInfo1.size);
+    }
+    { // multiple elements
+        auto spriteInfo2 = AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,0.5f}, {1.0f, 1.0f});
+        atlas.addSpriteInfo("sprite2",spriteInfo2);
+        auto spriteInfo = atlas.spriteInfo("sprite2");
+        REQUIRE(spriteInfo.rectInAtlas == spriteInfo2.rectInAtlas);
+        REQUIRE(spriteInfo.size == spriteInfo2.size);
+    }
 }

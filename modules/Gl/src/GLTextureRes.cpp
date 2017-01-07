@@ -6,7 +6,8 @@
 
 namespace flappy {
 
-GLTexture::GLTexture(const char *bitmapData, int width, int height)
+GLTexture::GLTexture(const char *bitmapData, int width, int height):
+    TextureRes({width, height})
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     CHECK_GL_ERROR;

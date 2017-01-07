@@ -4,6 +4,7 @@
 #include <SpriteComponent.h>
 #include <PresenterComponent.h>
 #include <QuadRes.h>
+#include <SizeComponent.h>
 
 namespace game {
 
@@ -13,8 +14,13 @@ using namespace flappy;
 
 void GameScene::createBasket(string color, vec2 pos) {
     EM->create([=](EP e) {
+        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_baskets:" + color);
+
         auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_baskets:" + color));
+        sprite->setQuad(quad);
+
+        auto sizeComponent = e->create<SizeComponent>();
+        sizeComponent->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
 
         auto transform = e->create<TransformComponent>();
         transform->setPos(vec3(pos, 0));
@@ -26,9 +32,9 @@ void GameScene::createBasket(string color, vec2 pos) {
 
 void GameScene::init() {
     auto atlas = std::make_shared<AtlasRes>();
-    atlas->addRect("blue",{0,0,0.333f,1});
-    atlas->addRect("green",{0.333f,0,0.333f * 2.0f,1.0f});
-    atlas->addRect("red",{0.333f * 2.0f,0,0.333 * 3.0f,1.0f});
+    atlas->addSpriteInfo("blue",AtlasRes::SpriteInfo({0,0,0.333f,1},{100, 100}));
+    atlas->addSpriteInfo("green",AtlasRes::SpriteInfo({0.333f,0,0.333f * 2.0f,1.0f},{100, 100}));
+    atlas->addSpriteInfo("red",AtlasRes::SpriteInfo({0.333f * 2.0f,0,0.333 * 3.0f,1.0f},{100, 100}));
     MGR<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
 
     //CameraComponent

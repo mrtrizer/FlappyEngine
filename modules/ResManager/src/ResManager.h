@@ -42,7 +42,11 @@ public:
     template <typename ResT>
     void setRes(const std::string& name, std::shared_ptr<ResT> res)
     {
-        getResType<ResT>().resMap.emplace(name, ResKeeper(res, false));
+        auto foundIter = getResType<ResT>().resMap.find(name);
+        if (foundIter == getResType<ResT>().resMap.end())
+            getResType<ResT>().resMap.emplace(name, ResKeeper(res, false));
+        else
+            foundIter->second.actualRes()->pushRes(res);
     }
 
     /// @brief Bind resource factory, used to load and reload resources.

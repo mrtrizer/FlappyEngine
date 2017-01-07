@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <glm/vec2.hpp>
+
 #include <Res.h>
 
 namespace flappy {
@@ -13,15 +15,16 @@ public:
         float v;
     };
 
-    TextureRes():m_uvs({{0,1},{0,0},{1,1},{1,0}}) {}
+    TextureRes(glm::vec2 size):m_uvs({{0,1},{0,0},{1,1},{1,0}}), m_size(size) {}
 
     std::vector<UV> uvs() const { return m_uvs; }
     float relWidth() const {return m_relWidth;}
     float relHeight() const {return m_relHeight;}
+    glm::vec2 size() const {return m_size;}
 
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
-// TODO: Make private
+#warning TODO: Make private
 protected:
     /// Saved UVs after auto resize
     std::vector<UV> m_uvs;
@@ -29,6 +32,7 @@ protected:
     float m_relWidth = 1.0;
     /// Relative height (0.0 to 1.0)
     float m_relHeight = 1.0;
+    glm::vec2 m_size = {0.0f, 0.0f};
 };
 
 } // flappy

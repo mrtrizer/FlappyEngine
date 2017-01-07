@@ -41,6 +41,11 @@ public:
         else
             return shared_from_this();
     }
+
+    bool resUpdated() {
+        return (m_next != nullptr) && (m_next.get() != this);
+    }
+
     void pushRes(std::shared_ptr<Res> res) {
         if (m_next != nullptr)
             nextRes()->pushRes(res);

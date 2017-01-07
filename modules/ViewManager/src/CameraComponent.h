@@ -15,18 +15,16 @@ namespace flappy {
 class CameraComponent : public Component, public std::enable_shared_from_this<CameraComponent>
 {
 public:
-    CameraComponent():m_textureRes(std::make_shared<TextureRes>()) {}
+    CameraComponent() {}
     void setHeight(float height) {m_height = height;}
     Tools::Rect rect() const;
     glm::mat4 pMatrix();
     glm::vec3 screenToScene(const glm::vec2 &pos) const;
     void init();
-    std::shared_ptr<TextureRes> textureRes() { return m_textureRes; }
 
 private:
     /// Height in game units
     float m_height = 100;
-    std::shared_ptr<TextureRes> m_textureRes;
 };
 
 } // flappy

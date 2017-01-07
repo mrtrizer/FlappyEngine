@@ -51,7 +51,7 @@ GLViewSprite::GLViewSprite() :
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_quad != nullptr) {
-        if (m_quad->nextRes() != m_quad) {
+        if (m_quad->resUpdated()) {
             m_quad = static_pointer_cast<QuadRes>(m_quad->nextRes());
             updateFrame();
         }
@@ -69,31 +69,38 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 void GLViewSprite::updateFrame() {
     auto texture = m_quad->texture();
 
-    auto rect = m_quad->rect();
-    float quadWidth = rect.x2 - rect.x1;
-    float quadHeight = rect.y2 - rect.y1;
-    float relWidth = texture->relWidth();
-    float relHeight = texture->relHeight();
-    float newRelWidth = relWidth * quadWidth;
-    float newRelHeight = relHeight * quadHeight;
-    float relX = rect.x1 * relWidth;
-    float relY = rect.y1 * relHeight;
+    auto spriteInfo = m_quad->spriteInfo();
+
+    auto rectInAtlas = spriteInfo.rectInAtlas;
+
+
+    // Relative width and height of texture are useful for non square atlases.
+    // We need to multiply relative sprite coords and relative atlas size.
+    float textureRelativeWidth = texture->relWidth();
+    float spriteRelativeWidth = textureRelativeWidth * rectInAtlas.size().x;
+    float spriteRelativeX = rectInAtlas.x1 * textureRelativeWidth;
+
+    float textureRelativeHeight = texture->relHeight();
+    float spriteRelativeHeight = textureRelativeHeight * rectInAtlas.size().y;
+    float spriteRelativeY = rectInAtlas.y1 * textureRelativeHeight;
+
     vector<GLTexture::UV> uvs({
-            {relX, relY + newRelHeight},
-            {relX, relY},
-            {relX + newRelWidth, relY + newRelHeight},
-            {relX + newRelWidth, relY}});
+            {spriteRelativeX, spriteRelativeY + spriteRelativeHeight},
+            {spriteRelativeX, spriteRelativeY},
+            {spriteRelativeX + spriteRelativeWidth, spriteRelativeY + spriteRelativeHeight},
+            {spriteRelativeX + spriteRelativeWidth, spriteRelativeY}});
 
     m_rect.reset(GL_TRIANGLE_STRIP);
 
     m_rect.addVBO<GLTexture::UV>(uvs, getShader()->findAttr("aTexCoord"));
 
-    const float factor = 100.0f;
+    auto spriteSize = spriteInfo.size;
 
-    m_vertexList = { {-0.5f * newRelWidth * factor, -0.5f * newRelHeight * factor},
-                {-0.5f * newRelWidth * factor, 0.5f * newRelHeight * factor},
-                {0.5f * newRelWidth * factor, -0.5f * newRelHeight * factor},
-                {0.5f * newRelWidth * factor, 0.5f * newRelHeight * factor} };
+    m_vertexList = {
+                {-0.5f * spriteSize.x, -0.5f * spriteSize.y},
+                {-0.5f * spriteSize.x, 0.5f * spriteSize.y},
+                {0.5f * spriteSize.x, -0.5f * spriteSize.y},
+                {0.5f * spriteSize.x, 0.5f * spriteSize.y} };
 
     m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
 }

@@ -17,7 +17,7 @@ public:
         m_textureRes(textureRes),
         m_quadName(quadName)
     {}
-    Tools::Rect rect() { return m_atlasRes->rect(m_quadName); }
+    AtlasRes::SpriteInfo spriteInfo() { return m_atlasRes->spriteInfo(m_quadName); }
     std::shared_ptr<TextureRes> texture() { return m_textureRes; }
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {m_atlasRes, m_textureRes}; }
 

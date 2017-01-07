@@ -26,13 +26,13 @@ std::shared_ptr<Res> QuadResFactory::load(const std::string& name, std::shared_p
         string textureName = quadName;
         string defaultQuadName = "__full__";
         string defaultAtlasName = string("atlas_full__") + textureName;
+        auto texture = resManager->getRes<TextureRes>(quadName);
         {
             auto atlas = make_shared<AtlasRes>(); // create atlas dependent from image
-            atlas->addRect(defaultQuadName, {0,0,1,1});
+            atlas->addSpriteInfo(defaultQuadName, AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,1.0f}, texture->size()));
             resManager->setRes<AtlasRes>(defaultAtlasName, atlas);
         }
         auto defaultAtlas = resManager->getRes<AtlasRes>(defaultAtlasName);
-        auto texture = resManager->getRes<TextureRes>(quadName);
         auto defaultQuad = make_shared<QuadRes>(defaultAtlas, texture, defaultQuadName);
         return defaultQuad;
     }

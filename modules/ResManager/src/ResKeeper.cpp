@@ -27,8 +27,9 @@ bool ResKeeper::needRemove()
 
 bool ResKeeper::dependencyChanged() const
 {
-    for (auto dependency: m_res->dependencyList())
-        if (dependency->nextRes() != dependency)
+    auto actualRes = m_res->nextRes();
+    for (auto dependency: actualRes->dependencyList())
+        if (dependency->resUpdated())
             return true;
     return false;
 }
