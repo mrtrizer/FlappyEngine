@@ -25,7 +25,7 @@ void GameCtrl::createBall() {
         auto transform = e->create<TransformComponent>();
         transform->setPos({randX,-50, 0});
 
-        transform->setScale(10);
+        transform->setScale(100);
 
         switch (linearRand(0,2)) {
         case 0: {
@@ -42,8 +42,6 @@ void GameCtrl::createBall() {
             e->create<RectShape>()->setColor({0,1,0,0.5f});
             break;
         }
-
-
 
         e->create<BallCtrl>()->color = color;
     });

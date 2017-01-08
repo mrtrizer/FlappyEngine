@@ -16,15 +16,14 @@ void SceneManager::update(float) {
 
 void SceneManager::setScene(std::shared_ptr<Scene> scene) {
 
+    scene->setParent(managerList());
+    scene->create<EntityManager>();
+    scene->init();
     if (m_scene == nullptr) {
         m_scene = scene;
-        m_scene->setParent(managerList());
-        m_scene->init();
         m_nextScene = nullptr;
     } else {
         m_nextScene = scene;
-        m_nextScene->setParent(managerList());
-        m_nextScene->init();
     }
 }
 

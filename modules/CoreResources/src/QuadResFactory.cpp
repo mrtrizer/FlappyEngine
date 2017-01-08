@@ -18,7 +18,7 @@ std::shared_ptr<Res> QuadResFactory::load(const std::string& name, std::shared_p
         string atlasName = splittedName[0];
         string quadName = splittedName[1];
         auto atlas = resManager->getResSync<AtlasRes>(atlasName);
-        auto texture = resManager->getResSync<TextureRes>(atlasName);
+        auto texture = resManager->getRes<TextureRes>(atlasName);
         auto quad = make_shared<QuadRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path

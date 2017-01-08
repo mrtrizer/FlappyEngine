@@ -16,9 +16,10 @@ using namespace flappy;
 
 void MenuScene::init() {
     //CameraComponent
-    EM->create([=](EP e){
+    EM->create([=, this](EP e){
         auto camera = e->create<CameraComponent>();
         camera->setHeight(640);
+        setCamera(camera);
         e->create<TransformComponent>();
     });
 
@@ -38,7 +39,7 @@ void MenuScene::init() {
             auto gameScene = std::make_shared<GameScene>();
             MGR<SceneManager>()->setScene(gameScene);
         });
-        auto quad = MGR<ResManager>()->getResSync<QuadRes>("img_play");
+        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_play");
         e->create<SpriteComponent>()
                 ->setQuad(quad);
         e->create<TransformComponent>()

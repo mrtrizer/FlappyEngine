@@ -20,8 +20,6 @@ void CameraComponent::init() {
     auto scene = sceneManager->scene();
     if (scene == nullptr)
         return;
-    if (scene->camera() == nullptr)
-        scene->setCamera(shared_from_this());
 }
 
 Rect CameraComponent::rect() const {

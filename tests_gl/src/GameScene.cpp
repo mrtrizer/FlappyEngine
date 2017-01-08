@@ -5,6 +5,7 @@
 #include <PresenterComponent.h>
 #include <QuadRes.h>
 #include <SizeComponent.h>
+#include <MenuScene.h>
 
 namespace game {
 
@@ -39,7 +40,9 @@ void GameScene::init() {
 
     //CameraComponent
     EM->create([=](EP e){
-        e->create<CameraComponent>();
+        auto camera = e->create<CameraComponent>();
+        camera->setHeight(640);
+        setCamera(camera);
     });
 
     //Game controller
@@ -47,18 +50,37 @@ void GameScene::init() {
         e->create<GameCtrl>();
     });
 
-    //Background
-    EM->create([=](EP e){
-        auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
-        auto transform = e->create<TransformComponent>();
-        transform->setScale(2);
-    });
+//    //Background
+//    EM->create([=](EP e){
+//        auto sprite = e->create<SpriteComponent>();
+//        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
+//        auto transform = e->create<TransformComponent>();
+//        transform->setScale(2);
+//    });
 
     //Baskets
-    createBasket("blue", {0, 40});
-    createBasket("red", {-30, 40});
-    createBasket("green", {30, 40});
+    createBasket("blue", {0, 250});
+    createBasket("red", {-200, 250});
+    createBasket("green", {200, 250});
+
+    //Menu button
+    EM->create([=](EP e) {
+        auto buttonComponent = e->create<ButtonComponent>();
+        events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
+            LOGI("Click");
+
+            auto menuScene = std::make_shared<MenuScene>();
+            MGR<SceneManager>()->setScene(menuScene);
+        });
+        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_play");
+        e->create<SpriteComponent>()
+                ->setQuad(quad);
+        auto transform = e->create<TransformComponent>();
+        transform->setScale(0.5f);
+        transform->setPos({0, -260, 0});
+        e->create<SizeComponent>()
+                ->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
+    });
 }
 
 } // flappy

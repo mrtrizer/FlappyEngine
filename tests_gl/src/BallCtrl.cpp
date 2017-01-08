@@ -18,7 +18,7 @@ void BallCtrl::update(TimeDelta dt) {
         shape->setColor({shape->color().r() + 0.1f * dt, 0, 0, shape->color().a()});
     auto scale = entity()->transform()->scale();
     entity()->transform()->setScale({scale.x, scale.y + dt});
-    if (entity()->transform()->pos().y > 40)
+    if (entity()->transform()->pos().y > 320)
         EM->remove(entity());
 }
 

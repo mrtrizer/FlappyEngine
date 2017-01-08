@@ -47,10 +47,12 @@ TEST_CASE( "ViewManager::update()") {
     auto managerList = std::make_shared<ManagerList>();
     managerList->create<ScreenManager>(); // ViewManager depends from ScreenManager
     auto sceneManager = managerList->create<SceneManager>(); // ViewManager dependes from SceneManager
-    sceneManager->setScene(std::make_shared<TestScene>());
+    auto testScene = std::make_shared<TestScene>();
+    sceneManager->setScene(testScene);
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create(); // ViewManager can't render without camera
     auto camera = entity->create<CameraComponent>();
+    testScene->setCamera(camera);
     auto viewManager = managerList->override<ViewManager,TestViewManager>();
 
     REQUIRE(viewManager != nullptr);

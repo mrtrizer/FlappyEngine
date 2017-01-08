@@ -65,8 +65,10 @@ TEST_CASE( "CameraComponent::init()") {
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
     auto camera1 = entity->create<CameraComponent>(); //Without Scene
-    sceneManager->setScene(std::make_shared<TestScene>());
+    auto testScene = std::make_shared<TestScene>();
+    sceneManager->setScene(testScene);
     sceneManager->update(1);
     auto camera2 = entity->create<CameraComponent>(); //With TestScene
+    testScene->setCamera(camera2);
     REQUIRE(sceneManager->scene()->camera() == camera2);
 }

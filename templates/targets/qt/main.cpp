@@ -4,7 +4,6 @@
 #include <QtTextureResFactory.h>
 #include <ResManager.h>
 #include <InputManager.h>
-#include <EntityManager.h>
 #include <SceneManager.h>
 #include <ScreenManager.h>
 #include <AppManager.h>
@@ -27,7 +26,6 @@ int main(int argc, char *argv[])
     auto resManager = managerList->create<ResManager>();
     resManager->bindResFactory<TextureRes>(make_shared<QtTextureResFactory>("../../res/", qtFileMonitor));
     resManager->bindResFactory<QuadRes>(make_shared<QuadResFactory>());
-    managerList->create<EntityManager>();
     managerList->create<SceneManager>();
     managerList->create<ScreenManager>();
     managerList->create<InputManager>();
