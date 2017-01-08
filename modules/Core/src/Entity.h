@@ -28,6 +28,7 @@ public:
         return component;
     }
 
+#warning TODO: Rename to component()
     // TODO: How to optomize? Dynamic cast for every component is bad idea.
     // We can store all presenters in separate list
     template<typename ComponentT>

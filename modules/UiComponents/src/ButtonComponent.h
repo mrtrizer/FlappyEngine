@@ -8,17 +8,15 @@ namespace flappy {
 
 class ButtonComponent: public Component {
 public:
-    void update(TimeDelta dt);
+    struct OnButtonPress {};
+    struct OnButtonRelease {};
+    struct OnButtonClick {};
 
-    void setOnClick(std::function<void()> onClick) {
-        m_onClick = onClick;
-    }
+    void update(TimeDelta dt);
 
 private:
     bool isInField();
     bool m_mouseDown = false;
-    std::function<void()> m_onClick;
-    glm::vec3 m_baseScale;
 };
 
 } // flappy

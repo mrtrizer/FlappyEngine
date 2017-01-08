@@ -17,7 +17,7 @@ namespace flappy {
 ///
 /// Example:
 /// @code{.cpp}
-/// if (m_res != m_res->nextRes()) {
+/// if (m_res->resUpdated()) {
 ///     ... // new resource processing
 ///     m_res = m_res->nextRes()
 /// }

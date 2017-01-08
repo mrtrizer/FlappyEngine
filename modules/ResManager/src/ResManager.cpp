@@ -6,7 +6,7 @@ namespace flappy {
 
 using namespace std;
 
-std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, shared_ptr<ResManager> resManager)
+ResKeeper& ResManager::ResType::getResKeeper(const string& name, shared_ptr<ResManager> resManager)
 {
     auto resIter = resMap.find(name);
     if (resIter == resMap.end()) {
@@ -14,8 +14,9 @@ std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, shared_ptr<
             throw runtime_error("ResFactory is not binded");
         try { // catch all exception from default res create function
             auto defaultRes = resFactory->create(name, resManager);
-            resMap.emplace(name, ResKeeper(defaultRes));
-            return defaultRes;
+            auto resKeeper = ResKeeper(defaultRes);
+            auto iter = resMap.emplace(name, std::move(resKeeper)).first;
+            return iter->second;
         } catch (exception& e) {
             throw runtime_error(string("Default resource create error.\nDescription:\n") + e.what());
         }
@@ -23,8 +24,12 @@ std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, shared_ptr<
             throw runtime_error("Default resource create error.");
         }
     } else {
-        return resIter->second.actualRes();
+        return resIter->second;
     }
+}
+
+std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, shared_ptr<ResManager> resManager) {
+    return getResKeeper(name, resManager).actualRes();
 }
 
 void ResManager::update(TimeDelta)

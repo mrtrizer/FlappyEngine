@@ -6,6 +6,9 @@
 #include <TransformComponent.h>
 #include <QuadRes.h>
 #include <ResManager.h>
+#include <SizeComponent.h>
+
+#include "GameScene.h"
 
 namespace game {
 
@@ -13,8 +16,9 @@ using namespace flappy;
 
 void MenuScene::init() {
     //CameraComponent
-    $(EntityManager)->create([=](EP e){
-        e->create<CameraComponent>();
+    EM->create([=](EP e){
+        auto camera = e->create<CameraComponent>();
+        camera->setHeight(640);
         e->create<TransformComponent>();
     });
 
@@ -26,15 +30,21 @@ void MenuScene::init() {
         transform->setScale(2);
     });
 
-    $(EntityManager)->create([=](EP e) {
-        auto button = e->create<ButtonComponent>();
-        button->setOnClick([]{
+    EM->create([=](EP e) {
+        auto buttonComponent = e->create<ButtonComponent>();
+        events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
             LOGI("Click");
+
+            auto gameScene = std::make_shared<GameScene>();
+            MGR<SceneManager>()->setScene(gameScene);
         });
-        auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_play"));
-        auto transform = e->create<TransformComponent>();
-        transform->setScale(0.5f);
+        auto quad = MGR<ResManager>()->getResSync<QuadRes>("img_play");
+        e->create<SpriteComponent>()
+                ->setQuad(quad);
+        e->create<TransformComponent>()
+                ->setScale(0.5f);
+        e->create<SizeComponent>()
+                ->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
     });
 }
 

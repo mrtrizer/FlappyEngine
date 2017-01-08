@@ -18,13 +18,18 @@ public:
     EventController(EventController&&) = delete;
     EventController& operator=(EventController&&) & = delete;
 
-    template <typename EventT, typename FuncT>
-    std::shared_ptr<ISubscription> subscribe(FuncT&& func) {
-        auto subscription = m_eventBus->subscribe<EventT>(std::forward<FuncT>(func));
-        return subscription;
+    template <typename FuncT>
+    void subscribe(FuncT&& func) {
+        m_subscriptionVector.push_back(m_eventBus->subscribe(std::forward<FuncT>(func)));
+    }
+
+    template <typename FuncT, typename SourceT>
+    void subscribe(SourceT source, FuncT&& func) {
+        m_subscriptionVector.push_back(source->events()->eventBus()->subscribe(std::forward<FuncT>(func)));
     }
 
     void unsubscribe(std::shared_ptr<ISubscription> subscription);
+
     template<typename EventT>
     void post(EventT&& event) {
         m_eventBus->post(std::forward<EventT>(event));
@@ -34,6 +39,7 @@ public:
 
 private:
     std::shared_ptr<EventBus> m_eventBus;
+    std::vector<std::shared_ptr<ISubscription>> m_subscriptionVector;
 };
 
 } // flappy

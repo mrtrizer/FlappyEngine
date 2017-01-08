@@ -39,6 +39,7 @@ private:
     }
 
 public:
+#warning TODO: Rename to mgr()
     template <typename Manager>
     constexpr auto MGR() const -> decltype(m_managerList.lock()->MGR<Manager>()) {
         return m_managerList.lock()->MGR<Manager>();

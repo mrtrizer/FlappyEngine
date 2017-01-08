@@ -37,6 +37,17 @@ public:
         return std::static_pointer_cast<ResT>(getResType<ResT>().getRes(name, shared_from_this()));
     }
 
+    /// @brief Synchronous version of getRes
+    template <typename ResT>
+    std::shared_ptr<ResT> getResSync(const std::string& name)
+    {
+        auto& resType = getResType<ResT>();
+        auto& resKeeper = resType.getResKeeper(name, shared_from_this());
+        if (resType.resFactory)
+            resKeeper.updateRes(resType.resFactory, name, shared_from_this());
+        return std::static_pointer_cast<ResT>(resKeeper.actualRes());
+    }
+
     /// @brief Set resource with name. Resource will be destroyed in next update
     /// if it hasn't external links.
     template <typename ResT>
@@ -71,6 +82,7 @@ private:
         /// Generates runtime_error exception if ResFactory is not set.
         /// @return Initialized resource by name
         std::shared_ptr<Res> getRes(const std::string& name, std::shared_ptr<ResManager>);
+        ResKeeper& getResKeeper(const std::string& name, std::shared_ptr<ResManager>);
     };
 
     std::vector<ResType> m_resTypeVector;
