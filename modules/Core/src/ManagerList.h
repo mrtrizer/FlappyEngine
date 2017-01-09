@@ -23,14 +23,14 @@ public:
     void init();
 
     template <typename ManagerT>
-    std::shared_ptr<ManagerT> MGR() {
+    std::shared_ptr<ManagerT> manager() {
         using namespace std;
         shared_ptr<BaseManager> manager = m_managerList[ClassId<BaseManager, ManagerT>::id()];
         if (manager) { //if found
             return static_pointer_cast<ManagerT>(manager);
         } else { //search in parent
             if (auto parent = m_parent.lock())
-                return parent->MGR<ManagerT>();
+                return parent->manager<ManagerT>();
             else
                 return nullptr;
                 //throw std::runtime_error("Manager is not initialized: " + typeName<ManagerT>());

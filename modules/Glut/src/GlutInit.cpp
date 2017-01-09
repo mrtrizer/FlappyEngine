@@ -58,25 +58,25 @@ void render() {
 }
 
 void resizeWindow(int width, int height) {
-    g_managerList->MGR<ViewManager>()->resize(width, height);
+    g_managerList->manager<ViewManager>()->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    g_managerList->MGR<InputManager>()->setMousePos({x,y});
+    g_managerList->manager<InputManager>()->setMousePos({x,y});
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        g_managerList->MGR<InputManager>()->setMouseDown();
+        g_managerList->manager<InputManager>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        g_managerList->MGR<InputManager>()->setMouseUp();
+        g_managerList->manager<InputManager>()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    g_managerList->MGR<InputManager>()->setMousePos({x,y});
+    g_managerList->manager<InputManager>()->setMousePos({x,y});
 }
 
 void initGLUT(shared_ptr<ManagerList> managerList) {
     GLUTInit::g_managerList = managerList;
 
-    auto args = managerList->MGR<AppManager>()->args();
+    auto args = managerList->manager<AppManager>()->args();
     g_argv = new char*[args.size()];
     for (unsigned i = 0; i < args.size(); i++) {
         g_argv[i] = new char[args[i].size()];

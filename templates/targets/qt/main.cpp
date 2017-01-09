@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     managerList->init();
 
-    managerList->MGR<SceneManager>()->setScene(make_shared<{!scene_class!}>());
+    managerList->manager<SceneManager>()->setScene(make_shared<{!scene_class!}>());
 
     return GLUTInit::mainLoop();
 }

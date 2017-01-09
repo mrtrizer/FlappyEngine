@@ -30,11 +30,11 @@ private:
 
 public:
     template <typename Mgr>
-    auto MGR() const -> decltype(m_managerList.lock()->MGR<Mgr>()) {
+    auto manager() const -> decltype(m_managerList.lock()->manager<Mgr>()) {
         auto managerListSPtr = m_managerList.lock();
         if (!managerListSPtr)
             throw std::runtime_error("This Manager should be created inside ManagerList. Use ManagerList::create<ManagerT>() function.");
-        return managerListSPtr->MGR<Mgr>();
+        return managerListSPtr->manager<Mgr>();
     }
 };
 

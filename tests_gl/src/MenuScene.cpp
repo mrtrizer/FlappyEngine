@@ -15,8 +15,15 @@ namespace game {
 using namespace flappy;
 
 void MenuScene::init() {
+//    auto camera = manager<EntityManager>()->create<CameraEntity>(640, 960);
+//    setCamera(camera);
+
+//    manager<EntityManager>()->create<SpriteEntity>("img_background");
+
+//    manager<EntityManager>()->create<ButtonEntity>("img_play_up", "img_play_down");
+
     //CameraComponent
-    EM->create([=, this](EP e){
+    manager<EntityManager>()->create([=, this](EP e){
         auto camera = e->create<CameraComponent>();
         camera->setHeight(640);
         setCamera(camera);
@@ -24,22 +31,22 @@ void MenuScene::init() {
     });
 
     //Background
-    EM->create([=](EP e){
+    manager<EntityManager>()->create([=](EP e){
         auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
+        sprite->setQuad(manager<ResManager>()->getRes<QuadRes>("img_background"));
         auto transform = e->create<TransformComponent>();
         transform->setScale(2);
     });
 
-    EM->create([=](EP e) {
+    manager<EntityManager>()->create([=](EP e) {
         auto buttonComponent = e->create<ButtonComponent>();
         events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
             LOGI("Click");
 
             auto gameScene = std::make_shared<GameScene>();
-            MGR<SceneManager>()->setScene(gameScene);
+            manager<SceneManager>()->setScene(gameScene);
         });
-        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_play");
+        auto quad = manager<ResManager>()->getRes<QuadRes>("img_play");
         e->create<SpriteComponent>()
                 ->setQuad(quad);
         e->create<TransformComponent>()

@@ -14,8 +14,8 @@ using namespace glm;
 using namespace flappy;
 
 void GameScene::createBasket(string color, vec2 pos) {
-    EM->create([=](EP e) {
-        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_baskets:" + color);
+    manager<EntityManager>()->create([=](EP e) {
+        auto quad = manager<ResManager>()->getRes<QuadRes>("img_baskets:" + color);
 
         auto sprite = e->create<SpriteComponent>();
         sprite->setQuad(quad);
@@ -36,22 +36,22 @@ void GameScene::init() {
     atlas->addSpriteInfo("blue",AtlasRes::SpriteInfo({0,0,0.333f,1},{100, 100}));
     atlas->addSpriteInfo("green",AtlasRes::SpriteInfo({0.333f,0,0.333f * 2.0f,1.0f},{100, 100}));
     atlas->addSpriteInfo("red",AtlasRes::SpriteInfo({0.333f * 2.0f,0,0.333 * 3.0f,1.0f},{100, 100}));
-    MGR<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
+    manager<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
 
     //CameraComponent
-    EM->create([=](EP e){
+    manager<EntityManager>()->create([=](EP e){
         auto camera = e->create<CameraComponent>();
         camera->setHeight(640);
         setCamera(camera);
     });
 
     //Game controller
-    EM->create([=](EP e){
+    manager<EntityManager>()->create([=](EP e){
         e->create<GameCtrl>();
     });
 
 //    //Background
-//    EM->create([=](EP e){
+//    manager<EntityManager>()->create([=](EP e){
 //        auto sprite = e->create<SpriteComponent>();
 //        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
 //        auto transform = e->create<TransformComponent>();
@@ -64,15 +64,15 @@ void GameScene::init() {
     createBasket("green", {200, 250});
 
     //Menu button
-    EM->create([=](EP e) {
+    manager<EntityManager>()->create([=](EP e) {
         auto buttonComponent = e->create<ButtonComponent>();
         events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
             LOGI("Click");
 
             auto menuScene = std::make_shared<MenuScene>();
-            MGR<SceneManager>()->setScene(menuScene);
+            manager<SceneManager>()->setScene(menuScene);
         });
-        auto quad = MGR<ResManager>()->getRes<QuadRes>("img_play");
+        auto quad = manager<ResManager>()->getRes<QuadRes>("img_play");
         e->create<SpriteComponent>()
                 ->setQuad(quad);
         auto transform = e->create<TransformComponent>();

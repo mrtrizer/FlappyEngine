@@ -14,7 +14,7 @@ using namespace glm;
 using namespace Tools;
 
 void CameraComponent::init() {
-    auto sceneManager = MGR<SceneManager>();
+    auto sceneManager = manager<SceneManager>();
     if (sceneManager == nullptr)
         return;
     auto scene = sceneManager->scene();
@@ -23,7 +23,7 @@ void CameraComponent::init() {
 }
 
 Rect CameraComponent::rect() const {
-    auto screenManager = MGR<ScreenManager>();
+    auto screenManager = manager<ScreenManager>();
     if (screenManager == nullptr)
         return {0,0,0,0};
     auto screenSize = screenManager->screenSize();
@@ -38,8 +38,8 @@ Rect CameraComponent::rect() const {
 }
 
 vec3 CameraComponent::screenToScene(const vec2 &pos) const {
-    float coeff = this->m_height / MGR<ScreenManager>()->screenSize().y;
-    vec2 screenSize = MGR<ScreenManager>()->screenSize() * 0.5f;
+    float coeff = this->m_height / manager<ScreenManager>()->screenSize().y;
+    vec2 screenSize = manager<ScreenManager>()->screenSize() * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

@@ -10,13 +10,13 @@
 namespace flappy {
 
 void ButtonComponent::update(TimeDelta) {
-    if (MGR<InputManager>()->mouseDown()) {
+    if (manager<InputManager>()->mouseDown()) {
         if (isInField()) {
             events()->post(OnButtonPress());
             m_mouseDown = true;
         }
     }
-    if (MGR<InputManager>()->mouseUp()) {
+    if (manager<InputManager>()->mouseUp()) {
         if (isInField() && m_mouseDown) {
             events()->post(OnButtonRelease());
             events()->post(OnButtonClick());
@@ -26,8 +26,8 @@ void ButtonComponent::update(TimeDelta) {
 }
 
 bool ButtonComponent::isInField() {
-    if (auto scene = MGR<SceneManager>()->scene()) {
-        auto pos = scene->camera()->screenToScene(MGR<InputManager>()->mousePos());
+    if (auto scene = manager<SceneManager>()->scene()) {
+        auto pos = scene->camera()->screenToScene(manager<InputManager>()->mousePos());
         auto buttonPos = entity()->transform()->pos();
         auto buttonSize = entity()->get<SizeComponent>()->size();
         auto size = 0.5f * buttonSize * entity()->transform()->scale();

@@ -19,7 +19,7 @@ void BallCtrl::update(TimeDelta dt) {
     auto scale = entity()->transform()->scale();
     entity()->transform()->setScale({scale.x, scale.y + dt});
     if (entity()->transform()->pos().y > 320)
-        EM->remove(entity());
+        manager<EntityManager>()->remove(entity());
 }
 
 } // game

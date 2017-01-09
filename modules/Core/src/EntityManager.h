@@ -54,7 +54,5 @@ template <> inline bool EntityManager::check <void> (std::shared_ptr<Entity>) {
 }
 
 using EP = const std::shared_ptr<Entity>&;
-#define EM MGR<EntityManager>()
-#define $(type) MGR<type>()
 
 } // flappy

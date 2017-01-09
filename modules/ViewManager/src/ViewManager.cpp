@@ -34,7 +34,7 @@ void ViewManager::update(TimeDelta dt) {
         visual.z = z;
     };
 
-    auto scene = MGR<SceneManager>()->scene();
+    auto scene = manager<SceneManager>()->scene();
     if (scene == nullptr)
         return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
 
@@ -60,7 +60,7 @@ void ViewManager::addPresenter(const std::shared_ptr<PresenterComponent>& presen
 void ViewManager::resize(int width, int height) {
     if (width < 1 || height < 1)
         throw runtime_error("Invalid screen size. It should be greater then 0.");
-    MGR<ScreenManager>()->resize(width, height);
+    manager<ScreenManager>()->resize(width, height);
     updateViewPort();
 }
 

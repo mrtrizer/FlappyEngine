@@ -51,7 +51,7 @@ void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
 }
 
 void GLViewManager::updateViewPort() {
-    glViewport(0, 0, MGR<ScreenManager>()->width(), MGR<ScreenManager>()->height());
+    glViewport(0, 0, manager<ScreenManager>()->width(), manager<ScreenManager>()->height());
     CHECK_GL_ERROR;
 }
 

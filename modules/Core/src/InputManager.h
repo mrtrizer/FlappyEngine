@@ -27,6 +27,4 @@ private:
     bool m_mousePressed = false;
 };
 
-#define INPUT MGR<InputManager>()
-
 } // flappy
