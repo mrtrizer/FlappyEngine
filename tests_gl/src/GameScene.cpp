@@ -5,7 +5,11 @@
 #include <PresenterComponent.h>
 #include <QuadRes.h>
 #include <SizeComponent.h>
-#include <MenuScene.h>
+#include <SpriteBuilder.h>
+#include <CameraBuilder.h>
+#include <ButtonBuilder.h>
+
+#include "MenuScene.h"
 
 namespace game {
 
@@ -38,25 +42,23 @@ void GameScene::init() {
     atlas->addSpriteInfo("red",AtlasRes::SpriteInfo({0.333f * 2.0f,0,0.333 * 3.0f,1.0f},{100, 100}));
     manager<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
 
-    //CameraComponent
-    manager<EntityManager>()->create([=](EP e){
-        auto camera = e->create<CameraComponent>();
-        camera->setHeight(640);
-        setCamera(camera);
-    });
+    //Camera
+    auto camera = manager<EntityManager>()->add(
+        CameraBuilder()
+            .size({960, 640})
+    );
+    setCamera(camera->get<CameraComponent>());
 
     //Game controller
     manager<EntityManager>()->create([=](EP e){
         e->create<GameCtrl>();
     });
 
-//    //Background
-//    manager<EntityManager>()->create([=](EP e){
-//        auto sprite = e->create<SpriteComponent>();
-//        sprite->setQuad(MGR<ResManager>()->getRes<QuadRes>("img_background"));
-//        auto transform = e->create<TransformComponent>();
-//        transform->setScale(2);
-//    });
+    //Background
+    manager<EntityManager>()->add(
+        SpriteBuilder()
+            .spritePath("img_background")
+    );
 
     //Baskets
     createBasket("blue", {0, 250});
@@ -64,23 +66,16 @@ void GameScene::init() {
     createBasket("green", {200, 250});
 
     //Menu button
-    manager<EntityManager>()->create([=](EP e) {
-        auto buttonComponent = e->create<ButtonComponent>();
-        events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
-            LOGI("Click");
-
-            auto menuScene = std::make_shared<MenuScene>();
-            manager<SceneManager>()->setScene(menuScene);
-        });
-        auto quad = manager<ResManager>()->getRes<QuadRes>("img_play");
-        e->create<SpriteComponent>()
-                ->setQuad(quad);
-        auto transform = e->create<TransformComponent>();
-        transform->setScale(0.5f);
-        transform->setPos({0, -260, 0});
-        e->create<SizeComponent>()
-                ->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
-    });
+    auto button = manager<EntityManager>()->add(
+        ButtonBuilder()
+            .idlePath("start_btn_idle")
+            .onClick([this](){
+                auto menuScene = std::make_shared<MenuScene>();
+                manager<SceneManager>()->setScene(menuScene);
+            })
+    );
+    button->transform()->setPos({0, -260, 0});
+    button->transform()->setScale(0.2f);
 }
 
 } // flappy

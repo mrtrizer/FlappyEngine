@@ -32,31 +32,31 @@ TEST_CASE( "ManagerList::create() ManagerList::remove()") {
     managerList->create<TestManager>();
     managerList->create<TestManagerEmpty1>();
     managerList->init();
-    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManager));
-    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    REQUIRE(typeid(*managerList->manager<TestManager>()) == typeid(TestManager));
+    REQUIRE(managerList->manager<TestManagerEmpty2>() == nullptr);
     managerList->remove<TestManager>();
-    REQUIRE(managerList->MGR<TestManager>() == nullptr);
+    REQUIRE(managerList->manager<TestManager>() == nullptr);
 }
 
 TEST_CASE( "ManagerList::override()") {
     auto managerList = make_shared<ManagerList>();
     managerList->override<TestManager, TestManagerOverride>();
     managerList->init();
-    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManagerOverride));
-    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    REQUIRE(typeid(*managerList->manager<TestManager>()) == typeid(TestManagerOverride));
+    REQUIRE(managerList->manager<TestManagerEmpty2>() == nullptr);
 }
 
-TEST_CASE( "ManagerList::MGR() [one ManagerList]") {
+TEST_CASE( "ManagerList::manager() [one ManagerList]") {
     auto managerList = make_shared<ManagerList>();
-    REQUIRE(managerList->MGR<TestManager>() == nullptr);
-    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    REQUIRE(managerList->manager<TestManager>() == nullptr);
+    REQUIRE(managerList->manager<TestManagerEmpty2>() == nullptr);
     managerList->create<TestManager>();
     managerList->init();
-    REQUIRE(typeid(*managerList->MGR<TestManager>()) == typeid(TestManager));
-    REQUIRE(managerList->MGR<TestManagerEmpty2>() == nullptr);
+    REQUIRE(typeid(*managerList->manager<TestManager>()) == typeid(TestManager));
+    REQUIRE(managerList->manager<TestManagerEmpty2>() == nullptr);
 }
 
-TEST_CASE( "ManagerList::MGR() [nested ManagerLists]") {
+TEST_CASE( "ManagerList::manager() [nested ManagerLists]") {
     auto managerList1 = make_shared<ManagerList>();
     managerList1->create<TestManager>();
     managerList1->init();
@@ -64,6 +64,6 @@ TEST_CASE( "ManagerList::MGR() [nested ManagerLists]") {
     managerList2->setParent(managerList1);
     managerList2->create<TestManagerEmpty2>();
     managerList2->init();
-    REQUIRE(typeid(*managerList2->MGR<TestManager>()) == typeid(TestManager));
-    REQUIRE(typeid(*managerList2->MGR<TestManagerEmpty2>())  == typeid(TestManagerEmpty2));
+    REQUIRE(typeid(*managerList2->manager<TestManager>()) == typeid(TestManager));
+    REQUIRE(typeid(*managerList2->manager<TestManagerEmpty2>())  == typeid(TestManagerEmpty2));
 }

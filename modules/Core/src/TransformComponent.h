@@ -10,6 +10,8 @@
 
 namespace flappy {
 
+#warning TODO: Move file to core
+
 class TransformComponent: public Component, public std::enable_shared_from_this<TransformComponent>
 {
 public:

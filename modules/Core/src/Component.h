@@ -40,7 +40,7 @@ private:
 
 public:
     template <typename ManagerT>
-    constexpr auto manager() const -> decltype(m_managerList.lock()->manager<ManagerT>()) {
+    auto manager() const -> decltype(m_managerList.lock()->manager<ManagerT>()) {
         return m_managerList.lock()->manager<ManagerT>();
     }
 };

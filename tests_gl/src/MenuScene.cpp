@@ -1,58 +1,36 @@
 #include "MenuScene.h"
 
 #include <EntityManager.h>
-#include <ButtonComponent.h>
 #include <SpriteComponent.h>
 #include <TransformComponent.h>
 #include <QuadRes.h>
 #include <ResManager.h>
 #include <SizeComponent.h>
+#include <CameraBuilder.h>
 
 #include "GameScene.h"
+#include "MenuLayoutBuilder.h"
 
 namespace game {
 
 using namespace flappy;
 
 void MenuScene::init() {
-//    auto camera = manager<EntityManager>()->create<CameraEntity>(640, 960);
-//    setCamera(camera);
+    auto camera = manager<EntityManager>()->add(
+        CameraBuilder()
+            .size({960, 640})
+    );
+    setCamera(camera->get<CameraComponent>());
 
-//    manager<EntityManager>()->create<SpriteEntity>("img_background");
+    auto layout = manager<EntityManager>()->add(
+        MenuLayoutBuilder()
+    );
 
-//    manager<EntityManager>()->create<ButtonEntity>("img_play_up", "img_play_down");
+    layout->transform()->rotate(0.5f);
 
-    //CameraComponent
-    manager<EntityManager>()->create([=, this](EP e){
-        auto camera = e->create<CameraComponent>();
-        camera->setHeight(640);
-        setCamera(camera);
-        e->create<TransformComponent>();
-    });
-
-    //Background
-    manager<EntityManager>()->create([=](EP e){
-        auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(manager<ResManager>()->getRes<QuadRes>("img_background"));
-        auto transform = e->create<TransformComponent>();
-        transform->setScale(2);
-    });
-
-    manager<EntityManager>()->create([=](EP e) {
-        auto buttonComponent = e->create<ButtonComponent>();
-        events()->subscribe(buttonComponent, [this](ButtonComponent::OnButtonClick e) {
-            LOGI("Click");
-
-            auto gameScene = std::make_shared<GameScene>();
-            manager<SceneManager>()->setScene(gameScene);
-        });
-        auto quad = manager<ResManager>()->getRes<QuadRes>("img_play");
-        e->create<SpriteComponent>()
-                ->setQuad(quad);
-        e->create<TransformComponent>()
-                ->setScale(0.5f);
-        e->create<SizeComponent>()
-                ->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
+    events()->subscribe([this](MenuLayoutBuilder::StartButtonPressed){
+        auto gameScene = std::make_shared<GameScene>();
+        manager<SceneManager>()->setScene(gameScene);
     });
 }
 

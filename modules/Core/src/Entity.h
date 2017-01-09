@@ -2,18 +2,23 @@
 
 #include <list>
 
-#include "EventBus.h"
-#include "Component.h"
 #include <Tools.h>
+
+#include "EventController.h"
+#include "Component.h"
 
 namespace flappy {
 
 class TransformComponent;
+class Builder;
 
 class Entity: public std::enable_shared_from_this<Entity> {
     friend class TransformComponent;
 public:
-    Entity(std::weak_ptr<ManagerList> managerList):m_managerList(managerList){}
+    Entity(std::weak_ptr<ManagerList> managerList):
+        m_managerList(managerList),
+        m_eventController(std::make_shared<EventController>())
+    {}
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 
@@ -54,20 +59,20 @@ public:
         return list;
     }
 
-    // TODO: Move to cpp
-    void update(TimeDelta dt) {
-        for (auto component: m_components)
-            component->update(dt);
-    }
+    void update(TimeDelta dt);
+
+    std::shared_ptr<Entity> add(const Builder &builder);
+
+    std::shared_ptr<EventController> events() {return m_eventController;}
 
     std::shared_ptr<TransformComponent> transform() { return m_transform; }
 
-protected:
     std::weak_ptr<ManagerList> managerList() const {return m_managerList;}
 
 private:
     std::list<std::shared_ptr<Component>> m_components;
     std::shared_ptr<TransformComponent> m_transform;
+    std::shared_ptr<EventController> m_eventController;
 
     std::weak_ptr<ManagerList> m_managerList;
 };

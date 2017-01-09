@@ -45,7 +45,7 @@ TEST_CASE( "Component::entity()" ) {
     REQUIRE(entity->get<TestComponent>()->entity() == entity);
 }
 
-TEST_CASE( "Component::MGR()" ) {
+TEST_CASE( "Component::manager()" ) {
     Mock<TestManager::IMock> mock;
     Fake(Method(mock,init));
     Fake(Method(mock,test));
@@ -54,9 +54,9 @@ TEST_CASE( "Component::MGR()" ) {
     managerList->create<TestManager>(&mock.get());
     managerList->create<EntityManager>();
     managerList->init();
-    auto entity = managerList->MGR<EntityManager>()->create();
+    auto entity = managerList->manager<EntityManager>()->create();
     auto component = entity->create<Component>();
-    component->MGR<TestManager>()->test();
+    component->manager<TestManager>()->test();
 
     Verify(Method(mock, init), Method(mock,test)).Exactly(1);
 }
