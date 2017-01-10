@@ -44,8 +44,9 @@ void GameScene::init() {
 
     //Camera
     auto camera = manager<EntityManager>()->add(
-        CameraBuilder()
+        CameraBuilder(shared_from_this())
             .size({960, 640})
+            .build()
     );
     setCamera(camera->get<CameraComponent>());
 
@@ -56,8 +57,9 @@ void GameScene::init() {
 
     //Background
     manager<EntityManager>()->add(
-        SpriteBuilder()
+        SpriteBuilder(shared_from_this())
             .spritePath("img_background")
+            .build()
     );
 
     //Baskets
@@ -67,12 +69,13 @@ void GameScene::init() {
 
     //Menu button
     auto button = manager<EntityManager>()->add(
-        ButtonBuilder()
+        ButtonBuilder(shared_from_this())
             .idlePath("start_btn_idle")
             .onClick([this](){
                 auto menuScene = std::make_shared<MenuScene>();
                 manager<SceneManager>()->setScene(menuScene);
             })
+            .build()
     );
     button->transform()->setPos({0, -260, 0});
     button->transform()->setScale(0.2f);

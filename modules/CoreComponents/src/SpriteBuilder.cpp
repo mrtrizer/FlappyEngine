@@ -6,7 +6,9 @@
 
 namespace flappy {
 
-void SpriteBuilder::build(std::shared_ptr<Entity> entity) const {
+std::shared_ptr<Entity> SpriteBuilder::build() const {
+    auto entity = std::make_shared<Entity>();
+
     if (m_spritePath.empty())
         throw std::runtime_error("Sprite path is not defined.");
 
@@ -17,6 +19,8 @@ void SpriteBuilder::build(std::shared_ptr<Entity> entity) const {
 
     auto sizeComponent = entity->create<SizeComponent>();
     sizeComponent->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
+
+    return entity;
 }
 
 } // flappy

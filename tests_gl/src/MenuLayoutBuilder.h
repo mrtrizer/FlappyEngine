@@ -7,9 +7,11 @@ namespace flappy {
 class MenuLayoutBuilder: public Builder
 {
 public:
+    using Builder::Builder;
+
     struct StartButtonPressed {};
 
-    void build(std::shared_ptr<Entity>) const override;
+    std::shared_ptr<Entity> build() const override;
 };
 
 } // flappy

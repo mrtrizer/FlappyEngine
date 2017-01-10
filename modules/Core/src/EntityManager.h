@@ -26,7 +26,7 @@ public:
 
     std::shared_ptr<Entity> create();
 
-    std::shared_ptr<Entity> add(const Builder &builder);
+    std::shared_ptr<Entity> add(std::shared_ptr<Entity>);
 
     std::shared_ptr<Entity> find(std::function<bool(const std::shared_ptr<Entity>&)> check);
 

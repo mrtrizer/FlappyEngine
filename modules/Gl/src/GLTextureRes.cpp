@@ -15,9 +15,9 @@ GLTexture::GLTexture(const char *bitmapData, int width, int height):
     CHECK_GL_ERROR;
     glBindTexture(GL_TEXTURE_2D, m_texture);
     CHECK_GL_ERROR;
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     CHECK_GL_ERROR;
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     CHECK_GL_ERROR;
 
     //check width and height

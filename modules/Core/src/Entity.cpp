@@ -11,19 +11,10 @@ void Entity::update(TimeDelta dt) {
         component->update(dt);
 }
 
-std::shared_ptr<Entity> Entity::add(const Builder& builder) {
+std::shared_ptr<TransformComponent> Entity::transform() {
     if (m_transform == nullptr)
         m_transform = create<TransformComponent>();
-    if (auto managerList = m_managerList.lock()) {
-        builder.setManagerList(managerList);
-        auto entity = managerList->manager<EntityManager>()->create();
-        auto transform = entity->create<TransformComponent>();
-        builder.build(entity);
-        transform->setParent(m_transform);
-        return entity;
-    } else {
-        throw std::runtime_error("ManagerList is destroyed already.");
-    }
+    return m_transform;
 }
 
 } // flappy

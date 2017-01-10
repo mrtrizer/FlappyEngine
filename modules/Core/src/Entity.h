@@ -15,20 +15,31 @@ class Builder;
 class Entity: public std::enable_shared_from_this<Entity> {
     friend class TransformComponent;
 public:
-    Entity(std::weak_ptr<ManagerList> managerList):
-        m_managerList(managerList),
+    Entity():
         m_eventController(std::make_shared<EventController>())
     {}
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
+
+    void setManagerList(std::weak_ptr<ManagerList> managerList) {
+        if (!m_managerList.expired())
+            throw std::runtime_error("You can't add entity to several entity managers.");
+        m_managerList = managerList;
+        for (auto component: m_components) {
+            component->setManagerList(m_managerList);
+            component->init();
+        }
+    }
 
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> create(Args ... args) {
         using namespace std;
         auto component = make_shared<ComponentT>(args...);
         component->setEntity(shared_from_this());
-        component->setManagerList(managerList());
-        component->init();
+        if (!managerList().expired()) {
+            component->setManagerList(managerList());
+            component->init();
+        }
         m_components.push_back(component);
         return component;
     }
@@ -61,11 +72,9 @@ public:
 
     void update(TimeDelta dt);
 
-    std::shared_ptr<Entity> add(const Builder &builder);
-
     std::shared_ptr<EventController> events() {return m_eventController;}
 
-    std::shared_ptr<TransformComponent> transform() { return m_transform; }
+    std::shared_ptr<TransformComponent> transform();
 
     std::weak_ptr<ManagerList> managerList() const {return m_managerList;}
 

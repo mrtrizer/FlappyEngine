@@ -14,7 +14,9 @@ class Component {
     friend class ManagerList;
     friend class Entity;
 public:
-    Component() = default;
+    Component():
+        m_eventController(std::make_shared<EventController>())
+    {}
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
     virtual ~Component() = default;
@@ -33,7 +35,7 @@ private:
     void setEntity(std::weak_ptr<Entity> entity) {m_entity = entity;}
     void setManagerList(std::weak_ptr<ManagerList> managerList) {
         if (auto managerListPtr = managerList.lock()) {
-            m_eventController = std::make_shared<EventController>(managerListPtr->events()->eventBus());
+            m_eventController->setParent(managerListPtr->events()->eventBus());
         }
         m_managerList = managerList;
     }

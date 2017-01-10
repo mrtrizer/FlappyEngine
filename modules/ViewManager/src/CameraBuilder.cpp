@@ -4,12 +4,16 @@
 
 namespace flappy {
 
-void CameraBuilder::build(std::shared_ptr<Entity> entity) const {
+std::shared_ptr<Entity> CameraBuilder::build() const {
+    auto entity = std::make_shared<Entity>();
+
     if ((m_size.x < 1) || (m_size.y < 1))
         throw std::runtime_error("Camera size should be greater or equal 1 pixel");
 
     auto camera = entity->create<CameraComponent>();
     camera->setHeight(m_size.y);
+
+    return entity;
 }
 
 } // flappy

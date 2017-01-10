@@ -25,28 +25,24 @@ void EntityManager::reset() {
 }
 
 shared_ptr<Entity> EntityManager::create(function<void(const std::shared_ptr<Entity>&)> func) {
-    auto entity = make_shared<Entity>(managerList());
+    auto entity = make_shared<Entity>();
+    entity->setManagerList(managerList());
     m_entities.push_back(entity);
     func(entity);
     return entity;
 }
 
 shared_ptr<Entity> EntityManager::create() {
-    auto entity = make_shared<Entity>(managerList());
+    auto entity = make_shared<Entity>();
+    entity->setManagerList(managerList());
     m_entities.push_back(entity);
     return entity;
 }
 
-shared_ptr<Entity> EntityManager::add(const Builder &builder) {
-    if (auto managerListPtr = managerList().lock()) {
-        builder.setManagerList(managerListPtr);
-        auto entity = managerListPtr->manager<EntityManager>()->create();
-        entity->create<TransformComponent>();
-        builder.build(entity);
-        return entity;
-    } else {
-        throw std::runtime_error("ManagerList is destroyed already.");
-    }
+shared_ptr<Entity> EntityManager::add(shared_ptr<Entity> entity) {
+    entity->setManagerList(managerList());
+    m_entities.push_back(entity);
+    return entity;
 }
 
 shared_ptr<Entity> EntityManager::find(std::function<bool(const std::shared_ptr<Entity>&)> check) {

@@ -2,9 +2,9 @@
 
 namespace flappy {
 
-Builder::Builder()
+Builder::Builder(std::weak_ptr<ManagerList> managerList)
 {
-
+    m_managerList = managerList;
 }
 
 } // flappy

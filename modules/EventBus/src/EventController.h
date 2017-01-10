@@ -37,6 +37,10 @@ public:
 
     std::shared_ptr<EventBus> eventBus() {return m_eventBus;}
 
+    void setParent(std::shared_ptr<EventBus> parentEventBus) {
+        parentEventBus->addChild(m_eventBus);
+    }
+
 private:
     std::shared_ptr<EventBus> m_eventBus;
     std::vector<std::shared_ptr<ISubscription>> m_subscriptionVector;

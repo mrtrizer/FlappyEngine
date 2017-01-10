@@ -10,8 +10,6 @@
 
 namespace flappy {
 
-#warning TODO: Move file to core
-
 class TransformComponent: public Component, public std::enable_shared_from_this<TransformComponent>
 {
 public:
@@ -38,12 +36,13 @@ public:
     void stretch(const glm::vec3& offset) {m_scale += offset;}
 
     void setParent(const std::shared_ptr<TransformComponent>& parent) {m_parent = parent;}
-
+    std::shared_ptr<Entity> addChild(std::shared_ptr<Entity> entity);
 private:
     glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
     glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};
     float m_angle = 0.0f;
     std::weak_ptr<TransformComponent> m_parent;
+    std::vector<std::shared_ptr<Entity>> m_tmpChildren;
 };
 
 } // flappy
