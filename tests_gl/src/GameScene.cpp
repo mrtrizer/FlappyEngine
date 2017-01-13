@@ -18,67 +18,58 @@ using namespace glm;
 using namespace flappy;
 
 void GameScene::createBasket(string color, vec2 pos) {
-    manager<EntityManager>()->create([=](EP e) {
-        auto quad = manager<ResManager>()->getRes<QuadRes>("img_baskets:" + color);
 
-        auto sprite = e->create<SpriteComponent>();
-        sprite->setQuad(quad);
+    auto quad = manager<ResManager>()->getRes<QuadRes>("img_baskets:" + color);
 
-        auto sizeComponent = e->create<SizeComponent>();
-        sizeComponent->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
+    auto basket = manager<EntityManager>()->create();
 
-        auto transform = e->create<TransformComponent>();
-        transform->setPos(vec3(pos, 0));
-        transform->setScale(1);
+    auto sprite = basket->component<SpriteComponent>();
+    sprite->setQuad(quad);
 
-        e->create<BasketCtrl>()->setColor(color);
-    });
+    auto sizeComponent = basket->component<SizeComponent>();
+    sizeComponent->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
+
+    auto transform = basket->component<TransformComponent>();
+    transform->setPos(vec3(pos, 0));
+
+    basket->create<BasketCtrl>()->setColor(color);
 }
 
 void GameScene::init() {
     auto atlas = std::make_shared<AtlasRes>();
     atlas->addSpriteInfo("blue",AtlasRes::SpriteInfo({0,0,0.333f,1},{100, 100}));
     atlas->addSpriteInfo("green",AtlasRes::SpriteInfo({0.333f,0,0.333f * 2.0f,1.0f},{100, 100}));
-    atlas->addSpriteInfo("red",AtlasRes::SpriteInfo({0.333f * 2.0f,0,0.333 * 3.0f,1.0f},{100, 100}));
+        atlas->addSpriteInfo("red",AtlasRes::SpriteInfo({0.333f * 2.0f,0,0.333 * 3.0f,1.0f},{100, 100}));
     manager<ResManager>()->setRes<AtlasRes>("img_baskets", atlas);
 
     //Camera
-    auto camera = manager<EntityManager>()->add(
-        CameraBuilder(shared_from_this())
-            .size({960, 640})
-            .build()
-    );
-    setCamera(camera->get<CameraComponent>());
+    auto camera = manager<EntityManager>()->create();
+    setCamera(camera->component<CameraComponent>()
+              ->setSize({960, 640}));
 
-    //Game controller
-    manager<EntityManager>()->create([=](EP e){
-        e->create<GameCtrl>();
-    });
+//    //Game controller
+//    manager<EntityManager>()->create([=](EP e){
+//        e->create<GameCtrl>();
+//    });
 
     //Background
-    manager<EntityManager>()->add(
-        SpriteBuilder(shared_from_this())
-            .spritePath("img_background")
-            .build()
-    );
+    auto sprite = manager<EntityManager>()->create();
+    sprite->component<SpriteComponent>()->setSpriteResByPath("img_background");
+    sprite->component<TransformComponent>();
 
     //Baskets
     createBasket("blue", {0, 250});
-    createBasket("red", {-200, 250});
-    createBasket("green", {200, 250});
+//    createBasket("red", {-200, 250});
+//    createBasket("green", {200, 250});
 
-    //Menu button
-    auto button = manager<EntityManager>()->add(
-        ButtonBuilder(shared_from_this())
-            .idlePath("start_btn_idle")
-            .onClick([this](){
-                auto menuScene = std::make_shared<MenuScene>();
-                manager<SceneManager>()->setScene(menuScene);
-            })
-            .build()
-    );
-    button->transform()->setPos({0, -260, 0});
-    button->transform()->setScale(0.2f);
+//    //Menu button
+//    auto button = manager<EntityManager>()->add(
+//        ButtonBuilder(shared_from_this())
+//            .idlePath("start_btn_idle")
+//            .build()
+//    );
+//    button->transform()->setPos({0, -260, 0});
+//    button->transform()->setScale(0.2f);
 }
 
 } // flappy

@@ -58,7 +58,7 @@ void GameCtrl::update(TimeDelta dt) {
         m_mouseDownPos = manager<InputManager>()->mousePos();
     if (manager<InputManager>()->mouseUp())
         manager<EntityManager>()->each<BallCtrl>([this](EP e) {
-            auto ballCtrl = e->get<BallCtrl>();
+            auto ballCtrl = e->component<BallCtrl>();
             if (m_mouseDownPos.x - manager<InputManager>()->mousePos().x > 0)
                 ballCtrl->slideSpeed = glm::max(-30.0f, ballCtrl->slideSpeed - 10);
             else

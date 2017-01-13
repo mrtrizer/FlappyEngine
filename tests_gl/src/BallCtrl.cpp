@@ -14,7 +14,7 @@ void BallCtrl::update(TimeDelta dt) {
     entity()->transform()->move({0.0f, speed * dt});
     entity()->transform()->move({slideSpeed * dt, 0.0f});
     entity()->transform()->rotate(dt);
-    if (auto shape = entity()->get<CircleShape>())
+    if (auto shape = entity()->component<CircleShape>())
         shape->setColor({shape->color().r() + 0.1f * dt, 0, 0, shape->color().a()});
     auto scale = entity()->transform()->scale();
     entity()->transform()->setScale({scale.x, scale.y + dt});

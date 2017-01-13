@@ -1,17 +1,15 @@
 #pragma once
 
-#include <Builder.h>
+#include <Component.h>
 
 namespace flappy {
 
-class MenuLayoutBuilder: public Builder
+class MenuLayoutComponent: public Component
 {
 public:
-    using Builder::Builder;
-
     struct StartButtonPressed {};
 
-    std::shared_ptr<Entity> build() const override;
+    void init() override;
 };
 
 } // flappy

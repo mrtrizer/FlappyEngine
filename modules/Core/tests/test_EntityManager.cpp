@@ -21,7 +21,7 @@ TEST_CASE( "EntityManager::update()") {
     entity1->create<TestComponent>(&mock.get());
     entityManager.update(1);
 
-    Verify(Method(mock,init), Method(mock,update).Using(1)).Exactly(1);
+    Verify(Method(mock,update).Using(1)).Exactly(1);
 }
 
 TEST_CASE( "EntityManager::remove()") {

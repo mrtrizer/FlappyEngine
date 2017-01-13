@@ -1,33 +1,29 @@
 #include "MenuLayoutBuilder.h"
 
-#include <SpriteBuilder.h>
+#include <SpriteComponent.h>
 #include <ButtonBuilder.h>
+#include <ButtonComponent.h>
+#include <ResManager.h>
 #include <TransformComponent.h>
+#include <EventRedirectComponent.h>
 
 namespace flappy {
 
-std::shared_ptr<Entity> MenuLayoutBuilder::build() const {
+void MenuLayoutComponent::init() {
+    // background
+    auto sprite = component<TransformComponent>()->createChild();
+    sprite->component<SpriteComponent>()->setSpriteResByPath("img_background");
 
-    auto layout = std::make_shared<Entity>();
-
-    layout->transform()->addChild(SpriteBuilder(managerList())
-            .spritePath("img_background")
-            .build()
-    );
-
+    // start button
     auto button = ButtonBuilder(managerList())
-            .idlePath("start_btn_idle")
-            .activatedPath("start_btn_activated")
-            .pressedPath("start_btn_pressed")
-            .onClick([layout](){
-                if (auto managerList = layout->managerList().lock())
-                    managerList->events()->post(StartButtonPressed());
-            })
-            .build();
-    button->transform()->setScale(0.2f);
-    layout->transform()->addChild(button);
-
-    return layout;
+                .idlePath("start_btn_idle")
+                .activatedPath("start_btn_activated")
+                .pressedPath("start_btn_pressed")
+                .build();
+    button->component<TransformComponent>()->setScale(0.2f);
+    button->component<EventRedirectComponent>()
+            ->redirectToManagerList<ButtonComponent::OnButtonClick>(StartButtonPressed());
+    component<TransformComponent>()->addChild(button);
 }
 
 } // flappy

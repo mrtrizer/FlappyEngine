@@ -25,7 +25,7 @@ HEADERS += fakeit.h
 
 prebuildTarget.target = prebuild
 prebuildTarget.depends = FORCE
-prebuildTarget.commands = flappy prebuild qt
+prebuildTarget.commands = flappy prebuild qt.tests
 QMAKE_EXTRA_TARGETS += prebuildTarget
 PRE_TARGETDEPS += prebuild
 

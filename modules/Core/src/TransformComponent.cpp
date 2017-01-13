@@ -27,4 +27,8 @@ std::shared_ptr<Entity> TransformComponent::addChild(std::shared_ptr<Entity> ent
     return entity;
 }
 
+std::shared_ptr<Entity> TransformComponent::createChild() {
+    return addChild(std::make_shared<Entity>());
+}
+
 } // flappy

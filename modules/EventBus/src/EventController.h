@@ -35,11 +35,8 @@ public:
         m_eventBus->post(std::forward<EventT>(event));
     }
 
-    std::shared_ptr<EventBus> eventBus() {return m_eventBus;}
-
-    void setParent(std::shared_ptr<EventBus> parentEventBus) {
-        parentEventBus->addChild(m_eventBus);
-    }
+    void setEventBus(std::shared_ptr<EventBus> eventBus) { m_eventBus = eventBus; }
+    std::shared_ptr<EventBus> eventBus() { return m_eventBus; }
 
 private:
     std::shared_ptr<EventBus> m_eventBus;

@@ -16,20 +16,15 @@ namespace game {
 using namespace flappy;
 
 void MenuScene::init() {
+    auto camera = manager<EntityManager>()->create();
+    setCamera(camera->component<CameraComponent>()
+              ->setSize({960, 640}));
 
-    auto camera = CameraBuilder(shared_from_this())
-            .size({960, 640})
-            .build();
-    manager<EntityManager>()->add(camera);
-    setCamera(camera->get<CameraComponent>());
+    auto layout = manager<EntityManager>()->create();
+    layout->component<MenuLayoutComponent>();
+    layout->component<TransformComponent>()->rotate(0.5f);
 
-    auto layout = MenuLayoutBuilder(shared_from_this())
-                    .build();
-    manager<EntityManager>()->add(layout);
-
-    layout->transform()->rotate(0.5f);
-
-    events()->subscribe([this](MenuLayoutBuilder::StartButtonPressed){
+    events()->subscribe([this](MenuLayoutComponent::StartButtonPressed){
         auto gameScene = std::make_shared<GameScene>();
         manager<SceneManager>()->setScene(gameScene);
     });

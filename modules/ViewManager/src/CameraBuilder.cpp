@@ -11,7 +11,7 @@ std::shared_ptr<Entity> CameraBuilder::build() const {
         throw std::runtime_error("Camera size should be greater or equal 1 pixel");
 
     auto camera = entity->create<CameraComponent>();
-    camera->setHeight(m_size.y);
+    camera->setSize(m_size);
 
     return entity;
 }

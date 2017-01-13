@@ -37,6 +37,7 @@ public:
 
     void setParent(const std::shared_ptr<TransformComponent>& parent) {m_parent = parent;}
     std::shared_ptr<Entity> addChild(std::shared_ptr<Entity> entity);
+    std::shared_ptr<Entity> createChild();
 private:
     glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
     glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};

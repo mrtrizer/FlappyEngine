@@ -29,7 +29,7 @@ TEST_CASE( "CameraComponent::rect()") {
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
     auto camera = entity->create<CameraComponent>();
-    camera->setHeight(20);
+    camera->setSize({0,20});
     REQUIRE(camera->rect().x1 == 0);
     REQUIRE(camera->rect().x2 == 0);
     REQUIRE(camera->rect().y1 == 0);

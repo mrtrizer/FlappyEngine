@@ -24,7 +24,7 @@ void ViewManager::update(TimeDelta dt) {
         visual.presenter->update(dt);
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = visual.presenter->entity()->get<TransformComponent>();
+        auto curTransform = visual.presenter->entity()->component<TransformComponent>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
             z += curTransform->pos().z;

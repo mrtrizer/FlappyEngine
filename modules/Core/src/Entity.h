@@ -16,7 +16,7 @@ class Entity: public std::enable_shared_from_this<Entity> {
     friend class TransformComponent;
 public:
     Entity():
-        m_eventController(std::make_shared<EventController>())
+        m_eventBus(std::make_shared<EventBus>())
     {}
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
@@ -25,6 +25,8 @@ public:
         if (!m_managerList.expired())
             throw std::runtime_error("You can't add entity to several entity managers.");
         m_managerList = managerList;
+        if (auto managerListPtr = m_managerList.lock())
+            managerListPtr->events()->eventBus()->addChild(m_eventBus);
         for (auto component: m_components) {
             component->setManagerList(m_managerList);
             component->init();
@@ -36,6 +38,7 @@ public:
         using namespace std;
         auto component = make_shared<ComponentT>(args...);
         component->setEntity(shared_from_this());
+        component->events()->setEventBus(eventBus());
         if (!managerList().expired()) {
             component->setManagerList(managerList());
             component->init();
@@ -44,11 +47,8 @@ public:
         return component;
     }
 
-#warning TODO: Rename to component()
-    // TODO: How to optomize? Dynamic cast for every component is bad idea.
-    // We can store all presenters in separate list
     template<typename ComponentT>
-    std::shared_ptr<ComponentT> get() const {
+    std::shared_ptr<ComponentT> findComponent() {
         using namespace std;
         for (auto component: m_components) {
             auto cast = dynamic_pointer_cast<ComponentT>(component);
@@ -56,6 +56,16 @@ public:
                 return cast;
         }
         return nullptr;
+    }
+
+#warning TODO: Rename to component()
+    // TODO: How to optomize? Dynamic cast for every component is bad idea.
+    // We can store all presenters in separate list
+    template<typename ComponentT>
+    std::shared_ptr<ComponentT> component() {
+        if (auto foundComponent = findComponent<ComponentT>())
+            return foundComponent;
+        return create<ComponentT>();
     }
 
     template<typename ComponentT>
@@ -72,7 +82,7 @@ public:
 
     void update(TimeDelta dt);
 
-    std::shared_ptr<EventController> events() {return m_eventController;}
+    std::shared_ptr<EventBus> eventBus() {return m_eventBus;}
 
     std::shared_ptr<TransformComponent> transform();
 
@@ -81,7 +91,7 @@ public:
 private:
     std::list<std::shared_ptr<Component>> m_components;
     std::shared_ptr<TransformComponent> m_transform;
-    std::shared_ptr<EventController> m_eventController;
+    std::shared_ptr<EventBus> m_eventBus;
 
     std::weak_ptr<ManagerList> m_managerList;
 };

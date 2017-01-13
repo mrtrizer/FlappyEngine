@@ -16,7 +16,7 @@ void BasketCtrl::update(TimeDelta) {
         float minDist = e->transform()->scale().x * 0.5f + basketR;
         if (distance(e->transform()->pos(), entity()->transform()->pos()) < minDist) {
             manager<EntityManager>()->remove(e);
-            if (e->get<BallCtrl>()->color == color())
+            if (e->component<BallCtrl>()->color == color())
                 entity()->transform()->stretch(-1.0f);
         }
     });

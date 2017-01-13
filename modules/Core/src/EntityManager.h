@@ -47,7 +47,7 @@ private:
     
     template <typename ComponentT = void, typename ... Components>
     bool check(std::shared_ptr<Entity> entity) {
-        return check<Components...>(entity) && (entity->get<ComponentT>() != nullptr);
+        return check<Components...>(entity) && (entity->findComponent<ComponentT>());
     }
 };
 

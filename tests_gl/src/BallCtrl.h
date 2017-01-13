@@ -6,6 +6,10 @@ namespace game {
 
 class BallCtrl: public flappy::Component {
 public:
+    BallCtrl(){
+        LOGI("I've birth.");
+    }
+
     void update(flappy::TimeDelta dt);
 
     float speed = 15;

@@ -15,31 +15,34 @@ using namespace std;
 
 TEST_CASE( "Entity::add()" ) {
     auto managerList = std::make_shared<ManagerList>();
-    auto entity = std::make_shared<Entity>(managerList);
-    REQUIRE(entity->get<TestComponent>() == nullptr);
+    auto entity = std::make_shared<Entity>();
+    entity->setManagerList(managerList);
+    REQUIRE(entity->findComponent<TestComponent>() == nullptr);
     entity->create<TestComponentEmpty>();
-    REQUIRE(entity->get<TestComponent>() == nullptr);
+    REQUIRE(entity->findComponent<TestComponent>() == nullptr);
     auto component = entity->create<TestComponent>();
-    REQUIRE(entity->get<TestComponent>() == component);
+    REQUIRE(entity->findComponent<TestComponent>() == component);
     entity->create<TestComponent>();
     REQUIRE(entity->getAll<TestComponent>().size() == 2);
 }
 
 TEST_CASE( "Entity::get()") {
     auto managerList = std::make_shared<ManagerList>();
-    auto entity = std::make_shared<Entity>(managerList);
-    REQUIRE(entity->get<TestComponent>() == nullptr);
+    auto entity = std::make_shared<Entity>();
+    entity->setManagerList(managerList);
+    REQUIRE(entity->findComponent<TestComponent>() == nullptr);
     entity->create<TestComponentEmpty>();
-    REQUIRE(entity->get<TestComponent>() == nullptr);
+    REQUIRE(entity->findComponent<TestComponent>() == nullptr);
     auto component = entity->create<TestComponent>();
-    REQUIRE(entity->get<TestComponent>() == component);
+    REQUIRE(entity->findComponent<TestComponent>() == component);
     entity->create<TestComponent>();
-    REQUIRE(entity->get<TestComponent>() == component); // should return first component
+    REQUIRE(entity->findComponent<TestComponent>() == component); // should return first component
 }
 
 TEST_CASE( "Entity::getAll()") {
     auto managerList = std::make_shared<ManagerList>();
-    auto entity = std::make_shared<Entity>(managerList);
+    auto entity = std::make_shared<Entity>();
+    entity->setManagerList(managerList);
     auto component1 = entity->create<TestComponent>();
     REQUIRE(entity->getAll<TestComponent>().front() == component1);
     auto component2 = entity->create<TestComponent>();
@@ -51,7 +54,8 @@ TEST_CASE( "Entity::getAll()") {
 
 TEST_CASE( "Entity::update()") {
     auto managerList = std::make_shared<ManagerList>();
-    auto entity = std::make_shared<Entity>(managerList);
+    auto entity = std::make_shared<Entity>();
+    entity->setManagerList(managerList);
     entity->create<TestComponent>();
 
     Mock<TestComponent::IMock> mock;
@@ -66,7 +70,8 @@ TEST_CASE( "Entity::update()") {
 
 TEST_CASE( "Entity::transform()") {
     auto managerList = std::make_shared<ManagerList>();
-    auto entity = std::make_shared<Entity>(managerList);
+    auto entity = std::make_shared<Entity>();
+    entity->setManagerList(managerList);
     auto transform = entity->create<TransformComponent>();
     entity->transform() == transform;
 }

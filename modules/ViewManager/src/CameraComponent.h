@@ -16,7 +16,11 @@ class CameraComponent : public Component, public std::enable_shared_from_this<Ca
 {
 public:
     CameraComponent() {}
-    void setHeight(float height) {m_height = height;}
+    std::shared_ptr<CameraComponent> setSize(glm::vec2 size)
+    {
+        m_height = size.y;
+        return shared_from_this();
+    }
     Tools::Rect rect() const;
     glm::mat4 pMatrix();
     glm::vec3 screenToScene(const glm::vec2 &pos) const;
