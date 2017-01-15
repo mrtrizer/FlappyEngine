@@ -18,7 +18,7 @@ TEST_CASE( "EntityManager::update()") {
 
     EntityManager entityManager;
     auto entity1 = entityManager.create();
-    entity1->create<TestComponent>(&mock.get());
+    entity1->createComponent<TestComponent>(&mock.get());
     entityManager.update(1);
 
     Verify(Method(mock,update).Using(1)).Exactly(1);
@@ -51,7 +51,7 @@ TEST_CASE( "EntityManager::create()") {
 TEST_CASE( "EntityManager::create(std::function)") {
     EntityManager entityManager;
     auto entity1 = entityManager.create([](EP e){
-        e->create<TestComponent>();
+        e->createComponent<TestComponent>();
     });
     REQUIRE(entityManager.entities().size() == 1);
 }
@@ -107,9 +107,9 @@ TEST_CASE( "EntityManager::each() [one component]") {
     auto entity2 = entityManager.create();
     auto entity3 = entityManager.create();
     auto entity4 = entityManager.create();
-    entity1->create<TestComponent>();
-    entity2->create<TestComponent>();
-    entity3->create<TestComponentEmpty>();
+    entity1->createComponent<TestComponent>();
+    entity2->createComponent<TestComponent>();
+    entity3->createComponent<TestComponentEmpty>();
 
     entityManager.each<TestComponent>([&componentCount](EP){
         componentCount++;
@@ -124,10 +124,10 @@ TEST_CASE( "EntityManager::each() [multiple components]") {
     auto entity2 = entityManager.create();
     auto entity3 = entityManager.create();
     auto entity4 = entityManager.create();
-    entity1->create<TestComponent>();
-    entity2->create<TestComponent>();
-    entity2->create<TestComponentEmpty>();
-    entity3->create<TestComponentEmpty>();
+    entity1->createComponent<TestComponent>();
+    entity2->createComponent<TestComponent>();
+    entity2->createComponent<TestComponentEmpty>();
+    entity3->createComponent<TestComponentEmpty>();
 
     entityManager.each<TestComponent, TestComponentEmpty>([&componentCount](EP){
         componentCount++;

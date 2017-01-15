@@ -50,7 +50,7 @@ mat4 CameraComponent::pMatrix() {
     static const float far = 99.0f;
 
     mat4 mvMatrix;
-    auto transform = entity()->component<TransformComponent>();
+    auto transform = entity().lock()->component<TransformComponent>();
     if (transform != nullptr)
         mvMatrix = transform->getMvMatrix();
 

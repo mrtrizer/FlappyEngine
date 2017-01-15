@@ -12,12 +12,12 @@ using namespace flappy;
 
 void BasketCtrl::update(TimeDelta) {
     manager<EntityManager>()->each<BallCtrl>([this](EP e) {
-        float basketR = entity()->transform()->scale().x * 0.5f;
-        float minDist = e->transform()->scale().x * 0.5f + basketR;
-        if (distance(e->transform()->pos(), entity()->transform()->pos()) < minDist) {
+        float basketR = component<TransformComponent>()->scale().x * 0.5f;
+        float minDist = e->component<TransformComponent>()->scale().x * 0.5f + basketR;
+        if (distance(e->component<TransformComponent>()->pos(), component<TransformComponent>()->pos()) < minDist) {
             manager<EntityManager>()->remove(e);
             if (e->component<BallCtrl>()->color == color())
-                entity()->transform()->stretch(-1.0f);
+                component<TransformComponent>()->stretch(-1.0f);
         }
     });
 }

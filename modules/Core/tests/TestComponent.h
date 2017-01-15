@@ -2,6 +2,8 @@
 
 #include <Component.h>
 
+#include "TestManager.h"
+
 class TestComponent: public flappy::Component {
 public:
     class IMock {
@@ -22,6 +24,10 @@ public:
     void update(flappy::TimeDelta dt) override {
         if (m_mockComponent != nullptr)
             m_mockComponent->update(dt);
+    }
+
+    void testManager() {
+        manager<TestManager>()->test();
     }
 
 private:

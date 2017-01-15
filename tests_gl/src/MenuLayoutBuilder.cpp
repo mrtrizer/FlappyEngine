@@ -11,7 +11,7 @@ namespace flappy {
 
 void MenuLayoutComponent::init() {
     // background
-    auto sprite = component<TransformComponent>()->createChild();
+    auto sprite = entity().lock()->createEntity();
     sprite->component<SpriteComponent>()->setSpriteResByPath("img_background");
 
     // start button
@@ -23,7 +23,7 @@ void MenuLayoutComponent::init() {
     button->component<TransformComponent>()->setScale(0.2f);
     button->component<EventRedirectComponent>()
             ->redirectToManagerList<ButtonComponent::OnButtonClick>(StartButtonPressed());
-    component<TransformComponent>()->addChild(button);
+    entity().lock()->addEntity(button);
 }
 
 } // flappy

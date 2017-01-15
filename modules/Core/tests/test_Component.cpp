@@ -20,7 +20,8 @@ TEST_CASE( "Component::update()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,update));
 
-    shared_ptr<Component> testComponent = make_shared<TestComponent>(&mock.get());
+    auto entity = make_shared<Entity>();
+    auto testComponent = make_shared<TestComponent>(&mock.get());
 
     testComponent->update(1);
 
@@ -42,8 +43,8 @@ TEST_CASE( "Component::entity()" ) {
     auto managerList = std::make_shared<ManagerList>();
     auto entity = std::make_shared<Entity>();
     entity->setManagerList(managerList);
-    entity->create<TestComponent>();
-    REQUIRE(entity->findComponent<TestComponent>()->entity() == entity);
+    entity->component<TestComponent>();
+    REQUIRE(entity->findComponent<TestComponent>()->entity().lock() == entity);
 }
 
 TEST_CASE( "Component::manager()" ) {
@@ -56,8 +57,8 @@ TEST_CASE( "Component::manager()" ) {
     managerList->create<EntityManager>();
     managerList->init();
     auto entity = managerList->manager<EntityManager>()->create();
-    auto component = entity->create<Component>();
-    component->manager<TestManager>()->test();
+    auto component = entity->component<TestComponent>();
+    component->testManager();
 
     Verify(Method(mock, init), Method(mock,test)).Exactly(1);
 }

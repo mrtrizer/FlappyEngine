@@ -16,7 +16,7 @@ TEST_CASE( "Scene::setCamera() Scene::camera()") {
     auto managerList = std::make_shared<ManagerList>();
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
-    auto camera = entity->create<CameraComponent>();
+    auto camera = entity->component<CameraComponent>();
     scene->setCamera(camera);
     REQUIRE(scene->camera() == camera);
 }

@@ -28,9 +28,9 @@ void ButtonComponent::update(TimeDelta) {
 bool ButtonComponent::isInField() {
     if (auto scene = manager<SceneManager>()->scene()) {
         auto pos = scene->camera()->screenToScene(manager<InputManager>()->mousePos());
-        auto buttonPos = entity()->transform()->pos();
-        auto buttonSize = entity()->component<SizeComponent>()->size();
-        auto size = 0.5f * buttonSize * entity()->transform()->scale();
+        auto buttonPos = component<TransformComponent>()->pos();
+        auto buttonSize = component<SizeComponent>()->size();
+        auto size = 0.5f * buttonSize * component<TransformComponent>()->scale();
         auto diff = pos - buttonPos;
         return (abs(diff.x) < size.x) && (abs(diff.y) < size.y);
     } else {

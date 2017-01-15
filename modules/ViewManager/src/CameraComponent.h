@@ -15,7 +15,6 @@ namespace flappy {
 class CameraComponent : public Component, public std::enable_shared_from_this<CameraComponent>
 {
 public:
-    CameraComponent() {}
     std::shared_ptr<CameraComponent> setSize(glm::vec2 size)
     {
         m_height = size.y;

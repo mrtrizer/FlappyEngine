@@ -12,11 +12,11 @@ std::shared_ptr<Entity> ButtonBuilder::build() const {
 
     if (m_idlePath.empty())
         throw std::runtime_error("Sprite path for idle state is not defined.");
-    auto buttonComponent = entity->create<ButtonComponent>();
+    auto buttonComponent = entity->component<ButtonComponent>();
     auto quad = manager<ResManager>()->getRes<QuadRes>(m_idlePath);
-    entity->create<SpriteComponent>()
+    entity->component<SpriteComponent>()
             ->setQuad(quad);
-    entity->create<SizeComponent>()
+    entity->component<SizeComponent>()
             ->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
 
     return entity;

@@ -24,11 +24,15 @@ void ViewManager::update(TimeDelta dt) {
         visual.presenter->update(dt);
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = visual.presenter->entity()->component<TransformComponent>();
+        auto curTransform = visual.presenter->entity().lock()->component<TransformComponent>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->getMvMatrix() * transformMatrix;
             z += curTransform->pos().z;
-            curTransform = curTransform->parent();
+            auto entityPtr = curTransform->entity().lock();
+            if (auto parentPtr = entityPtr->parent().lock())
+                curTransform = parentPtr->component<TransformComponent>();
+            else
+                curTransform = nullptr;
         }
         visual.pos = transformMatrix;
         visual.z = z;

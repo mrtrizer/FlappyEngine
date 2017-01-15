@@ -32,7 +32,7 @@ void GameScene::createBasket(string color, vec2 pos) {
     auto transform = basket->component<TransformComponent>();
     transform->setPos(vec3(pos, 0));
 
-    basket->create<BasketCtrl>()->setColor(color);
+    basket->createComponent<BasketCtrl>()->setColor(color);
 }
 
 void GameScene::init() {

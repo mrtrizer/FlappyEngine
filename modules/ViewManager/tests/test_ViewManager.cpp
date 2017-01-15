@@ -51,7 +51,7 @@ TEST_CASE( "ViewManager::update()") {
     sceneManager->setScene(testScene);
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create(); // ViewManager can't render without camera
-    auto camera = entity->create<CameraComponent>();
+    auto camera = entity->createComponent<CameraComponent>();
     testScene->setCamera(camera);
     auto viewManager = managerList->override<ViewManager,TestViewManager>();
 
@@ -60,7 +60,7 @@ TEST_CASE( "ViewManager::update()") {
     viewManager->bind<CircleShape, TestView>();
 
     auto circleEntity = entityManager->create();
-    auto circleShape = circleEntity->create<CircleShape>();
+    auto circleShape = circleEntity->createComponent<CircleShape>();
 
     auto view = static_pointer_cast<TestView>(circleShape->view().lock());
 

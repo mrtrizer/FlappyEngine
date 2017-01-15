@@ -14,10 +14,10 @@ std::shared_ptr<Entity> SpriteBuilder::build() const {
 
     auto quad = manager<ResManager>()->getRes<QuadRes>(m_spritePath);
 
-    auto sprite = entity->create<SpriteComponent>();
+    auto sprite = entity->component<SpriteComponent>();
     sprite->setQuad(quad);
 
-    auto sizeComponent = entity->create<SizeComponent>();
+    auto sizeComponent = entity->component<SizeComponent>();
     sizeComponent->setSize(glm::vec3(quad->spriteInfo().size, 0.0f));
 
     return entity;

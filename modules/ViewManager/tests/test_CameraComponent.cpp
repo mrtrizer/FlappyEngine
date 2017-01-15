@@ -28,7 +28,7 @@ TEST_CASE( "CameraComponent::rect()") {
     auto managerList = std::make_shared<ManagerList>();
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
-    auto camera = entity->create<CameraComponent>();
+    auto camera = entity->createComponent<CameraComponent>();
     camera->setSize({0,20});
     REQUIRE(camera->rect().x1 == 0);
     REQUIRE(camera->rect().x2 == 0);
@@ -46,7 +46,7 @@ TEST_CASE( "CameraComponent::pMatrix()") {
     auto managerList = std::make_shared<ManagerList>();
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
-    auto camera = entity->create<CameraComponent>();
+    auto camera = entity->createComponent<CameraComponent>();
     auto screenManager = managerList->create<ScreenManager>();
     screenManager->resize(5, 10);
     const float near = -1.0f;
@@ -64,11 +64,11 @@ TEST_CASE( "CameraComponent::init()") {
     auto sceneManager = managerList->create<SceneManager>();
     auto entityManager = managerList->create<EntityManager>();
     auto entity = entityManager->create();
-    auto camera1 = entity->create<CameraComponent>(); //Without Scene
+    auto camera1 = entity->createComponent<CameraComponent>(); //Without Scene
     auto testScene = std::make_shared<TestScene>();
     sceneManager->setScene(testScene);
     sceneManager->update(1);
-    auto camera2 = entity->create<CameraComponent>(); //With TestScene
+    auto camera2 = entity->createComponent<CameraComponent>(); //With TestScene
     testScene->setCamera(camera2);
     REQUIRE(sceneManager->scene()->camera() == camera2);
 }

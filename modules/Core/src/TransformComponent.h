@@ -19,7 +19,6 @@ public:
     glm::vec3 pos() const {return m_pos;}
     float angle() const {return m_angle;}
     glm::vec3 scale() const {return m_scale;}
-    std::shared_ptr<TransformComponent> parent() {return m_parent.lock();}
 
     void setPos(const glm::vec3& pos) {m_pos = pos;}
     void move(const glm::vec2& offset) {m_pos += glm::vec3(offset, 0.0f);}
@@ -35,15 +34,10 @@ public:
     void stretch(float offset) {m_scale += glm::vec3(offset, offset, offset);}
     void stretch(const glm::vec3& offset) {m_scale += offset;}
 
-    void setParent(const std::shared_ptr<TransformComponent>& parent) {m_parent = parent;}
-    std::shared_ptr<Entity> addChild(std::shared_ptr<Entity> entity);
-    std::shared_ptr<Entity> createChild();
 private:
     glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
     glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};
     float m_angle = 0.0f;
-    std::weak_ptr<TransformComponent> m_parent;
-    std::vector<std::shared_ptr<Entity>> m_tmpChildren;
 };
 
 } // flappy
