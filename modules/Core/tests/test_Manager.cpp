@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <Manager.h>
 
 #include "TestManager.h"

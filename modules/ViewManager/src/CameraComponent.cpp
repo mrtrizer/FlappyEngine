@@ -5,7 +5,6 @@
 #include <TransformComponent.h>
 #include <ScreenManager.h>
 #include <SceneManager.h>
-#include <Scene.h>
 
 namespace flappy {
 
@@ -14,12 +13,7 @@ using namespace glm;
 using namespace Tools;
 
 void CameraComponent::init() {
-    auto sceneManager = manager<SceneManager>();
-    if (sceneManager == nullptr)
-        return;
-    auto scene = sceneManager->scene();
-    if (scene == nullptr)
-        return;
+
 }
 
 Rect CameraComponent::rect() const {

@@ -5,7 +5,6 @@
 #include <SizeComponent.h>
 #include <InputManager.h>
 #include <SceneManager.h>
-#include <Scene.h>
 
 namespace flappy {
 
@@ -26,16 +25,16 @@ void ButtonComponent::update(TimeDelta) {
 }
 
 bool ButtonComponent::isInField() {
-    if (auto scene = manager<SceneManager>()->scene()) {
-        auto pos = scene->camera()->screenToScene(manager<InputManager>()->mousePos());
-        auto buttonPos = component<TransformComponent>()->pos();
-        auto buttonSize = component<SizeComponent>()->size();
-        auto size = 0.5f * buttonSize * component<TransformComponent>()->scale();
-        auto diff = pos - buttonPos;
-        return (abs(diff.x) < size.x) && (abs(diff.y) < size.y);
-    } else {
-        return false;
-    }
+//    if (auto scene = manager<SceneManager>()) {
+//        auto pos = scene->camera()->screenToScene(manager<InputManager>()->mousePos());
+//        auto buttonPos = component<TransformComponent>()->pos();
+//        auto buttonSize = component<SizeComponent>()->size();
+//        auto size = 0.5f * buttonSize * component<TransformComponent>()->scale();
+//        auto diff = pos - buttonPos;
+//        return (abs(diff.x) < size.x) && (abs(diff.y) < size.y);
+//    } else {
+//        return false;
+//    }
 }
 
 } // flappy

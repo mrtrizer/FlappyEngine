@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <Tools.h>
 
 using namespace flappy;

@@ -1,65 +1,20 @@
-#include "EntityManager.h"
+#include "SceneManager.h"
 
-#include <Builder.h>
 #include "TransformComponent.h"
 
 namespace flappy {
 
 using namespace std;
 
-void EntityManager::update(TimeDelta dt) {
-    for (auto entity: m_removeList)
-        m_entities.remove(entity);
-    m_removeList.clear();
-    for (auto entity: m_entities)
-        entity->update(dt);
-}
-
-void EntityManager::remove(shared_ptr<Entity> entity) {
-    m_removeList.remove(entity);
-    m_removeList.push_back(entity);
-}
-
-void EntityManager::reset() {
-    m_removeList = m_entities;
-}
-
-shared_ptr<Entity> EntityManager::create(function<void(const std::shared_ptr<Entity>&)> func) {
-    auto entity = make_shared<Entity>();
-    entity->setManagerList(managerList());
-    m_entities.push_back(entity);
-    func(entity);
-    return entity;
-}
-
-shared_ptr<Entity> EntityManager::create() {
-    auto entity = make_shared<Entity>();
-    entity->setManagerList(managerList());
-    m_entities.push_back(entity);
-    return entity;
-}
-
-shared_ptr<Entity> EntityManager::add(shared_ptr<Entity> entity) {
-    entity->setManagerList(managerList());
-    m_entities.push_back(entity);
-    return entity;
-}
-
-shared_ptr<Entity> EntityManager::find(std::function<bool(const std::shared_ptr<Entity>&)> check) {
+void SceneManager::update(TimeDelta dt) {
     for (auto entity: m_entities) {
-        if (check(entity))
-            return entity;
+#warning TODO: Remove outdate entities
     }
-    return nullptr;
 }
 
-list<shared_ptr<Entity>> EntityManager::findAll(function<bool(const std::shared_ptr<Entity>&)> check) {
-    list<shared_ptr<Entity>> list;
-    for (auto entity: m_entities) {
-        if (check(entity))
-            list.push_back(entity);
-    }
-    return list;
+shared_ptr<Entity> SceneManager::add(shared_ptr<Entity> entity) {
+    m_entities.push_back(entity);
+    return entity;
 }
 
 } // flappy

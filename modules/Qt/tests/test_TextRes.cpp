@@ -4,7 +4,6 @@
 #include <memory>
 #include <fstream>
 
-#include <ManagerList.h>
 #include <ResManager.h>
 #include <TextRes.h>
 #include <StdTextFileResFactory.h>

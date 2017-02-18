@@ -11,7 +11,7 @@ namespace flappy {
 
 class PresenterComponent;
 class View;
-class EntityManager;
+class SceneManager;
 class ScreenManager;
 
 /// @brief Abstract base for View implementations in MVC terms.

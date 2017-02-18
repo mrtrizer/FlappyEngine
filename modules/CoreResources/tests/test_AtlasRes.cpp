@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <AtlasRes.h>
 #include <Tools.h>
 

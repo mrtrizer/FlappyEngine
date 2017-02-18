@@ -47,33 +47,50 @@ namespace GLUTInit {
 
 using namespace std;
 
-shared_ptr<ManagerList> g_managerList;
+shared_ptr<Entity> g_managerList;
 char** g_argv = nullptr;
 int g_argc = 0;
+chrono::steady_clock::time_point g_lastTime;
+
+TimeDelta calcTimeDelta() {
+    using namespace chrono;
+    auto newTime = steady_clock::now();
+    auto diff = newTime - g_lastTime;
+    TimeDelta timeDelta = diff.count(); // delta in seconds
+    g_lastTime = newTime;
+    return timeDelta;
+}
+
+void updateEntities() {
+    TimeDelta timeDelta = calcTimeDelta();
+    g_managerList->events()->post(Entity::OnUpdate(timeDelta));
+}
 
 void render() {
     glutSwapBuffers();
     glutPostRedisplay();
-    g_managerList->update();
+    updateEntities();
 }
 
 void resizeWindow(int width, int height) {
-    g_managerList->manager<ViewManager>()->resize(width, height);
+    auto viewManager = g_managerList->findComponent<ViewManager>();
+    if (viewManager)
+        viewManager->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    g_managerList->manager<InputManager>()->setMousePos({x,y});
+    g_managerList->component<InputManager>()->setMousePos({x,y});
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        g_managerList->manager<InputManager>()->setMouseDown();
+        g_managerList->component<InputManager>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        g_managerList->manager<InputManager>()->setMouseUp();
+        g_managerList->component<InputManager>()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
     g_managerList->manager<InputManager>()->setMousePos({x,y});
 }
 
-void initGLUT(shared_ptr<ManagerList> managerList) {
+void initGLUT(std::shared_ptr<Entity> managerList) {
     GLUTInit::g_managerList = managerList;
 
     auto args = managerList->manager<AppManager>()->args();
@@ -92,7 +109,7 @@ void initGLUT(shared_ptr<ManagerList> managerList) {
     glewInit();
 #endif
 
-    auto manager = managerList->override<ViewManager, GLViewManager>();
+    auto manager = managerList->component<GLViewManager>();
     manager->bind<CircleShape,GLViewCircle>();
     manager->bind<RectShape,GLViewRect>();
     manager->bind<SpriteComponent,GLViewSprite>();

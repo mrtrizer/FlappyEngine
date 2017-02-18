@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <TextureRes.h>
 
 using namespace flappy;

@@ -1,7 +1,6 @@
 #include "ViewManager.h"
 
 #include <SceneManager.h>
-#include <Scene.h>
 #include <ScreenManager.h>
 #include <TransformComponent.h>
 #include <PresenterComponent.h>
@@ -38,7 +37,7 @@ void ViewManager::update(TimeDelta dt) {
         visual.z = z;
     };
 
-    auto scene = manager<SceneManager>()->scene();
+    auto scene = component<SceneManager>();
     if (scene == nullptr)
         return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
 

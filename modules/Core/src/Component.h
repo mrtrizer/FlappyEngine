@@ -9,7 +9,6 @@ namespace flappy {
 
 class Entity;
 class EventController;
-class ManagerList;
 
 class Component {
     friend class Entity;
@@ -24,6 +23,7 @@ public:
 
     virtual void update(float) {}
     virtual void init() {}
+    virtual void deinit() {}
 
 protected:
     template <typename ComponentT>
@@ -36,13 +36,9 @@ protected:
     template <typename ManagerT>
     std::shared_ptr<ManagerT> manager() const {
         return [](auto entity) {
-            return entity.lock()->managerList().lock()->manager<ManagerT>();
+            return entity.lock()->manager<ManagerT>();
         } (entity());
     }
-
-    /// @brief Returns a weak pointer to the current manager list.
-    /// @details I return a weak_ptr to say "Saving of a pointer is a bad idea".
-    std::weak_ptr<ManagerList> managerList();
 
 private:
     std::weak_ptr<Entity> m_entity;

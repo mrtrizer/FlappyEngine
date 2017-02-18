@@ -3,8 +3,7 @@
 
 #include <memory>
 
-#include <ManagerList.h>
-#include <Scene.h>
+#include <ClassId.h>
 
 using namespace flappy;
 using namespace std;

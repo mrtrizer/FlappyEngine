@@ -2,9 +2,9 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <EntityManager.h>
 #include <Tools.h>
 #include <TextureRes.h>
+#include <Component.h>
 
 namespace flappy {
 

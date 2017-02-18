@@ -7,7 +7,7 @@
 #include <glm/vec3.hpp>
 
 #include <Color.h>
-#include <EntityManager.h>
+#include <SceneManager.h>
 #include <Tools.h>
 
 namespace flappy {

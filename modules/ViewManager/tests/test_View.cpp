@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <PresenterComponent.h>
 
 #include "TestView.h"

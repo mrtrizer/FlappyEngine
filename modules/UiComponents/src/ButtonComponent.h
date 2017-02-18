@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 
-#include <EntityManager.h>
+#include <SceneManager.h>
 
 namespace flappy {
 

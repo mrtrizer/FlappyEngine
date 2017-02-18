@@ -4,10 +4,9 @@
 #include <memory>
 
 #include <Entity.h>
-#include <EntityManager.h>
+#include <SceneManager.h>
 #include <TransformComponent.h>
-#include <ManagerList.h>
-#include <EntityManager.h>
+#include <SceneManager.h>
 
 #include "TestManager.h"
 #include "TestComponent.h"
@@ -40,9 +39,7 @@ TEST_CASE( "Component::init()") {
 }
 
 TEST_CASE( "Component::entity()" ) {
-    auto managerList = std::make_shared<ManagerList>();
     auto entity = std::make_shared<Entity>();
-    entity->setManagerList(managerList);
     entity->component<TestComponent>();
     REQUIRE(entity->findComponent<TestComponent>()->entity().lock() == entity);
 }
@@ -52,13 +49,12 @@ TEST_CASE( "Component::manager()" ) {
     Fake(Method(mock,init));
     Fake(Method(mock,test));
 
-    auto managerList = make_shared<ManagerList>();
-    managerList->create<TestManager>(&mock.get());
-    managerList->create<EntityManager>();
-    managerList->init();
-    auto entity = managerList->manager<EntityManager>()->create();
-    auto component = entity->component<TestComponent>();
-    component->testManager();
+//    auto managerList = make_shared<Entity>();
+//    managerList->createManager<TestManager>(&mock.get());
+//    managerList->createManager<EntityManager>();
+//    auto entity = managerList->manager<EntityManager>()->create();
+//    auto component = entity->component<TestComponent>();
+//    component->testManager();
 
     Verify(Method(mock, init), Method(mock,test)).Exactly(1);
 }

@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <ScreenManager.h>
 
 using namespace flappy;

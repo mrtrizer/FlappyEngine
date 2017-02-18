@@ -5,10 +5,10 @@
 namespace flappy {
 
 class GLViewFactory;
-class ManagerList;
+class Entity;
 
 namespace GLUTInit {
-    void initGLUT(std::shared_ptr<ManagerList> managerList);
+    void initGLUT(std::shared_ptr<Entity> managerList);
     int mainLoop();
 }
 

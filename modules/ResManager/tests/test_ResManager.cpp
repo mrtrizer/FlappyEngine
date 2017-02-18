@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <ResManager.h>
 #include <ResFactory.h>
 #include <Res.h>
@@ -40,14 +39,14 @@ class TestResFactory: public ResFactory {
 }
 
 TEST_CASE( "ResManager::setRes()") {
-    auto managerList = make_shared<ManagerList>();
-    auto resManager = managerList->create<ResManager>();
-    resManager->setRes<::TestRes>("test", make_shared<::TestRes>("set res"));
+//    auto managerList = make_shared<ManagerList>();
+//    auto resManager = managerList->create<ResManager>();
+//    resManager->setRes<::TestRes>("test", make_shared<::TestRes>("set res"));
 }
 
 TEST_CASE( "ResManager::getRes()") {
-    auto managerList = make_shared<ManagerList>();
-    auto resManager = managerList->create<ResManager>();
-    resManager->bindResFactory<::TestRes>(make_shared<::TestResFactory>());
-    auto res = resManager->getRes<TestRes>("test");
+//    auto managerList = make_shared<ManagerList>();
+//    auto resManager = managerList->create<ResManager>();
+//    resManager->bindResFactory<::TestRes>(make_shared<::TestResFactory>());
+//    auto res = resManager->getRes<TestRes>("test");
 }

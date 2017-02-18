@@ -1,37 +1,85 @@
 #include "Entity.h"
 
-#include "ManagerList.h"
+#include "EventController.h"
 #include "TransformComponent.h"
-#include "Builder.h"
 
 namespace flappy {
 
-void Entity::setManagerList(std::weak_ptr<ManagerList> managerList) {
-    if (!m_managerList.expired())
-        throw std::runtime_error("You can't add entity to several entity managers.");
-    m_managerList = managerList;
-    if (auto managerListPtr = m_managerList.lock())
-        managerListPtr->events()->eventBus()->addChild(m_eventBus);
-    for (auto component: m_components) {
-        component->init();
+Entity::Entity():
+    m_eventController(std::make_shared<EventController>())
+{}
+
+Entity::~Entity() {
+    for (auto component: m_components)
+        component->deinit();
+}
+
+void Entity::setParent(std::weak_ptr<Entity> parent) {
+    m_parent = parent;
+}
+
+std::weak_ptr<Entity> Entity::parent() {
+    return m_parent;
+}
+
+std::weak_ptr<Entity> Entity::root() {
+    auto root = shared_from_this();
+    while (!root->parent().expired())
+        root = root->parent().lock();
+    return root;
+}
+
+std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity) {
+    if (!entity->parent().expired() && (entity->parent().lock().get() == this))
+        throw std::runtime_error("Can't add same entity twice!");
+    entity->setParent(shared_from_this());
+    m_entities.push_back(entity);
+    if (auto entityManager = manager<SceneManager>())
+        entityManager->add(entity);
+    return entity;
+}
+
+void Entity::removeEntity(std::shared_ptr<Entity> entity) {
+    m_entities.remove(entity);
+}
+
+std::shared_ptr<Entity> Entity::findEntity(std::function<bool(const Entity&)> predicate, unsigned depth) {
+    for (auto entity: m_entities) {
+        if (predicate(*entity)) {
+            return entity;
+        } else {
+            if (depth > 0)
+                if (auto childResult = entity->findEntity(predicate, depth - 1))
+                    return childResult;
+        }
     }
+    return nullptr;
+}
+
+std::list<std::shared_ptr<Entity>> Entity::findEntities(std::function<bool(const Entity&)> predicate, unsigned depth) {
+    std::list<std::shared_ptr<Entity>> list;
+    for (auto entity: m_entities) {
+        if (predicate(*entity))
+            list.push_back(entity);
+        if (depth > 0) {
+            auto childResult = entity->findEntities(predicate, depth - 1);
+            if (!childResult.empty())
+                list.splice(list.end(), childResult);
+        }
+    }
+    return list;
+}
+
+std::list<std::shared_ptr<Entity>> Entity::findEntities(unsigned depth) {
+    if (depth == 0)
+        return m_entities;
+    else
+        return findEntities([](const Entity&){ return true; });
 }
 
 void Entity::update(float dt) {
     for (auto component: m_components)
         component->update(dt);
-}
-
-std::shared_ptr<Entity> Entity::createEntity() {
-    auto entity = managerList().lock()->manager<EntityManager>()->create();
-    entity->setParent(shared_from_this());
-    return entity;
-}
-
-std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity) {
-    managerList().lock()->manager<EntityManager>()->add(entity);
-    entity->setParent(shared_from_this());
-    return entity;
 }
 
 } // flappy

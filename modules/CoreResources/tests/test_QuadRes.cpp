@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
 #include <QuadRes.h>
 
 using namespace flappy;

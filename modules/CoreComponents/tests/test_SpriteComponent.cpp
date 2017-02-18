@@ -3,9 +3,6 @@
 
 #include <memory>
 
-#include <ManagerList.h>
-
-using namespace flappy;
 using namespace std;
 
 
