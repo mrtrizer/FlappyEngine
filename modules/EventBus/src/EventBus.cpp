@@ -2,14 +2,19 @@
 
 namespace flappy {
 
-void EventBus::postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions)
+FlowStatus EventBus::postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions)
 {
-    for (auto subscriptionIter = subscriptions.begin(); subscriptionIter != subscriptions.end(); subscriptionIter++) {
+    FlowStatus flowStatus = FlowStatus::CONTINUE;
+    for (auto subscriptionIter = subscriptions.begin(); subscriptionIter != subscriptions.end(); ) {
         if (subscriptionIter->expired())
             subscriptionIter = subscriptions.erase(subscriptionIter);
-        else
-            subscriptionIter->lock()->call(event);
+        else {
+            if (subscriptionIter->lock()->call(event) == FlowStatus::BREAK)
+                flowStatus = FlowStatus::BREAK;
+            subscriptionIter++;
+        }
     }
+    return flowStatus;
 }
 
 } // flappy

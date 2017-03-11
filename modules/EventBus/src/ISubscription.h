@@ -1,38 +1,61 @@
 #pragma once
 
+#include <FuncSignature.h>
+
 #include "EventHandle.h"
 
 namespace flappy {
 
+enum class FlowStatus {
+    BREAK,
+    CONTINUE
+};
+
 class ISubscription {
 public:
     virtual ~ISubscription() = default;
-    virtual void call(const EventHandle& e) = 0;
+    virtual FlowStatus call(const EventHandle& e) = 0;
 };
 
 template <typename EventT>
 class Subscription: public ISubscription {
 public:
-    Subscription(std::function<void(EventT)> func): m_func(func) {}
+    Subscription(std::function<void(EventT)> func): m_func(func)
+    {}
 
-    void call(const EventHandle& e) override {
+    FlowStatus call(const EventHandle& e) override {
         m_func(*static_cast<EventT*>(e.eventPtr()));
+        return FlowStatus::CONTINUE;
     }
 
 private:
     std::function<void(EventT)> m_func;
 };
 
-class SubscriptionAll: public ISubscription {
+template <typename EventT>
+class SubscriptionControl: public ISubscription {
 public:
-    SubscriptionAll(std::function<void(const EventHandle&)> func): m_func(func) {}
+    SubscriptionControl(std::function<FlowStatus(EventT)> func): m_func(func)
+    {}
 
-    void call(const EventHandle& e) override {
-        m_func(e);
+    FlowStatus call(const EventHandle& e) override {
+        return m_func(*static_cast<EventT*>(e.eventPtr()));
     }
 
 private:
-    std::function<void(const EventHandle& e)> m_func;
+    std::function<FlowStatus(EventT)> m_func;
+};
+
+class SubscriptionAll: public ISubscription {
+public:
+    SubscriptionAll(std::function<FlowStatus(const EventHandle&)> func): m_func(func) {}
+
+    FlowStatus call(const EventHandle& e) override {
+        return m_func(e);
+    }
+
+private:
+    std::function<FlowStatus(const EventHandle& e)> m_func;
 };
 
 } // flappy
