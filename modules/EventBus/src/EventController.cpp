@@ -2,11 +2,9 @@
 
 namespace flappy {
 
-EventController::EventController(std::shared_ptr<EventBus> parentEventBus):
-    m_eventBus(std::make_shared<EventBus>())
+EventController::EventController()
 {
-    if (parentEventBus != nullptr)
-        parentEventBus->addChild(m_eventBus);
+
 }
 
 } // flappy

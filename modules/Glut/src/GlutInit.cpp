@@ -5,7 +5,7 @@
 #include <sstream>
 #include <cstring>
 
-#warning FIXME: Strange path
+// FIXME: Strange path
 #include <GLTools.h> //glew has to be included before glut
 
 #define GLUT_NOT_SUPPORTED "GLUT is not supported on target platform"

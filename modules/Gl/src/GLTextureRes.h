@@ -3,7 +3,7 @@
 #include <vector>
 
 #include <TextureRes.h>
-#warning FIXME: Strange includes
+// FIXME: Strange includes
 #include <GLTools.h>
 #include <GLShaderProgram.h>
 

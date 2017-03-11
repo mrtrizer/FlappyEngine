@@ -24,7 +24,7 @@ public:
 
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
-#warning TODO: Make private
+    // TODO: Make private
 protected:
     /// Saved UVs after auto resize
     std::vector<UV> m_uvs;

@@ -12,7 +12,7 @@ class EventController;
 class Entity: public std::enable_shared_from_this<Entity> {
     friend class TransformComponent;
 public:
-    struct OnUpdate {
+    struct OnUpdate: public IEvent {
     public:
         OnUpdate(TimeDelta dt): m_dt(dt){}
         TimeDelta dt() const { return m_dt; }

@@ -33,8 +33,8 @@ public:
 
     virtual std::list<std::shared_ptr<Res>> dependencyList() const = 0;
 
-#warning TODO: Need add lastRes() method to get last resource instance
-#warning TODO: Return just next resource from nextRes()
+    // TODO: Need add lastRes() method to get last resource instance
+    // TODO: Return just next resource from nextRes()
     std::shared_ptr<Res> nextRes() {
         if (m_next != nullptr)
             return m_next->nextRes();

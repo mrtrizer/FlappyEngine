@@ -45,16 +45,5 @@ TEST_CASE( "Component::entity()" ) {
 }
 
 TEST_CASE( "Component::manager()" ) {
-    Mock<TestManager::IMock> mock;
-    Fake(Method(mock,init));
-    Fake(Method(mock,test));
 
-//    auto managerList = make_shared<Entity>();
-//    managerList->createManager<TestManager>(&mock.get());
-//    managerList->createManager<EntityManager>();
-//    auto entity = managerList->manager<EntityManager>()->create();
-//    auto component = entity->component<TestComponent>();
-//    component->testManager();
-
-    Verify(Method(mock, init), Method(mock,test)).Exactly(1);
 }

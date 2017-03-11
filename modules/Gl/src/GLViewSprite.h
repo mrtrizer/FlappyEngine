@@ -2,7 +2,7 @@
 
 #include <Color.h>
 
-#warning FIXME: Strange includes
+// FIXME: Strange includes
 #include <GLView.h>
 #include <GLAttribArray.h>
 

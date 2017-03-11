@@ -8,7 +8,7 @@ using namespace std;
 
 void SceneManager::update(TimeDelta dt) {
     for (auto entity: m_entities) {
-#warning TODO: Remove outdate entities
+    // TODO: Remove outdate entities
     }
 }
 

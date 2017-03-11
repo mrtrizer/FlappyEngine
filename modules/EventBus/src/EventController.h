@@ -11,7 +11,7 @@ class ISubscription;
 class EventController
 {
 public:
-    EventController(std::shared_ptr<EventBus> parentEventBus = nullptr);
+    EventController();
     virtual ~EventController() = default;
     EventController(const EventController&) = delete;
     EventController& operator=(const EventController&) & = delete;
@@ -20,12 +20,12 @@ public:
 
     template <typename FuncT>
     void subscribe(FuncT&& func) {
-        m_subscriptionVector.push_back(m_eventBus->subscribe(std::forward<FuncT>(func)));
+        m_subscriptionVector.push_back(m_eventBus->subscribeIn(std::forward<FuncT>(func)));
     }
 
     template <typename FuncT, typename SourceT>
     void subscribe(SourceT source, FuncT&& func) {
-        m_subscriptionVector.push_back(source->events()->eventBus()->subscribe(std::forward<FuncT>(func)));
+        m_subscriptionVector.push_back(source->events()->eventBus()->subscribeIn(std::forward<FuncT>(func)));
     }
 
     void unsubscribe(std::shared_ptr<ISubscription> subscription);

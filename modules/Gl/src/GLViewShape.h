@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#warning FIXME: Strange includes
+// FIXME: Strange includes
 #include <GLView.h>
 #include <GLShaderProgram.h>
 #include <GLAttribArray.h>

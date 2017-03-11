@@ -10,10 +10,10 @@ using namespace flappy;
 TEST_CASE( "EventSystem::subscribe() EventSystem::post()") {
     bool checkFlag = false;
 
-    struct TestEvent {};
+    struct TestEvent: public IEvent {};
     EventBus eventSystem;
     { // Subscription life time
-        auto subscription = eventSystem.subscribe([&checkFlag](TestEvent) {
+        auto subscription = eventSystem.subscribeIn([&checkFlag](TestEvent) {
             checkFlag = true;
         });
         eventSystem.post(TestEvent());

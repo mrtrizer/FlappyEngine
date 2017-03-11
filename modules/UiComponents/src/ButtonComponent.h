@@ -8,9 +8,9 @@ namespace flappy {
 
 class ButtonComponent: public Component {
 public:
-    struct OnButtonPress {};
-    struct OnButtonRelease {};
-    struct OnButtonClick {};
+    struct OnButtonPress: public IEvent {};
+    struct OnButtonRelease: public IEvent {};
+    struct OnButtonClick: public IEvent {};
 
     void update(TimeDelta dt);
 

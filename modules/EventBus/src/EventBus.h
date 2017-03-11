@@ -7,55 +7,61 @@
 #include <vector>
 #include <functional>
 
-#include <ClassId.h>
+#include <TypeMap.h>
 #include <FuncSignature.h>
 
 #include "ISubscription.h"
 
 namespace flappy {
 
+
 class EventBus {
 public:
-    EventBus(): m_subscriptions(ClassCounter<EventBus>::count())
+    EventBus()
     {}
 
-    void addChild(std::shared_ptr<EventBus> eventBus) {
-        m_children.push_back(eventBus);
+    template <typename FuncT>
+    std::shared_ptr<ISubscription> subscribeIn(FuncT&& func) {
+        using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
+        return subscribeInList(std::forward<FuncT>(func), m_inSubscriptions.get<EventT>());
     }
+
+    template <typename FuncT>
+    std::shared_ptr<ISubscription> subscribeOut(FuncT&& func) {
+        using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
+        return subscribeInList(std::forward<FuncT>(func), m_outSubscriptions.get<EventT>());
+    }
+
+    std::shared_ptr<ISubscription> subscribeInAll(std::function<void(const EventHandle& event)> handler) {
+        auto subscription = std::make_shared<SubscriptionAll>(handler);
+        m_abstractSubscriptions.push_back(subscription);
+        return subscription;
+    }
+
+    void post(const EventHandle& event) {
+        auto id = event.id();
+        postInList(event, m_inSubscriptions.getById(id));
+        postInList(event, m_abstractSubscriptions);
+        postInList(event, m_outSubscriptions.getById(id));
+    }
+
+private:
+    TypeMap<EventHandle, std::list<std::weak_ptr<ISubscription>>> m_inSubscriptions;
+    std::list<std::weak_ptr<ISubscription>> m_abstractSubscriptions;
+    TypeMap<EventHandle, std::list<std::weak_ptr<ISubscription>>> m_outSubscriptions;
+
+    void postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions);
 
     /// Add subscription to event
     /// @param func callback function `void (const EventT& e)`
     template<typename FuncT>
-    std::shared_ptr<ISubscription> subscribe(FuncT func) {
+    std::shared_ptr<ISubscription> subscribeInList(FuncT&& func, std::list<std::weak_ptr<ISubscription>>& subscriptions)
+    {
         using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-        const unsigned id = ClassId<EventBus, EventT>::id();
-        auto subscription = std::make_shared<Subscription<EventT>>(func);
-        m_subscriptions[id].push_back(subscription);
+        auto subscription = std::make_shared<Subscription<EventT>>(std::forward<FuncT>(func));
+        subscriptions.push_back(subscription);
         return subscription;
     }
-
-    /// Emit event to all listeners
-    template<typename EventT>
-    void post(EventT event) {
-        const unsigned id = ClassId<EventBus, EventT>::id();
-        auto& subscriptions = m_subscriptions[id];
-        for (auto subscriptionIter = subscriptions.begin(); subscriptionIter != subscriptions.end(); subscriptionIter++) {
-            if (subscriptionIter->use_count() == 1)
-                subscriptionIter = subscriptions.erase(subscriptionIter);
-            else
-                std::static_pointer_cast<Subscription<EventT>>(*subscriptionIter)->call(event);
-        }
-        for (auto childIter = m_children.begin(); childIter != m_children.end(); childIter++) {
-            if (childIter->use_count() == 1)
-                childIter = m_children.erase(childIter);
-            else
-                (*childIter)->post<EventT>(std::forward<EventT>(event));
-        }
-    }
-
-private:
-    std::vector<std::list<std::shared_ptr<ISubscription>>> m_subscriptions;
-    std::vector<std::shared_ptr<EventBus>> m_children;
 };
 
 } // flappy
