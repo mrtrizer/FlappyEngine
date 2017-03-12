@@ -1,7 +1,6 @@
 #include "catch.h"
 
 #include "SafePtr.h"
-#include "Tools.h"
 
 using namespace flappy;
 

@@ -8,7 +8,7 @@
 
 namespace  flappy {
 
-template <typename ContextT, typename ElementT = void>
+template <typename ContextT, typename ElementT>
 class TypeMap
 {
 public:
@@ -27,11 +27,11 @@ public:
         return getById(ClassId<ContextT, T>::id());
     }
 
-    template <typename T>
-    void set(T&& element)
+    template <typename T, typename ValueT>
+    void set(ValueT&& element)
     {
         unsigned id = ClassId<ContextT, T>::id();
-        elements.emplace(id, std::forward<T>(element));
+        elements[id] = std::forward<ValueT>(element);
     }
 
 private:
