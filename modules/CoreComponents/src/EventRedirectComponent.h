@@ -11,7 +11,7 @@ public:
     template <typename InputEventType, typename OutputEventType>
     void redirectToRoot(const OutputEventType& event) {
         events()->subscribe([this, event](InputEventType) {
-            entity().lock()->root().lock()->events()->post(event);
+            entity()->root()->events()->post(event);
         });
     }
 };

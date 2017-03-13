@@ -7,6 +7,8 @@
 
 namespace flappy {
 
-using Manager = Component;
+class Manager: public Component {
+
+};
 
 } // flappy

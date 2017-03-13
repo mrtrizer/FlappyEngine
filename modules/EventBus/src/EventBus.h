@@ -55,7 +55,7 @@ private:
     std::list<std::weak_ptr<ISubscription>> m_abstractSubscriptions;
     TypeMap<EventHandle, std::list<std::weak_ptr<ISubscription>>> m_outSubscriptions;
 
-    FlowStatus postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions);
+    FlowStatus postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription> > &subscriptions);
 
     template <typename FuncT, typename CompT>
     using IsSameResult = std::is_same<typename FuncSignature<FuncT>::result_type, CompT>;

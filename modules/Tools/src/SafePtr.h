@@ -13,6 +13,15 @@ public:
         m_weakPtr(sharedPtr)
     {}
 
+    SafePtr(std::weak_ptr<T> weakPtr):
+        m_weakPtr(weakPtr)
+    {}
+
+    template <typename SafePatrT>
+    SafePtr(SafePtr<SafePatrT> sharedPtr = nullptr):
+        m_weakPtr(std::static_pointer_cast<T>(sharedPtr.m_weakPtr.lock()))
+    {}
+
     T* operator->() const
     {
         auto sharedPtr = m_weakPtr.lock();
@@ -28,7 +37,19 @@ public:
         return *this;
     }
 
-private:
+    bool operator== (std::shared_ptr<T> sharedPtr) {
+        return m_weakPtr.lock() == sharedPtr;
+    }
+
+    bool operator== (T* rawPtr) {
+        return m_weakPtr.lock().get() == rawPtr;
+    }
+
+    operator bool()
+    {
+        return !m_weakPtr.expired();
+    }
+
     std::weak_ptr<T> m_weakPtr;
 };
 

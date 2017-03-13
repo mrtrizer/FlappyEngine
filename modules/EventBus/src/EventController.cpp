@@ -2,7 +2,8 @@
 
 namespace flappy {
 
-EventController::EventController()
+EventController::EventController():
+    m_eventBus(std::make_shared<EventBus>())
 {
 
 }

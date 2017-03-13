@@ -18,7 +18,18 @@ public:
 
     ElementT& getById(unsigned id)
     {
-        return elements[id];
+        return elements.at(id);
+    }
+
+    ElementT getById(unsigned id) const
+    {
+        return elements.at(id);
+    }
+
+    template <typename ValueT>
+    void setById(unsigned id, ValueT&& element)
+    {
+        elements[id] = std::forward<ValueT>(element);
     }
 
     template <typename T>
@@ -27,11 +38,16 @@ public:
         return getById(ClassId<ContextT, T>::id());
     }
 
+    template <typename T>
+    ElementT get() const
+    {
+        return getById(ClassId<ContextT, T>::id());
+    }
+
     template <typename T, typename ValueT>
     void set(ValueT&& element)
     {
-        unsigned id = ClassId<ContextT, T>::id();
-        elements[id] = std::forward<ValueT>(element);
+        setById(ClassId<ContextT, T>::id(), std::forward<ValueT>(element));
     }
 
 private:

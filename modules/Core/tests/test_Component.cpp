@@ -41,7 +41,7 @@ TEST_CASE( "Component::init()") {
 TEST_CASE( "Component::entity()" ) {
     auto entity = std::make_shared<Entity>();
     entity->component<TestComponent>();
-    REQUIRE(entity->findComponent<TestComponent>()->entity().lock() == entity);
+    REQUIRE(entity->findComponent<TestComponent>()->entity() == entity);
 }
 
 TEST_CASE( "Component::manager()" ) {

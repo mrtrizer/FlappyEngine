@@ -27,8 +27,8 @@ public:
 
     void setParent(std::weak_ptr<Entity> parent);
 
-    std::weak_ptr<Entity> parent();
-    std::weak_ptr<Entity> root();
+    SafePtr<Entity> parent();
+    SafePtr<Entity> root();
 
     /// @brief Returns pointer to EventBus.
     std::shared_ptr<EventController> events() {return m_eventController;}
@@ -70,20 +70,14 @@ public:
     std::list<std::shared_ptr<ComponentT>> findComponents(unsigned depth = 0) const;
 
     // Manager managment
-    template<typename ManagerT>
-    std::shared_ptr<ManagerT> manager();
+   template<typename ManagerT>
+   std::shared_ptr<ManagerT> manager();
 
-    template <typename ManagerT, typename ... Args>
-    std::shared_ptr<ManagerT> createManager(Args ... args);
+   template <typename ManagerT, typename ... Args>
+   std::shared_ptr<ManagerT> createManager(Args ... args);
 
-    template <typename ManagerT>
-    void removeManager(std::shared_ptr<ManagerT> manager);
-
-    template<typename ManagerT>
-    std::shared_ptr<ManagerT> findManager(std::function<bool(const ManagerT&)> predicate, unsigned depth = 0);
-
-    template<typename ManagerT>
-    std::shared_ptr<ManagerT> findManager(unsigned depth = 0);
+   template <typename ManagerT>
+   void removeManager(std::shared_ptr<ManagerT> manager);
 
     // Entity managment
     std::shared_ptr<Entity> addEntity(std::shared_ptr<Entity> entity = std::make_shared<Entity>());
@@ -96,7 +90,7 @@ private:
     std::list<std::shared_ptr<Component>> m_components;
     std::list<std::shared_ptr<Entity>> m_entities;
     std::shared_ptr<EventController> m_eventController;
-    std::weak_ptr<Entity> m_parent;
+    SafePtr<Entity> m_parent;
 
     void update(float dt);
 };
@@ -180,8 +174,8 @@ std::shared_ptr<ManagerT> Entity::manager() {
     if (auto manager = findComponent<ManagerT>()) {
         return manager;
     } else {
-        if (!parent().expired())
-            return parent().lock()->manager<ManagerT>();
+        if (parent())
+            return parent()->manager<ManagerT>();
         else
             throw std::runtime_error("Manager is unavaliable.");
     }
@@ -195,24 +189,6 @@ std::shared_ptr<ManagerT> Entity::createManager(Args ... args) {
 template <typename ManagerT>
 void Entity::removeManager(std::shared_ptr<ManagerT> manager) {
     removeComponent(manager);
-}
-
-template<typename ManagerT>
-std::shared_ptr<ManagerT> Entity::findManager(std::function<bool(const ManagerT&)> predicate, unsigned depth) {
-    if (auto manager = findComponent<ManagerT>()) {
-        if (predicate(*manager))
-            return manager;
-    } else {
-        if (parent())
-            return parent().lock()->manager<ManagerT>(predicate);
-        else
-            return nullptr;
-    }
-}
-
-template<typename ManagerT>
-std::shared_ptr<ManagerT> Entity::findManager(unsigned depth) {
-    findManager<ManagerT>([](const ManagerT&){return true;});
 }
 
 } // flappy

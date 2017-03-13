@@ -4,47 +4,59 @@
 
 // To not include everywhere
 #include <EventController.h>
+#include <SafePtr.h>
+#include <Tools.h>
 
 namespace flappy {
 
+class Manager;
 class Entity;
 class EventController;
 
 class Component {
     friend class Entity;
 public:
+    struct OnManagerAdded: IEvent {
+        unsigned id;
+        SafePtr<Manager> pointer;
+    };
+
+    struct OnManagerRemoved: IEvent {
+        unsigned id;
+        SafePtr<Manager> pointer;
+    };
+
     Component();
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
     virtual ~Component() = default;
 
-    std::weak_ptr<Entity> entity() const { return m_entity; }
-    std::shared_ptr<EventController> events() { return m_eventController; }
-
-    virtual void update(float) {}
     virtual void init() {}
-    virtual void deinit() {}
+
+    virtual void update(flappy::TimeDelta) {}
+
+    SafePtr<Entity> entity() const { return m_entity; }
+    std::shared_ptr<EventController> events() { return m_eventController; }
 
 protected:
     template <typename ComponentT>
-    std::shared_ptr<ComponentT> component() {
+    SafePtr<ComponentT> component() {
         return [](auto entity) {
-            return entity.lock()->component<ComponentT>();
+            return entity->component<ComponentT>();
         } (entity());
     }
 
     template <typename ManagerT>
-    std::shared_ptr<ManagerT> manager() const {
-        return [](auto entity) {
-            return entity.lock()->manager<ManagerT>();
-        } (entity());
+    SafePtr<ManagerT> manager() const {
+        return m_managers.get<ManagerT>();
     }
 
 private:
-    std::weak_ptr<Entity> m_entity;
+    SafePtr<Entity> m_entity;
+    TypeMap<Component, SafePtr<Manager>> m_managers;
     std::shared_ptr<EventController> m_eventController;
 
-    void setEntity(std::weak_ptr<Entity> entity) {
+    void setEntity(SafePtr<Entity> entity) {
         m_entity = entity;
     }
 };

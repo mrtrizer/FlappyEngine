@@ -10,27 +10,25 @@ Entity::Entity():
 {}
 
 Entity::~Entity() {
-    for (auto component: m_components)
-        component->deinit();
 }
 
 void Entity::setParent(std::weak_ptr<Entity> parent) {
     m_parent = parent;
 }
 
-std::weak_ptr<Entity> Entity::parent() {
+SafePtr<Entity> Entity::parent() {
     return m_parent;
 }
 
-std::weak_ptr<Entity> Entity::root() {
-    auto root = shared_from_this();
-    while (!root->parent().expired())
-        root = root->parent().lock();
+SafePtr<Entity> Entity::root() {
+    auto root = SafePtr<Entity>(shared_from_this());
+    while (root->parent())
+        root = root->parent();
     return root;
 }
 
 std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity) {
-    if (!entity->parent().expired() && (entity->parent().lock().get() == this))
+    if (entity->parent() && (entity->parent() == this))
         throw std::runtime_error("Can't add same entity twice!");
     entity->setParent(shared_from_this());
     m_entities.push_back(entity);
