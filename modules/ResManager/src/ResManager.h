@@ -15,7 +15,7 @@ namespace flappy {
 class Res;
 class ResFactory;
 
-class ResManager final: public Manager, public std::enable_shared_from_this<ResManager>
+class ResManager final: public Manager
 {
 public:
     ResManager():m_resTypeVector(ClassCounter<Res>::count()) {}
@@ -34,7 +34,7 @@ public:
     template <typename ResT>
     std::shared_ptr<ResT> getRes(const std::string& name)
     {
-        return std::static_pointer_cast<ResT>(getResType<ResT>().getRes(name, shared_from_this()));
+        return std::static_pointer_cast<ResT>(getResType<ResT>().getRes(name, selfPointer<ResManager>()));
     }
 
     /// @brief Synchronous version of getRes
@@ -42,9 +42,9 @@ public:
     std::shared_ptr<ResT> getResSync(const std::string& name)
     {
         auto& resType = getResType<ResT>();
-        auto& resKeeper = resType.getResKeeper(name, shared_from_this());
+        auto& resKeeper = resType.getResKeeper(name, selfPointer<ResManager>());
         if (resType.resFactory)
-            resKeeper.updateRes(resType.resFactory, name, shared_from_this());
+            resKeeper.updateRes(resType.resFactory, name, selfPointer<ResManager>());
         return std::static_pointer_cast<ResT>(resKeeper.actualRes());
     }
 
@@ -69,7 +69,7 @@ public:
         getResType<ResT>().resFactory = factory;
     }
 
-    void update(TimeDelta) override;
+    void update(DeltaTime) override;
 
 private:
     struct ResType
@@ -81,8 +81,8 @@ private:
         /// if can't find existing resource.
         /// Generates runtime_error exception if ResFactory is not set.
         /// @return Initialized resource by name
-        std::shared_ptr<Res> getRes(const std::string& name, std::shared_ptr<ResManager>);
-        ResKeeper& getResKeeper(const std::string& name, std::shared_ptr<ResManager>);
+        std::shared_ptr<Res> getRes(const std::string& name, SafePtr<ResManager>);
+        ResKeeper& getResKeeper(const std::string& name, SafePtr<ResManager>);
     };
 
     std::vector<ResType> m_resTypeVector;

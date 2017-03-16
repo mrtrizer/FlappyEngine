@@ -10,7 +10,7 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-void ViewManager::update(TimeDelta dt) {
+void ViewManager::update(DeltaTime dt) {
 
     for (auto i = m_visuals.begin(); i !=  m_visuals.end(); ) {
         auto& visual = *i;
@@ -37,7 +37,7 @@ void ViewManager::update(TimeDelta dt) {
         visual.z = z;
     };
 
-    auto scene = component<SceneManager>();
+    auto scene = entity()->component<SceneManager>();
     if (scene == nullptr)
         return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
 

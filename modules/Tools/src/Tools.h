@@ -87,6 +87,6 @@ namespace Tools
     class unknown_intersect_obj {};
 }
 
-using TimeDelta = float;
+using DeltaTime = float;
 
 } // flappy

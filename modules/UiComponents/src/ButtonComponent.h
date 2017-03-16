@@ -12,7 +12,7 @@ public:
     struct OnButtonRelease: public IEvent {};
     struct OnButtonClick: public IEvent {};
 
-    void update(TimeDelta dt);
+    void update(DeltaTime dt);
 
 private:
     bool isInField();

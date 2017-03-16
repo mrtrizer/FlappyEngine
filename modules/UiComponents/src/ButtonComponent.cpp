@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-void ButtonComponent::update(TimeDelta) {
+void ButtonComponent::update(DeltaTime) {
     if (manager<InputManager>()->mouseDown()) {
         if (isInField()) {
             events()->post(OnButtonPress());

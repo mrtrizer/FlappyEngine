@@ -17,7 +17,7 @@ std::shared_ptr<Res> StdTextFileResFactory::loadFile(const std::string& path) {
     return std::make_shared<TextRes>(sStream.str());
 }
 
-std::shared_ptr<Res> StdTextFileResFactory::create(const std::string&, std::shared_ptr<ResManager>) {
+std::shared_ptr<Res> StdTextFileResFactory::create(const std::string&, SafePtr<ResManager>) {
     return std::make_shared<TextRes>("");
 }
 

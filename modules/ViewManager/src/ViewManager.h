@@ -33,7 +33,7 @@ private:
 public:
     ViewManager(): m_bindings(ClassCounter<PresenterComponent>::count()) {}
 
-    void update(TimeDelta dt);
+    void update(DeltaTime dt);
     void resize(int width, int height);
 
     /// Assing custom View for PresenterComponent

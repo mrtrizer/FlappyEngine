@@ -14,10 +14,10 @@ class Entity: public std::enable_shared_from_this<Entity> {
 public:
     struct OnUpdate: public IEvent {
     public:
-        OnUpdate(TimeDelta dt): m_dt(dt){}
-        TimeDelta dt() const { return m_dt; }
+        OnUpdate(DeltaTime dt): m_dt(dt){}
+        DeltaTime dt() const { return m_dt; }
     private:
-        TimeDelta m_dt;
+        DeltaTime m_dt;
     };
 
     Entity();
@@ -70,14 +70,14 @@ public:
     std::list<std::shared_ptr<ComponentT>> findComponents(unsigned depth = 0) const;
 
     // Manager managment
-   template<typename ManagerT>
-   std::shared_ptr<ManagerT> manager();
+    template<typename ManagerT>
+    std::shared_ptr<ManagerT> manager();
 
-   template <typename ManagerT, typename ... Args>
-   std::shared_ptr<ManagerT> createManager(Args ... args);
+    template <typename ManagerT, typename ... Args>
+    std::shared_ptr<ManagerT> createManager(Args ... args);
 
-   template <typename ManagerT>
-   void removeManager(std::shared_ptr<ManagerT> manager);
+    template <typename ManagerT>
+    void removeManager(std::shared_ptr<ManagerT> manager);
 
     // Entity managment
     std::shared_ptr<Entity> addEntity(std::shared_ptr<Entity> entity = std::make_shared<Entity>());
@@ -100,7 +100,7 @@ template <typename ComponentT, typename ... Args>
 std::shared_ptr<ComponentT> Entity::createComponent(Args ... args) {
     using namespace std;
     auto component = make_shared<ComponentT>(args...);
-    component->setEntity(shared_from_this());
+    component->setParentEntity(shared_from_this());
     component->events()->setEventBus(events()->eventBus());
     component->init();
     m_components.push_back(component);

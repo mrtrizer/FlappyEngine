@@ -6,7 +6,7 @@ namespace flappy {
 
 using namespace std;
 
-void SceneManager::update(TimeDelta) {
+void SceneManager::update(DeltaTime) {
     for (auto entity: m_entities) {
     // TODO: Remove outdate entities
     }

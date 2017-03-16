@@ -20,7 +20,7 @@ vec2 InputManager::mousePos() const {
     return m_mousePos;
 }
 
-void InputManager::update(TimeDelta) {
+void InputManager::update(DeltaTime) {
     if (--m_mouseDown < 0)
         m_mouseDown = 0;
     if (--m_mouseUp < 0)

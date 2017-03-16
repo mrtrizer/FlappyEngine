@@ -11,7 +11,7 @@ FileResFactory::FileResFactory(std::string path, std::string ext, std::shared_pt
 {
 }
 
-std::shared_ptr<Res> FileResFactory::load(const std::string& name, std::shared_ptr<ResManager>) {
+std::shared_ptr<Res> FileResFactory::load(const std::string& name, SafePtr<ResManager>) {
     if (m_fileMonitor != nullptr)
         m_fileMonitor->registerFile(m_path + name + m_ext);
     return loadFile(m_path + name + m_ext);

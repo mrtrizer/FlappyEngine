@@ -21,9 +21,9 @@ TEST_CASE( "TypeMap::TypeMap()") {
 
     TypeMap<BaseClass, std::shared_ptr<BaseClass>> typeMap;
     typeMap.set<Class1>(std::make_shared<Class1>(10));
+    REQUIRE(typeMap.get<Class1>()->value == 10);
+
     REQUIRE(!typeMap.get<Class2>());
     typeMap.set<Class2>(std::make_shared<Class2>(20));
-
-    REQUIRE(typeMap.get<Class1>()->value == 10);
     REQUIRE(typeMap.get<Class2>()->value == 20);
 }

@@ -6,7 +6,7 @@ namespace flappy {
 
 using namespace std;
 
-ResKeeper& ResManager::ResType::getResKeeper(const string& name, shared_ptr<ResManager> resManager)
+ResKeeper& ResManager::ResType::getResKeeper(const string& name, SafePtr<ResManager> resManager)
 {
     auto resIter = resMap.find(name);
     if (resIter == resMap.end()) {
@@ -28,11 +28,11 @@ ResKeeper& ResManager::ResType::getResKeeper(const string& name, shared_ptr<ResM
     }
 }
 
-std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, shared_ptr<ResManager> resManager) {
+std::shared_ptr<Res> ResManager::ResType::getRes(const string& name, SafePtr<ResManager> resManager) {
     return getResKeeper(name, resManager).actualRes();
 }
 
-void ResManager::update(TimeDelta)
+void ResManager::update(DeltaTime)
 {
     for (auto& resType: m_resTypeVector) {
         if (resType.resFactory == nullptr)
@@ -42,7 +42,7 @@ void ResManager::update(TimeDelta)
             if (resPairIter->second.needRemove()) {
                 resPairIter = resType.resMap.erase(resPairIter);
             } else {
-                resPairIter->second.updateRes(resType.resFactory, resPairIter->first, shared_from_this());
+                resPairIter->second.updateRes(resType.resFactory, resPairIter->first, selfPointer<ResManager>());
                 resPairIter++;
             }
         }

@@ -13,42 +13,44 @@ class Manager;
 class Entity;
 class EventController;
 
-class Component {
+class Component: public std::enable_shared_from_this<Component> {
     friend class Entity;
 public:
-    struct OnManagerAdded: IEvent {
-        unsigned id;
-        SafePtr<Manager> pointer;
-    };
-
-    struct OnManagerRemoved: IEvent {
-        unsigned id;
-        SafePtr<Manager> pointer;
-    };
-
     Component();
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
     virtual ~Component() = default;
 
+    virtual void update(DeltaTime) {}
+
+    /// Called when you already added to entity.
+    /// @details You have access to parent entity from this method first time.
     virtual void init() {}
 
-    virtual void update(flappy::TimeDelta) {}
+    /// Called when you removed from the entity.
+    /// @details Here, you have last chance to access to your past neighbors and entity
+    virtual void deinit() {}
 
+    /// Returns parent entity (can be null if conponent is not added to entity)
     SafePtr<Entity> entity() const { return m_entity; }
+
+    /// Returns EventController
     std::shared_ptr<EventController> events() { return m_eventController; }
 
 protected:
-    template <typename ComponentT>
-    SafePtr<ComponentT> component() {
-        return [](auto entity) {
-            return entity->component<ComponentT>();
-        } (entity());
-    }
-
     template <typename ManagerT>
     SafePtr<ManagerT> manager() const {
         return m_managers.get<ManagerT>();
+    }
+
+    template <typename T>
+    std::shared_ptr<T> selfSharedPointer() {
+        return std::static_pointer_cast<T>(shared_from_this());
+    }
+
+    template <typename T>
+    SafePtr<T> selfPointer() {
+        return selfSharedPointer<T>();
     }
 
 private:
@@ -56,9 +58,13 @@ private:
     TypeMap<Component, SafePtr<Manager>> m_managers;
     std::shared_ptr<EventController> m_eventController;
 
-    void setEntity(SafePtr<Entity> entity) {
-        m_entity = entity;
-    }
+    /// Called when you add a component to an entity
+    /// @param entity New entity pointer. Can be nullptr.
+    void setParentEntity(SafePtr<Entity> entity);
+
+    virtual void initInternal() {}
+
+    virtual void deinitInternal() {}
 };
 
 } // flappy

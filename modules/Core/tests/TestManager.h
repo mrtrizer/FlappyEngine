@@ -7,7 +7,7 @@ public:
     class IMock {
     public:
         virtual void init() = 0;
-        virtual void update(flappy::TimeDelta dt) = 0;
+        virtual void update(flappy::DeltaTime dt) = 0;
         virtual void test() = 0;
     };
 
@@ -20,7 +20,7 @@ public:
             m_mockComponent->init();
     }
 
-    void update(flappy::TimeDelta dt) override {
+    void update(flappy::DeltaTime dt) override {
         if (m_mockComponent != nullptr)
             m_mockComponent->update(dt);
     }

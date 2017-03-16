@@ -18,7 +18,7 @@ class DefaultResFactory : public ResFactory
 public:
     DefaultResFactory() = default;
 
-    virtual std::shared_ptr<Res> load(const std::string& name, std::shared_ptr<ResManager> resManager) {
+    virtual std::shared_ptr<Res> load(const std::string& name, SafePtr<ResManager> resManager) {
         return std::make_shared<ResT>(resManager->getRes<DependT>(name) ...);
     }
 };

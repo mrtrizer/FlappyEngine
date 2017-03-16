@@ -39,9 +39,9 @@ std::shared_ptr<Res> ResKeeper::actualRes()
     return m_res->nextRes();
 }
 
-void ResKeeper::updateRes(shared_ptr<ResFactory> resFactory,
+void ResKeeper::updateRes(SafePtr<ResFactory> resFactory,
                                       string name,
-                                      shared_ptr<ResManager> resManager)
+                                      SafePtr<ResManager> resManager)
 {
     // check res changed
     if (resFactory->changed(name))

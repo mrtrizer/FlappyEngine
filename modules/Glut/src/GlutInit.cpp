@@ -52,17 +52,17 @@ char** g_argv = nullptr;
 int g_argc = 0;
 chrono::steady_clock::time_point g_lastTime;
 
-TimeDelta calcTimeDelta() {
+DeltaTime calcTimeDelta() {
     using namespace chrono;
     auto newTime = steady_clock::now();
     auto diff = newTime - g_lastTime;
-    TimeDelta timeDelta = diff.count(); // delta in seconds
+    DeltaTime timeDelta = diff.count(); // delta in seconds
     g_lastTime = newTime;
     return timeDelta;
 }
 
 void updateEntities() {
-    TimeDelta timeDelta = calcTimeDelta();
+    DeltaTime timeDelta = calcTimeDelta();
     g_managerList->events()->post(Entity::OnUpdate(timeDelta));
 }
 

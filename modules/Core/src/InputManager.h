@@ -15,7 +15,7 @@ public:
     bool mousePressed() const;
     glm::vec2 mousePos() const;
 
-    void update(TimeDelta) override;
+    void update(DeltaTime) override;
     void setMouseDown();
     void setMouseUp();
     void setMousePos(const glm::vec2& m_mousePos);

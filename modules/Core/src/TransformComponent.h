@@ -13,7 +13,6 @@ namespace flappy {
 class TransformComponent: public Component, public std::enable_shared_from_this<TransformComponent>
 {
 public:
-    void init() override;
     glm::mat4x4 getMvMatrix();
 
     glm::vec3 pos() const {return m_pos;}

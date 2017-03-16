@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <SafePtr.h>
+
 namespace flappy {
 
 class ResManager;
@@ -29,8 +31,8 @@ public:
     ResFactory(ResFactory&&) = default;
     ResFactory& operator=(ResFactory&&) & = default;
 
-    virtual std::shared_ptr<Res> load(const std::string&, std::shared_ptr<ResManager>) = 0;
-    virtual std::shared_ptr<Res> create(const std::string& name, std::shared_ptr<ResManager> resManager) {
+    virtual std::shared_ptr<Res> load(const std::string&, SafePtr<ResManager>) = 0;
+    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<ResManager> resManager) {
         return load(name, resManager);
     }
 

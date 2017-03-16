@@ -11,7 +11,7 @@ void PresenterComponent::init() {
     auto viewManager = manager<ViewManager>();
     if (!viewManager)
         return ERROR_MSG(VOID_VALUE, "ViewManager is not installed.");
-    manager<ViewManager>()->addPresenter(shared_from_this());
+    manager<ViewManager>()->addPresenter(selfSharedPointer<PresenterComponent>());
     updateView();
 }
 
@@ -20,7 +20,7 @@ void PresenterComponent::init() {
 /// called only if frameN is changed in GPresenterSprite.
 void PresenterComponent::updateView(){
     if (auto viewPtr = m_view.lock())
-        viewPtr->externUpdate(shared_from_this());
+        viewPtr->externUpdate(selfSharedPointer<PresenterComponent>());
 }
 
 void PresenterComponent::setColor(const Color& color) {

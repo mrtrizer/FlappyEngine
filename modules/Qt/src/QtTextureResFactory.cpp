@@ -14,7 +14,7 @@ QtTextureResFactory::QtTextureResFactory(std::string path, std::shared_ptr<IFile
     FileResFactory(path, ".png", fileMonitor)
 {}
 
-std::shared_ptr<Res> QtTextureResFactory::create(const std::string&, std::shared_ptr<ResManager>) {
+std::shared_ptr<Res> QtTextureResFactory::create(const std::string&, SafePtr<ResManager>) {
     const unsigned char bitmapData[] = {0xff,0x55,0xff,0x55};
     auto texture = make_shared<GLTexture>((const char*)bitmapData, 1, 1);
     return texture;

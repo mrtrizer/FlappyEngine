@@ -16,7 +16,7 @@ public:
     /// There are two name formats avaliable:
     /// Path in atlas: "atlas_name:sprite_name"
     /// Image file name: "file_name"
-    std::shared_ptr<Res> load(const std::string& name, std::shared_ptr<ResManager>) override;
+    std::shared_ptr<Res> load(const std::string& name, SafePtr<ResManager>) override;
 
 private:
     std::vector<std::string> split(const std::string &s, char delimiter);

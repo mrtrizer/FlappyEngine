@@ -18,7 +18,7 @@ public:
     {}
 
     template <typename SafePatrT>
-    SafePtr(SafePtr<SafePatrT> sharedPtr = nullptr):
+    SafePtr(const SafePtr<SafePatrT>& sharedPtr):
         m_weakPtr(std::static_pointer_cast<T>(sharedPtr.m_weakPtr.lock()))
     {}
 
@@ -50,6 +50,7 @@ public:
         return !m_weakPtr.expired();
     }
 
+    // TODO: Move m_weakPtr to private
     std::weak_ptr<T> m_weakPtr;
 };
 

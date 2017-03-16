@@ -15,7 +15,7 @@ class CameraComponent;
 
 class SceneManager: public Manager {
 public:
-    void update(TimeDelta dt);
+    void update(DeltaTime dt);
 
     std::shared_ptr<Entity> add(std::shared_ptr<Entity>);
 
