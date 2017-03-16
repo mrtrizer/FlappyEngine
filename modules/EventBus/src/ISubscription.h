@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 #include <FuncSignature.h>
 
 #include "EventHandle.h"
@@ -24,7 +26,7 @@ public:
     {}
 
     FlowStatus call(const EventHandle& e) override {
-        m_func(*static_cast<EventT*>(e.eventPtr()));
+        m_func(*static_cast<const std::decay_t<EventT>*>(e.eventPtr()));
         return FlowStatus::CONTINUE;
     }
 
@@ -39,7 +41,7 @@ public:
     {}
 
     FlowStatus call(const EventHandle& e) override {
-        return m_func(*static_cast<EventT*>(e.eventPtr()));
+        return m_func(*static_cast<const std::decay_t<EventT>*>(e.eventPtr()));
     }
 
 private:

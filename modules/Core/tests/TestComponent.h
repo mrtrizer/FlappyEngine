@@ -9,6 +9,7 @@ public:
     class IMock {
     public:
         virtual void init() = 0;
+        virtual void deinit() = 0;
         virtual void update(flappy::DeltaTime dt) = 0;
     };
 
@@ -16,15 +17,24 @@ public:
         m_mockComponent (mockComponent)
     {}
 
+    void update(flappy::DeltaTime dt) override {
+        if (m_mockComponent != nullptr)
+            m_mockComponent->update(dt);
+    }
+
+protected:
+
     void init() override {
         if (m_mockComponent != nullptr)
             m_mockComponent->init();
     }
 
-    void update(flappy::DeltaTime dt) override {
+    void deinit() override {
         if (m_mockComponent != nullptr)
-            m_mockComponent->update(dt);
+            m_mockComponent->deinit();
     }
+
+
 
     void testManager() {
         manager<TestManager>()->test();

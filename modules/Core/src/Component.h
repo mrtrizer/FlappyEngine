@@ -23,14 +23,6 @@ public:
 
     virtual void update(DeltaTime) {}
 
-    /// Called when you already added to entity.
-    /// @details You have access to parent entity from this method first time.
-    virtual void init() {}
-
-    /// Called when you removed from the entity.
-    /// @details Here, you have last chance to access to your past neighbors and entity
-    virtual void deinit() {}
-
     /// Returns parent entity (can be null if conponent is not added to entity)
     SafePtr<Entity> entity() const { return m_entity; }
 
@@ -52,6 +44,15 @@ protected:
     SafePtr<T> selfPointer() {
         return selfSharedPointer<T>();
     }
+
+protected:
+    /// Called when you already added to entity.
+    /// @details You have access to parent entity from this method first time.
+    virtual void init() {}
+
+    /// Called when you removed from the entity.
+    /// @details Here, you have last chance to access to your past neighbors and entity
+    virtual void deinit() {}
 
 private:
     SafePtr<Entity> m_entity;

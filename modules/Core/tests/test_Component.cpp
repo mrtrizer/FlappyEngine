@@ -27,13 +27,17 @@ TEST_CASE( "Component::update()") {
     Verify(Method(mock,update).Using(1)).Exactly(1);
 }
 
-TEST_CASE( "Component::init()") {
+TEST_CASE( "Component::setParentEntity() Component::init() Component::deinit()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,init));
+    Fake(Method(mock,deinit));
 
-    shared_ptr<Component> component = make_shared<TestComponent>(&mock.get());
+    auto component = make_shared<TestComponent>(&mock.get());
 
-    component->init();
+    auto entity = make_shared<Entity>();
+    entity->addComponent(component);
+    entity->removeComponent(component);
+
 
     Verify(Method(mock,init)).Exactly(1);
 }

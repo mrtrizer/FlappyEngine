@@ -13,11 +13,8 @@ class Entity: public std::enable_shared_from_this<Entity> {
     friend class TransformComponent;
 public:
     struct OnUpdate: public IEvent {
-    public:
-        OnUpdate(DeltaTime dt): m_dt(dt){}
-        DeltaTime dt() const { return m_dt; }
-    private:
-        DeltaTime m_dt;
+        explicit OnUpdate(DeltaTime dt): dt(dt){}
+        DeltaTime dt;
     };
 
     Entity();
@@ -34,6 +31,8 @@ public:
     std::shared_ptr<EventController> events() {return m_eventController;}
 
     // Component managment
+    template <typename ComponentT>
+    void addComponent(std::shared_ptr<ComponentT> component);
 
     /// @brief Useful for manual control of component creation.
     /// @details Use to create components with constructor with arguments.
@@ -95,21 +94,23 @@ private:
     void update(float dt);
 };
 
+template<typename ComponentT>
+void Entity::addComponent(std::shared_ptr<ComponentT> component) {
+    component->setParentEntity(shared_from_this());
+    m_components.push_back(component);
+}
 
 template <typename ComponentT, typename ... Args>
 std::shared_ptr<ComponentT> Entity::createComponent(Args ... args) {
     using namespace std;
     auto component = make_shared<ComponentT>(args...);
-    component->setParentEntity(shared_from_this());
-    component->events()->setEventBus(events()->eventBus());
-    component->init();
-    m_components.push_back(component);
+    addComponent<ComponentT>(component);
     return component;
 }
 
 template <typename ComponentT>
 void Entity::removeComponent(std::shared_ptr<ComponentT> component) {
-    component->deinit();
+    component->setParentEntity(SafePtr<Entity>());
     m_components.remove(component);
 }
 

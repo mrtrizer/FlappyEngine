@@ -10,11 +10,11 @@ namespace flappy {
 Component::Component():
     m_eventController(std::make_shared<EventController>())
 {
-    events()->subscribe([this](Manager::OnManagerAdded e) {
+    events()->subscribe([this](const Manager::OnManagerAdded& e) {
         m_managers.setById(e.id, e.pointer);
     });
-    events()->subscribe([this](Manager::OnManagerRemoved e) {
-        m_managers.setById(e.id, nullptr);
+    events()->subscribe([this](const Manager::OnManagerRemoved& e) {
+        m_managers.setById(e.id, SafePtr<Component>());
     });
 }
 

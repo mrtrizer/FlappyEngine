@@ -7,7 +7,25 @@ namespace flappy {
 
 Entity::Entity():
     m_eventController(std::make_shared<EventController>())
-{}
+{
+    events()->subscribe([this](const OnUpdate& e) {
+        for (auto component: m_components)
+            component->update(e.dt);
+        // Break event flow. We no need to pass update event to components
+        return FlowStatus::BREAK;
+    });
+
+    events()->eventBus()->subscribeInAll([this](const EventHandle& handle) {
+        FlowStatus flowStatus = FlowStatus::CONTINUE;
+        for (auto component: m_components) {
+            auto curFlowStatus = component->events()->eventBus()->post(handle);
+            if (curFlowStatus != FlowStatus::CONTINUE)
+                flowStatus = curFlowStatus;
+        }
+        return flowStatus;
+    });
+
+}
 
 Entity::~Entity() {
 }
