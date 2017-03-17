@@ -19,13 +19,26 @@ public:
     EventController& operator=(EventController&&) & = delete;
 
     template <typename FuncT>
-    void subscribe(FuncT&& func) {
-        m_subscriptionVector.push_back(m_eventBus->subscribeIn(std::forward<FuncT>(func)));
+    std::shared_ptr<ISubscription> subscribeIn(FuncT&& func)
+    {
+        auto subscription = m_eventBus->subscribeIn(std::forward<FuncT>(func));
+        m_subscriptionVector.push_back(subscription);
+        return subscription;
     }
 
-    template <typename FuncT, typename SourceT>
-    void subscribe(SourceT source, FuncT&& func) {
-        m_subscriptionVector.push_back(source->events()->eventBus()->subscribeIn(std::forward<FuncT>(func)));
+    std::shared_ptr<ISubscription> subscribeInAll(std::function<FlowStatus(const EventHandle& event)> handler)
+    {
+        auto subscription = m_eventBus->subscribeInAll(handler);
+        m_subscriptionVector.push_back(subscription);
+        return subscription;
+    }
+
+    template <typename FuncT>
+    std::shared_ptr<ISubscription> subscribeOut(FuncT&& func)
+    {
+        auto subscription = m_eventBus->subscribeOut(std::forward<FuncT>(func));
+        m_subscriptionVector.push_back(subscription);
+        return subscription;
     }
 
     void unsubscribe(std::shared_ptr<ISubscription> subscription);

@@ -108,7 +108,10 @@ public:
     // Entity managment
 
     /// Add child entity
-    std::shared_ptr<Entity> addEntity(std::shared_ptr<Entity> entity = std::make_shared<Entity>());
+    void addEntity(std::shared_ptr<Entity> entity);
+
+    /// Create child entity
+    std::shared_ptr<Entity> createEntity();
 
     /// Remove child entity
     void removeEntity(std::shared_ptr<Entity> entity);

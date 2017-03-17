@@ -9,10 +9,15 @@ namespace flappy
 Entity::Entity():
     m_eventController(std::make_shared<EventController>())
 {
-    events()->eventBus()->subscribeInAll([this](const EventHandle& handle) {
+    events()->subscribeInAll([this](const EventHandle& handle) {
         FlowStatus flowStatus = FlowStatus::CONTINUE;
         for (auto component: m_components) {
             auto curFlowStatus = component->events()->eventBus()->post(handle);
+            if (curFlowStatus != FlowStatus::CONTINUE)
+                flowStatus = curFlowStatus;
+        }
+        for (auto entity: m_entities) {
+            auto curFlowStatus = entity->events()->eventBus()->post(handle);
             if (curFlowStatus != FlowStatus::CONTINUE)
                 flowStatus = curFlowStatus;
         }
@@ -43,12 +48,18 @@ SafePtr<Entity> Entity::root()
     return root;
 }
 
-std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity)
+void Entity::addEntity(std::shared_ptr<Entity> entity)
 {
     if (entity->parent() && (entity->parent() == this))
         throw std::runtime_error("Can't add same entity twice!");
     entity->setParent(shared_from_this());
     m_entities.push_back(entity);
+}
+
+std::shared_ptr<Entity> Entity::createEntity()
+{
+    auto entity = std::make_shared<Entity>();
+    addEntity(entity);
     return entity;
 }
 

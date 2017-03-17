@@ -16,17 +16,47 @@ using namespace std;
 
 TEST_CASE( "root() parent()" )
 {
+    auto entityRoot = std::make_shared<Entity>();
+    auto entityMiddle = entityRoot->createEntity();
+    auto entityLast = entityMiddle->createEntity();
+
+    REQUIRE(entityLast->root() == entityRoot);
+    REQUIRE(entityLast->parent() == entityMiddle);
 }
 
 TEST_CASE( "events() Events sending" )
 {
+    auto entityRoot = std::make_shared<Entity>();
+    auto entityMiddle = entityRoot->createEntity();
+    auto entityLast = entityMiddle->createEntity();
+
+    struct TestEvent: public IEvent {
+        int value;
+    };
+
+    int resultValue = 0;
+
+    entityLast->events()->subscribeIn([&resultValue](const TestEvent& e) {
+        resultValue = e.value;
+    });
+
+    TestEvent event;
+    event.value = 10;
+    entityRoot->events()->post(event);
+
+    // Check event passed
+    REQUIRE(resultValue == 10);
 }
 
 
 // Component managment
 
 TEST_CASE("addComponent(std::shared_ptr<ComponentT> )") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testComponent = std::make_shared<Component>();
 
+    testEntity->addComponent(testComponent);
+    REQUIRE_THROWS(testEntity->addComponent(testComponent));
 }
 
 TEST_CASE("createComponent(Args ... args)") {
