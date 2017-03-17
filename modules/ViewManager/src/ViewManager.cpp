@@ -25,7 +25,7 @@ void ViewManager::update(DeltaTime dt) {
         float z = 0;
         auto curTransform = visual.presenter->entity()->component<TransformComponent>();
         while (curTransform != nullptr) {
-            transformMatrix = curTransform->getMvMatrix() * transformMatrix;
+            transformMatrix = curTransform->transformMatrix() * transformMatrix;
             z += curTransform->pos().z;
             auto entityPtr = curTransform->entity();
             if (auto parentPtr = entityPtr->parent())
@@ -41,7 +41,7 @@ void ViewManager::update(DeltaTime dt) {
     if (scene == nullptr)
         return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
 
-    auto camera = scene->camera();
+    auto camera = scene->mainCamera();
 
     if (camera == nullptr)
         return ERROR_MSG(VOID_VALUE, "No main camera in scene!\n");

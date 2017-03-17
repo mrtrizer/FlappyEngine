@@ -3,18 +3,12 @@
 #include "EventController.h"
 #include "TransformComponent.h"
 
-namespace flappy {
+namespace flappy
+{
 
 Entity::Entity():
     m_eventController(std::make_shared<EventController>())
 {
-    events()->subscribe([this](const OnUpdate& e) {
-        for (auto component: m_components)
-            component->update(e.dt);
-        // Break event flow. We no need to pass update event to components
-        return FlowStatus::BREAK;
-    });
-
     events()->eventBus()->subscribeInAll([this](const EventHandle& handle) {
         FlowStatus flowStatus = FlowStatus::CONTINUE;
         for (auto component: m_components) {
@@ -27,39 +21,44 @@ Entity::Entity():
 
 }
 
-Entity::~Entity() {
+Entity::~Entity()
+{
 }
 
-void Entity::setParent(std::weak_ptr<Entity> parent) {
+void Entity::setParent(std::weak_ptr<Entity> parent)
+{
     m_parent = parent;
 }
 
-SafePtr<Entity> Entity::parent() {
+SafePtr<Entity> Entity::parent()
+{
     return m_parent;
 }
 
-SafePtr<Entity> Entity::root() {
+SafePtr<Entity> Entity::root()
+{
     auto root = SafePtr<Entity>(shared_from_this());
     while (root->parent())
         root = root->parent();
     return root;
 }
 
-std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity) {
+std::shared_ptr<Entity> Entity::addEntity(std::shared_ptr<Entity> entity)
+{
     if (entity->parent() && (entity->parent() == this))
         throw std::runtime_error("Can't add same entity twice!");
     entity->setParent(shared_from_this());
     m_entities.push_back(entity);
-    if (auto entityManager = manager<SceneManager>())
-        entityManager->add(entity);
     return entity;
 }
 
-void Entity::removeEntity(std::shared_ptr<Entity> entity) {
+void Entity::removeEntity(std::shared_ptr<Entity> entity)
+{
     m_entities.remove(entity);
 }
 
-std::shared_ptr<Entity> Entity::findEntity(std::function<bool(const Entity&)> predicate, unsigned depth) {
+std::shared_ptr<Entity> Entity::findEntity(std::function<bool(const Entity&)> predicate, unsigned depth)
+{
     for (auto entity: m_entities) {
         if (predicate(*entity)) {
             return entity;
@@ -72,7 +71,8 @@ std::shared_ptr<Entity> Entity::findEntity(std::function<bool(const Entity&)> pr
     return nullptr;
 }
 
-std::list<std::shared_ptr<Entity>> Entity::findEntities(std::function<bool(const Entity&)> predicate, unsigned depth) {
+std::list<std::shared_ptr<Entity>> Entity::findEntities(std::function<bool(const Entity&)> predicate, unsigned depth)
+{
     std::list<std::shared_ptr<Entity>> list;
     for (auto entity: m_entities) {
         if (predicate(*entity))
@@ -86,16 +86,12 @@ std::list<std::shared_ptr<Entity>> Entity::findEntities(std::function<bool(const
     return list;
 }
 
-std::list<std::shared_ptr<Entity>> Entity::findEntities(unsigned depth) {
+std::list<std::shared_ptr<Entity>> Entity::findEntities(unsigned depth)
+{
     if (depth == 0)
         return m_entities;
     else
         return findEntities([](const Entity&){ return true; });
-}
-
-void Entity::update(float dt) {
-    for (auto component: m_components)
-        component->update(dt);
 }
 
 } // flappy

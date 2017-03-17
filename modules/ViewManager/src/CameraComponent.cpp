@@ -46,7 +46,7 @@ mat4 CameraComponent::pMatrix() {
     mat4 mvMatrix;
     auto transform = entity()->component<TransformComponent>();
     if (transform != nullptr)
-        mvMatrix = transform->getMvMatrix();
+        mvMatrix = transform->transformMatrix();
 
     return ortho(curRect.x1, curRect.x2, curRect.y2, curRect.y1, near, far) * mvMatrix;
 }

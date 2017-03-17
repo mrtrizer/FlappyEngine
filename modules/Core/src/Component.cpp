@@ -5,7 +5,8 @@
 #include "Entity.h"
 #include "Manager.h"
 
-namespace flappy {
+namespace flappy
+{
 
 Component::Component():
     m_eventController(std::make_shared<EventController>())
@@ -15,6 +16,9 @@ Component::Component():
     });
     events()->subscribe([this](const Manager::OnManagerRemoved& e) {
         m_managers.setById(e.id, SafePtr<Component>());
+    });
+    events()->subscribe([this](const OnUpdate& e) {
+        update(e.dt);
     });
 }
 

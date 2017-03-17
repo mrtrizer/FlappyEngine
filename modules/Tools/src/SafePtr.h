@@ -37,12 +37,32 @@ public:
         return *this;
     }
 
+    // TODO: Add test
+    bool operator== (SafePtr<T> safePtr) {
+        return m_weakPtr.lock() == safePtr.m_weakPtr.lock();
+    }
+
     bool operator== (std::shared_ptr<T> sharedPtr) {
         return m_weakPtr.lock() == sharedPtr;
     }
 
     bool operator== (T* rawPtr) {
         return m_weakPtr.lock().get() == rawPtr;
+    }
+
+    // TODO: Add test
+    bool operator!= (SafePtr<T> safePtr) {
+        return !(m_weakPtr.lock() == safePtr.m_weakPtr.lock());
+    }
+
+    // TODO: Add test
+    bool operator!= (std::shared_ptr<T> sharedPtr) {
+        return !(m_weakPtr.lock() == sharedPtr);
+    }
+
+    // TODO: Add test
+    bool operator!= (T* rawPtr) {
+        return !(m_weakPtr.lock().get() == rawPtr);
     }
 
     operator bool()

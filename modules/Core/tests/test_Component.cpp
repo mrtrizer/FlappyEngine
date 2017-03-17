@@ -15,18 +15,6 @@ using namespace flappy;
 using namespace fakeit;
 using namespace std;
 
-TEST_CASE( "Component::update()") {
-    Mock<TestComponent::IMock> mock;
-    Fake(Method(mock,update));
-
-    auto entity = make_shared<Entity>();
-    auto testComponent = make_shared<TestComponent>(&mock.get());
-
-    testComponent->update(1);
-
-    Verify(Method(mock,update).Using(1)).Exactly(1);
-}
-
 TEST_CASE( "Component::setParentEntity() Component::init() Component::deinit()") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,init));

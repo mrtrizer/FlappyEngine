@@ -5,7 +5,8 @@
 #include <Manager.h>
 #include <Tools.h>
 
-namespace flappy {
+namespace flappy
+{
 
 class InputManager: public Manager
 {

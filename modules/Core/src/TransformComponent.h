@@ -8,12 +8,13 @@
 
 #include <SceneManager.h>
 
-namespace flappy {
+namespace flappy
+{
 
-class TransformComponent: public Component, public std::enable_shared_from_this<TransformComponent>
+class TransformComponent: public Component
 {
 public:
-    glm::mat4x4 getMvMatrix();
+    glm::mat4x4 transformMatrix();
 
     glm::vec3 pos() const {return m_pos;}
     float angle() const {return m_angle;}

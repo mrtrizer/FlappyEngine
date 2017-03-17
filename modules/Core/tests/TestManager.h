@@ -2,9 +2,11 @@
 
 #include <Manager.h>
 
-class TestManager: public flappy::Manager {
+class TestManager: public flappy::Manager
+{
 public:
-    class IMock {
+    class IMock
+    {
     public:
         virtual void init() = 0;
         virtual void update(flappy::DeltaTime dt) = 0;
@@ -15,17 +17,20 @@ public:
         m_mockComponent (mockComponent)
     {}
 
-    void init() override {
+    void init() override
+    {
         if (m_mockComponent != nullptr)
             m_mockComponent->init();
     }
 
-    void update(flappy::DeltaTime dt) override {
+    void update(flappy::DeltaTime dt) override
+    {
         if (m_mockComponent != nullptr)
             m_mockComponent->update(dt);
     }
 
-    void test() {
+    void test()
+    {
         if (m_mockComponent != nullptr)
             m_mockComponent->test();
     }

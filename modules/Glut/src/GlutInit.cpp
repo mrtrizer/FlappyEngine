@@ -62,8 +62,9 @@ DeltaTime calcTimeDelta() {
 }
 
 void updateEntities() {
-    DeltaTime timeDelta = calcTimeDelta();
-    g_managerList->events()->post(Entity::OnUpdate(timeDelta));
+    auto updateEvent = Component::OnUpdate();
+    updateEvent.dt = calcTimeDelta();
+    g_managerList->events()->post(updateEvent);
 }
 
 void render() {

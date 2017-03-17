@@ -9,42 +9,47 @@
 
 #include "Entity.h"
 
-namespace flappy {
+namespace flappy
+{
 
 class CameraComponent;
 
-class SceneManager: public Manager {
+class SceneManager: public Manager
+{
 public:
-    void update(DeltaTime dt);
 
-    std::shared_ptr<Entity> add(std::shared_ptr<Entity>);
+    void regiser(SafePtr<Entity> entity);
+
+    void unregiser(SafePtr<Entity> entity);
 
     template <typename ... Components>
-    void each(std::function<void(std::shared_ptr<Entity>)> func) {
+    void each(std::function<void(SafePtr<Entity>)> func)
+    {
         for (auto entity: m_entities) {
             if (check<Components...>(entity))
                 func(entity);
         }
     }
 
-    void setCamera(const std::weak_ptr<CameraComponent>& camera) { m_camera = camera; }
-    std::shared_ptr<CameraComponent> camera() const { return m_camera.lock(); }
+    void setMainCamera(const SafePtr<CameraComponent>& camera);
+
+    SafePtr<CameraComponent> mainCamera() const;
 
 private:
-    std::weak_ptr<CameraComponent> m_camera;
-
-    std::list<std::shared_ptr<Entity>> m_entities;
+    SafePtr<CameraComponent> m_camera;
+    std::list<SafePtr<Entity>> m_entities;
 
     template <typename ComponentT = void, typename ... Components>
-    bool check(std::shared_ptr<Entity> entity) {
+    bool check(std::shared_ptr<Entity> entity)
+    {
         return check<Components...>(entity) && (entity->findComponent<ComponentT>());
     }
 };
 
-template <> inline bool SceneManager::check <void> (std::shared_ptr<Entity>) {
+template <> inline
+bool SceneManager::check <void> (std::shared_ptr<Entity>)
+{
     return true;
 }
-
-using EP = const std::shared_ptr<Entity>&;
 
 } // flappy

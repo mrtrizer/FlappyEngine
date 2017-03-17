@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <type_traits>
 
 #include <ClassId.h>
 
@@ -23,7 +24,7 @@ public:
     template <typename EventT>
     EventHandle(EventT&& event):
         m_id(ClassId<EventHandle, EventT>::id()),
-        m_eventStructPtr(new EventT(std::forward<EventT>(event)))
+        m_eventStructPtr(new std::decay_t<EventT>(std::forward<EventT>(event)))
     {}
 
     EventHandle(const EventHandle&) = delete;

@@ -6,7 +6,8 @@
 
 #include "ClassId.h"
 
-namespace  flappy {
+namespace  flappy
+{
 
 template <typename ContextT, typename ElementT>
 class TypeMap
