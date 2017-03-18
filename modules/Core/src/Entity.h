@@ -77,14 +77,14 @@ public:
     template <typename ManagerT>
     void addManager(std::shared_ptr<ManagerT> manager);
 
-    /// Returns manager from component list of entity.
-    /// Throws runtime_error if manager is not found.
-    template<typename ManagerT>
-    std::shared_ptr<ManagerT> manager();
-
     /// Create manager and add to the component list
     template <typename ManagerT, typename ... Args>
     std::shared_ptr<ManagerT> createManager(Args ... args);
+
+    /// Returns manager from component list of entity.
+    /// Throws runtime_error if manager is not found.
+    template<typename ManagerT>
+    std::shared_ptr<ManagerT> findManager();
 
     /// Remove manager from component list
     template <typename ManagerT>
@@ -202,9 +202,11 @@ std::list<std::shared_ptr<ComponentT>> Entity::findComponents(std::function<bool
             list.push_back(dynamic_pointer_cast<ComponentT>(cast));
     }
     if (depth > 0) {
-        auto childResult = findComponents(predicate, depth - 1);
-        if (!childResult.empty())
-            list.splice(list.end(), childResult);
+        for (auto entity: m_entities) {
+            auto childResult = entity->findComponents<ComponentT>(predicate, depth - 1);
+            if (!childResult.empty())
+                list.splice(list.end(), childResult);
+        }
     }
     return list;
 }
@@ -224,19 +226,19 @@ void Entity::addManager(std::shared_ptr<ManagerT> manager)
     addComponent(manager);
 }
 
+template <typename ManagerT, typename ... Args>
+std::shared_ptr<ManagerT> Entity::createManager(Args ... args)
+{
+    return createComponent<ManagerT>(args...);
+}
+
 template<typename ManagerT>
-std::shared_ptr<ManagerT> Entity::manager()
+std::shared_ptr<ManagerT> Entity::findManager()
 {
     if (auto manager = findComponent<ManagerT>())
         return manager;
     else
         throw std::runtime_error("Manager is not added to this entity.");
-}
-
-template <typename ManagerT, typename ... Args>
-std::shared_ptr<ManagerT> Entity::createManager(Args ... args)
-{
-    return createComponent<ManagerT>(args...);
 }
 
 // TODO: Remove template. Move to cpp

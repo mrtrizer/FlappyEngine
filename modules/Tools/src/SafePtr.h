@@ -38,30 +38,30 @@ public:
     }
 
     // TODO: Add test
-    bool operator== (SafePtr<T> safePtr) {
+    bool operator== (const SafePtr<T>& safePtr) const {
         return m_weakPtr.lock() == safePtr.m_weakPtr.lock();
     }
 
-    bool operator== (std::shared_ptr<T> sharedPtr) {
+    bool operator== (const std::shared_ptr<T>& sharedPtr) const {
         return m_weakPtr.lock() == sharedPtr;
     }
 
-    bool operator== (T* rawPtr) {
+    bool operator== (const T* rawPtr) const {
         return m_weakPtr.lock().get() == rawPtr;
     }
 
     // TODO: Add test
-    bool operator!= (SafePtr<T> safePtr) {
+    bool operator!= (const SafePtr<T>& safePtr) const {
         return !(m_weakPtr.lock() == safePtr.m_weakPtr.lock());
     }
 
     // TODO: Add test
-    bool operator!= (std::shared_ptr<T> sharedPtr) {
+    bool operator!= (const std::shared_ptr<T>& sharedPtr) const {
         return !(m_weakPtr.lock() == sharedPtr);
     }
 
     // TODO: Add test
-    bool operator!= (T* rawPtr) {
+    bool operator!= (const T* rawPtr) const {
         return !(m_weakPtr.lock().get() == rawPtr);
     }
 

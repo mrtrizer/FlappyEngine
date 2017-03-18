@@ -88,13 +88,13 @@ void mouseFunc(int button, int state, int x, int y) {
 }
 
 void passiveMotionFunc(int x, int y) {
-    g_managerList->manager<InputManager>()->setMousePos({x,y});
+    g_managerList->findManager<InputManager>()->setMousePos({x,y});
 }
 
 void initGLUT(std::shared_ptr<Entity> managerList) {
     GLUTInit::g_managerList = managerList;
 
-    auto args = managerList->manager<AppManager>()->args();
+    auto args = managerList->findManager<AppManager>()->args();
     g_argv = new char*[args.size()];
     for (unsigned i = 0; i < args.size(); i++) {
         g_argv[i] = new char[args[i].size()];

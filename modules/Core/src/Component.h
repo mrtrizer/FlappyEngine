@@ -55,9 +55,22 @@ protected:
         return std::static_pointer_cast<T>(shared_from_this());
     }
 
+    template <typename T>
+    const std::shared_ptr<T> selfSharedPointer() const
+    {
+        return std::static_pointer_cast<T>(shared_from_this());
+    }
+
     /// Returns SafePtr<Component> static casted to SafePtr<T>
     template <typename T>
     SafePtr<T> selfPointer()
+    {
+        return selfSharedPointer<T>();
+    }
+
+    /// Returns SafePtr<Component> static casted to SafePtr<T>
+    template <typename T>
+    const SafePtr<T> selfPointer() const
     {
         return selfSharedPointer<T>();
     }
