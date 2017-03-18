@@ -12,7 +12,76 @@ using namespace flappy;
 using namespace fakeit;
 using namespace std;
 
-// Base
+
+// Component managment
+
+TEST_CASE("addComponent(std::shared_ptr<ComponentT> )") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testComponent = std::make_shared<Component>();
+
+    testEntity->addComponent(testComponent);
+    REQUIRE_THROWS(testEntity->addComponent(testComponent));
+    REQUIRE(*testEntity->findComponents<Component>(0).begin() == testComponent);
+}
+
+TEST_CASE("createComponent(Args ... args)") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testComponent = testEntity->createComponent<Component>();
+
+    REQUIRE_THROWS(testEntity->addComponent(testComponent));
+    REQUIRE(*testEntity->findComponents<Component>(0).begin() == testComponent);
+}
+
+TEST_CASE("removeComponent(std::shared_ptr<ComponentT> )") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testComponent = testEntity->createComponent<Component>();
+
+    REQUIRE_NOTHROW(testEntity->removeComponent(testComponent));
+    REQUIRE(testEntity->findComponents<Component>(0).size() == 0);
+}
+
+TEST_CASE("findComponent<ComponentT>()") {
+
+}
+
+TEST_CASE("findComponents<ComponentT>()") {
+
+}
+
+TEST_CASE("component<ComponentT>()") {
+
+}
+
+
+// Manager managment
+
+TEST_CASE("addManager(std::shared_ptr<ManagerT>) manager<ManagerT>()") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testManager = std::make_shared<Manager>();
+
+    testEntity->addManager(testManager);
+    REQUIRE_THROWS(testEntity->addManager(testManager));
+    REQUIRE(*testEntity->findComponents<Manager>().begin() == testManager);
+}
+
+TEST_CASE("createManager(Args ... args)") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testManager = testEntity->createManager<Manager>();
+
+    REQUIRE_THROWS(testEntity->addManager(testManager));
+    REQUIRE(*testEntity->findComponents<Manager>().begin() == testManager);
+}
+
+TEST_CASE("removeManager(std::shared_ptr<ManagerT> manager)") {
+    auto testEntity = std::make_shared<Entity>();
+    auto testManager = testEntity->createManager<Manager>();
+
+    REQUIRE_NOTHROW(testEntity->removeManager(testManager));
+    REQUIRE(testEntity->findComponents<Manager>().size() == 0);
+}
+
+
+// Entity managment
 
 TEST_CASE( "root() parent()" )
 {
@@ -48,67 +117,97 @@ TEST_CASE( "events() Events sending" )
     REQUIRE(resultValue == 10);
 }
 
-
-// Component managment
-
-TEST_CASE("addComponent(std::shared_ptr<ComponentT> )") {
-    auto testEntity = std::make_shared<Entity>();
-    auto testComponent = std::make_shared<Component>();
-
-    testEntity->addComponent(testComponent);
-    REQUIRE_THROWS(testEntity->addComponent(testComponent));
+TEST_CASE("createEntity(std::shared_ptr<Entity>)") {
+    auto entityRoot = std::make_shared<Entity>();
+    auto entity = entityRoot->createEntity();
+    auto entities = entityRoot->findEntities(0);
+    REQUIRE(*entities.begin() == entity);
 }
-
-TEST_CASE("createComponent(Args ... args)") {
-
-}
-
-TEST_CASE("removeComponent(std::shared_ptr<ComponentT> )") {
-
-}
-
-TEST_CASE("findComponent(predicate, depth) findComponent(depth)") {
-
-}
-
-TEST_CASE("findComponents(predicate, depth) findComponents(depth)") {
-
-}
-
-TEST_CASE("component<ComponentT>()") {
-
-}
-
-
-// Manager managment
-
-TEST_CASE("addManager(std::shared_ptr<ManagerT>) manager<ManagerT>()") {
-
-}
-
-TEST_CASE("createManager(Args ... args)") {
-
-}
-
-TEST_CASE("removeManager(std::shared_ptr<ManagerT> manager)") {
-
-}
-
-
-// Entity managment
 
 TEST_CASE("addEntity(std::shared_ptr<Entity>)") {
-
+    auto entityRoot = std::make_shared<Entity>();
+    auto entity = std::make_shared<Entity>();
+    entityRoot->addEntity(entity);
+    // can't add twice
+    REQUIRE_THROWS(entityRoot->addEntity(entity));
+    auto entities = entityRoot->findEntities(0);
+    REQUIRE(*entities.begin() == entity);
 }
 
 TEST_CASE("removeEntity(std::shared_ptr<Entity>)") {
-
+    auto entityRoot = std::make_shared<Entity>();
+    auto entity = entityRoot->createEntity();
+    auto entities = entityRoot->findEntities(0);
+    REQUIRE(*entities.begin() == entity);
+    entityRoot->removeEntity(entity);
+    REQUIRE_NOTHROW(entityRoot->removeEntity(entity));
+    REQUIRE(entityRoot->findEntities(0).size() == 0);
 }
 
 TEST_CASE("findEntity(predicate, depth)") {
-
+    auto entityRoot = std::make_shared<Entity>();
+    auto entityMiddle = entityRoot->createEntity();
+    auto entityLast = entityMiddle->createEntity();
+    {
+        auto entity = entityRoot->findEntity([entityMiddle](const Entity& entity) {
+            return entity.shared_from_this() == entityMiddle;
+        });
+        REQUIRE(entity == entityMiddle);
+    }
+    {
+        auto entity = entityRoot->findEntity([entityRoot](const Entity& entity) {
+            return entity.shared_from_this() == entityRoot;
+        });
+        REQUIRE(entity == nullptr);
+    }
+    {
+        auto entity = entityRoot->findEntity([entityMiddle](const Entity& entity) {
+            return entity.shared_from_this() == entityMiddle;
+        }, 1);
+        REQUIRE(entity == entityMiddle);
+    }
+    {
+        auto entity = entityRoot->findEntity([entityLast](const Entity& entity) {
+            return entity.shared_from_this() == entityLast;
+        }, 1);
+        REQUIRE(entity == entityLast);
+    }
 }
 
 TEST_CASE("findEntities(depth) findEntities(predicate, depth)") {
-
+    auto entityRoot = std::make_shared<Entity>();
+    auto entityMiddle = entityRoot->createEntity();
+    auto entityLast = entityMiddle->createEntity();
+    {
+        auto entities = entityRoot->findEntities([](const Entity&) {
+            return true;
+        }, 0);
+        REQUIRE(entities.size() == 1);
+    }
+    {
+        auto entities = entityRoot->findEntities([](const Entity&) {
+            return false;
+        }, 0);
+        REQUIRE(entities.size() == 0);
+    }
+    {
+        auto entities = entityRoot->findEntities([](const Entity&) {
+            return true;
+        }, 1);
+        REQUIRE(entities.size() == 2);
+    }
+    {
+        auto entities = entityRoot->findEntities([](const Entity&) {
+            return false;
+        }, 1);
+        REQUIRE(entities.size() == 0);
+    }
+    {
+        auto entities = entityRoot->findEntities(0);
+        REQUIRE(entities.size() == 1);
+    }
+    {
+        auto entities = entityRoot->findEntities(1);
+        REQUIRE(entities.size() == 2);
+    }
 }

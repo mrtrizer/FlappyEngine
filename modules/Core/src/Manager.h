@@ -24,8 +24,8 @@ public:
     };
 
 private:
-    void initInternal() override;
-    void deinitInternal() override;
+    void initInternal() override final;
+    void deinitInternal() override final;
 
 };
 

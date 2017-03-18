@@ -30,7 +30,7 @@ Entity::~Entity()
 {
 }
 
-void Entity::setParent(std::weak_ptr<Entity> parent)
+void Entity::setParent(SafePtr<Entity> parent)
 {
     m_parent = parent;
 }
@@ -102,7 +102,7 @@ std::list<std::shared_ptr<Entity>> Entity::findEntities(unsigned depth)
     if (depth == 0)
         return m_entities;
     else
-        return findEntities([](const Entity&){ return true; });
+        return findEntities([](const Entity&){ return true; }, depth);
 }
 
 } // flappy

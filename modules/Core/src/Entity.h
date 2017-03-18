@@ -21,19 +21,6 @@ public:
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 
-    /// Returns parent of current entity or nullptr
-    SafePtr<Entity> parent();
-
-    /// Returns first entity in hierarchy
-    SafePtr<Entity> root();
-
-    /// @brief Returns pointer to EventBus.
-    std::shared_ptr<EventController> events()
-    {
-        return m_eventController;
-    }
-
-
 
     // Component managment
 
@@ -52,7 +39,7 @@ public:
     std::shared_ptr<ComponentT> createComponent(Args ... args);
 
     /// Remove component from the list of components if exists.
-    /// Before changing of component Component::deinit() will be called;
+    /// Before changing of component method Component::deinit() will be called;
     template <typename ComponentT>
     void removeComponent(std::shared_ptr<ComponentT> component);
 
@@ -62,7 +49,7 @@ public:
     template<typename ComponentT>
     std::shared_ptr<ComponentT> findComponent(std::function<bool(const ComponentT&)> predicate, unsigned depth = 0);
 
-    /// @brief Search single component of ComponentT without predicate
+    /// @brief Search single component of ComponentT without predicate. Returns first match or nullptr.
     template<typename ComponentT>
     std::shared_ptr<ComponentT> findComponent(unsigned depth = 0);
 
@@ -107,6 +94,18 @@ public:
 
     // Entity managment
 
+    /// Returns parent of current entity or nullptr
+    SafePtr<Entity> parent();
+
+    /// Returns first entity in hierarchy
+    SafePtr<Entity> root();
+
+    /// @brief Returns pointer to EventBus.
+    std::shared_ptr<EventController> events()
+    {
+        return m_eventController;
+    }
+
     /// Add child entity
     void addEntity(std::shared_ptr<Entity> entity);
 
@@ -131,9 +130,10 @@ private:
     std::shared_ptr<EventController> m_eventController;
     SafePtr<Entity> m_parent;
 
-    void setParent(std::weak_ptr<Entity> parent);
+    void setParent(SafePtr<Entity> parent);
 };
 
+// TODO: Remove template. Move to cpp
 template<typename ComponentT>
 void Entity::addComponent(std::shared_ptr<ComponentT> component)
 {
@@ -152,6 +152,7 @@ std::shared_ptr<ComponentT> Entity::createComponent(Args ... args)
     return component;
 }
 
+// TODO: Remove template. Move to cpp
 template <typename ComponentT>
 void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 {
@@ -197,19 +198,30 @@ std::list<std::shared_ptr<ComponentT>> Entity::findComponents(std::function<bool
     std::list<std::shared_ptr<ComponentT>> list;
     for (auto component: m_components) {
         auto cast = dynamic_pointer_cast<ComponentT>(component);
-        if ((cast != nullptr) && predicate(*component))
+        if ((cast != nullptr) && predicate(*cast))
             list.push_back(dynamic_pointer_cast<ComponentT>(cast));
     }
-    if (depth > 0)
-        if (auto childResult = findComponents(predicate, depth - 1))
+    if (depth > 0) {
+        auto childResult = findComponents(predicate, depth - 1);
+        if (!childResult.empty())
             list.splice(list.end(), childResult);
+    }
     return list;
 }
 
 template<typename ComponentT>
 std::list<std::shared_ptr<ComponentT>> Entity::findComponents(unsigned depth) const
 {
-    return findComponents([](const ComponentT&){ return true; });
+    return findComponents<ComponentT>([](const ComponentT&){ return true; }, depth);
+}
+
+// Manager managment
+
+// TODO: Remove template. Move to cpp
+template <typename ManagerT>
+void Entity::addManager(std::shared_ptr<ManagerT> manager)
+{
+    addComponent(manager);
 }
 
 template<typename ManagerT>
@@ -227,6 +239,7 @@ std::shared_ptr<ManagerT> Entity::createManager(Args ... args)
     return createComponent<ManagerT>(args...);
 }
 
+// TODO: Remove template. Move to cpp
 template <typename ManagerT>
 void Entity::removeManager(std::shared_ptr<ManagerT> manager)
 {
