@@ -27,14 +27,22 @@ void Component::setParentEntity(SafePtr<Entity> entity)
     if (entity != m_entity) {
         if (m_entity) {
             deinitInternal();
-            deinit();
         }
         m_entity = entity;
         if (entity) {
             initInternal();
-            init();
         }
     }
+}
+
+void Component::initInternal()
+{
+    init();
+}
+
+void Component::deinitInternal()
+{
+    deinit();
 }
 
 } // flappy

@@ -8,7 +8,7 @@ class GLViewFactory;
 class Entity;
 
 namespace GLUTInit {
-    void initGLUT(std::shared_ptr<Entity> managerList);
+    void initGLUT(std::shared_ptr<Entity> entity);
     int mainLoop();
 }
 

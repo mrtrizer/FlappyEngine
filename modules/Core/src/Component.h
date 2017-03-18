@@ -26,6 +26,8 @@ public:
     Component();
     Component(const Component&) = delete;
     Component& operator=(const Component&) = delete;
+    Component(Component&&) = default;
+    Component& operator=(Component&&) & = default;
     virtual ~Component() = default;
 
     /// Returns parent entity (can be null if conponent is not added to entity)
@@ -99,11 +101,9 @@ private:
     /// @param entity New entity pointer. Can be nullptr.
     void setParentEntity(SafePtr<Entity> entity);
 
-    virtual void initInternal()
-    {}
+    virtual void initInternal();
 
-    virtual void deinitInternal()
-    {}
+    virtual void deinitInternal();
 };
 
 } // flappy

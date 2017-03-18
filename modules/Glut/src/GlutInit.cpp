@@ -47,7 +47,7 @@ namespace GLUTInit {
 
 using namespace std;
 
-shared_ptr<Entity> g_managerList;
+shared_ptr<Entity> g_entity;
 char** g_argv = nullptr;
 int g_argc = 0;
 chrono::steady_clock::time_point g_lastTime;
@@ -64,7 +64,7 @@ DeltaTime calcTimeDelta() {
 void updateEntities() {
     auto updateEvent = Component::OnUpdate();
     updateEvent.dt = calcTimeDelta();
-    g_managerList->events()->post(updateEvent);
+    g_entity->events()->post(updateEvent);
 }
 
 void render() {
@@ -74,27 +74,30 @@ void render() {
 }
 
 void resizeWindow(int width, int height) {
-    auto viewManager = g_managerList->findComponent<ViewManager>();
+    auto viewManager = g_entity->findComponent<ViewManager>();
     if (viewManager)
         viewManager->resize(width, height);
 }
 
 void mouseFunc(int button, int state, int x, int y) {
-    g_managerList->component<InputManager>()->setMousePos({x,y});
+    g_entity->component<InputManager>()->setMousePos({x,y});
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        g_managerList->component<InputManager>()->setMouseDown();
+        g_entity->component<InputManager>()->setMouseDown();
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-        g_managerList->component<InputManager>()->setMouseUp();
+        g_entity->component<InputManager>()->setMouseUp();
 }
 
 void passiveMotionFunc(int x, int y) {
-    g_managerList->findManager<InputManager>()->setMousePos({x,y});
+    g_entity->findManager<InputManager>()->setMousePos({x,y});
 }
 
-void initGLUT(std::shared_ptr<Entity> managerList) {
-    GLUTInit::g_managerList = managerList;
+void initGLUT(std::shared_ptr<Entity> entity) {
+    if (g_entity != nullptr)
+        throw std::runtime_error("Can't initialize glut twice.");
 
-    auto args = managerList->findManager<AppManager>()->args();
+    GLUTInit::g_entity = entity;
+
+    auto args = entity->findManager<AppManager>()->args();
     g_argv = new char*[args.size()];
     for (unsigned i = 0; i < args.size(); i++) {
         g_argv[i] = new char[args[i].size()];
@@ -110,7 +113,7 @@ void initGLUT(std::shared_ptr<Entity> managerList) {
     glewInit();
 #endif
 
-    auto manager = managerList->component<GLViewManager>();
+    auto manager = entity->component<GLViewManager>();
     manager->bind<CircleShape,GLViewCircle>();
     manager->bind<RectShape,GLViewRect>();
     manager->bind<SpriteComponent,GLViewSprite>();
