@@ -6,7 +6,7 @@
         "../modules/CoreResources",
         "../modules/EventBus",
         "../modules/ResManager",
-        "../modules/ViewManager",
+        "../modules/RenderManager",
 		"../modules/Gl",
 		"../modules/Glut",
 		"../modules/JsonRes",

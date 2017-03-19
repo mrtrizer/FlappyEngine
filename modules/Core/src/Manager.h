@@ -28,18 +28,14 @@ private:
     {
         // Initilize manager first. To be prepeared when components try access it.
         init();
-
-        // Send OnManagerAdded event
         postEvent(createManagerEvent<OnManagerAdded>());
     }
 
     void deinitInternal() override final
     {
-        // Send OnManagerRemoved event first.
+        // Send remove event first.
         // To allow components access manager before denitialization.
         postEvent(createManagerEvent<OnManagerRemoved>());
-
-        // Deinitialize manager
         deinit();
     }
 };

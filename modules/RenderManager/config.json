@@ -1,5 +1,5 @@
 {
-    "name":"ViewManager",
+    "name":"RenderManager",
     "src_dirs": [
         "./src"
     ],

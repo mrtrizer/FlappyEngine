@@ -22,12 +22,10 @@ public:
     };
 
     struct OnManagerAdded: public OnManager
-    {
-    };
+    {};
 
     struct OnManagerRemoved: public OnManager
-    {
-    };
+    {};
 
     virtual int managerId() = 0;
 

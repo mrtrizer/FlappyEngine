@@ -65,7 +65,7 @@ public:
         return !(m_weakPtr.lock().get() == rawPtr);
     }
 
-    operator bool()
+    operator bool() const
     {
         return !m_weakPtr.expired();
     }
