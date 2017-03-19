@@ -52,7 +52,7 @@ GLViewSprite::GLViewSprite() :
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_quad != nullptr) {
         if (m_quad->resUpdated()) {
-            m_quad = static_pointer_cast<QuadRes>(m_quad->nextRes());
+            m_quad = static_pointer_cast<QuadRes>(m_quad->lastRes());
             updateFrame();
         }
         getShader()->render(m_rect, [this, mvMatrix, pMartrix](){

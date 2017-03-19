@@ -20,18 +20,11 @@ before_install:
 
 script:
 #opengl test project
- - pushd tests_gl
- - flappy prebuild qt
- - flappy prebuild qt.tests
- - pushd targets/qt
- - qmake tests_gl.pro
- - make
- - popd
  - pushd targets/qt.tests
+ - flappy prebuild qt.tests
  - qmake tests_gl_tests.pro
  - make
  - ./tests_gl_tests
- - popd
  - popd
 
 after_success:

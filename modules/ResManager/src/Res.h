@@ -33,11 +33,16 @@ public:
 
     virtual std::list<std::shared_ptr<Res>> dependencyList() const = 0;
 
-    // TODO: Need add lastRes() method to get last resource instance
-    // TODO: Return just next resource from nextRes()
     std::shared_ptr<Res> nextRes() {
         if (m_next != nullptr)
-            return m_next->nextRes();
+            return m_next;
+        else
+            return shared_from_this();
+    }
+
+    std::shared_ptr<Res> lastRes() {
+        if (m_next != nullptr)
+            return m_next->lastRes();
         else
             return shared_from_this();
     }
@@ -48,7 +53,7 @@ public:
 
     void pushRes(std::shared_ptr<Res> res) {
         if (m_next != nullptr)
-            nextRes()->pushRes(res);
+            lastRes()->pushRes(res);
         else
             m_next = res;
     }
