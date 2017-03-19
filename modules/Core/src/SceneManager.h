@@ -14,7 +14,7 @@ namespace flappy
 
 class CameraComponent;
 
-class SceneManager: public Manager
+class SceneManager: public Manager<SceneManager>
 {
 public:
 

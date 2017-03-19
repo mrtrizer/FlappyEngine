@@ -95,34 +95,34 @@ TEST_CASE("component<ComponentT>()") {
 
 TEST_CASE("addManager(std::shared_ptr<ManagerT>) manager<ManagerT>()") {
     auto testEntity = std::make_shared<Entity>();
-    auto testManager = std::make_shared<Manager>();
+    auto testManager = std::make_shared<TestManager>();
 
     testEntity->addManager(testManager);
     REQUIRE_THROWS(testEntity->addManager(testManager));
-    REQUIRE(*testEntity->findComponents<Manager>().begin() == testManager);
+    REQUIRE(*testEntity->findComponents<TestManager>().begin() == testManager);
 }
 
 TEST_CASE("createManager(Args ... args)") {
     auto testEntity = std::make_shared<Entity>();
-    auto testManager = testEntity->createManager<Manager>();
+    auto testManager = testEntity->createManager<TestManager>();
 
     REQUIRE_THROWS(testEntity->addManager(testManager));
-    REQUIRE(*testEntity->findComponents<Manager>().begin() == testManager);
+    REQUIRE(*testEntity->findComponents<TestManager>().begin() == testManager);
 }
 
 TEST_CASE("findManager<ManagerT>()") {
     auto testEntity = std::make_shared<Entity>();
-    auto testManager = testEntity->createManager<Manager>();
+    auto testManager = testEntity->createManager<TestManager>();
 
-    REQUIRE(testEntity->findManager<Manager>() == testManager);
+    REQUIRE(testEntity->findManager<TestManager>() == testManager);
 }
 
 TEST_CASE("removeManager(std::shared_ptr<ManagerT> manager)") {
     auto testEntity = std::make_shared<Entity>();
-    auto testManager = testEntity->createManager<Manager>();
+    auto testManager = testEntity->createManager<TestManager>();
 
     REQUIRE_NOTHROW(testEntity->removeManager(testManager));
-    REQUIRE(testEntity->findComponents<Manager>().size() == 0);
+    REQUIRE(testEntity->findComponents<TestManager>().size() == 0);
 }
 
 // Entity managment

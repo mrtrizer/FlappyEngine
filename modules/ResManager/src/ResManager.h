@@ -15,7 +15,7 @@ namespace flappy {
 class Res;
 class ResFactory;
 
-class ResManager final: public Manager
+class ResManager final: public Manager<ResManager>
 {
 public:
     ResManager():m_resTypeVector(ClassCounter<Res>::count()) {}

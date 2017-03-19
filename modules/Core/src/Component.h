@@ -10,6 +10,8 @@
 namespace flappy
 {
 
+class AManager;
+template <typename DerivedT>
 class Manager;
 class Entity;
 class EventController;
@@ -94,7 +96,7 @@ protected:
 
 private:
     SafePtr<Entity> m_entity;
-    TypeMap<Component, SafePtr<Manager>> m_managers;
+    TypeMap<Component, SafePtr<AManager>> m_managers;
     std::shared_ptr<EventController> m_eventController;
 
     /// Called when you add a component to an entity

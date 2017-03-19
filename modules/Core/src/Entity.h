@@ -2,6 +2,8 @@
 
 #include <list>
 
+#include <TypeTraits.h>
+
 #include "Component.h"
 #include "Manager.h"
 
@@ -128,34 +130,60 @@ private:
     std::list<std::shared_ptr<Component>> m_components;
     std::list<std::shared_ptr<Entity>> m_entities;
     std::shared_ptr<EventController> m_eventController;
+    TypeMap<Component, SafePtr<AManager>> m_managers;
     SafePtr<Entity> m_parent;
 
     void setParent(SafePtr<Entity> parent);
+
+    template <typename ManagerEventT>
+    void sendManagerEvents(std::shared_ptr<EventController> eventController);
 };
 
-// TODO: Remove template. Move to cpp
+
+template <typename ManagerEventT>
+void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController) {
+    for (int id = 0; id < m_managers.size(); id++) {
+        auto manager = m_managers.getById(id);
+        if (manager != nullptr) {
+            auto event = ManagerEventT();
+            event.id = id;
+            event.pointer = manager;
+            eventController->post(event);
+        }
+    }
+}
+
+
+// Component managment
+
 template<typename ComponentT>
 void Entity::addComponent(std::shared_ptr<ComponentT> component)
 {
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
     if (component->entity() != nullptr)
         throw std::runtime_error("Can't add a component to several entities.");
     component->setParentEntity(shared_from_this());
     m_components.push_back(component);
+    sendManagerEvents<AManager::OnManagerAdded>(component->events());
 }
 
 template <typename ComponentT, typename ... Args>
 std::shared_ptr<ComponentT> Entity::createComponent(Args ... args)
 {
-    using namespace std;
-    auto component = make_shared<ComponentT>(args...);
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
+    auto component = std::make_shared<ComponentT>(args...);
     addComponent<ComponentT>(component);
     return component;
 }
 
-// TODO: Remove template. Move to cpp
 template <typename ComponentT>
 void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 {
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
+    sendManagerEvents<AManager::OnManagerRemoved>(component->events());
     component->setParentEntity(SafePtr<Entity>());
     m_components.remove(component);
 }
@@ -163,9 +191,10 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 template<typename ComponentT>
 std::shared_ptr<ComponentT> Entity::findComponent(std::function<bool(const ComponentT&)> predicate, unsigned depth)
 {
-    using namespace std;
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
     for (auto component: m_components) {
-        auto cast = dynamic_pointer_cast<ComponentT>(component);
+        auto cast = std::dynamic_pointer_cast<ComponentT>(component);
         if ((cast != nullptr) && predicate(*cast))
             return cast;
     }
@@ -186,6 +215,8 @@ std::shared_ptr<ComponentT> Entity::findComponent(unsigned depth)
 template<typename ComponentT>
 std::shared_ptr<ComponentT> Entity::component()
 {
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
     if (auto foundComponent = findComponent<ComponentT>())
         return foundComponent;
     return createComponent<ComponentT>();
@@ -194,12 +225,13 @@ std::shared_ptr<ComponentT> Entity::component()
 template<typename ComponentT>
 std::list<std::shared_ptr<ComponentT>> Entity::findComponents(std::function<bool(const ComponentT&)> predicate, unsigned depth) const
 {
-    using namespace std;
+    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+
     std::list<std::shared_ptr<ComponentT>> list;
     for (auto component: m_components) {
-        auto cast = dynamic_pointer_cast<ComponentT>(component);
+        auto cast = std::dynamic_pointer_cast<ComponentT>(component);
         if ((cast != nullptr) && predicate(*cast))
-            list.push_back(dynamic_pointer_cast<ComponentT>(cast));
+            list.push_back(std::dynamic_pointer_cast<ComponentT>(cast));
     }
     if (depth > 0) {
         for (auto entity: m_entities) {
@@ -217,34 +249,44 @@ std::list<std::shared_ptr<ComponentT>> Entity::findComponents(unsigned depth) co
     return findComponents<ComponentT>([](const ComponentT&){ return true; }, depth);
 }
 
+
+
+
+
 // Manager managment
 
-// TODO: Remove template. Move to cpp
 template <typename ManagerT>
 void Entity::addManager(std::shared_ptr<ManagerT> manager)
 {
+    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
+
     addComponent(manager);
 }
 
 template <typename ManagerT, typename ... Args>
 std::shared_ptr<ManagerT> Entity::createManager(Args ... args)
 {
+    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
+
     return createComponent<ManagerT>(args...);
 }
 
 template<typename ManagerT>
 std::shared_ptr<ManagerT> Entity::findManager()
 {
+    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
+
     if (auto manager = findComponent<ManagerT>())
         return manager;
     else
         throw std::runtime_error("Manager is not added to this entity.");
 }
 
-// TODO: Remove template. Move to cpp
 template <typename ManagerT>
 void Entity::removeManager(std::shared_ptr<ManagerT> manager)
 {
+    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
+
     removeComponent(manager);
 }
 

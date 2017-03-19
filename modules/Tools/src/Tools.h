@@ -82,9 +82,6 @@ namespace Tools
             vector.resize(pos + 1);
         return vector.at(pos);
     }
-
-    class not_implemented {};
-    class unknown_intersect_obj {};
 }
 
 using DeltaTime = float;

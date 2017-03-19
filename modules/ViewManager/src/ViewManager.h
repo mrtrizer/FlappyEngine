@@ -16,7 +16,7 @@ class ScreenManager;
 
 /// @brief Abstract base for View implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager: public Manager {
+class ViewManager: public Manager<ViewManager> {
 private:
     class IViewFactory {
     public:
@@ -31,6 +31,12 @@ private:
     };
 
 public:
+    struct OnWindowResize: public IEvent {
+        float width;
+        float height;
+    };
+
+
     ViewManager(): m_bindings(ClassCounter<PresenterComponent>::count()) {}
 
     void update(DeltaTime dt);

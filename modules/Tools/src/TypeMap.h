@@ -22,11 +22,17 @@ public:
         return elements.at(id);
     }
 
+    // TODO: Add test
+    int size() {
+        return int(elements.size());
+    }
+
     ElementT getById(unsigned id) const
     {
         return elements.at(id);
     }
 
+    // TODO: Add test
     template <typename ValueT>
     void setById(unsigned id, ValueT&& element)
     {

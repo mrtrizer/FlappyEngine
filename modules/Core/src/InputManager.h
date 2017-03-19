@@ -8,9 +8,31 @@
 namespace flappy
 {
 
-class InputManager: public Manager
+class InputManager: public Manager<InputManager>
 {
 public:
+    enum MouseButton {
+        LEFT,
+        RIGHT
+    };
+
+    struct OnMouseDown: public IEvent {
+        float x;
+        float y;
+        MouseButton button;
+    };
+
+    struct OnMouseUp: public IEvent {
+        float x;
+        float y;
+        MouseButton button;
+    };
+
+    struct OnMouseMove: public IEvent {
+        float x;
+        float y;
+    };
+
     bool mouseDown() const;
     bool mouseUp() const;
     bool mousePressed() const;
