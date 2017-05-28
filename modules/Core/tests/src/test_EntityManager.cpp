@@ -3,8 +3,6 @@
 
 #include <memory>
 
-#include <SceneManager.h>
-
 #include "TestComponent.h"
 
 using namespace flappy;

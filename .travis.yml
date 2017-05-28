@@ -9,7 +9,7 @@ before_install:
  - sudo apt-get install -qq gcc-5 g++-5
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
  - git submodule update --init --recursive
- - git clone https://github.com/mrtrizer/FlappyTools.git flappytools
+ - git clone https://github.com/mrtrizer/FlappyTools2.git flappytools
  - pushd flappytools
  - cmake -G "Unix Makefiles"
  - sudo make install
@@ -20,12 +20,12 @@ before_install:
 
 script:
 #opengl test project
- - pushd targets/qt.tests
- - flappy prebuild qt.tests
- - qmake tests_gl_tests.pro
+ - pushd modules/Core/tests
+ - flappy gen cmake
+ - pushd generated/cmake
+ - cmake -G "Unix Makefiles"
  - make
- - ./tests_gl_tests
- - popd
+ - ./test_Core
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

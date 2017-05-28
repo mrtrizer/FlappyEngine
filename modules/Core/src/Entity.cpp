@@ -1,7 +1,6 @@
 #include "Entity.h"
 
 #include "EventController.h"
-#include "TransformComponent.h"
 
 namespace flappy
 {

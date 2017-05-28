@@ -4,7 +4,6 @@
 #include <memory>
 
 #include <Entity.h>
-#include <TransformComponent.h>
 
 #include "TestComponent.h"
 

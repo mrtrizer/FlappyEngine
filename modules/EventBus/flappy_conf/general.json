@@ -1,0 +1,17 @@
+{
+    "name":"EventBus",
+    "modules":[
+        {
+            "name":"Tools",
+            "path":"../Tools"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

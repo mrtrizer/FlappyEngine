@@ -16,7 +16,6 @@ class EventController;
 /// When Components and Managers are meat, entieis are bones.
 class Entity: public std::enable_shared_from_this<Entity>
 {
-    friend class TransformComponent;
 public:
     Entity();
     ~Entity();

@@ -1,0 +1,16 @@
+{
+    "name":"Tools",
+    "cxx":{
+        "header_dirs": [
+            "./src",
+            "./libs"
+        ],
+        "src_dirs": [
+            "./src",
+            "./libs/glm"
+        ],
+        "src_exclude": [
+            "./libs/glm/detail"
+        ]
+    }
+}

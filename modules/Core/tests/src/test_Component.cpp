@@ -4,9 +4,6 @@
 #include <memory>
 
 #include <Entity.h>
-#include <SceneManager.h>
-#include <TransformComponent.h>
-#include <SceneManager.h>
 
 #include "TestManager.h"
 #include "TestComponent.h"

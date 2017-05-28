@@ -1,0 +1,21 @@
+{
+    "name":"test_Core",
+    "modules": [
+        {
+            "name":"Core",
+            "path":"../"
+        },
+        {
+            "name":"Tools",
+            "path":"../../Tools"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
