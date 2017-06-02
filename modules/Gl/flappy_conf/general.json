@@ -1,12 +1,20 @@
 {
-    "name":"test_Core",
+    "name":"Gl",
     "modules": [
         {
             "path":"../Core"
         },
         {
             "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../RenderManager"
         }
+
+
 
     ],
     "cxx":{

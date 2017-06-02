@@ -1,5 +1,5 @@
 {
-    "name":"test_Core",
+    "name":"CoreResources",
     "modules": [
         {
             "path":"../Core"
@@ -8,7 +8,7 @@
             "path":"../Tools"
         },
         {
-            "path":"../Gl"
+            "path":"../ResManager"
         }
 
     ],

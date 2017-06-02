@@ -1,13 +1,9 @@
 {
-    "name":"Sdl",
+    "name":"test_GlutManager",
     "modules": [
         {
-            "path":"../Gl"
-        },
-        {
-            "path":"../Tools"
+            "path":"../"
         }
-
     ],
     "cxx":{
         "header_dirs": [

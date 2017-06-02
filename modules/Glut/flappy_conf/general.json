@@ -1,5 +1,5 @@
 {
-    "name":"test_Core",
+    "name":"GlutManager",
     "modules": [
         {
             "path":"../Core"
@@ -9,7 +9,11 @@
         },
         {
             "path":"../Gl"
+        },
+        {
+            "path":"../CoreComponents"
         }
+
 
     ],
     "cxx":{

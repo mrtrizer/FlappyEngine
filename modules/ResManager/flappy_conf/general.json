@@ -1,11 +1,11 @@
 {
-    "name":"test_Core",
+    "name":"ResManager",
     "modules": [
         {
-            "path":"../Gl"
+            "path":"../Tools"
         },
         {
-            "path":"../Tools"
+            "path":"../Core"
         }
 
     ],

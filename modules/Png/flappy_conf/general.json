@@ -1,5 +1,5 @@
 {
-    "name":"test_Core",
+    "name":"Png",
     "modules": [
         {
             "path":"../Gl"

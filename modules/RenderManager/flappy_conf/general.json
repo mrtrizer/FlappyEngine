@@ -1,11 +1,14 @@
 {
-    "name":"test_Core",
+    "name":"RenderManager",
     "modules": [
         {
-            "path":"../Gl"
+            "path":"../Core"
         },
         {
             "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
         }
 
     ],
