@@ -1,12 +1,16 @@
 {
-    "name":"Core",
-    "modules":[
+    "name":"test_Core",
+    "modules": [
+        {
+            "path":"../Core"
+        },
         {
             "path":"../Tools"
         },
         {
-            "path":"../EventBus"
+            "path":"../Gl"
         }
+
     ],
     "cxx":{
         "header_dirs": [
