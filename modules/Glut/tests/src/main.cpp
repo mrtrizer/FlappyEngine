@@ -1,6 +1,7 @@
 #include <memory>
 
 #include <GlutManager.h>
+#include <Entity.h>
 
 using namespace flappy;
 using namespace std;

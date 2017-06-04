@@ -13,15 +13,35 @@
         {
             "path":"../CoreComponents"
         }
-
-
     ],
     "cxx":{
+        "flags": [
+            "-std=c++1y"
+        ],
         "header_dirs": [
             "./src"
         ],
         "src_dirs": [
             "./src"
+        ]
+    },
+    "cmake": {
+        "packages": [
+            {
+                "name":"GLEW",
+                "libs":"${GLEW_LIBRARIES}",
+                "includes":"${GLEW_INCLUDE_DIR}"
+            },
+            {
+                "name":"GLUT",
+                "libs":"${GLUT_LIBRARIES}",
+                "includes":"${GLUT_INCLUDE_DIR}"
+            },
+            {
+                "name":"OpenGL",
+                "libs":"${OPENGL_LIBRARIES}",
+                "includes":"${OPENGL_INCLUDE_DIR}"
+            }
         ]
     }
 }
