@@ -6,9 +6,10 @@ namespace flappy {
 
 class GlutManager : public Manager<GlutManager>
 {
+public:
+    int startMainLoop();
 protected:
     void init() override;
-    int startMainLoop();
 
 private:
     int m_glutWindowId = 0;
