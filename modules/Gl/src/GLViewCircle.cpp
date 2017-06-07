@@ -1,7 +1,5 @@
 #include "GLViewCircle.h"
 
-#include <PresenterComponent.h>
-
 namespace flappy {
 
 using namespace std;

@@ -9,7 +9,6 @@
 
 namespace flappy {
 
-class PresenterComponent;
 class View;
 class SceneManager;
 class ScreenManager;
@@ -37,27 +36,16 @@ public:
     };
 
 
-    ViewManager(): m_bindings(ClassCounter<PresenterComponent>::count()) {}
+    ViewManager();
 
     void update(DeltaTime dt);
     void resize(int width, int height);
 
-    /// Assing custom View for PresenterComponent
-    template <typename PresenterT, typename ViewT>
-    void bind() {
-        m_bindings[ClassId<PresenterComponent,PresenterT>::id()] = std::make_shared<ViewFactory<ViewT>>();
-    }
-    
-    /// Create View for particular presenter.
-    /// @details Before using of this method, you need assign
-    /// custom View implementation for PresenterComponent,
-    /// using bind() method.
-    void addPresenter(const std::shared_ptr<PresenterComponent>& presenter);
+    void registerRenderElement(const SafePtr<View> renderElement);
 
 protected:
     struct Visual {
-        std::shared_ptr<PresenterComponent> presenter;
-        std::shared_ptr<View> view;
+        SafePtr<View> view;
         glm::mat4 pos;
         float z;
     };
@@ -67,7 +55,6 @@ protected:
 private:
     virtual void updateViewPort() = 0;
 
-    std::vector<std::shared_ptr<IViewFactory>> m_bindings;
     std::list<Visual> m_visuals;
 };
 

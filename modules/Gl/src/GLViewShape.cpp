@@ -1,5 +1,4 @@
 #include <glm/gtc/type_ptr.hpp>
-#include <PresenterComponent.h>
 
 #include "GLViewShape.h"
 
@@ -29,16 +28,12 @@ GLViewShape::GLViewShape() :
     GLView(shapeVShader, shapeFShader)
 {}
 
-void GLViewShape::update(const PresenterComponent& presenter) {
-    auto& shape = static_cast<const RectShape&>(presenter);
-    m_colorRGBA = GLTools::GLColorRGBA(shape.color());
-}
-
 void GLViewShape::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
+    m_glColorRGBA = GLTools::GLColorRGBA(m_color);
     getShader()->render(getAttribArray(), [this, mvMatrix, pMartrix](){
         glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
         glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-        glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
+        glUniform4fv(getShader()->findUniform("uColor"),1, reinterpret_cast<GLfloat *>(&m_glColorRGBA));
     });
 }
 

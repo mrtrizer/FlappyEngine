@@ -21,7 +21,6 @@ class GLViewSprite : public GLView<GLViewSprite>
 public:
     GLViewSprite();
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
-    void update(const PresenterComponent &) override;
 
 private:
     GLAttribArray m_rect;

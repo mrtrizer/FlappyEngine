@@ -7,6 +7,7 @@
 #include <GLShaderProgram.h>
 #include <GLAttribArray.h>
 #include <GLTools.h>
+#include <Color.h>
 
 namespace flappy {
 
@@ -15,12 +16,14 @@ namespace flappy {
 class GLViewShape: public GLView<GLViewShape> {
 public:
     GLViewShape();
-    void update(const PresenterComponent& presenter) override;
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     virtual const GLAttribArray & getAttribArray() const = 0;
+    void setColor(Color color) { m_color = color; }
+    Color color() { return m_color; }
 
 private:
-    GLTools::GLColorRGBA m_colorRGBA;
+    GLTools::GLColorRGBA m_glColorRGBA;
+    Color m_color;
 };
 
 } // flappy

@@ -3,27 +3,24 @@
 #include <SceneManager.h>
 #include <ScreenManager.h>
 #include <TransformComponent.h>
-#include <PresenterComponent.h>
+#include <View.h>
 
 namespace flappy {
 
 using namespace std;
 using namespace glm;
 
+ViewManager::ViewManager() {
+
+}
+
 void ViewManager::update(DeltaTime dt) {
 
-    for (auto i = m_visuals.begin(); i !=  m_visuals.end(); ) {
+    for (auto i = m_visuals.begin(); i !=  m_visuals.end(); i++) {
         auto& visual = *i;
-        if (visual.presenter.use_count() == 1) {
-            i = m_visuals.erase(i);
-            continue;
-        } else {
-            i++;
-        }
-        visual.presenter->update(dt);
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = visual.presenter->entity()->component<TransformComponent>();
+        auto curTransform = visual.view->entity()->component<TransformComponent>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->transformMatrix() * transformMatrix;
             z += curTransform->pos().z;
@@ -51,12 +48,8 @@ void ViewManager::update(DeltaTime dt) {
     redraw(m_visuals, pMatrix);
 }
 
-void ViewManager::addPresenter(const std::shared_ptr<PresenterComponent>& presenter) {
-    unsigned id = presenter->id();
-    if (m_bindings[id] == nullptr)
-        return ERROR_MSG(VOID_VALUE, "PresenterComponent component %d was not binded.", id);
-    auto visual = Visual{presenter, m_bindings[id]->build(), {}, 0};
-    presenter->setView(visual.view);
+void ViewManager::registerRenderElement(const SafePtr<View> renderElement) {
+    auto visual = Visual{renderElement, {}, 0};
     m_visuals.push_back(visual);
 }
 

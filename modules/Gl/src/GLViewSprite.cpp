@@ -1,8 +1,6 @@
 #include "GLViewSprite.h"
 
 #include <glm/gtc/type_ptr.hpp>
-#include <PresenterComponent.h>
-#include <SpriteComponent.h>
 #include <GLShaderProgram.h>
 #include <GLTextureRes.h>
 #include <ResManager.h>
@@ -103,13 +101,6 @@ void GLViewSprite::updateFrame() {
                 {0.5f * spriteSize.x, 0.5f * spriteSize.y} };
 
     m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
-}
-
-void GLViewSprite::update(const PresenterComponent & presenter){
-    auto & sprite = static_cast<const SpriteComponent &>(presenter);
-    m_colorRGBA = GLTools::GLColorRGBA(sprite.color());
-    m_quad = sprite.quad();
-    updateFrame();
 }
 
 } // flappy

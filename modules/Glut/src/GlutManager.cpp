@@ -82,12 +82,11 @@ namespace {
         onWindowResizeEvent.width = width;
         onWindowResizeEvent.height = height;
         g_entity->events()->post(onWindowResizeEvent);
+        glutPostRedisplay();
     }
 
     void render() {
         glutSwapBuffers();
-        glutPostRedisplay();
-
         auto updateEvent = Component::OnUpdate();
         updateEvent.dt = calcTimeDelta();
         g_entity->events()->post(updateEvent);
