@@ -53,7 +53,7 @@ public:
 
 private:
     std::shared_ptr<EventBus> m_eventBus;
-    std::vector<std::shared_ptr<ISubscription>> m_subscriptionVector;
+    std::list<std::shared_ptr<ISubscription>> m_subscriptionVector;
 };
 
 } // flappy

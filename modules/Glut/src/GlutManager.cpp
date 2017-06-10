@@ -93,6 +93,11 @@ namespace {
     }
 }
 
+GlutManager::GlutManager() :AGLManager({ClassId<Component,AppManager>().id()}) {
+
+}
+
+
 void GlutManager::init()
 {
     // Global pointer to Entity is used in glut callbacks
@@ -100,15 +105,11 @@ void GlutManager::init()
         throw std::runtime_error("Can't initialize glut twice.");
     g_entity = entity();
 
-    events()->subscribeIn([this](AManager::OnManagerAdded e) {
-        if (auto appManager = e.castTo<AppManager>()) {
-            if (initGlut(appManager->args())) {
-                int glutWindowId = initWindow("FlappyEngine", 600, 600);
-                if (glutWindowId > 0)
-                    m_glutWindowId = glutWindowId;
-            }
-        }
-    });
+    if (initGlut(manager<AppManager>()->args())) {
+        int glutWindowId = initWindow("FlappyEngine", 600, 600);
+        if (glutWindowId > 0)
+            m_glutWindowId = glutWindowId;
+    }
 }
 
 bool GlutManager::initGlut(std::vector<std::string> args) {

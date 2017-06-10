@@ -9,6 +9,7 @@
 
 #include <View.h>
 #include <ScreenManager.h>
+#include <AGLManager.h>
 
 #include "GLShaderProgram.h"
 #include "GLTools.h"
@@ -20,21 +21,14 @@ using namespace glm;
 using namespace std;
 
 void GLViewManager::init() {
-    ViewManager::init();
-    events()->subscribeIn([this](OnManagerAdded e) {
-        if (e.castTo<SceneManager>() != nullptr) {
-            resize(100,100);
-            LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
-            glClearColor(0.0, 0.0, 0.0, 0.0);
-            CHECK_GL_ERROR;
-            glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            CHECK_GL_ERROR;
-            glEnable (GL_BLEND);
-            CHECK_GL_ERROR;
-            updateViewPort();
-        }
-    });
-
+    LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    CHECK_GL_ERROR;
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR;
+    glEnable (GL_BLEND);
+    CHECK_GL_ERROR;
+    updateViewPort();
 }
 
 void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {

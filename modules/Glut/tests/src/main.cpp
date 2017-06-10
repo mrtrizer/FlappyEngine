@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     // Glut and render
     auto glutManager = rootEntity->createManager<GlutManager>();
     rootEntity->createManager<AppManager>(argc, argv);
-    rootEntity->createManager<ScreenManager>();
+    rootEntity->createManager<ScreenManager>(600, 600);
     rootEntity->createManager<GLViewManager>();
 
     // Scene

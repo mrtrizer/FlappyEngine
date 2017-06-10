@@ -11,6 +11,7 @@ namespace flappy {
 class ScreenManager: public Manager<ScreenManager>
 {
 public:
+    ScreenManager(int width, int height);
     glm::vec2 screenSize() const;
     void resize(int width, int height);
 

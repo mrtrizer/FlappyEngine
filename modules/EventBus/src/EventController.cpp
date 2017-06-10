@@ -8,4 +8,8 @@ EventController::EventController():
 
 }
 
+void EventController::unsubscribe(std::shared_ptr<ISubscription> subscription) {
+    m_subscriptionVector.remove(subscription);
+}
+
 } // flappy

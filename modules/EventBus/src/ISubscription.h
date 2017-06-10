@@ -13,7 +13,7 @@ enum class FlowStatus {
     CONTINUE
 };
 
-class ISubscription {
+class ISubscription: public std::enable_shared_from_this<ISubscription> {
 public:
     virtual ~ISubscription() = default;
     virtual FlowStatus call(const EventHandle& e) = 0;
@@ -22,7 +22,8 @@ public:
 template <typename EventT>
 class Subscription: public ISubscription {
 public:
-    Subscription(std::function<void(EventT)> func): m_func(func)
+    Subscription(std::function<void(EventT)> func):
+        m_func(func)
     {}
 
     FlowStatus call(const EventHandle& e) override {

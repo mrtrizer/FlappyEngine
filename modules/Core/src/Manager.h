@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <ClassId.h>
+
 #include "AManager.h"
 
 namespace flappy
@@ -10,6 +12,10 @@ namespace flappy
 template <typename DerivedT>
 class Manager: public AManager {
 public:
+    using ClassIdList = std::list<unsigned>;
+
+    using AManager::AManager;
+
     int managerId() override final {
         return ClassId<Component, DerivedT>::id();
     }
@@ -26,8 +32,8 @@ private:
 
     void initInternal() override final
     {
-        // Initilize manager first. To be prepeared when components try access it.
         init();
+        // And ofc send message informing children about the manager was initialized
         postEvent(createManagerEvent<OnManagerAdded>());
     }
 
@@ -36,6 +42,7 @@ private:
         // Send remove event first.
         // To allow components access manager before denitialization.
         postEvent(createManagerEvent<OnManagerRemoved>());
+
         deinit();
     }
 };

@@ -1,13 +1,15 @@
 #pragma once
 
 #include <Manager.h>
+#include <AGLManager.h>
 
 namespace flappy {
 
-class GlutManager : public Manager<GlutManager>
+class GlutManager : public AGLManager
 {
 public:
-    int startMainLoop();
+    GlutManager();
+    int startMainLoop() override;
 protected:
     void init() override;
 

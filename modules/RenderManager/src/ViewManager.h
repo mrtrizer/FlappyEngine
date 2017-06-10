@@ -39,7 +39,6 @@ public:
     ViewManager();
 
     void update(DeltaTime dt);
-    void resize(int width, int height);
 
     void registerRenderElement(const SafePtr<View> renderElement);
 

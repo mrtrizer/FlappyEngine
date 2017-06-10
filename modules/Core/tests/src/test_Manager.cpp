@@ -10,6 +10,7 @@
 
 using namespace flappy;
 using namespace std;
+using namespace fakeit;
 
 TEST_CASE("Add/Remove manager events") {
     auto entityRoot = std::make_shared<Entity>();
@@ -65,4 +66,45 @@ TEST_CASE("Add/Remove component events") {
 
     entityMiddle->removeComponent(componentMiddle);
     REQUIRE(onRemovedCalled == true);
+}
+
+
+class DependantTestComponent: public flappy::Component {
+public:
+    class IMock
+    {
+    public:
+        virtual void init() = 0;
+        virtual void deinit() = 0;
+        virtual void update(flappy::DeltaTime dt) = 0;
+    };
+
+    DependantTestComponent(IMock* mockComponent = nullptr):
+        Component({ClassId<Component, TestManager>().id()}),
+        m_mockComponent (mockComponent){
+
+    }
+
+    void init() override final {
+        if (m_mockComponent != nullptr)
+            m_mockComponent->init();
+    }
+private:
+    IMock* m_mockComponent;
+};
+
+TEST_CASE( "Initialization of component with dependencies") {
+    Mock<DependantTestComponent::IMock> mock;
+    Fake(Method(mock,init));
+
+    auto component = make_shared<DependantTestComponent>(&mock.get());
+
+    auto entity = make_shared<Entity>();
+    entity->addComponent(component);
+
+    Verify(Method(mock,init)).Exactly(0);
+
+    auto testManager = entity->createManager<TestManager>();
+
+    Verify(Method(mock,init)).Exactly(1);
 }

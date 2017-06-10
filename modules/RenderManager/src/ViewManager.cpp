@@ -53,11 +53,4 @@ void ViewManager::registerRenderElement(const SafePtr<View> renderElement) {
     m_visuals.push_back(visual);
 }
 
-void ViewManager::resize(int width, int height) {
-    if (width < 1 || height < 1)
-        throw runtime_error("Invalid screen size. It should be greater then 0.");
-    manager<ScreenManager>()->resize(width, height);
-    updateViewPort();
-}
-
 } // flappy
