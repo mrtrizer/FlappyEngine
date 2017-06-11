@@ -1,5 +1,3 @@
-Main Page {#mainpage}
-=========
 # FlappyEngine
 ## Tests:
 | Module | Status |
