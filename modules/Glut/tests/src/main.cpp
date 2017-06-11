@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
     auto rootEntity = std::make_shared<Entity>();
 
     // Glut and render
-    auto glutManager = rootEntity->createManager<GlutManager>();
-    rootEntity->createManager<AppManager>(argc, argv);
-    rootEntity->createManager<ScreenManager>(600, 600);
     rootEntity->createManager<GLViewManager>();
+    rootEntity->createManager<GlutManager>();
+    rootEntity->createManager<ScreenManager>(600, 600);
+    rootEntity->createManager<AppManager>(argc, argv);
+
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();
@@ -31,7 +32,8 @@ int main(int argc, char *argv[])
     // Some rect
     auto rectEntity = sceneEntity->createEntity();
     auto transformComponent = rectEntity->createComponent<TransformComponent>();
+    transformComponent->setScale({10.0f, 10.0f});
     auto rectComponent = rectEntity->createComponent<GLViewRect>();
 
-    return glutManager->startMainLoop();
+    return rootEntity->findComponent<AGLManager>()->startMainLoop();
 }

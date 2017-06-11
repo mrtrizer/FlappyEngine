@@ -70,8 +70,8 @@ bool Component::checkDependencies() {
 
         try {
             initInternal();
-        } catch (std::exception e) {
-            LOGI("Initialization error: %s", e.what());
+        } catch (std::exception& e) {
+            LOGE("Initialization error: %s", e.what());
             return false;
         }
 
@@ -93,9 +93,11 @@ bool Component::checkDependencies() {
 void Component::initExternal()
 {
     m_managerAddedSubscription = events()->subscribeIn([this] (OnManagerAdded e) {
-        // We also get event when sent OnManagerAdded if will send it
+        // We also get our own event if we will send it.
         // This check need only for Managers. May be I'll find better solution later.
-        // Without this check rend return we will recursively get this event and send next.
+        // I don't like very much that component indirectly depends of Manager because
+        // of this code.
+        // Without this check we would recursively send and get this event back.
         if (e.pointer == selfPointer<Component>())
             return;
         if (checkDependencies())

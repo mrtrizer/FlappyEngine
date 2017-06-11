@@ -40,6 +40,7 @@ namespace flappy {
 
 namespace {
 
+    int g_updateDelayMs = 16; // ~60 fps
     SafePtr<Entity> g_entity;
     std::chrono::steady_clock::time_point g_lastTime;
 
@@ -87,16 +88,25 @@ namespace {
 
     void render() {
         glutSwapBuffers();
+    }
+
+    void timer(int e) {
         auto updateEvent = Component::OnUpdate();
         updateEvent.dt = calcTimeDelta();
         g_entity->events()->post(updateEvent);
+
+        // Redraw screen with new object data.
+        glutPostRedisplay();
+
+        // Timer is a one shoot must be reset after being called.
+        // By using a timed event, your application should run about the same speed on any machine.
+        glutTimerFunc(g_updateDelayMs, timer, 0);
     }
 }
 
 GlutManager::GlutManager() :AGLManager({ClassId<Component,AppManager>().id()}) {
 
 }
-
 
 void GlutManager::init()
 {
@@ -139,6 +149,7 @@ int GlutManager::initWindow(std::string name, int width, int height)
     glutPassiveMotionFunc(passiveMotionFunc);
     glutReshapeFunc(resizeWindow);
     glutDisplayFunc(render);
+    glutTimerFunc(g_updateDelayMs, timer, 0);
 
     return windowId;
 }

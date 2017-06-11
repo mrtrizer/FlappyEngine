@@ -1,5 +1,5 @@
 {
-    "name":"GlutManager",
+    "name":"Sdl2",
     "modules": [
         {
             "path":"../Core"
@@ -33,9 +33,14 @@
                 "includes":"${GLEW_INCLUDE_DIRS}"
             },
             {
-                "name":"GLUT",
-                "libs":"${GLUT_LIBRARIES}",
-                "includes":"${GLUT_INCLUDE_DIRS}"
+                "name":"SDL2",
+                "libs":"${SDL2_LIBRARIES}",
+                "includes":"${SDL2_INCLUDE_DIRS}"
+            },
+            {
+                "name":"SDL_Image",
+                "libs":"${SDL_IMAGE_LIBRARIES}",
+                "includes":"${SDL_IMAGE_INCLUDE_DIRS}"
             },
             {
                 "name":"OpenGL",
