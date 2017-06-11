@@ -19,13 +19,16 @@ before_install:
  - sudo apt-get install -qq qt55base libglew-dev mesa-common-dev freeglut3-dev
 
 script:
-#opengl test project
+#core tests
  - pushd modules/Core/tests
- - flappy gen cmake
- - pushd generated/cmake
- - cmake -G "Unix Makefiles"
- - make
- - ./test_Core
+ - flappy build cmake
+ - ./generated/cmake/test_Core
+ - popd
+
+#opengl test project (build only)
+ - pushd modules/Glut/tests
+ - flappy build cmake
+ - popd
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
