@@ -38,10 +38,6 @@ void Component::subscribeEvents() {
 void Component::setParentEntity(SafePtr<Entity> entity)
 {
     if (entity != m_entity) {
-        // Deinit if entity was set before
-        if (m_entity) {
-            deinitExternal();
-        }
         m_entity = entity;
         if (entity) {
             initExternal();
@@ -105,15 +101,6 @@ void Component::initExternal()
     });
     if (checkDependencies())
         events()->unsubscribe(m_managerAddedSubscription.lock());
-}
-
-void Component::deinitExternal()
-{
-    // Send remove event first.
-    // To allow components access manager before denitialization.
-    deinitInternal();
-
-    events()->unsubscribe(m_managerRemovedSubscription.lock());
 }
 
 } // flappy

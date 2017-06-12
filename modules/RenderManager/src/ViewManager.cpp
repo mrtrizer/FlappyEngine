@@ -1,5 +1,6 @@
 #include "ViewManager.h"
 
+#include <Tools.h>
 #include <SceneManager.h>
 #include <ScreenManager.h>
 #include <TransformComponent.h>
@@ -10,9 +11,9 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-ViewManager::ViewManager() {
-
-}
+ViewManager::ViewManager(std::list<unsigned> dependencies):
+    Manager(Tools::concat(dependencies, {SceneManager::id()}))
+{}
 
 void ViewManager::update(DeltaTime dt) {
 

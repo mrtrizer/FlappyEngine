@@ -16,7 +16,11 @@ public:
 
     using AManager::AManager;
 
-    int managerId() override final {
+    unsigned managerId() override final {
+        return ClassId<Component, DerivedT>::id();
+    }
+
+    static unsigned id() {
         return ClassId<Component, DerivedT>::id();
     }
 

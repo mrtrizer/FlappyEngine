@@ -20,6 +20,9 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
+GLViewManager::GLViewManager(): ViewManager({AGLManager::id(), ScreenManager::id()})
+{}
+
 void GLViewManager::init() {
     LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
     glClearColor(0.0, 0.0, 0.0, 0.0);

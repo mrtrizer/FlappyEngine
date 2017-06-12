@@ -11,7 +11,7 @@ public:
 
     using Component::Component;
 
-    virtual int managerId() = 0;
+    virtual unsigned managerId() = 0;
 
 protected:
 

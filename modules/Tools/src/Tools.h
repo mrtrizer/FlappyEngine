@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <iostream>
 #include <regex>
+#include <list>
 
 #include <glm/vec2.hpp>
 
@@ -82,6 +83,8 @@ namespace Tools
             vector.resize(pos + 1);
         return vector.at(pos);
     }
+
+    std::list<unsigned> concat(std::list<unsigned> first, std::list<unsigned> second);
 }
 
 using DeltaTime = float;

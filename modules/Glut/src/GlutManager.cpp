@@ -104,9 +104,7 @@ namespace {
     }
 }
 
-GlutManager::GlutManager() :AGLManager({ClassId<Component,AppManager>().id()}) {
-
-}
+GlutManager::GlutManager() :AGLManager({AppManager::id()}) {}
 
 void GlutManager::init()
 {

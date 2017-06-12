@@ -12,6 +12,7 @@ class GLViewFactory;
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
 class GLViewManager : public ViewManager {
 public:
+    GLViewManager();
     void redraw(std::list<Visual> &, glm::mat4 &) override;
     void init() override;
 protected:

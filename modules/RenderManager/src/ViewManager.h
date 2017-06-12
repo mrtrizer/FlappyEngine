@@ -17,6 +17,7 @@ class ScreenManager;
 /// @details Holds a pointer to GWorldModel.
 class ViewManager: public Manager<ViewManager> {
 private:
+
     class IViewFactory {
     public:
         virtual ~IViewFactory() = default;
@@ -35,8 +36,7 @@ public:
         float height;
     };
 
-
-    ViewManager();
+    ViewManager(std::list<unsigned>);
 
     void update(DeltaTime dt);
 
