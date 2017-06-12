@@ -12,8 +12,8 @@ public:
     GLRenderElementFactory(): RenderElementFactory({ViewManager::id()})
     {}
 
-    std::shared_ptr<Component> createSpriteRender(SafePtr<MeshComponent>) override;
-    std::shared_ptr<Component> createMeshRender(SafePtr<MeshComponent>) override;
+    std::shared_ptr<View> createSpriteRender(SafePtr<MeshComponent>) override;
+    std::shared_ptr<View> createMeshRender(SafePtr<MeshComponent>) override;
 
 };
 

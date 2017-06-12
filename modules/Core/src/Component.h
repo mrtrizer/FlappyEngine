@@ -47,6 +47,8 @@ public:
         return m_eventController;
     }
 
+    bool isInitialized() { return !m_managerRemovedSubscription.expired(); }
+
     struct OnManager: public IEvent
     {
         unsigned id;

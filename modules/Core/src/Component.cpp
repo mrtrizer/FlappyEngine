@@ -38,6 +38,10 @@ void Component::subscribeEvents() {
 void Component::setParentEntity(SafePtr<Entity> entity)
 {
     if (entity != m_entity) {
+        // Deinit if entity was set before
+        if (m_entity) {
+            deinitExternal();
+        }
         m_entity = entity;
         if (entity) {
             initExternal();
@@ -73,11 +77,14 @@ bool Component::checkDependencies() {
 
         // Subscribe to remove manager events
         m_managerRemovedSubscription = events()->subscribeIn([this] (OnManagerRemoved) {
+
             for (unsigned dependenceTypeId : m_dependenceClassIdList)
                 if (!isManagerRegistered(dependenceTypeId)) {
                     deinitInternal();
                     // Unsubscribe not to be deinitialized twice
                     events()->unsubscribe(m_managerRemovedSubscription.lock());
+
+                    break;
                 }
         });
         return true;
@@ -89,6 +96,7 @@ bool Component::checkDependencies() {
 void Component::initExternal()
 {
     m_managerAddedSubscription = events()->subscribeIn([this] (OnManagerAdded e) {
+
         // We also get our own event if we will send it.
         // This check need only for Managers. May be I'll find better solution later.
         // I don't like very much that component indirectly depends of Manager because
@@ -101,6 +109,21 @@ void Component::initExternal()
     });
     if (checkDependencies())
         events()->unsubscribe(m_managerAddedSubscription.lock());
+
+
+}
+
+void Component::deinitExternal()
+{
+    // check, was deinit called before
+    if (!isInitialized())
+        return;
+
+    // Send remove event first.
+    // To allow components access manager before denitialization.
+    deinitInternal();
+
+    events()->unsubscribe(m_managerRemovedSubscription.lock());
 }
 
 } // flappy

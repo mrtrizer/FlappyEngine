@@ -35,7 +35,7 @@ void ViewManager::update(DeltaTime dt) {
         visual.z = z;
     };
 
-    auto scene = entity()->component<SceneManager>();
+    auto scene = manager<SceneManager>();
     if (scene == nullptr)
         return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
 

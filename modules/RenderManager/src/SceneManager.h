@@ -18,19 +18,6 @@ class SceneManager: public Manager<SceneManager>
 {
 public:
 
-    void regiser(SafePtr<Entity> entity);
-
-    void unregiser(SafePtr<Entity> entity);
-
-    template <typename ... Components>
-    void each(std::function<void(SafePtr<Entity>)> func)
-    {
-        for (auto entity: m_entities) {
-            if (check<Components...>(entity))
-                func(entity);
-        }
-    }
-
     void setMainCamera(const SafePtr<CameraComponent>& camera);
 
     SafePtr<CameraComponent> mainCamera() const;

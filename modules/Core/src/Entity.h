@@ -72,25 +72,10 @@ public:
 
     // Manager managment
 
-    /// Add manager to the list of components.
-    /// Entity will be set as manager's parent.
-    /// Method Component::init() will be called.
-    template <typename ManagerT>
-    void addManager(std::shared_ptr<ManagerT> manager);
-
-    /// Create manager and add to the component list
-    template <typename ManagerT, typename ... Args>
-    std::shared_ptr<ManagerT> createManager(Args ... args);
-
     /// Returns manager from component list of entity.
     /// Throws runtime_error if manager is not found.
     template<typename ManagerT>
     std::shared_ptr<ManagerT> findManager();
-
-    /// Remove manager from component list
-    template <typename ManagerT>
-    void removeManager(std::shared_ptr<ManagerT> manager);
-
 
 
     // Entity managment
@@ -254,22 +239,6 @@ std::list<std::shared_ptr<ComponentT>> Entity::findComponents(unsigned depth) co
 
 // Manager managment
 
-template <typename ManagerT>
-void Entity::addManager(std::shared_ptr<ManagerT> manager)
-{
-    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
-
-    addComponent(manager);
-}
-
-template <typename ManagerT, typename ... Args>
-std::shared_ptr<ManagerT> Entity::createManager(Args ... args)
-{
-    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
-
-    return createComponent<ManagerT>(args...);
-}
-
 template<typename ManagerT>
 std::shared_ptr<ManagerT> Entity::findManager()
 {
@@ -279,14 +248,6 @@ std::shared_ptr<ManagerT> Entity::findManager()
         return manager;
     else
         throw std::runtime_error("Manager is not added to this entity.");
-}
-
-template <typename ManagerT>
-void Entity::removeManager(std::shared_ptr<ManagerT> manager)
-{
-    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
-
-    removeComponent(manager);
 }
 
 } // flappy

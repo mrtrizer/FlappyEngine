@@ -31,18 +31,18 @@ TEST_CASE("Add/Remove manager events") {
             onRemovedCalled = true;
     });
 
-    auto testManager = entityRoot->createManager<TestManager>();
+    auto testManager = entityRoot->createComponent<TestManager>();
     REQUIRE(onAddedCalled == true);
     REQUIRE(onRemovedCalled == false);
 
-    entityRoot->removeManager(testManager);
+    entityRoot->removeComponent(testManager);
     REQUIRE(onRemovedCalled == true);
 }
 
 TEST_CASE("Add/Remove component events") {
     auto entityRoot = std::make_shared<Entity>();
     auto entityMiddle = entityRoot->createEntity();
-    auto testManager = entityRoot->createManager<TestManager>();
+    auto testManager = entityRoot->createComponent<TestManager>();
 
     auto componentMiddle = std::make_shared<Component>();
 
@@ -104,7 +104,7 @@ TEST_CASE( "Initialization of component with dependencies") {
 
     Verify(Method(mock,init)).Exactly(0);
 
-    auto testManager = entity->createManager<TestManager>();
+    auto testManager = entity->createComponent<TestManager>();
 
     Verify(Method(mock,init)).Exactly(1);
 }

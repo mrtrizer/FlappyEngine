@@ -8,12 +8,13 @@
 namespace flappy {
 
 class MeshComponent: public Component {
-protected:
+public:
     MeshComponent(): Component({RenderElementFactory::id()})
     {}
 
+protected:
     void init() override {
-        m_renderElement = manager<RenderElementFactory>()->createRect();
+        m_renderElement = manager<RenderElementFactory>()->createMeshRender(selfPointer<MeshComponent>());
         entity()->addComponent(m_renderElement);
     }
 
