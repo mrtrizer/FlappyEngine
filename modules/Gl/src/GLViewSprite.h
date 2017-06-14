@@ -19,17 +19,19 @@ class SpriteComponent;
 class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
-    GLViewSprite();
+    GLViewSprite(SafePtr<SpriteComponent> spriteComponent);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
 
 private:
     GLAttribArray m_rect;
 
+    SafePtr<SpriteComponent> m_spriteComponent;
+
     GLTools::GLColorRGBA m_colorRGBA;
 
     std::vector<GLTools::Vertex> m_vertexList;
 
-    std::shared_ptr<QuadRes> m_quad;
+    std::shared_ptr<QuadRes> m_quadRes;
 
     void updateFrame();
 };

@@ -2,12 +2,12 @@
 
 #include "GLViewSprite.h"
 #include "GLViewRect.h"
-#include "GLViewCircle.h"
 
 namespace flappy {
 
-std::shared_ptr<View> GLRenderElementFactory::createSpriteRender(SafePtr<MeshComponent>) {
-    return std::make_shared<GLViewRect>();
+std::shared_ptr<View> GLRenderElementFactory::createSpriteRender(SafePtr<SpriteComponent> spriteComponent) {
+    return std::make_shared<GLViewSprite>(spriteComponent);
+
 }
 
 std::shared_ptr<View> GLRenderElementFactory::createMeshRender(SafePtr<MeshComponent>) {

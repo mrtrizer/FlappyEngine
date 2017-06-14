@@ -5,6 +5,7 @@
 #include <GLTextureRes.h>
 #include <ResManager.h>
 #include <QuadRes.h>
+#include <SpriteComponent.h>
 
 namespace flappy {
 
@@ -37,24 +38,27 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite() :
+GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent) :
     GLView<GLViewSprite>(spriteVShader, spriteFShader),
     m_rect(GL_TRIANGLE_STRIP),
     m_vertexList{ {-0.5f, -0.5f},
                 {-0.5f, 0.5f},
                 {0.5f, -0.5f},
-                {0.5f, 0.5f} }
+                {0.5f, 0.5f} },
+    m_quadRes(spriteComponent->getQuadRes()),
+    m_colorRGBA(GLTools::GLColorRGBA(spriteComponent->getColorRGBA()))
 {
+
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    if (m_quad != nullptr) {
-        if (m_quad->resUpdated()) {
-            m_quad = static_pointer_cast<QuadRes>(m_quad->lastRes());
+    if (m_quadRes != nullptr) {
+        if (m_quadRes->resUpdated()) {
+            m_quadRes = static_pointer_cast<QuadRes>(m_quadRes->lastRes());
             updateFrame();
         }
         getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
-            auto texture = m_quad->texture();
+            auto texture = m_quadRes->texture();
             glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
             glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
@@ -65,9 +69,9 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 }
 
 void GLViewSprite::updateFrame() {
-    auto texture = m_quad->texture();
+    auto texture = m_quadRes->texture();
 
-    auto spriteInfo = m_quad->spriteInfo();
+    auto spriteInfo = m_quadRes->spriteInfo();
 
     auto rectInAtlas = spriteInfo.rectInAtlas;
 
