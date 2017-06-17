@@ -33,7 +33,7 @@ public:
     Component& operator=(const Component&) = delete;
     Component(Component&&) = default;
     Component& operator=(Component&&) & = default;
-    virtual ~Component() = default;
+    virtual ~Component();
 
     /// Returns parent entity (can be null if conponent is not added to entity)
     SafePtr<Entity> entity() const
@@ -130,8 +130,7 @@ private:
     std::shared_ptr<EventController> m_eventController;
 
     ClassIdList m_dependenceClassIdList;
-    std::weak_ptr<ISubscription> m_managerAddedSubscription;
-    std::weak_ptr<ISubscription> m_managerRemovedSubscription;
+    std::weak_ptr<ISubscription> m_updateSubscription;
 
     void subscribeEvents();
 
@@ -141,15 +140,19 @@ private:
 
     bool checkDependencies();
 
-    /// External init subscribe component to dependencies
-    /// to init component once all dependencies was initialized.
-    /// After that it call initInternal which is overriden in
-    /// Manager template class.
-    void initExternal();
+    void tryInit();
 
-    /// Unsubscribes component from all events first. And then
-    /// calls deinitInternal.
-    void deinitExternal();
+    void tryDeinit();
+
+    void addedToEntityInternal();
+
+    void removedFromEntityInternal();
+
+    virtual void addedToEntity()
+    {}
+
+    virtual void removedFromEntity()
+    {}
 
     /// By default just calls init(). In Manager implementation
     /// it also emits event about themself to dependants.

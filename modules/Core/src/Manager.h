@@ -51,7 +51,23 @@ private:
         // To allow components access manager before denitialization.
         postEvent(createManagerEvent<OnManagerRemoved>());
 
+        // If we have parent manager of same type, notify dependant components
+        if (isManagerRegistered(id()))
+            postEvent(createManagerEvent<OnManagerAdded>());
+
         deinit();
+    }
+
+    void addedToEntity() override final
+    {
+        if (isInitialized())
+            postEvent(createManagerEvent<OnManagerAdded>());
+    }
+
+    void removedFromEntity() override final
+    {
+        if (isInitialized())
+            postEvent(createManagerEvent<OnManagerRemoved>());
     }
 };
 
