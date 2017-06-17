@@ -47,7 +47,7 @@ public:
         return m_eventController;
     }
 
-    bool isInitialized() { return !m_managerRemovedSubscription.expired(); }
+    bool isInitialized() { return m_initializedFlag; }
 
     struct OnManager: public IEvent
     {
@@ -124,6 +124,7 @@ protected:
     {}
 
 private:
+    bool m_initializedFlag = false;
     SafePtr<Entity> m_entity;
     TypeMap<Component, SafePtr<AManager>> m_managers;
     std::shared_ptr<EventController> m_eventController;

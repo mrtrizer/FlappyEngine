@@ -36,6 +36,8 @@ private:
 
     void initInternal() override final
     {
+        LOGI("%s::initInternal()", typeName<DerivedT>().c_str());
+
         init();
         // And ofc send message informing children about the manager was initialized
         postEvent(createManagerEvent<OnManagerAdded>());
@@ -43,6 +45,8 @@ private:
 
     void deinitInternal() override final
     {
+        LOGI("%s::deinitInternal()", typeName<DerivedT>().c_str());
+
         // Send remove event first.
         // To allow components access manager before denitialization.
         postEvent(createManagerEvent<OnManagerRemoved>());

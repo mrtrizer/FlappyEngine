@@ -1,5 +1,7 @@
 #include "EventController.h"
 
+#include <Tools.h>
+
 namespace flappy {
 
 EventController::EventController():

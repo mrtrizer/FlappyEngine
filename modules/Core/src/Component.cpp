@@ -77,13 +77,15 @@ bool Component::checkDependencies() {
 
         // Subscribe to remove manager events
         m_managerRemovedSubscription = events()->subscribeIn([this] (OnManagerRemoved) {
+            if (!isInitialized())
+                return;
 
             for (unsigned dependenceTypeId : m_dependenceClassIdList)
                 if (!isManagerRegistered(dependenceTypeId)) {
                     deinitInternal();
                     // Unsubscribe not to be deinitialized twice
                     events()->unsubscribe(m_managerRemovedSubscription.lock());
-
+                    m_initializedFlag = false;
                     break;
                 }
         });
@@ -102,13 +104,19 @@ void Component::initExternal()
         // I don't like very much that component indirectly depends of Manager because
         // of this code.
         // Without this check we would recursively send and get this event back.
-        if (e.pointer == selfPointer<Component>())
+        if (isInitialized())
             return;
-        if (checkDependencies())
+        m_initializedFlag = true;
+        if (checkDependencies()) {
             events()->unsubscribe(m_managerAddedSubscription.lock());
+        } else {
+            m_initializedFlag = false;
+        }
     });
-    if (checkDependencies())
+    if (checkDependencies()) {
         events()->unsubscribe(m_managerAddedSubscription.lock());
+        m_initializedFlag = true;
+    }
 
 
 }
@@ -124,6 +132,8 @@ void Component::deinitExternal()
     deinitInternal();
 
     events()->unsubscribe(m_managerRemovedSubscription.lock());
+
+    m_initializedFlag = false;
 }
 
 } // flappy
