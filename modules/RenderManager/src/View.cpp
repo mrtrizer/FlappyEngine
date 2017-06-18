@@ -1,6 +1,5 @@
 #include "View.h"
 
-#include <AManager.h>
 #include <ViewManager.h>
 
 namespace flappy {

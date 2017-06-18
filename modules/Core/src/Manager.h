@@ -17,7 +17,7 @@ public:
     using IManager::IManager;
 
     unsigned managerId() override final {
-        return ClassId<IManager, DerivedT>::id();
+        return ClassId<Component, DerivedT>::id();
     }
 
     static unsigned id() {

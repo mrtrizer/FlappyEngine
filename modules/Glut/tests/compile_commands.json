@@ -11,11 +11,6 @@
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Glut/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/AManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/AManager.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/AManager.cpp"
-},
-{
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Glut/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
   "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp",
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp"
 },
@@ -23,6 +18,11 @@
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Glut/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
   "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Glut/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp"
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Glut/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
