@@ -24,18 +24,17 @@ Component::Component(ClassIdList dependenceClassIdList)
 }
 
 Component::~Component() {
-    if (isInitialized())
-        tryDeinit();
+
 }
 
 void Component::subscribeEvents() {
-    events()->subscribeIn([this](const AManager::OnManagerAdded& e) {
+    events()->subscribeIn([this](const OnManagerAdded& e) {
         m_managers.setById(e.id, e.pointer);
         if (!isInitialized() && allDependenciesReady())
             tryInit();
     });
-    events()->subscribeIn([this](const AManager::OnManagerRemoved& e) {
-        m_managers.setById(e.id, SafePtr<AManager>());
+    events()->subscribeIn([this](const OnManagerRemoved& e) {
+        m_managers.setById(e.id, SafePtr<IManager>());
         if (isInitialized() && !allDependenciesReady())
             tryDeinit();
     });
@@ -104,6 +103,10 @@ void Component::addedToEntityInternal() {
 }
 
 void Component::removedFromEntityInternal()
-{}
+{
+    if (isInitialized())
+        tryDeinit();
+    removedFromEntity();
+}
 
 } // flappy

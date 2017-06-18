@@ -13,7 +13,7 @@ using namespace glm;
 using namespace Tools;
 
 void CameraComponent::init() {
-    events()->subscribeIn([this](AManager::OnManagerAdded e) {
+    events()->subscribeIn([this](OnManagerAdded e) {
         if (e.castTo<SceneManager>() != nullptr) {
             manager<SceneManager>()->setMainCamera(selfPointer<CameraComponent>());
         }

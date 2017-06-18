@@ -9,7 +9,7 @@ using namespace glm;
 using namespace std;
 
 View::View() {
-    events()->subscribeIn([this](AManager::OnManagerAdded e) {
+    events()->subscribeIn([this](OnManagerAdded e) {
         if (e.castTo<ViewManager>() != nullptr)
             manager<ViewManager>()->registerRenderElement(selfPointer<View>());
     });

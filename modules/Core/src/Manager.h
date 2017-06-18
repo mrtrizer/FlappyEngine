@@ -4,20 +4,20 @@
 
 #include <ClassId.h>
 
-#include "AManager.h"
+#include "IManager.h"
 
 namespace flappy
 {
 
 template <typename DerivedT>
-class Manager: public AManager {
+class Manager: public IManager {
 public:
     using ClassIdList = std::list<unsigned>;
 
-    using AManager::AManager;
+    using IManager::IManager;
 
     unsigned managerId() override final {
-        return ClassId<Component, DerivedT>::id();
+        return ClassId<IManager, DerivedT>::id();
     }
 
     static unsigned id() {

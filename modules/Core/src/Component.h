@@ -10,7 +10,7 @@
 namespace flappy
 {
 
-class AManager;
+class IManager;
 template <typename DerivedT>
 class Manager;
 class Entity;
@@ -52,7 +52,7 @@ public:
     struct OnManager: public IEvent
     {
         unsigned id;
-        SafePtr<AManager> pointer;
+        SafePtr<IManager> pointer;
         template <typename ManagerT>
         SafePtr<ManagerT> castTo() {
             if (ClassId<Component, ManagerT>::id() == id)
@@ -126,7 +126,7 @@ protected:
 private:
     bool m_initializedFlag = false;
     SafePtr<Entity> m_entity;
-    TypeMap<Component, SafePtr<AManager>> m_managers;
+    TypeMap<Component, SafePtr<IManager>> m_managers;
     std::shared_ptr<EventController> m_eventController;
 
     ClassIdList m_dependenceClassIdList;

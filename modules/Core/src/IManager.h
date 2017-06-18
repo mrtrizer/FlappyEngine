@@ -5,7 +5,7 @@
 
 namespace flappy {
 
-class AManager: public Component
+class IManager: public Component
 {
 public:
 

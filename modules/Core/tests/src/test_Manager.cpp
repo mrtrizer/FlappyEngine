@@ -7,6 +7,7 @@
 #include <Entity.h>
 
 #include "TestManager.h"
+#include "DependantTestComponent.h"
 
 using namespace flappy;
 using namespace std;
@@ -19,14 +20,14 @@ TEST_CASE("Add/Remove manager events") {
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](AManager::OnManagerAdded e) {
+    componentMiddle->events()->subscribeIn([&onAddedCalled](Component::OnManagerAdded e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](AManager::OnManagerRemoved e) {
+    componentMiddle->events()->subscribeIn([&onRemovedCalled](Component::OnManagerRemoved e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });
@@ -48,14 +49,14 @@ TEST_CASE("Add/Remove component events") {
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](AManager::OnManagerAdded e) {
+    componentMiddle->events()->subscribeIn([&onAddedCalled](Component::OnManagerAdded e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](AManager::OnManagerRemoved e) {
+    componentMiddle->events()->subscribeIn([&onRemovedCalled](Component::OnManagerRemoved e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });
@@ -68,34 +69,10 @@ TEST_CASE("Add/Remove component events") {
     REQUIRE(onRemovedCalled == true);
 }
 
-
-class DependantTestComponent: public flappy::Component {
-public:
-    class IMock
-    {
-    public:
-        virtual void init() = 0;
-        virtual void deinit() = 0;
-        virtual void update(flappy::DeltaTime dt) = 0;
-    };
-
-    DependantTestComponent(IMock* mockComponent = nullptr):
-        Component({ClassId<Component, TestManager>().id()}),
-        m_mockComponent (mockComponent){
-
-    }
-
-    void init() override final {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-private:
-    IMock* m_mockComponent;
-};
-
-TEST_CASE( "Initialization of component with dependencies") {
+TEST_CASE( "Init/deinit of component with dependencies") {
     Mock<DependantTestComponent::IMock> mock;
     Fake(Method(mock,init));
+    Fake(Method(mock,deinit));
 
     auto component = make_shared<DependantTestComponent>(&mock.get());
 
@@ -107,4 +84,12 @@ TEST_CASE( "Initialization of component with dependencies") {
     auto testManager = entity->createComponent<TestManager>();
 
     Verify(Method(mock,init)).Exactly(1);
+
+    entity->removeComponent(testManager);
+
+    Verify(Method(mock,deinit)).Exactly(1);
+
+    testManager = entity->createComponent<TestManager>();
+
+    Verify(Method(mock,init)).Exactly(2);
 }

@@ -89,16 +89,6 @@ TEST_CASE("component<ComponentT>()") {
     REQUIRE(component == testEntity->component<Component>());
 }
 
-
-// Manager managment
-
-TEST_CASE("findManager<ManagerT>()") {
-    auto testEntity = std::make_shared<Entity>();
-    auto testManager = testEntity->createComponent<TestManager>();
-
-    REQUIRE(testEntity->findManager<TestManager>() == testManager);
-}
-
 // Entity managment
 
 TEST_CASE( "root() parent()" )

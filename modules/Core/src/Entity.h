@@ -69,15 +69,6 @@ public:
     std::list<std::shared_ptr<ComponentT>> findComponents(unsigned depth = 0) const;
 
 
-
-    // Manager managment
-
-    /// Returns manager from component list of entity.
-    /// Throws runtime_error if manager is not found.
-    template<typename ManagerT>
-    std::shared_ptr<ManagerT> findManager();
-
-
     // Entity managment
 
     /// Returns parent of current entity or nullptr
@@ -114,7 +105,7 @@ private:
     std::list<std::shared_ptr<Component>> m_components;
     std::list<std::shared_ptr<Entity>> m_entities;
     std::shared_ptr<EventController> m_eventController;
-    TypeMap<Component, SafePtr<AManager>> m_managers;
+    TypeMap<Component, SafePtr<IManager>> m_managers;
     SafePtr<Entity> m_parent;
 
     void setParent(SafePtr<Entity> parent);
@@ -149,7 +140,7 @@ void Entity::addComponent(std::shared_ptr<ComponentT> component)
         throw std::runtime_error("Can't add a component to several entities.");
     component->setParentEntity(shared_from_this());
     m_components.push_back(component);
-    sendManagerEvents<AManager::OnManagerAdded>(component->events());
+    sendManagerEvents<IManager::OnManagerAdded>(component->events());
 }
 
 template <typename ComponentT, typename ... Args>
@@ -167,7 +158,7 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 {
     static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
 
-    sendManagerEvents<AManager::OnManagerRemoved>(component->events());
+    sendManagerEvents<IManager::OnManagerRemoved>(component->events());
     component->setParentEntity(SafePtr<Entity>());
     m_components.remove(component);
 }
@@ -231,23 +222,6 @@ template<typename ComponentT>
 std::list<std::shared_ptr<ComponentT>> Entity::findComponents(unsigned depth) const
 {
     return findComponents<ComponentT>([](const ComponentT&){ return true; }, depth);
-}
-
-
-
-
-
-// Manager managment
-
-template<typename ManagerT>
-std::shared_ptr<ManagerT> Entity::findManager()
-{
-    static_assert(isBaseOf<AManager, ManagerT>(), "Type must be a descendant of Manager");
-
-    if (auto manager = findComponent<ManagerT>())
-        return manager;
-    else
-        throw std::runtime_error("Manager is not added to this entity.");
 }
 
 } // flappy
