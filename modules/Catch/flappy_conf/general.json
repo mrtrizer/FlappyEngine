@@ -1,16 +1,15 @@
 {
-    "name":"ModuleTests",
+    "name":"Catch",
     "modules": [
-        {
-            "path":"../"
-        }
     ],
     "cxx":{
         "header_dirs": [
-            "./src"
+            "./src",
+            "./libs"
         ],
         "src_dirs": [
-            "./src"
+            "./src",
+            "./libs"
         ]
     }
 }

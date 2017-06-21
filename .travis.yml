@@ -20,15 +20,51 @@ before_install:
  - sudo apt-get install -qq qt55base libglew-dev mesa-common-dev freeglut3-dev libxi-dev
 
 script:
-#core tests
+#Core tests
  - pushd modules/Core/tests
  - flappy build cmake
- - ./generated/cmake/test_Core
+ - ./generated/cmake/ModuleTests
  - popd
 
-#opengl test project (build only)
+#Gl test project (build only)
  - pushd modules/Glut/tests
  - flappy build cmake
+ - popd
+
+#Std test project (build only)
+ - pushd modules/Std/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
+#ResManager test project (build only)
+ - pushd modules/ResManager/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
+#Tools test project (build only)
+ - pushd modules/Tools/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
+#EventManager test project (build only)
+ - pushd modules/EventManager/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
+#CoreComponents test project (build only)
+ - pushd modules/CoreComponents/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
+#CoreResources test project (build only)
+ - pushd modules/CoreResources/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
  - popd
 
 after_success:

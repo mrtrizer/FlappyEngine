@@ -1,0 +1,157 @@
+[
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_CameraComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_CameraComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_CameraComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Color.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Color.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Color.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_PresenterComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_PresenterComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_PresenterComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_SceneManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_SceneManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_SceneManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ScreenManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ScreenManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ScreenManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Transform.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Transform.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_Transform.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_View.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_View.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_View.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ViewManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ViewManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/src/test_ViewManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/CameraComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/CameraComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/CameraComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/Color.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/Color.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/Color.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/RenderElementFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/RenderElementFactory.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/RenderElementFactory.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SceneManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SceneManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SceneManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ScreenManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ScreenManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ScreenManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SizeComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SizeComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/SizeComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/TransformComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/TransformComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/TransformComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/View.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/View.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/View.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/RenderManager",
+  "command": "/usr/bin/c++   -DRenderManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ViewManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ViewManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/src/ViewManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Catch",
+  "command": "/usr/bin/c++   -DCatch_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Core",
+  "command": "/usr/bin/c++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Core",
+  "command": "/usr/bin/c++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Core",
+  "command": "/usr/bin/c++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Tools",
+  "command": "/usr/bin/c++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/Tools",
+  "command": "/usr/bin/c++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/CoreResources",
+  "command": "/usr/bin/c++   -DCoreResources_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/CoreResources",
+  "command": "/usr/bin/c++   -DCoreResources_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/ResManager",
+  "command": "/usr/bin/c++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/ResManager",
+  "command": "/usr/bin/c++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/RenderManager/tests/generated/cmake/ResManager",
+  "command": "/usr/bin/c++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp"
+}
+]

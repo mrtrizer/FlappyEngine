@@ -12,6 +12,9 @@
         },
         {
             "path":"../CoreComponents"
+        },
+        {
+            "path":"../Std"
         }
     ],
     "cxx":{

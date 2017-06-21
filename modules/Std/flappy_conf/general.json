@@ -1,9 +1,16 @@
 {
-    "name":"ModuleTests",
+    "name":"Std",
     "modules": [
         {
-            "path":"../"
+            "path":"../ResManager"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../Tools"
         }
+
     ],
     "cxx":{
         "header_dirs": [

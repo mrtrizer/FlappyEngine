@@ -1,5 +1,5 @@
 {
-    "name":"ModuleTests",
+    "name":"test_GlutManager",
     "modules": [
         {
             "path":"../"
