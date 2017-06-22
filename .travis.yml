@@ -49,17 +49,17 @@ script:
  - ./generated/cmake/ModuleTests
  - popd
 
-#EventManager test project (build only)
- - pushd modules/EventManager/tests
+#EventBus test project (build only)
+ - pushd modules/EventBus/tests
  - flappy build cmake
  - ./generated/cmake/ModuleTests
  - popd
 
 #CoreComponents test project (build only)
- # - pushd modules/CoreComponents/tests
- # - flappy build cmake
- # - ./generated/cmake/ModuleTests
- # - popd
+# - pushd modules/CoreComponents/tests
+# - flappy build cmake
+# - ./generated/cmake/ModuleTests
+# - popd
 
 #CoreResources test project (build only)
  - pushd modules/CoreResources/tests
