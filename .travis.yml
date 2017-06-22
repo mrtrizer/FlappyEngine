@@ -56,10 +56,10 @@ script:
  - popd
 
 #CoreComponents test project (build only)
- - pushd modules/CoreComponents/tests
- - flappy build cmake
- - ./generated/cmake/ModuleTests
- - popd
+ # - pushd modules/CoreComponents/tests
+ # - flappy build cmake
+ # - ./generated/cmake/ModuleTests
+ # - popd
 
 #CoreResources test project (build only)
  - pushd modules/CoreResources/tests
