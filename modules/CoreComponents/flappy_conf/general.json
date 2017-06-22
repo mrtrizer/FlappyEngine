@@ -6,11 +6,7 @@
         },
         {
             "path":"../Tools"
-        },
-        {
-            "path":"../Gl"
         }
-
     ],
     "cxx":{
         "header_dirs": [

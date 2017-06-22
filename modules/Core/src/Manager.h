@@ -27,7 +27,7 @@ public:
 private:
 
     template <typename EventT>
-    EventHandle createManagerEvent() {
+    EventHandle createComponentEvent() {
         auto event = EventT();
         event.id = managerId();
         event.pointer = selfPointer<Manager<DerivedT>>();
@@ -40,7 +40,7 @@ private:
 
         init();
         // And ofc send message informing children about the manager was initialized
-        postEvent(createManagerEvent<OnManagerAdded>());
+        postEvent(createComponentEvent<OnManagerAdded>());
     }
 
     void deinitInternal() override final
@@ -49,11 +49,11 @@ private:
 
         // Send remove event first.
         // To allow components access manager before denitialization.
-        postEvent(createManagerEvent<OnManagerRemoved>());
+        postEvent(createComponentEvent<OnManagerRemoved>());
 
         // If we have parent manager of same type, notify dependant components
         if (isManagerRegistered(id()))
-            postEvent(createManagerEvent<OnManagerAdded>());
+            postEvent(createComponentEvent<OnManagerAdded>());
 
         deinit();
     }
@@ -61,13 +61,13 @@ private:
     void addedToEntity() override final
     {
         if (isInitialized())
-            postEvent(createManagerEvent<OnManagerAdded>());
+            postEvent(createComponentEvent<OnManagerAdded>());
     }
 
     void removedFromEntity() override final
     {
         if (isInitialized())
-            postEvent(createManagerEvent<OnManagerRemoved>());
+            postEvent(createComponentEvent<OnManagerRemoved>());
     }
 };
 
