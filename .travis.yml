@@ -67,5 +67,11 @@ script:
  - ./generated/cmake/ModuleTests
  - popd
 
+#JsonRes test project (build only)
+ - pushd modules/JsonRes/tests
+ - flappy build cmake
+ - ./generated/cmake/ModuleTests
+ - popd
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
