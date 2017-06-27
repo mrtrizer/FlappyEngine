@@ -1,8 +1,11 @@
 {
-    "name":"test_GlutManager",
+    "name":"ModuleTests",
     "modules": [
         {
             "path":"../"
+        },
+        {
+            "path":"../../Catch"
         }
     ],
     "cxx":{

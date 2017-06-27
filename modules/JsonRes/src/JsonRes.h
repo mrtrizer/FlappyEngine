@@ -9,30 +9,12 @@ namespace flappy {
 class JsonRes: public Res
 {
 public:
-    JsonRes(std::shared_ptr<TextRes> textRes):
-        m_textRes(textRes)
-    {
-        setFromStr(textRes->text());
-    }
+    JsonRes(std::shared_ptr<TextRes> textRes);
 
-    std::list<std::shared_ptr<Res>> dependencyList() const override {
-        return {m_textRes};
-    }
-
-    void setFromStr(const std::string& jsonStr) {
-        if (!jsonStr.empty())
-            m_json = nlohmann::json::parse(jsonStr);
-        else
-            m_json.clear();
-    }
-
-    std::string toStr() const {
-        return m_json.dump();
-    }
-
-    nlohmann::json& json() {
-        return m_json;
-    }
+    std::list<std::shared_ptr<Res>> dependencyList() const override;
+    void setFromStr(const std::string& jsonStr);
+    std::string toStr() const;
+    nlohmann::json& json();
 
     template <typename JsonT>
     void setJson(JsonT& json) {
