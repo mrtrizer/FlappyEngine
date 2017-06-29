@@ -3,6 +3,9 @@
     "modules": [
         {
             "path":"../"
+        },
+        {
+            "path":"../../FlappySdl2"
         }
     ],
     "cxx":{

@@ -34,7 +34,8 @@ public:
     /// @brief Useful for manual control of component creation.
     /// @details Use to create components with constructor with arguments.
     /// Also can be used to create multiple components of same type in
-    /// single entity.
+    /// single entity. Prefere using component<T>() for creation of components with
+    /// empty constructors.
     /// @see findComponent(), components()
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> createComponent(Args ... args);
@@ -50,13 +51,15 @@ public:
     template<typename ComponentT>
     std::shared_ptr<ComponentT> findComponent(std::function<bool(const ComponentT&)> predicate, unsigned depth = 0);
 
-    /// @brief Search single component of ComponentT without predicate. Returns first match or nullptr.
+    /// @brief Search single component of ComponentT without predicate in hierarchy.
+    /// @return Returns first match or nullptr.
     template<typename ComponentT>
     std::shared_ptr<ComponentT> findComponent(unsigned depth = 0);
 
     /// @brief Returns first component of required type else creates new component.
     /// @details Useful for default component managment. If only one component
-    /// of same type avaliable at same time.
+    /// of same type avaliable at same time. Prefere using this method to create
+    /// components without constructors.
     template<typename ComponentT>
     std::shared_ptr<ComponentT> component();
 

@@ -1,14 +1,14 @@
 #include <SDL/SDL_image.h>
 
-#include "sdltexturefactory.h"
-#include <gl/gltexture.h>
+#include "SdlGlTextureResFactory.h"
+#include <GLTextureRes.h>
 
 namespace flappy {
 
 using namespace std;
 
 /// @param resPath Path to resource dir
-SDLTextureFactory::SDLTextureFactory(string path):
+SdlGlTextureResFactory::SdlGlTextureResFactory(string path):
     m_path(path){
 
 }
@@ -16,12 +16,12 @@ SDLTextureFactory::SDLTextureFactory(string path):
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-std::shared_ptr<IRes> SDLTextureFactory::getTexture(const string& path) {
+std::shared_ptr<Res> SdlGlTextureResFactory::load(const std::string& path, SafePtr<ResManager>) {
     string fullPath = m_path + "/" + path + ".png";
 
     SDL_Surface *image;
     if(!(image = IMG_Load(fullPath.data()))) {
-        throw file_open_error();
+            throw file_open_error();
     }
 
     //TODO: Any other ways to switch R and B components?
