@@ -26,7 +26,7 @@ script:
  - ./generated/cmake/ModuleTests
  - popd
 
-#Gl test project (build only)
+#Glut test project (build only)
  - pushd modules/Glut/tests
  - flappy build cmake
  - popd
@@ -71,6 +71,11 @@ script:
  - pushd modules/JsonRes/tests
  - flappy build cmake
  - ./generated/cmake/ModuleTests
+ - popd
+
+#Sdl2Components test project (build only)
+ - pushd modules/Sdl2Components/tests
+ - flappy build cmake
  - popd
 
 after_success:

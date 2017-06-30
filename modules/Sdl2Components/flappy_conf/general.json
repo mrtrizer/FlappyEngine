@@ -1,5 +1,5 @@
 {
-    "name":"FlappySdl2",
+    "name":"Sdl2Components",
     "modules": [
         {
             "path":"../Gl"
@@ -20,6 +20,7 @@
         ]
     },
     "cmake": {
+        "module_path": "cmake",
         "packages": [
             {
                 "name":"GLUT",
@@ -32,9 +33,9 @@
                 "includes":"${GLEW_INCLUDE_DIRS}"
             },
             {
-                "name":"SDL_image",
-                "libs":"${SDL_IMAGE_LIBRARIES}",
-                "includes":"${SDL_IMAGE_INCLUDE_DIRS}"
+                "name":"SDL2_image",
+                "libs":"${SDL2_IMAGE_LIBRARY}",
+                "includes":"${SDL2_IMAGE_INCLUDE_DIR}"
             },
             {
                 "name":"SDL2",
