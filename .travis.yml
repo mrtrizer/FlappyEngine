@@ -6,6 +6,7 @@ dist: trusty
 before_install:
  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
  - sudo apt-get update -qq
+ - sudo apt-get install libsdl2-dev libsdl2-image-dev
  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
  - sudo apt-get install -qq gcc-5 g++-5 nodejs
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
