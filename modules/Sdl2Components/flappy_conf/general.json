@@ -23,16 +23,6 @@
         "module_path": "cmake",
         "packages": [
             {
-                "name":"GLUT",
-                "libs":"${GLUT_LIBRARIES}",
-                "includes":"${GLUT_INCLUDE_DIRS}"
-            },
-            {
-                "name":"GLEW",
-                "libs":"${GLEW_LIBRARIES}",
-                "includes":"${GLEW_INCLUDE_DIRS}"
-            },
-            {
                 "name":"SDL2_image",
                 "libs":"${SDL2_IMAGE_LIBRARY}",
                 "includes":"${SDL2_IMAGE_INCLUDE_DIR}"
@@ -41,11 +31,6 @@
                 "name":"SDL2",
                 "libs":"${SDL2_LIBRARIES}",
                 "includes":"${SDL2_INCLUDE_DIRS}"
-            },
-            {
-                "name":"OpenGL",
-                "libs":"${OPENGL_LIBRARIES}",
-                "includes":"${OPENGL_INCLUDE_DIRS}"
             }
         ]
     }

@@ -13,9 +13,6 @@
         {
             "path":"../RenderManager"
         }
-
-
-
     ],
     "cxx":{
         "header_dirs": [
@@ -23,6 +20,21 @@
         ],
         "src_dirs": [
             "./src"
+        ]
+    },
+    "cmake": {
+        "module_path": "cmake",
+        "packages": [
+            {
+                "name":"GLEW",
+                "libs":"${GLEW_LIBRARIES}",
+                "includes":"${GLEW_INCLUDE_DIRS}"
+            },
+            {
+                "name":"OpenGL",
+                "libs":"${OPENGL_LIBRARIES}",
+                "includes":"${OPENGL_INCLUDE_DIRS}"
+            }
         ]
     }
 }
