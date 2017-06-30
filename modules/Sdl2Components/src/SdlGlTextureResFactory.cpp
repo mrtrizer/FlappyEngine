@@ -1,4 +1,4 @@
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include "SdlGlTextureResFactory.h"
 #include <GLTextureRes.h>
@@ -21,7 +21,7 @@ std::shared_ptr<Res> SdlGlTextureResFactory::load(const std::string& path, SafeP
 
     SDL_Surface *image;
     if(!(image = IMG_Load(fullPath.data()))) {
-        throw file_open_error();
+            throw file_open_error();
     }
 
     //TODO: Any other ways to switch R and B components?
