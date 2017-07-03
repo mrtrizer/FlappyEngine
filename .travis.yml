@@ -74,8 +74,8 @@ script:
  - ./generated/cmake/ModuleTests
  - popd
 
-#Sdl2Components test project (build only)
- - pushd modules/Sdl2Components/tests
+#Sdl2Manager test project (build only)
+ - pushd modules/Sdl2Manager/tests
  - flappy build cmake
  - popd
 
