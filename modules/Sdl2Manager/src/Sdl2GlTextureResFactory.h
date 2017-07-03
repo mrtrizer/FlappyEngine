@@ -9,10 +9,10 @@
 
 namespace flappy {
 
-class SdlGlTextureResFactory :public ResFactory
+class Sdl2GlTextureResFactory :public ResFactory
 {
 public:
-    SdlGlTextureResFactory(std::string path);
+    Sdl2GlTextureResFactory(std::string path);
     std::shared_ptr<Res> load(const std::string&, SafePtr<ResManager>) override;
 
     class file_open_error {};

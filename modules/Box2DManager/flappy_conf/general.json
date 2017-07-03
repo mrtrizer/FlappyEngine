@@ -1,0 +1,21 @@
+{
+    "name":"CoreComponents",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src",
+            "./libs"
+        ],
+        "src_dirs": [
+            "./src",
+            "./libs"
+        ]
+    }
+}

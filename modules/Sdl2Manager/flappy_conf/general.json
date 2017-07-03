@@ -1,11 +1,14 @@
 {
-    "name":"Sdl2Components",
+    "name":"Sdl2Manager",
     "modules": [
         {
             "path":"../Gl"
         },
         {
             "path":"../ResManager"
+        },
+        {
+            "path":"../CoreComponents"
         }
     ],
     "cxx":{

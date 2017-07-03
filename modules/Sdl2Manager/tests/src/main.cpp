@@ -1,6 +1,6 @@
 #include <memory>
 
-#include <GlutManager.h>
+#include <Sdl2Manager.h>
 #include <Entity.h>
 #include <AppManager.h>
 #include <SceneManager.h>
@@ -13,6 +13,7 @@
 #include <QuadRes.h>
 #include <QuadResFactory.h>
 #include <TextureRes.h>
+#include <Sdl2GlTextureResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -21,8 +22,8 @@ int main(int argc, char *argv[])
 {
     auto rootEntity = std::make_shared<Entity>();
 
-    // Glut and render
-    rootEntity->component<GlutManager>();
+    // Sdl2 and render
+    rootEntity->component<Sdl2Manager>();
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
 
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
     sceneEntity->component<GLViewManager>();
     sceneEntity->component<GLRenderElementFactory>();
     sceneEntity->component<ResManager>()->bindResFactory<QuadRes>(std::make_shared<QuadResFactory>());
+    sceneEntity->component<ResManager>()->bindResFactory<TextureRes>(std::make_shared<Sdl2GlTextureResFactory>("."));
 
     // Some rect
     auto rectEntity = sceneEntity->createEntity();

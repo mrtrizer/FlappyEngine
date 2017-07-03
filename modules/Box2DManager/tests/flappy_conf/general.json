@@ -1,5 +1,5 @@
 {
-    "name":"ModuleTests",
+    "name":"CoreComponents",
     "modules": [
         {
             "path":"../"
