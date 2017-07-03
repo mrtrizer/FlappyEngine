@@ -21,6 +21,8 @@
 #include <GLViewRect.h>
 #include <GLViewSprite.h>
 
+#define CHECK_SDL_ERROR checkSdlError(__FILE__, __FUNCTION__, __LINE__)
+
 namespace flappy {
 
 namespace {
@@ -51,15 +53,13 @@ namespace {
         g_entity->events()->post(onMouseMoveEvent);
     }
 
-    void mouseFunc(int button, int state, int x, int y) {
+    void mouseFunc(int x, int y) {
         passiveMotionFunc(x, y);
-        //if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-            InputManager::OnMouseDown onMouseDownEvent;
-            onMouseDownEvent.x = x;
-            onMouseDownEvent.y = y;
-            onMouseDownEvent.button = InputManager::MouseButton::LEFT;
-            g_entity->events()->post(onMouseDownEvent);
-        //}
+        InputManager::OnMouseDown onMouseDownEvent;
+        onMouseDownEvent.x = x;
+        onMouseDownEvent.y = y;
+        onMouseDownEvent.button = InputManager::MouseButton::LEFT;
+        g_entity->events()->post(onMouseDownEvent);
     }
 
     void resizeWindow(int width, int height) {
@@ -69,11 +69,17 @@ namespace {
         g_entity->events()->post(onWindowResizeEvent);
     }
 
-    void timer(int e) {
-        auto updateEvent = Component::OnUpdate();
-        updateEvent.dt = calcTimeDelta();
-        g_entity->events()->post(updateEvent);
+    void checkSdlError(const char * file, const char * func, int line)
+    {
+        std::string error = SDL_GetError();
 
+        if (error != "")
+        {
+            std::stringstream ss;
+            ss << "SDL Error " << error << file << ' ' << line << ' ' << func << std::endl;
+
+            SDL_ClearError();
+        }
     }
 }
 
@@ -86,14 +92,14 @@ void Sdl2Manager::init()
         throw std::runtime_error("Can't initialize glut twice.");
     g_entity = entity();
 
-    if (initGlut(manager<AppManager>()->args())) {
+    if (initSdl2(manager<AppManager>()->args())) {
         int glutWindowId = initWindow("FlappyEngine", 600, 600);
         if (glutWindowId > 0)
             m_glutWindowId = glutWindowId;
     }
 }
 
-bool Sdl2Manager::initGlut(std::vector<std::string> args) {
+bool Sdl2Manager::initSdl2(std::vector<std::string> args) {
     auto argv = new char*[args.size()];
     for (unsigned i = 0; i < args.size(); i++) {
         argv[i] = new char[args[i].size()];
@@ -127,6 +133,8 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         LOGE("Failed to init SDL");
 
+    CHECK_SDL_ERROR;
+
     // Create our window centered at 512x512 resolution
     mainWindow = SDL_CreateWindow(name.c_str(),
                                   SDL_WINDOWPOS_CENTERED,
@@ -135,6 +143,8 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
                                   height,
                                   SDL_WINDOW_OPENGL);
 
+    CHECK_SDL_ERROR;
+
     // Check that everything worked out okay
     if (!mainWindow)
         LOGE("Unable to create window");
@@ -142,10 +152,16 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     // Create our opengl context and attach it to our window
     mainContext = SDL_GL_CreateContext(mainWindow);
 
+    CHECK_SDL_ERROR;
+
     SetOpenGLAttributes();
+
+    CHECK_SDL_ERROR;
 
     // This makes our buffer swap syncronized with the monitor's vertical refresh
     SDL_GL_SetSwapInterval(1);
+
+    CHECK_SDL_ERROR;
 
     // Init GLEW
     // Apparently, this is needed for Apple. Thanks to Ross Vander for letting me know
@@ -157,8 +173,39 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     return 0;
 }
 
-void RunGame()
+void Sdl2Manager::cleanup()
 {
+    // Delete our OpengL context
+    SDL_GL_DeleteContext(mainContext);
+
+    CHECK_SDL_ERROR;
+
+    // Destroy our window
+    SDL_DestroyWindow(mainWindow);
+
+    CHECK_SDL_ERROR;
+
+    // Shutdown SDL 2
+    SDL_Quit();
+
+    CHECK_SDL_ERROR;
+}
+
+void printSdlGlAttributes()
+{
+    int majorVersion = 0;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &majorVersion);
+
+    int minorVersion = 0;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minorVersion);
+
+    LOGI("SDL GL Context version: %d.%d", majorVersion, minorVersion);
+}
+
+int Sdl2Manager::startMainLoop()
+{
+    printSdlGlAttributes();
+
     bool loop = true;
 
     while( loop)
@@ -177,56 +224,24 @@ void RunGame()
                 loop = false;
                 break;
             }
+            if (event.type == SDL_MOUSEMOTION) {
+                passiveMotionFunc(event.motion.x, event.motion.y);
+                break;
+            }
+            if (event.type == SDL_MOUSEBUTTONDOWN) {
+                mouseFunc(event.button.x, event.button.y);
+                break;
+            }
         }
 
            // Swap the buffers.
         SDL_GL_SwapWindow(mainWindow);
+
+        CHECK_SDL_ERROR;
     }
-}
 
-void Cleanup()
-{
-    // Delete our OpengL context
-    SDL_GL_DeleteContext(mainContext);
-
-    // Destroy our window
-    SDL_DestroyWindow(mainWindow);
-
-    // Shutdown SDL 2
-    SDL_Quit();
-}
-
-
-int Sdl2Manager::startMainLoop()
-{
-    RunGame();
-    Cleanup();
+    cleanup();
     return 0;
-}
-
-void CheckSDLError(int line = -1)
-{
-    std::string error = SDL_GetError();
-
-    if (error != "")
-    {
-        std::cout << "SLD Error : " << error << std::endl;
-
-        if (line != -1)
-            std::cout << "\nLine : " << line << std::endl;
-
-        SDL_ClearError();
-    }
-}
-
-void PrintSDL_GL_Attributes()
-{
-    int value = 0;
-    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &value);
-    std::cout << "SDL_GL_CONTEXT_MAJOR_VERSION : " << value << std::endl;
-
-    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &value);
-    std::cout << "SDL_GL_CONTEXT_MINOR_VERSION: " << value << std::endl;
 }
 
 } // flappy

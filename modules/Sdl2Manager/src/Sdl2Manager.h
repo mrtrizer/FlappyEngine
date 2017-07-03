@@ -16,8 +16,9 @@ protected:
 private:
     int m_glutWindowId = 0;
 
-    bool initGlut(std::vector<std::string> args);
+    bool initSdl2(std::vector<std::string> args);
     int initWindow(std::string name, int width, int height);
+    void cleanup();
 };
 
 } // flappy

@@ -19,10 +19,6 @@ void checkOpenGLerror(const char * file, const char * func, int line) {
         stringstream ss;
         ss << "[ERROR] " << file << ' ' << line << ' ' << func << endl;
         LOGE("%s",ss.str().data());
-#ifdef QT_DEBUG
-        ss << "Text: " << reinterpret_cast<const char *>(gluErrorString(errCode)) << endl;
-        throw runtime_error(ss.str());
-#endif
     }
 }
 
