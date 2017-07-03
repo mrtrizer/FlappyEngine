@@ -27,11 +27,6 @@ script:
  - ./generated/cmake/ModuleTests
  - popd
 
-#Glut test project (build only)
- - pushd modules/Glut/tests
- - flappy build cmake
- - popd
-
 #Std test project (build only)
  - pushd modules/Std/tests
  - flappy build cmake
