@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     auto rootEntity = std::make_shared<Entity>();
 
     // Sdl2 and render
-    rootEntity->component<Sdl2Manager>();
+    rootEntity->createComponent<Sdl2Manager>();
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
 

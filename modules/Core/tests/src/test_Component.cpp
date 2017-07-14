@@ -56,3 +56,23 @@ TEST_CASE( "Component::events()" ) {
     auto component = make_shared<TestComponent>();
     REQUIRE(component->events() != nullptr);
 }
+
+TEST_CASE("Passing events to children components") {
+    auto rootEntity = make_shared<Entity>();
+    auto rootComponent = rootEntity->createComponent<TestComponent>();
+
+    Mock<TestComponent::IMock> mock;
+    Fake(Method(mock,update));
+    Fake(Method(mock,init));
+    Fake(Method(mock,deinit));
+
+    auto childEntity = rootEntity->createEntity();
+    auto childComponent = make_shared<TestComponent>(&mock.get());
+    childEntity->addComponent(childComponent);
+
+    auto updateEvent = Component::OnUpdate();
+    updateEvent.dt = 1.0f;
+    rootEntity->events()->post(updateEvent);
+
+    Verify(Method(mock,update)).Exactly(1);
+}

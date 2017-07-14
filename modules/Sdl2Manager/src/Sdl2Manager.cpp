@@ -2,99 +2,43 @@
 
 #include <cstdio>
 #include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <cstring>
 #include <cstdlib>
 #include <unistd.h>
 
-#include <SDL2/SDL.h>
-
 #include <GLIncludes.h>
 #include <GLTools.h>
 #include <GLViewManager.h>
-#include <InputManager.h>
 #include <AppManager.h>
-#include <GLViewCircle.h>
-#include <GLViewRect.h>
-#include <GLViewSprite.h>
 
-
-#define CHECK_SDL_ERROR checkSdlError(__FILE__, __FUNCTION__, __LINE__)
+#include "Sdl2Utils.h"
 
 namespace flappy {
 
-namespace {
+Sdl2Manager::Sdl2Manager()
+    : AGLManager({AppManager::id()})
+{}
 
-    SafePtr<Entity> g_entity;
-    std::chrono::steady_clock::time_point g_lastTime;
-
-    // Our SDL_Window ( just like with SDL2 wihout OpenGL)
-    SDL_Window *mainWindow;
-
-    // Our opengl context handle
-    SDL_GLContext mainContext;
-
-    DeltaTime calcTimeDelta() {
-        using namespace std::chrono;
-        auto newTime = steady_clock::now();
-        auto diff = newTime - g_lastTime;
-        DeltaTime timeDelta = diff.count(); // delta in seconds
-        g_lastTime = newTime;
-        return timeDelta;
-    }
-
-    void passiveMotionFunc(int x, int y) {
-        InputManager::OnMouseMove onMouseMoveEvent;
-        onMouseMoveEvent.x = x;
-        onMouseMoveEvent.y = y;
-        g_entity->events()->post(onMouseMoveEvent);
-    }
-
-    void mouseFunc(int x, int y) {
-        passiveMotionFunc(x, y);
-        InputManager::OnMouseDown onMouseDownEvent;
-        onMouseDownEvent.x = x;
-        onMouseDownEvent.y = y;
-        onMouseDownEvent.button = InputManager::MouseButton::LEFT;
-        g_entity->events()->post(onMouseDownEvent);
-    }
-
-    void resizeWindow(int width, int height) {
-        ViewManager::OnWindowResize onWindowResizeEvent;
-        onWindowResizeEvent.width = width;
-        onWindowResizeEvent.height = height;
-        g_entity->events()->post(onWindowResizeEvent);
-    }
-
-    void checkSdlError(const char * file, const char * func, int line)
-    {
-        std::string error = SDL_GetError();
-
-        if (error != "")
-        {
-            std::stringstream ss;
-            ss << "SDL Error " << error << file << ' ' << line << ' ' << func << std::endl;
-
-            SDL_ClearError();
-        }
-    }
+void Sdl2Manager::resizeWindow(int width, int height) {
+    ViewManager::OnWindowResize onWindowResizeEvent;
+    onWindowResizeEvent.width = width;
+    onWindowResizeEvent.height = height;
+    events()->post(onWindowResizeEvent);
 }
 
-Sdl2Manager::Sdl2Manager() :AGLManager({AppManager::id()}) {}
+DeltaTime Sdl2Manager::calcTimeDelta() {
+    using namespace std::chrono;
+    auto newTime = steady_clock::now();
+    auto diff = newTime - m_lastTime;
+    DeltaTime timeDelta = diff.count(); // delta in seconds
+    m_lastTime = newTime;
+    return timeDelta;
+}
 
 void Sdl2Manager::init()
 {
-    // Global pointer to Entity is used in glut callbacks
-    if (g_entity != nullptr)
-        throw std::runtime_error("Can't initialize glut twice.");
-    g_entity = entity();
-
     if (initSdl2(manager<AppManager>()->args())) {
-        int glutWindowId = initWindow("FlappyEngine", 600, 600);
-        if (glutWindowId > 0)
-            m_glutWindowId = glutWindowId;
+        initWindow("FlappyEngine", 600, 600);
     }
 }
 
@@ -109,7 +53,7 @@ bool Sdl2Manager::initSdl2(std::vector<std::string> args) {
     return true;
 }
 
-bool SetOpenGLAttributes()
+bool Sdl2Manager::setOpenGLAttributes()
 {
     // Set our OpenGL version.
     // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
@@ -126,7 +70,7 @@ bool SetOpenGLAttributes()
     return true;
 }
 
-int Sdl2Manager::initWindow(std::string name, int width, int height)
+void Sdl2Manager::initWindow(std::string name, int width, int height)
 {
     // Initialize SDL's Video subsystem
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -135,7 +79,7 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     CHECK_SDL_ERROR;
 
     // Create our window centered at 512x512 resolution
-    mainWindow = SDL_CreateWindow(name.c_str(),
+    m_mainWindow = SDL_CreateWindow(name.c_str(),
                                   SDL_WINDOWPOS_CENTERED,
                                   SDL_WINDOWPOS_CENTERED,
                                   width,
@@ -145,15 +89,15 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     CHECK_SDL_ERROR;
 
     // Check that everything worked out okay
-    if (!mainWindow)
+    if (!m_mainWindow)
         LOGE("Unable to create window");
 
     // Create our opengl context and attach it to our window
-    mainContext = SDL_GL_CreateContext(mainWindow);
+    m_mainContext = SDL_GL_CreateContext(m_mainWindow);
 
     CHECK_SDL_ERROR;
 
-    SetOpenGLAttributes();
+    setOpenGLAttributes();
 
     CHECK_SDL_ERROR;
 
@@ -168,19 +112,17 @@ int Sdl2Manager::initWindow(std::string name, int width, int height)
     glewExperimental = GL_TRUE;
     glewInit();
     #endif
-
-    return 0;
 }
 
 void Sdl2Manager::cleanup()
 {
     // Delete our OpengL context
-    SDL_GL_DeleteContext(mainContext);
+    SDL_GL_DeleteContext(m_mainContext);
 
     CHECK_SDL_ERROR;
 
     // Destroy our window
-    SDL_DestroyWindow(mainWindow);
+    SDL_DestroyWindow(m_mainWindow);
 
     CHECK_SDL_ERROR;
 
@@ -190,7 +132,7 @@ void Sdl2Manager::cleanup()
     CHECK_SDL_ERROR;
 }
 
-void printSdlGlAttributes()
+void Sdl2Manager::printSdlGlAttributes()
 {
     int majorVersion = 0;
     SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &majorVersion);
@@ -214,7 +156,7 @@ int Sdl2Manager::startMainLoop()
 
         auto updateEvent = Component::OnUpdate();
         updateEvent.dt = calcTimeDelta();
-        g_entity->events()->post(updateEvent);
+        entity()->events()->post(updateEvent);
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -222,19 +164,13 @@ int Sdl2Manager::startMainLoop()
             if (event.type == SDL_QUIT) {
                 loop = false;
                 break;
-            }
-            if (event.type == SDL_MOUSEMOTION) {
-                passiveMotionFunc(event.motion.x, event.motion.y);
-                break;
-            }
-            if (event.type == SDL_MOUSEBUTTONDOWN) {
-                mouseFunc(event.button.x, event.button.y);
-                break;
+            } else {
+                events()->post(Sdl2Event(event));
             }
         }
 
            // Swap the buffers.
-        SDL_GL_SwapWindow(mainWindow);
+        SDL_GL_SwapWindow(m_mainWindow);
 
         CHECK_SDL_ERROR;
     }

@@ -1,0 +1,37 @@
+[
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake",
+  "command": "/usr/bin/c++    -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/src/test_EventSystem.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/src/test_EventSystem.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/src/test_EventSystem.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/EventBus",
+  "command": "/usr/bin/c++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/Catch",
+  "command": "/usr/bin/c++   -DCatch_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/Tools",
+  "command": "/usr/bin/c++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/tests/generated/cmake/Tools",
+  "command": "/usr/bin/c++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp"
+}
+]
