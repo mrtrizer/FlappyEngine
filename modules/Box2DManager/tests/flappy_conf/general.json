@@ -1,8 +1,11 @@
 {
-    "name":"CoreComponents",
+    "name":"ModuleTests",
     "modules": [
         {
             "path":"../"
+        },
+        {
+            "path":"../../Catch"
         }
     ],
     "cxx":{

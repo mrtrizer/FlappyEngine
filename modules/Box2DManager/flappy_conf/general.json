@@ -11,11 +11,13 @@
     "cxx":{
         "header_dirs": [
             "./src",
-            "./libs"
+            "./libs/Box2D/Box2D/Box2D",
+            "./libs/Box2D/Box2D"
+
         ],
         "src_dirs": [
             "./src",
-            "./libs"
+            "./libs/Box2D/Box2D/Box2D"
         ]
     }
 }
