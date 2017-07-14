@@ -9,11 +9,10 @@
 #include <cstdlib>
 #include <unistd.h>
 
-// FIXME: Strange path
-#include <GLTools.h> //glew has to be included before glut
-
 #include <SDL2/SDL.h>
 
+#include <GLIncludes.h>
+#include <GLTools.h>
 #include <GLViewManager.h>
 #include <InputManager.h>
 #include <AppManager.h>
@@ -21,13 +20,13 @@
 #include <GLViewRect.h>
 #include <GLViewSprite.h>
 
+
 #define CHECK_SDL_ERROR checkSdlError(__FILE__, __FUNCTION__, __LINE__)
 
 namespace flappy {
 
 namespace {
 
-    int g_updateDelayMs = 16; // ~60 fps
     SafePtr<Entity> g_entity;
     std::chrono::steady_clock::time_point g_lastTime;
 
