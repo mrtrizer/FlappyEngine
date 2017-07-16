@@ -4,7 +4,7 @@
 
 #include "TestManager.h"
 
-class TestComponent: public flappy::Component
+class TestComponent: public flappy::Component<TestComponent>
 {
 public:
     class IMock

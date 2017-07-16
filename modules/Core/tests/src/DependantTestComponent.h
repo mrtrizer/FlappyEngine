@@ -2,7 +2,7 @@
 
 #include <Component.h>
 
-class DependantTestComponent: public flappy::Component {
+class DependantTestComponent: public flappy::Component<DependantTestComponent> {
 public:
     class IMock
     {
