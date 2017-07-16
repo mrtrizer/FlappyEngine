@@ -48,4 +48,4 @@ private:
     IMock* m_mockComponent;
 };
 
-class TestComponentEmpty: public flappy::Component {};
+class TestComponentEmpty: public flappy::Component<TestComponentEmpty> {};
