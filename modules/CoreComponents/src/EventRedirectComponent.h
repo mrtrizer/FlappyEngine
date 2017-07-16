@@ -5,7 +5,7 @@
 
 namespace flappy {
 
-class EventRedirectComponent : public Component
+class EventRedirectComponent : public Component<EventRedirectComponent>
 {
 public:
     template <typename InputEventType, typename OutputEventType>

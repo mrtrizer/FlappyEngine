@@ -9,38 +9,46 @@
 namespace flappy
 {
 
-Component::Component():
+ComponentBase::ComponentBase():
     m_eventController(std::make_shared<EventController>()),
     m_dependenceClassIdList()
 {
     subscribeEvents();
 }
 
-Component::Component(ClassIdList dependenceClassIdList)
+ComponentBase::ComponentBase(ClassIdList dependenceClassIdList)
     : m_eventController(std::make_shared<EventController>()),
       m_dependenceClassIdList(dependenceClassIdList)
 {
     subscribeEvents();
 }
 
-Component::~Component() {
+ComponentBase::~ComponentBase() {
 
 }
 
-void Component::subscribeEvents() {
-    events()->subscribeIn([this](const OnManagerAdded& e) {
+bool ComponentBase::isManagerRegistered(unsigned id) {
+    return m_managers.getById(id) != nullptr;
+}
+
+bool ComponentBase::isComponentRegistered(unsigned id) {
+    return entity()->componentById(id) != nullptr;
+}
+
+void ComponentBase::subscribeEvents() {
+    events()->subscribeIn([this](const ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
         if (!isInitialized() && allDependenciesReady())
             tryInit();
     });
-    events()->subscribeIn([this](const OnManagerRemoved& e) {
-        m_managers.setById(e.id, SafePtr<IManager>());
+    events()->subscribeIn([this](const ManagerRemovedEvent& e) {
+        m_managers.setById(e.id, SafePtr<ManagerBase>());
         if (isInitialized() && !allDependenciesReady())
             tryDeinit();
     });
 }
 
-void Component::setParentEntity(SafePtr<Entity> entity)
+void ComponentBase::setParentEntity(SafePtr<Entity> entity)
 {
     if (entity != m_entity) {
         // Deinit if entity was set before
@@ -54,22 +62,22 @@ void Component::setParentEntity(SafePtr<Entity> entity)
     }
 }
 
-void Component::initInternal() {
+void ComponentBase::initInternal() {
     init();
 }
 
-void Component::deinitInternal() {
+void ComponentBase::deinitInternal() {
     deinit();
 }
 
-bool Component::allDependenciesReady() {
+bool ComponentBase::allDependenciesReady() {
     for (unsigned dependenceTypeId : m_dependenceClassIdList)
-        if (!isManagerRegistered(dependenceTypeId))
+        if (!isManagerRegistered(dependenceTypeId) && !isComponentRegistered(dependenceTypeId))
             return false;
     return true;
 }
 
-void Component::tryInit() {
+void ComponentBase::tryInit() {
     // We have to set the flag before initialization call to avoid recursive calls
     m_initializedFlag = true;
     try {
@@ -83,7 +91,7 @@ void Component::tryInit() {
     }
 }
 
-void Component::tryDeinit() {
+void ComponentBase::tryDeinit() {
     m_initializedFlag = false;
     try {
         // Send remove event first.
@@ -96,13 +104,13 @@ void Component::tryDeinit() {
     }
 }
 
-void Component::addedToEntityInternal() {
+void ComponentBase::addedToEntityInternal() {
     if (!isInitialized() && allDependenciesReady())
         tryInit();
     addedToEntity();
 }
 
-void Component::removedFromEntityInternal()
+void ComponentBase::removedFromEntityInternal()
 {
     if (isInitialized())
         tryDeinit();

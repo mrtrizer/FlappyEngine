@@ -11,7 +11,7 @@ namespace flappy {
 /// @brief Interface for all object views.
 /// Contains abstract draw() method for implementation in
 /// derived classes.
-class View : public Component {
+class View : public Component<View> {
 public:
     View();
     virtual ~View() = default;

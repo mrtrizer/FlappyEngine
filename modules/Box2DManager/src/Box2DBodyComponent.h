@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-class Box2DBodyComponent: public Component {
+class Box2DBodyComponent: public Component<Box2DBodyComponent> {
 public:
     Box2DBodyComponent();
 

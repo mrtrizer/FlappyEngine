@@ -7,7 +7,7 @@
 
 namespace flappy {
 
-class MeshComponent: public Component {
+class MeshComponent: public Component<MeshComponent> {
 public:
     MeshComponent(): Component({RenderElementFactory::id()})
     {}

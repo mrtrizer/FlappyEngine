@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class SpriteComponent: public Component {
+class SpriteComponent: public Component<SpriteComponent> {
 public:
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color getColorRGBA() { return m_colorRGBA; }

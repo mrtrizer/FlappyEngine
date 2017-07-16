@@ -6,6 +6,26 @@
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DBodyComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DBodyComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DBodyComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DFixtureComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DFixtureComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DFixtureComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DJointComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DJointComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DJointComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DWorldManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DWorldManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src/Box2DWorldManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
   "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp",
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/libs/Box2D/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp"
 },
@@ -238,21 +258,6 @@
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Catch",
   "command": "/usr/bin/clang++   -DCatch_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp",
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
-},
-{
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Component.cpp"
-},
-{
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
-},
-{
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/IManager.cpp"
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",

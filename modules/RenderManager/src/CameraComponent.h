@@ -12,7 +12,7 @@ namespace flappy {
 /// @details A camera can be set as active in GWordCtrl and used by View
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
-class CameraComponent : public Component
+class CameraComponent : public Component<CameraComponent>
 {
 public:
     void setSize(glm::vec2 size)

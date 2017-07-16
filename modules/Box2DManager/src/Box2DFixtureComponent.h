@@ -4,7 +4,7 @@
 
 namespace flappy {
 
-class Box2DFixtureComponent: public Component {
+class Box2DFixtureComponent: public Component<Box2DFixtureComponent> {
 public:
     Box2DFixtureComponent();
 

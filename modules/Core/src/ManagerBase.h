@@ -5,13 +5,13 @@
 
 namespace flappy {
 
-class IManager: public Component
+class ManagerBase: public ComponentBase
 {
 public:
 
-    using Component::Component;
+    using ComponentBase::ComponentBase;
 
-    virtual unsigned managerId() = 0;
+    virtual unsigned componentId() = 0;
 
 protected:
 

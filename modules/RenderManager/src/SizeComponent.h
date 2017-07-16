@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-class SizeComponent : public Component
+class SizeComponent : public Component<SizeComponent>
 {
 public:
     SizeComponent();

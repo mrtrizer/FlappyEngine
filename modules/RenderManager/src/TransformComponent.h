@@ -11,7 +11,7 @@
 namespace flappy
 {
 
-class TransformComponent: public Component
+class TransformComponent: public Component<TransformComponent>
 {
 public:
     glm::mat4x4 transformMatrix();

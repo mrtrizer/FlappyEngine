@@ -4,24 +4,24 @@
 
 #include <ClassId.h>
 
-#include "IManager.h"
+#include "ManagerBase.h"
 
 namespace flappy
 {
 
 template <typename DerivedT>
-class Manager: public IManager {
+class Manager: public ManagerBase {
 public:
     using ClassIdList = std::list<unsigned>;
 
-    using IManager::IManager;
+    using ManagerBase::ManagerBase;
 
-    unsigned managerId() override final {
-        return ClassId<Component, DerivedT>::id();
+    unsigned componentId() override {
+        return ClassId<ComponentBase, DerivedT>::id();
     }
 
     static unsigned id() {
-        return ClassId<Component, DerivedT>::id();
+        return ClassId<ComponentBase, DerivedT>::id();
     }
 
 private:
@@ -29,7 +29,7 @@ private:
     template <typename EventT>
     EventHandle createComponentEvent() {
         auto event = EventT();
-        event.id = managerId();
+        event.id = componentId();
         event.pointer = selfPointer<Manager<DerivedT>>();
         return EventHandle(event);
     }
@@ -40,7 +40,7 @@ private:
 
         init();
         // And ofc send message informing children about the manager was initialized
-        postEvent(createComponentEvent<OnManagerAdded>());
+        postEvent(createComponentEvent<ManagerAddedEvent>());
     }
 
     void deinitInternal() override final
@@ -49,11 +49,11 @@ private:
 
         // Send remove event first.
         // To allow components access manager before denitialization.
-        postEvent(createComponentEvent<OnManagerRemoved>());
+        postEvent(createComponentEvent<ManagerRemovedEvent>());
 
         // If we have parent manager of same type, notify dependant components
         if (isManagerRegistered(id()))
-            postEvent(createComponentEvent<OnManagerAdded>());
+            postEvent(createComponentEvent<ManagerAddedEvent>());
 
         deinit();
     }
@@ -61,13 +61,13 @@ private:
     void addedToEntity() override final
     {
         if (isInitialized())
-            postEvent(createComponentEvent<OnManagerAdded>());
+            postEvent(createComponentEvent<ManagerAddedEvent>());
     }
 
     void removedFromEntity() override final
     {
         if (isInitialized())
-            postEvent(createComponentEvent<OnManagerRemoved>());
+            postEvent(createComponentEvent<ManagerRemovedEvent>());
     }
 };
 

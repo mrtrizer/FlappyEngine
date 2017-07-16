@@ -11,6 +11,7 @@ namespace flappy
 {
 
 class EventController;
+class ComponentBase;
 
 /// Hierarchy of entities is a spine of flappyengine object hierarchy.
 /// When Components and Managers are meat, entieis are bones.
@@ -63,6 +64,9 @@ public:
     template<typename ComponentT>
     std::shared_ptr<ComponentT> component();
 
+    /// @brief Returns component by id
+    std::shared_ptr<ComponentBase> componentById(unsigned id);
+
     /// @brief Returns all components of required type.
     template<typename ComponentT>
     std::list<std::shared_ptr<ComponentT>> findComponents(std::function<bool(const ComponentT&)> predicate, unsigned depth = 0) const;
@@ -105,10 +109,10 @@ public:
     std::list<std::shared_ptr<Entity>> findEntities(unsigned depth = 0);
 
 private:
-    std::list<std::shared_ptr<Component>> m_components;
+    std::list<std::shared_ptr<ComponentBase>> m_components;
     std::list<std::shared_ptr<Entity>> m_entities;
     std::shared_ptr<EventController> m_eventController;
-    TypeMap<Component, SafePtr<IManager>> m_managers;
+    TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
     SafePtr<Entity> m_parent;
 
     void setParent(SafePtr<Entity> parent);
@@ -137,19 +141,19 @@ void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController)
 template<typename ComponentT>
 void Entity::addComponent(std::shared_ptr<ComponentT> component)
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     if (component->entity() != nullptr)
         throw std::runtime_error("Can't add a component to several entities.");
     component->setParentEntity(shared_from_this());
     m_components.push_back(component);
-    sendManagerEvents<IManager::OnManagerAdded>(component->events());
+    sendManagerEvents<ManagerBase::ManagerAddedEvent>(component->events());
 }
 
 template <typename ComponentT, typename ... Args>
 std::shared_ptr<ComponentT> Entity::createComponent(Args ... args)
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     auto component = std::make_shared<ComponentT>(args...);
     addComponent<ComponentT>(component);
@@ -159,9 +163,9 @@ std::shared_ptr<ComponentT> Entity::createComponent(Args ... args)
 template <typename ComponentT>
 void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
-    sendManagerEvents<IManager::OnManagerRemoved>(component->events());
+    sendManagerEvents<ManagerBase::ManagerRemovedEvent>(component->events());
     component->setParentEntity(SafePtr<Entity>());
     m_components.remove(component);
 }
@@ -169,7 +173,7 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 template<typename ComponentT>
 std::shared_ptr<ComponentT> Entity::findComponent(std::function<bool(const ComponentT&)> predicate, unsigned depth)
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     for (auto component: m_components) {
         auto cast = std::dynamic_pointer_cast<ComponentT>(component);
@@ -193,7 +197,7 @@ std::shared_ptr<ComponentT> Entity::findComponent(unsigned depth)
 template<typename ComponentT>
 std::shared_ptr<ComponentT> Entity::component()
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     if (auto foundComponent = findComponent<ComponentT>())
         return foundComponent;
@@ -203,13 +207,13 @@ std::shared_ptr<ComponentT> Entity::component()
 template<typename ComponentT>
 std::list<std::shared_ptr<ComponentT>> Entity::findComponents(std::function<bool(const ComponentT&)> predicate, unsigned depth) const
 {
-    static_assert(isBaseOf<Component, ComponentT>(), "Type must be a descendant of Component");
+    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     std::list<std::shared_ptr<ComponentT>> list;
     for (auto component: m_components) {
         auto cast = std::dynamic_pointer_cast<ComponentT>(component);
         if ((cast != nullptr) && predicate(*cast))
-            list.push_back(std::dynamic_pointer_cast<ComponentT>(cast));
+            list.push_back(cast);
     }
     if (depth > 0) {
         for (auto entity: m_entities) {

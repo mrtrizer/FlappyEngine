@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include "EventController.h"
+#include "ComponentBase.h"
 
 namespace flappy
 {
@@ -8,11 +9,11 @@ namespace flappy
 Entity::Entity():
     m_eventController(std::make_shared<EventController>())
 {
-    events()->subscribeIn([this](const Component::OnManagerAdded& e) {
+    events()->subscribeIn([this](const ComponentBase::ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
     });
-    events()->subscribeIn([this](const Component::OnManagerRemoved& e) {
-        m_managers.setById(e.id, SafePtr<IManager>());
+    events()->subscribeIn([this](const ComponentBase::ManagerRemovedEvent& e) {
+        m_managers.setById(e.id, SafePtr<ManagerBase>());
     });
 
     events()->subscribeInAll([this](const EventHandle& handle) {
@@ -34,6 +35,13 @@ Entity::Entity():
 
 Entity::~Entity()
 {
+}
+
+std::shared_ptr<ComponentBase> Entity::componentById(unsigned id) {
+    for (auto component: m_components)
+        if (component->componentId() == id)
+            return component;
+    return nullptr;
 }
 
 void Entity::setParent(SafePtr<Entity> parent)
@@ -60,7 +68,7 @@ void Entity::addEntity(std::shared_ptr<Entity> entity)
         throw std::runtime_error("Can't add same entity twice!");
     entity->setParent(shared_from_this());
     m_entities.push_back(entity);
-    sendManagerEvents<Component::OnManagerAdded>(entity->events());
+    sendManagerEvents<ComponentBase::ManagerAddedEvent>(entity->events());
 }
 
 std::shared_ptr<Entity> Entity::createEntity()
@@ -72,7 +80,7 @@ std::shared_ptr<Entity> Entity::createEntity()
 
 void Entity::removeEntity(std::shared_ptr<Entity> entity)
 {
-    sendManagerEvents<Component::OnManagerRemoved>(entity->events());
+    sendManagerEvents<ComponentBase::ManagerRemovedEvent>(entity->events());
     m_entities.remove(entity);
 }
 
