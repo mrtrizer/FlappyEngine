@@ -16,45 +16,45 @@ using namespace std;
 
 TEST_CASE("addComponent(std::shared_ptr<ComponentT> )") {
     auto testEntity = std::make_shared<Entity>();
-    auto testComponent = std::make_shared<Component>();
+    auto testComponent = std::make_shared<TestComponent>();
 
     testEntity->addComponent(testComponent);
     REQUIRE_THROWS(testEntity->addComponent(testComponent));
-    REQUIRE(testEntity->findComponent<Component>() == testComponent);
+    REQUIRE(testEntity->findComponent<TestComponent>() == testComponent);
 }
 
 TEST_CASE("createComponent(Args ... args)") {
     auto testEntity = std::make_shared<Entity>();
-    auto testComponent = testEntity->createComponent<Component>();
+    auto testComponent = testEntity->createComponent<TestComponent>();
 
     REQUIRE_THROWS(testEntity->addComponent(testComponent));
-    REQUIRE(*testEntity->findComponents<Component>(0).begin() == testComponent);
+    REQUIRE(*testEntity->findComponents<TestComponent>(0).begin() == testComponent);
 }
 
 TEST_CASE("removeComponent(std::shared_ptr<ComponentT> )") {
     auto testEntity = std::make_shared<Entity>();
-    auto testComponent = testEntity->createComponent<Component>();
+    auto testComponent = testEntity->createComponent<TestComponent>();
 
     REQUIRE_NOTHROW(testEntity->removeComponent(testComponent));
-    REQUIRE(testEntity->findComponents<Component>(0).size() == 0);
+    REQUIRE(testEntity->findComponents<TestComponent>(0).size() == 0);
 }
 
 TEST_CASE("findComponent<ComponentT>()") {
     auto entityRoot = std::make_shared<Entity>();
-    auto componentRoot = entityRoot->createComponent<Component>();
+    auto componentRoot = entityRoot->createComponent<TestComponent>();
     auto entityMiddle = entityRoot->createEntity();
-    auto componentMiddle = entityMiddle->createComponent<Component>();
+    auto componentMiddle = entityMiddle->createComponent<TestComponent>();
 
-    REQUIRE(entityRoot->findComponent<Component>() == componentRoot);
-    REQUIRE(entityRoot->findComponent<Component>(1) == componentRoot);
+    REQUIRE(entityRoot->findComponent<TestComponent>() == componentRoot);
+    REQUIRE(entityRoot->findComponent<TestComponent>(1) == componentRoot);
     {
-        auto component = entityRoot->findComponent<Component>([componentMiddle](const Component& component) {
+        auto component = entityRoot->findComponent<TestComponent>([componentMiddle](const TestComponent& component) {
             return component.shared_from_this() == componentMiddle;
         },1);
         REQUIRE(component == componentMiddle);
     }
     {
-        auto component = entityRoot->findComponent<Component>([componentRoot](const Component& component) {
+        auto component = entityRoot->findComponent<TestComponent>([componentRoot](const TestComponent& component) {
             return component.shared_from_this() == componentRoot;
         },1);
         REQUIRE(component == componentRoot);
@@ -63,19 +63,19 @@ TEST_CASE("findComponent<ComponentT>()") {
 
 TEST_CASE("findComponents<ComponentT>()") {
     auto entityRoot = std::make_shared<Entity>();
-    auto componentRoot = entityRoot->createComponent<Component>();
+    auto componentRoot = entityRoot->createComponent<TestComponent>();
     auto entityMiddle = entityRoot->createEntity();
-    auto componentMiddle = entityMiddle->createComponent<Component>();
+    auto componentMiddle = entityMiddle->createComponent<TestComponent>();
 
     {
-        auto components = entityRoot->findComponents<Component>([componentMiddle](const Component& component) {
+        auto components = entityRoot->findComponents<TestComponent>([componentMiddle](const TestComponent& component) {
             return component.shared_from_this() == componentMiddle;
         },1);
         REQUIRE(components.size() == 1);
         REQUIRE(*components.begin() == componentMiddle);
     }
     {
-        auto components = entityRoot->findComponents<Component>([componentRoot](const Component& component) {
+        auto components = entityRoot->findComponents<TestComponent>([componentRoot](const TestComponent& component) {
             return component.shared_from_this() == componentRoot;
         },1);
         REQUIRE(components.size() == 1);
@@ -85,8 +85,8 @@ TEST_CASE("findComponents<ComponentT>()") {
 
 TEST_CASE("component<ComponentT>()") {
     auto testEntity = std::make_shared<Entity>();
-    auto component = testEntity->component<Component>();
-    REQUIRE(component == testEntity->component<Component>());
+    auto component = testEntity->component<TestComponent>();
+    REQUIRE(component == testEntity->component<TestComponent>());
 }
 
 // Entity managment

@@ -7,6 +7,7 @@
 #include <Entity.h>
 
 #include "TestManager.h"
+#include "TestComponent.h"
 #include "DependantTestComponent.h"
 
 using namespace flappy;
@@ -16,18 +17,18 @@ using namespace fakeit;
 TEST_CASE("Add/Remove manager events") {
     auto entityRoot = std::make_shared<Entity>();
     auto entityMiddle = entityRoot->createEntity();
-    auto componentMiddle = entityMiddle->createComponent<Component>();
+    auto componentMiddle = entityMiddle->createComponent<TestComponent>();
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](Component::OnManagerAdded e) {
+    componentMiddle->events()->subscribeIn([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](Component::OnManagerRemoved e) {
+    componentMiddle->events()->subscribeIn([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });
@@ -45,18 +46,18 @@ TEST_CASE("Add/Remove component events") {
     auto entityMiddle = entityRoot->createEntity();
     auto testManager = entityRoot->createComponent<TestManager>();
 
-    auto componentMiddle = std::make_shared<Component>();
+    auto componentMiddle = std::make_shared<TestComponent>();
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](Component::OnManagerAdded e) {
+    componentMiddle->events()->subscribeIn([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](Component::OnManagerRemoved e) {
+    componentMiddle->events()->subscribeIn([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });

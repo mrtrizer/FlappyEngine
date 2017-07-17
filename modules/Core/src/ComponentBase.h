@@ -27,7 +27,7 @@ public:
 
     using ClassIdList = std::list<unsigned>;
 
-    ComponentBase(ClassIdList dependenceClassIdList);
+    ComponentBase(ClassIdList dependenceManagerIdList, ClassIdList dependenceComponentList = {});
     ComponentBase();
     ComponentBase(const ComponentBase&) = delete;
     ComponentBase& operator=(const ComponentBase&) = delete;
@@ -54,13 +54,13 @@ public:
     struct ComponentEvent: public IEvent
     {
         unsigned id;
-        SafePtr<ManagerBase> pointer;
-        template <typename ManagerT>
-        SafePtr<ManagerT> castTo() {
-            if (ClassId<ComponentBase, ManagerT>::id() == id)
-                return SafePtr<ManagerT>(pointer);
+        SafePtr<ComponentBase> pointer;
+        template <typename ComponentT>
+        SafePtr<ComponentT> castTo() {
+            if (ClassId<ComponentBase, ComponentT>::id() == id)
+                return SafePtr<ComponentT>(pointer);
             else
-                return SafePtr<ManagerT>();
+                return SafePtr<ComponentT>();
         }
     };
 
@@ -119,7 +119,9 @@ protected:
     virtual void update(DeltaTime)
     {}
 
-    bool allDependenciesReady();
+    bool allManagersReady();
+
+    bool allComponentsReady();
 
     /// Called when you already added to entity.
     /// @details You have access to parent entity from this method first time.
@@ -135,9 +137,11 @@ private:
     bool m_initializedFlag = false;
     SafePtr<Entity> m_entity;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
+    TypeMap<ComponentBase, SafePtr<ManagerBase>> m_components;
     std::shared_ptr<EventController> m_eventController;
 
-    ClassIdList m_dependenceClassIdList;
+    ClassIdList m_dependenceManagerList;
+    ClassIdList m_dependenceComponentList;
     std::weak_ptr<ISubscription> m_updateSubscription;
 
     void subscribeEvents();

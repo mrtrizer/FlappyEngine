@@ -119,6 +119,9 @@ private:
 
     template <typename ManagerEventT>
     void sendManagerEvents(std::shared_ptr<EventController> eventController);
+
+    template<typename ComponentT, typename ComponentEventT>
+    void sendComponentEvents(std::shared_ptr<ComponentT> component);
 };
 
 
@@ -135,6 +138,24 @@ void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController)
     }
 }
 
+template<typename ComponentT, typename ComponentEventT>
+void Entity::sendComponentEvents(std::shared_ptr<ComponentT> component) {
+    for (auto currentComponent : m_components) {
+        if (currentComponent != component) {
+            // Notify already added components
+            ComponentBase::ComponentAddedEvent newComponentEvent;
+            newComponentEvent.id = component->componentId();
+            newComponentEvent.pointer = component;
+            currentComponent->events()->post(newComponentEvent);
+            // Notify new component
+            ComponentBase::ComponentAddedEvent oldComponentEvent;
+            oldComponentEvent.id = currentComponent->componentId();
+            oldComponentEvent.pointer = currentComponent;
+            component->events()->post(oldComponentEvent);
+        }
+    }
+
+}
 
 // Component managment
 
@@ -147,7 +168,11 @@ void Entity::addComponent(std::shared_ptr<ComponentT> component)
         throw std::runtime_error("Can't add a component to several entities.");
     component->setParentEntity(shared_from_this());
     m_components.push_back(component);
+    // Notify component about accesible managers
     sendManagerEvents<ManagerBase::ManagerAddedEvent>(component->events());
+
+    // Notify components about new component
+    sendComponentEvents<ComponentT, ComponentBase::ComponentAddedEvent>(component);
 }
 
 template <typename ComponentT, typename ... Args>
@@ -165,8 +190,14 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
 {
     static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
+    // Notify component about losing of all managers
     sendManagerEvents<ManagerBase::ManagerRemovedEvent>(component->events());
+
+    // Notify components about component removing
+    sendComponentEvents<ComponentT, ComponentBase::ComponentRemovedEvent>(component);
+
     component->setParentEntity(SafePtr<Entity>());
+
     m_components.remove(component);
 }
 

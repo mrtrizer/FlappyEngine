@@ -70,7 +70,7 @@ TEST_CASE("Passing events to children components") {
     auto childComponent = make_shared<TestComponent>(&mock.get());
     childEntity->addComponent(childComponent);
 
-    auto updateEvent = Component::OnUpdate();
+    auto updateEvent = ComponentBase::OnUpdate();
     updateEvent.dt = 1.0f;
     rootEntity->events()->post(updateEvent);
 

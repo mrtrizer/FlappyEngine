@@ -13,7 +13,7 @@ public:
     };
 
     DependantTestComponent(IMock* mockComponent = nullptr):
-        Component({flappy::ClassId<Component, TestManager>().id()}),
+        Component({TestManager::id()}),
         m_mockComponent (mockComponent){
 
     }
