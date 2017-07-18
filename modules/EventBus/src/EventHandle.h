@@ -24,7 +24,7 @@ class EventHandle {
 public:
     template <typename EventT>
     EventHandle(EventT&& event):
-        m_id(ClassId<EventHandle, EventT>::id()),
+        m_id(GetTypeId<EventHandle, EventT>::value()),
         m_eventStructPtr(new std::decay_t<EventT>(std::forward<EventT>(event)))
     {
         static_assert(isBaseOf<IEvent, EventT>(), "Event must be a descendant of IEvent");
@@ -36,10 +36,10 @@ public:
     EventHandle& operator=(EventHandle&&) & = default;
 
     IEvent* eventPtr() const { return m_eventStructPtr.get(); }
-    unsigned id() const { return m_id; }
+    TypeId<EventHandle> id() const { return m_id; }
 
 private:
-    unsigned m_id;
+    TypeId<EventHandle> m_id;
     std::unique_ptr<IEvent> m_eventStructPtr;
 };
 

@@ -25,9 +25,9 @@ public:
         DeltaTime dt;
     };
 
-    using ClassIdList = std::list<unsigned>;
+    using TypeIdList = std::list<TypeId<ComponentBase>>;
 
-    ComponentBase(ClassIdList dependenceManagerIdList, ClassIdList dependenceComponentList = {});
+    ComponentBase(TypeIdList dependenceManagerIdList, TypeIdList dependenceComponentList = {});
     ComponentBase();
     ComponentBase(const ComponentBase&) = delete;
     ComponentBase& operator=(const ComponentBase&) = delete;
@@ -35,7 +35,7 @@ public:
     ComponentBase& operator=(ComponentBase&&) & = default;
     virtual ~ComponentBase();
 
-    virtual unsigned componentId() = 0;
+    virtual TypeId<ComponentBase> componentId() = 0;
 
     /// Returns parent entity (can be null if conponent is not added to entity)
     SafePtr<Entity> entity() const
@@ -53,11 +53,11 @@ public:
 
     struct ComponentEvent: public IEvent
     {
-        unsigned id;
+        TypeId<ComponentBase> id;
         SafePtr<ComponentBase> pointer;
         template <typename ComponentT>
         SafePtr<ComponentT> castTo() {
-            if (ClassId<ComponentBase, ComponentT>::id() == id)
+            if (GetTypeId<ComponentBase, ComponentT>::value() == id)
                 return SafePtr<ComponentT>(pointer);
             else
                 return SafePtr<ComponentT>();
@@ -77,9 +77,9 @@ public:
     {};
 
 protected:
-    bool isManagerRegistered(unsigned id);
+    bool isManagerRegistered(TypeId<ComponentBase> id);
 
-    bool isComponentRegistered(unsigned id);
+    bool isComponentRegistered(TypeId<ComponentBase> id);
 
     /// Returns manager if avaliable
     template <typename ManagerT>
@@ -137,11 +137,11 @@ private:
     bool m_initializedFlag = false;
     SafePtr<Entity> m_entity;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
-    TypeMap<ComponentBase, SafePtr<ManagerBase>> m_components;
+    TypeMap<ComponentBase, SafePtr<ComponentBase>> m_components;
     std::shared_ptr<EventController> m_eventController;
 
-    ClassIdList m_dependenceManagerList;
-    ClassIdList m_dependenceComponentList;
+    TypeIdList m_dependenceManagerList;
+    TypeIdList m_dependenceComponentList;
     std::weak_ptr<ISubscription> m_updateSubscription;
 
     void subscribeEvents();

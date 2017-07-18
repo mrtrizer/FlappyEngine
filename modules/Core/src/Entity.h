@@ -65,7 +65,7 @@ public:
     std::shared_ptr<ComponentT> component();
 
     /// @brief Returns component by id
-    std::shared_ptr<ComponentBase> componentById(unsigned id);
+    std::shared_ptr<ComponentBase> componentById(TypeId<ComponentBase> id);
 
     /// @brief Returns all components of required type.
     template<typename ComponentT>
@@ -127,7 +127,8 @@ private:
 
 template <typename ManagerEventT>
 void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController) {
-    for (int id = 0; id < m_managers.size(); id++) {
+    for (int i = 0; i < m_managers.size(); i++) {
+        TypeId<ComponentBase> id(i);
         auto manager = m_managers.getById(id);
         if (manager != nullptr) {
             auto event = ManagerEventT();

@@ -23,13 +23,6 @@ bool isPowOfTwo(int x) {
     return !(x == 0) && !(x & (x - 1));
 }
 
-std::list<unsigned> concat(std::list<unsigned> first, std::list<unsigned> second) {
-    std::list<unsigned> newList;
-    newList.merge(first);
-    newList.merge(second);
-    return newList;
-}
-
 } // Tools
 
 } // flappy

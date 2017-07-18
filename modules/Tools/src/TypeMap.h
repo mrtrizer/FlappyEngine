@@ -14,51 +14,71 @@ class TypeMap
 {
 public:
     TypeMap() :
-        elements(ClassCounter<ContextT>::count())
+        m_elements(TypeCounter<ContextT>::count())
     {}
 
-    ElementT& getById(unsigned id)
+    typename std::vector<ElementT>::iterator begin()
     {
-        return elements.at(id);
+        return m_elements.begin();
+    }
+
+    typename std::vector<ElementT>::iterator end()
+    {
+        return m_elements.end();
+    }
+
+    typename std::vector<ElementT>::const_iterator begin() const
+    {
+        return m_elements.begin();
+    }
+
+    typename std::vector<ElementT>::const_iterator end() const
+    {
+        return m_elements.end();
+    }
+
+    ElementT& getById(TypeId<ContextT> id)
+    {
+        return m_elements.at(id.toUnsigned());
     }
 
     // TODO: Add test
     int size() {
-        return int(elements.size());
+        return int(m_elements.size());
     }
 
-    ElementT getById(unsigned id) const
+    ElementT getById(TypeId<ContextT> id) const
     {
-        return elements.at(id);
+        return m_elements.at(id.toUnsigned());
     }
 
     // TODO: Add test
     template <typename ValueT>
-    void setById(unsigned id, ValueT&& element)
+    void setById(TypeId<ContextT> id, ValueT&& element)
     {
-        elements[id] = std::forward<ValueT>(element);
+        m_elements[id.toUnsigned()] = std::forward<ValueT>(element);
     }
 
     template <typename T>
     ElementT& get()
     {
-        return getById(ClassId<ContextT, T>::id());
+        return getById(GetTypeId<ContextT, T>::value());
     }
 
     template <typename T>
     ElementT get() const
     {
-        return getById(ClassId<ContextT, T>::id());
+        return getById(GetTypeId<ContextT, T>::value());
     }
 
     template <typename T, typename ValueT>
     void set(ValueT&& element)
     {
-        setById(ClassId<ContextT, T>::id(), std::forward<ValueT>(element));
+        setById(GetTypeId<ContextT, T>::value(), std::forward<ValueT>(element));
     }
 
 private:
-    std::vector<ElementT> elements;
+    std::vector<ElementT> m_elements;
 };
 
 } // flappy

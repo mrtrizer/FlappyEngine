@@ -24,12 +24,12 @@ class Component: public ComponentBase
 public:
     using ComponentBase::ComponentBase;
 
-    unsigned componentId() override {
-        return ClassId<ComponentBase, DerivedT>::id();
+    TypeId<ComponentBase> componentId() override {
+        return GetTypeId<ComponentBase, DerivedT>::value();
     }
 
-    static unsigned id() {
-        return ClassId<ComponentBase, DerivedT>::id();
+    static TypeId<ComponentBase> id() {
+        return GetTypeId<ComponentBase, DerivedT>::value();
     }
 };
 

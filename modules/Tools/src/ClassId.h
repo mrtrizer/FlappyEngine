@@ -2,10 +2,10 @@
 
 namespace flappy {
 
-template <typename Context>
-class ClassCounter {
+template <typename ContextT>
+class TypeCounter {
 public:
-    ClassCounter():
+    TypeCounter():
         m_curId(m_count) {
         m_count++;
     }
@@ -16,23 +16,42 @@ private:
     const unsigned m_curId;
 };
 
-template <typename Context>
-unsigned ClassCounter<Context>::m_count = 0;
+template <typename ContextT>
+unsigned TypeCounter<ContextT>::m_count = 0;
 
-template <typename Context, typename Class>
-class ClassId_ {
+template <typename ContextT>
+class TypeId {
+public:
+    explicit TypeId(unsigned id = -1)
+        : m_id(id)
+    {}
+    TypeId(const TypeId&) = default;
+    TypeId(TypeId&&) = default;
+    TypeId& operator = (const TypeId&) = default;
+    bool operator>(const TypeId& other) { return other.toUnsigned() > toUnsigned(); }
+    bool operator<(const TypeId& other) { return other.toUnsigned() < toUnsigned(); }
+    bool operator==(const TypeId& other) { return other.toUnsigned() == toUnsigned(); }
+    bool operator!=(const TypeId& other) { return other.toUnsigned() != toUnsigned(); }
+    unsigned toUnsigned() const { return m_id; }
+    bool isValid() const { return m_id != -1; }
+private:
+    unsigned m_id;
+};
+
+template <typename ContextT, typename TypeT>
+class GetTypeId_ {
 public:
     /// Returns serial ids for classes in a context.
     /// Base or client classes can be used as a context.
-    static unsigned id() {return m_counter.id();}
+    static TypeId<ContextT> value() {return TypeId<ContextT>(m_counter.id());}
 private:
-    static ClassCounter<Context> m_counter;
+    static TypeCounter<ContextT> m_counter;
 };
 
-template <typename Context, typename Class>
-ClassCounter<Context> ClassId_<Context, Class>::m_counter;
+template <typename ContextT, typename ClassT>
+TypeCounter<ContextT> GetTypeId_<ContextT, ClassT>::m_counter;
 
-template <typename Context, typename Class>
-using ClassId = ClassId_<std::decay_t<Context>, std::decay_t<Class>>;
-    
+template <typename ContextT, typename ClassT>
+using GetTypeId = GetTypeId_<std::decay_t<ContextT>, std::decay_t<ClassT>>;
+
 } // flappy

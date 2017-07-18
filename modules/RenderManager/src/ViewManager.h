@@ -36,7 +36,7 @@ public:
         float height;
     };
 
-    ViewManager(std::list<unsigned>);
+    ViewManager(TypeIdList);
 
     void update(DeltaTime dt);
 

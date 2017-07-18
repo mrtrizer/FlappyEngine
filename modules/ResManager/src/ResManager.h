@@ -18,7 +18,7 @@ class ResFactory;
 class ResManager final: public Manager<ResManager>
 {
 public:
-    ResManager():m_resTypeVector(ClassCounter<Res>::count()) {}
+    ResManager() {}
     virtual ~ResManager() = default;
     ResManager(const ResManager&) = delete;
     ResManager& operator=(const ResManager&) = delete;
@@ -85,13 +85,13 @@ private:
         ResKeeper& getResKeeper(const std::string& name, SafePtr<ResManager>);
     };
 
-    std::vector<ResType> m_resTypeVector;
+    TypeMap<Res, ResType> m_resTypeVector;
 
     /// @return ResType reference. Resize m_resTypeVector if need.
     template <typename ResT>
     ResType& getResType()
     {
-        return m_resTypeVector[ClassId<Res, ResT>::id()];
+        return m_resTypeVector.getById(GetTypeId<Res, ResT>::value());
     }
 };
 

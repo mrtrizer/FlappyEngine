@@ -11,7 +11,7 @@ public:
 
     using ComponentBase::ComponentBase;
 
-    virtual unsigned componentId() = 0;
+    virtual TypeId<ComponentBase> componentId() = 0;
 
 protected:
 

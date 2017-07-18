@@ -12,16 +12,14 @@ namespace flappy
 template <typename DerivedT>
 class Manager: public ManagerBase {
 public:
-    using ClassIdList = std::list<unsigned>;
-
     using ManagerBase::ManagerBase;
 
-    unsigned componentId() override {
-        return ClassId<ComponentBase, DerivedT>::id();
+    TypeId<ComponentBase> componentId() override {
+        return GetTypeId<ComponentBase, DerivedT>::value();
     }
 
-    static unsigned id() {
-        return ClassId<ComponentBase, DerivedT>::id();
+    static TypeId<ComponentBase> id() {
+        return GetTypeId<ComponentBase, DerivedT>::value();
     }
 
 private:

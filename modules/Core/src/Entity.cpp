@@ -37,7 +37,7 @@ Entity::~Entity()
 {
 }
 
-std::shared_ptr<ComponentBase> Entity::componentById(unsigned id) {
+std::shared_ptr<ComponentBase> Entity::componentById(TypeId<ComponentBase> id) {
     for (auto component: m_components)
         if (component->componentId() == id)
             return component;

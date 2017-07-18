@@ -16,7 +16,7 @@ ComponentBase::ComponentBase():
     subscribeEvents();
 }
 
-ComponentBase::ComponentBase(ClassIdList dependenceManagerIdList, flappy::ComponentBase::ClassIdList dependenceComponentList)
+ComponentBase::ComponentBase(TypeIdList dependenceManagerIdList, flappy::ComponentBase::TypeIdList dependenceComponentList)
     : m_eventController(std::make_shared<EventController>()),
       m_dependenceManagerList(dependenceManagerIdList),
       m_dependenceComponentList(dependenceComponentList)
@@ -28,11 +28,11 @@ ComponentBase::~ComponentBase() {
 
 }
 
-bool ComponentBase::isManagerRegistered(unsigned id) {
+bool ComponentBase::isManagerRegistered(TypeId<ComponentBase> id) {
     return m_managers.getById(id) != nullptr;
 }
 
-bool ComponentBase::isComponentRegistered(unsigned id) {
+bool ComponentBase::isComponentRegistered(TypeId<flappy::ComponentBase> id) {
     return m_components.getById(id) != nullptr;
 }
 
@@ -54,7 +54,7 @@ void ComponentBase::subscribeEvents() {
             tryInit();
     });
     events()->subscribeIn([this](const ComponentRemovedEvent& e) {
-        m_components.setById(e.id, SafePtr<ManagerBase>());
+        m_components.setById(e.id, SafePtr<ComponentBase>());
         if (isInitialized() && !allComponentsReady())
             tryDeinit();
     });
@@ -83,14 +83,14 @@ void ComponentBase::deinitInternal() {
 }
 
 bool ComponentBase::allManagersReady() {
-    for (unsigned dependenceTypeId : m_dependenceManagerList)
+    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceManagerList)
         if (!isManagerRegistered(dependenceTypeId))
             return false;
     return true;
 }
 
 bool ComponentBase::allComponentsReady() {
-    for (unsigned dependenceTypeId : m_dependenceComponentList)
+    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
         if (!isComponentRegistered(dependenceTypeId))
             return false;
     return true;

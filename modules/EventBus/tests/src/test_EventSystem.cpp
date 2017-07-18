@@ -49,7 +49,7 @@ TEST_CASE( "EventSystem::subscriptionIn() EventSystem::FlowStatus") {
 
         auto subscriptionAll = eventBus.subscribeInAll(
                     [&callCounter](const EventHandle& handle) {
-            if (handle.id() == ClassId<EventHandle, TestEvent>::id())
+            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
                 callCounter++;
             return FlowStatus::CONTINUE;
         });
@@ -81,7 +81,7 @@ TEST_CASE( "EventSystem::subscriptionAll() EventSystem::FlowStatus") {
         });
 
         auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
-            if (handle.id() == ClassId<EventHandle, TestEvent>::id())
+            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
                 callCounter++;
             return FlowStatus::BREAK;
         });
@@ -111,7 +111,7 @@ TEST_CASE( "EventSystem::subscriptionOut() EventSystem::FlowStatus") {
         });
 
         auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
-            if (handle.id() == ClassId<EventHandle, TestEvent>::id())
+            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
                 callCounter++;
             return FlowStatus::CONTINUE;
         });
@@ -136,7 +136,7 @@ TEST_CASE( "EventSystem::subscribeAll() EventSystem::post()") {
     EventBus eventBus;
 
     auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
-        if (handle.id() == ClassId<EventHandle, TestEvent1>::id())
+        if (handle.id() == GetTypeId<EventHandle, TestEvent1>::value())
             callCounter++;
         return FlowStatus::CONTINUE;
     });

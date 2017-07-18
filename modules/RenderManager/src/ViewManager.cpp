@@ -11,7 +11,7 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-ViewManager::ViewManager(std::list<unsigned> dependencies):
+ViewManager::ViewManager(TypeIdList dependencies):
     Manager(Tools::concat(dependencies, {SceneManager::id()}))
 {}
 

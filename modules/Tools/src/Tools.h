@@ -84,7 +84,13 @@ namespace Tools
         return vector.at(pos);
     }
 
-    std::list<unsigned> concat(std::list<unsigned> first, std::list<unsigned> second);
+    template <typename T>
+    std::list<T> concat(std::list<T> first, std::list<T> second) {
+        std::list<T> newList;
+        newList.merge(first);
+        newList.merge(second);
+        return newList;
+    }
 }
 
 using DeltaTime = float;
