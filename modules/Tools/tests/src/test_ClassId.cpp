@@ -13,9 +13,9 @@ struct B: public A {};
 struct C: public B {};
 
 TEST_CASE( "ClassId::id()") {
-    REQUIRE((ClassId<A,A>::id() == 0));
-    REQUIRE((ClassId<A,B>::id() == 1));
-    REQUIRE((ClassId<A,C>::id() == 2));
-    REQUIRE((ClassId<A,B>::id() == 1));
-    REQUIRE(ClassCounter<A>::count() == 3);
+    REQUIRE((GetTypeId<A,A>::value() == TypeId<A>(0)));
+    REQUIRE((GetTypeId<A,B>::value() == TypeId<A>(1)));
+    REQUIRE((GetTypeId<A,C>::value() == TypeId<A>(2)));
+    REQUIRE((GetTypeId<A,B>::value() == TypeId<A>(1)));
+    REQUIRE(TypeCounter<A>::count() == 3);
 }
