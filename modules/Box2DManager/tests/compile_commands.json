@@ -260,6 +260,21 @@
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
 },
 {
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp"
+},
+{
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/Box2DManager/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
   "command": "/usr/bin/clang++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp",
   "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp"
