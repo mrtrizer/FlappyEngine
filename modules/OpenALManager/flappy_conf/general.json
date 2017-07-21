@@ -1,0 +1,34 @@
+{
+    "name":"OpenALManager",
+    "modules": [
+        {
+            "path":"../Core"
+        }
+    ],
+    "cxx":{
+        "flags": [
+            "-std=c++1y"
+        ],
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    },
+    "cmake": {
+        "module_path": "cmake",
+        "packages": [
+            {
+                "name":"OpenAL",
+                "libs":"${OPENAL_LIBRARY}",
+                "includes":"${OPENAL_INCLUDE_DIR}"
+            },
+            {
+                "name":"ALUT",
+                "libs":"${ALUT_LIBRARY}",
+                "includes":"${ALUT_INCLUDE_DIR}"
+            }
+        ]
+    }
+}
