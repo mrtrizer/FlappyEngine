@@ -16,6 +16,12 @@ class TouchComponent: public Component<TouchComponent>
 public:
     TouchComponent();
 
+    void touchDown(glm::vec2 pos, int index);
+    void touchUp(glm::vec2 pos, int index);
+    void touchMove(glm::vec2 pos, int index);
+
+    bool testPoint(glm::vec2 pos);
+
 private:
     void init() final;
     void deinit() final;

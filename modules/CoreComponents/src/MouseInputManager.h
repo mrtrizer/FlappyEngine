@@ -8,10 +8,10 @@
 namespace flappy
 {
 
-class InputManager: public Manager<InputManager>
+class MouseInputManager: public Manager<MouseInputManager>
 {
 public:
-    enum MouseButton {
+    enum class MouseButton {
         LEFT,
         RIGHT,
         CENTER,
@@ -38,9 +38,9 @@ public:
         glm::vec2 pos;
     };
 
-    bool mouseDown() const;
-    bool mouseUp() const;
-    bool mousePressed() const;
+    bool isMouseDown(MouseButton mouseButton = MouseButton::LEFT) const;
+    bool isMouseUp(MouseButton mouseButton = MouseButton::LEFT) const;
+    bool isMousePressed(MouseButton mouseButton = MouseButton::LEFT) const;
     glm::vec2 mousePos() const;
 
     void update(DeltaTime) override;

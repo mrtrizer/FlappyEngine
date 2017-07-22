@@ -3,43 +3,43 @@
 
 #include <memory>
 
-#include <InputManager.h>
+#include <MouseInputManager.h>
 
 using namespace flappy;
 using namespace std;
 using namespace glm;
 
-TEST_CASE( "InputManager::isMouseDown()") {
-    InputManager inputManager;
+TEST_CASE( "MouseInputManager::isMouseDown()") {
+    MouseInputManager inputManager;
     inputManager.setMouseDown({0.0f, 0.0f});
-    REQUIRE(inputManager.mouseDown() == false);
+    REQUIRE(inputManager.isMouseDown() == false);
     inputManager.update(1);
-    REQUIRE(inputManager.mouseDown() == true);
+    REQUIRE(inputManager.isMouseDown() == true);
     inputManager.update(1);
-    REQUIRE(inputManager.mouseDown() == false);
+    REQUIRE(inputManager.isMouseDown() == false);
 }
 
-TEST_CASE( "InputManager::isMouseUp()") {
-    InputManager inputManager;
+TEST_CASE( "MouseInputManager::isMouseUp()") {
+    MouseInputManager inputManager;
     inputManager.setMouseUp({0.0f, 0.0f});
-    REQUIRE(inputManager.mouseUp() == false);
+    REQUIRE(inputManager.isMouseUp() == false);
     inputManager.update(1);
-    REQUIRE(inputManager.mouseUp() == true);
+    REQUIRE(inputManager.isMouseUp() == true);
     inputManager.update(1);
-    REQUIRE(inputManager.mouseUp() == false);
+    REQUIRE(inputManager.isMouseUp() == false);
 }
 
-TEST_CASE( "InputManager::isMousePressed()") {
-    InputManager inputManager;
-    REQUIRE(inputManager.mousePressed() == false);
+TEST_CASE( "MouseInputManager::isMousePressed()") {
+    MouseInputManager inputManager;
+    REQUIRE(inputManager.isMousePressed() == false);
     inputManager.setMouseDown({0.0f, 0.0f});
-    REQUIRE(inputManager.mousePressed() == true);
+    REQUIRE(inputManager.isMousePressed() == true);
     inputManager.setMouseUp({0.0f, 0.0f});
-    REQUIRE(inputManager.mousePressed() == false);
+    REQUIRE(inputManager.isMousePressed() == false);
 }
 
-TEST_CASE( "InputManager::getMousePos()") {
-    InputManager inputManager;
+TEST_CASE( "MouseInputManager::getMousePos()") {
+    MouseInputManager inputManager;
     REQUIRE(inputManager.mousePos() == vec2(0,0));
     inputManager.setMousePos({10, 10});
     REQUIRE(inputManager.mousePos() == vec2(10,10));
