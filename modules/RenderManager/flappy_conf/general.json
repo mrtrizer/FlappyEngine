@@ -9,8 +9,10 @@
         },
         {
             "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
         }
-
     ],
     "cxx":{
         "header_dirs": [

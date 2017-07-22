@@ -36,8 +36,8 @@ public:
     b2Fixture* fixture() const;
 
 private:
-    void init() override;
-    void deinit() override;
+    void init() final;
+    void deinit() final;
 
     void initFixture();
 

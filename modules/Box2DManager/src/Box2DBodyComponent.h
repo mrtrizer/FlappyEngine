@@ -2,6 +2,8 @@
 
 #include <Component.h>
 
+#include <glm/vec3.hpp>
+
 #include <Box2D/Box2D.h>
 
 namespace flappy {
@@ -17,10 +19,13 @@ public:
     }
 
 private:
-    void init() override;
-    void deinit() override;
+    void init() final;
+    void deinit() final;
+    void update(DeltaTime dt) final;
 
     b2Body* m_body;
+    glm::vec3 m_lastTransformPos;
+    float m_lastTransformAngle;
 };
 
 } // flappy

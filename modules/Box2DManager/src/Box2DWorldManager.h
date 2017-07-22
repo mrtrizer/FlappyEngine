@@ -12,8 +12,6 @@ public:
 
     b2World& world() { return m_world; }
 
-    void update(DeltaTime dt) final;
-
     void setGravity(glm::vec2 gravity);
 
     float sizeFactor() const;
@@ -26,10 +24,12 @@ public:
     void setPositionIterations(int positionIterations);
 
 private:
+    void update(DeltaTime dt) final;
+
     b2World m_world;
     int m_velocityIterations = 6;
     int m_positionIterations = 2;
-    float m_sizeFactor;
+    float m_sizeFactor = 1.0f;
 };
 
 } // flappy

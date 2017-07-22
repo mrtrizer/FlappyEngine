@@ -1,12 +1,16 @@
 {
-    "name":"CoreComponents",
+    "name":"Box2DManager",
     "modules": [
         {
             "path":"../Core"
         },
         {
             "path":"../Tools"
+        },
+        {
+            "path":"../CoreComponents"
         }
+
     ],
     "cxx":{
         "header_dirs": [
