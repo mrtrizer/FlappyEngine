@@ -10,6 +10,7 @@
 #include <GLTools.h>
 #include <GLViewManager.h>
 #include <AppManager.h>
+#include <Entity.h>
 
 #include "Sdl2Utils.h"
 

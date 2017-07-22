@@ -3,7 +3,7 @@
 #include <memory>
 #include <glm/mat4x4.hpp>
 
-#include "ViewManager.h"
+#include <Manager.h>
 #include <CameraComponent.h>
 #include <TransformComponent.h>
 
