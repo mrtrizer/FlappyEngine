@@ -11,7 +11,7 @@ using namespace glm;
 
 TEST_CASE( "InputManager::isMouseDown()") {
     InputManager inputManager;
-    inputManager.setMouseDown();
+    inputManager.setMouseDown({0.0f, 0.0f});
     REQUIRE(inputManager.mouseDown() == false);
     inputManager.update(1);
     REQUIRE(inputManager.mouseDown() == true);
@@ -21,7 +21,7 @@ TEST_CASE( "InputManager::isMouseDown()") {
 
 TEST_CASE( "InputManager::isMouseUp()") {
     InputManager inputManager;
-    inputManager.setMouseUp();
+    inputManager.setMouseUp({0.0f, 0.0f});
     REQUIRE(inputManager.mouseUp() == false);
     inputManager.update(1);
     REQUIRE(inputManager.mouseUp() == true);
@@ -32,9 +32,9 @@ TEST_CASE( "InputManager::isMouseUp()") {
 TEST_CASE( "InputManager::isMousePressed()") {
     InputManager inputManager;
     REQUIRE(inputManager.mousePressed() == false);
-    inputManager.setMouseDown();
+    inputManager.setMouseDown({0.0f, 0.0f});
     REQUIRE(inputManager.mousePressed() == true);
-    inputManager.setMouseUp();
+    inputManager.setMouseUp({0.0f, 0.0f});
     REQUIRE(inputManager.mousePressed() == false);
 }
 
