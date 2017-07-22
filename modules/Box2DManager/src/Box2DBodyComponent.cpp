@@ -23,6 +23,19 @@ void Box2DBodyComponent::init() {
     m_body = manager<Box2DWorldManager>()->world().CreateBody(&bodyDef);
 }
 
+bool Box2DBodyComponent::testPoint(glm::vec2 point) {
+    float sizeFactor = manager<Box2DWorldManager>()->sizeFactor();
+    b2Vec2 b2Point(point.x * sizeFactor, point.y * sizeFactor);
+    b2Fixture* fixture = body().GetFixtureList();
+    while (fixture) {
+        if (fixture->TestPoint(b2Point)) {
+            return true;
+        }
+        fixture = fixture->GetNext();
+    }
+    return false;
+}
+
 void Box2DBodyComponent::deinit() {
     manager<Box2DWorldManager>()->world().DestroyBody(m_body);
 }

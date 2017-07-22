@@ -1,6 +1,7 @@
 #include "TouchComponent.h"
 
 #include <Box2DBodyComponent.h>
+#include <Box2DWorldManager.h>
 
 #include "UIManager.h"
 

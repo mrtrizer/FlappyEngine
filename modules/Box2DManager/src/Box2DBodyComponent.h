@@ -18,6 +18,8 @@ public:
         return *m_body;
     }
 
+    bool testPoint(glm::vec2 point);
+
 private:
     void init() final;
     void deinit() final;

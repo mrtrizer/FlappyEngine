@@ -13,22 +13,30 @@ class InputManager: public Manager<InputManager>
 public:
     enum MouseButton {
         LEFT,
-        RIGHT
+        RIGHT,
+        CENTER,
+        BUTTON_1,
+        BUTTON_2,
+        BUTTON_3,
+        BUTTON_4,
+        BUTTON_5,
+        BUTTON_6,
+        BUTTON_7
     };
 
-    struct OnMouseDown: public IEvent {
+    struct MouseDownEvent: public IEvent {
         float x;
         float y;
         MouseButton button;
     };
 
-    struct OnMouseUp: public IEvent {
+    struct MouseUpEvent: public IEvent {
         float x;
         float y;
         MouseButton button;
     };
 
-    struct OnMouseMove: public IEvent {
+    struct MouseMoveEvent: public IEvent {
         float x;
         float y;
     };
