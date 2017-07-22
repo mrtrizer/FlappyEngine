@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default",
+  "command": "/usr/bin/clang++    -I/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/UI/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/src/test_UIManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/UI/tests/src/test_UIManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/src/test_UIManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/UI",
+  "command": "/usr/bin/clang++   -DUI_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/UI/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/UI.dir/home/mrtrizer/Projects/flappy_engine/modules/UI/src/TouchComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/UI/src/TouchComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/UI/src/TouchComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/UI",
+  "command": "/usr/bin/clang++   -DUI_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/UI/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/UI.dir/home/mrtrizer/Projects/flappy_engine/modules/UI/src/UIManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/UI/src/UIManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/UI/src/UIManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Catch",
+  "command": "/usr/bin/clang++   -DCatch_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/UI/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp"
+}
+]
