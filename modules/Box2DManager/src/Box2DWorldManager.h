@@ -10,20 +10,26 @@ class Box2DWorldManager: public Manager<Box2DWorldManager> {
 public:
     Box2DWorldManager();
 
-    b2World world() { return m_world; }
+    b2World& world() { return m_world; }
 
-    void update(DeltaTime dt);
+    void update(DeltaTime dt) final;
 
-    void setVelocityIterations(int value) { m_velocityIterations = value; }
-    void setPositionIterations(int value) { m_positionIterations = value; }
+    void setGravity(glm::vec2 gravity);
 
-    int velocityIterations() { return m_velocityIterations; }
-    int positionIterations() { return m_positionIterations; }
+    float sizeFactor() const;
+    void setSizeFactor(float sizeFactor);
+
+    int velocityIterations() const;
+    void setVelocityIterations(int velocityIterations);
+
+    int positionIterations() const;
+    void setPositionIterations(int positionIterations);
 
 private:
     b2World m_world;
-    int32 m_velocityIterations = 6;
-    int32 m_positionIterations = 2;
+    int m_velocityIterations = 6;
+    int m_positionIterations = 2;
+    float m_sizeFactor;
 };
 
 } // flappy

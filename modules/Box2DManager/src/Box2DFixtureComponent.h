@@ -10,7 +10,7 @@ class Box2DFixtureComponent: public Component<Box2DFixtureComponent> {
 public:
     Box2DFixtureComponent();
 
-    void setShape(std::unique_ptr<b2Shape>&& shape);
+    void setShape(const b2Shape &shape);
 
     float friction() const;
     void setFriction(float friction);
@@ -39,11 +39,13 @@ private:
     void init() override;
     void deinit() override;
 
-    std::unique_ptr<b2Shape> m_shape;
+    void initFixture();
+
+    const b2Shape* m_shape;
 
     float m_friction = 0.2f;
     float m_elasticity = 0.0f;
-    float m_density = 1.0f;
+    float m_density = 0.0f;
     bool m_isSensor = false;
 
     uint16_t m_categoryBits = 0x0001;

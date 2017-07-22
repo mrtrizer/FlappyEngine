@@ -12,10 +12,15 @@ Box2DFixtureComponent::Box2DFixtureComponent() : Component({}, {Box2DBodyCompone
 }
 
 void Box2DFixtureComponent::init() {
+    if ((m_shape != nullptr) && isInitialized())
+        initFixture();
+}
+
+void Box2DFixtureComponent::initFixture() {
     auto bodyComponent = entity()->component<Box2DBodyComponent>();
     b2FixtureDef fixtureDef;
 
-    fixtureDef.shape = m_shape.get();
+    fixtureDef.shape = m_shape;
 
     // physics params
     fixtureDef.friction = m_friction;
@@ -32,9 +37,11 @@ void Box2DFixtureComponent::init() {
 }
 
 void Box2DFixtureComponent::deinit() {
-    auto bodyComponent = entity()->component<Box2DBodyComponent>();
-    bodyComponent->body().DestroyFixture(m_fixture);
-    m_fixture = nullptr;
+    if (m_fixture != nullptr) {
+        auto bodyComponent = entity()->component<Box2DBodyComponent>();
+        bodyComponent->body().DestroyFixture(m_fixture);
+        m_fixture = nullptr;
+    }
 }
 
 b2Fixture* Box2DFixtureComponent::fixture() const
@@ -42,11 +49,10 @@ b2Fixture* Box2DFixtureComponent::fixture() const
     return m_fixture;
 }
 
-void Box2DFixtureComponent::setShape(std::unique_ptr<b2Shape>&& shape) {
-    m_shape = std::move(shape);
-    if (m_fixture != nullptr) {
-       LOGE("Setting of shape after initialization is not supported");
-    }
+void Box2DFixtureComponent::setShape(const b2Shape& shape) {
+    m_shape = &shape;
+    deinit();
+    init();
 }
 
 int16_t Box2DFixtureComponent::groupIndex() const
