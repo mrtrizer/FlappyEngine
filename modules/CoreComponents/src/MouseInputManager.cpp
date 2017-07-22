@@ -36,8 +36,10 @@ void MouseInputManager::update(DeltaTime)
         m_mouseUp = 0;
 }
 
-void MouseInputManager::setMouseDown(const vec2 &mousePos)
+void MouseInputManager::setMouseDown(MouseButton mouseButton, const vec2 &mousePos)
 {
+    (void)mouseButton;
+
     m_mouseDown = 2;
     m_mousePressed = true;
     this->m_mousePos = mousePos;
@@ -48,8 +50,10 @@ void MouseInputManager::setMouseDown(const vec2 &mousePos)
     events()->post(mouseDownEvent);
 }
 
-void MouseInputManager::setMouseUp(const vec2 &mousePos)
+void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos)
 {
+    (void)mouseButton;
+
     m_mouseUp = 2;
     m_mousePressed = false;
     this->m_mousePos = mousePos;
@@ -60,8 +64,10 @@ void MouseInputManager::setMouseUp(const vec2 &mousePos)
     events()->post(mouseUpEvent);
 }
 
-void MouseInputManager::setMousePos(const vec2 &mousePos)
+void MouseInputManager::setMousePos(MouseButton mouseButton, const vec2 &mousePos)
 {
+    (void)mouseButton;
+
     this->m_mousePos = mousePos;
 
     MouseInputManager::MouseMoveEvent mouseMoveEvent;

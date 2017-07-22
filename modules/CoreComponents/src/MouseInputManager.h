@@ -44,9 +44,9 @@ public:
     glm::vec2 mousePos() const;
 
     void update(DeltaTime) override;
-    void setMouseDown(const glm::vec2 &mousePos);
-    void setMouseUp(const glm::vec2 &mousePos);
-    void setMousePos(const glm::vec2& m_mousePos);
+    void setMouseDown(MouseButton mouseButton, const glm::vec2 &mousePos);
+    void setMouseUp(MouseButton mouseButton, const glm::vec2 &mousePos);
+    void setMousePos(MouseButton mouseButton, const glm::vec2& m_mousePos);
 private:
 
     glm::vec2 m_mousePos;
