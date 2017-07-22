@@ -33,21 +33,37 @@ void InputManager::update(DeltaTime)
         m_mouseUp = 0;
 }
 
-void InputManager::setMouseDown()
+void InputManager::setMouseDown(const vec2 &mousePos)
 {
     m_mouseDown = 2;
     m_mousePressed = true;
+    this->m_mousePos = mousePos;
+
+    InputManager::MouseDownEvent mouseDownEvent;
+    mouseDownEvent.pos = mousePos;
+    mouseDownEvent.button = InputManager::MouseButton::LEFT;
+    events()->post(mouseDownEvent);
 }
 
-void InputManager::setMouseUp()
+void InputManager::setMouseUp(const vec2 &mousePos)
 {
     m_mouseUp = 2;
     m_mousePressed = false;
+    this->m_mousePos = mousePos;
+
+    InputManager::MouseDownEvent mouseUpEvent;
+    mouseUpEvent.pos = mousePos;
+    mouseUpEvent.button = InputManager::MouseButton::LEFT;
+    events()->post(mouseUpEvent);
 }
 
 void InputManager::setMousePos(const vec2 &mousePos)
 {
     this->m_mousePos = mousePos;
+
+    InputManager::MouseMoveEvent mouseMoveEvent;
+    mouseMoveEvent.pos = mousePos;
+    events()->post(mouseMoveEvent);
 }
 
 } // flappy

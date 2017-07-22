@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 #include <Manager.h>
 #include <Tools.h>
@@ -25,20 +25,17 @@ public:
     };
 
     struct MouseDownEvent: public IEvent {
-        float x;
-        float y;
+        glm::vec2 pos;
         MouseButton button;
     };
 
     struct MouseUpEvent: public IEvent {
-        float x;
-        float y;
+        glm::vec2 pos;
         MouseButton button;
     };
 
     struct MouseMoveEvent: public IEvent {
-        float x;
-        float y;
+        glm::vec2 pos;
     };
 
     bool mouseDown() const;
@@ -47,8 +44,8 @@ public:
     glm::vec2 mousePos() const;
 
     void update(DeltaTime) override;
-    void setMouseDown();
-    void setMouseUp();
+    void setMouseDown(const glm::vec2 &mousePos);
+    void setMouseUp(const glm::vec2 &mousePos);
     void setMousePos(const glm::vec2& m_mousePos);
 private:
 
