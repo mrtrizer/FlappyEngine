@@ -21,8 +21,23 @@
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
-  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/InputManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/InputManager.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/InputManager.cpp"
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/KeyboardInputManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/KeyboardInputManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/KeyboardInputManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseInputManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseInputManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseInputManager.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseToTouchConvertComponent.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseToTouchConvertComponent.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/MouseToTouchConvertComponent.cpp"
+},
+{
+  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",
+  "command": "/usr/bin/clang++   -DCoreComponents_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/TouchInputManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/TouchInputManager.cpp",
+  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/src/TouchInputManager.cpp"
 },
 {
   "directory": "/home/mrtrizer/Projects/flappy_engine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreComponents",

@@ -11,7 +11,7 @@ using namespace glm;
 
 TEST_CASE( "MouseInputManager::isMouseDown()") {
     MouseInputManager inputManager;
-    inputManager.setMouseDown({0.0f, 0.0f});
+    inputManager.setMouseDown(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMouseDown() == false);
     inputManager.update(1);
     REQUIRE(inputManager.isMouseDown() == true);
@@ -21,7 +21,7 @@ TEST_CASE( "MouseInputManager::isMouseDown()") {
 
 TEST_CASE( "MouseInputManager::isMouseUp()") {
     MouseInputManager inputManager;
-    inputManager.setMouseUp({0.0f, 0.0f});
+    inputManager.setMouseUp(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMouseUp() == false);
     inputManager.update(1);
     REQUIRE(inputManager.isMouseUp() == true);
@@ -32,15 +32,15 @@ TEST_CASE( "MouseInputManager::isMouseUp()") {
 TEST_CASE( "MouseInputManager::isMousePressed()") {
     MouseInputManager inputManager;
     REQUIRE(inputManager.isMousePressed() == false);
-    inputManager.setMouseDown({0.0f, 0.0f});
+    inputManager.setMouseDown(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMousePressed() == true);
-    inputManager.setMouseUp({0.0f, 0.0f});
+    inputManager.setMouseUp(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMousePressed() == false);
 }
 
 TEST_CASE( "MouseInputManager::getMousePos()") {
     MouseInputManager inputManager;
     REQUIRE(inputManager.mousePos() == vec2(0,0));
-    inputManager.setMousePos({10, 10});
+    inputManager.setMousePos(MouseInputManager::MouseButton::LEFT, {10, 10});
     REQUIRE(inputManager.mousePos() == vec2(10,10));
 }
