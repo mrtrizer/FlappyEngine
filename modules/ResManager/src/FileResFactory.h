@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "ResFactory.h"
 
 namespace flappy {

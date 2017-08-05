@@ -28,10 +28,10 @@ public:
     TypeId(const TypeId&) = default;
     TypeId(TypeId&&) = default;
     TypeId& operator = (const TypeId&) = default;
-    bool operator>(const TypeId& other) { return other.toUnsigned() > toUnsigned(); }
-    bool operator<(const TypeId& other) { return other.toUnsigned() < toUnsigned(); }
-    bool operator==(const TypeId& other) { return other.toUnsigned() == toUnsigned(); }
-    bool operator!=(const TypeId& other) { return other.toUnsigned() != toUnsigned(); }
+    bool operator>(const TypeId& other) const { return other.toUnsigned() > toUnsigned(); }
+    bool operator<(const TypeId& other) const { return other.toUnsigned() < toUnsigned(); }
+    bool operator==(const TypeId& other) const { return other.toUnsigned() == toUnsigned(); }
+    bool operator!=(const TypeId& other) const { return other.toUnsigned() != toUnsigned(); }
     unsigned toUnsigned() const { return m_id; }
     bool isValid() const { return m_id != -1; }
 private:

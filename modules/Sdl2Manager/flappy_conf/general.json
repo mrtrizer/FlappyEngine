@@ -32,7 +32,7 @@
             },
             {
                 "name":"SDL2",
-                "libs":"${SDL2_LIBRARIES}",
+                "libs":"${SDL2_LIBRARY}",
                 "includes":"${SDL2_INCLUDE_DIRS}"
             }
         ]

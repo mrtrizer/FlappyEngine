@@ -2,6 +2,7 @@
 #define SAFEPTR_H
 
 #include <memory>
+#include <stdexcept>
 
 namespace  flappy {
 

@@ -1,4 +1,4 @@
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 #include "Sdl2GlTextureResFactory.h"
 #include <GLTextureRes.h>
