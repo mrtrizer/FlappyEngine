@@ -28,10 +28,21 @@ function copyFile(source, target, cb) {
 module.exports.type = "*";
 module.exports.generate = function (config, resSrcDir, cacheDir) {
     const path = require("path");
-    const fs = require('fs');
     const inputPath = path.join(resSrcDir, config.input)
     const outputPath = path.join(cacheDir, config.input)
     console.log(inputPath);
     console.log(outputPath);
     copyFile(inputPath, outputPath);
 };
+module.exports.getResList = function (config, resSrcDir, cacheDir) {
+    const path = require("path");
+    const outputPath = path.join(cacheDir, config.input);
+    var list = [
+        {
+            "path": config.input,
+            "fullPath": outputPath,
+            "type": config.type
+        }
+    ]
+    return outputPath;
+}
