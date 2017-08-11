@@ -26,6 +26,7 @@ function copyFile(source, target, cb) {
 }
 
 module.exports.type = "*";
+
 module.exports.generate = function (config, resSrcDir, cacheDir) {
     const path = require("path");
     const inputPath = path.join(resSrcDir, config.input)
@@ -34,6 +35,7 @@ module.exports.generate = function (config, resSrcDir, cacheDir) {
     console.log(outputPath);
     copyFile(inputPath, outputPath);
 };
+
 module.exports.getResList = function (config, resSrcDir, cacheDir) {
     const path = require("path");
     const outputPath = path.join(cacheDir, config.input);
@@ -44,5 +46,5 @@ module.exports.getResList = function (config, resSrcDir, cacheDir) {
             "type": config.type
         }
     ]
-    return outputPath;
+    return list;
 }
