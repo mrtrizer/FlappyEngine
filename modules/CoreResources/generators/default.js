@@ -1,49 +1,25 @@
 "strict"
 
-function copyFile(source, target, cb) {
-    const fs = require("fs")
-    var cbCalled = false;
-
-    var rd = fs.createReadStream(source);
-    rd.on("error", function(err) {
-        done(err);
-    });
-    var wr = fs.createWriteStream(target);
-    wr.on("error", function(err) {
-        done(err);
-    });
-    wr.on("close", function(ex) {
-        done();
-    });
-    rd.pipe(wr);
-
-    function done(err) {
-        if (cb && !cbCalled) {
-            cb(err);
-            cbCalled = true;
-        }
-    }
-}
-
 module.exports.type = "*";
 
-module.exports.generate = function (config, resSrcDir, cacheDir) {
+module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
-    const inputPath = path.join(resSrcDir, config.input)
-    const outputPath = path.join(cacheDir, config.input)
+    const fse = context.require("fs-extra");
+    const inputPath = path.join(resSrcDir, resConfig.input)
+    const outputPath = path.join(cacheSubDir, resConfig.input)
     console.log(inputPath);
     console.log(outputPath);
-    copyFile(inputPath, outputPath);
+    fse.copySync(inputPath, outputPath);
 };
 
-module.exports.getResList = function (config, resSrcDir, cacheDir) {
+module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
-    const outputPath = path.join(cacheDir, config.input);
+    const outputPath = path.join(cacheSubDir, resConfig.input);
     var list = [
         {
-            "path": config.input,
+            "path": resConfig.input,
             "fullPath": outputPath,
-            "type": config.type
+            "type": resConfig.type
         }
     ]
     return list;
