@@ -9,15 +9,31 @@
 #define stat _stat
 #endif
 
+#include <Tools.h>
+
 namespace flappy {
 
 using namespace std;
 
+unsigned long getLastModificationTime(string filePath) {
+    struct stat fileStat;
+    int result = stat(filePath.c_str(), &fileStat);
+    if(result == 0) {
+#ifdef __APPLE__
+        return fileStat.st_mtimespec.tv_sec;
+#else
+        return fileStat.st_mtim.tv_sec;
+#endif
+    } else {
+        LOGE("Can't get last modification time. Error: %", result);
+        return 0;
+    }
+}
+
 void StdFileMonitor::registerFile(string path) {
     struct stat result;
-    if(stat(path.c_str(), &result)==0) {
-        m_fileInfoMap[path] = result.st_mtim.tv_sec;
-    }
+
+    m_fileInfoMap[path] = getLastModificationTime(path);
 }
 
 bool StdFileMonitor::changed(string path) {
@@ -27,12 +43,10 @@ bool StdFileMonitor::changed(string path) {
 
     auto lastFileTime = iter->second;
 
-    struct stat result;
-    if(stat(path.c_str(), &result)==0) {
-        if (lastFileTime != result.st_mtim.tv_sec) {
-            iter->second = result.st_mtim.tv_sec;
-            return true;
-        }
+    unsigned long lastModificationTime = getLastModificationTime(path);
+    if (lastFileTime != lastModificationTime) {
+        iter->second = lastModificationTime;
+        return true;
     }
 
     return false;

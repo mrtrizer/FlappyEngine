@@ -39,29 +39,29 @@ static const char spriteFShader[] =
     "}\n";
 
 GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent) :
-    GLView<GLViewSprite>(spriteVShader, spriteFShader),
+    GLView<GLViewSprite>(spriteVShader, spriteFShader, {}, { SpriteComponent::id() }),
     m_rect(GL_TRIANGLE_STRIP),
+    m_spriteComponent(spriteComponent),
     m_vertexList{ {-0.5f, -0.5f},
                 {-0.5f, 0.5f},
                 {0.5f, -0.5f},
                 {0.5f, 0.5f} },
-    m_quadRes(spriteComponent->getQuadRes()),
-    m_colorRGBA(GLTools::GLColorRGBA(spriteComponent->getColorRGBA()))
+    m_quadRes(spriteComponent->quadRes())
 {
 
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
+    if (m_quadRes != m_spriteComponent->quadRes()) {
+        updateFrame();
+        m_quadRes = m_spriteComponent->quadRes();
+    }
     if (m_quadRes != nullptr) {
-        if (m_quadRes->resUpdated()) {
-            m_quadRes = static_pointer_cast<QuadRes>(m_quadRes->lastRes());
-            updateFrame();
-        }
         getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
             auto texture = m_quadRes->texture();
             glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-            glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_colorRGBA));
+            glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
             auto glTexture = static_pointer_cast<GLTexture>(texture);
             glTexture->bind(getShader()->findUniform("uTex"), 0);
         });
@@ -69,9 +69,9 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 }
 
 void GLViewSprite::updateFrame() {
-    auto texture = m_quadRes->texture();
+    auto texture = m_spriteComponent->quadRes()->texture();
 
-    auto spriteInfo = m_quadRes->spriteInfo();
+    auto spriteInfo = m_spriteComponent->quadRes()->spriteInfo();
 
     auto rectInAtlas = spriteInfo.rectInAtlas;
 

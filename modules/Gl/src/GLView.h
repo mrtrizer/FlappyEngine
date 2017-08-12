@@ -17,9 +17,11 @@ template<typename Derived>
 class GLView: public View
 {
 public:
-    GLView(const char * vSource, const char * fSource) {
+    GLView(const char * vSource, const char * fSource, TypeIdList dependenceManagerIdList = {}, TypeIdList dependenceComponentList = {}):
+        View(dependenceManagerIdList, dependenceComponentList)
+    {
         using namespace std;
-        //TODO: move to getShader for garaties of calling in GL context?
+        //TODO: move to getShader for garanties of calling in GL context?
         if (m_weakShader.expired())
             m_weakShader = m_shader = make_shared<GLShaderProgram>(vSource, fSource);
         else

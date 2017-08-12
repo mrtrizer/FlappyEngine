@@ -42,6 +42,8 @@ public:
 
     void registerRenderElement(const SafePtr<View> renderElement);
 
+    void unregisterRenderElement(const SafePtr<View> renderElement);
+
 protected:
     struct Visual {
         SafePtr<View> view;

@@ -54,4 +54,8 @@ void ViewManager::registerRenderElement(const SafePtr<View> renderElement) {
     m_visuals.push_back(visual);
 }
 
+void ViewManager::unregisterRenderElement(const SafePtr<View> renderElement) {
+    m_visuals.remove_if([&renderElement](const Visual& i){ return i.view == renderElement; });
+}
+
 } // flappy

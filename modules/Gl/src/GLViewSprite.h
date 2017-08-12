@@ -27,8 +27,6 @@ private:
 
     SafePtr<SpriteComponent> m_spriteComponent;
 
-    GLTools::GLColorRGBA m_colorRGBA;
-
     std::vector<GLTools::Vertex> m_vertexList;
 
     std::shared_ptr<QuadRes> m_quadRes;

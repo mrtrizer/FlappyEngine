@@ -11,10 +11,15 @@ namespace flappy {
 class SpriteComponent: public Component<SpriteComponent> {
 public:
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
-    Color getColorRGBA() { return m_colorRGBA; }
+    Color& colorRGBA() { return m_colorRGBA; }
 
     void setQuadRes(std::shared_ptr<QuadRes> quadRes) { m_quadRes = quadRes; }
-    std::shared_ptr<QuadRes> getQuadRes() { return m_quadRes; }
+    std::shared_ptr<QuadRes> quadRes() {
+        if (m_quadRes != nullptr && m_quadRes->resUpdated()) {
+            m_quadRes = std::static_pointer_cast<QuadRes>(m_quadRes->lastRes());
+        }
+        return m_quadRes;
+    }
 
     void init() override {
         m_renderElement = manager<RenderElementFactory>()->createSpriteRender(selfPointer<SpriteComponent>());
