@@ -1,92 +1,92 @@
 [
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default",
-  "command": "/usr/bin/clang++    -I/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/src -I/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/src -I/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Std/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/src/test_JsonRes.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/src/test_JsonRes.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/src/test_JsonRes.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default",
+  "command": "/usr/bin/clang++   -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/ModuleTests.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/src/test_JsonRes.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/src/test_JsonRes.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/src/test_JsonRes.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/JsonRes",
-  "command": "/usr/bin/clang++   -DJsonRes_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/src -I/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Std/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/JsonRes.dir/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/src/JsonRes.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/JsonRes/src/JsonRes.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/src/JsonRes.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/JsonRes",
+  "command": "/usr/bin/clang++  -DJsonRes_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/JsonRes.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src/JsonRes.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src/JsonRes.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src/JsonRes.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Catch",
-  "command": "/usr/bin/clang++   -DCatch_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/src -I/home/mrtrizer/Projects/flappy_engine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Catch/src/main.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Catch",
+  "command": "/usr/bin/clang++  -DCatch_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Catch.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src/main.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src/main.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src/main.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Std",
-  "command": "/usr/bin/clang++   -DStd_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Std/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/Std.dir/home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdFileMonitor.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdFileMonitor.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdFileMonitor.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Std",
+  "command": "/usr/bin/clang++  -DStd_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/Std.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdFileMonitor.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdFileMonitor.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdFileMonitor.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Std",
-  "command": "/usr/bin/clang++   -DStd_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Std/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/Std.dir/home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdTextFileResFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdTextFileResFactory.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Std/src/StdTextFileResFactory.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Std",
+  "command": "/usr/bin/clang++  -DStd_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src  -g -fPIC   -std=c++1y -o CMakeFiles/Std.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdTextFileResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdTextFileResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src/StdTextFileResFactory.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
-  "command": "/usr/bin/clang++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/Tools.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Tools.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Tools.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Tools.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Tools",
-  "command": "/usr/bin/clang++   -DTools_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Tools/src/TypeMap.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/TypeMap.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/TypeMap.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/TypeMap.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/ResManager",
-  "command": "/usr/bin/clang++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/FileResFactory.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
+  "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/FileResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/FileResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/FileResFactory.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/ResManager",
-  "command": "/usr/bin/clang++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResKeeper.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
+  "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/ResManager",
-  "command": "/usr/bin/clang++   -DResManager_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src/ResManager.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
+  "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResManager.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResManager.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResManager.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreResources",
-  "command": "/usr/bin/clang++   -DCoreResources_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/AtlasRes.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreResources",
+  "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/AtlasRes.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/AtlasRes.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/AtlasRes.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/CoreResources",
-  "command": "/usr/bin/clang++   -DCoreResources_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/CoreResources/src/QuadResFactory.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreResources",
+  "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ComponentBase.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/Entity.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Entity.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Entity.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Entity.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/Core",
-  "command": "/usr/bin/clang++   -DCore_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/Core/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/Core/src/ManagerBase.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
-  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventBus.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++  -DEventBus_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventBus.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventBus.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventBus.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
-  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventController.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++  -DEventBus_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventController.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventController.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventController.cpp"
 },
 {
-  "directory": "/home/mrtrizer/Projects/flappy_engine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_8_0_Clang_64bit-Default/EventBus",
-  "command": "/usr/bin/clang++   -DEventBus_EXPORTS -I/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/src -I/home/mrtrizer/Projects/flappy_engine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp.o -c /home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp",
-  "file": "/home/mrtrizer/Projects/flappy_engine/modules/EventBus/src/EventHandle.cpp"
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/EventBus",
+  "command": "/usr/bin/clang++  -DEventBus_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/EventBus.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventHandle.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventHandle.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src/EventHandle.cpp"
 }
 ]
