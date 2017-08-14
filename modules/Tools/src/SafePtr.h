@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <Tools.h>
 
 namespace  flappy {
 
@@ -28,8 +29,10 @@ public:
         auto sharedPtr = m_weakPtr.lock();
         if (sharedPtr)
             return sharedPtr.get();
-        else
+        else {
+            Tools::printStackTrace();
             throw std::runtime_error("Pointer is expired");
+        }
     }
 
     SafePtr& operator= (std::shared_ptr<T> sharedPtr)

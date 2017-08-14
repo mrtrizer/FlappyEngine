@@ -74,14 +74,6 @@ void ComponentBase::setParentEntity(SafePtr<Entity> entity)
     }
 }
 
-void ComponentBase::initInternal() {
-    init();
-}
-
-void ComponentBase::deinitInternal() {
-    deinit();
-}
-
 bool ComponentBase::allManagersReady() {
     for (TypeId<ComponentBase> dependenceTypeId : m_dependenceManagerList)
         if (!isManagerRegistered(dependenceTypeId))

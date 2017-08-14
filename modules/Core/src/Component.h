@@ -31,6 +31,19 @@ public:
     static TypeId<ComponentBase> id() {
         return GetTypeId<ComponentBase, DerivedT>::value();
     }
+
+private:
+    void initInternal() {
+        LOGI("Init %s", typeName<DerivedT>().c_str());
+
+        init();
+    }
+
+    void deinitInternal() {
+        LOGI("Deinit %s", typeName<DerivedT>().c_str());
+
+        deinit();
+    }
 };
 
 } // flappy

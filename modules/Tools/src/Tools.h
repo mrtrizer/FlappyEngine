@@ -6,6 +6,7 @@
 #include <iostream>
 #include <regex>
 #include <list>
+#include <execinfo.h>
 
 #include <glm/vec2.hpp>
 
@@ -60,6 +61,8 @@ std::string typeName() {
 /// Gives some common tools
 namespace Tools
 {
+    void printStackTrace();
+
     struct Rect {
         Rect()
         {}

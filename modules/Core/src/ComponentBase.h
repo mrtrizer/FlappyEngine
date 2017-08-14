@@ -168,11 +168,11 @@ private:
 
     /// By default just calls init(). In Manager implementation
     /// it also emits event about themself to dependants.
-    virtual void initInternal();
+    virtual void initInternal() = 0;
 
     /// By default just call deinit(). In Manager implementation
     /// it also emits event about deinitialization to dependants.
-    virtual void deinitInternal();
+    virtual void deinitInternal() = 0;
 };
 
 } // flappy

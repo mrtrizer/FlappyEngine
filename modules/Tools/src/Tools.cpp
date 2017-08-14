@@ -10,6 +10,16 @@ using namespace std;
 /// Common tools for model
 namespace Tools {
 
+void printStackTrace() {
+    void* callstack[128];
+    int frames = backtrace(callstack, sizeof(callstack) / sizeof(void*));
+    char** strs = backtrace_symbols(callstack, frames);
+    for (int i = 0; i < (frames - 1); ++i) {
+        printf("%s\n", strs[i]);
+    }
+    free(strs);
+}
+
 bool Rect::operator==(const Rect& rect)
 {
     return x1 == rect.x1
