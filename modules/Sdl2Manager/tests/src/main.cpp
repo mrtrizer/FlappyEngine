@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     // Sprite
     auto spriteEntity = sceneEntity->createEntity();
-    spriteEntity->component<TransformComponent>()->setAngle(M_PI * 0.5f);
+    spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
     spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
     spriteEntity->component<SpriteComponent>()->setQuadRes(resManager->getRes<QuadRes>("__img_missing__"));
