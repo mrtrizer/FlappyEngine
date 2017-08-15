@@ -78,7 +78,12 @@ namespace Tools
     };
 
     using PMatrix = std::vector<float>;
-    bool isPowOfTwo(int x);
+
+    /// Check is unsigned int a power of two
+    bool isPowOfTwo(unsigned x);
+
+    /// Nearest power of two greater or equal to value
+    unsigned nextHighestPowOfTwo32(unsigned value);
 
     template <typename T>
     T& resizeAndGet(std::vector<T>& vector, unsigned pos) {

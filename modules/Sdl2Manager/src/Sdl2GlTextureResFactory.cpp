@@ -35,6 +35,8 @@ std::shared_ptr<Res> Sdl2GlTextureResFactory::load(const std::string& path, Safe
 
     auto result = make_shared<GLTexture>((char *)image->pixels, image->w, image->h);
 
+    delete image;
+
     return move(result);
 }
 

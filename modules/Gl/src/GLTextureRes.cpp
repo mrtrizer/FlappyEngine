@@ -28,19 +28,13 @@ GLTexture::GLTexture(const char *bitmapData, int width, int height):
         CHECK_GL_ERROR;
 
     } else {
-        int oldWidth = width;
-        int oldHeight = height;
+        int powTwoWidth = Tools::nextHighestPowOfTwo32(width);
+        int powTwoHeight = Tools::nextHighestPowOfTwo32(height);
 
-        //max and nearest power of two
-        int newWidth = 1;
-        do {
-            newWidth <<= 1;
-            oldWidth >>= 1;
-            oldHeight >>= 1;
-        } while (oldWidth || oldHeight);
+        int maxPowTwo = std::max(powTwoWidth, powTwoHeight);
 
-        m_relWidth = (float)width / newWidth;
-        m_relHeight = (float)height / newWidth;
+        m_relWidth = (float)width / maxPowTwo;
+        m_relHeight = (float)height / maxPowTwo;
 
         //recalculate UVs
         m_uvs[2].u = m_relWidth;
@@ -49,12 +43,12 @@ GLTexture::GLTexture(const char *bitmapData, int width, int height):
         m_uvs[2].v = m_relHeight;
 
         //data buffer for square image
-        char * newPixBuf = new char[newWidth * newWidth * 4]();
+        char * newPixBuf = new char[maxPowTwo * maxPowTwo * 4]();
         //image will be located at the top left corner of newPixBuf
         for (int i = 0; i < height; i++)
-            memcpy(&newPixBuf[i * newWidth * 4], &bitmapData[i * width * 4], width * 4);
+            memcpy(&newPixBuf[i * maxPowTwo * 4], &bitmapData[i * width * 4], width * 4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     newWidth, newWidth, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     maxPowTwo, maxPowTwo, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      static_cast<const GLvoid*>(newPixBuf));
         CHECK_GL_ERROR;
         delete []newPixBuf;

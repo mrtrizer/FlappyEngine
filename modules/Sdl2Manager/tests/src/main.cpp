@@ -25,13 +25,15 @@ int main(int argc, char *argv[])
     auto rootEntity = std::make_shared<Entity>();
 
     // Sdl2 and render
-    rootEntity->createComponent<Sdl2Manager>();
+
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
     auto resManager = rootEntity->createComponent<ResManager>();
     auto stdFileMonitor = std::make_shared<StdFileMonitor>();
     resManager->bindResFactory<TextureRes>(std::make_shared<Sdl2GlTextureResFactory>("./resources"));
     resManager->bindResFactory<QuadRes>(std::make_shared<QuadResFactory>());
+
+
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();
@@ -40,17 +42,25 @@ int main(int argc, char *argv[])
     sceneEntity->component<GLViewManager>();
     sceneEntity->component<GLRenderElementFactory>();
 
+
+
     // Some rect
     auto rectEntity = sceneEntity->createEntity();
     rectEntity->component<MeshComponent>();
     rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
+
+
 
     // Sprite
     auto spriteEntity = sceneEntity->createEntity();
     spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
     spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
+    rootEntity->createComponent<Sdl2Manager>();
+
     spriteEntity->component<SpriteComponent>()->setQuadRes(resManager->getRes<QuadRes>("__img_missing__"));
+
+
 
     return rootEntity->findComponent<AGLManager>()->startMainLoop();
 }
