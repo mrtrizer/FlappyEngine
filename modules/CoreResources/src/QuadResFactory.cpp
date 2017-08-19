@@ -12,7 +12,7 @@ namespace flappy {
 
 using namespace std;
 
-std::shared_ptr<Res> QuadResFactory::load(const std::string& name, SafePtr<ResManager> resManager)  {
+std::shared_ptr<Res> QuadResFactory::load(const std::string& name, SafePtr<Entity> resManager)  {
     auto splittedName = split(name, ':');
     if (splittedName.size() == 2) { // if atlas path, load atlas
         string atlasName = splittedName[0];

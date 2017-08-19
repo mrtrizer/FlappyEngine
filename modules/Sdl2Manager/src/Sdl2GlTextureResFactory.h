@@ -5,11 +5,11 @@
 #include <ResManager.h>
 #include <AtlasRes.h>
 #include <TextureRes.h>
-#include <ResFactory.h>
+#include <IResFactory.h>
 
 namespace flappy {
 
-class Sdl2GlTextureResFactory :public ResFactory
+class Sdl2GlTextureResFactory :public IResFactory
 {
 public:
     Sdl2GlTextureResFactory(std::string path);

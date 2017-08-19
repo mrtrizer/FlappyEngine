@@ -1,7 +1,7 @@
 #include "ResKeeper.h"
 
 #include "Res.h"
-#include "ResFactory.h"
+#include "IResFactory.h"
 #include "ResManager.h"
 
 namespace flappy {
@@ -39,9 +39,9 @@ std::shared_ptr<Res> ResKeeper::actualRes()
     return m_res->nextRes();
 }
 
-void ResKeeper::updateRes(SafePtr<ResFactory> resFactory,
+void ResKeeper::updateRes(SafePtr<IResFactory> resFactory,
                                       string name,
-                                      SafePtr<ResManager> resManager)
+                                      SafePtr<Entity> entity)
 {
     // check res changed
     if (resFactory->changed(name))
@@ -52,7 +52,7 @@ void ResKeeper::updateRes(SafePtr<ResFactory> resFactory,
     // reload if anything is changed
     if (m_changed) {
         try { // catch all possible error while resource loading
-            auto loadedRes = resFactory->load(name, resManager);
+            auto loadedRes = resFactory->load(name, entity);
             if (loadedRes != nullptr) {
                 m_res->pushRes(loadedRes);
                 m_changed = false;

@@ -6,8 +6,8 @@
 
 namespace flappy {
 
-class ResManager;
 class Res;
+class Entity;
 
 /// @addtogroup ResManager
 /// @{
@@ -22,17 +22,17 @@ class Res;
 /// requested resource. It's usially called in a separate thread.
 /// changed method returns true if resource was changed since
 /// last load.
-class ResFactory {
+class IResFactory {
 public:
-    ResFactory() = default;
-    virtual ~ResFactory() = default;
-    ResFactory(const ResFactory&) = default;
-    ResFactory& operator=(const ResFactory&) & = default;
-    ResFactory(ResFactory&&) = default;
-    ResFactory& operator=(ResFactory&&) & = default;
+    IResFactory() = default;
+    virtual ~IResFactory() = default;
+    IResFactory(const IResFactory&) = default;
+    IResFactory& operator=(const IResFactory&) & = default;
+    IResFactory(IResFactory&&) = default;
+    IResFactory& operator=(IResFactory&&) & = default;
 
-    virtual std::shared_ptr<Res> load(const std::string&, SafePtr<ResManager>) = 0;
-    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<ResManager> resManager) {
+    virtual std::shared_ptr<Res> load(const std::string&, SafePtr<Entity>) = 0;
+    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity> resManager) {
         return load(name, resManager);
     }
 

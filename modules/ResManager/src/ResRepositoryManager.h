@@ -14,7 +14,7 @@ namespace flappy {
 /// @{
 
 class Res;
-class ResFactory;
+class IResFactory;
 class IFileMonitorManager;
 
 class ResRepositoryManager final: public Manager<ResRepositoryManager>

@@ -7,8 +7,8 @@
 namespace flappy {
 
 class Res;
-class ResFactory;
-class ResManager;
+class IResFactory;
+class Entity;
 
 /// @addtogroup ResManager
 /// @{
@@ -25,7 +25,7 @@ public:
 
     bool needRemove();
     void cleanUpRes();
-    void updateRes(SafePtr<ResFactory>, std::string name, SafePtr<ResManager>);
+    void updateRes(SafePtr<IResFactory>, std::string name, SafePtr<Entity> entity);
     bool dependencyChanged() const;
     std::shared_ptr<Res> actualRes();
 

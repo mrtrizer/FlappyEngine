@@ -75,6 +75,8 @@ public:
     template<typename ComponentT>
     std::list<std::shared_ptr<ComponentT>> findComponents(unsigned depth = 0) const;
 
+    template<typename ManagerT>
+    SafePtr<ManagerT> manager();
 
     // Entity managment
 
@@ -261,6 +263,17 @@ template<typename ComponentT>
 std::list<std::shared_ptr<ComponentT>> Entity::findComponents(unsigned depth) const
 {
     return findComponents<ComponentT>([](const ComponentT&){ return true; }, depth);
+}
+
+template<typename ManagerT>
+SafePtr<ManagerT> Entity::manager()
+{
+    static_assert(isBaseOf<ManagerBase, ManagerT>(), "Type must be a descendant of Manager");
+
+    if (auto foundManager = m_managers.get<ManagerT>())
+        return foundManager;
+    else
+        return SafePtr<ManagerT>();
 }
 
 } // flappy

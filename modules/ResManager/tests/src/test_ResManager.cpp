@@ -4,13 +4,15 @@
 #include <memory>
 
 #include <ResManager.h>
-#include <ResFactory.h>
+#include <IResFactory.h>
 #include <Res.h>
 #include <Tools.h>
 #include <Entity.h>
 #include <StdFileMonitorManager.h>
 #include <StdFileLoadManager.h>
 #include <ResRepositoryManager.h>
+#include <FileResFactory.h>
+#include <TextRes.h>
 
 using namespace flappy;
 using namespace std;
@@ -26,20 +28,6 @@ public:
     std::string testStr;
 };
 
-class TestResFactory: public ResFactory {
-    std::shared_ptr<Res> load(const std::string& name, std::shared_ptr<ResManager>) {
-        return std::make_shared<TestRes>(name + " loaded");
-    }
-
-    std::shared_ptr<Res> create(const std::string& name, std::shared_ptr<ResManager>) {
-        return std::make_shared<TestRes>(name + " default");
-    }
-
-    bool changed(const std::string&) {
-        return false;
-    }
-};
-
 }
 
 TEST_CASE( "ResRepositoryManager::findResInfo") {
@@ -52,12 +40,12 @@ TEST_CASE( "ResRepositoryManager::findResInfo") {
 }
 
 TEST_CASE( "ResManager::setRes()") {
-
-}
-
-TEST_CASE( "ResManager::getRes()") {
-//    auto managerList = make_shared<ManagerList>();
-//    auto resManager = managerList->create<ResManager>();
-//    resManager->bindResFactory<::TestRes>(make_shared<::TestResFactory>());
-//    auto res = resManager->getRes<TestRes>("test");
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>("./resources");
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("res_list.json");
+    auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
+    resManager->bindResFactory(std::make_shared<FileResFactory>());
+    auto textRes = resManager->getResSync("text_res.txt");
+    REQUIRE(textRes->text() == "Abuksigun\n");
 }

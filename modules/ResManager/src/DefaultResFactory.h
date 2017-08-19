@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ResFactory.h"
+#include "IResFactory.h"
 #include "ResManager.h"
 
 namespace flappy {
@@ -13,7 +13,7 @@ namespace flappy {
 /// updates it if dependencies was updated.
 /// Pass dependent classes in DependT argument.
 template <typename ResT, typename ... DependT>
-class DefaultResFactory : public ResFactory
+class DefaultResFactory : public IResFactory
 {
 public:
     DefaultResFactory() = default;
