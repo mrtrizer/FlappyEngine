@@ -79,6 +79,8 @@ namespace Tools
 
     using PMatrix = std::vector<float>;
 
+    std::string joinPath(std::vector<std::string> pathList);
+
     /// Check is unsigned int a power of two
     bool isPowOfTwo(unsigned x);
 

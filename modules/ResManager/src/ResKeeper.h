@@ -4,6 +4,8 @@
 
 #include <SafePtr.h>
 
+#include "ResInfo.h"
+
 namespace flappy {
 
 class Res;
@@ -25,7 +27,7 @@ public:
 
     bool needRemove();
     void cleanUpRes();
-    void updateRes(SafePtr<IResFactory>, std::string name, SafePtr<Entity> entity);
+    void updateRes(SafePtr<IResFactory>, const ResInfo& resInfo, SafePtr<Entity> entity);
     bool dependencyChanged() const;
     std::shared_ptr<Res> actualRes();
 

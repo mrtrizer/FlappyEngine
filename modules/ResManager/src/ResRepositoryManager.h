@@ -7,6 +7,7 @@
 #include <Manager.h>
 
 #include "ResKeeper.h"
+#include "ResInfo.h"
 
 namespace flappy {
 
@@ -20,13 +21,7 @@ class IFileMonitorManager;
 class ResRepositoryManager final: public Manager<ResRepositoryManager>
 {
 public:
-    struct ResInfo {
-        std::string name;
-        std::string path;
-        std::string type;
-    };
-
-    ResRepositoryManager(std::string filePath);
+    ResRepositoryManager(std::string resRespositoryPath);
 
     ResInfo findResInfo(std::string name) const;
 
@@ -34,10 +29,11 @@ public:
     void update(DeltaTime) override;
 
 private:
-    std::string m_filePath;
+    std::string m_resRepositoryPath;
     std::map<std::string, ResInfo> m_resInfoMap;
 
     void loadResInfoList();
+    std::string resInfoListFilePath();
 };
 
 /// @}

@@ -5,6 +5,7 @@
 #include <list>
 
 #include <Manager.h>
+#include <ResRepositoryManager.h>
 
 #include "ResKeeper.h"
 #include "IResFactory.h"
@@ -20,7 +21,9 @@ template <typename ResT>
 class ResManager final: public Manager<ResManager<ResT>>
 {
 public:
-    ResManager() {}
+    ResManager()
+        : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
+    {}
     virtual ~ResManager() = default;
     ResManager(const ResManager&) = delete;
     ResManager& operator=(const ResManager&) = delete;
@@ -36,32 +39,16 @@ public:
     std::shared_ptr<ResT> getRes(const std::string& name);
 
     /// @brief Synchronous version of getRes
-    std::shared_ptr<ResT> getResSync(const std::string& name)
-    {
-        auto& resKeeper = getResKeeper(name, this->entity());
-        if (m_resFactory)
-            resKeeper.updateRes(m_resFactory, name, this->entity());
-        return std::static_pointer_cast<ResT>(resKeeper.actualRes());
-    }
+    std::shared_ptr<ResT> getResSync(const std::string& name);
 
     /// @brief Set resource with name. Resource will be destroyed in next update
     /// if it hasn't external links.
-    void setRes(const std::string& name, std::shared_ptr<ResT> res)
-    {
-        auto foundIter = m_resMap.find(name);
-        if (foundIter == m_resMap.end())
-            m_resMap.emplace(name, ResKeeper(res, false));
-        else
-            foundIter->second.actualRes()->pushRes(res);
-    }
+    void setRes(const std::string& name, std::shared_ptr<ResT> res);
 
     /// @brief Bind resource factory, used to load and reload resources.
     /// Resource can't be initlalized and loaded without binded factory.
     /// But it still can be set with setRes() and got with getRes() later.
-    void bindResFactory(std::shared_ptr<IResFactory> factory)
-    {
-        m_resFactory = factory;
-    }
+    void bindResFactory(std::shared_ptr<IResFactory> factory);
 
     void update(DeltaTime) override;
 
@@ -107,6 +94,39 @@ std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name) {
     return std::static_pointer_cast<ResT>(getResKeeper(name, this->entity()).actualRes());
 }
 
+/// @brief Synchronous version of getRes
+template<typename ResT>
+std::shared_ptr<ResT> ResManager<ResT>::getResSync(const std::string& name)
+{
+    auto& resKeeper = getResKeeper(name, this->entity());
+    if ((m_resFactory != nullptr) && this->isInitialized()) {
+        auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
+        resKeeper.updateRes(m_resFactory, resInfo, this->entity());
+    }
+    return std::static_pointer_cast<ResT>(resKeeper.actualRes());
+}
+
+/// @brief Set resource with name. Resource will be destroyed in next update
+/// if it hasn't external links.
+template<typename ResT>
+void ResManager<ResT>::setRes(const std::string& name, std::shared_ptr<ResT> res)
+{
+    auto foundIter = m_resMap.find(name);
+    if (foundIter == m_resMap.end())
+        m_resMap.emplace(name, ResKeeper(res, false));
+    else
+        foundIter->second.actualRes()->pushRes(res);
+}
+
+/// @brief Bind resource factory, used to load and reload resources.
+/// Resource can't be initlalized and loaded without binded factory.
+/// But it still can be set with setRes() and got with getRes() later.
+template<typename ResT>
+void ResManager<ResT>::bindResFactory(std::shared_ptr<IResFactory> factory)
+{
+    m_resFactory = factory;
+}
+
 template<typename ResT>
 void ResManager<ResT>::update(DeltaTime)
 {
@@ -117,7 +137,9 @@ void ResManager<ResT>::update(DeltaTime)
         if (resPairIter->second.needRemove()) {
             resPairIter = m_resMap.erase(resPairIter);
         } else {
-            resPairIter->second.updateRes(m_resFactory, resPairIter->first, this->entity());
+            auto name = resPairIter->first;
+            auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
+            resPairIter->second.updateRes(m_resFactory, resInfo, this->entity());
             resPairIter++;
         }
     }

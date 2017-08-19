@@ -11,11 +11,7 @@ class TextRes;
 
 class StdFileLoadManager: public IFileLoadManager {
 public:
-    StdFileLoadManager(std::string path);
     std::string loadTextFile(const std::string& filePath) override;
-
-private:
-    std::string m_path;
 };
 
 }

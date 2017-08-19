@@ -33,8 +33,8 @@ public:
 TEST_CASE( "ResRepositoryManager::findResInfo") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
-    rootEntity->createComponent<StdFileLoadManager>("./resources");
-    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("res_list.json");
+    rootEntity->createComponent<StdFileLoadManager>();
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
     auto resInfo = resRepositoryManager->findResInfo("text_res.txt");
     REQUIRE(resInfo.type == "file");
 }
@@ -42,8 +42,8 @@ TEST_CASE( "ResRepositoryManager::findResInfo") {
 TEST_CASE( "ResManager::setRes()") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
-    rootEntity->createComponent<StdFileLoadManager>("./resources");
-    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("res_list.json");
+    rootEntity->createComponent<StdFileLoadManager>();
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
     auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
     resManager->bindResFactory(std::make_shared<FileResFactory>());
     auto textRes = resManager->getResSync("text_res.txt");

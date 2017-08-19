@@ -20,6 +20,16 @@ void printStackTrace() {
     free(strs);
 }
 
+std::string joinPath(std::vector<std::string> pathList) {
+    if (pathList.size() < 1)
+        return "";
+    std::string outPath = pathList[0];
+    for (int i = 1; i < pathList.size(); i++) {
+        outPath += "/" + pathList[i];
+    }
+    return outPath;
+}
+
 bool Rect::operator==(const Rect& rect)
 {
     return x1 == rect.x1

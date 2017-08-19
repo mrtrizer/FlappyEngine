@@ -22,7 +22,7 @@ class FileResFactory : public IResFactory
 public:
     FileResFactory(std::string path = "", std::string ext = "");
 
-    std::shared_ptr<Res> load(const std::string& name, SafePtr<Entity>) override;
+    std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity>) override;
     std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity>) override;
 
 private:
