@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Entity.h>
+
 #include "IResFactory.h"
 #include "ResManager.h"
 
@@ -18,8 +20,12 @@ class DefaultResFactory : public IResFactory
 public:
     DefaultResFactory() = default;
 
-    virtual std::shared_ptr<Res> load(const std::string& name, SafePtr<ResManager> resManager) {
-        return std::make_shared<ResT>(resManager->getRes<DependT>(name) ...);
+    virtual std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity> entity) final {
+        return create(resInfo.name, entity);
+    }
+
+    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity> entity) final {
+        return std::make_shared<ResT>(entity->manager<ResManager<DependT>>()->template getRes(name) ...);
     }
 };
 

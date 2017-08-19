@@ -20,8 +20,11 @@ class ComponentBase: public std::enable_shared_from_this<ComponentBase>
 {
     friend class Entity;
 public:
-    struct OnUpdate: public IEvent
+    struct UpdateEvent: public IEvent
     {
+        UpdateEvent(DeltaTime dt)
+            : dt(dt)
+        {}
         DeltaTime dt;
     };
 

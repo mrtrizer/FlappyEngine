@@ -38,8 +38,10 @@ void StdFileMonitorManager::registerFile(string path) {
 
 bool StdFileMonitorManager::changed(string path) {
     auto iter = m_fileInfoMap.find(path);
-    if (iter == m_fileInfoMap.end())
+    if (iter == m_fileInfoMap.end()) {
+        registerFile(path);
         return false;
+    }
 
     auto lastFileTime = iter->second;
 

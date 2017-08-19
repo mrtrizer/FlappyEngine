@@ -46,12 +46,19 @@ void ResRepositoryManager::init() {
 }
 
 ResInfo ResRepositoryManager::findResInfo(std::string name) const {
-    return m_resInfoMap.at(name);
+    if (m_resInfoMap.find(name) != m_resInfoMap.end()) {
+        return m_resInfoMap.at(name);
+    } else {
+        LOGE("Can't find information about resource in resource repository list.");
+        auto resPath = Tools::joinPath({m_resRepositoryPath, name});
+        return ResInfo{name, resPath, "*"};
+    }
 }
 
 void ResRepositoryManager::update(DeltaTime)
 {
-    if (manager<IFileMonitorManager>()->changed(m_resRepositoryPath)) {
+    auto resListPath = resInfoListFilePath();
+    if (manager<IFileMonitorManager>()->changed(resListPath)) {
         loadResInfoList();
     }
 }

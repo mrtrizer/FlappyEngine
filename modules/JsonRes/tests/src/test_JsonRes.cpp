@@ -8,8 +8,9 @@
 #include <TextRes.h>
 #include <DefaultResFactory.h>
 #include <JsonRes.h>
-#include <StdTextFileResFactory.h>
-#include <StdFileMonitor.h>
+#include <StdFileLoadManager.h>
+#include <StdFileMonitorManager.h>
+#include <FileResFactory.h>
 #include <thread>
 
 using namespace flappy;
@@ -27,23 +28,27 @@ void writeToFile(std::string name, std::string text) {
 }
 
 TEST_CASE( "JsonRes::text()") {
-    auto resManager = make_shared<ResManager>();
-    auto stdFileMonitor = make_shared<StdFileMonitor>();
-    resManager->bindResFactory<JsonRes>(std::make_shared<DefaultResFactory<JsonRes, TextRes>>());
-    resManager->bindResFactory<TextRes>(std::make_shared<StdTextFileResFactory>("./", stdFileMonitor));
-    writeToFile("example.txt", "{\"name\":\"Alfred\"}");
-    auto jsonRes = resManager->getRes<JsonRes>("example.txt");
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
+    auto textResManager = rootEntity->createComponent<ResManager<TextRes>>();
+    textResManager->bindResFactory(std::make_shared<FileResFactory>());
+    auto jsonResManager = rootEntity->createComponent<ResManager<JsonRes>>();
+    jsonResManager->bindResFactory(std::make_shared<DefaultResFactory<JsonRes, TextRes>>());
+    writeToFile("./resources/example.txt", "{\"name\":\"Alfred\"}");
+    auto jsonRes = jsonResManager->getRes("example.txt");
     REQUIRE(jsonRes->json().empty() == true);
-    resManager->update(1); // two update in case if JsonRes updated before TextRes
-    resManager->update(1); // in such cases dependant resource is reloaded in next update
-    jsonRes = std::static_pointer_cast<JsonRes>(resManager->getRes<JsonRes>("example.txt")->lastRes());
-    auto textRes = resManager->getRes<TextRes>("example.txt");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1)); // two update in case if JsonRes updated before TextRes
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1)); // in such cases dependant resource is reloaded in next update
+    jsonRes = std::static_pointer_cast<JsonRes>(jsonResManager->getRes("example.txt")->lastRes());
+    auto textRes = textResManager->getRes("example.txt");
     REQUIRE(jsonRes->json()["name"] == string("Alfred"));
-    resManager->update(1);
-    resManager->update(1);
-    writeToFile("example.txt", "{\"name\":\"Nastya\"}");
-    resManager->update(1);
-    resManager->update(1);
-    jsonRes = resManager->getRes<JsonRes>("example.txt");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1));
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1));
+    writeToFile("./resources/example.txt", "{\"name\":\"Nastya\"}");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1));
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1));
+    jsonRes = jsonResManager->getRes("example.txt");
     REQUIRE(jsonRes->json()["name"] == string("Nastya"));
 }

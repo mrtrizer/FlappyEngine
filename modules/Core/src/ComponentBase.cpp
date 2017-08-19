@@ -93,7 +93,7 @@ void ComponentBase::tryInit() {
     m_initializedFlag = true;
     try {
         initInternal();
-        m_updateSubscription = events()->subscribeIn([this](const OnUpdate& e) {
+        m_updateSubscription = events()->subscribeIn([this](const UpdateEvent& e) {
             update(e.dt);
         });
     } catch (std::exception& e) {

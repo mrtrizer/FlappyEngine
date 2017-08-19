@@ -9,6 +9,7 @@ namespace flappy {
 class JsonRes: public Res
 {
 public:
+    JsonRes() = default;
     JsonRes(std::shared_ptr<TextRes> textRes);
 
     std::list<std::shared_ptr<Res>> dependencyList() const override;

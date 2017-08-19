@@ -1,5 +1,8 @@
 #include "ResKeeper.h"
 
+#include <Entity.h>
+#include <IFileMonitorManager.h>
+
 #include "Res.h"
 #include "IResFactory.h"
 #include "ResManager.h"
@@ -44,8 +47,8 @@ void ResKeeper::updateRes(SafePtr<IResFactory> resFactory,
                                       SafePtr<Entity> entity)
 {
     // check res changed
-//    if (resFactory->changed(resInfo->path))
-//        m_changed = true;
+    if (entity->manager<IFileMonitorManager>()->changed(resInfo.path))
+        m_changed = true;
     // check dependencies changed
     if (dependencyChanged())
         m_changed = true;

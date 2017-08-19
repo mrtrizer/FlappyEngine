@@ -155,7 +155,7 @@ int Sdl2Manager::startMainLoop()
         // If frames were 30, wait 33 ms before running the loop again
         usleep( 1000000/60 );
 
-        auto updateEvent = ComponentBase::OnUpdate();
+        auto updateEvent = ComponentBase::UpdateEvent();
         updateEvent.dt = calcTimeDelta();
         entity()->events()->post(updateEvent);
 

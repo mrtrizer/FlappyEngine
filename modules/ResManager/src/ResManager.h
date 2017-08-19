@@ -24,11 +24,6 @@ public:
     ResManager()
         : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
     {}
-    virtual ~ResManager() = default;
-    ResManager(const ResManager&) = delete;
-    ResManager& operator=(const ResManager&) = delete;
-    ResManager(ResManager&&) = default;
-    ResManager& operator=(ResManager&&) = default;
 
     /// @brief If resource is not loaded yet, method returns default
     /// resource, created by binded ResourceFactory.

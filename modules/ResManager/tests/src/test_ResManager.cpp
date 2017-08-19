@@ -39,7 +39,7 @@ TEST_CASE( "ResRepositoryManager::findResInfo") {
     REQUIRE(resInfo.type == "file");
 }
 
-TEST_CASE( "ResManager::setRes()") {
+TEST_CASE( "ResManager::getRes()") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
