@@ -1,4 +1,4 @@
-#include "StdFileMonitor.h"
+#include "StdFileMonitorManager.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -30,13 +30,13 @@ unsigned long getLastModificationTime(string filePath) {
     }
 }
 
-void StdFileMonitor::registerFile(string path) {
+void StdFileMonitorManager::registerFile(string path) {
     struct stat result;
 
     m_fileInfoMap[path] = getLastModificationTime(path);
 }
 
-bool StdFileMonitor::changed(string path) {
+bool StdFileMonitorManager::changed(string path) {
     auto iter = m_fileInfoMap.find(path);
     if (iter == m_fileInfoMap.end())
         return false;

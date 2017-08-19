@@ -9,7 +9,11 @@
         },
         {
             "path":"../../CoreResources"
+        },
+        {
+            "path":"../../Std"
         }
+
     ],
     "cxx":{
         "header_dirs": [

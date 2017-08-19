@@ -7,6 +7,10 @@
 #include <ResFactory.h>
 #include <Res.h>
 #include <Tools.h>
+#include <Entity.h>
+#include <StdFileMonitorManager.h>
+#include <StdFileLoadManager.h>
+#include <ResRepositoryManager.h>
 
 using namespace flappy;
 using namespace std;
@@ -38,10 +42,17 @@ class TestResFactory: public ResFactory {
 
 }
 
+TEST_CASE( "ResRepositoryManager::findResInfo") {
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>("./resources");
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("res_list.json");
+    auto resInfo = resRepositoryManager->findResInfo("text_res.txt");
+    REQUIRE(resInfo.type == "file");
+}
+
 TEST_CASE( "ResManager::setRes()") {
-//    auto managerList = make_shared<ManagerList>();
-//    auto resManager = managerList->create<ResManager>();
-//    resManager->setRes<::TestRes>("test", make_shared<::TestRes>("set res"));
+
 }
 
 TEST_CASE( "ResManager::getRes()") {

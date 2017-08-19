@@ -3,11 +3,11 @@
 #include <unordered_map>
 #include <string>
 
-#include <IFileMonitor.h>
+#include <IFileMonitorManager.h>
 
 namespace flappy {
 
-class StdFileMonitor: public IFileMonitor
+class StdFileMonitorManager: public IFileMonitorManager
 {
 public:
     void registerFile(std::string path);

@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-class IFileMonitor;
+class IFileMonitorManager;
 
 /// @addtogroup ResManager
 /// @{
@@ -19,7 +19,7 @@ class IFileMonitor;
 class FileResFactory : public ResFactory
 {
 public:
-    FileResFactory(std::string path = "", std::string ext = "", std::shared_ptr<IFileMonitor> fileMonitor = nullptr);
+    FileResFactory(std::string path = "", std::string ext = "");
 
     std::shared_ptr<Res> load(const std::string& name, SafePtr<ResManager>) override;
     virtual std::shared_ptr<Res> loadFile(const std::string& path) = 0;
@@ -28,7 +28,6 @@ public:
 private:
     std::string m_path;
     std::string m_ext;
-    std::shared_ptr<IFileMonitor> m_fileMonitor;
 };
 
 /// @}

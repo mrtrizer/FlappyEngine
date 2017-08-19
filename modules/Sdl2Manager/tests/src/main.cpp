@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
     auto resManager = rootEntity->createComponent<ResManager>();
-    auto stdFileMonitor = std::make_shared<StdFileMonitor>();
+    auto stdFileMonitor = std::make_shared<StdFileMonitorManager>();
     resManager->bindResFactory<TextureRes>(std::make_shared<Sdl2GlTextureResFactory>("./resources"));
     resManager->bindResFactory<QuadRes>(std::make_shared<QuadResFactory>());
 

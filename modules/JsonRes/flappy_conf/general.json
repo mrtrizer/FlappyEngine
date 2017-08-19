@@ -14,8 +14,7 @@
     ],
     "cxx":{
         "header_dirs": [
-            "./src",
-            "./libs"
+            "./src"
         ],
         "src_dirs": [
             "./src"
