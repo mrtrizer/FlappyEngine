@@ -6,6 +6,12 @@
         },
         {
             "path":"../../Catch"
+        },
+        {
+            "path":"../../Std"
+        },
+        {
+            "path":"../../Sdl2Manager"
         }
     ],
     "cxx":{

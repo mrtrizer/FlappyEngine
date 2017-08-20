@@ -35,7 +35,7 @@ TEST_CASE( "ResRepositoryManager::findResInfo") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    auto resInfo = resRepositoryManager->findResInfo("text_res.txt");
+    auto resInfo = resRepositoryManager->findResInfo("text_res");
     REQUIRE(resInfo.type == "file");
 }
 
@@ -46,6 +46,6 @@ TEST_CASE( "ResManager::getRes()") {
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
     auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
     resManager->bindResFactory(std::make_shared<FileResFactory>());
-    auto textRes = resManager->getResSync("text_res.txt");
+    auto textRes = resManager->getResSync("text_res");
     REQUIRE(textRes->text() == "Abuksigun\n");
 }

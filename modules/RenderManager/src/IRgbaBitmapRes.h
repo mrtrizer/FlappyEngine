@@ -13,6 +13,7 @@ class IRgbaBitmapRes: public Res
 public:
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
+    virtual char* bitmapData() = 0;
     virtual Color pixelColor(int x, int y) = 0;
     virtual int width() = 0;
     virtual int height() = 0;

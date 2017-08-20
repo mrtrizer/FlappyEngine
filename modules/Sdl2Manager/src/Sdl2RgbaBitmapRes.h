@@ -13,6 +13,7 @@ public:
 
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
+    char* bitmapData() override;
     Color pixelColor(int x, int y) override;
     int width() override;
     int height() override;

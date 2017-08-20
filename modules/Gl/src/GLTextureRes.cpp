@@ -1,14 +1,29 @@
 #include <cstring>
 
 #include <Tools.h>
+#include <IRgbaBitmapRes.h>
 
 #include "GLTextureRes.h"
 
 namespace flappy {
 
-GLTexture::GLTexture(const char *bitmapData, int width, int height):
-    TextureRes({width, height})
-{
+GLTextureRes::GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes):
+    TextureRes({rgbaBitmapRes->width(), rgbaBitmapRes->height()}),
+    m_rgbaBitmapRes(rgbaBitmapRes)
+{}
+
+GLTextureRes::~GLTextureRes() {
+    if (m_texture != -1) {
+        glDeleteTextures(1,&m_texture);
+        CHECK_GL_ERROR;
+    }
+}
+
+void GLTextureRes::initGLTexture() {
+    const char *bitmapData = m_rgbaBitmapRes->bitmapData();
+    int width = m_rgbaBitmapRes->width();
+    int height = m_rgbaBitmapRes->height();
+
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     CHECK_GL_ERROR;
     glGenTextures(1, &m_texture);
@@ -56,20 +71,23 @@ GLTexture::GLTexture(const char *bitmapData, int width, int height):
 
     glBindTexture(GL_TEXTURE_2D,0);
     CHECK_GL_ERROR;
+
 }
 
-GLTexture::~GLTexture() {
-    glDeleteTextures(1,&m_texture);
-    CHECK_GL_ERROR;
-}
+void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
+    if (m_texture == -1)
+        initGLTexture();
 
-void GLTexture::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
     glActiveTexture(GL_TEXTURE0 + n);
     CHECK_GL_ERROR;
     glBindTexture(GL_TEXTURE_2D, m_texture);
     CHECK_GL_ERROR;
     glUniform1i(uniformLoc, 0);
     CHECK_GL_ERROR;
+}
+
+std::list<std::shared_ptr<Res>> GLTextureRes::dependencyList() {
+    return std::list<std::shared_ptr<Res>>{m_rgbaBitmapRes};
 }
 
 } // flappy

@@ -62,7 +62,7 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
             glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
             glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
-            auto glTexture = static_pointer_cast<GLTexture>(texture);
+            auto glTexture = static_pointer_cast<GLTextureRes>(texture);
             glTexture->bind(getShader()->findUniform("uTex"), 0);
         });
     }
@@ -86,7 +86,7 @@ void GLViewSprite::updateFrame() {
     float spriteRelativeHeight = textureRelativeHeight * rectInAtlas.size().y;
     float spriteRelativeY = rectInAtlas.y1 * textureRelativeHeight;
 
-    vector<GLTexture::UV> uvs({
+    vector<GLTextureRes::UV> uvs({
             {spriteRelativeX, spriteRelativeY + spriteRelativeHeight},
             {spriteRelativeX, spriteRelativeY},
             {spriteRelativeX + spriteRelativeWidth, spriteRelativeY + spriteRelativeHeight},
@@ -94,7 +94,7 @@ void GLViewSprite::updateFrame() {
 
     m_rect.reset(GL_TRIANGLE_STRIP);
 
-    m_rect.addVBO<GLTexture::UV>(uvs, getShader()->findAttr("aTexCoord"));
+    m_rect.addVBO<GLTextureRes::UV>(uvs, getShader()->findAttr("aTexCoord"));
 
     auto spriteSize = spriteInfo.size;
 

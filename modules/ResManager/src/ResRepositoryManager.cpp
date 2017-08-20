@@ -32,11 +32,11 @@ void ResRepositoryManager::loadResInfoList() {
     auto json = json::parse(jsonStr);
     auto jsonResInfoList = json["list"];
     for (json::iterator jsonIterator = jsonResInfoList.begin(); jsonIterator != jsonResInfoList.end(); ++jsonIterator) {
-        // TODO: Rename path field to name field in resource info json file
+        std::string name = jsonIterator->at("name");
         std::string path = jsonIterator->at("path");
         std::string type = jsonIterator->at("type");
         auto resPath = Tools::joinPath({m_resRepositoryPath, path});
-        m_resInfoMap[path] = ResInfo {path, resPath, type};
+        m_resInfoMap[name] = ResInfo {name, resPath, type};
     }
 }
 

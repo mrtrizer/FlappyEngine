@@ -33,7 +33,7 @@ public:
     IResFactory& operator=(IResFactory&&) & = default;
 
     virtual std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity>) = 0;
-    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity> resManager) = 0;
+    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity>) = 0;
 };
 
 /// @}

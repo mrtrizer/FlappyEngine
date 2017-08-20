@@ -6,6 +6,11 @@ Sdl2RgbaBitmapRes::Sdl2RgbaBitmapRes(std::unique_ptr<SDL_Surface> sdlSurface)
     :m_sdlSurface(std::move(sdlSurface))
 {}
 
+char* Sdl2RgbaBitmapRes::bitmapData()
+{
+    return (char*)m_sdlSurface->pixels;
+}
+
 Color Sdl2RgbaBitmapRes::pixelColor(int x, int y)
 {
     return Color();

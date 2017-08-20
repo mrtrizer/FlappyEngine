@@ -7,20 +7,27 @@
 #include <GLTools.h>
 #include <GLShaderProgram.h>
 
+
 namespace flappy {
+
+class IRgbaBitmapRes;
 
 /// @brief Holds and manages texture id.
 /// @details Auto resizes an image if it not fit to
 /// w == h == x^2 and saves uv coordinates
 /// of image corners.
-class GLTexture: public TextureRes {
+class GLTextureRes: public TextureRes {
 public:
-    GLTexture(const char* bitmapData, int width, int height);
-    ~GLTexture();
+    GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
+    ~GLTextureRes();
     void bind(GLShaderProgram::UniformLocation uniformLoc, int n);
+    std::list<std::shared_ptr<Res>> dependencyList();
 
 private:
-    GLuint m_texture;
+    GLuint m_texture = -1;
+    std::shared_ptr<IRgbaBitmapRes> m_rgbaBitmapRes;
+
+    void initGLTexture();
 };
 
 } // flappy

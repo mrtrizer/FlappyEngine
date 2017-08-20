@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include <ResManager.h>
+#include <Entity.h>
 
 #include "QuadRes.h"
 #include "AtlasRes.h"
@@ -12,13 +12,20 @@ namespace flappy {
 
 using namespace std;
 
-std::shared_ptr<Res> QuadResFactory::load(const std::string& name, SafePtr<Entity> resManager)  {
+std::shared_ptr<Res> QuadResFactory::load(const ResInfo& resInfo, SafePtr<Entity> entity)  {
+    return create(resInfo.name, entity);
+}
+
+std::shared_ptr<Res> QuadResFactory::create(const std::string& name, SafePtr<Entity> entity) {
     auto splittedName = split(name, ':');
+    auto textureResManager = entity->manager<ResManager<TextureRes>>();
+    auto atlasResManager = entity->manager<ResManager<AtlasRes>>();
+
     if (splittedName.size() == 2) { // if atlas path, load atlas
         string atlasName = splittedName[0];
         string quadName = splittedName[1];
-        auto atlas = resManager->getResSync<AtlasRes>(atlasName);
-        auto texture = resManager->getRes<TextureRes>(atlasName);
+        auto atlas = atlasResManager->getResSync(atlasName);
+        auto texture = textureResManager->getRes(atlasName);
         auto quad = make_shared<QuadRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path
@@ -26,13 +33,13 @@ std::shared_ptr<Res> QuadResFactory::load(const std::string& name, SafePtr<Entit
         string textureName = quadName;
         string defaultQuadName = "__full__";
         string defaultAtlasName = string("atlas_full__") + textureName;
-        auto texture = resManager->getResSync<TextureRes>(quadName);
+        auto texture = textureResManager->getResSync(quadName);
         {
             auto atlas = make_shared<AtlasRes>(); // create atlas dependent from image
             atlas->addSpriteInfo(defaultQuadName, AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,1.0f}, texture->size()));
-            resManager->setRes<AtlasRes>(defaultAtlasName, atlas);
+            atlasResManager->setRes(defaultAtlasName, atlas);
         }
-        auto defaultAtlas = resManager->getRes<AtlasRes>(defaultAtlasName);
+        auto defaultAtlas = atlasResManager->getRes(defaultAtlasName);
         auto defaultQuad = make_shared<QuadRes>(defaultAtlas, texture, defaultQuadName);
         return defaultQuad;
     }

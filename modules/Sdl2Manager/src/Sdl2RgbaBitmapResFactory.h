@@ -12,8 +12,8 @@ namespace flappy {
 class Sdl2RgbaBitmapResFactory :public IResFactory
 {
 public:
-    Sdl2RgbaBitmapResFactory(std::string path);
-    std::shared_ptr<Res> load(const std::string&, SafePtr<ResManager>) override;
+    std::shared_ptr<Res> load(const ResInfo&, SafePtr<Entity>) override;
+    std::shared_ptr<Res> create(const std::string&, SafePtr<Entity>) override;
 
     class file_open_error {};
 
