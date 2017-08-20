@@ -27,6 +27,7 @@ public:
     void addSpriteInfo(const std::string& name, const SpriteInfo& spriteInfo);
     std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
 
+
 private:  
     std::unordered_map<std::string, SpriteInfo> m_rectMap;
 };

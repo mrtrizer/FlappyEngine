@@ -1,5 +1,5 @@
 {
-    "name":"ModuleTests",
+    "name":"tests_UI",
     "modules": [
         {
             "path":"../"

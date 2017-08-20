@@ -1,5 +1,5 @@
 {
-    "name":"ModuleTests",
+    "name":"tests_Sdl2Manager",
     "modules": [
         {
             "path":"../"
