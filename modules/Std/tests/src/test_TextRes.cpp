@@ -6,8 +6,10 @@
 
 #include <ResManager.h>
 #include <TextRes.h>
-#include <StdFileMonitor.h>
-#include <StdTextFileResFactory.h>
+#include <Entity.h>
+#include <StdFileMonitorManager.h>
+#include <StdFileLoadManager.h>
+#include <FileResFactory.h>
 #include <thread>
 
 using namespace flappy;
@@ -25,19 +27,23 @@ void writeToFile(std::string name, std::string text) {
 }
 
 TEST_CASE( "TextRes::text()") {
-    auto resManager = std::make_shared<ResManager>();
-    auto stdFileMonitor = std::make_shared<StdFileMonitor>();
-    resManager->bindResFactory<TextRes>(std::make_shared<StdTextFileResFactory>("./", stdFileMonitor));
-    writeToFile("example.txt", "Test text");
-    auto textFile = resManager->getRes<TextRes>("example.txt");
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
+    auto textResManager = rootEntity->createComponent<ResManager<TextRes>>(FileResFactory());
+
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    writeToFile("./resources/example.txt", "Test text");
+    auto textFile = textResManager->getRes("example");
     REQUIRE(textFile->text() == "");
-    resManager->update(1);
-    textFile = resManager->getRes<TextRes>("example.txt");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    textFile = textResManager->getRes("example");
     REQUIRE(textFile->text() == "Test text");
-    resManager->update(1);
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(textFile->nextRes() == textFile); // res should not be updated during update
-    writeToFile("example.txt", "Test text 2");
-    resManager->update(1);
-    textFile = resManager->getRes<TextRes>("example.txt");
+    writeToFile("./resources/example.txt", "Test text 2");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    textFile = textResManager->getRes("example");
     REQUIRE(textFile->text() == "Test text 2");
 }

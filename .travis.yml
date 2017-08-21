@@ -24,49 +24,49 @@ script:
 #Core tests
  - pushd modules/Core/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_Core
  - popd
 
 #Std test project (build only)
  - pushd modules/Std/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_Std
  - popd
 
 #ResManager test project (build only)
  - pushd modules/ResManager/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_ResManager
  - popd
 
 #Tools test project (build only)
  - pushd modules/Tools/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_Tools
  - popd
 
 #EventBus test project (build only)
  - pushd modules/EventBus/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_EventBus
  - popd
 
 #CoreComponents test project (build only)
  - pushd modules/CoreComponents/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_CoreComponents
  - popd
 
 #CoreResources test project (build only)
  - pushd modules/CoreResources/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_CoreResources
  - popd
 
 #JsonRes test project (build only)
  - pushd modules/JsonRes/tests
  - flappy build cmake
- - ./generated/cmake/ModuleTests
+ - ./generated/cmake/tests_JsonRes
  - popd
 
 #Sdl2Manager test project (build only)

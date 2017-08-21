@@ -33,17 +33,18 @@ public:
     }
 
 private:
-    void initInternal() {
+    void initInternal() override {
         LOGI("Init %s", typeName<DerivedT>().c_str());
 
         init();
     }
 
-    void deinitInternal() {
+    void deinitInternal() override {
         LOGI("Deinit %s", typeName<DerivedT>().c_str());
 
         deinit();
     }
+
 };
 
 } // flappy
