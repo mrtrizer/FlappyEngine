@@ -22,7 +22,12 @@ class ResManager final: public Manager<ResManager<ResT>>
 {
 public:
     ResManager()
+    {}
+
+    template <typename ResFactoryT>
+    ResManager(ResFactoryT&& resFactory)
         : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
+        , m_resFactory(std::make_shared<std::decay_t<ResFactoryT>>(std::move(resFactory)))
     {}
 
     /// @brief If resource is not loaded yet, method returns default

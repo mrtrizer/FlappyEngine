@@ -24,15 +24,15 @@ TEST_CASE( "Quad ResManager::getRes") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
-    auto atlasResManager = rootEntity->createComponent<ResManager<AtlasRes>>();
-    auto rgbaResManager = rootEntity->createComponent<ResManager<IRgbaBitmapRes>>();
-    rgbaResManager->bindResFactory(std::make_shared<Sdl2RgbaBitmapResFactory>());
-    auto textureResManager = rootEntity->createComponent<ResManager<TextureRes>>();
-    textureResManager->bindResFactory(std::make_shared<DefaultResFactory<GLTextureRes, IRgbaBitmapRes>>());
+
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    auto resManager = rootEntity->createComponent<ResManager<QuadRes>>();
-    resManager->bindResFactory(std::make_shared<QuadResFactory>());
-    auto textRes = resManager->getRes("test_img");
+
+    rootEntity->createComponent<ResManager<AtlasRes>> ();
+    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
+    rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
+    rootEntity->createComponent<ResManager<QuadRes>> (QuadResFactory());
+
+    rootEntity->manager<ResManager<QuadRes>>()->getRes("test_img");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1));
 }
 

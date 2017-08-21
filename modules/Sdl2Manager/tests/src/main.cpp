@@ -13,8 +13,12 @@
 #include <QuadRes.h>
 #include <QuadResFactory.h>
 #include <TextureRes.h>
-#include <Sdl2GlTextureResFactory.h>
-#include <StdFileMonitor.h>
+#include <StdFileMonitorManager.h>
+#include <ResRepositoryManager.h>
+#include <Sdl2RgbaBitmapResFactory.h>
+#include <DefaultResFactory.h>
+#include <IRgbaBitmapRes.h>
+#include <GLTextureRes.h>
 #include <SpriteComponent.h>
 
 using namespace flappy;
@@ -28,12 +32,12 @@ int main(int argc, char *argv[])
 
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
-    auto resManager = rootEntity->createComponent<ResManager>();
-    auto stdFileMonitor = std::make_shared<StdFileMonitorManager>();
-    resManager->bindResFactory<TextureRes>(std::make_shared<Sdl2GlTextureResFactory>("./resources"));
-    resManager->bindResFactory<QuadRes>(std::make_shared<QuadResFactory>());
-
-
+    rootEntity->createComponent<ResRepositoryManager>("./resources");
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<ResManager<AtlasRes>> ();
+    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
+    rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
+    rootEntity->createComponent<ResManager<QuadRes>> (QuadResFactory());
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();
@@ -42,14 +46,10 @@ int main(int argc, char *argv[])
     sceneEntity->component<GLViewManager>();
     sceneEntity->component<GLRenderElementFactory>();
 
-
-
     // Some rect
     auto rectEntity = sceneEntity->createEntity();
     rectEntity->component<MeshComponent>();
     rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
-
-
 
     // Sprite
     auto spriteEntity = sceneEntity->createEntity();
@@ -58,9 +58,8 @@ int main(int argc, char *argv[])
 
     rootEntity->createComponent<Sdl2Manager>();
 
-    spriteEntity->component<SpriteComponent>()->setQuadRes(resManager->getRes<QuadRes>("__img_missing__"));
-
-
+    auto quadRes = rootEntity->manager<ResManager<QuadRes>>()->getRes("__img_missing__");
+    spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);
 
     return rootEntity->findComponent<AGLManager>()->startMainLoop();
 }
