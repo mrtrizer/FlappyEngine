@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     rootEntity->createComponent<Sdl2Manager>();
 
-    auto quadRes = rootEntity->manager<ResManager<QuadRes>>()->getRes("__img_missing__");
+    auto quadRes = rootEntity->component<ResManager<QuadRes>>()->getRes("__img_missing__");
     spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);
 
     return rootEntity->findComponent<AGLManager>()->startMainLoop();
