@@ -23,6 +23,7 @@ class ResManager final: public Manager<ResManager<ResT>>
 {
 public:
     ResManager()
+    : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
     {}
 
     template <typename ResFactoryT>

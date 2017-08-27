@@ -16,6 +16,7 @@
 #include <StdFileMonitorManager.h>
 #include <ResRepositoryManager.h>
 #include <Sdl2RgbaBitmapResFactory.h>
+#include <StdFileLoadManager.h>
 #include <DefaultResFactory.h>
 #include <IRgbaBitmapRes.h>
 #include <GLTextureRes.h>
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<AppManager>(argc, argv);
     rootEntity->createComponent<ResRepositoryManager>("./resources");
     rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
     rootEntity->createComponent<ResManager<AtlasRes>> ();
     rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
     rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
