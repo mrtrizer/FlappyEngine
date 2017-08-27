@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <list>
 
+#include <Res.h>
 #include <Manager.h>
 #include <ResRepositoryManager.h>
 
