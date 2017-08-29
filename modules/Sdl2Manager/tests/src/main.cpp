@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     auto rootEntity = std::make_shared<Entity>();
 
     // Sdl2 and render
-
+    rootEntity->createComponent<Sdl2Manager>();
     rootEntity->createComponent<ScreenManager>(600, 600);
     rootEntity->createComponent<AppManager>(argc, argv);
     rootEntity->createComponent<ResRepositoryManager>("./resources");
@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
     spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
     spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
-    rootEntity->createComponent<Sdl2Manager>();
 
     auto quadRes = rootEntity->component<ResManager<QuadRes>>()->getRes("__img_missing__");
     spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);

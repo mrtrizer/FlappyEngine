@@ -37,6 +37,7 @@ std::shared_ptr<Res> Sdl2RgbaBitmapResFactory::load(const ResInfo& resInfo, Safe
 std::shared_ptr<Res> Sdl2RgbaBitmapResFactory::create(const std::string&, SafePtr<Entity>) {
     SDL_Surface* sdlSurfacePtr = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
     auto sdlSurface = std::unique_ptr<SDL_Surface>(sdlSurfacePtr);
+    SDL_FillRect(sdlSurfacePtr, NULL, SDL_MapRGB(sdlSurfacePtr->format, 255, 0, 0));
 
     auto result = make_shared<Sdl2RgbaBitmapRes>(std::move(sdlSurface));
 

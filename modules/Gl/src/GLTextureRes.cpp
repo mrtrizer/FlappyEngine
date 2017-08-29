@@ -75,6 +75,10 @@ void GLTextureRes::initGLTexture() {
 }
 
 void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
+    if (m_rgbaBitmapRes->nextRes() != nullptr) {
+        m_rgbaBitmapRes = std::static_pointer_cast<IRgbaBitmapRes>(m_rgbaBitmapRes->nextRes());
+        m_texture = -1;
+    }
     if (m_texture == -1)
         initGLTexture();
 
