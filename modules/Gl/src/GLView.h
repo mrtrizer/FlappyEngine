@@ -3,9 +3,12 @@
 #include <memory>
 
 #include <View.h>
+#include <ResManager.h>
 #include "GLShaderProgram.h"
 
 namespace flappy {
+
+// TODO: Right now this class became useless.
 
 /// @brief Holds a shader shared pointer.
 /// @details Takes a pointer from static weak pointer.
@@ -17,24 +20,19 @@ template<typename Derived>
 class GLView: public View
 {
 public:
-    GLView(const char * vSource, const char * fSource, TypeIdList dependenceManagerIdList = {}, TypeIdList dependenceComponentList = {}):
-        View(dependenceManagerIdList, dependenceComponentList)
+    GLView(TypeIdList dependenceManagerIdList = {}, TypeIdList dependenceComponentList = {}):
+        View(Tools::concat(dependenceManagerIdList, {ResManager<GLShaderProgram>::id()}), dependenceComponentList)
     {
-        using namespace std;
-        //TODO: move to getShader for garanties of calling in GL context?
-        if (m_weakShader.expired())
-            m_weakShader = m_shader = make_shared<GLShaderProgram>(vSource, fSource);
-        else
-            m_shader = m_weakShader.lock();
+        events()->subscribeIn([this](InitEvent) {
+            m_shaderRes = manager<ResManager<GLShaderProgram>>()->getRes("shape_shader");
+        });
     }
-protected:
-    std::shared_ptr<GLShaderProgram> getShader(){return m_shader;}
-private:
-    static std::weak_ptr<GLShaderProgram> m_weakShader;
-    std::shared_ptr<GLShaderProgram> m_shader;
-};
 
-template<typename Derived>
-std::weak_ptr<GLShaderProgram> GLView<Derived>::m_weakShader;
+    void setShader(std::shared_ptr<GLShaderProgram> shaderRes) { m_shaderRes = shaderRes; }
+    std::shared_ptr<GLShaderProgram> shader() { return m_shaderRes; }
+
+private:
+    std::shared_ptr<GLShaderProgram> m_shaderRes;
+};
 
 } // flappy

@@ -36,6 +36,7 @@ private:
     {
         LOGI("Init %s", typeName<DerivedT>().c_str());
 
+        events()->post(InitEvent());
         init();
         // And ofc send message informing children about the manager was initialized
         postEvent(createComponentEvent<ManagerAddedEvent>());
@@ -53,6 +54,7 @@ private:
         if (isManagerRegistered(id()))
             postEvent(createComponentEvent<ManagerAddedEvent>());
 
+        events()->post(DeinitEvent());
         deinit();
     }
 

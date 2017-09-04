@@ -3,39 +3,49 @@
 #include <iostream>
 #include <functional>
 
+#include <Res.h>
+#include <TextRes.h>
+
 #include "GLTools.h"
 
 namespace flappy {
 
 class GLAttribArray;
 
-class GLShaderProgram {
+class GLShaderProgram: public Res {
 public:
     using Program = GLuint;
     using AttribLocation = GLint;
     using UniformLocation = GLint;
 
-    GLShaderProgram(const std::string& vertexSource, const std::string& fragmentSource);
+    GLShaderProgram(std::shared_ptr<TextRes> vertexShaderRes, std::shared_ptr<TextRes> fragmentShaderRes);
     ~GLShaderProgram();
-    void render(const GLAttribArray &, std::function<void()>) const;
-    AttribLocation findAttr(const char*) const;
-    UniformLocation findUniform(const char*) const;
-    inline Program getProgram() const {return m_program;}
+    void render(const GLAttribArray &, std::function<void()>);
+    AttribLocation findAttr(const char*);
+    UniformLocation findUniform(const char*);
+    inline Program getProgram();
+
+    std::list<std::shared_ptr<Res>> dependencyList() const override;
 
     class shader_init_failed {};
 
 protected:
-    void bind() const;
+    void bind();
     void unbind() const;
 
 private:
     using ShaderType = GLenum;
 
-    GLuint m_fragmentShader;
-    GLuint m_vertexShader;
-    Program m_program;
-
     GLuint loadShader(ShaderType, const std::string& source);
+    void initShader();
+    void deinitShader();
+
+    std::shared_ptr<TextRes> m_fragmentShaderRes;
+    std::shared_ptr<TextRes> m_vertexShaderRes;
+
+    GLuint m_fragmentShader = 0;
+    GLuint m_vertexShader = 0;
+    Program m_program = 0;
 };
 
 } // flappy

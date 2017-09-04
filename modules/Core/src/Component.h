@@ -36,12 +36,14 @@ private:
     void initInternal() override {
         LOGI("Init %s", typeName<DerivedT>().c_str());
 
+        events()->post(InitEvent());
         init();
     }
 
     void deinitInternal() override {
         LOGI("Deinit %s", typeName<DerivedT>().c_str());
 
+        events()->post(DeinitEvent());
         deinit();
     }
 

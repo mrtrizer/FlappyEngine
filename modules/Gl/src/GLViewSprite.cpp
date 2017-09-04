@@ -39,7 +39,7 @@ static const char spriteFShader[] =
     "}\n";
 
 GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent) :
-    GLView<GLViewSprite>(spriteVShader, spriteFShader, {}, { SpriteComponent::id() }),
+    GLView<GLViewSprite>({ SpriteComponent::id() }),
     m_rect(GL_TRIANGLE_STRIP),
     m_spriteComponent(spriteComponent),
     m_vertexList{ {-0.5f, -0.5f},
@@ -57,13 +57,13 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
         m_quadRes = m_spriteComponent->quadRes();
     }
     if (m_quadRes != nullptr) {
-        getShader()->render(m_rect, [this, mvMatrix, pMartrix](){
+        shader()->render(m_rect, [this, mvMatrix, pMartrix](){
             auto texture = m_quadRes->texture();
-            glUniformMatrix4fv(getShader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
-            glUniformMatrix4fv(getShader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-            glUniform4fv(getShader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
+            glUniformMatrix4fv(shader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
+            glUniformMatrix4fv(shader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
+            glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
             auto glTexture = static_pointer_cast<GLTextureRes>(texture);
-            glTexture->bind(getShader()->findUniform("uTex"), 0);
+            glTexture->bind(shader()->findUniform("uTex"), 0);
         });
     }
 }
@@ -94,7 +94,7 @@ void GLViewSprite::updateFrame() {
 
     m_rect.reset(GL_TRIANGLE_STRIP);
 
-    m_rect.addVBO<GLTextureRes::UV>(uvs, getShader()->findAttr("aTexCoord"));
+    m_rect.addVBO<GLTextureRes::UV>(uvs, shader()->findAttr("aTexCoord"));
 
     auto spriteSize = spriteInfo.size;
 
@@ -104,7 +104,11 @@ void GLViewSprite::updateFrame() {
                 {0.5f * spriteSize.x, -0.5f * spriteSize.y},
                 {0.5f * spriteSize.x, 0.5f * spriteSize.y} };
 
-    m_rect.addVBO<GLTools::Vertex>(m_vertexList, getShader()->findAttr("aPosition"));
+    m_rect.addVBO<GLTools::Vertex>(m_vertexList, shader()->findAttr("aPosition"));
+}
+
+void GLViewSprite::init() {
+    m_shaderProgramRes = manager<ResManager<GLShaderProgram>>()->getRes("default_shape");
 }
 
 } // flappy

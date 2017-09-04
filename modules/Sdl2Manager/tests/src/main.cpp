@@ -18,9 +18,11 @@
 #include <Sdl2RgbaBitmapResFactory.h>
 #include <StdFileLoadManager.h>
 #include <DefaultResFactory.h>
+#include <GLShaderResFactory.h>
 #include <IRgbaBitmapRes.h>
 #include <GLTextureRes.h>
 #include <SpriteComponent.h>
+#include <FileResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -37,9 +39,11 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     rootEntity->createComponent<ResManager<AtlasRes>> ();
+    rootEntity->createComponent<ResManager<TextRes>> (FileResFactory());
     rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
     rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
     rootEntity->createComponent<ResManager<QuadRes>> (QuadResFactory());
+    rootEntity->createComponent<ResManager<GLShaderProgram>> (GLShaderResFactory());
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();
@@ -53,14 +57,14 @@ int main(int argc, char *argv[])
     rectEntity->component<MeshComponent>();
     rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
 
-    // Sprite
-    auto spriteEntity = sceneEntity->createEntity();
-    spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
-    spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
+//    // Sprite
+//    auto spriteEntity = sceneEntity->createEntity();
+//    spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
+//    spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
 
-    auto quadRes = rootEntity->component<ResManager<QuadRes>>()->getRes("__img_missing__");
-    spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);
+//    auto quadRes = rootEntity->component<ResManager<QuadRes>>()->getRes("__img_missing__");
+//    spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);
 
     return rootEntity->findComponent<AGLManager>()->startMainLoop();
 }

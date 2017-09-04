@@ -13,17 +13,13 @@ View::View(TypeIdList dependenceManagerIdList, TypeIdList dependenceComponentLis
         Tools::concat(dependenceManagerIdList, { ViewManager::id() }),
         dependenceComponentList)
 {
+    events()->subscribeIn([this](InitEvent) {
+        manager<ViewManager>()->registerRenderElement(selfPointer<View>());
+    });
 
-}
-
-void View::init()
-{
-    manager<ViewManager>()->registerRenderElement(selfPointer<View>());
-}
-
-void View::deinit()
-{
-    manager<ViewManager>()->unregisterRenderElement(selfPointer<View>());
+    events()->subscribeIn([this](DeinitEvent) {
+        manager<ViewManager>()->unregisterRenderElement(selfPointer<View>());
+    });
 }
 
 /// Calls update method if need (if externUpdate() was invoked before)

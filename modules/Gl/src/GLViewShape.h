@@ -15,13 +15,15 @@ namespace flappy {
 /// All derived classes have to impmelent getAttribArray().
 class GLViewShape: public GLView<GLViewShape> {
 public:
-    GLViewShape();
+    using GLView::GLView;
+
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
     virtual const GLAttribArray & getAttribArray() const = 0;
     void setColor(Color color) { m_color = color; }
     Color color() { return m_color; }
 
 private:
+
     GLTools::GLColorRGBA m_glColorRGBA;
     Color m_color;
 };

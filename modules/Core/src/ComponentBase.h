@@ -28,6 +28,12 @@ public:
         DeltaTime dt;
     };
 
+    struct InitEvent: public IEvent
+    {};
+
+    struct DeinitEvent: public IEvent
+    {};
+
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
     ComponentBase(TypeIdList dependenceManagerIdList, TypeIdList dependenceComponentList = {});

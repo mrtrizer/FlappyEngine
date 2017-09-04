@@ -18,10 +18,6 @@ public:
     void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
 protected:
     virtual void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) = 0;
-
-private:
-    void init() override;
-    void deinit() override;
 };
 
 } // flappy

@@ -61,6 +61,11 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Gl",
+  "command": "/usr/bin/clang++  -DGl_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src -I/usr/local/include -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/Gl.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLShaderResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLShaderResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLShaderResFactory.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Gl",
   "command": "/usr/bin/clang++  -DGl_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src -I/usr/local/include -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/Gl.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureRes.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureRes.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureRes.cpp"
 },

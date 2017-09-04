@@ -5,6 +5,14 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
+GLViewCircle::GLViewCircle(int vertexCount):
+    m_circle(GL_TRIANGLE_FAN),
+    m_vertexCount(vertexCount)
+{
+    vector<GLTools::Vertex> vertexList = circleTriangleFan(0.5f, m_vertexCount);
+    m_circle.addVBO<GLTools::Vertex>(vertexList, shader()->findAttr("aPosition"));
+}
+
 /// Generates vertices for circle drawing in GL_TRIANGLE_FAN format
 /// @param count Count of vertices ( >= 3).
 vector<GLTools::Vertex> GLViewCircle::circleTriangleFan(float r, int vertexCount)
@@ -17,14 +25,6 @@ vector<GLTools::Vertex> GLViewCircle::circleTriangleFan(float r, int vertexCount
     for (int i = 0; i < vertexCount + 1; i++)
         vertexList[i + 1] = {cos(step * i) * r, sin(step * i) * r};
     return vertexList;
-}
-
-GLViewCircle::GLViewCircle(int vertexCount):
-    m_circle(GL_TRIANGLE_FAN),
-    m_vertexCount(vertexCount)
-{
-    vector<GLTools::Vertex> vertexList = circleTriangleFan(0.5f, m_vertexCount);
-    m_circle.addVBO<GLTools::Vertex>(vertexList, getShader()->findAttr("aPosition"));
 }
 
 } // flappy
