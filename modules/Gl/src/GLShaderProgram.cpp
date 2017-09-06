@@ -15,7 +15,7 @@ using namespace std;
     if (infoLen) { \
         char buf[infoLen]; \
         glGet ## type ## InfoLog(instance, infoLen, NULL, buf); \
-        cout << "Can't compile the shader:" << endl << buf << endl; \
+        cout << "Shader compilation error:" << endl << buf << endl; \
     } \
 }
 
@@ -34,7 +34,7 @@ GLShaderProgram::~GLShaderProgram() {
 GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) {
     GLuint shader = glCreateShader(shaderType);
     if (shader == 0)
-        throw shader_init_failed();
+        throw std::runtime_error("Shader creation error");
     auto sourceStrPtr = source.c_str();
     glShaderSource(shader, 1, &sourceStrPtr, NULL);
     CHECK_GL_ERROR;
@@ -45,21 +45,9 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) 
     if (!compiled) {
         PRINT_INFO(Shader, shader);
         glDeleteShader(shader);
-        throw shader_init_failed();
+        throw std::runtime_error("Shader compilation error");
     }
     return shader;
-}
-
-void GLShaderProgram::deinitShader() {
-    if (m_program != 0) {
-        //TODO: Is this a proper cleanup?
-        glDetachShader(m_program, m_vertexShader);
-        CHECK_GL_ERROR;
-        glDetachShader(m_program, m_fragmentShader);
-        CHECK_GL_ERROR;
-        glDeleteProgram(m_program);
-        CHECK_GL_ERROR;
-    }
 }
 
 void GLShaderProgram::initShader() {
@@ -82,41 +70,45 @@ void GLShaderProgram::initShader() {
             PRINT_INFO(Program, m_program);
             glDeleteProgram(m_program);
             m_program = 0;
+            throw std::runtime_error("Shader program linking error");
         }
     }
 }
 
+void GLShaderProgram::deinitShader() {
+    if (m_program != 0) {
+        if (m_vertexShader != 0) {
+            glDetachShader(m_program, m_vertexShader);
+            CHECK_GL_ERROR;
+        }
+        if (m_fragmentShader != 0) {
+            glDetachShader(m_program, m_fragmentShader);
+            CHECK_GL_ERROR;
+        }
+        glDeleteProgram(m_program);
+        CHECK_GL_ERROR;
+    }
+}
+
 GLShaderProgram::AttribLocation GLShaderProgram::findAttr(const char* name) {
-    AttribLocation result = glGetAttribLocation(getProgram(), name);
+    AttribLocation result = glGetAttribLocation(program(), name);
     CHECK_GL_ERROR;
     return result;
 }
 
 GLShaderProgram::UniformLocation GLShaderProgram::findUniform(const char* name) {
-    UniformLocation result = glGetUniformLocation(getProgram(), name);
+    UniformLocation result = glGetUniformLocation(program(), name);
     CHECK_GL_ERROR;
     return result;
 }
 
-GLShaderProgram::Program GLShaderProgram::getProgram()
+GLShaderProgram::Program GLShaderProgram::program() const
 {
-    bool needReinit = false;
-    if (m_vertexShaderRes->nextRes() != nullptr) {
-        m_vertexShaderRes = std::static_pointer_cast<TextRes>(m_vertexShaderRes->nextRes());
-        needReinit = true;
-    }
-    if (m_fragmentShaderRes->nextRes() != nullptr) {
-        m_fragmentShaderRes = std::static_pointer_cast<TextRes>(m_fragmentShaderRes->nextRes());
-        needReinit = true;
-    }
-    if ((m_program == 0) && needReinit == true)
-        initShader();
-
     return m_program;
 }
 
 void GLShaderProgram::bind() {
-    glUseProgram(getProgram());
+    glUseProgram(program());
     CHECK_GL_ERROR;
 }
 

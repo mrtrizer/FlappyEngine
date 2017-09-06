@@ -17,7 +17,7 @@ void checkOpenGLerror(const char * file, const char * func, int line) {
     GLenum errCode = glGetError();
     if(errCode != GL_NO_ERROR) {
         stringstream ss;
-        ss << "[ERROR] " << file << ' ' << line << ' ' << func << endl;
+        ss << " OpenGL error " << file << ' ' << line << ' ' << func << endl;
         LOGE("%s",ss.str().data());
     }
 }

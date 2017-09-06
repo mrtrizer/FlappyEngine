@@ -46,7 +46,11 @@ void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     //and draw presenters one by one appying move matrices
     for (auto presenter: presenterList) {
         auto mvMatrix = presenter.pos;
-        presenter.view->redraw(pMatrix, mvMatrix);
+        try {
+            presenter.view->redraw(pMatrix, mvMatrix);
+        } catch (std::exception& e) {
+            LOGE("Rendering exception: %s", e.what());
+        }
     }
 }
 

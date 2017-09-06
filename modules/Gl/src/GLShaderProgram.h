@@ -23,11 +23,10 @@ public:
     void render(const GLAttribArray &, std::function<void()>);
     AttribLocation findAttr(const char*);
     UniformLocation findUniform(const char*);
-    inline Program getProgram();
+    Program program() const;
+    void initShader();
 
     std::list<std::shared_ptr<Res>> dependencyList() const override;
-
-    class shader_init_failed {};
 
 protected:
     void bind();
@@ -37,7 +36,7 @@ private:
     using ShaderType = GLenum;
 
     GLuint loadShader(ShaderType, const std::string& source);
-    void initShader();
+
     void deinitShader();
 
     std::shared_ptr<TextRes> m_fragmentShaderRes;

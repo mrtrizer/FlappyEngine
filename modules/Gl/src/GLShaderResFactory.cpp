@@ -17,9 +17,11 @@ std::shared_ptr<Res> GLShaderResFactory::load(const ResInfo& resInfo, SafePtr<En
 
 std::shared_ptr<Res> GLShaderResFactory::create(const std::string& name, SafePtr<Entity> entity) {
     auto textResFactory = entity->manager<ResManager<TextRes>>();
-    return std::make_shared<GLShaderProgram>(
+    auto shaderRes = std::make_shared<GLShaderProgram>(
                 textResFactory->getResSync(name + "_vertex"),
                 textResFactory->getResSync(name + "_fragment"));
+    shaderRes->initShader();
+    return shaderRes;
 }
 
 } // flappy
