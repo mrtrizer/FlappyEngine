@@ -143,15 +143,16 @@ void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController)
 
 template<typename ComponentT, typename ComponentEventT>
 void Entity::sendComponentEvents(std::shared_ptr<ComponentT> component) {
+    // Mutual notifications of new component and existing ones
     for (auto currentComponent : m_components) {
         if (currentComponent != component) {
-            // Notify already added components
-            ComponentBase::ComponentAddedEvent newComponentEvent;
+            // Notify old components about new one
+            auto newComponentEvent = ComponentEventT();
             newComponentEvent.id = component->componentId();
             newComponentEvent.pointer = component;
             currentComponent->events()->post(newComponentEvent);
-            // Notify new component
-            ComponentBase::ComponentAddedEvent oldComponentEvent;
+            // Notify new component about old ones
+            auto oldComponentEvent = ComponentEventT();
             oldComponentEvent.id = currentComponent->componentId();
             oldComponentEvent.pointer = currentComponent;
             component->events()->post(oldComponentEvent);

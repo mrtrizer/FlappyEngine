@@ -17,8 +17,9 @@
 namespace flappy {
 
 Sdl2Manager::Sdl2Manager()
-    : AGLManager({AppManager::id()})
-{}
+{
+    addDependency(AppManager::id());
+}
 
 void Sdl2Manager::resizeWindow(int width, int height) {
     ViewManager::OnWindowResize onWindowResizeEvent;

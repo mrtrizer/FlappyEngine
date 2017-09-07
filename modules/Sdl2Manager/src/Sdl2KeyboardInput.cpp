@@ -7,7 +7,9 @@
 
 namespace flappy {
 
-Sdl2KeyboardInput::Sdl2KeyboardInput(): Manager({Sdl2Manager::id()}) {
+Sdl2KeyboardInput::Sdl2KeyboardInput() {
+    addDependency(Sdl2Manager::id());
+
     events()->subscribeIn([this](Sdl2Manager::Sdl2Event e) {
         if (e.event.type == SDL_KEYDOWN) {
             manager<KeyboardInputManager>()->setKeyDown((KeyCode)e.event.key.keysym.scancode);

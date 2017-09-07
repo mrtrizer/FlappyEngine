@@ -9,17 +9,8 @@
 namespace flappy
 {
 
-ComponentBase::ComponentBase():
-    m_eventController(std::make_shared<EventController>()),
-    m_dependenceManagerList()
-{
-    subscribeEvents();
-}
-
-ComponentBase::ComponentBase(TypeIdList dependenceManagerIdList, flappy::ComponentBase::TypeIdList dependenceComponentList)
-    : m_eventController(std::make_shared<EventController>()),
-      m_dependenceManagerList(dependenceManagerIdList),
-      m_dependenceComponentList(dependenceComponentList)
+ComponentBase::ComponentBase()
+    : m_eventController(std::make_shared<EventController>())
 {
     subscribeEvents();
 }
@@ -39,18 +30,18 @@ bool ComponentBase::isComponentRegistered(TypeId<flappy::ComponentBase> id) {
 void ComponentBase::subscribeEvents() {
     events()->subscribeIn([this](const ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
-        if (!isInitialized() && allManagersReady() && allComponentsReady())
+        if (!isInitialized() && allComponentsReady())
             tryInit();
     });
     events()->subscribeIn([this](const ManagerRemovedEvent& e) {
         m_managers.setById(e.id, SafePtr<ManagerBase>());
-        if (isInitialized() && !allManagersReady())
+        if (isInitialized() && !allComponentsReady())
             tryDeinit();
     });
     events()->subscribeIn([this](const ComponentAddedEvent& e) {
         if (m_components.getById(e.id) == nullptr)
             m_components.setById(e.id, e.pointer);
-        if (!isInitialized() && allManagersReady() && allComponentsReady())
+        if (!isInitialized() && allComponentsReady())
             tryInit();
     });
     events()->subscribeIn([this](const ComponentRemovedEvent& e) {
@@ -74,18 +65,15 @@ void ComponentBase::setParentEntity(SafePtr<Entity> entity)
     }
 }
 
-bool ComponentBase::allManagersReady() {
-    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceManagerList)
-        if (!isManagerRegistered(dependenceTypeId))
+bool ComponentBase::allComponentsReady() {
+    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
+        if (!isComponentRegistered(dependenceTypeId) && !isManagerRegistered(dependenceTypeId))
             return false;
     return true;
 }
 
-bool ComponentBase::allComponentsReady() {
-    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
-        if (!isComponentRegistered(dependenceTypeId))
-            return false;
-    return true;
+void ComponentBase::addDependency(TypeId<ComponentBase> id) {
+    m_dependenceComponentList.push_back(id);
 }
 
 void ComponentBase::tryInit() {
@@ -116,7 +104,7 @@ void ComponentBase::tryDeinit() {
 }
 
 void ComponentBase::addedToEntityInternal() {
-    if (!isInitialized() && allManagersReady())
+    if (!isInitialized() && allComponentsReady())
         tryInit();
     addedToEntity();
 }

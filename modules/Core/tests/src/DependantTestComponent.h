@@ -12,10 +12,10 @@ public:
         virtual void update(flappy::DeltaTime dt) = 0;
     };
 
-    DependantTestComponent(IMock* mockComponent = nullptr):
-        Component({TestManager::id()}),
-        m_mockComponent (mockComponent){
-
+    DependantTestComponent(IMock* mockComponent = nullptr)
+        : m_mockComponent (mockComponent)
+    {
+            addDependency(TestManager::id());
     }
 
     void init() override final {

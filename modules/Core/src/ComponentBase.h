@@ -36,7 +36,6 @@ public:
 
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
-    ComponentBase(TypeIdList dependenceManagerIdList, TypeIdList dependenceComponentList = {});
     ComponentBase();
     ComponentBase(const ComponentBase&) = delete;
     ComponentBase& operator=(const ComponentBase&) = delete;
@@ -128,19 +127,21 @@ protected:
     virtual void update(DeltaTime)
     {}
 
-    bool allManagersReady();
-
     bool allComponentsReady();
 
+    // TODO: Deprecated. Remove update methods. Listen OnInit event instead.
     /// Called when you already added to entity.
     /// @details You have access to parent entity from this method first time.
     virtual void init()
     {}
 
+    // TODO: Deprecated. Remove update methods. Listen Deinit event instead.
     /// Called when you removed from the entity.
     /// @details Here, you have last chance to access to your past neighbors and entity
     virtual void deinit()
     {}
+
+    void addDependency(TypeId<ComponentBase> id);
 
 private:
     bool m_initializedFlag = false;
@@ -149,7 +150,6 @@ private:
     TypeMap<ComponentBase, SafePtr<ComponentBase>> m_components;
     std::shared_ptr<EventController> m_eventController;
 
-    TypeIdList m_dependenceManagerList;
     TypeIdList m_dependenceComponentList;
     std::weak_ptr<ISubscription> m_updateSubscription;
 

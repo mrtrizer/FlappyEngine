@@ -10,8 +10,10 @@ namespace flappy {
 
 class SpriteComponent: public Component<SpriteComponent> {
 public:
-    SpriteComponent() : Component({RenderElementFactory::id()})
-    {}
+    SpriteComponent()
+    {
+        addDependency(RenderElementFactory::id());
+    }
 
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color& colorRGBA() { return m_colorRGBA; }

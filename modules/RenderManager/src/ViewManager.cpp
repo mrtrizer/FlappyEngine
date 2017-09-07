@@ -11,9 +11,10 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-ViewManager::ViewManager(TypeIdList dependencies):
-    Manager(Tools::concat(dependencies, {SceneManager::id()}))
-{}
+ViewManager::ViewManager()
+{
+    addDependency(SceneManager::id());
+}
 
 void ViewManager::update(DeltaTime dt) {
 

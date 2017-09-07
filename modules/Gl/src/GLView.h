@@ -20,9 +20,10 @@ template<typename Derived>
 class GLView: public View
 {
 public:
-    GLView(TypeIdList dependenceManagerIdList = {}, TypeIdList dependenceComponentList = {}):
-        View(Tools::concat(dependenceManagerIdList, {ResManager<GLShaderProgram>::id()}), dependenceComponentList)
+    GLView()
     {
+        addDependency(ResManager<GLShaderProgram>::id());
+
         events()->subscribeIn([this](InitEvent) {
             m_shaderRes = manager<ResManager<GLShaderProgram>>()->getRes("shape_shader");
         });

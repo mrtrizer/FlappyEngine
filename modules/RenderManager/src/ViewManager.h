@@ -36,7 +36,7 @@ public:
         float height;
     };
 
-    ViewManager(TypeIdList);
+    ViewManager();
 
     void update(DeltaTime dt);
 

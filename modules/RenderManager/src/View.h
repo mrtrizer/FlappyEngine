@@ -13,7 +13,7 @@ namespace flappy {
 /// derived classes.
 class View : public Component<View> {
 public:
-    View(TypeIdList dependenceManagerIdList = {}, TypeIdList dependenceComponentList = {});
+    View();
     virtual ~View() = default;
     void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
 protected:

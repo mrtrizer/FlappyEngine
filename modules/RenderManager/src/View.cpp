@@ -8,11 +8,10 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-View::View(TypeIdList dependenceManagerIdList, TypeIdList dependenceComponentList):
-    Component(
-        Tools::concat(dependenceManagerIdList, { ViewManager::id() }),
-        dependenceComponentList)
+View::View()
 {
+    addDependency(ViewManager::id());
+
     events()->subscribeIn([this](InitEvent) {
         manager<ViewManager>()->registerRenderElement(selfPointer<View>());
     });

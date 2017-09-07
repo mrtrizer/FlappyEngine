@@ -20,8 +20,11 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLViewManager::GLViewManager(): ViewManager({AGLManager::id(), ScreenManager::id()})
-{}
+GLViewManager::GLViewManager(): ViewManager()
+{
+    addDependency(AGLManager::id());
+    addDependency(ScreenManager::id());
+}
 
 void GLViewManager::init() {
     LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));

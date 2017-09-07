@@ -38,8 +38,7 @@ static const char spriteFShader[] =
 #endif
     "}\n";
 
-GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent) :
-    GLView<GLViewSprite>({ SpriteComponent::id() }),
+GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     m_rect(GL_TRIANGLE_STRIP),
     m_spriteComponent(spriteComponent),
     m_vertexList{ {-0.5f, -0.5f},
@@ -48,7 +47,7 @@ GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent) :
                 {0.5f, 0.5f} },
     m_quadRes(spriteComponent->quadRes())
 {
-
+    addDependency(SpriteComponent::id());
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {

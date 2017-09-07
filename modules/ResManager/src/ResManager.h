@@ -23,14 +23,16 @@ class ResManager final: public Manager<ResManager<ResT>>
 {
 public:
     ResManager()
-    : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
-    {}
+    {
+        this->addDependency(ResRepositoryManager::id());
+    }
 
     template <typename ResFactoryT>
     ResManager(ResFactoryT&& resFactory)
-        : Manager<ResManager<ResT>>({ResRepositoryManager::id()})
-        , m_resFactory(std::make_shared<std::decay_t<ResFactoryT>>(std::move(resFactory)))
-    {}
+        : m_resFactory(std::make_shared<std::decay_t<ResFactoryT>>(std::move(resFactory)))
+    {
+        this->addDependency(ResRepositoryManager::id());
+    }
 
     /// @brief If resource is not loaded yet, method returns default
     /// resource, created by binded ResourceFactory.

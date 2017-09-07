@@ -15,9 +15,11 @@ namespace flappy {
 using namespace std;
 
 ResRepositoryManager::ResRepositoryManager(std::string resRespositoryPath)
-    : Manager({IFileLoadManager::id(), IFileMonitorManager::id()})
-    , m_resRepositoryPath(resRespositoryPath)
-{}
+    : m_resRepositoryPath(resRespositoryPath)
+{
+    addDependency(IFileLoadManager::id());
+    addDependency(IFileMonitorManager::id());
+}
 
 std::string ResRepositoryManager::resInfoListFilePath() {
     return Tools::joinPath({m_resRepositoryPath, "res_list.json"});

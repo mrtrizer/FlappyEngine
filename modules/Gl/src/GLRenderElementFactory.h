@@ -9,8 +9,10 @@ namespace flappy {
 class GLRenderElementFactory : public RenderElementFactory {
 public:
 
-    GLRenderElementFactory(): RenderElementFactory({ViewManager::id()})
-    {}
+    GLRenderElementFactory()
+    {
+        addDependency(ViewManager::id());
+    }
 
     std::shared_ptr<View> createSpriteRender(SafePtr<SpriteComponent>) override;
     std::shared_ptr<View> createMeshRender(SafePtr<MeshComponent>) override;

@@ -6,8 +6,10 @@
 namespace flappy {
 
 MouseToTouchConvertComponent::MouseToTouchConvertComponent()
-    :Component({TouchInputManager::id(), MouseInputManager::id()})
-{}
+{
+    addDependency(TouchInputManager::id());
+    addDependency(MouseInputManager::id());
+}
 
 void MouseToTouchConvertComponent::init()
 {

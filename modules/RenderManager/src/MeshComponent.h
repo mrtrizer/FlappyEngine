@@ -9,8 +9,10 @@ namespace flappy {
 
 class MeshComponent: public Component<MeshComponent> {
 public:
-    MeshComponent(): Component({RenderElementFactory::id()})
-    {}
+    MeshComponent()
+    {
+        addDependency(RenderElementFactory::id());
+    }
 
 protected:
     void init() override {
