@@ -8,6 +8,7 @@
 #include <Manager.h>
 #include <ResRepositoryManager.h>
 
+#include "IFileMonitorManager.h"
 #include "ResKeeper.h"
 #include "IResFactory.h"
 
@@ -16,8 +17,6 @@ namespace flappy {
 /// @addtogroup ResManager
 /// @{
 
-class Res;
-
 template <typename ResT>
 class ResManager final: public Manager<ResManager<ResT>>
 {
@@ -25,13 +24,8 @@ public:
     ResManager()
     {
         this->addDependency(ResRepositoryManager::id());
-    }
-
-    template <typename ResFactoryT>
-    ResManager(ResFactoryT&& resFactory)
-        : m_resFactory(std::make_shared<std::decay_t<ResFactoryT>>(std::move(resFactory)))
-    {
-        this->addDependency(ResRepositoryManager::id());
+        this->addDependency(ResFactory<ResT>::id());
+        this->addDependency(IFileMonitorManager::id());
     }
 
     /// @brief If resource is not loaded yet, method returns default
@@ -57,28 +51,19 @@ public:
     void update(DeltaTime) override;
 
 private:
-
-    std::shared_ptr<IResFactory> m_resFactory;
     std::map<std::string, ResKeeper> m_resMap;
 
-    /// @brief Creates default resource with ResFactory::create()
-    /// if can't find existing resource.
-    /// Generates runtime_error exception if ResFactory is not set.
-    /// @return Initialized resource by name
-    std::shared_ptr<Res> getRes(const std::string& name, SafePtr<Entity> entity);
-    ResKeeper& getResKeeper(const std::string& name, SafePtr<Entity> entity);
+    ResKeeper& getResKeeper(const std::string& name);
 };
 
 
 template<typename ResT>
-ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name, SafePtr<Entity> entity)
+ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 {
     auto resIter = m_resMap.find(name);
     if (resIter == m_resMap.end()) {
-        if (m_resFactory == nullptr)
-            throw std::runtime_error("ResFactory is not binded");
         try { // catch all exception from default res create function
-            auto defaultRes = m_resFactory->create(name, entity);
+            auto defaultRes = this->template manager<ResFactory<ResT>>()->create(name);
             auto resKeeper = ResKeeper(defaultRes);
             auto iter = m_resMap.emplace(name, std::move(resKeeper)).first;
             return iter->second;
@@ -95,17 +80,16 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name, SafePtr<Entit
 
 template<typename ResT>
 std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name) {
-    return std::static_pointer_cast<ResT>(getResKeeper(name, this->entity()).actualRes());
+    return std::static_pointer_cast<ResT>(getResKeeper(name).actualRes());
 }
 
 /// @brief Synchronous version of getRes
 template<typename ResT>
 std::shared_ptr<ResT> ResManager<ResT>::getResSync(const std::string& name)
 {
-    auto& resKeeper = getResKeeper(name, this->entity());
-    if ((m_resFactory != nullptr) && this->isInitialized()) {
-        auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
-        resKeeper.updateRes(m_resFactory, resInfo, this->entity());
+    auto& resKeeper = getResKeeper(name);
+    if (this->isInitialized()) {
+        resKeeper.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
     }
     return std::static_pointer_cast<ResT>(resKeeper.actualRes());
 }
@@ -122,28 +106,16 @@ void ResManager<ResT>::setRes(const std::string& name, std::shared_ptr<ResT> res
         foundIter->second.actualRes()->pushRes(res);
 }
 
-/// @brief Bind resource factory, used to load and reload resources.
-/// Resource can't be initlalized and loaded without binded factory.
-/// But it still can be set with setRes() and got with getRes() later.
-template<typename ResT>
-void ResManager<ResT>::bindResFactory(std::shared_ptr<IResFactory> factory)
-{
-    m_resFactory = factory;
-}
-
 template<typename ResT>
 void ResManager<ResT>::update(DeltaTime)
 {
-    if (m_resFactory == nullptr)
-        return;
     for (auto resPairIter = m_resMap.begin(); resPairIter != m_resMap.end();) {
         resPairIter->second.cleanUpRes();
         if (resPairIter->second.needRemove()) {
             resPairIter = m_resMap.erase(resPairIter);
         } else {
             auto name = resPairIter->first;
-            auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
-            resPairIter->second.updateRes(m_resFactory, resInfo, this->entity());
+            resPairIter->second.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
             resPairIter++;
         }
     }

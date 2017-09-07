@@ -14,18 +14,36 @@ namespace flappy {
 /// @details This factory just creates an instance of a resource and
 /// updates it if dependencies was updated.
 /// Pass dependent classes in DependT argument.
-template <typename ResT, typename ... DependT>
-class DefaultResFactory : public IResFactory
+template <typename BaseResT, typename ResT, typename ... DependT>
+class DefaultResFactory : public ResFactory<BaseResT>
 {
 public:
-    DefaultResFactory() = default;
 
-    virtual std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity> entity) final {
-        return create(resInfo.name, entity);
+    // Recursive adding of dependencies listed in DependT variadic
+    struct Empty {};
+
+    // for empty dependencies
+    template <typename EmptyT>
+    void addDependencies() {
     }
 
-    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity> entity) final {
-        return std::make_shared<ResT>(entity->manager<ResManager<DependT>>()->template getRes(name) ...);
+    // for the rest dependencies
+    template <typename EmptyT, typename FirstDependT, typename ... RestDependT>
+    void addDependencies() {
+        this->template addDependency(ResManager<FirstDependT>::id());
+        addDependencies<Empty, RestDependT...>();
+    }
+
+    DefaultResFactory() {
+        addDependencies<Empty, DependT...>();
+    }
+
+    virtual std::shared_ptr<Res> load(const std::string& name) final {
+        return create(name);
+    }
+
+    virtual std::shared_ptr<Res> create(const std::string& name) final {
+        return std::make_shared<ResT>(this->template manager<ResManager<DependT>>()->template getRes(name) ...);
     }
 };
 

@@ -6,18 +6,17 @@
 #include <AtlasRes.h>
 #include <TextureRes.h>
 #include <IResFactory.h>
+#include <IRgbaBitmapRes.h>
 
 namespace flappy {
 
-class Sdl2RgbaBitmapResFactory :public IResFactory
+class Sdl2RgbaBitmapResFactory :public ResFactory<IRgbaBitmapRes>
 {
 public:
-    std::shared_ptr<Res> load(const ResInfo&, SafePtr<Entity>) override;
-    std::shared_ptr<Res> create(const std::string&, SafePtr<Entity>) override;
+    Sdl2RgbaBitmapResFactory();
+    std::shared_ptr<Res> load(const std::string&) override;
+    std::shared_ptr<Res> create(const std::string&) override;
 
-    class file_open_error {};
-
-class wrong_bitmap_format {};
 private:
     std::string m_path;
 };

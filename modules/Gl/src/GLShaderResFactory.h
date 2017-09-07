@@ -4,13 +4,16 @@
 #include <vector>
 
 #include <IResFactory.h>
+#include <GLShaderProgram.h>
 
 namespace flappy {
 
-class GLShaderResFactory: public IResFactory {
+class GLShaderResFactory: public ResFactory<GLShaderProgram> {
 public:
-    std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity>) override;
-    std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity>) override;
+    GLShaderResFactory();
+
+    std::shared_ptr<Res> load(const std::string& name) override;
+    std::shared_ptr<Res> create(const std::string& name) override;
 };
 
 } // flappy

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <Manager.h>
 #include <SafePtr.h>
 #include <ResInfo.h>
 
@@ -13,6 +14,12 @@ class Entity;
 /// @addtogroup ResManager
 /// @{
 
+class IResFactory {
+public:
+    virtual std::shared_ptr<Res> load(const std::string& resInfo) = 0;
+    virtual std::shared_ptr<Res> create(const std::string& name) = 0;
+};
+
 /// Base class for all resource factories.
 /// @details Every automaticly loaded resource should have
 /// factory. Factories are used to create resource instacies
@@ -21,19 +28,9 @@ class Entity;
 /// instace right on first user request.
 /// load() method should provide synchronious loading of
 /// requested resource. It's usially called in a separate thread.
-/// changed method returns true if resource was changed since
-/// last load.
-class IResFactory {
-public:
-    IResFactory() = default;
-    virtual ~IResFactory() = default;
-    IResFactory(const IResFactory&) = default;
-    IResFactory& operator=(const IResFactory&) & = default;
-    IResFactory(IResFactory&&) = default;
-    IResFactory& operator=(IResFactory&&) & = default;
+template <typename ResT>
+class ResFactory: public Manager<ResFactory<ResT>>, public IResFactory {
 
-    virtual std::shared_ptr<Res> load(const ResInfo& resInfo, SafePtr<Entity>) = 0;
-    virtual std::shared_ptr<Res> create(const std::string& name, SafePtr<Entity>) = 0;
 };
 
 /// @}

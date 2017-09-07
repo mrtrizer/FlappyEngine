@@ -39,11 +39,16 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     rootEntity->createComponent<ResManager<AtlasRes>> ();
-    rootEntity->createComponent<ResManager<TextRes>> (FileResFactory());
-    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
-    rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
-    rootEntity->createComponent<ResManager<QuadRes>> (QuadResFactory());
-    rootEntity->createComponent<ResManager<GLShaderProgram>> (GLShaderResFactory());
+    rootEntity->createComponent<FileResFactory<TextRes>>();
+    rootEntity->createComponent<ResManager<TextRes>> ();
+    rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
+    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
+    rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
+    rootEntity->createComponent<ResManager<TextureRes>> ();
+    rootEntity->createComponent<QuadResFactory>();
+    rootEntity->createComponent<ResManager<QuadRes>> ();
+    rootEntity->createComponent<GLShaderResFactory> ();
+    rootEntity->createComponent<ResManager<GLShaderProgram>> ();
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();

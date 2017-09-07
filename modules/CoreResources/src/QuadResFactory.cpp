@@ -12,14 +12,19 @@ namespace flappy {
 
 using namespace std;
 
-std::shared_ptr<Res> QuadResFactory::load(const ResInfo& resInfo, SafePtr<Entity> entity)  {
-    return create(resInfo.name, entity);
+QuadResFactory::QuadResFactory() {
+    addDependency(ResManager<TextureRes>::id());
+    addDependency(ResManager<AtlasRes>::id());
 }
 
-std::shared_ptr<Res> QuadResFactory::create(const std::string& name, SafePtr<Entity> entity) {
+std::shared_ptr<Res> QuadResFactory::load(const std::string& name)  {
+    return create(name);
+}
+
+std::shared_ptr<Res> QuadResFactory::create(const std::string& name) {
     auto splittedName = split(name, ':');
-    auto textureResManager = entity->manager<ResManager<TextureRes>>();
-    auto atlasResManager = entity->manager<ResManager<AtlasRes>>();
+    auto textureResManager = manager<ResManager<TextureRes>>();
+    auto atlasResManager = manager<ResManager<AtlasRes>>();
 
     if (splittedName.size() == 2) { // if atlas path, load atlas
         string atlasName = splittedName[0];

@@ -9,8 +9,9 @@
 namespace flappy {
 
 class Res;
-class IResFactory;
 class Entity;
+class IFileMonitorManager;
+class IResFactory;
 
 /// @addtogroup ResManager
 /// @{
@@ -27,7 +28,7 @@ public:
 
     bool needRemove();
     void cleanUpRes();
-    void updateRes(SafePtr<IResFactory>, const ResInfo& resInfo, SafePtr<Entity> entity);
+    void updateRes(SafePtr<IResFactory> resFactory, const std::string& name, SafePtr<IFileMonitorManager> monitor);
     bool dependencyChanged() const;
     std::shared_ptr<Res> actualRes();
 

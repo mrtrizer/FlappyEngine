@@ -27,10 +27,14 @@ TEST_CASE( "Quad ResManager::getRes") {
 
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
 
+    rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>> ();
     rootEntity->createComponent<ResManager<AtlasRes>> ();
-    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> (Sdl2RgbaBitmapResFactory());
-    rootEntity->createComponent<ResManager<TextureRes>> (DefaultResFactory<GLTextureRes, IRgbaBitmapRes>());
-    rootEntity->createComponent<ResManager<QuadRes>> (QuadResFactory());
+    rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
+    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
+    rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
+    rootEntity->createComponent<ResManager<TextureRes>> ();
+    rootEntity->createComponent<QuadResFactory> ();
+    rootEntity->createComponent<ResManager<QuadRes>> ();
 
     rootEntity->manager<ResManager<QuadRes>>()->getRes("test_img");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1));

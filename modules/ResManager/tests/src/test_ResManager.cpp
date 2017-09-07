@@ -44,7 +44,8 @@ TEST_CASE( "ResManager::getRes()") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    auto resManager = rootEntity->createComponent<ResManager<TextRes>>(FileResFactory());
+    rootEntity->createComponent<FileResFactory<TextRes>>();
+    auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
     auto textRes = resManager->getResSync("text_res");
     REQUIRE(textRes->text() == "Abuksigun\n");
 }

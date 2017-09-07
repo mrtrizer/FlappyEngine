@@ -42,20 +42,18 @@ std::shared_ptr<Res> ResKeeper::actualRes()
     return m_res->nextRes();
 }
 
-void ResKeeper::updateRes(SafePtr<IResFactory> resFactory,
-                                      const ResInfo& resInfo,
-                                      SafePtr<Entity> entity)
+void ResKeeper::updateRes(SafePtr<IResFactory> resFactory, const std::string& name, SafePtr<IFileMonitorManager> monitor)
 {
     // check res changed
-    if (entity->manager<IFileMonitorManager>()->changed(resInfo.path))
-        m_changed = true;
+//    if (monitor->changed(resInfo.path))
+//        m_changed = true;
     // check dependencies changed
     if (dependencyChanged())
         m_changed = true;
     // reload if anything is changed
     if (m_changed) {
         try { // catch all possible error while resource loading
-            auto loadedRes = resFactory->load(resInfo, entity);
+            auto loadedRes = resFactory->load(name);
             if (loadedRes != nullptr) {
                 m_res->pushRes(loadedRes);
                 m_changed = false;
