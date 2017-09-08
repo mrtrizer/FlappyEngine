@@ -18,6 +18,7 @@ class IResFactory {
 public:
     virtual std::shared_ptr<Res> load(const std::string& resInfo) = 0;
     virtual std::shared_ptr<Res> create(const std::string& name) = 0;
+    virtual bool changed(const std::string& name) { return false; }
 };
 
 /// Base class for all resource factories.

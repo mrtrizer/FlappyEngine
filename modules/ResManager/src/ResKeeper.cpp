@@ -45,11 +45,9 @@ std::shared_ptr<Res> ResKeeper::actualRes()
 void ResKeeper::updateRes(SafePtr<IResFactory> resFactory, const std::string& name, SafePtr<IFileMonitorManager> monitor)
 {
     // check res changed
-//    if (monitor->changed(resInfo.path))
-//        m_changed = true;
+    m_changed = m_changed || resFactory->changed(name);
     // check dependencies changed
-    if (dependencyChanged())
-        m_changed = true;
+    m_changed = m_changed || dependencyChanged();
     // reload if anything is changed
     if (m_changed) {
         try { // catch all possible error while resource loading

@@ -4,6 +4,7 @@
 
 #include "IResFactory.h"
 #include "IFileLoadManager.h"
+#include "IFileMonitorManager.h"
 #include "ResRepositoryManager.h"
 #include "TextRes.h"
 
@@ -28,6 +29,7 @@ public:
 
     std::shared_ptr<Res> load(const std::string& name) override;
     std::shared_ptr<Res> create(const std::string& name) override;
+    bool changed(const std::string& name) override;
 
 private:
     std::string m_path;
@@ -40,6 +42,7 @@ FileResFactory<ResT>::FileResFactory(std::string path, std::string ext):
     m_ext(ext)
 {
     this->addDependency(ResRepositoryManager::id());
+    this->addDependency(IFileMonitorManager::id());
     this->addDependency(IFileLoadManager::id());
 }
 
@@ -53,6 +56,12 @@ std::shared_ptr<Res> FileResFactory<ResT>::load(const std::string& name) {
 template <typename ResT>
 std::shared_ptr<Res> FileResFactory<ResT>::create(const std::string& name) {
     return std::make_shared<TextRes>("");
+}
+
+template <typename ResT>
+bool FileResFactory<ResT>::changed(const std::string& name) {
+    auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
+    return this->template manager<IFileMonitorManager>()->changed(resInfo.path);
 }
 
 
