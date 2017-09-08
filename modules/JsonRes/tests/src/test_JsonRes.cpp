@@ -32,8 +32,10 @@ TEST_CASE( "JsonRes::text()") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    auto textResManager = rootEntity->createComponent<ResManager<TextRes>>(FileResFactory());
-    auto jsonResManager = rootEntity->createComponent<ResManager<JsonRes>>(DefaultResFactory<JsonRes, TextRes>());
+    rootEntity->createComponent<FileResFactory<TextRes>>();
+    auto textResManager = rootEntity->createComponent<ResManager<TextRes>>();
+    rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
+    auto jsonResManager = rootEntity->createComponent<ResManager<JsonRes>>();
     writeToFile("./resources/example.txt", "{\"name\":\"Alfred\"}");
     auto jsonRes = jsonResManager->getRes("example");
     REQUIRE(jsonRes->json().empty() == true);
