@@ -14,6 +14,10 @@ class Manager: public ManagerBase {
 public:
     using ManagerBase::ManagerBase;
 
+    std::string componentName() const override {
+        return typeName<DerivedT>();
+    }
+
     TypeId<ComponentBase> componentId() override {
         return GetTypeId<ComponentBase, DerivedT>::value();
     }

@@ -12,6 +12,11 @@ using namespace std;
 using namespace glm;
 using namespace Tools;
 
+CameraComponent::CameraComponent() {
+    addDependency(SceneManager::id());
+    addDependency(ScreenManager::id());
+}
+
 void CameraComponent::init() {
     events()->subscribeIn([this](ManagerAddedEvent e) {
         if (e.castTo<SceneManager>() != nullptr) {

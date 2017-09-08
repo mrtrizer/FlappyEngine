@@ -18,7 +18,7 @@ class Res;
 class IResFactory;
 class IFileMonitorManager;
 
-class ResRepositoryManager final: public Manager<ResRepositoryManager>
+class ResRepositoryManager: public Manager<ResRepositoryManager>
 {
 public:
     ResRepositoryManager(std::string resRespositoryPath);

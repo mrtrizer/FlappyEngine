@@ -80,6 +80,8 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 
 template<typename ResT>
 std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name) {
+    if (!this->template isInitialized())
+        throw std::runtime_error(std::string("ResManager for ") + typeName<ResT>() + " is not initialized.");
     return std::static_pointer_cast<ResT>(getResKeeper(name).actualRes());
 }
 

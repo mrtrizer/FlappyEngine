@@ -15,6 +15,8 @@ namespace flappy {
 class CameraComponent : public Component<CameraComponent>
 {
 public:
+    CameraComponent();
+
     void setSize(glm::vec2 size)
     {
         m_height = size.y;
