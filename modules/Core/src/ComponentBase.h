@@ -112,7 +112,6 @@ protected:
     template <typename ManagerT>
     SafePtr<ManagerT> manager() const
     {
-        LOGE("%s", componentId().name().c_str());
         if (!isDependancy<ManagerT>())
             LOGE("%s is not listed in dependencies of %s but requested", typeName<ManagerT>().c_str(), componentId().name().c_str());
         return m_managers.get<ManagerT>();
