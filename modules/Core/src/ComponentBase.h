@@ -43,8 +43,7 @@ public:
     ComponentBase& operator=(ComponentBase&&) & = default;
     virtual ~ComponentBase();
 
-    virtual std::string componentName() const = 0;
-    virtual TypeId<ComponentBase> componentId() = 0;
+    virtual TypeId<ComponentBase> componentId() const = 0;
 
     /// Returns parent entity (can be null if conponent is not added to entity)
     SafePtr<Entity> entity() const
@@ -96,7 +95,7 @@ protected:
     {
         auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ManagerT::id());
         if (managerIter == m_dependenceComponentList.end())
-            LOGE("%s is not listed in dependencies of %s but requested", typeName<ManagerT>().c_str(), componentName().c_str());
+            LOGE("%s is not listed in dependencies of %s but requested", typeName<ManagerT>().c_str(), componentId().name().c_str());
         return m_managers.get<ManagerT>();
     }
 

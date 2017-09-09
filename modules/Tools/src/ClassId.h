@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <Tools.h>
+
 namespace flappy {
 
 template <typename ContextT>
@@ -34,6 +37,7 @@ public:
     bool operator!=(const TypeId& other) const { return other.toUnsigned() != toUnsigned(); }
     unsigned toUnsigned() const { return m_id; }
     bool isValid() const { return m_id != -1; }
+    std::string name() { return typeName<ContextT>(); }
 private:
     unsigned m_id;
 };

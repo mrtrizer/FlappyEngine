@@ -24,11 +24,7 @@ class Component: public ComponentBase
 public:
     using ComponentBase::ComponentBase;
 
-    std::string componentName() const override {
-        return typeName<DerivedT>();
-    }
-
-    TypeId<ComponentBase> componentId() override {
+    TypeId<ComponentBase> componentId() const final {
         return GetTypeId<ComponentBase, DerivedT>::value();
     }
 
