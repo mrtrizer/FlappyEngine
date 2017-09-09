@@ -52,7 +52,7 @@ public:
     ComponentBase& operator=(const ComponentBase&) = delete;
     ComponentBase(ComponentBase&&) = default;
     ComponentBase& operator=(ComponentBase&&) & = default;
-    virtual ~ComponentBase();
+    virtual ~ComponentBase() = default;
 
     virtual TypeId<ComponentBase> componentId() const = 0;
 
@@ -96,16 +96,24 @@ public:
     {};
 
 protected:
-    bool isManagerRegistered(TypeId<ComponentBase> id);
+    bool isManagerRegistered(TypeId<ComponentBase> id) const;
 
-    bool isComponentRegistered(TypeId<ComponentBase> id);
+    bool isComponentRegistered(TypeId<ComponentBase> id) const;
+
+    bool allComponentsReady() const;
+
+    template <typename ComponentT>
+    bool isDependancy() const {
+        auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ComponentT::id());
+        return (managerIter != m_dependenceComponentList.end());
+    }
 
     /// Returns manager if avaliable
     template <typename ManagerT>
     SafePtr<ManagerT> manager() const
     {
-        auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ManagerT::id());
-        if (managerIter == m_dependenceComponentList.end())
+        LOGE("%s", componentId().name().c_str());
+        if (!isDependancy<ManagerT>())
             LOGE("%s is not listed in dependencies of %s but requested", typeName<ManagerT>().c_str(), componentId().name().c_str());
         return m_managers.get<ManagerT>();
     }
@@ -141,8 +149,6 @@ protected:
     // TODO: Deprecated. Remove update methods. Listen OnUpdate event instead.
     virtual void update(DeltaTime)
     {}
-
-    bool allComponentsReady();
 
     // TODO: Deprecated. Remove update methods. Listen OnInit event instead.
     /// Called when you already added to entity.

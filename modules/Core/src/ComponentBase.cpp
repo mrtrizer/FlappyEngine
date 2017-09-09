@@ -15,16 +15,19 @@ ComponentBase::ComponentBase()
     subscribeEvents();
 }
 
-ComponentBase::~ComponentBase() {
-
-}
-
-bool ComponentBase::isManagerRegistered(TypeId<ComponentBase> id) {
+bool ComponentBase::isManagerRegistered(TypeId<ComponentBase> id) const {
     return m_managers.getById(id) != nullptr;
 }
 
-bool ComponentBase::isComponentRegistered(TypeId<flappy::ComponentBase> id) {
+bool ComponentBase::isComponentRegistered(TypeId<flappy::ComponentBase> id) const {
     return m_components.getById(id) != nullptr;
+}
+
+bool ComponentBase::allComponentsReady() const {
+    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
+        if (!isComponentRegistered(dependenceTypeId) && !isManagerRegistered(dependenceTypeId))
+            return false;
+    return true;
 }
 
 void ComponentBase::subscribeEvents() {
@@ -65,13 +68,6 @@ void ComponentBase::setParentEntity(SafePtr<Entity> entity)
     }
 }
 
-bool ComponentBase::allComponentsReady() {
-    for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
-        if (!isComponentRegistered(dependenceTypeId) && !isManagerRegistered(dependenceTypeId))
-            return false;
-    return true;
-}
-
 void ComponentBase::addDependency(TypeId<ComponentBase> id) {
     m_dependenceComponentList.push_back(id);
 }
@@ -85,7 +81,7 @@ void ComponentBase::tryInit() {
             update(e.dt);
         });
     } catch (std::exception& e) {
-        LOGE("Initialization error: %s", e.what());
+        LOGE("%s initialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = false;
     }
 }
@@ -98,7 +94,7 @@ void ComponentBase::tryDeinit() {
         deinitInternal();
         events()->unsubscribe(m_updateSubscription.lock());
     } catch (std::exception& e) {
-        LOGE("Deinitialization error: %s", e.what());
+        LOGE("%s deinitialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = true;
     }
 }
