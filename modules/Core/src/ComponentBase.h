@@ -33,6 +33,7 @@ class ComponentBase: public std::enable_shared_from_this<ComponentBase>
 {
     friend class Entity;
 public:
+
     struct UpdateEvent: public IEvent
     {
         UpdateEvent(DeltaTime dt)
@@ -46,29 +47,6 @@ public:
 
     struct DeinitEvent: public IEvent
     {};
-
-    ComponentBase();
-    ComponentBase(const ComponentBase&) = delete;
-    ComponentBase& operator=(const ComponentBase&) = delete;
-    ComponentBase(ComponentBase&&) = default;
-    ComponentBase& operator=(ComponentBase&&) & = default;
-    virtual ~ComponentBase() = default;
-
-    virtual TypeId<ComponentBase> componentId() const = 0;
-
-    /// Returns parent entity (can be null if conponent is not added to entity)
-    SafePtr<Entity> entity() const
-    {
-        return m_entity;
-    }
-
-    /// Returns EventController
-    std::shared_ptr<EventController> events()
-    {
-        return m_eventController;
-    }
-
-    bool isInitialized() { return m_initializedFlag; }
 
     struct ComponentEvent: public IEvent
     {
@@ -94,6 +72,23 @@ public:
 
     struct ComponentRemovedEvent: public ComponentEvent
     {};
+
+    ComponentBase();
+    ComponentBase(const ComponentBase&) = delete;
+    ComponentBase& operator=(const ComponentBase&) = delete;
+    ComponentBase(ComponentBase&&) = default;
+    ComponentBase& operator=(ComponentBase&&) & = default;
+    virtual ~ComponentBase() = default;
+
+    virtual TypeId<ComponentBase> componentId() const = 0;
+
+    /// Returns parent entity (can be null if conponent is not added to entity)
+    SafePtr<Entity> entity() const { return m_entity; }
+
+    /// Returns EventController
+    std::shared_ptr<EventController> events() { return m_eventController; }
+
+    bool isInitialized() { return m_initializedFlag; }
 
 protected:
     bool isManagerRegistered(TypeId<ComponentBase> id) const;
