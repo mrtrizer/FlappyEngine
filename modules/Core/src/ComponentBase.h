@@ -16,6 +16,19 @@ class Manager;
 class Entity;
 class EventController;
 
+/// Base class for all components. Components can be attached to the
+/// entity and have access to neighbour components to the same entity
+/// via methods of entity.
+/// Component can be in two states:
+/// - Initialized - When attached to an entity and all dependencies initialized.
+/// - Deinitialized - When detached of an entity or dependencies are not initialized.
+/// Once component switch state to initialized, InitEvent is sent into event bus of
+/// this  component. And ComponentAdded event is sent to event bus of entity where
+/// component is attached to.
+/// Other components can understand that dependancy is initialized/deinitialized
+/// by listening of ComponentAddedEvent and ComponentRemovedEvent events.
+/// Components can also depend of and access to a special type of components called
+/// Managers if it placed higher or on the same level in the hierarchy.
 class ComponentBase: public std::enable_shared_from_this<ComponentBase>
 {
     friend class Entity;
@@ -33,8 +46,6 @@ public:
 
     struct DeinitEvent: public IEvent
     {};
-
-    using TypeIdList = std::list<TypeId<ComponentBase>>;
 
     ComponentBase();
     ComponentBase(const ComponentBase&) = delete;
@@ -106,6 +117,7 @@ protected:
         return std::static_pointer_cast<T>(shared_from_this());
     }
 
+    /// Returns shared_ptr<Component> static casted to shared_ptr<T>
     template <typename T>
     const std::shared_ptr<T> selfSharedPointer() const
     {
@@ -147,6 +159,8 @@ protected:
     void addDependency(TypeId<ComponentBase> id);
 
 private:
+    using TypeIdList = std::list<TypeId<ComponentBase>>;
+
     bool m_initializedFlag = false;
     SafePtr<Entity> m_entity;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
@@ -172,11 +186,9 @@ private:
 
     void removedFromEntityInternal();
 
-    virtual void addedToEntity()
-    {}
+    virtual void addedToEntity() {}
 
-    virtual void removedFromEntity()
-    {}
+    virtual void removedFromEntity() {}
 
     /// By default just calls init(). In Manager implementation
     /// it also emits event about themself to dependants.
