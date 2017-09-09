@@ -15,6 +15,9 @@ class ComponentBase;
 
 /// Hierarchy of entities is a spine of flappyengine object hierarchy.
 /// When Components and Managers are meat, entieis are bones.
+/// There are two main functions of entities:
+/// - Delivering of events down by hierarchy
+/// - Contain components and provide access methods
 class Entity: public std::enable_shared_from_this<Entity>
 {
 public:
