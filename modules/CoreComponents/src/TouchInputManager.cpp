@@ -5,6 +5,17 @@ namespace flappy
 
 using namespace glm;
 
+TouchInputManager::TouchInputManager() {
+
+    subscribe([this](UpdateEvent) {
+        if (--m_touchDown < 0)
+            m_touchDown = 0;
+        if (--m_touchUp < 0)
+            m_touchUp = 0;
+    });
+
+}
+
 bool TouchInputManager::isTouchDown() const
 {
     return m_touchDown == 1;
@@ -23,14 +34,6 @@ bool TouchInputManager::isTouchPressed() const
 vec2 TouchInputManager::touchPos() const
 {
     return m_touchPos;
-}
-
-void TouchInputManager::update(DeltaTime)
-{
-    if (--m_touchDown < 0)
-        m_touchDown = 0;
-    if (--m_touchUp < 0)
-        m_touchUp = 0;
 }
 
 void TouchInputManager::setTouchDown(const vec2 &touchPos, int index)

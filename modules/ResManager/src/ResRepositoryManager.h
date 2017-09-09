@@ -25,9 +25,6 @@ public:
 
     ResInfo findResInfo(std::string name) const;
 
-    void init() override;
-    void update(DeltaTime) override;
-
 private:
     std::string m_resRepositoryPath;
     std::map<std::string, ResInfo> m_resInfoMap;

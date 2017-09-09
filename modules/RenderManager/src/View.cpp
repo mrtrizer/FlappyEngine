@@ -12,11 +12,11 @@ View::View()
 {
     addDependency(ViewManager::id());
 
-    events()->subscribeIn([this](InitEvent) {
+    subscribe([this](InitEvent) {
         manager<ViewManager>()->registerRenderElement(selfPointer<View>());
     });
 
-    events()->subscribeIn([this](DeinitEvent) {
+    subscribe([this](DeinitEvent) {
         manager<ViewManager>()->unregisterRenderElement(selfPointer<View>());
     });
 }

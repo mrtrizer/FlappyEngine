@@ -18,7 +18,7 @@ CameraComponent::CameraComponent() {
 }
 
 void CameraComponent::init() {
-    events()->subscribeIn([this](ManagerAddedEvent e) {
+    subscribe([this](ManagerAddedEvent e) {
         if (e.castTo<SceneManager>() != nullptr) {
             manager<SceneManager>()->setMainCamera(selfPointer<CameraComponent>());
         }

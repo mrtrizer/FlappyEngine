@@ -17,27 +17,26 @@ public:
 
     TestComponent(IMock* mockComponent = nullptr):
         m_mockComponent (mockComponent)
-    {}
-
-    void update(flappy::DeltaTime dt) override
     {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->update(dt);
+        subscribe([this](InitEvent) {
+            if (m_mockComponent != nullptr)
+                m_mockComponent->init();
+        });
+
+        subscribe([this](DeinitEvent) {
+            if (m_mockComponent != nullptr)
+                m_mockComponent->deinit();
+        });
+
+        subscribe([this](UpdateEvent e) {
+            if (m_mockComponent != nullptr)
+                m_mockComponent->update(e.dt);
+        });
+
     }
+
 
 protected:
-
-    void init() override
-    {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-
-    void deinit() override
-    {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->deinit();
-    }
 
     void testManager()
     {

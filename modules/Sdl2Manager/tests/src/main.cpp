@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<ResManager<QuadRes>> ();
     rootEntity->createComponent<GLShaderResFactory> ();
     rootEntity->createComponent<ResManager<GLShaderProgram>> ();
+    rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
 
     // Scene
     auto sceneEntity = rootEntity->createEntity();

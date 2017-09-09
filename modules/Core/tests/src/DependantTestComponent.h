@@ -16,17 +16,19 @@ public:
         : m_mockComponent (mockComponent)
     {
             addDependency(TestManager::id());
+
+            subscribe([this](InitEvent) {
+                if (m_mockComponent != nullptr)
+                    m_mockComponent->init();
+            });
+
+            subscribe([this](DeinitEvent) {
+                if (m_mockComponent != nullptr)
+                    m_mockComponent->deinit();
+            });
+
     }
 
-    void init() override final {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->init();
-    }
-
-    void deinit() override final {
-        if (m_mockComponent != nullptr)
-            m_mockComponent->deinit();
-    }
 private:
     IMock* m_mockComponent;
 };

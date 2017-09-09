@@ -20,9 +20,6 @@ public:
         SDL_Event event;
     };
 
-protected:
-    void init() override;
-
 private:
     int m_maxFps;
     int m_updateFreq;

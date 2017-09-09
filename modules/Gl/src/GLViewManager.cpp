@@ -24,17 +24,17 @@ GLViewManager::GLViewManager(): ViewManager()
 {
     addDependency(AGLManager::id());
     addDependency(ScreenManager::id());
-}
 
-void GLViewManager::init() {
-    LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    CHECK_GL_ERROR;
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CHECK_GL_ERROR;
-    glEnable (GL_BLEND);
-    CHECK_GL_ERROR;
-    updateViewPort();
+    subscribe([this](InitEvent) {
+        LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        CHECK_GL_ERROR;
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        CHECK_GL_ERROR;
+        glEnable (GL_BLEND);
+        CHECK_GL_ERROR;
+        updateViewPort();
+    });
 }
 
 void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {

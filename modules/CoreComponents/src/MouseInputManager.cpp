@@ -5,6 +5,16 @@ namespace flappy
 
 using namespace glm;
 
+MouseInputManager::MouseInputManager() {
+
+    subscribe([this](UpdateEvent) {
+        if (--m_mouseDown < 0)
+            m_mouseDown = 0;
+        if (--m_mouseUp < 0)
+            m_mouseUp = 0;
+    });
+}
+
 bool MouseInputManager::isMouseDown(MouseButton mouseButton) const
 {
     (void)mouseButton;
@@ -26,14 +36,6 @@ bool MouseInputManager::isMousePressed(MouseButton mouseButton) const
 vec2 MouseInputManager::mousePos() const
 {
     return m_mousePos;
-}
-
-void MouseInputManager::update(DeltaTime)
-{
-    if (--m_mouseDown < 0)
-        m_mouseDown = 0;
-    if (--m_mouseUp < 0)
-        m_mouseUp = 0;
 }
 
 void MouseInputManager::setMouseDown(MouseButton mouseButton, const vec2 &mousePos)

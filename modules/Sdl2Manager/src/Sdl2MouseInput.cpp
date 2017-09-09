@@ -9,7 +9,7 @@ Sdl2MouseInput::Sdl2MouseInput()
 {
     addDependency(Sdl2Manager::id());
 
-    events()->subscribeIn([this](Sdl2Manager::Sdl2Event e) {
+    subscribe([this](Sdl2Manager::Sdl2Event e) {
         if (e.event.type == SDL_MOUSEMOTION) {
             manager<MouseInputManager>()->setMousePos(MouseInputManager::MouseButton::LEFT, {e.event.motion.x, e.event.motion.y});
         }

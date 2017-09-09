@@ -19,6 +19,19 @@ ResRepositoryManager::ResRepositoryManager(std::string resRespositoryPath)
 {
     addDependency(IFileLoadManager::id());
     addDependency(IFileMonitorManager::id());
+
+    subscribe([this](InitEvent) {
+        loadResInfoList();
+        manager<IFileMonitorManager>()->registerFile(m_resRepositoryPath);
+    });
+
+    subscribe([this](UpdateEvent) {
+        auto resListPath = resInfoListFilePath();
+        if (manager<IFileMonitorManager>()->changed(resListPath)) {
+            loadResInfoList();
+        }
+    });
+
 }
 
 std::string ResRepositoryManager::resInfoListFilePath() {
@@ -42,11 +55,6 @@ void ResRepositoryManager::loadResInfoList() {
     }
 }
 
-void ResRepositoryManager::init() {
-    loadResInfoList();
-    manager<IFileMonitorManager>()->registerFile(m_resRepositoryPath);
-}
-
 ResInfo ResRepositoryManager::findResInfo(std::string name) const {
     if (m_resInfoMap.find(name) != m_resInfoMap.end()) {
         return m_resInfoMap.at(name);
@@ -54,14 +62,6 @@ ResInfo ResRepositoryManager::findResInfo(std::string name) const {
         LOGE("Can't find information about resource in resource repository list.");
         auto resPath = Tools::joinPath({m_resRepositoryPath, name});
         return ResInfo{name, resPath, "*"};
-    }
-}
-
-void ResRepositoryManager::update(DeltaTime)
-{
-    auto resListPath = resInfoListFilePath();
-    if (manager<IFileMonitorManager>()->changed(resListPath)) {
-        loadResInfoList();
     }
 }
 

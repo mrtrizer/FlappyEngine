@@ -19,6 +19,12 @@ namespace flappy {
 Sdl2Manager::Sdl2Manager()
 {
     addDependency(AppManager::id());
+
+    subscribe([this](InitEvent) {
+        if (initSdl2(manager<AppManager>()->args())) {
+            initWindow("FlappyEngine", 600, 600);
+        }
+    });
 }
 
 void Sdl2Manager::resizeWindow(int width, int height) {
@@ -35,13 +41,6 @@ DeltaTime Sdl2Manager::calcTimeDelta() {
     DeltaTime timeDelta = diff.count(); // delta in seconds
     m_lastTime = newTime;
     return timeDelta;
-}
-
-void Sdl2Manager::init()
-{
-    if (initSdl2(manager<AppManager>()->args())) {
-        initWindow("FlappyEngine", 600, 600);
-    }
 }
 
 bool Sdl2Manager::initSdl2(std::vector<std::string> args) {

@@ -30,7 +30,6 @@ private:
     std::shared_ptr<GLShaderProgram> m_shaderProgramRes;
 
     void updateFrame();
-    void init() override;
 };
 
 } // flappy

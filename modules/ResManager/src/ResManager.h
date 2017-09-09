@@ -26,6 +26,19 @@ public:
         this->addDependency(ResRepositoryManager::id());
         this->addDependency(ResFactory<ResT>::id());
         this->addDependency(IFileMonitorManager::id());
+
+        this->subscribe([this](ComponentBase::UpdateEvent) {
+            for (auto resPairIter = m_resMap.begin(); resPairIter != m_resMap.end();) {
+                resPairIter->second.cleanUpRes();
+                if (resPairIter->second.needRemove()) {
+                    resPairIter = m_resMap.erase(resPairIter);
+                } else {
+                    auto name = resPairIter->first;
+                    resPairIter->second.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
+                    resPairIter++;
+                }
+            }
+        });
     }
 
     /// @brief If resource is not loaded yet, method returns default
@@ -47,8 +60,6 @@ public:
     /// Resource can't be initlalized and loaded without binded factory.
     /// But it still can be set with setRes() and got with getRes() later.
     void bindResFactory(std::shared_ptr<IResFactory> factory);
-
-    void update(DeltaTime) override;
 
 private:
     std::map<std::string, ResKeeper> m_resMap;
@@ -106,21 +117,6 @@ void ResManager<ResT>::setRes(const std::string& name, std::shared_ptr<ResT> res
         m_resMap.emplace(name, ResKeeper(res, false));
     else
         foundIter->second.actualRes()->pushRes(res);
-}
-
-template<typename ResT>
-void ResManager<ResT>::update(DeltaTime)
-{
-    for (auto resPairIter = m_resMap.begin(); resPairIter != m_resMap.end();) {
-        resPairIter->second.cleanUpRes();
-        if (resPairIter->second.needRemove()) {
-            resPairIter = m_resMap.erase(resPairIter);
-        } else {
-            auto name = resPairIter->first;
-            resPairIter->second.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
-            resPairIter++;
-        }
-    }
 }
 
 /// @}

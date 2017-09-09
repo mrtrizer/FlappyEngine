@@ -14,6 +14,10 @@ using namespace glm;
 ViewManager::ViewManager()
 {
     addDependency(SceneManager::id());
+
+    subscribe([this](UpdateEvent e) {
+        update(e.dt);
+    });
 }
 
 void ViewManager::update(DeltaTime dt) {

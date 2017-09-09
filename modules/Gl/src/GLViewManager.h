@@ -14,7 +14,6 @@ class GLViewManager : public ViewManager {
 public:
     GLViewManager();
     void redraw(std::list<Visual> &, glm::mat4 &) override;
-    void init() override;
 protected:
     void updateViewPort() override;
 };

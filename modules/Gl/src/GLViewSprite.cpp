@@ -48,6 +48,10 @@ GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     m_quadRes(spriteComponent->quadRes())
 {
     addDependency(SpriteComponent::id());
+
+    subscribe([this](InitEvent) {
+        m_shaderProgramRes = manager<ResManager<GLShaderProgram>>()->getRes("default_shape");
+    });
 }
 
 void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
@@ -104,10 +108,6 @@ void GLViewSprite::updateFrame() {
                 {0.5f * spriteSize.x, 0.5f * spriteSize.y} };
 
     m_rect.addVBO<GLTools::Vertex>(m_vertexList, shader()->findAttr("aPosition"));
-}
-
-void GLViewSprite::init() {
-    m_shaderProgramRes = manager<ResManager<GLShaderProgram>>()->getRes("default_shape");
 }
 
 } // flappy

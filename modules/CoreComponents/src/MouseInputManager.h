@@ -38,12 +38,13 @@ public:
         glm::vec2 pos;
     };
 
+    MouseInputManager();
+
     bool isMouseDown(MouseButton mouseButton = MouseButton::LEFT) const;
     bool isMouseUp(MouseButton mouseButton = MouseButton::LEFT) const;
     bool isMousePressed(MouseButton mouseButton = MouseButton::LEFT) const;
     glm::vec2 mousePos() const;
 
-    void update(DeltaTime) override;
     void setMouseDown(MouseButton mouseButton, const glm::vec2 &mousePos);
     void setMouseUp(MouseButton mouseButton, const glm::vec2 &mousePos);
     void setMousePos(MouseButton mouseButton, const glm::vec2& m_mousePos);

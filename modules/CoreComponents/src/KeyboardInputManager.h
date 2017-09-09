@@ -21,6 +21,8 @@ public:
         KeyCode keyCode;
     };
 
+    KeyboardInputManager();
+
     void setKeyDown(KeyCode keyCode);
     void setKeyUp(KeyCode keyCode);
 
@@ -34,8 +36,6 @@ private:
         unsigned upEventCounter = 0;
         bool pressedFlag = false;
     };
-
-    void update(DeltaTime dt) final;
 
     KeyStatus m_keyStatus[(unsigned)KeyCode::__ENUM_SIZE__];
 };

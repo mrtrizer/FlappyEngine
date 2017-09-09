@@ -13,6 +13,20 @@ ComponentBase::ComponentBase()
     : m_eventController(std::make_shared<EventController>())
 {
     subscribeEvents();
+
+    // Check if component initialized after the first update
+    m_updateSubscription = subscribe([this](const UpdateEvent) {
+        if (!isInitialized()) {
+            for (auto dependency : m_dependenceComponentList) {
+                if (!isComponentRegistered(dependency) && !isManagerRegistered(dependency)) {
+                    LOGW("%s can't be initialized because dependency %s is not initialized.",
+                         componentId().name().c_str(),
+                         dependency.name().c_str());
+                }
+            }
+        }
+        events()->unsubscribe(m_updateSubscription.lock());
+    });
 }
 
 bool ComponentBase::isManagerRegistered(TypeId<ComponentBase> id) const {
@@ -31,23 +45,23 @@ bool ComponentBase::allComponentsReady() const {
 }
 
 void ComponentBase::subscribeEvents() {
-    events()->subscribeIn([this](const ManagerAddedEvent& e) {
+    subscribe([this](const ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
         if (!isInitialized() && allComponentsReady())
             tryInit();
     });
-    events()->subscribeIn([this](const ManagerRemovedEvent& e) {
+    subscribe([this](const ManagerRemovedEvent& e) {
         m_managers.setById(e.id, SafePtr<ManagerBase>());
         if (isInitialized() && !allComponentsReady())
             tryDeinit();
     });
-    events()->subscribeIn([this](const ComponentAddedEvent& e) {
+    subscribe([this](const ComponentAddedEvent& e) {
         if (m_components.getById(e.id) == nullptr)
             m_components.setById(e.id, e.pointer);
         if (!isInitialized() && allComponentsReady())
             tryInit();
     });
-    events()->subscribeIn([this](const ComponentRemovedEvent& e) {
+    subscribe([this](const ComponentRemovedEvent& e) {
         m_components.setById(e.id, SafePtr<ComponentBase>());
         if (isInitialized() && !allComponentsReady())
             tryDeinit();
@@ -77,9 +91,6 @@ void ComponentBase::tryInit() {
     m_initializedFlag = true;
     try {
         initInternal();
-        m_updateSubscription = events()->subscribeIn([this](const UpdateEvent& e) {
-            update(e.dt);
-        });
     } catch (std::exception& e) {
         LOGE("%s initialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = false;
@@ -92,7 +103,6 @@ void ComponentBase::tryDeinit() {
         // Send remove event first.
         // To allow components access manager before denitialization.
         deinitInternal();
-        events()->unsubscribe(m_updateSubscription.lock());
     } catch (std::exception& e) {
         LOGE("%s deinitialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = true;

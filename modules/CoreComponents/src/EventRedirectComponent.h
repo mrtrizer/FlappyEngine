@@ -10,7 +10,7 @@ class EventRedirectComponent : public Component<EventRedirectComponent>
 public:
     template <typename InputEventType, typename OutputEventType>
     void redirectToRoot(const OutputEventType& event) {
-        events()->subscribeIn([this, event](InputEventType) {
+        subscribe([this, event](InputEventType) {
             entity()->root()->events()->post(event);
         });
     }

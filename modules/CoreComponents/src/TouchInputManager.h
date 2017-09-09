@@ -27,12 +27,13 @@ public:
         int index;
     };
 
+    TouchInputManager();
+
     bool isTouchDown() const;
     bool isTouchUp() const;
     bool isTouchPressed() const;
     glm::vec2 touchPos() const;
 
-    void update(DeltaTime) override;
     void setTouchDown(const glm::vec2 &touchPos, int index);
     void setTouchUp(const glm::vec2 &touchPos, int index);
     void setTouchPos(const glm::vec2 &touchPos, int index);

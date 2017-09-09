@@ -3,6 +3,19 @@
 namespace flappy
 {
 
+KeyboardInputManager::KeyboardInputManager() {
+
+    subscribe([this](UpdateEvent) {
+        for (int i = 0; i < (int)KeyCode::__ENUM_SIZE__; i++) {
+            if (m_keyStatus[i].downEventCounter > 0)
+                m_keyStatus[i].downEventCounter--;
+            if (m_keyStatus[i].upEventCounter > 0)
+                m_keyStatus[i].upEventCounter--;
+        }
+    });
+
+}
+
 void KeyboardInputManager::setKeyDown(KeyCode keyCode)
 {
     m_keyStatus[(int)keyCode].downEventCounter = 2;
@@ -28,16 +41,6 @@ bool KeyboardInputManager::isKeyUp(KeyCode keyCode)
 bool KeyboardInputManager::isKeyPressed(KeyCode keyCode)
 {
     return m_keyStatus[(int)keyCode].pressedFlag;
-}
-
-void KeyboardInputManager::update(DeltaTime dt)
-{
-    for (int i = 0; i < (int)KeyCode::__ENUM_SIZE__; i++) {
-        if (m_keyStatus[i].downEventCounter > 0)
-            m_keyStatus[i].downEventCounter--;
-        if (m_keyStatus[i].upEventCounter > 0)
-            m_keyStatus[i].upEventCounter--;
-    }
 }
 
 } // flappy

@@ -19,7 +19,7 @@ class EventController;
 /// Base class for all components. Components can be attached to the
 /// entity and have access to neighbour components to the same entity
 /// via methods of entity.
-/// Component can be in two states:
+/// @details Component can be in two states:
 /// - Initialized - When attached to an entity and all dependencies initialized.
 /// - Deinitialized - When detached of an entity or dependencies are not initialized.
 /// Once component switch state to initialized, InitEvent is sent into event bus of
@@ -100,8 +100,10 @@ protected:
 
     bool isComponentRegistered(TypeId<ComponentBase> id) const;
 
+    /// Returns true of all dependencies are initialized.
     bool allComponentsReady() const;
 
+    /// Returns true if component is listed in dependencies of the component.
     template <typename ComponentT>
     bool isDependancy() const {
         auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ComponentT::id());
@@ -109,6 +111,7 @@ protected:
     }
 
     /// Returns manager if avaliable
+    /// You can access only managers at the same or higer level of hierarchy.
     template <typename ManagerT>
     SafePtr<ManagerT> manager() const
     {
@@ -119,54 +122,32 @@ protected:
 
     /// Returns shared_ptr<Component> static casted to shared_ptr<T>
     template <typename T>
-    std::shared_ptr<T> selfSharedPointer()
-    {
-        return std::static_pointer_cast<T>(shared_from_this());
-    }
+    std::shared_ptr<T> selfSharedPointer() { return std::static_pointer_cast<T>(shared_from_this()); }
 
-    /// Returns shared_ptr<Component> static casted to shared_ptr<T>
     template <typename T>
-    const std::shared_ptr<T> selfSharedPointer() const
-    {
-        return std::static_pointer_cast<T>(shared_from_this());
-    }
+    const std::shared_ptr<T> selfSharedPointer() const { return std::static_pointer_cast<T>(shared_from_this()); }
 
     /// Returns SafePtr<Component> static casted to SafePtr<T>
     template <typename T>
-    SafePtr<T> selfPointer()
-    {
-        return selfSharedPointer<T>();
-    }
+    SafePtr<T> selfPointer() { return selfSharedPointer<T>(); }
 
-    /// Returns SafePtr<Component> static casted to SafePtr<T>
     template <typename T>
-    const SafePtr<T> selfPointer() const
-    {
-        return selfSharedPointer<T>();
-    }
+    const SafePtr<T> selfPointer() const { return selfSharedPointer<T>(); }
 
-    // TODO: Deprecated. Remove update methods. Listen OnUpdate event instead.
-    virtual void update(DeltaTime)
-    {}
-
-    // TODO: Deprecated. Remove update methods. Listen OnInit event instead.
-    /// Called when you already added to entity.
-    /// @details You have access to parent entity from this method first time.
-    virtual void init()
-    {}
-
-    // TODO: Deprecated. Remove update methods. Listen Deinit event instead.
-    /// Called when you removed from the entity.
-    /// @details Here, you have last chance to access to your past neighbors and entity
-    virtual void deinit()
-    {}
-
+    /// Use this method to list dependencies.
+    /// Component will be initialized once all depenencies are initialized.
     void addDependency(TypeId<ComponentBase> id);
+
+    template <typename FuncT>
+    std::shared_ptr<ISubscription> subscribe(FuncT&& func) {
+        return events()->subscribeIn(std::move(func));
+    }
 
 private:
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
     bool m_initializedFlag = false;
+    bool m_firstUpdate = true;
     SafePtr<Entity> m_entity;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
     TypeMap<ComponentBase, SafePtr<ComponentBase>> m_components;

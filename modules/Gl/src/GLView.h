@@ -24,7 +24,7 @@ public:
     {
         addDependency(ResManager<GLShaderProgram>::id());
 
-        events()->subscribeIn([this](InitEvent) {
+        subscribe([this](InitEvent) {
             m_shaderRes = manager<ResManager<GLShaderProgram>>()->getRes("shape_shader");
         });
     }

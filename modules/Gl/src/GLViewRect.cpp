@@ -7,7 +7,7 @@ using namespace std;
 GLViewRect::GLViewRect():
     m_rect(GL_TRIANGLE_STRIP)
 {
-    events()->subscribeIn([this](InitEvent) {
+    subscribe([this](InitEvent) {
         vector<GLTools::Vertex> vertexList({
                       {-0.5f,-0.5f},
                       {-0.5f,0.5f},
