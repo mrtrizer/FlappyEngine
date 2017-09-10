@@ -50,7 +50,7 @@ private:
         postEvent(createComponentEvent<ManagerRemovedEvent>());
 
         // If we have parent manager of same type, notify dependant components
-        if (isManagerRegistered(id()))
+        if (isManagerInitialized(id()))
             postEvent(createComponentEvent<ManagerAddedEvent>());
 
         events()->post(DeinitEvent());

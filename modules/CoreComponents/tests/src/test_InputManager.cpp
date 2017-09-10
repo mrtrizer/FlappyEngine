@@ -13,9 +13,9 @@ TEST_CASE( "MouseInputManager::isMouseDown()") {
     MouseInputManager inputManager;
     inputManager.setMouseDown(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMouseDown() == false);
-    inputManager.update(1);
+    inputManager.events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(inputManager.isMouseDown() == true);
-    inputManager.update(1);
+    inputManager.events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(inputManager.isMouseDown() == false);
 }
 
@@ -23,9 +23,9 @@ TEST_CASE( "MouseInputManager::isMouseUp()") {
     MouseInputManager inputManager;
     inputManager.setMouseUp(MouseInputManager::MouseButton::LEFT, {0.0f, 0.0f});
     REQUIRE(inputManager.isMouseUp() == false);
-    inputManager.update(1);
+    inputManager.events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(inputManager.isMouseUp() == true);
-    inputManager.update(1);
+    inputManager.events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(inputManager.isMouseUp() == false);
 }
 

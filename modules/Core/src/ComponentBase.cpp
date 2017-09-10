@@ -18,7 +18,7 @@ ComponentBase::ComponentBase()
     m_updateSubscription = subscribe([this](const UpdateEvent) {
         if (!isInitialized()) {
             for (auto dependency : m_dependenceComponentList) {
-                if (!isComponentRegistered(dependency) && !isManagerRegistered(dependency)) {
+                if (!isComponentInitialized(dependency) && !isManagerInitialized(dependency)) {
                     LOGW("%s can't be initialized because dependency %s is not initialized.",
                          componentId().name().c_str(),
                          dependency.name().c_str());
@@ -29,17 +29,17 @@ ComponentBase::ComponentBase()
     });
 }
 
-bool ComponentBase::isManagerRegistered(TypeId<ComponentBase> id) const {
+bool ComponentBase::isManagerInitialized(TypeId<ComponentBase> id) const {
     return m_managers.getById(id) != nullptr;
 }
 
-bool ComponentBase::isComponentRegistered(TypeId<flappy::ComponentBase> id) const {
+bool ComponentBase::isComponentInitialized(TypeId<flappy::ComponentBase> id) const {
     return m_components.getById(id) != nullptr;
 }
 
-bool ComponentBase::allComponentsReady() const {
+bool ComponentBase::allDependenciesInitialized() const {
     for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
-        if (!isComponentRegistered(dependenceTypeId) && !isManagerRegistered(dependenceTypeId))
+        if (!isComponentInitialized(dependenceTypeId) && !isManagerInitialized(dependenceTypeId))
             return false;
     return true;
 }
@@ -47,23 +47,23 @@ bool ComponentBase::allComponentsReady() const {
 void ComponentBase::subscribeEvents() {
     subscribe([this](const ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
-        if (!isInitialized() && allComponentsReady())
+        if (!isInitialized() && allDependenciesInitialized())
             tryInit();
     });
     subscribe([this](const ManagerRemovedEvent& e) {
         m_managers.setById(e.id, SafePtr<ManagerBase>());
-        if (isInitialized() && !allComponentsReady())
+        if (isInitialized() && !allDependenciesInitialized())
             tryDeinit();
     });
     subscribe([this](const ComponentAddedEvent& e) {
         if (m_components.getById(e.id) == nullptr)
             m_components.setById(e.id, e.pointer);
-        if (!isInitialized() && allComponentsReady())
+        if (!isInitialized() && allDependenciesInitialized())
             tryInit();
     });
     subscribe([this](const ComponentRemovedEvent& e) {
         m_components.setById(e.id, SafePtr<ComponentBase>());
-        if (isInitialized() && !allComponentsReady())
+        if (isInitialized() && !allDependenciesInitialized())
             tryDeinit();
     });
 }
@@ -110,7 +110,7 @@ void ComponentBase::tryDeinit() {
 }
 
 void ComponentBase::addedToEntityInternal() {
-    if (!isInitialized() && allComponentsReady())
+    if (!isInitialized() && allDependenciesInitialized())
         tryInit();
     addedToEntity();
 }

@@ -91,41 +91,31 @@ public:
     bool isInitialized() { return m_initializedFlag; }
 
 protected:
-    bool isManagerRegistered(TypeId<ComponentBase> id) const;
+    bool isManagerInitialized(TypeId<ComponentBase> id) const;
 
-    bool isComponentRegistered(TypeId<ComponentBase> id) const;
+    bool isComponentInitialized(TypeId<ComponentBase> id) const;
 
     /// Returns true of all dependencies are initialized.
-    bool allComponentsReady() const;
+    bool allDependenciesInitialized() const;
 
     /// Returns true if component is listed in dependencies of the component.
     template <typename ComponentT>
-    bool isDependancy() const {
-        auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ComponentT::id());
-        return (managerIter != m_dependenceComponentList.end());
-    }
+    bool isDependancy() const;
 
     /// Returns manager if avaliable
     /// You can access only managers at the same or higer level of hierarchy.
     template <typename ManagerT>
-    SafePtr<ManagerT> manager() const
-    {
-        if (!isDependancy<ManagerT>())
-            LOGE("%s is not listed in dependencies of %s but requested", typeName<ManagerT>().c_str(), componentId().name().c_str());
-        return m_managers.get<ManagerT>();
-    }
+    SafePtr<ManagerT> manager() const;
 
     /// Returns shared_ptr<Component> static casted to shared_ptr<T>
     template <typename T>
     std::shared_ptr<T> selfSharedPointer() { return std::static_pointer_cast<T>(shared_from_this()); }
-
     template <typename T>
     const std::shared_ptr<T> selfSharedPointer() const { return std::static_pointer_cast<T>(shared_from_this()); }
 
     /// Returns SafePtr<Component> static casted to SafePtr<T>
     template <typename T>
     SafePtr<T> selfPointer() { return selfSharedPointer<T>(); }
-
     template <typename T>
     const SafePtr<T> selfPointer() const { return selfSharedPointer<T>(); }
 
@@ -133,10 +123,9 @@ protected:
     /// Component will be initialized once all depenencies are initialized.
     void addDependency(TypeId<ComponentBase> id);
 
+    /// Short method for calling of events()->subscribeIn(...)
     template <typename FuncT>
-    std::shared_ptr<ISubscription> subscribe(FuncT&& func) {
-        return events()->subscribeIn(std::move(func));
-    }
+    std::shared_ptr<ISubscription> subscribe(FuncT&& func);
 
 private:
     using TypeIdList = std::list<TypeId<ComponentBase>>;
@@ -179,5 +168,28 @@ private:
     /// it also emits event about deinitialization to dependants.
     virtual void deinitInternal() = 0;
 };
+
+template <typename ComponentT>
+bool ComponentBase::isDependancy() const {
+    auto managerIter = std::find(m_dependenceComponentList.begin(), m_dependenceComponentList.end(), ComponentT::id());
+    return (managerIter != m_dependenceComponentList.end());
+}
+
+/// Returns manager if avaliable
+/// You can access only managers at the same or higer level of hierarchy.
+template <typename ManagerT>
+SafePtr<ManagerT> ComponentBase::manager() const
+{
+    if (!isDependancy<ManagerT>())
+        LOGE("%s is not listed in dependencies of %s but requested",
+             typeName<ManagerT>().c_str(),
+             componentId().name().c_str());
+    return m_managers.get<ManagerT>();
+}
+
+template <typename FuncT>
+std::shared_ptr<ISubscription> ComponentBase::subscribe(FuncT&& func) {
+    return events()->subscribeIn(std::move(func));
+}
 
 } // flappy
