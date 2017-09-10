@@ -7,124 +7,53 @@
 
 using namespace flappy;
 
-TEST_CASE( "EventSystem::subscribeIn() EventSystem::subscribeOut() EventSystem::post()") {
+TEST_CASE( "EventSystem::subscribe() EventSystem::post()") {
     int callCounter = 0;
 
     struct TestEvent: public IEvent {};
     EventBus eventBus;
 
-    auto subscriptionIn1 = eventBus.subscribeIn([&callCounter](TestEvent) {
+    auto subscription1 = eventBus.subscribe([&callCounter](TestEvent) {
         callCounter++; // + 2
     });
 
     // Subscription life time
     {
-        auto subscriptionIn2 = eventBus.subscribeIn([&callCounter](TestEvent) {
+        auto subscription2 = eventBus.subscribe([&callCounter](TestEvent) {
             callCounter++; // + 1
         });
 
-        auto subscriptionOut2 = eventBus.subscribeOut([&callCounter](TestEvent) {
-            callCounter++; // + 1
-        });
-        eventBus.post(TestEvent());
-    }
-    eventBus.post(TestEvent());
-
-    REQUIRE(callCounter == 4);
-}
-
-TEST_CASE( "EventSystem::subscriptionIn() EventSystem::FlowStatus") {
-    int callCounter = 0;
-
-    struct TestEvent: public IEvent {};
-    EventBus eventBus;
-
-    // Subscription life time
-    {
-        auto subscriptionIn = eventBus.subscribeIn(
-                    [&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::BREAK;
-        });
-
-        auto subscriptionAll = eventBus.subscribeInAll(
-                    [&callCounter](const EventHandle& handle) {
-            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
-                callCounter++;
-            return FlowStatus::CONTINUE;
-        });
-
-        auto subscriptionOut = eventBus.subscribeOut(
-                    [&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::CONTINUE;
-        });
-        eventBus.post(TestEvent());
-    }
-    eventBus.post(TestEvent());
-
-    REQUIRE(callCounter == 2);
-}
-
-
-TEST_CASE( "EventSystem::subscriptionAll() EventSystem::FlowStatus") {
-    int callCounter = 0;
-
-    struct TestEvent: public IEvent {};
-    EventBus eventBus;
-
-    // Subscription life time
-    {
-        auto subscriptionIn = eventBus.subscribeIn([&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::CONTINUE;
-        });
-
-        auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
-            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
-                callCounter++;
-            return FlowStatus::BREAK;
-        });
-
-        auto subscriptionOut = eventBus.subscribeOut([&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::CONTINUE;
-        });
-        eventBus.post(TestEvent());
-    }
-    eventBus.post(TestEvent());
-
-    REQUIRE(callCounter == 2);
-}
-
-TEST_CASE( "EventSystem::subscriptionOut() EventSystem::FlowStatus") {
-    int callCounter = 0;
-
-    struct TestEvent: public IEvent {};
-    EventBus eventBus;
-
-    // Subscription life time
-    {
-        auto subscriptionIn = eventBus.subscribeIn([&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::CONTINUE;
-        });
-
-        auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
-            if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
-                callCounter++;
-            return FlowStatus::CONTINUE;
-        });
-
-        auto subscriptionOut = eventBus.subscribeOut([&callCounter](TestEvent) {
-            callCounter++; // + 1
-            return FlowStatus::BREAK;
-        });
         eventBus.post(TestEvent());
     }
     eventBus.post(TestEvent());
 
     REQUIRE(callCounter == 3);
+}
+
+TEST_CASE( "EventSystem::subscription() EventSystem::FlowStatus") {
+    int callCounter = 0;
+
+    struct TestEvent: public IEvent {};
+    EventBus eventBus;
+
+    // Subscription life time
+    {
+        auto subscription = eventBus.subscribe(
+        [&callCounter](TestEvent) {
+            callCounter++; // + 1
+        });
+
+        auto subscriptionAll = eventBus.subscribeAll(
+            [&callCounter](const EventHandle& handle) {
+                if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
+                    callCounter++;
+            });
+
+        eventBus.post(TestEvent());
+    }
+    eventBus.post(TestEvent());
+
+    REQUIRE(callCounter == 2);
 }
 
 TEST_CASE( "EventSystem::subscribeAll() EventSystem::post()") {
@@ -135,10 +64,9 @@ TEST_CASE( "EventSystem::subscribeAll() EventSystem::post()") {
 
     EventBus eventBus;
 
-    auto subscriptionAll = eventBus.subscribeInAll([&callCounter](const EventHandle& handle) {
+    auto subscriptionAll = eventBus.subscribeAll([&callCounter](const EventHandle& handle) {
         if (handle.id() == GetTypeId<EventHandle, TestEvent1>::value())
             callCounter++;
-        return FlowStatus::CONTINUE;
     });
 
     eventBus.post(TestEvent1());

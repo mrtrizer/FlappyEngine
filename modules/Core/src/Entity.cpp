@@ -9,26 +9,20 @@ namespace flappy
 Entity::Entity():
     m_eventController(std::make_shared<EventController>())
 {
-    events()->subscribeIn([this](const ComponentBase::ManagerAddedEvent& e) {
+    events()->subscribe([this](const ComponentBase::ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
     });
-    events()->subscribeIn([this](const ComponentBase::ManagerRemovedEvent& e) {
+    events()->subscribe([this](const ComponentBase::ManagerRemovedEvent& e) {
         m_managers.setById(e.id, SafePtr<ManagerBase>());
     });
 
-    events()->subscribeInAll([this](const EventHandle& handle) {
-        FlowStatus flowStatus = FlowStatus::CONTINUE;
+    events()->subscribeAll([this](const EventHandle& handle) {
         for (auto component: m_components) {
-            auto curFlowStatus = component->events()->eventBus()->post(handle);
-            if (curFlowStatus != FlowStatus::CONTINUE)
-                flowStatus = curFlowStatus;
+            component->events()->eventBus()->post(handle);
         }
         for (auto entity: m_entities) {
-            auto curFlowStatus = entity->events()->eventBus()->post(handle);
-            if (curFlowStatus != FlowStatus::CONTINUE)
-                flowStatus = curFlowStatus;
+            entity->events()->eventBus()->post(handle);
         }
-        return flowStatus;
     });
 
 }

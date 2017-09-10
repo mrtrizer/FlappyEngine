@@ -113,7 +113,7 @@ TEST_CASE( "events() Events sending" )
 
     int resultValue = 0;
 
-    entityLast->events()->subscribeIn([&resultValue](const TestEvent& e) {
+    entityLast->events()->subscribe([&resultValue](const TestEvent& e) {
         resultValue = e.value;
     });
 

@@ -21,14 +21,14 @@ TEST_CASE("Add/Remove manager events") {
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
+    componentMiddle->events()->subscribe([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
+    componentMiddle->events()->subscribe([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });
@@ -50,14 +50,14 @@ TEST_CASE("Add/Remove component events") {
 
     bool onAddedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
+    componentMiddle->events()->subscribe([&onAddedCalled](ComponentBase::ManagerAddedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onAddedCalled = true;
     });
 
     bool onRemovedCalled = false;
 
-    componentMiddle->events()->subscribeIn([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
+    componentMiddle->events()->subscribe([&onRemovedCalled](ComponentBase::ManagerRemovedEvent e) {
         if (auto manager = e.castTo<TestManager>())
             onRemovedCalled = true;
     });

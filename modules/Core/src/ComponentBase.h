@@ -123,7 +123,7 @@ protected:
     /// Component will be initialized once all depenencies are initialized.
     void addDependency(TypeId<ComponentBase> id);
 
-    /// Short method for calling of events()->subscribeIn(...)
+    /// Short method for calling of events()->subscribe(...)
     template <typename FuncT>
     std::shared_ptr<ISubscription> subscribe(FuncT&& func);
 
@@ -189,7 +189,7 @@ SafePtr<ManagerT> ComponentBase::manager() const
 
 template <typename FuncT>
 std::shared_ptr<ISubscription> ComponentBase::subscribe(FuncT&& func) {
-    return events()->subscribeIn(std::move(func));
+    return events()->subscribe(std::move(func));
 }
 
 } // flappy
