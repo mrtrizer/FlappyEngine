@@ -3,6 +3,7 @@
 #include <memory>
 #include "EventBus.h"
 
+#include <SafePtr.h>
 
 namespace flappy {
 
@@ -19,21 +20,21 @@ public:
     EventController& operator=(EventController&&) & = delete;
 
     template <typename FuncT>
-    std::shared_ptr<ISubscription> subscribe(FuncT&& func)
+    SafePtr<ISubscription> subscribe(FuncT&& func)
     {
         auto subscription = m_eventBus->subscribe(std::forward<FuncT>(func));
         m_subscriptionVector.push_back(subscription);
         return subscription;
     }
 
-    std::shared_ptr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler)
+    SafePtr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler)
     {
         auto subscription = m_eventBus->subscribeAll(handler);
         m_subscriptionVector.push_back(subscription);
         return subscription;
     }
 
-    void unsubscribe(std::shared_ptr<ISubscription> subscription);
+    void unsubscribe(SafePtr<ISubscription> subscription);
 
     template<typename EventT>
     void post(EventT&& event) {

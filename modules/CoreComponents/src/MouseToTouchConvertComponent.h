@@ -14,9 +14,9 @@ public:
     MouseToTouchConvertComponent();
 
 private:
-    std::shared_ptr<ISubscription> m_mouseDownSubscription;
-    std::shared_ptr<ISubscription> m_mouseUpSubscription;
-    std::shared_ptr<ISubscription> m_mouseMoveSubscription;
+    SafePtr<ISubscription> m_mouseDownSubscription;
+    SafePtr<ISubscription> m_mouseUpSubscription;
+    SafePtr<ISubscription> m_mouseMoveSubscription;
 };
 
 } // flappy

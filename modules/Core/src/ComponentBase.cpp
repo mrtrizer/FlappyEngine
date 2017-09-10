@@ -25,7 +25,7 @@ ComponentBase::ComponentBase()
                 }
             }
         }
-        events()->unsubscribe(m_updateSubscription.lock());
+        events()->unsubscribe(m_updateSubscription);
     });
 }
 

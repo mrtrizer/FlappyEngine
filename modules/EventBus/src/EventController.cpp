@@ -10,8 +10,8 @@ EventController::EventController():
 
 }
 
-void EventController::unsubscribe(std::shared_ptr<ISubscription> subscription) {
-    m_subscriptionVector.remove(subscription);
+void EventController::unsubscribe(SafePtr<ISubscription> subscription) {
+    m_subscriptionVector.remove_if([subscription](std::shared_ptr<ISubscription>& item) {return subscription == item; });
 }
 
 } // flappy
