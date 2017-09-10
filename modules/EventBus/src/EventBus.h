@@ -14,26 +14,21 @@
 
 namespace flappy {
 
-
 class EventBus {
 public:
+    EventBus() = default;
+    virtual ~EventBus() = default;
+    EventBus(const EventBus&) = delete;
+    EventBus& operator=(const EventBus&) & = delete;
+    EventBus(EventBus&&) = delete;
+    EventBus& operator=(EventBus&&) & = delete;
+
     template <typename FuncT>
-    std::shared_ptr<ISubscription> subscribe(FuncT&& func) {
-        using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-        return subscribeList(std::forward<FuncT>(func), m_inSubscriptions.get<EventT>());
-    }
+    std::shared_ptr<ISubscription> subscribe(FuncT&& func);
 
-    std::shared_ptr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler) {
-        auto subscription = std::make_shared<SubscriptionAll>(handler);
-        m_abstractSubscriptions.push_back(subscription);
-        return subscription;
-    }
+    std::shared_ptr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler);
 
-    void post(const EventHandle& event) {
-        auto id = event.id();
-        postInList(event, m_inSubscriptions.getById(id));
-        postInList(event, m_abstractSubscriptions);
-    }
+    void post(const EventHandle& event);
 
 private:
     TypeMap<EventHandle, std::list<std::weak_ptr<ISubscription>>> m_inSubscriptions;
@@ -45,21 +40,35 @@ private:
     using IsSameResult = std::is_same<typename FuncSignature<FuncT>::result_type, CompT>;
 
     template <typename FuncT>
-    std::shared_ptr<ISubscription> createSubscription(FuncT&& func) {
-        using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-        return std::make_shared<Subscription<EventT>>(std::forward<FuncT>(func));
-    }
+    std::shared_ptr<ISubscription> createSubscription(FuncT&& func);
 
     /// Add subscription to event
     /// @param func callback function `void (const EventT& e)`
     template<typename FuncT>
-    std::shared_ptr<ISubscription> subscribeList(FuncT&& func, std::list<std::weak_ptr<ISubscription>>& subscriptions)
-    {
-        auto subscription = createSubscription(func);
-        subscriptions.push_back(subscription);
-        return subscription;
-    }
+    std::shared_ptr<ISubscription> subscribeList(FuncT&& func, std::list<std::weak_ptr<ISubscription>>& subscriptions);
 
 };
+
+template <typename FuncT>
+std::shared_ptr<ISubscription> EventBus::subscribe(FuncT&& func) {
+    using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
+    return subscribeList(std::forward<FuncT>(func), m_inSubscriptions.get<EventT>());
+}
+
+template <typename FuncT>
+std::shared_ptr<ISubscription> EventBus::createSubscription(FuncT&& func) {
+    using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
+    return std::make_shared<Subscription<EventT>>(std::forward<FuncT>(func));
+}
+
+/// Add subscription to event
+/// @param func callback function `void (const EventT& e)`
+template<typename FuncT>
+std::shared_ptr<ISubscription> EventBus::subscribeList(FuncT&& func, std::list<std::weak_ptr<ISubscription>>& subscriptions)
+{
+    auto subscription = createSubscription(func);
+    subscriptions.push_back(subscription);
+    return subscription;
+}
 
 } // flappy
