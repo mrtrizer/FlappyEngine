@@ -89,11 +89,8 @@ public:
     /// Returns first entity in hierarchy
     SafePtr<Entity> root();
 
-    /// @brief Returns pointer to EventBus.
-    std::shared_ptr<EventController> events()
-    {
-        return m_eventController;
-    }
+    /// Returns pointer to EventBus.
+    std::shared_ptr<EventController> events() { return m_eventController; }
 
     /// Add child entity
     void addEntity(std::shared_ptr<Entity> entity);

@@ -127,6 +127,10 @@ protected:
     template <typename FuncT>
     std::shared_ptr<ISubscription> subscribe(FuncT&& func);
 
+    /// Short method for calling of events()->subscribe(...)
+    template <typename FuncT>
+    void unsubscribe(std::shared_ptr<ISubscription> subscription);
+
 private:
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
@@ -190,6 +194,11 @@ SafePtr<ManagerT> ComponentBase::manager() const
 template <typename FuncT>
 std::shared_ptr<ISubscription> ComponentBase::subscribe(FuncT&& func) {
     return events()->subscribe(std::move(func));
+}
+
+template <typename FuncT>
+void ComponentBase::unsubscribe(std::shared_ptr<ISubscription> subscription) {
+    events()->unsubscribe(subscription);
 }
 
 } // flappy
