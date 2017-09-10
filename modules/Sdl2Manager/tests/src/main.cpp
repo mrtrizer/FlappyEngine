@@ -10,8 +10,8 @@
 #include <ScreenManager.h>
 #include <MeshComponent.h>
 #include <ResManager.h>
-#include <QuadRes.h>
-#include <QuadResFactory.h>
+#include <SpriteRes.h>
+#include <SpriteResFactory.h>
 #include <TextureRes.h>
 #include <StdFileMonitorManager.h>
 #include <ResRepositoryManager.h>
@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
     rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
     rootEntity->createComponent<ResManager<TextureRes>> ();
-    rootEntity->createComponent<QuadResFactory>();
-    rootEntity->createComponent<ResManager<QuadRes>> ();
+    rootEntity->createComponent<SpriteResFactory>();
+    rootEntity->createComponent<ResManager<SpriteRes>> ();
     rootEntity->createComponent<GLShaderResFactory> ();
     rootEntity->createComponent<ResManager<GLShaderProgram>> ();
     rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
 //    spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
 
-//    auto quadRes = rootEntity->component<ResManager<QuadRes>>()->getRes("__img_missing__");
-//    spriteEntity->component<SpriteComponent>()->setQuadRes(quadRes);
+//    auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
+//    spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
     return rootEntity->findComponent<AGLManager>()->startMainLoop();
 }

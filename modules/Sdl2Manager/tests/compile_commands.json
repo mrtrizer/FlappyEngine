@@ -181,8 +181,8 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreResources",
-  "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp",
-  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/QuadResFactory.cpp"
+  "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/SpriteResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/SpriteResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/SpriteResFactory.cpp"
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/RenderManager",

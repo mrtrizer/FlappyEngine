@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include <Component.h>
-#include <QuadRes.h>
+#include <SpriteRes.h>
 
 namespace flappy {
 

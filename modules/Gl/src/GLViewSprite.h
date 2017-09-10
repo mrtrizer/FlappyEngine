@@ -11,7 +11,7 @@ namespace flappy {
 template <typename T>
 class ResHandler;
 
-class QuadRes;
+class SpriteRes;
 
 class SpriteComponent;
 
@@ -26,7 +26,7 @@ private:
     GLAttribArray m_rect;
     SafePtr<SpriteComponent> m_spriteComponent;
     std::vector<GLTools::Vertex> m_vertexList;
-    std::shared_ptr<QuadRes> m_quadRes;
+    std::shared_ptr<SpriteRes> m_quadRes;
     std::shared_ptr<GLShaderProgram> m_shaderProgramRes;
 
     void updateFrame();

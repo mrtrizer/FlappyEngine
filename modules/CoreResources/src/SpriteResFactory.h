@@ -5,13 +5,13 @@
 
 #include <IResFactory.h>
 
-#include "QuadRes.h"
+#include "SpriteRes.h"
 
 namespace flappy {
 
-class QuadResFactory: public ResFactory<QuadRes> {
+class SpriteResFactory: public ResFactory<SpriteRes> {
 public:
-    QuadResFactory();
+    SpriteResFactory();
 
     /// @brief Loads sprite by path in atlas or file name.
     /// @details Always loads atlas synchronous.

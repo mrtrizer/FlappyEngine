@@ -4,7 +4,7 @@
 #include <GLShaderProgram.h>
 #include <GLTextureRes.h>
 #include <ResManager.h>
-#include <QuadRes.h>
+#include <SpriteRes.h>
 #include <SpriteComponent.h>
 
 namespace flappy {

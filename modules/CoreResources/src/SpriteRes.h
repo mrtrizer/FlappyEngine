@@ -10,9 +10,9 @@
 
 namespace flappy {
 
-class QuadRes: public Res {
+class SpriteRes: public Res {
 public:
-    QuadRes(std::shared_ptr<AtlasRes> atlasRes, std::shared_ptr<TextureRes> textureRes, const std::string& quadName):
+    SpriteRes(std::shared_ptr<AtlasRes> atlasRes, std::shared_ptr<TextureRes> textureRes, const std::string& quadName):
         m_atlasRes(atlasRes),
         m_textureRes(textureRes),
         m_quadName(quadName)

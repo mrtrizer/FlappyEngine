@@ -1,10 +1,10 @@
-#include "QuadResFactory.h"
+#include "SpriteResFactory.h"
 
 #include <sstream>
 
 #include <Entity.h>
 
-#include "QuadRes.h"
+#include "SpriteRes.h"
 #include "AtlasRes.h"
 #include "TextureRes.h"
 
@@ -12,16 +12,16 @@ namespace flappy {
 
 using namespace std;
 
-QuadResFactory::QuadResFactory() {
+SpriteResFactory::SpriteResFactory() {
     addDependency(ResManager<TextureRes>::id());
     addDependency(ResManager<AtlasRes>::id());
 }
 
-std::shared_ptr<Res> QuadResFactory::load(const std::string& name)  {
+std::shared_ptr<Res> SpriteResFactory::load(const std::string& name)  {
     return create(name);
 }
 
-std::shared_ptr<Res> QuadResFactory::create(const std::string& name) {
+std::shared_ptr<Res> SpriteResFactory::create(const std::string& name) {
     auto splittedName = split(name, ':');
     auto textureResManager = manager<ResManager<TextureRes>>();
     auto atlasResManager = manager<ResManager<AtlasRes>>();
@@ -31,7 +31,7 @@ std::shared_ptr<Res> QuadResFactory::create(const std::string& name) {
         string quadName = splittedName[1];
         auto atlas = atlasResManager->getResSync(atlasName);
         auto texture = textureResManager->getRes(atlasName);
-        auto quad = make_shared<QuadRes>(atlas, texture, quadName);
+        auto quad = make_shared<SpriteRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path
         string quadName = splittedName[0];
@@ -45,12 +45,12 @@ std::shared_ptr<Res> QuadResFactory::create(const std::string& name) {
             atlasResManager->setRes(defaultAtlasName, atlas);
         }
         auto defaultAtlas = atlasResManager->getRes(defaultAtlasName);
-        auto defaultQuad = make_shared<QuadRes>(defaultAtlas, texture, defaultQuadName);
+        auto defaultQuad = make_shared<SpriteRes>(defaultAtlas, texture, defaultQuadName);
         return defaultQuad;
     }
 }
 
-std::vector<std::string> QuadResFactory::split(const std::string &s, char delimiter)
+std::vector<std::string> SpriteResFactory::split(const std::string &s, char delimiter)
 {
     std::stringstream ss(s);
     std::string item;
