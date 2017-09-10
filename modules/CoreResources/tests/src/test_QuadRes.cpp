@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include <QuadRes.h>
+#include <SpriteRes.h>
 #include <AtlasRes.h>
 #include <TextureRes.h>
-#include <QuadResFactory.h>
+#include <SpriteResFactory.h>
 #include <IRgbaBitmapRes.h>
 #include <Sdl2RgbaBitmapResFactory.h>
 #include <DefaultResFactory.h>
@@ -20,7 +20,7 @@
 using namespace flappy;
 using namespace std;
 
-TEST_CASE( "Quad ResManager::getRes") {
+TEST_CASE( "SpriteResManager::getRes") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
@@ -33,18 +33,18 @@ TEST_CASE( "Quad ResManager::getRes") {
     rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
     rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
     rootEntity->createComponent<ResManager<TextureRes>> ();
-    rootEntity->createComponent<QuadResFactory> ();
-    rootEntity->createComponent<ResManager<QuadRes>> ();
+    rootEntity->createComponent<SpriteResFactory> ();
+    rootEntity->createComponent<ResManager<SpriteRes>> ();
 
-    rootEntity->manager<ResManager<QuadRes>>()->getRes("test_img");
+    rootEntity->manager<ResManager<SpriteRes>>()->getRes("test_img");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1));
 }
 
-TEST_CASE( "Quad::rect()") {
+TEST_CASE( "SpriteRes::rect()") {
     REQUIRE(true);
 }
 
-TEST_CASE( "Quad::texture()") {
+TEST_CASE( "SpriteRes::texture()") {
     REQUIRE(true);
 }
 
