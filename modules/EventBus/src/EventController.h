@@ -9,6 +9,9 @@ namespace flappy {
 
 class ISubscription;
 
+/// Event controller is a wrapper around EventBus.
+/// It helps subscribe to events without saving of
+/// subscription.
 class EventController
 {
 public:
@@ -19,17 +22,24 @@ public:
     EventController(EventController&&) = delete;
     EventController& operator=(EventController&&) & = delete;
 
+    /// Subscribe to concrete event.
+    /// Use unsubscribe() method to unsubscribe.
     template <typename FuncT>
     SafePtr<ISubscription> subscribe(FuncT&& func);
 
+    /// Subscribe to all events in event bus. Useful for event forwarding.
+    /// Use unsubscribe() method to unsubscribe.
     SafePtr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler);
 
+    /// Unsubscribe of event
     void unsubscribe(SafePtr<ISubscription> subscription);
 
+    /// Post event to all subscribers.
     template<typename EventT>
     void post(EventT&& event);
 
     void setEventBus(std::shared_ptr<EventBus> eventBus) { m_eventBus = eventBus; }
+
     std::shared_ptr<EventBus> eventBus() { return m_eventBus; }
 
 private:
