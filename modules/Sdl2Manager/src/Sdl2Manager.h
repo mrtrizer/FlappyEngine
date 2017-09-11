@@ -3,11 +3,11 @@
 #include <SDL2/SDL.h>
 
 #include <Manager.h>
-#include <AGLManager.h>
+#include <IGLManager.h>
 
 namespace flappy {
 
-class Sdl2Manager : public AGLManager
+class Sdl2Manager : public IGLManager
 {
 public:
     Sdl2Manager();

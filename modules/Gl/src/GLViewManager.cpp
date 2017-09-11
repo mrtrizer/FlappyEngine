@@ -9,7 +9,7 @@
 
 #include <View.h>
 #include <ScreenManager.h>
-#include <AGLManager.h>
+#include <IGLManager.h>
 
 #include "GLShaderProgram.h"
 #include "GLTools.h"
@@ -22,7 +22,7 @@ using namespace std;
 
 GLViewManager::GLViewManager(): ViewManager()
 {
-    addDependency(AGLManager::id());
+    addDependency(IGLManager::id());
     addDependency(ScreenManager::id());
 
     subscribe([this](InitEvent) {

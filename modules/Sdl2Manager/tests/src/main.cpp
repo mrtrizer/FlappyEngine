@@ -72,5 +72,5 @@ int main(int argc, char *argv[])
 //    auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
 //    spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
-    return rootEntity->findComponent<AGLManager>()->startMainLoop();
+    return rootEntity->findComponent<IGLManager>()->startMainLoop();
 }

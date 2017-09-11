@@ -6,7 +6,7 @@
 namespace flappy {
 
 /// Base class for all GL managers like SDL, GLUT and so on
-class AGLManager : public Manager<AGLManager> {
+class IGLManager : public Manager<IGLManager> {
 public:
     using Manager::Manager;
 
