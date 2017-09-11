@@ -12,32 +12,6 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-static const char spriteVShader[] =
-    "attribute vec2 aPosition;\n"
-    "attribute vec2 aTexCoord;\n"
-    "uniform mat4 uMVMatrix;\n"
-    "uniform mat4 uPMatrix;\n"
-    "varying vec2 vTexCoord;\n"
-    "void main() {\n"
-    "   vTexCoord = aTexCoord;"
-    "   gl_Position = uPMatrix * uMVMatrix * vec4(aPosition,0,1);\n"
-    "}\n";
-
-static const char spriteFShader[] =
-#if defined(GL_ES) || EMSCRIPTEN || TARGET_OS_IPHONE == 1
-    "precision mediump float;\n"
-#endif
-    "uniform sampler2D uTex;\n"
-    "uniform vec4 uColor;\n"
-    "varying vec2 vTexCoord;\n"
-    "void main() {\n"
-#if TARGET_OS_IPHONE == 1
-    "   gl_FragColor = texture2D(uTex,vTexCoord).rgba * uColor;\n"
-#else
-    "   gl_FragColor = texture2D(uTex,vTexCoord).bgra * uColor;\n"
-#endif
-    "}\n";
-
 GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     m_rect(GL_TRIANGLE_STRIP),
     m_spriteComponent(spriteComponent),
@@ -50,7 +24,7 @@ GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     addDependency(SpriteComponent::id());
 
     subscribe([this](InitEvent) {
-        m_shaderProgramRes = manager<ResManager<GLShaderProgram>>()->getRes("default_shape");
+        setShader(manager<ResManager<GLShaderProgram>>()->getRes("texture_shader"));
     });
 }
 

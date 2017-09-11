@@ -1,4 +1,6 @@
-//precision mediump float;
+#if defined(GL_ES)
+precision mediump float;
+#endif
 uniform vec4 uColor;
 
 void main() {

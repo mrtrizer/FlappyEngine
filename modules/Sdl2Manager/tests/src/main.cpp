@@ -63,14 +63,14 @@ int main(int argc, char *argv[])
     rectEntity->component<MeshComponent>();
     rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
 
-//    // Sprite
-//    auto spriteEntity = sceneEntity->createEntity();
-//    spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
-//    spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
+    // Sprite
+    auto spriteEntity = sceneEntity->createEntity();
+    spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
+    spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
 
 
-//    auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
-//    spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+    auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
+    spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
     return rootEntity->findComponent<IGLManager>()->startMainLoop();
 }
