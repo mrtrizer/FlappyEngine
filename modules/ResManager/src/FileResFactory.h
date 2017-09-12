@@ -48,9 +48,10 @@ FileResFactory<ResT>::FileResFactory(std::string path, std::string ext):
 
 template <typename ResT>
 std::shared_ptr<Res> FileResFactory<ResT>::load(const std::string& name) {
-    auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
+    auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
+    auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
     auto fileLoadManager = this->template manager<IFileLoadManager>();
-    return std::make_shared<TextRes>(fileLoadManager->loadTextFile(resInfo.path));
+    return std::make_shared<TextRes>(fileLoadManager->loadTextFile(fileInfo.path));
 }
 
 template <typename ResT>
@@ -60,7 +61,7 @@ std::shared_ptr<Res> FileResFactory<ResT>::create(const std::string& name) {
 
 template <typename ResT>
 bool FileResFactory<ResT>::changed(const std::string& name) {
-    auto resInfo = this->template manager<ResRepositoryManager>()->findResInfo(name);
+    auto resInfo = this->template manager<ResRepositoryManager>()->findFileInfo(name);
     return this->template manager<IFileMonitorManager>()->changed(resInfo.path);
 }
 

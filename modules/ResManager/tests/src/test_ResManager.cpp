@@ -30,13 +30,23 @@ public:
 
 }
 
-TEST_CASE( "ResRepositoryManager::findResInfo") {
+TEST_CASE( "ResRepositoryManager::findFileInfo") {
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    auto resInfo = resRepositoryManager->findResInfo("text_res");
+    auto resInfo = resRepositoryManager->findFileInfo("text_res.txt");
     REQUIRE(resInfo.type == "file");
+}
+
+TEST_CASE( "ResRepositoryManager::findResMeta") {
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
+    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
+    auto resMeta = resRepositoryManager->findResMeta("text_res");
+    REQUIRE(resMeta.data["input"] == "text_res.txt");
+    REQUIRE(resMeta.data["type"] == "file");
 }
 
 TEST_CASE( "ResManager::getRes()") {

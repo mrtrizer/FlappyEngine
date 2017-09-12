@@ -23,14 +23,18 @@ class ResRepositoryManager: public Manager<ResRepositoryManager>
 public:
     ResRepositoryManager(std::string resRespositoryPath);
 
-    ResInfo findResInfo(std::string name) const;
+    FileInfo findFileInfo(std::string name) const;
+    ResMeta findResMeta(std::string name) const;
 
 private:
     std::string m_resRepositoryPath;
-    std::map<std::string, ResInfo> m_resInfoMap;
+    std::map<std::string, FileInfo> m_resInfoMap;
+    std::map<std::string, ResMeta> m_resMetaMap;
 
-    void loadResInfoList();
-    std::string resInfoListFilePath();
+    void loadFileList();
+    void loadResMeta();
+    std::string fileListFilePath();
+    std::string resMetaFilePath();
 };
 
 /// @}
