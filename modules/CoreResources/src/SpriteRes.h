@@ -19,7 +19,7 @@ public:
     {}
     AtlasRes::SpriteInfo spriteInfo() { return m_atlasRes->spriteInfo(m_quadName); }
     std::shared_ptr<TextureRes> texture() { return m_textureRes; }
-    std::list<std::shared_ptr<Res>> dependencyList() const override { return {m_atlasRes, m_textureRes}; }
+    std::list<std::shared_ptr<Res>> dependencyList() const final { return {m_atlasRes, m_textureRes}; }
 
 private:
     std::shared_ptr<AtlasRes> m_atlasRes;

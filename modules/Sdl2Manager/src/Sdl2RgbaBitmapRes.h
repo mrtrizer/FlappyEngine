@@ -11,12 +11,10 @@ class Sdl2RgbaBitmapRes: public IRgbaBitmapRes
 public:
     Sdl2RgbaBitmapRes(std::unique_ptr<SDL_Surface> sdlSurface);
 
-    std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
-
-    char* bitmapData() override;
-    Color pixelColor(int x, int y) override;
-    int width() override;
-    int height() override;
+    char* bitmapData() final;
+    Color pixelColor(int x, int y) final;
+    int width() final;
+    int height() final;
 
 private:
     std::unique_ptr<SDL_Surface> m_sdlSurface;

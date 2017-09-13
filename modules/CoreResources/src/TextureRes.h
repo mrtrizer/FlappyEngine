@@ -22,8 +22,6 @@ public:
     float relHeight() const {return m_relHeight;}
     glm::vec2 size() const {return m_size;}
 
-    std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
-
     // TODO: Make private
 protected:
     /// Saved UVs after auto resize

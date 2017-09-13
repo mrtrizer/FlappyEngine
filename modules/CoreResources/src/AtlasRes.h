@@ -25,7 +25,7 @@ public:
     AtlasRes() = default;
     SpriteInfo spriteInfo(const std::string& name) const;
     void addSpriteInfo(const std::string& name, const SpriteInfo& spriteInfo);
-    std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
+    std::list<std::shared_ptr<Res>> dependencyList() const final { return {}; }
 
 
 private:  

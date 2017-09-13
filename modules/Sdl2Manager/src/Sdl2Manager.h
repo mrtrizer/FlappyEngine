@@ -11,7 +11,7 @@ class Sdl2Manager : public IGLManager
 {
 public:
     Sdl2Manager();
-    int startMainLoop() override;
+    int startMainLoop() final;
     void setMaxFps(int fps) { m_maxFps = fps; }
     void setUpdateFreq(int updateFreq) { m_updateFreq = updateFreq; }
 

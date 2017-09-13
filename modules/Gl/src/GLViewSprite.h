@@ -20,7 +20,7 @@ class GLViewSprite : public GLView<GLViewSprite>
 {
 public:
     GLViewSprite(SafePtr<SpriteComponent> spriteComponent);
-    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
+    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:
     GLAttribArray m_rect;

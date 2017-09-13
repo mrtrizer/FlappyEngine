@@ -13,9 +13,9 @@ class GLViewFactory;
 class GLViewManager : public ViewManager {
 public:
     GLViewManager();
-    void redraw(std::list<Visual> &, glm::mat4 &) override;
+    void redraw(std::list<Visual> &, glm::mat4 &) final;
 protected:
-    void updateViewPort() override;
+    void updateViewPort() final;
 };
 
 } // flappy

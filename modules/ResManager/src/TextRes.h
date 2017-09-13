@@ -16,8 +16,6 @@ public:
         return m_text;
     }
 
-    std::list<std::shared_ptr<Res>> dependencyList() const override { return {}; }
-
 private:
     std::string m_text;
 };

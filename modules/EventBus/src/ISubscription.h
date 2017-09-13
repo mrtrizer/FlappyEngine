@@ -33,7 +33,7 @@ class SubscriptionAll: public ISubscription {
 public:
     SubscriptionAll(std::function<void(const EventHandle&)> func): m_func(func) {}
 
-    void call(const EventHandle& e) override {
+    void call(const EventHandle& e) final {
         return m_func(e);
     }
 

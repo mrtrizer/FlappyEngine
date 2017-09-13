@@ -25,7 +25,7 @@ unsigned long getLastModificationTime(string filePath) {
         return fileStat.st_mtim.tv_sec;
 #endif
     } else {
-        LOGE("Can't get last modification time. Error: %d", result);
+        LOGE("Can't get last modification time for \"%s\". Error: %d", filePath.c_str(), result);
         return 0;
     }
 }

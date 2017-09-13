@@ -27,9 +27,9 @@ class FileResFactory : public ResFactory<ResT>
 public:
     FileResFactory(std::string path = "", std::string ext = "");
 
-    std::shared_ptr<Res> load(const std::string& name) override;
-    std::shared_ptr<Res> create(const std::string& name) override;
-    bool changed(const std::string& name) override;
+    std::shared_ptr<Res> load(const std::string& name) final;
+    std::shared_ptr<Res> create(const std::string& name) final;
+    bool changed(const std::string& name) final;
 
 private:
     std::string m_path;

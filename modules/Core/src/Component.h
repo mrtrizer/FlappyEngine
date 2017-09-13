@@ -33,13 +33,13 @@ public:
     }
 
 private:
-    void initInternal() override {
+    void initInternal() final {
         LOGI("Init %s", typeName<DerivedT>().c_str());
 
         events()->post(InitEvent());
     }
 
-    void deinitInternal() override {
+    void deinitInternal() final {
         LOGI("Deinit %s", typeName<DerivedT>().c_str());
 
         events()->post(DeinitEvent());

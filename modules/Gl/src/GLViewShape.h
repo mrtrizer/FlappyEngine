@@ -17,7 +17,7 @@ class GLViewShape: public GLView<GLViewShape> {
 public:
     using GLView::GLView;
 
-    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) override;
+    void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
     virtual const GLAttribArray & getAttribArray() const = 0;
     void setColor(Color color) { m_color = color; }
     Color color() { return m_color; }

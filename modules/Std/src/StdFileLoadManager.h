@@ -11,7 +11,7 @@ class TextRes;
 
 class StdFileLoadManager: public IFileLoadManager {
 public:
-    std::string loadTextFile(const std::string& filePath) override;
+    std::string loadTextFile(const std::string& filePath) final;
 };
 
 }

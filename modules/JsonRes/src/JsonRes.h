@@ -12,7 +12,7 @@ public:
     JsonRes() = default;
     JsonRes(std::shared_ptr<TextRes> textRes);
 
-    std::list<std::shared_ptr<Res>> dependencyList() const override;
+    std::list<std::shared_ptr<Res>> dependencyList() const final;
     void setFromStr(const std::string& jsonStr);
     std::string toStr() const;
     nlohmann::json& json();

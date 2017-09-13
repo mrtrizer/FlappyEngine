@@ -8,7 +8,7 @@ namespace flappy {
 class GLViewCircle: public GLViewShape {
 public:
     GLViewCircle(int vertexCount = 32);
-    const GLAttribArray& getAttribArray() const override {return m_circle; }
+    const GLAttribArray& getAttribArray() const final {return m_circle; }
 
 private:
     GLAttribArray m_circle;
