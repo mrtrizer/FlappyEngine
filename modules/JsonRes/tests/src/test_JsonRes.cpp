@@ -50,5 +50,6 @@ TEST_CASE( "JsonRes::text()") {
     rootEntity->events()->post(ComponentBase::UpdateEvent(1));
     rootEntity->events()->post(ComponentBase::UpdateEvent(1));
     jsonRes = jsonResManager->getRes("example");
+
     REQUIRE(jsonRes->json()["name"] == string("Nastya"));
 }

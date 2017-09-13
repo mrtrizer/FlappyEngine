@@ -61,8 +61,9 @@ std::shared_ptr<Res> FileResFactory<ResT>::create(const std::string& name) {
 
 template <typename ResT>
 bool FileResFactory<ResT>::changed(const std::string& name) {
-    auto resInfo = this->template manager<ResRepositoryManager>()->findFileInfo(name);
-    return this->template manager<IFileMonitorManager>()->changed(resInfo.path);
+    auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
+    auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
+    return this->template manager<IFileMonitorManager>()->changed(fileInfo.path);
 }
 
 

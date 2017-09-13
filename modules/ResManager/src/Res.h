@@ -31,7 +31,7 @@ public:
     Res(Res&&) = default;
     Res& operator=(Res&&) = default;
 
-    virtual std::list<std::shared_ptr<Res>> dependencyList() const = 0;
+    virtual std::list<std::shared_ptr<Res>> dependencyList() const { return {}; }
 
     std::shared_ptr<Res> nextRes() {
         if (m_next != nullptr)
@@ -46,6 +46,7 @@ public:
         else
             return shared_from_this();
     }
+
 
     bool resUpdated() {
         return (m_next != nullptr) && (m_next.get() != this);

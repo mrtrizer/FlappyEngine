@@ -18,15 +18,13 @@ public:
     using AttribLocation = GLint;
     using UniformLocation = GLint;
 
-    GLShaderProgram(std::shared_ptr<TextRes> vertexShaderRes, std::shared_ptr<TextRes> fragmentShaderRes);
+    GLShaderProgram(std::string vertexShaderRes, std::string fragmentShaderStr);
     ~GLShaderProgram();
     void render(const GLAttribArray &, std::function<void()>);
     AttribLocation findAttr(const char*);
     UniformLocation findUniform(const char*);
     Program program() const;
     void initShader();
-
-    std::list<std::shared_ptr<Res>> dependencyList() const override;
 
 protected:
     void bind();
@@ -39,8 +37,8 @@ private:
 
     void deinitShader();
 
-    std::shared_ptr<TextRes> m_fragmentShaderRes;
-    std::shared_ptr<TextRes> m_vertexShaderRes;
+    std::string m_fragmentShaderStr;
+    std::string m_vertexShaderStr;
 
     GLuint m_fragmentShader = 0;
     GLuint m_vertexShader = 0;

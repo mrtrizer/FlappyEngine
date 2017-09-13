@@ -22,9 +22,9 @@ using namespace std;
 /// Takes GLSL sources from nullterm strings.
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
-GLShaderProgram::GLShaderProgram(std::shared_ptr<TextRes> vertexShaderRes, std::shared_ptr<TextRes> fragmentShaderRes)
-    : m_vertexShaderRes(vertexShaderRes)
-    , m_fragmentShaderRes(fragmentShaderRes)
+GLShaderProgram::GLShaderProgram(string vertexShaderStr, string fragmentShaderStr)
+    : m_vertexShaderStr(vertexShaderStr)
+    , m_fragmentShaderStr(fragmentShaderStr)
 {}
 
 GLShaderProgram::~GLShaderProgram() {
@@ -53,8 +53,8 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) 
 void GLShaderProgram::initShader() {
     deinitShader();
 
-    m_vertexShader = loadShader(GL_VERTEX_SHADER, m_vertexShaderRes->text());
-    m_fragmentShader = loadShader(GL_FRAGMENT_SHADER, m_fragmentShaderRes->text());
+    m_vertexShader = loadShader(GL_VERTEX_SHADER, m_vertexShaderStr);
+    m_fragmentShader = loadShader(GL_FRAGMENT_SHADER, m_fragmentShaderStr);
 
     m_program = glCreateProgram();
     if (m_program) {
@@ -127,11 +127,6 @@ void GLShaderProgram::render(const GLAttribArray & attribArray, function<void()>
     glDrawArrays(attribArray.method(), 0, attribArray.size());
     attribArray.unbind();
     unbind();
-}
-
-
-std::list<std::shared_ptr<Res> > GLShaderProgram::dependencyList() const {
-    return {m_vertexShaderRes, m_fragmentShaderRes};
 }
 
 } // flappy
