@@ -5,11 +5,14 @@ module.exports.type = "*";
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
+    const logger = context.require("./logger.js");
 
     const inputPath = path.join(resSrcDir, resConfig.input)
     const outputPath = path.join(cacheSubDir, resConfig.input)
-    console.log(inputPath);
-    console.log(outputPath);
+    logger.logi("Default generator start");
+    logger.logi("Res type: " + resConfig.type);
+    logger.logi("Copy from: " + inputPath);
+    logger.logi("Copy to: " + outputPath);
     fse.copySync(inputPath, outputPath);
 
     return resConfig;

@@ -5,11 +5,12 @@ module.exports.type = "glsl_shader";
 function copyFileToCache(context, file, resSrcDir, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
+    const logger = context.require("./logger.js");
 
     const inputPath = path.join(resSrcDir, file)
     const outputPath = path.join(cacheSubDir, file)
-    console.log(inputPath);
-    console.log(outputPath);
+    logger.logi("Copy from: " + inputPath);
+    logger.logi("Copy to: " + outputPath);
     fse.copySync(inputPath, outputPath);
 }
 
