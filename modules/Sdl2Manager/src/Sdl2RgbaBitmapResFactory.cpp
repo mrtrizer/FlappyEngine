@@ -11,6 +11,7 @@ using namespace std;
 
 Sdl2RgbaBitmapResFactory::Sdl2RgbaBitmapResFactory() {
     addDependency(ResRepositoryManager::id());
+    addDependency(IFileMonitorManager::id());
 }
 
 // http://www.libpng.org/pub/png/book/chapter13.html
@@ -20,6 +21,7 @@ std::shared_ptr<Res> Sdl2RgbaBitmapResFactory::load(const std::string& name) {
     auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
     auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
     string fullPath = fileInfo.path;
+    manager<IFileMonitorManager>()->registerFile(fullPath);
 
     SDL_Surface* sdlSurfacePtr;
     if(!( sdlSurfacePtr = IMG_Load(fullPath.data()))) {
@@ -50,6 +52,12 @@ std::shared_ptr<Res> Sdl2RgbaBitmapResFactory::create(const std::string&) {
     auto result = make_shared<Sdl2RgbaBitmapRes>(std::move(sdlSurface));
 
     return result;
+}
+
+bool Sdl2RgbaBitmapResFactory::changed(const string & name) {
+    auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
+    auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
+    return manager<IFileMonitorManager>()->changed(fileInfo.path);
 }
 
 }

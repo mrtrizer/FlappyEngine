@@ -14,8 +14,9 @@ class Sdl2RgbaBitmapResFactory :public ResFactory<IRgbaBitmapRes>
 {
 public:
     Sdl2RgbaBitmapResFactory();
-    std::shared_ptr<Res> load(const std::string&) override;
-    std::shared_ptr<Res> create(const std::string&) override;
+    std::shared_ptr<Res> load(const std::string&) final;
+    std::shared_ptr<Res> create(const std::string&) final;
+    bool changed(const std::string&) final;
 
 private:
     std::string m_path;
