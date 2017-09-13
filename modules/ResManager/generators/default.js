@@ -17,15 +17,16 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
 
 module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
+    const relativePath = path.join(resConfig.input);
     const outputPath = path.join(cacheSubDir, resConfig.input);
 
     var list = [
         {
-            "path": resConfig.input,
+            "path": relativePath,
             "fullPath": outputPath,
             "type": resConfig.type
         }
     ];
-    
+
     return list;
 }
