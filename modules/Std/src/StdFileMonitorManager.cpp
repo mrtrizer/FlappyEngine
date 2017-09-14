@@ -13,9 +13,7 @@
 
 namespace flappy {
 
-using namespace std;
-
-unsigned long getLastModificationTime(string filePath) {
+unsigned long StdFileMonitorManager::getLastModificationTime(std::string filePath) {
     struct stat fileStat;
     int result = stat(filePath.c_str(), &fileStat);
     if(result == 0) {
@@ -30,28 +28,29 @@ unsigned long getLastModificationTime(string filePath) {
     }
 }
 
-void StdFileMonitorManager::registerFile(string path) {
-    struct stat result;
-
+void StdFileMonitorManager::registerFile(std::string path) {
     m_fileInfoMap[path] = getLastModificationTime(path);
 }
 
-bool StdFileMonitorManager::changed(string path) {
+bool StdFileMonitorManager::changed(std::string path) {
+    bool changed = false;
+
     auto iter = m_fileInfoMap.find(path);
-    if (iter == m_fileInfoMap.end()) {
+
+    if (iter != m_fileInfoMap.end()) {
+        auto lastFileTime = iter->second;
+
+        unsigned long lastModificationTime = getLastModificationTime(path);
+
+        if ((lastFileTime != lastModificationTime) && (lastModificationTime != 0)) {
+            iter->second = lastModificationTime;
+            changed = true;
+        }
+    } else {
         registerFile(path);
-        return false;
     }
 
-    auto lastFileTime = iter->second;
-
-    unsigned long lastModificationTime = getLastModificationTime(path);
-    if (lastFileTime != lastModificationTime) {
-        iter->second = lastModificationTime;
-        return true;
-    }
-
-    return false;
+    return changed;
 }
 
 } // flappy

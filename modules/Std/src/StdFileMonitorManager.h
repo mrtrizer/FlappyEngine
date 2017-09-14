@@ -15,6 +15,8 @@ public:
 
 private:
     std::unordered_map<std::string, time_t> m_fileInfoMap;
+
+    unsigned long getLastModificationTime(std::string filePath);
 };
 
 } // flappy

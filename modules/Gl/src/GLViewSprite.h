@@ -27,7 +27,6 @@ private:
     SafePtr<SpriteComponent> m_spriteComponent;
     std::vector<GLTools::Vertex> m_vertexList;
     std::shared_ptr<SpriteRes> m_quadRes;
-    std::shared_ptr<GLShaderProgram> m_shaderProgramRes;
 
     void updateFrame();
 };
