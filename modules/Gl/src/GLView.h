@@ -31,7 +31,8 @@ public:
 
     void setShader(std::shared_ptr<GLShaderProgram> shaderRes) { m_shaderRes = shaderRes; }
     std::shared_ptr<GLShaderProgram> shader() {
-        m_shaderRes = std::static_pointer_cast<GLShaderProgram>(m_shaderRes->lastRes());
+        if (m_shaderRes->nextRes() != m_shaderRes)
+            m_shaderRes = std::static_pointer_cast<GLShaderProgram>(m_shaderRes->lastRes());
         return m_shaderRes;
     }
 
