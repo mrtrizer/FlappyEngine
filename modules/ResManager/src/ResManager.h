@@ -34,7 +34,7 @@ public:
                     resPairIter = m_resMap.erase(resPairIter);
                 } else {
                     auto name = resPairIter->first;
-                    resPairIter->second.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
+                    resPairIter->second.updateRes();
                     resPairIter++;
                 }
             }
@@ -73,17 +73,9 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 {
     auto resIter = m_resMap.find(name);
     if (resIter == m_resMap.end()) {
-        try { // catch all exception from default res create function
-            auto defaultRes = this->template manager<ResFactory<ResT>>()->create(name);
-            auto resKeeper = ResKeeper(defaultRes);
-            auto iter = m_resMap.emplace(name, std::move(resKeeper)).first;
-            return iter->second;
-        } catch (std::exception& e) {
-            throw std::runtime_error(std::string("Default resource create error.\nDescription:\n") + e.what());
-        }
-        catch (...) {
-            throw std::runtime_error("Default resource create error.");
-        }
+        auto resKeeper = ResKeeper(this->template manager<ResFactory<ResT>>(), name);
+        auto iter = m_resMap.emplace(name, std::move(resKeeper)).first;
+        return iter->second;
     } else {
         return resIter->second;
     }
@@ -102,7 +94,7 @@ std::shared_ptr<ResT> ResManager<ResT>::getResSync(const std::string& name)
 {
     auto& resKeeper = getResKeeper(name);
     if (this->isInitialized()) {
-        resKeeper.updateRes(this->template manager<ResFactory<ResT>>(), name, this->template manager<IFileMonitorManager>());
+        resKeeper.updateRes();
     }
     return std::static_pointer_cast<ResT>(resKeeper.actualRes());
 }
@@ -113,10 +105,13 @@ template<typename ResT>
 void ResManager<ResT>::setRes(const std::string& name, std::shared_ptr<ResT> res)
 {
     auto foundIter = m_resMap.find(name);
-    if (foundIter == m_resMap.end())
-        m_resMap.emplace(name, ResKeeper(res, false));
-    else
-        foundIter->second.actualRes()->pushRes(res);
+    if (foundIter == m_resMap.end()) {
+        auto resKeeper = ResKeeper(this->template manager<ResFactory<ResT>>(), name);
+        resKeeper.pushRes(res);
+        m_resMap.emplace(name, std::move(resKeeper));
+    } else {
+        foundIter->second.pushRes(res);
+    }
 }
 
 /// @}

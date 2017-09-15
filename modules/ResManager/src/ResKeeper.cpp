@@ -9,29 +9,36 @@
 
 namespace flappy {
 
-using namespace std;
+ResKeeper::ResKeeper(SafePtr<IResFactory> resFactory, std::string name)
+    : m_resFactory (resFactory)
+    , m_name(name)
+{}
 
-ResKeeper::ResKeeper(shared_ptr<Res> res, bool changed):
-    m_changed(changed),
-    m_res(res)
-{
-}
-
-void ResKeeper::cleanUpRes()
-{
-    while ((m_res != m_res->nextRes()) && (m_res.use_count() == 1))
-        m_res = m_res->nextRes();
+void ResKeeper::pushRes(std::shared_ptr<Res> res) {
+    if (m_res == nullptr)
+        m_res = res;
+    else
+        m_res->pushRes(res);
 }
 
 bool ResKeeper::needRemove()
 {
+    if (m_res == nullptr)
+        return false;
     return (m_res == m_res->nextRes()) && (m_res.use_count() == 1);
 }
 
-bool ResKeeper::dependencyChanged() const
+void ResKeeper::cleanUpRes()
 {
-    auto actualRes = m_res->nextRes();
-    for (auto dependency: actualRes->dependencyList())
+    if (m_res == nullptr)
+        return;
+    while ((m_res != m_res->nextRes()) && (m_res.use_count() == 1))
+        m_res = m_res->nextRes();
+}
+
+bool ResKeeper::dependencyChanged()
+{
+    for (auto dependency: actualRes()->dependencyList())
         if (dependency->resUpdated())
             return true;
     return false;
@@ -39,31 +46,43 @@ bool ResKeeper::dependencyChanged() const
 
 std::shared_ptr<Res> ResKeeper::actualRes()
 {
-    return m_res->nextRes();
+    if (m_res == nullptr) {
+        try { // catch all possible exceptions while resource creating
+            m_res = m_resFactory->create(m_name);
+            LOGI("Resource %s created",  m_name.c_str());
+        } catch (std::exception& e) {
+            throw std::runtime_error(std::string("Default resource create error.\nDescription:\n") + e.what());
+        }
+        catch (...) {
+            throw std::runtime_error("Default resource create error.");
+        }
+    }
+
+    return m_res->lastRes();
 }
 
-void ResKeeper::updateRes(SafePtr<IResFactory> resFactory, const std::string& name, SafePtr<IFileMonitorManager> monitor)
+void ResKeeper::updateRes()
 {
-    // check res changed
-    m_changed = m_changed || resFactory->changed(name);
-    // check dependencies changed
-    m_changed = m_changed || dependencyChanged();
+    // check res or dependencies changed
+    bool changed = m_resFactory->changed(m_name) || dependencyChanged() || !m_loaded;
+
     // reload if anything is changed
-    if (m_changed) {
-        try { // catch all possible error while resource loading
-            auto loadedRes = resFactory->load(name);
+    if (changed) {
+        try { // swallow all possible exceptions while resource loading
+            auto loadedRes = m_resFactory->load(m_name);
             if (loadedRes != nullptr) {
                 m_res->pushRes(loadedRes);
-                m_changed = false;
+                m_loaded = true;
+                LOGI("Resource %s updated",  m_name.c_str());
+            } else {
+                LOGW("Resource %s update is rejected by factory",  m_name.c_str());
             }
         }
-        catch (exception& e) {
+        catch (std::exception& e) {
             LOGE("Unexpected error during resource loading.\nDescription:\n%s", e.what());
-            m_changed = false;
         }
         catch (...) {
             LOGE("Unexpected error during resource loading.");
-            m_changed = false;
         }
     }
 }
