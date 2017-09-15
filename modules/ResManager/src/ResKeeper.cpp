@@ -12,26 +12,25 @@ namespace flappy {
 ResKeeper::ResKeeper(SafePtr<IResFactory> resFactory, std::string name)
     : m_resFactory (resFactory)
     , m_name(name)
-{}
-
-void ResKeeper::pushRes(std::shared_ptr<Res> res) {
-    if (m_res == nullptr)
-        m_res = res;
-    else
-        m_res->pushRes(res);
+{
+    try { // catch all possible exceptions while resource creating
+        m_res = m_resFactory->create(m_name);
+        LOGI("Resource %s created",  m_name.c_str());
+    } catch (std::exception& e) {
+        throw std::runtime_error(std::string("Default resource create error.\nDescription:\n") + e.what());
+    }
+    catch (...) {
+        throw std::runtime_error("Default resource create error.");
+    }
 }
 
 bool ResKeeper::needRemove()
 {
-    if (m_res == nullptr)
-        return false;
     return (m_res == m_res->nextRes()) && (m_res.use_count() == 1);
 }
 
 void ResKeeper::cleanUpRes()
 {
-    if (m_res == nullptr)
-        return;
     while ((m_res != m_res->nextRes()) && (m_res.use_count() == 1))
         m_res = m_res->nextRes();
 }
@@ -46,18 +45,6 @@ bool ResKeeper::dependencyChanged()
 
 std::shared_ptr<Res> ResKeeper::actualRes()
 {
-    if (m_res == nullptr) {
-        try { // catch all possible exceptions while resource creating
-            m_res = m_resFactory->create(m_name);
-            LOGI("Resource %s created",  m_name.c_str());
-        } catch (std::exception& e) {
-            throw std::runtime_error(std::string("Default resource create error.\nDescription:\n") + e.what());
-        }
-        catch (...) {
-            throw std::runtime_error("Default resource create error.");
-        }
-    }
-
     return m_res->lastRes();
 }
 

@@ -26,7 +26,6 @@ public:
     ResKeeper(ResKeeper&&) = default;
     ResKeeper& operator=(ResKeeper&&) & = default;
 
-    void pushRes(std::shared_ptr<Res> res);
     bool needRemove();
     void cleanUpRes();
     void updateRes();

@@ -52,10 +52,6 @@ public:
     /// @brief Synchronous version of getRes
     std::shared_ptr<ResT> getResSync(const std::string& name);
 
-    /// @brief Set resource with name. Resource will be destroyed in next update
-    /// if it hasn't external links.
-    void setRes(const std::string& name, std::shared_ptr<ResT> res);
-
     /// @brief Bind resource factory, used to load and reload resources.
     /// Resource can't be initlalized and loaded without binded factory.
     /// But it still can be set with setRes() and got with getRes() later.
@@ -97,21 +93,6 @@ std::shared_ptr<ResT> ResManager<ResT>::getResSync(const std::string& name)
         resKeeper.updateRes();
     }
     return std::static_pointer_cast<ResT>(resKeeper.actualRes());
-}
-
-/// @brief Set resource with name. Resource will be destroyed in next update
-/// if it hasn't external links.
-template<typename ResT>
-void ResManager<ResT>::setRes(const std::string& name, std::shared_ptr<ResT> res)
-{
-    auto foundIter = m_resMap.find(name);
-    if (foundIter == m_resMap.end()) {
-        auto resKeeper = ResKeeper(this->template manager<ResFactory<ResT>>(), name);
-        resKeeper.pushRes(res);
-        m_resMap.emplace(name, std::move(resKeeper));
-    } else {
-        foundIter->second.pushRes(res);
-    }
 }
 
 /// @}
