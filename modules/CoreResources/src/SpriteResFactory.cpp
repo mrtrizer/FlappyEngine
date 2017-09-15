@@ -29,23 +29,17 @@ std::shared_ptr<Res> SpriteResFactory::create(const std::string& name) {
     if (splittedName.size() == 2) { // if atlas path, load atlas
         string atlasName = splittedName[0];
         string quadName = splittedName[1];
-        auto atlas = atlasResManager->getResSync(atlasName);
+        auto atlas = atlasResManager->getRes(atlasName);
         auto texture = textureResManager->getRes(atlasName);
         auto quad = make_shared<SpriteRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path
         string quadName = splittedName[0];
-        string textureName = quadName;
         string defaultQuadName = "__full__";
-        string defaultAtlasName = string("atlas_full__") + textureName;
         auto texture = textureResManager->getResSync(quadName);
-        {
-            auto atlas = make_shared<AtlasRes>(); // create atlas dependent from image
-            atlas->addSpriteInfo(defaultQuadName, AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,1.0f}, texture->size()));
-            atlasResManager->setRes(defaultAtlasName, atlas);
-        }
-        auto defaultAtlas = atlasResManager->getRes(defaultAtlasName);
-        auto defaultQuad = make_shared<SpriteRes>(defaultAtlas, texture, defaultQuadName);
+        auto atlas = make_shared<AtlasRes>(); // create atlas dependent from image
+        atlas->addSpriteInfo(defaultQuadName, AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,1.0f}, texture->size()));
+        auto defaultQuad = make_shared<SpriteRes>(atlas, texture, defaultQuadName);
         return defaultQuad;
     }
 }
