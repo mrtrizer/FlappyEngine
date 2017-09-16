@@ -115,8 +115,8 @@ void Sdl2Manager::initGlew(SDL_GLContext) {
     glewExperimental = GL_TRUE;
     GLenum statusCode = glewInit();
     if (statusCode != GLEW_OK) {
-        LOGE("Error: %s", glewGetErrorString(errstatusCode));
-        throw std::runtime_error("Glew initialization failed")
+        LOGE("Error: %s", glewGetErrorString(statusCode));
+        throw std::runtime_error("Glew initialization failed");
     }
     #endif
 }
