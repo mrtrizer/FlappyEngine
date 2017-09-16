@@ -21,9 +21,7 @@ Sdl2Manager::Sdl2Manager()
     addDependency(AppManager::id());
 
     subscribe([this](InitEvent) {
-        if (initSdl2(manager<AppManager>()->args())) {
-            initWindow("FlappyEngine", 600, 600);
-        }
+        initWindow("FlappyEngine", 600, 600);
     });
 }
 
@@ -43,103 +41,138 @@ DeltaTime Sdl2Manager::calcTimeDelta() {
     return timeDelta;
 }
 
-bool Sdl2Manager::initSdl2(std::vector<std::string> args) {
-    auto argv = new char*[args.size()];
-    for (unsigned i = 0; i < args.size(); i++) {
-        argv[i] = new char[args[i].size()];
-        std::strcpy(argv[i],args[i].data());
-    }
-    int argc = int(args.size());
-
-    return true;
+void Sdl2Manager::setAttribute(SDL_GLattr attribute, int value)
+{
+    int statusCode = SDL_GL_SetAttribute(attribute, value);
+    TRACE_SDL_ERRORS;
+    if (statusCode < 0)
+        throw std::runtime_error("Failed to set attribute");
 }
 
 bool Sdl2Manager::setOpenGLAttributes()
 {
     // Set our OpenGL version.
     // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+//    setAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    // 3.2 is part of the modern versions of OpenGL, but most video cards whould be able to run it
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    // I'm using verion 2.1 for now. Version 3.2 is not supported yet
+    setAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    setAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
     // Turn on double buffering with a 24bit Z buffer.
     // You may need to change this to 16 or 32 for your system
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    setAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     return true;
 }
 
-void Sdl2Manager::initWindow(std::string name, int width, int height)
+SDL_Window* Sdl2Manager::createWindow(std::string name, int width, int height)
 {
-    // Initialize SDL's Video subsystem
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        LOGE("Failed to init SDL");
+    // We should set attributes BEFORE initialization of WINDOW
+    setOpenGLAttributes();
 
-    CHECK_SDL_ERROR;
-
-    // Create our window centered at 512x512 resolution
-    m_mainWindow = SDL_CreateWindow(name.c_str(),
+    // Create our window centered
+    auto mainWindow = SDL_CreateWindow(name.c_str(),
                                   SDL_WINDOWPOS_CENTERED,
                                   SDL_WINDOWPOS_CENTERED,
                                   width,
                                   height,
                                   SDL_WINDOW_OPENGL);
 
-    CHECK_SDL_ERROR;
+    TRACE_SDL_ERRORS;
 
     // Check that everything worked out okay
-    if (!m_mainWindow)
-        LOGE("Unable to create window");
+    if (mainWindow == nullptr)
+        throw std::runtime_error("Unable to create window");
+    return mainWindow;
+}
 
-    // Create our opengl context and attach it to our window
-    m_mainContext = SDL_GL_CreateContext(m_mainWindow);
+SDL_GLContext Sdl2Manager::createGLContext(SDL_Window* window) {
+    auto mainContext = SDL_GL_CreateContext(window);
 
-    CHECK_SDL_ERROR;
+    TRACE_SDL_ERRORS;
 
-    setOpenGLAttributes();
+    if (mainContext == NULL)
+        throw std::runtime_error("Unable to create context");
 
-    CHECK_SDL_ERROR;
+    return mainContext;
+}
 
-    // This makes our buffer swap syncronized with the monitor's vertical refresh
-    SDL_GL_SetSwapInterval(1);
+void Sdl2Manager::setSwapInterval(SDL_GLContext, int swapInterval)
+{
+    int statusCode = SDL_GL_SetSwapInterval(swapInterval);
 
-    CHECK_SDL_ERROR;
+    TRACE_SDL_ERRORS;
 
+    if (statusCode == -1)
+        throw std::runtime_error("Swap interval is not supported");
+}
+
+void Sdl2Manager::initGlew(SDL_GLContext) {
     // Init GLEW
     // Apparently, this is needed for Apple. Thanks to Ross Vander for letting me know
     #ifndef __APPLE__
     glewExperimental = GL_TRUE;
-    glewInit();
+    GLenum statusCode = glewInit();
+    if (statusCode != GLEW_OK) {
+        LOGE("Error: %s", glewGetErrorString(errstatusCode));
+        throw std::runtime_error("Glew initialization failed")
+    }
     #endif
+}
+
+void Sdl2Manager::initWindow(std::string name, int width, int height)
+{
+    // Initialize SDL's Video subsystem
+    {
+        int statusCode = SDL_Init(SDL_INIT_VIDEO);
+        TRACE_SDL_ERRORS;
+
+        if (statusCode < 0)
+            throw std::runtime_error("Failed to init SDL");
+    }
+
+    auto mainWindow = createWindow(name, width, height);
+
+    // Create our opengl context and attach it to our window
+    auto glContext = createGLContext(mainWindow);
+
+    // This makes our buffer swap syncronized with the monitor's vertical refresh
+    setSwapInterval(glContext, 1);
+
+    initGlew(glContext);
+
+    m_mainWindow = mainWindow;
+    m_mainContext = glContext;
 }
 
 void Sdl2Manager::cleanup()
 {
     // Delete our OpengL context
     SDL_GL_DeleteContext(m_mainContext);
-
-    CHECK_SDL_ERROR;
+    TRACE_SDL_ERRORS;
 
     // Destroy our window
     SDL_DestroyWindow(m_mainWindow);
-
-    CHECK_SDL_ERROR;
+    TRACE_SDL_ERRORS;
 
     // Shutdown SDL 2
     SDL_Quit();
+    TRACE_SDL_ERRORS;
+}
 
-    CHECK_SDL_ERROR;
+int Sdl2Manager::getGLAttribute(SDL_GLattr attribute) {
+    int result = 0;
+    int statusCode = SDL_GL_GetAttribute(attribute, &result);
+    if (statusCode < 0)
+        throw std::runtime_error("Can't get GL context attribute");
+    return result;
 }
 
 void Sdl2Manager::printSdlGlAttributes()
 {
-    int majorVersion = 0;
-    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &majorVersion);
-
-    int minorVersion = 0;
-    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minorVersion);
+    int majorVersion = getGLAttribute(SDL_GL_CONTEXT_MAJOR_VERSION);
+    int minorVersion = getGLAttribute(SDL_GL_CONTEXT_MINOR_VERSION);
 
     LOGI("SDL GL Context version: %d.%d", majorVersion, minorVersion);
 }
@@ -150,16 +183,17 @@ int Sdl2Manager::startMainLoop()
 
     bool loop = true;
 
+    // Simplest draft implementation of the loop
     while( loop)
     {
-        // If frames were 30, wait 33 ms before running the loop again
-        usleep( 1000000/60 );
+        // Wait before next loop.
+        usleep( 1000000 / m_maxFps );
 
         auto updateEvent = ComponentBase::UpdateEvent(calcTimeDelta());
         entity()->events()->post(updateEvent);
 
         SDL_Event event;
-        while (SDL_PollEvent(&event))
+        while (SDL_PollEvent(&event) == 1)
         {
             if (event.type == SDL_QUIT) {
                 loop = false;
@@ -169,10 +203,9 @@ int Sdl2Manager::startMainLoop()
             }
         }
 
-           // Swap the buffers.
+        // Swap the buffers.
         SDL_GL_SwapWindow(m_mainWindow);
-
-        CHECK_SDL_ERROR;
+        TRACE_SDL_ERRORS;
     }
 
     cleanup();
