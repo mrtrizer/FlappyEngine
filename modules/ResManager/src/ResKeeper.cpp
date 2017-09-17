@@ -17,12 +17,15 @@ ResKeeper::ResKeeper(SafePtr<IResFactory> resFactory, std::string name)
         m_res = m_resFactory->create(m_name);
         LOGI("Resource %s created",  m_name.c_str());
     } catch (std::exception& e) {
+        LOGE("Can't create resource %s", name.c_str());
         throw std::runtime_error(std::string("Default resource create error.\nDescription:\n") + e.what());
     }
     catch (...) {
+        LOGE("Can't create resource %s", name.c_str());
         throw std::runtime_error("Default resource create error.");
     }
 }
+
 
 bool ResKeeper::needRemove()
 {

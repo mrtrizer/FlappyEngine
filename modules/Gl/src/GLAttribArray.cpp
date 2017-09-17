@@ -21,6 +21,7 @@ void GLAttribArray::bind() const {
         glEnableVertexAttribArray(vbo.m_attr);
         CHECK_GL_ERROR;
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        CHECK_GL_ERROR;
     }
 }
 

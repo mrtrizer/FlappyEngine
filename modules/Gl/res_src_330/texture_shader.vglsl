@@ -1,0 +1,12 @@
+#version 330
+
+in vec2 aPosition;
+in vec2 aTexCoord;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+out vec2 vTexCoord;
+
+void main() {
+   vTexCoord = aTexCoord;
+   gl_Position = uPMatrix * uMVMatrix * vec4(aPosition,0,1);
+}
