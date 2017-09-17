@@ -20,8 +20,35 @@ before_install:
  - sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y
  - sudo apt-get update -qq
  - sudo apt-get install -qq qt55base libglew-dev mesa-common-dev freeglut3-dev libxi-dev
+ - git clone https://github.com/KhronosGroup/glslang.git
+ - pushd glslang
+ - git clone https://github.com/google/googletest.git External/googletest
+ - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE Release
+ - sudo make install
+ - popd
+ - git clone https://github.com/KhronosGroup/SPIRV-Cross.git
+ - pushd SPIRV-Cross
+ - make
+ - sudo ln -s `pwd`/spirv-cross /usr/local/bin/spirv-cross
+ - popd
 
 script:
+# Test of shader compilation to SPIR-V
+ - pushd modules/gl/res_src_330
+ - glslangValidator -V -H -S vert -o shape_shader_vert.spv shape_shader.vglsl --aml
+ - spirv-cross ./shape_shader_vert.spv --es
+ - spirv-cross ./shape_shader_vert.spv --hlsl
+ - glslangValidator -V -H -S frag -o shape_shader_frag.spv shape_shader.fglsl --aml
+ - spirv-cross ./shape_shader_frag.spv --es
+ - spirv-cross ./shape_shader_frag.spv --hlsl
+ - glslangValidator -V -H -S vert -o texture_shader_vert.spv texture_shader.vglsl --aml
+ - spirv-cross ./texture_shader_vert.spv --es
+ - spirv-cross ./texture_shader_vert.spv --hlsl
+ - glslangValidator -V -H -S frag -o texture_shader_frag.spv texture_shader.fglsl --aml
+ - spirv-cross ./texture_shader_frag.spv --es
+ - spirv-cross ./texture_shader_frag.spv --hlsl
+ - popd
+
 #Core tests
  - pushd modules/Core/tests
  - flappy build cmake
