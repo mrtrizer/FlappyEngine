@@ -1,9 +1,12 @@
 #version 330
 
+uniform mats {
+    mat4 uMVMatrix;
+    mat4 uPMatrix;
+};
+
 in vec2 aPosition;
 in vec2 aTexCoord;
-uniform mat4 uMVMatrix;
-uniform mat4 uPMatrix;
 out vec2 vTexCoord;
 
 void main() {
