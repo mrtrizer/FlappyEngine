@@ -23,7 +23,7 @@ before_install:
  - git clone https://github.com/KhronosGroup/glslang.git
  - pushd glslang
  - git clone https://github.com/google/googletest.git External/googletest
- - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE Release
+ - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
  - sudo make install
  - popd
  - git clone https://github.com/KhronosGroup/SPIRV-Cross.git
@@ -34,7 +34,7 @@ before_install:
 
 script:
 # Test of shader compilation to SPIR-V
- - pushd modules/gl/res_src_330
+ - pushd modules/Gl/res_src_330
  - glslangValidator -V -H -S vert -o shape_shader_vert.spv shape_shader.vglsl --aml
  - spirv-cross ./shape_shader_vert.spv --es
  - spirv-cross ./shape_shader_vert.spv --hlsl
