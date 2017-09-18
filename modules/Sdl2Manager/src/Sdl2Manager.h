@@ -11,7 +11,6 @@ class Sdl2Manager : public IGLManager
 {
 public:
     Sdl2Manager();
-    int startMainLoop() final;
     void setMaxFps(int fps) { m_maxFps = fps; }
 
     struct Sdl2Event : IEvent {
@@ -23,8 +22,8 @@ private:
     int m_maxFps = 60;
     SDL_Window* m_mainWindow;
     SDL_GLContext m_mainContext;
-    std::chrono::steady_clock::time_point m_lastTime;
 
+    void update();
     DeltaTime calcTimeDelta();
     void resizeWindow(int width, int height);
     void setAttribute(SDL_GLattr attribute, int value);

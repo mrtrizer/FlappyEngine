@@ -10,7 +10,6 @@ class IGLManager : public Manager<IGLManager> {
 public:
     using Manager::Manager;
 
-    virtual int startMainLoop() = 0;
 };
 
 }

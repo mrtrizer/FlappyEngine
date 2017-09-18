@@ -11,6 +11,7 @@
 #include <GLViewManager.h>
 #include <AppManager.h>
 #include <Entity.h>
+#include <ThreadManager.h>
 
 #include "Sdl2Utils.h"
 
@@ -19,10 +20,36 @@ namespace flappy {
 Sdl2Manager::Sdl2Manager()
 {
     addDependency(AppManager::id());
+    addDependency(ThreadManager::id());
 
     subscribe([this](InitEvent) {
         initWindow("FlappyEngine", 600, 600);
     });
+
+    subscribe([this](DeinitEvent) {
+        cleanup();
+    });
+
+    subscribe([this](UpdateEvent) {
+        update();
+    });
+}
+
+void Sdl2Manager::update() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event) == 1)
+    {
+        if (event.type == SDL_QUIT) {
+            manager<ThreadManager>()->quit();
+            break;
+        } else {
+            events()->post(Sdl2Event(event));
+        }
+    }
+
+    // Swap the buffers.
+    SDL_GL_SwapWindow(m_mainWindow);
+    TRACE_SDL_ERRORS;
 }
 
 void Sdl2Manager::resizeWindow(int width, int height) {
@@ -30,15 +57,6 @@ void Sdl2Manager::resizeWindow(int width, int height) {
     onWindowResizeEvent.width = width;
     onWindowResizeEvent.height = height;
     events()->post(onWindowResizeEvent);
-}
-
-DeltaTime Sdl2Manager::calcTimeDelta() {
-    using namespace std::chrono;
-    auto newTime = steady_clock::now();
-    auto diff = newTime - m_lastTime;
-    DeltaTime timeDelta = diff.count(); // delta in seconds
-    m_lastTime = newTime;
-    return timeDelta;
 }
 
 void Sdl2Manager::setAttribute(SDL_GLattr attribute, int value)
@@ -142,6 +160,8 @@ void Sdl2Manager::initWindow(std::string name, int width, int height)
 
     initGlew(glContext);
 
+    printSdlGlAttributes();
+
     m_mainWindow = mainWindow;
     m_mainContext = glContext;
 }
@@ -175,41 +195,6 @@ void Sdl2Manager::printSdlGlAttributes()
     int minorVersion = getGLAttribute(SDL_GL_CONTEXT_MINOR_VERSION);
 
     LOGI("SDL GL Context version: %d.%d", majorVersion, minorVersion);
-}
-
-int Sdl2Manager::startMainLoop()
-{
-    printSdlGlAttributes();
-
-    bool loop = true;
-
-    // Simplest draft implementation of the loop
-    while( loop)
-    {
-        // Wait before next loop.
-        usleep( 1000000 / m_maxFps );
-
-        auto updateEvent = ComponentBase::UpdateEvent(calcTimeDelta());
-        entity()->events()->post(updateEvent);
-
-        SDL_Event event;
-        while (SDL_PollEvent(&event) == 1)
-        {
-            if (event.type == SDL_QUIT) {
-                loop = false;
-                break;
-            } else {
-                events()->post(Sdl2Event(event));
-            }
-        }
-
-        // Swap the buffers.
-        SDL_GL_SwapWindow(m_mainWindow);
-        TRACE_SDL_ERRORS;
-    }
-
-    cleanup();
-    return 0;
 }
 
 } // flappy
