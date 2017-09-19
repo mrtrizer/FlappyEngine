@@ -90,6 +90,8 @@ public:
 
     bool isInitialized() { return m_initializedFlag; }
 
+    virtual bool isReady() const { return true; }
+
 protected:
     bool isManagerInitialized(TypeId<ComponentBase> id) const;
 
@@ -128,7 +130,6 @@ protected:
     SafePtr<ISubscription> subscribe(FuncT&& func);
 
     /// Short method for calling of events()->subscribe(...)
-    template <typename FuncT>
     void unsubscribe(SafePtr<ISubscription> subscription);
 
 private:
@@ -194,11 +195,6 @@ SafePtr<ManagerT> ComponentBase::manager() const
 template <typename FuncT>
 SafePtr<ISubscription> ComponentBase::subscribe(FuncT&& func) {
     return events()->subscribe(std::move(func));
-}
-
-template <typename FuncT>
-void ComponentBase::unsubscribe(SafePtr<ISubscription> subscription) {
-    events()->unsubscribe(subscription);
 }
 
 } // flappy

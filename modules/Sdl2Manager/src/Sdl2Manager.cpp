@@ -12,6 +12,7 @@
 #include <AppManager.h>
 #include <Entity.h>
 #include <ThreadManager.h>
+#include <Application.h>
 
 #include "Sdl2Utils.h"
 
@@ -24,15 +25,25 @@ Sdl2Manager::Sdl2Manager()
 
     subscribe([this](InitEvent) {
         initWindow("FlappyEngine", 600, 600);
+        Application::instance().getThread()->setManager<IGLManager>(selfPointer<Sdl2Manager>());
+
+        m_updateEvent = subscribe([this](UpdateEvent) {
+            update();
+        });
     });
 
     subscribe([this](DeinitEvent) {
         cleanup();
+
+        unsubscribe(m_updateEvent);
     });
 
-    subscribe([this](UpdateEvent) {
-        update();
-    });
+
+}
+
+bool Sdl2Manager::isReady() const {
+    // Can be initialized if another manager was not initialized in current thread
+    return Application::instance().getThread()->getManager<IGLManager>() == nullptr;
 }
 
 void Sdl2Manager::update() {

@@ -38,6 +38,8 @@ bool ComponentBase::isComponentInitialized(TypeId<flappy::ComponentBase> id) con
 }
 
 bool ComponentBase::allDependenciesInitialized() const {
+    if (!isReady())
+        return false;
     for (TypeId<ComponentBase> dependenceTypeId : m_dependenceComponentList)
         if (!isComponentInitialized(dependenceTypeId) && !isManagerInitialized(dependenceTypeId))
             return false;
@@ -120,6 +122,10 @@ void ComponentBase::removedFromEntityInternal()
     if (isInitialized())
         tryDeinit();
     removedFromEntity();
+}
+
+void ComponentBase::unsubscribe(SafePtr<ISubscription> subscription) {
+    events()->unsubscribe(subscription);
 }
 
 } // flappy

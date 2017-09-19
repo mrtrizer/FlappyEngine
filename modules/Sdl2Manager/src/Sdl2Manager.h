@@ -11,6 +11,7 @@ class Sdl2Manager : public IGLManager
 {
 public:
     Sdl2Manager();
+    bool isReady() const;
     void setMaxFps(int fps) { m_maxFps = fps; }
 
     struct Sdl2Event : IEvent {
@@ -22,6 +23,7 @@ private:
     int m_maxFps = 60;
     SDL_Window* m_mainWindow;
     SDL_GLContext m_mainContext;
+    SafePtr<ISubscription> m_updateEvent;
 
     void update();
     DeltaTime calcTimeDelta();

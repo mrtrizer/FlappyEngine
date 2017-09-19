@@ -10,6 +10,7 @@ public:
     void setUpdateRate(int updateRate) { m_updateRate = updateRate; }
     int updateRate() { return m_updateRate; }
     int run() final;
+
 private:
     int m_updateRate = 30;
     std::chrono::steady_clock::time_point m_lastTime;
