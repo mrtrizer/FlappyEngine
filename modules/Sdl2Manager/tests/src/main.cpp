@@ -24,55 +24,58 @@
 #include <SpriteComponent.h>
 #include <FileResFactory.h>
 #include <DesktopThread.h>
+#include <PosixApplication.h>
 
 using namespace flappy;
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    DesktopThread desktopThread;
-    desktopThread.run([argc, argv](SafePtr<Entity> rootEntity) {
+    PosixApplication application;
+    auto currentThread = std::make_shared<DesktopThread>(
+                [argc, argv](SafePtr<Entity> rootEntity) {
 
-        // Sdl2 and render
-        rootEntity->createComponent<Sdl2Manager>();
-        rootEntity->createComponent<ScreenManager>(600, 600);
-        rootEntity->createComponent<AppManager>(argc, argv);
-        rootEntity->createComponent<ResRepositoryManager>("./resources");
-        rootEntity->createComponent<StdFileMonitorManager>();
-        rootEntity->createComponent<StdFileLoadManager>();
-        rootEntity->createComponent<ResManager<AtlasRes>> ();
-        rootEntity->createComponent<FileResFactory<TextRes>>();
-        rootEntity->createComponent<ResManager<TextRes>> ();
-        rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
-        rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
-        rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
-        rootEntity->createComponent<ResManager<TextureRes>> ();
-        rootEntity->createComponent<SpriteResFactory>();
-        rootEntity->createComponent<ResManager<SpriteRes>> ();
-        rootEntity->createComponent<GLShaderResFactory> ();
-        rootEntity->createComponent<ResManager<GLShaderProgram>> ();
-        rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
-
-        // Scene
-        auto sceneEntity = rootEntity->createEntity();
-        sceneEntity->component<SceneManager>()->setMainCamera(sceneEntity->component<CameraComponent>());
-        sceneEntity->component<CameraComponent>()->setSize({600, 600});
-        sceneEntity->component<GLViewManager>();
-        sceneEntity->component<GLRenderElementFactory>();
-
-        // Some rect
-        auto rectEntity = sceneEntity->createEntity();
-        rectEntity->component<MeshComponent>();
-        rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
-
-        // Sprite
-        auto spriteEntity = sceneEntity->createEntity();
-        spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
-        spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
+                        // Sdl2 and render
+                        rootEntity->createComponent<Sdl2Manager>();
+                        rootEntity->createComponent<ScreenManager>(600, 600);
+                        rootEntity->createComponent<AppManager>(argc, argv);
+                        rootEntity->createComponent<ResRepositoryManager>("./resources");
+                        rootEntity->createComponent<StdFileMonitorManager>();
+                        rootEntity->createComponent<StdFileLoadManager>();
+                        rootEntity->createComponent<ResManager<AtlasRes>> ();
+                        rootEntity->createComponent<FileResFactory<TextRes>>();
+                        rootEntity->createComponent<ResManager<TextRes>> ();
+                        rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
+                        rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
+                        rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
+                        rootEntity->createComponent<ResManager<TextureRes>> ();
+                        rootEntity->createComponent<SpriteResFactory>();
+                        rootEntity->createComponent<ResManager<SpriteRes>> ();
+                        rootEntity->createComponent<GLShaderResFactory> ();
+                        rootEntity->createComponent<ResManager<GLShaderProgram>> ();
+                        rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
 
 
-        auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
-        spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                        // Scene
+                        auto sceneEntity = rootEntity->createEntity();
+                        sceneEntity->component<SceneManager>()->setMainCamera(sceneEntity->component<CameraComponent>());
+                        sceneEntity->component<CameraComponent>()->setSize({600, 600});
+                        sceneEntity->component<GLViewManager>();
+                        sceneEntity->component<GLRenderElementFactory>();
 
-    });
+                        // Some rect
+                        auto rectEntity = sceneEntity->createEntity();
+                        rectEntity->component<MeshComponent>();
+                        rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
+
+                        // Sprite
+                        auto spriteEntity = sceneEntity->createEntity();
+                        spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
+                        spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
+
+                        auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
+                        spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+
+                    });
+    application.runThread(currentThread);
 }

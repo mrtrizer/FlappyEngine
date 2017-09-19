@@ -9,7 +9,7 @@ namespace flappy {
 
 class Thread {
 public:
-    virtual int run(std::function<void(SafePtr<Entity>)> initCallback) = 0;
+    virtual int run() = 0;
 };
 
 } //flappy

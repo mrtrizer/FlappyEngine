@@ -6,6 +6,10 @@
 
 namespace flappy {
 
+DesktopThread::DesktopThread(std::function<void(SafePtr<Entity>)> initCallback)
+    : m_initCallback(initCallback)
+{}
+
 DeltaTime DesktopThread::calcTimeDelta() {
     using namespace std::chrono;
     auto newTime = steady_clock::now();
@@ -15,12 +19,12 @@ DeltaTime DesktopThread::calcTimeDelta() {
     return timeDelta;
 }
 
-int DesktopThread::run(std::function<void(SafePtr<Entity>)> initCallback) {
+int DesktopThread::run() {
     auto entity = std::make_shared<Entity>();
 
     auto threadManager = entity->component<ThreadManager>();
 
-    initCallback(entity);
+    m_initCallback(entity);
 
     // Simplest draft implementation of the loop
     while(threadManager->active())
