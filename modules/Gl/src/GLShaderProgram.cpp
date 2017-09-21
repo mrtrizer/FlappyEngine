@@ -1,6 +1,9 @@
 #include <string>
 #include <iostream>
 
+#include <Application.h>
+#include <IGLManager.h>
+
 #include "GLShaderProgram.h"
 #include "GLAttribArray.h"
 
@@ -25,7 +28,18 @@ using namespace std;
 GLShaderProgram::GLShaderProgram(string vertexShaderStr, string fragmentShaderStr)
     : m_vertexShaderStr(vertexShaderStr)
     , m_fragmentShaderStr(fragmentShaderStr)
-{}
+{
+
+    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
+        if (e.id == IGLManager::id())
+            initShader();
+    });
+
+    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+        if (e.id == IGLManager::id())
+            deinitShader();
+    });
+}
 
 GLShaderProgram::~GLShaderProgram() {
     deinitShader();
@@ -51,6 +65,10 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) 
 }
 
 void GLShaderProgram::initShader() {
+    auto glManager = Application::instance().getThread()->getManager<IGLManager>();
+    if (glManager == nullptr || !glManager->isInitialized())
+        return;
+
     deinitShader();
 
     m_vertexShader = loadShader(GL_VERTEX_SHADER, m_vertexShaderStr);
@@ -76,18 +94,21 @@ void GLShaderProgram::initShader() {
 }
 
 void GLShaderProgram::deinitShader() {
-    if (m_program != 0) {
-        if (m_vertexShader != 0) {
-            glDetachShader(m_program, m_vertexShader);
-            CHECK_GL_ERROR;
-        }
-        if (m_fragmentShader != 0) {
-            glDetachShader(m_program, m_fragmentShader);
-            CHECK_GL_ERROR;
-        }
-        glDeleteProgram(m_program);
+    if (m_program == 0)
+        return;
+    if (m_vertexShader != 0) {
+        glDetachShader(m_program, m_vertexShader);
         CHECK_GL_ERROR;
+        m_vertexShader = 0;
     }
+    if (m_fragmentShader != 0) {
+        glDetachShader(m_program, m_fragmentShader);
+        CHECK_GL_ERROR;
+        m_fragmentShader = 0;
+    }
+    glDeleteProgram(m_program);
+    CHECK_GL_ERROR;
+    m_program = 0;
 }
 
 GLShaderProgram::AttribLocation GLShaderProgram::findAttr(const char* name) {

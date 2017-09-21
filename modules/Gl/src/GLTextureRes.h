@@ -27,6 +27,7 @@ private:
     GLuint m_texture = -1;
     std::shared_ptr<IRgbaBitmapRes> m_rgbaBitmapRes;
 
+    void deinitGLTexture();
     void initGLTexture();
 };
 

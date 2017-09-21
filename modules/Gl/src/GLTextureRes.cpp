@@ -2,6 +2,8 @@
 
 #include <Tools.h>
 #include <IRgbaBitmapRes.h>
+#include <Application.h>
+#include <IGLManager.h>
 
 #include "GLTextureRes.h"
 
@@ -10,16 +12,33 @@ namespace flappy {
 GLTextureRes::GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes):
     TextureRes({rgbaBitmapRes->width(), rgbaBitmapRes->height()}),
     m_rgbaBitmapRes(rgbaBitmapRes)
-{}
+{
+    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+        if (e.id == IGLManager::id())
+            deinitGLTexture();
+    });
+}
 
 GLTextureRes::~GLTextureRes() {
-    if (m_texture != -1) {
-        glDeleteTextures(1,&m_texture);
-        CHECK_GL_ERROR;
-    }
+    deinitGLTexture();
+}
+
+void GLTextureRes::deinitGLTexture() {
+    if (m_texture == -1)
+        return;
+
+    glDeleteTextures(1,&m_texture);
+    CHECK_GL_ERROR;
+    m_texture = -1;
 }
 
 void GLTextureRes::initGLTexture() {
+    auto glManager = Application::instance().getThread()->getManager<IGLManager>();
+    if (glManager == nullptr || !glManager->isInitialized())
+        return;
+
+    deinitGLTexture();
+
     const char *bitmapData = m_rgbaBitmapRes->bitmapData();
     int width = m_rgbaBitmapRes->width();
     int height = m_rgbaBitmapRes->height();
@@ -75,9 +94,9 @@ void GLTextureRes::initGLTexture() {
 }
 
 void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
-    if (m_rgbaBitmapRes->nextRes() != nullptr) {
+    if (m_rgbaBitmapRes->nextRes() != m_rgbaBitmapRes) {
         m_rgbaBitmapRes = std::static_pointer_cast<IRgbaBitmapRes>(m_rgbaBitmapRes->nextRes());
-        m_texture = -1;
+        initGLTexture();
     }
     if (m_texture == -1)
         initGLTexture();
