@@ -49,7 +49,7 @@ bool ComponentBase::allDependenciesInitialized() const {
 void ComponentBase::subscribeEvents() {
     subscribe([this](const ManagerAddedEvent& e) {
         m_managers.setById(e.id, e.pointer);
-        if (!isInitialized() && allDependenciesInitialized())
+        if (!isInitialized() && allDependenciesInitialized() && active())
             tryInit();
     });
     subscribe([this](const ManagerRemovedEvent& e) {
@@ -67,7 +67,7 @@ void ComponentBase::subscribeEvents() {
     subscribe([this](const ComponentAddedEvent& e) {
         if (m_components.getById(e.id) == nullptr)
             m_components.setById(e.id, e.pointer);
-        if (!isInitialized() && allDependenciesInitialized())
+        if (!isInitialized() && allDependenciesInitialized() && active())
             tryInit();
     });
     subscribe([this](const ComponentRemovedEvent& e) {
@@ -124,7 +124,7 @@ void ComponentBase::tryDeinit() {
 }
 
 void ComponentBase::addedToEntityInternal() {
-    if (!isInitialized() && allDependenciesInitialized())
+    if (!isInitialized() && allDependenciesInitialized() && active())
         tryInit();
     addedToEntity();
 }
@@ -138,6 +138,16 @@ void ComponentBase::removedFromEntityInternal()
 
 void ComponentBase::unsubscribe(SafePtr<ISubscription> subscription) {
     events()->unsubscribe(subscription);
+}
+
+void ComponentBase::setActive(bool active) {
+    m_active = active;
+    if (isInitialized() && !active) {
+        tryDeinit();
+    }
+    if (!isInitialized() && allDependenciesInitialized() && active) {
+        tryInit();
+    }
 }
 
 } // flappy

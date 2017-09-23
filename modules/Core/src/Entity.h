@@ -32,6 +32,8 @@ public:
     /// Add component to the list of components.
     /// Entity will be set as component's parent.
     /// Method Component::init() will be called.
+    /// Adding of multiple components of the same type
+    /// is not allowed.
     template <typename ComponentT>
     void addComponent(std::shared_ptr<ComponentT> component);
 
@@ -40,6 +42,8 @@ public:
     /// Also can be used to create multiple components of same type in
     /// single entity. Prefere using component<T>() for creation of components with
     /// empty constructors.
+    /// Creating of multiple components of the same type
+    /// is not allowed.
     /// @see findComponent(), components()
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> createComponent(Args ... args);

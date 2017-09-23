@@ -78,7 +78,9 @@ int main(int argc, char *argv[])
                         rootEntity->removeComponent(sdl2Manager);
                         sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
                         rootEntity->removeComponent(sdl2Manager);
-                        rootEntity->createComponent<Sdl2Manager>();
+                        sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
+                        sdl2Manager->setActive(false);
+                        sdl2Manager->setActive(true);
                     });
     application.runThread(currentThread);
 }

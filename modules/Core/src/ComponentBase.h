@@ -90,7 +90,15 @@ public:
 
     bool isInitialized() { return m_initializedFlag; }
 
+    /// Override this method to define special conditions of component initialization
     virtual bool isReady() const { return true; }
+
+    /// Allows you activate or deactivate component. Components are activated by default.
+    /// Deactivated component can't be initialized.
+    void setActive(bool active);
+
+    /// Returns value of active field. Components are activated by default.
+    bool active() { return m_active; }
 
 protected:
     bool isManagerInitialized(TypeId<ComponentBase> id) const;
@@ -136,6 +144,7 @@ private:
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
     bool m_initializedFlag = false;
+    bool m_active = true;
     bool m_firstUpdate = true;
     SafePtr<Entity> m_entity;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
