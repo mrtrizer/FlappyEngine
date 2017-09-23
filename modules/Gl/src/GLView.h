@@ -4,7 +4,9 @@
 
 #include <View.h>
 #include <ResManager.h>
+
 #include "GLShaderProgram.h"
+#include "IGLManager.h"
 
 namespace flappy {
 
@@ -23,6 +25,7 @@ public:
     GLView()
     {
         addDependency(ResManager<GLShaderProgram>::id());
+        addDependency(IGLManager::id());
 
         subscribe([this](InitEvent) {
             setShader(manager<ResManager<GLShaderProgram>>()->getRes("shape_shader"));

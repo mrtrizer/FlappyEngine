@@ -36,6 +36,8 @@ Sdl2Manager::Sdl2Manager()
         cleanup();
 
         unsubscribe(m_updateEvent);
+
+        //Application::instance().getThread()->setManager<IGLManager>(SafePtr<Sdl2Manager>());
     });
 
 
@@ -43,7 +45,8 @@ Sdl2Manager::Sdl2Manager()
 
 bool Sdl2Manager::isReady() const {
     // Can be initialized if another manager was not initialized in current thread
-    return Application::instance().getThread()->getManager<IGLManager>() == nullptr;
+    //return Application::instance().getThread()->getManager<IGLManager>() == nullptr;
+    return true;
 }
 
 void Sdl2Manager::update() {

@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
                 [argc, argv](SafePtr<Entity> rootEntity) {
 
                         // Sdl2 and render
-                        //auto sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
+                        auto sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
                         rootEntity->createComponent<ScreenManager>(600, 600);
                         rootEntity->createComponent<AppManager>(argc, argv);
                         rootEntity->createComponent<ResRepositoryManager>("./resources");
@@ -75,7 +75,9 @@ int main(int argc, char *argv[])
                         auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
                         spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
-                        //rootEntity->removeComponent(sdl2Manager);
+                        rootEntity->removeComponent(sdl2Manager);
+                        sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
+                        rootEntity->removeComponent(sdl2Manager);
                         rootEntity->createComponent<Sdl2Manager>();
                     });
     application.runThread(currentThread);

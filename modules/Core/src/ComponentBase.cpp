@@ -53,9 +53,16 @@ void ComponentBase::subscribeEvents() {
             tryInit();
     });
     subscribe([this](const ManagerRemovedEvent& e) {
+        auto removedManager = m_managers.getById(e.id);
+        // I remove manager from m_managers before calling of allDependenciesInitialized()
         m_managers.setById(e.id, SafePtr<ManagerBase>());
-        if (isInitialized() && !allDependenciesInitialized())
+        if (isInitialized() && !allDependenciesInitialized()) {
+            // Then I set it back to give oppotunity to use this manager during deinitialization
+            m_managers.setById(e.id, removedManager);
             tryDeinit();
+            // And then I totally remove it from the m_manager list
+            m_managers.setById(e.id, SafePtr<ManagerBase>());
+        }
     });
     subscribe([this](const ComponentAddedEvent& e) {
         if (m_components.getById(e.id) == nullptr)
@@ -64,9 +71,14 @@ void ComponentBase::subscribeEvents() {
             tryInit();
     });
     subscribe([this](const ComponentRemovedEvent& e) {
+        // See comments for ManagerRemovedEvent handler
+        auto removedComponent = m_components.getById(e.id);
         m_components.setById(e.id, SafePtr<ComponentBase>());
-        if (isInitialized() && !allDependenciesInitialized())
+        if (isInitialized() && !allDependenciesInitialized()) {
+            m_components.setById(e.id, removedComponent);
             tryDeinit();
+            m_components.setById(e.id, SafePtr<ManagerBase>());
+        }
     });
 }
 
