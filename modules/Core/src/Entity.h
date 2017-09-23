@@ -168,6 +168,9 @@ void Entity::addComponent(std::shared_ptr<ComponentT> component)
 {
     static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
+    if (findComponent<ComponentT>() != nullptr)
+        throw std::runtime_error("Multiple components of the same type can't be attached to an entity.");
+
     if (component->entity() != nullptr)
         throw std::runtime_error("Can't add a component to several entities.");
     component->setParentEntity(shared_from_this());
