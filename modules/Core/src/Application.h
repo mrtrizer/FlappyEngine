@@ -6,6 +6,8 @@
 
 namespace flappy {
 
+class Entity;
+
 /// The main purpose of an Application class in
 /// thread managment according to platfrom implementation
 class Application {
@@ -22,10 +24,13 @@ public:
 
     static Application& instance();
 
+    SafePtr<Entity> rootEntity() { return m_rootEntity; }
+
 private:
     virtual void setThread(std::shared_ptr<Thread> thread) = 0;
 
     static Application* s_instance;
+    std::shared_ptr<Entity> m_rootEntity;
 };
 
 } //flappy

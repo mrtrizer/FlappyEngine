@@ -3,6 +3,7 @@
 
 #include <Application.h>
 #include <IGLManager.h>
+#include <Entity.h>
 
 #include "GLShaderProgram.h"
 #include "GLAttribArray.h"
@@ -30,12 +31,12 @@ GLShaderProgram::GLShaderProgram(string vertexShaderStr, string fragmentShaderSt
     , m_fragmentShaderStr(fragmentShaderStr)
 {
 
-    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
+    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
         if (e.id == IGLManager::id())
             initShader();
     });
 
-    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitShader();
     });
@@ -65,8 +66,8 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) 
 }
 
 void GLShaderProgram::initShader() {
-    auto glManager = Application::instance().getThread()->getManager<IGLManager>();
-    if (glManager == nullptr || !glManager->isInitialized())
+    auto glManager = Application::instance().rootEntity()->manager<IGLManager>();
+    if (glManager == nullptr)
         return;
 
     deinitShader();

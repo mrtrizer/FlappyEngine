@@ -4,6 +4,7 @@
 #include <IRgbaBitmapRes.h>
 #include <Application.h>
 #include <IGLManager.h>
+#include <Entity.h>
 
 #include "GLTextureRes.h"
 
@@ -13,7 +14,7 @@ GLTextureRes::GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes):
     TextureRes({rgbaBitmapRes->width(), rgbaBitmapRes->height()}),
     m_rgbaBitmapRes(rgbaBitmapRes)
 {
-    Application::instance().getThread()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitGLTexture();
     });
@@ -33,8 +34,8 @@ void GLTextureRes::deinitGLTexture() {
 }
 
 void GLTextureRes::initGLTexture() {
-    auto glManager = Application::instance().getThread()->getManager<IGLManager>();
-    if (glManager == nullptr || !glManager->isInitialized())
+    auto glManager = Application::instance().rootEntity()->manager<IGLManager>();
+    if (glManager == nullptr)
         return;
 
     deinitGLTexture();

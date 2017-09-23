@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include <ThreadManager.h>
+#include <Entity.h>
 
 namespace flappy {
 
@@ -19,8 +20,7 @@ DeltaTime DesktopThread::calcTimeDelta() {
     return timeDelta;
 }
 
-int DesktopThread::run() {
-    auto entity = std::make_shared<Entity>();
+int DesktopThread::run(SafePtr<Entity> entity) {
 
     auto threadManager = entity->component<ThreadManager>();
 

@@ -1,10 +1,14 @@
 #include "Application.h"
 
+#include <Entity.h>
+
 namespace flappy {
 
 Application* Application::s_instance = nullptr;
 
-Application::Application() {
+Application::Application()
+    : m_rootEntity(std::make_shared<Entity>())
+{
     if (s_instance != nullptr)
         throw std::runtime_error("Can't create multiple Application instancies");
     s_instance = this;
@@ -16,7 +20,7 @@ Application::~Application() {
 
 void Application::runThread(std::shared_ptr<Thread> thread) {
     setThread(thread);
-    thread->run();
+    thread->run(rootEntity());
 }
 
 Application& Application::instance() {

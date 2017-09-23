@@ -25,7 +25,6 @@ Sdl2Manager::Sdl2Manager()
 
     subscribe([this](InitEvent) {
         initWindow("FlappyEngine", 600, 600);
-        Application::instance().getThread()->setManager<IGLManager>(selfPointer<Sdl2Manager>());
 
         m_updateEvent = subscribe([this](UpdateEvent) {
             update();
@@ -36,17 +35,12 @@ Sdl2Manager::Sdl2Manager()
         cleanup();
 
         unsubscribe(m_updateEvent);
-
-        //Application::instance().getThread()->setManager<IGLManager>(SafePtr<Sdl2Manager>());
     });
-
 
 }
 
 bool Sdl2Manager::isReady() const {
-    // Can be initialized if another manager was not initialized in current thread
-    //return Application::instance().getThread()->getManager<IGLManager>() == nullptr;
-    return true;
+    return entity()->parent() == nullptr;
 }
 
 void Sdl2Manager::update() {
