@@ -94,7 +94,7 @@ void GLTextureRes::initGLTexture() {
 
 }
 
-void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
+void GLTextureRes::bind(GLShaderRes::UniformLocation uniformLoc, int n) {
     if (m_rgbaBitmapRes->nextRes() != m_rgbaBitmapRes) {
         m_rgbaBitmapRes = m_rgbaBitmapRes->lastRes();
         initGLTexture();

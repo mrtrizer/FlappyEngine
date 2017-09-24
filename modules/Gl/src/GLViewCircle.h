@@ -12,7 +12,7 @@ public:
 
 private:
     GLAttribArray m_circle;
-    std::shared_ptr<GLShaderProgram> m_glShaderProgramRes;
+    std::shared_ptr<GLShaderRes> m_glShaderProgramRes;
     int m_vertexCount = 32;
 
     std::vector<GLTools::Vertex> circleTriangleFan(float r, int vertexCount);

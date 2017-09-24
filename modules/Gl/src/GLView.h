@@ -24,23 +24,23 @@ class GLView: public View
 public:
     GLView()
     {
-        addDependency(ResManager<GLShaderProgram>::id());
+        addDependency(ResManager<GLShaderRes>::id());
         addDependency(IGLManager::id());
 
         subscribe([this](InitEvent) {
-            setShader(manager<ResManager<GLShaderProgram>>()->getRes("shape_shader"));
+            setShader(manager<ResManager<GLShaderRes>>()->getRes("shape_shader"));
         });
     }
 
-    void setShader(std::shared_ptr<GLShaderProgram> shaderRes) { m_shaderRes = shaderRes; }
-    std::shared_ptr<GLShaderProgram> shader() {
+    void setShader(std::shared_ptr<GLShaderRes> shaderRes) { m_shaderRes = shaderRes; }
+    std::shared_ptr<GLShaderRes> shader() {
         if (m_shaderRes->nextRes() != m_shaderRes)
             m_shaderRes = m_shaderRes->lastRes();
         return m_shaderRes;
     }
 
 private:
-    std::shared_ptr<GLShaderProgram> m_shaderRes;
+    std::shared_ptr<GLShaderRes> m_shaderRes;
 };
 
 } // flappy

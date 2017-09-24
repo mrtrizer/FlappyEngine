@@ -20,7 +20,7 @@ class GLTextureRes: public TextureRes {
 public:
     GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
     ~GLTextureRes();
-    void bind(GLShaderProgram::UniformLocation uniformLoc, int n);
+    void bind(GLShaderRes::UniformLocation uniformLoc, int n);
     std::list<std::shared_ptr<ResBase> > dependencyList();
 
 private:

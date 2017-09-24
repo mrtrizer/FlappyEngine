@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<SpriteResFactory>();
                         rootEntity->createComponent<ResManager<SpriteRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
-                        rootEntity->createComponent<ResManager<GLShaderProgram>> ();
+                        rootEntity->createComponent<ResManager<GLShaderRes>> ();
                         rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
 
                         // Scene

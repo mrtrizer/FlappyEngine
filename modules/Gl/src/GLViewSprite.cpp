@@ -24,7 +24,7 @@ GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     addDependency(SpriteComponent::id());
 
     subscribe([this](InitEvent) {
-        setShader(manager<ResManager<GLShaderProgram>>()->getRes("texture_shader"));
+        setShader(manager<ResManager<GLShaderRes>>()->getRes("texture_shader"));
     });
 }
 

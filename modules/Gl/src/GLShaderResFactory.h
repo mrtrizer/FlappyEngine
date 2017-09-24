@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class GLShaderResFactory: public ResFactory<GLShaderProgram> {
+class GLShaderResFactory: public ResFactory<GLShaderRes> {
 public:
     GLShaderResFactory();
 

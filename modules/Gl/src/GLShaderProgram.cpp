@@ -26,7 +26,7 @@ using namespace std;
 /// Takes GLSL sources from nullterm strings.
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
-GLShaderProgram::GLShaderProgram(string vertexShaderStr, string fragmentShaderStr)
+GLShaderRes::GLShaderRes(string vertexShaderStr, string fragmentShaderStr)
     : m_vertexShaderStr(vertexShaderStr)
     , m_fragmentShaderStr(fragmentShaderStr)
 {
@@ -42,11 +42,11 @@ GLShaderProgram::GLShaderProgram(string vertexShaderStr, string fragmentShaderSt
     });
 }
 
-GLShaderProgram::~GLShaderProgram() {
+GLShaderRes::~GLShaderRes() {
     deinitShader();
 }
 
-GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) {
+GLuint GLShaderRes::loadShader(ShaderType shaderType, const string& source) {
     GLuint shader = glCreateShader(shaderType);
     if (shader == 0)
         throw std::runtime_error("Shader creation error");
@@ -65,7 +65,7 @@ GLuint GLShaderProgram::loadShader(ShaderType shaderType, const string& source) 
     return shader;
 }
 
-void GLShaderProgram::initShader() {
+void GLShaderRes::initShader() {
     auto glManager = Application::instance().rootEntity()->manager<IGLManager>();
     if (glManager == nullptr)
         return;
@@ -94,7 +94,7 @@ void GLShaderProgram::initShader() {
     }
 }
 
-void GLShaderProgram::deinitShader() {
+void GLShaderRes::deinitShader() {
     if (m_program == 0)
         return;
     if (m_vertexShader != 0) {
@@ -112,29 +112,29 @@ void GLShaderProgram::deinitShader() {
     m_program = 0;
 }
 
-GLShaderProgram::AttribLocation GLShaderProgram::findAttr(const char* name) {
+GLShaderRes::AttribLocation GLShaderRes::findAttr(const char* name) {
     AttribLocation result = glGetAttribLocation(program(), name);
     CHECK_GL_ERROR;
     return result;
 }
 
-GLShaderProgram::UniformLocation GLShaderProgram::findUniform(const char* name) {
+GLShaderRes::UniformLocation GLShaderRes::findUniform(const char* name) {
     UniformLocation result = glGetUniformLocation(program(), name);
     CHECK_GL_ERROR;
     return result;
 }
 
-GLShaderProgram::Program GLShaderProgram::program() const
+GLShaderRes::Program GLShaderRes::program() const
 {
     return m_program;
 }
 
-void GLShaderProgram::bind() {
+void GLShaderRes::bind() {
     glUseProgram(program());
     CHECK_GL_ERROR;
 }
 
-void GLShaderProgram::unbind() const {
+void GLShaderRes::unbind() const {
     glUseProgram(0);
 }
 
@@ -142,7 +142,7 @@ void GLShaderProgram::unbind() const {
 /// @param attribArray VBOs
 /// @param uniformFunc Define uniforms here with glUniform...() methods.
 /// @see AttribArray
-void GLShaderProgram::render(const GLAttribArray & attribArray, function<void()> uniformFunc = [](){}) {
+void GLShaderRes::render(const GLAttribArray & attribArray, function<void()> uniformFunc = [](){}) {
     bind();
     uniformFunc();
     attribArray.bind();

@@ -12,14 +12,14 @@ namespace flappy {
 
 class GLAttribArray;
 
-class GLShaderProgram: public Res<GLShaderProgram> {
+class GLShaderRes: public Res<GLShaderRes> {
 public:
     using Program = GLuint;
     using AttribLocation = GLint;
     using UniformLocation = GLint;
 
-    GLShaderProgram(std::string vertexShaderRes, std::string fragmentShaderStr);
-    ~GLShaderProgram();
+    GLShaderRes(std::string vertexShaderRes, std::string fragmentShaderStr);
+    ~GLShaderRes();
     void render(const GLAttribArray &, std::function<void()>);
     AttribLocation findAttr(const char*);
     UniformLocation findUniform(const char*);
