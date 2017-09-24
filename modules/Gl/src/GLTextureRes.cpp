@@ -96,7 +96,7 @@ void GLTextureRes::initGLTexture() {
 
 void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
     if (m_rgbaBitmapRes->nextRes() != m_rgbaBitmapRes) {
-        m_rgbaBitmapRes = std::static_pointer_cast<IRgbaBitmapRes>(m_rgbaBitmapRes->nextRes());
+        m_rgbaBitmapRes = m_rgbaBitmapRes->lastRes();
         initGLTexture();
     }
     if (m_texture == -1)
@@ -110,8 +110,8 @@ void GLTextureRes::bind(GLShaderProgram::UniformLocation uniformLoc, int n) {
     CHECK_GL_ERROR;
 }
 
-std::list<std::shared_ptr<Res>> GLTextureRes::dependencyList() {
-    return std::list<std::shared_ptr<Res>>{m_rgbaBitmapRes};
+std::list<std::shared_ptr<ResBase>> GLTextureRes::dependencyList() {
+    return std::list<std::shared_ptr<ResBase>>{m_rgbaBitmapRes};
 }
 
 } // flappy

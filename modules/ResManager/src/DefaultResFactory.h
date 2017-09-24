@@ -38,11 +38,11 @@ public:
         addDependencies<Empty, DependT...>();
     }
 
-    virtual std::shared_ptr<Res> load(const std::string& name) final {
+    virtual std::shared_ptr<ResBase> load(const std::string& name) final {
         return create(name);
     }
 
-    virtual std::shared_ptr<Res> create(const std::string& name) final {
+    virtual std::shared_ptr<ResBase> create(const std::string& name) final {
         return std::make_shared<ResT>(this->template manager<ResManager<DependT>>()->template getRes(name) ...);
     }
 };

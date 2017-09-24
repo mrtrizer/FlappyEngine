@@ -18,8 +18,8 @@ public:
     /// There are two name formats avaliable:
     /// Path in atlas: "atlas_name:sprite_name"
     /// Image file name: "file_name"
-    std::shared_ptr<Res> load(const std::string& name) final;
-    std::shared_ptr<Res> create(const std::string& name) final;
+    std::shared_ptr<ResBase> load(const std::string& name) final;
+    std::shared_ptr<ResBase> create(const std::string& name) final;
 
 private:
     std::vector<std::string> split(const std::string &s, char delimiter);

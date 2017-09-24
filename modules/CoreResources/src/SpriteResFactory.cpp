@@ -17,11 +17,11 @@ SpriteResFactory::SpriteResFactory() {
     addDependency(ResManager<AtlasRes>::id());
 }
 
-std::shared_ptr<Res> SpriteResFactory::load(const std::string& name)  {
+std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name)  {
     return create(name);
 }
 
-std::shared_ptr<Res> SpriteResFactory::create(const std::string& name) {
+std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
     auto splittedName = split(name, ':');
     auto textureResManager = manager<ResManager<TextureRes>>();
     auto atlasResManager = manager<ResManager<AtlasRes>>();

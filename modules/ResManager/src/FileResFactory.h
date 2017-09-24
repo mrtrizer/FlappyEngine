@@ -27,8 +27,8 @@ class FileResFactory : public ResFactory<ResT>
 public:
     FileResFactory(std::string path = "", std::string ext = "");
 
-    std::shared_ptr<Res> load(const std::string& name) final;
-    std::shared_ptr<Res> create(const std::string& name) final;
+    std::shared_ptr<ResBase> load(const std::string& name) final;
+    std::shared_ptr<ResBase> create(const std::string& name) final;
     bool changed(const std::string& name) final;
 
 private:
@@ -47,7 +47,7 @@ FileResFactory<ResT>::FileResFactory(std::string path, std::string ext):
 }
 
 template <typename ResT>
-std::shared_ptr<Res> FileResFactory<ResT>::load(const std::string& name) {
+std::shared_ptr<ResBase> FileResFactory<ResT>::load(const std::string& name) {
     auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
     auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
     auto fileLoadManager = this->template manager<IFileLoadManager>();
@@ -55,7 +55,7 @@ std::shared_ptr<Res> FileResFactory<ResT>::load(const std::string& name) {
 }
 
 template <typename ResT>
-std::shared_ptr<Res> FileResFactory<ResT>::create(const std::string& name) {
+std::shared_ptr<ResBase> FileResFactory<ResT>::create(const std::string& name) {
     return std::make_shared<TextRes>("");
 }
 

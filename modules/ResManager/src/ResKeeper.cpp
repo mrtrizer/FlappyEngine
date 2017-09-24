@@ -29,13 +29,13 @@ ResKeeper::ResKeeper(SafePtr<IResFactory> resFactory, std::string name)
 
 bool ResKeeper::needRemove()
 {
-    return (m_res == m_res->nextRes()) && (m_res.use_count() == 1);
+    return (m_res == m_res->nextResBase()) && (m_res.use_count() == 1);
 }
 
 void ResKeeper::cleanUpRes()
 {
-    while ((m_res != m_res->nextRes()) && (m_res.use_count() == 1))
-        m_res = m_res->nextRes();
+    while ((m_res != m_res->nextResBase()) && (m_res.use_count() == 1))
+        m_res = m_res->nextResBase();
 }
 
 bool ResKeeper::dependencyChanged()
@@ -46,9 +46,9 @@ bool ResKeeper::dependencyChanged()
     return false;
 }
 
-std::shared_ptr<Res> ResKeeper::actualRes()
+std::shared_ptr<ResBase> ResKeeper::actualRes()
 {
-    return m_res->lastRes();
+    return m_res->lastResBase();
 }
 
 void ResKeeper::updateRes()

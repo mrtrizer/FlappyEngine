@@ -19,11 +19,11 @@ GLShaderResFactory::GLShaderResFactory() {
     addDependency(ResRepositoryManager::id());
 }
 
-std::shared_ptr<Res> GLShaderResFactory::load(const std::string& name)  {
+std::shared_ptr<ResBase> GLShaderResFactory::load(const std::string& name)  {
     return create(name);
 }
 
-std::shared_ptr<Res> GLShaderResFactory::create(const std::string& name) {
+std::shared_ptr<ResBase> GLShaderResFactory::create(const std::string& name) {
     auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
 
     auto vertexShaderFileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["vertex"]);

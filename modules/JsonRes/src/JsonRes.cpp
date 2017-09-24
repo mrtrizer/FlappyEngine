@@ -8,7 +8,7 @@ JsonRes::JsonRes(std::shared_ptr<TextRes> textRes):
     setFromStr(textRes->text());
 }
 
-std::list<std::shared_ptr<Res>> JsonRes::dependencyList() const {
+std::list<std::shared_ptr<ResBase> > JsonRes::dependencyList() const {
     return {m_textRes};
 }
 

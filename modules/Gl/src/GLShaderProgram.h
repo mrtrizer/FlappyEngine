@@ -12,7 +12,7 @@ namespace flappy {
 
 class GLAttribArray;
 
-class GLShaderProgram: public Res {
+class GLShaderProgram: public Res<GLShaderProgram> {
 public:
     using Program = GLuint;
     using AttribLocation = GLint;

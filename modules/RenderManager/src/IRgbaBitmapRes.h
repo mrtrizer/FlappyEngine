@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class IRgbaBitmapRes: public Res
+class IRgbaBitmapRes: public Res<IRgbaBitmapRes>
 {
 public:
     virtual char* bitmapData() = 0;

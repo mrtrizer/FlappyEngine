@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class Res;
+class ResBase;
 class Entity;
 
 /// @addtogroup ResManager
@@ -16,11 +16,11 @@ class Entity;
 
 class IResFactory {
 public:
-    virtual std::shared_ptr<Res> load(const std::string& resInfo) = 0;
-    virtual std::shared_ptr<Res> create(const std::string& name) = 0;
+    virtual std::shared_ptr<ResBase> load(const std::string& resInfo) = 0;
+    virtual std::shared_ptr<ResBase> create(const std::string& name) = 0;
     virtual bool changed(const std::string& name) { return false; }
-    virtual void init(std::shared_ptr<Res> res) {}
-    virtual void deinit(std::shared_ptr<Res> res) {}
+    virtual void init(std::shared_ptr<ResBase> res) {}
+    virtual void deinit(std::shared_ptr<ResBase> res) {}
 };
 
 /// Base class for all resource factories.

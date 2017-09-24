@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-class TextRes: public Res {
+class TextRes: public Res<TextRes> {
 public:
     TextRes(std::string&& text): m_text(std::move(text))
     {}

@@ -19,7 +19,7 @@ using namespace std;
 
 namespace {
 
-class TestRes: public Res {
+class TestRes: public Res<TestRes> {
 public:
     TestRes(std::string testStr)
         :testStr(testStr)

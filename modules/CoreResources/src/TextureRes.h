@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class TextureRes: public Res {
+class TextureRes: public Res<TextureRes> {
 public:
     struct UV {
         float u;

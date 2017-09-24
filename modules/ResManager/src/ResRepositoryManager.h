@@ -14,7 +14,6 @@ namespace flappy {
 /// @addtogroup ResManager
 /// @{
 
-class Res;
 class IResFactory;
 class IFileMonitorManager;
 

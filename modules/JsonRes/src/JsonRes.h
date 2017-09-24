@@ -6,13 +6,13 @@
 
 namespace flappy {
 
-class JsonRes: public Res
+class JsonRes: public Res<JsonRes>
 {
 public:
     JsonRes() = default;
     JsonRes(std::shared_ptr<TextRes> textRes);
 
-    std::list<std::shared_ptr<Res>> dependencyList() const final;
+    std::list<std::shared_ptr<ResBase>> dependencyList() const final;
     void setFromStr(const std::string& jsonStr);
     std::string toStr() const;
     nlohmann::json& json();

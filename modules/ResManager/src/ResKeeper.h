@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-class Res;
+class ResBase;
 class Entity;
 class IFileMonitorManager;
 class IResFactory;
@@ -30,12 +30,12 @@ public:
     void cleanUpRes();
     void updateRes();
     bool dependencyChanged();
-    std::shared_ptr<Res> actualRes();
+    std::shared_ptr<ResBase> actualRes();
 
 private:
     SafePtr<IResFactory> m_resFactory;
     std::string m_name;
-    std::shared_ptr<Res> m_res;
+    std::shared_ptr<ResBase> m_res;
     bool m_loaded = false;
 };
 

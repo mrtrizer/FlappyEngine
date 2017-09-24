@@ -21,7 +21,7 @@ public:
     GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
     ~GLTextureRes();
     void bind(GLShaderProgram::UniformLocation uniformLoc, int n);
-    std::list<std::shared_ptr<Res>> dependencyList();
+    std::list<std::shared_ptr<ResBase> > dependencyList();
 
 private:
     GLuint m_texture = -1;
