@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Manager.h>
+#include <string>
 
 namespace flappy {
 
-class IConsoleManager : public Manager<IConsoleManager> {
+class IConsoleManager{
 public:
     virtual void print(std::string str) = 0;
 };

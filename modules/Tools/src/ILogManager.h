@@ -1,12 +1,13 @@
 #pragma once
 
-#include <Manager.h>
+#include <cstdarg>
 
 namespace flappy {
 
-class ILogManager : public Manager<ILogManager> {
+class ILogManager {
 public:
     virtual void log(const char* format, ...) = 0;
+    virtual void logVArg(const char* format, va_list arglist) = 0;
 };
 
 } // flappy

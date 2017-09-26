@@ -10,44 +10,9 @@
 
 #include <glm/vec2.hpp>
 
+#include <Debug.h>
+
 namespace flappy {
-
-inline void LOGI_default(const char* s) {
-    while (*s) {
-        if (*s == '%' && *++s != '%')
-            return;
-        std::cout << *s++;
-    }
-}
-
-template<typename T, typename... Args>
-void LOGI_default(const char* s, const T& value, const Args&... args) {
-    while (*s) {
-        if (*s == '%' && *++s != '%') {
-            std::cout << value;
-            return LOGI_default(++s, args...);
-        }
-        std::cout << *s++;
-    }
-}
-
-#ifndef ANDROID_JNI
-
-#define LOGI(...) std::printf("\x1b[32m [INFO] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
-#define LOGW(...) std::printf("\x1b[33m [WARNING] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
-#define LOGE(...) std::printf("\x1b[31m [ERROR] \x1b[0m"), std::printf(__VA_ARGS__), std::printf("\n")
-
-#else
-#include <jni.h>
-#include <android/log.h>
-#define  LOG_TAG    "libgl2jni"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGW(...)  __android_log_print(ANDROID_LOG_WARNING,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-#endif
-
-#define VOID_VALUE void()
-#define ERROR_MSG(value, ...) LOGE(__VA_ARGS__), LOGE("%s:%d\n", __FILE__, __LINE__), value;
 
 template <typename Type>
 std::string typeName() {
