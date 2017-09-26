@@ -1,6 +1,7 @@
 #include "DefaultLogManager.h"
 
 #include <cstdio>
+#include <cstdarg>
 
 #include "IConsoleManager.h"
 
