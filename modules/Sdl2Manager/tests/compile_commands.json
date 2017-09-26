@@ -116,6 +116,11 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
+  "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
   "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResKeeper.cpp"
 },

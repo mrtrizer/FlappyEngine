@@ -82,5 +82,5 @@ int main(int argc, char *argv[])
                         sdl2Manager->setActive(false);
                         sdl2Manager->setActive(true);
                     });
-    application.runThread(currentThread);
+    return application.runThread(currentThread);
 }
