@@ -11,7 +11,7 @@
 #include <ScreenManager.h>
 #include <IGLManager.h>
 
-#include "GLShaderProgram.h"
+#include "GLShaderRes.h"
 #include "GLTools.h"
 #include "GLAttribArray.h"
 

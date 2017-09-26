@@ -1,3 +1,5 @@
+#include "GLTextureRes.h"
+
 #include <cstring>
 
 #include <Tools.h>
@@ -6,15 +8,14 @@
 #include <IGLManager.h>
 #include <Entity.h>
 
-#include "GLTextureRes.h"
-
 namespace flappy {
 
-GLTextureRes::GLTextureRes(std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes):
+GLTextureRes::GLTextureRes(SafePtr<Entity> rootEntity, std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes):
     TextureRes({rgbaBitmapRes->width(), rgbaBitmapRes->height()}),
+    m_rootEntity(rootEntity),
     m_rgbaBitmapRes(rgbaBitmapRes)
 {
-    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitGLTexture();
     });
@@ -34,7 +35,7 @@ void GLTextureRes::deinitGLTexture() {
 }
 
 void GLTextureRes::initGLTexture() {
-    auto glManager = Application::instance().rootEntity()->manager<IGLManager>();
+    auto glManager = m_rootEntity->manager<IGLManager>();
     if (glManager == nullptr)
         return;
 

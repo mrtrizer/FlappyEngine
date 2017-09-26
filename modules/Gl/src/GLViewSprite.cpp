@@ -1,7 +1,7 @@
 #include "GLViewSprite.h"
 
 #include <glm/gtc/type_ptr.hpp>
-#include <GLShaderProgram.h>
+#include <GLShaderRes.h>
 #include <GLTextureRes.h>
 #include <ResManager.h>
 #include <SpriteRes.h>

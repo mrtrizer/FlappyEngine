@@ -19,7 +19,7 @@ public:
     Application(Application&&) = delete;
     Application& operator=(Application&&) & = delete;
 
-    void runThread(std::shared_ptr<Thread> thread);
+    int runThread(std::shared_ptr<Thread> thread);
     virtual SafePtr<Thread> getThread() = 0;
 
     static Application& instance();

@@ -4,17 +4,16 @@
 #include <vector>
 
 #include <IResFactory.h>
-#include <GLShaderRes.h>
+#include <GLTextureRes.h>
 
 namespace flappy {
 
-class GLShaderResFactory: public ResFactory<GLShaderRes> {
+class GLTextureResFactory: public ResFactory<TextureRes> {
 public:
-    GLShaderResFactory();
+    GLTextureResFactory();
 
     std::shared_ptr<ResBase> load(const std::string& name) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;
-    bool changed(const std::string& name) final;
 };
 
 } // flappy

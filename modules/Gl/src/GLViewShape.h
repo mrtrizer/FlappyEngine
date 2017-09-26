@@ -4,7 +4,7 @@
 
 // FIXME: Strange includes
 #include <GLView.h>
-#include <GLShaderProgram.h>
+#include <GLShaderRes.h>
 #include <GLAttribArray.h>
 #include <GLTools.h>
 #include <Color.h>

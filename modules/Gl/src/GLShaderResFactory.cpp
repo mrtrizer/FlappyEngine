@@ -6,7 +6,8 @@
 
 #include <IFileLoadManager.h>
 #include <IFileMonitorManager.h>
-#include <GLShaderProgram.h>
+#include <GLShaderRes.h>
+#include <ThreadManager.h>
 #include <ResManager.h>
 
 namespace flappy {
@@ -17,6 +18,7 @@ GLShaderResFactory::GLShaderResFactory() {
     addDependency(IFileLoadManager::id());
     addDependency(IFileMonitorManager::id());
     addDependency(ResRepositoryManager::id());
+    addDependency(ThreadManager::id());
 }
 
 std::shared_ptr<ResBase> GLShaderResFactory::load(const std::string& name)  {
@@ -34,7 +36,9 @@ std::shared_ptr<ResBase> GLShaderResFactory::create(const std::string& name) {
     auto fragmentShader = manager<IFileLoadManager>()->loadTextFile(fragmentShaderFileInfo.path);
     manager<IFileMonitorManager>()->registerFile(fragmentShaderFileInfo.path);
 
-    auto shaderRes = std::make_shared<GLShaderRes>(vertexShader, fragmentShader);
+    auto rootEntity = manager<ThreadManager>()->entity();
+
+    auto shaderRes = std::make_shared<GLShaderRes>(rootEntity, vertexShader, fragmentShader);
     shaderRes->initShader();
     return shaderRes;
 }

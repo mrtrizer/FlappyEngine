@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Entity.h>
+#include <ThreadManager.h>
 
 #include "IResFactory.h"
 #include "ResManager.h"

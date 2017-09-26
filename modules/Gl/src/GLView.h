@@ -5,7 +5,7 @@
 #include <View.h>
 #include <ResManager.h>
 
-#include "GLShaderProgram.h"
+#include "GLShaderRes.h"
 #include "IGLManager.h"
 
 namespace flappy {

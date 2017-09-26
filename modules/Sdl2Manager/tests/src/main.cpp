@@ -25,6 +25,7 @@
 #include <FileResFactory.h>
 #include <DesktopThread.h>
 #include <PosixApplication.h>
+#include <GLTextureResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
-                        rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
+                        rootEntity->createComponent<GLTextureResFactory>();
                         rootEntity->createComponent<ResManager<TextureRes>> ();
                         rootEntity->createComponent<SpriteResFactory>();
                         rootEntity->createComponent<ResManager<SpriteRes>> ();

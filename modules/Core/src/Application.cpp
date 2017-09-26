@@ -18,9 +18,9 @@ Application::~Application() {
     s_instance = nullptr;
 }
 
-void Application::runThread(std::shared_ptr<Thread> thread) {
+int Application::runThread(std::shared_ptr<Thread> thread) {
     setThread(thread);
-    thread->run(rootEntity());
+    return thread->run(rootEntity());
 }
 
 Application& Application::instance() {

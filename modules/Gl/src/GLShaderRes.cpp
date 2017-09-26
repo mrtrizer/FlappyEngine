@@ -1,3 +1,5 @@
+#include "GLShaderRes.h"
+
 #include <string>
 #include <iostream>
 
@@ -5,7 +7,6 @@
 #include <IGLManager.h>
 #include <Entity.h>
 
-#include "GLShaderProgram.h"
 #include "GLAttribArray.h"
 
 namespace flappy {
@@ -26,17 +27,18 @@ using namespace std;
 /// Takes GLSL sources from nullterm strings.
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
-GLShaderRes::GLShaderRes(string vertexShaderStr, string fragmentShaderStr)
-    : m_vertexShaderStr(vertexShaderStr)
+GLShaderRes::GLShaderRes(SafePtr<Entity> rootEntity, string vertexShaderStr, string fragmentShaderStr)
+    : m_rootEntity(rootEntity)
+    , m_vertexShaderStr(vertexShaderStr)
     , m_fragmentShaderStr(fragmentShaderStr)
 {
 
-    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
+    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
         if (e.id == IGLManager::id())
             initShader();
     });
 
-    Application::instance().rootEntity()->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitShader();
     });
@@ -66,7 +68,7 @@ GLuint GLShaderRes::loadShader(ShaderType shaderType, const string& source) {
 }
 
 void GLShaderRes::initShader() {
-    auto glManager = Application::instance().rootEntity()->manager<IGLManager>();
+    auto glManager = m_rootEntity->manager<IGLManager>();
     if (glManager == nullptr)
         return;
 
