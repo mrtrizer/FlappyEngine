@@ -81,6 +81,11 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Gl",
+  "command": "/usr/bin/clang++  -DGl_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src -I/usr/local/include -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/Gl.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTextureResFactory.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Gl",
   "command": "/usr/bin/clang++  -DGl_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src -I/usr/local/include -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/Gl.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTools.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTools.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Gl/src/GLTools.cpp"
 },
@@ -186,18 +191,18 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
-  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Debug.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Debug.cpp",
-  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/Debug.cpp"
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleManager.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleManager.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleManager.cpp"
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
   "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLogManager.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLogManager.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLogManager.cpp"
-},
-{
-  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
-  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/StdConsoleManager.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/StdConsoleManager.cpp",
-  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/StdConsoleManager.cpp"
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",

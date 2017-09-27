@@ -1,10 +1,10 @@
 #pragma once
 
-#include <IConsoleManager.h>
+#include "IConsoleService.h"
 
 namespace flappy {
 
-class StdConsoleManager: public IConsoleManager {
+class DefaultConsoleService: public IConsoleService {
 public:
     void print(const char *str) final;
 };

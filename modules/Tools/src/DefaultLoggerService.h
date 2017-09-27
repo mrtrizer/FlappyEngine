@@ -3,22 +3,22 @@
 #include <vector>
 #include <memory>
 
-#include "ILogManager.h"
+#include "ILoggerService.h"
 
 namespace flappy {
 
-class IConsoleManager;
+class IConsoleService;
 
-class DefaultLogManager : public ILogManager {
+class DefaultLoggerService : public ILoggerService {
 public:
-    DefaultLogManager(std::shared_ptr<flappy::IConsoleManager> consoleManager);
+    DefaultLoggerService(std::shared_ptr<flappy::IConsoleService> consoleManager);
 
     void log(const char* format, ...) final;
     void logVArg(const char* format, va_list arglist) final;
 
 private:
     std::vector<char> m_outputBuff;
-    std::shared_ptr<flappy::IConsoleManager> m_consoleManager;
+    std::shared_ptr<flappy::IConsoleService> m_consoleManager;
 };
 
 } // flappy

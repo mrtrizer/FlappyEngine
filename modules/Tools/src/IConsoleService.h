@@ -4,7 +4,7 @@
 
 namespace flappy {
 
-class IConsoleManager{
+class IConsoleService{
 public:
     virtual void print(const char *str) = 0;
 };
