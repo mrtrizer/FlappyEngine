@@ -16,6 +16,7 @@
 #include <ResRepositoryManager.h>
 #include <ResManager.h>
 #include <GLTextureRes.h>
+#include <GLTextureResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -31,7 +32,7 @@ TEST_CASE( "SpriteResManager::getRes") {
     rootEntity->createComponent<ResManager<AtlasRes>> ();
     rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
     rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
-    rootEntity->createComponent<DefaultResFactory<TextureRes, GLTextureRes, IRgbaBitmapRes>>();
+    rootEntity->createComponent<GLTextureResFactory>();
     rootEntity->createComponent<ResManager<TextureRes>> ();
     rootEntity->createComponent<SpriteResFactory> ();
     rootEntity->createComponent<ResManager<SpriteRes>> ();
