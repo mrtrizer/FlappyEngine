@@ -7,13 +7,23 @@
 
 namespace flappy {
 
-Box2DFixtureComponent::Box2DFixtureComponent() : Component({}, {Box2DBodyComponent::id()}) {
+Box2DFixtureComponent::Box2DFixtureComponent() {
 
-}
+    addDependency(Box2DBodyComponent::id());
 
-void Box2DFixtureComponent::init() {
-    if ((m_shape != nullptr) && isInitialized())
-        initFixture();
+    events()->subscribe([this](InitEvent) {
+        if ((m_shape != nullptr) && isInitialized())
+            initFixture();
+    });
+
+    events()->subscribe([this](DeinitEvent) {
+        if (m_fixture != nullptr) {
+            auto bodyComponent = entity()->component<Box2DBodyComponent>();
+            bodyComponent->body().DestroyFixture(m_fixture);
+            m_fixture = nullptr;
+        }
+    });
+
 }
 
 void Box2DFixtureComponent::initFixture() {
@@ -36,14 +46,6 @@ void Box2DFixtureComponent::initFixture() {
     m_fixture = bodyComponent->body().CreateFixture(&fixtureDef);
 }
 
-void Box2DFixtureComponent::deinit() {
-    if (m_fixture != nullptr) {
-        auto bodyComponent = entity()->component<Box2DBodyComponent>();
-        bodyComponent->body().DestroyFixture(m_fixture);
-        m_fixture = nullptr;
-    }
-}
-
 b2Fixture* Box2DFixtureComponent::fixture() const
 {
     return m_fixture;
@@ -51,8 +53,8 @@ b2Fixture* Box2DFixtureComponent::fixture() const
 
 void Box2DFixtureComponent::setShape(const b2Shape& shape) {
     m_shape = &shape;
-    deinit();
-    init();
+    setActive(false);
+    setActive(true);
 }
 
 int16_t Box2DFixtureComponent::groupIndex() const

@@ -5,6 +5,9 @@ namespace flappy {
 Box2DWorldManager::Box2DWorldManager():m_world(b2Vec2(0.0f, -9.8f))
 {
 
+    events()->subscribe([this](UpdateEvent e) {
+        update(e.dt);
+    });
 }
 
 void Box2DWorldManager::update(DeltaTime dt) {

@@ -34,7 +34,7 @@ TEST_CASE("Box2D") {
     auto dynamicEntity = rootEntity->createEntity();
     dynamicEntity->component<Box2DBodyComponent>()->body().SetType(b2_dynamicBody);
     dynamicEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
-    dynamicEntity->component<TransformComponent>()->setAngle(M_PI * 0.1f);
+    dynamicEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
     dynamicEntity->component<Box2DFixtureComponent>()->setDensity(1.0f);
     dynamicEntity->component<Box2DFixtureComponent>()->setFriction(0.3f);
     b2PolygonShape dynamicBox;
@@ -46,13 +46,12 @@ TEST_CASE("Box2D") {
     // This is our little game loop.
     for (int32 i = 0; i < 60; ++i)
     {
-        flappy::Box2DBodyComponent::OnUpdate updateEvent;
-        updateEvent.dt = timeStep;
+        flappy::Box2DBodyComponent::UpdateEvent updateEvent(timeStep);
         rootEntity->events()->post(updateEvent);
 
         // Now print the position and angle of the body.
         auto position = dynamicEntity->component<TransformComponent>()->pos();
-        float angle = dynamicEntity->component<TransformComponent>()->angle();
+        float angle = dynamicEntity->component<TransformComponent>()->angle2DRad();
 
         printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
     }

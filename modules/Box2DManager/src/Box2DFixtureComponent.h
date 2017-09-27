@@ -36,8 +36,6 @@ public:
     b2Fixture* fixture() const;
 
 private:
-    void init() final;
-    void deinit() final;
 
     void initFixture();
 

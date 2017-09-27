@@ -24,7 +24,7 @@ public:
     void setPositionIterations(int positionIterations);
 
 private:
-    void update(DeltaTime dt) final;
+    void update(DeltaTime dt);
 
     b2World m_world;
     int m_velocityIterations = 6;
