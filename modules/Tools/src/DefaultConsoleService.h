@@ -6,7 +6,7 @@ namespace flappy {
 
 class DefaultConsoleService: public IConsoleService {
 public:
-    void print(const char *str) final;
+    void print(LogMessageType messageType, const char *str) final;
 };
 
 } // flappy

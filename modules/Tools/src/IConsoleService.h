@@ -2,11 +2,13 @@
 
 #include <string>
 
+#include "LogMessageType.h"
+
 namespace flappy {
 
 class IConsoleService{
 public:
-    virtual void print(const char *str) = 0;
+    virtual void print(LogMessageType, const char *) = 0;
 };
 
 } // flappy
