@@ -36,9 +36,9 @@ private:
 }
 
 #ifndef RELEASE
-#define LOG() Debug::instance().log("[TRACE]" __VA_ARGS__)
+#define LOG(...) Debug::instance().log("[TRACE]" __VA_ARGS__)
 #else
-#define LOG() (void)
+#define LOG(...) (void)
 #endif
 #define LOGI(...) Debug::instance().log("\x1b[32m [INFO] \x1b[0m" __VA_ARGS__)
 #define LOGW(...) Debug::instance().log("\x1b[33m [WARNING] \x1b[0m" __VA_ARGS__)
