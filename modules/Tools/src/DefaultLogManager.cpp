@@ -8,7 +8,7 @@
 namespace flappy {
 
 DefaultLogManager::DefaultLogManager(std::shared_ptr<IConsoleManager> consoleManager)
-    : m_outputBuff(1024, ' ')
+    : m_outputBuff(1024)
     , m_consoleManager(consoleManager)
 {
 }
@@ -21,8 +21,8 @@ void DefaultLogManager::log(const char* format, ...){
 }
 
 void DefaultLogManager::logVArg(const char* format, va_list arglist) {
-    std::vsnprintf(&m_outputBuff.front(), m_outputBuff.size(), format, arglist );
-    m_consoleManager->print(m_outputBuff);
+    std::vsnprintf(m_outputBuff.data(), m_outputBuff.size(), format, arglist );
+    m_consoleManager->print(m_outputBuff.data());
 }
 
 }

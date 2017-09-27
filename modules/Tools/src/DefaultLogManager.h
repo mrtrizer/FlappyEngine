@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <vector>
 #include <memory>
 
 #include "ILogManager.h"
@@ -17,7 +17,7 @@ public:
     void logVArg(const char* format, va_list arglist) final;
 
 private:
-    std::string m_outputBuff;
+    std::vector<char> m_outputBuff;
     std::shared_ptr<flappy::IConsoleManager> m_consoleManager;
 };
 

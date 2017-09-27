@@ -4,7 +4,7 @@
 
 namespace flappy {
 
-void StdConsoleManager::print(std::string str) {
+void StdConsoleManager::print(const char* str) {
     std::cout << str << std::endl;
 }
 

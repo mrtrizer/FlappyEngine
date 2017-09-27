@@ -6,7 +6,7 @@ namespace flappy {
 
 class StdConsoleManager: public IConsoleManager {
 public:
-    void print(std::string str) final;
+    void print(const char *str) final;
 };
 
 } // flappy
