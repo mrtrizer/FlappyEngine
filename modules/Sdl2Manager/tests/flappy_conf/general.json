@@ -6,7 +6,11 @@
         },
         {
             "path":"../../Std"
+        },
+        {
+            "path":"../../Box2DManager"
         }
+
     ],
     "cxx":{
         "header_dirs": [

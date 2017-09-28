@@ -18,7 +18,7 @@ public:
     glm::mat4x4 transformMatrix();
 
     glm::vec3 pos() const {return m_pos;}
-    float angle2DRad() const {return glm::axis(m_quat).z;}
+    float angle2DRad() const {return glm::eulerAngles(m_quat).z;}
     glm::vec3 scale() const {return m_scale;}
 
     void setPos(const glm::vec3& pos) {m_pos = pos;}

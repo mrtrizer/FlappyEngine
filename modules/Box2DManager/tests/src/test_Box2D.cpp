@@ -25,9 +25,9 @@ TEST_CASE("Box2D") {
     // Ground
     auto groundEntity = rootEntity->createEntity();
     groundEntity->component<Box2DBodyComponent>()->body().SetType(b2_staticBody);
-    groundEntity->component<TransformComponent>()->setPos({0.0f, -10.0f, 0.0f});
+    groundEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
     b2PolygonShape groundBox;
-    groundBox.SetAsBox(50.0f, 10.0f);
+    groundBox.SetAsBox(100.0f, 1.0f);
     groundEntity->component<Box2DFixtureComponent>()->setShape(groundBox);
 
     // Dynamic box
@@ -36,21 +36,26 @@ TEST_CASE("Box2D") {
     dynamicEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
     dynamicEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
     dynamicEntity->component<Box2DFixtureComponent>()->setDensity(1.0f);
-    dynamicEntity->component<Box2DFixtureComponent>()->setFriction(0.3f);
+    dynamicEntity->component<Box2DFixtureComponent>()->setFriction(1.3f);
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(1.0f, 1.0f);
     dynamicEntity->component<Box2DFixtureComponent>()->setShape(dynamicBox);
 
-    float32 timeStep = 1.0f / 60.0f;
+    int fps = 60;
+    float simulationTimeSec = 1.0f;
+
+    float32 timeStep = 1.0f / fps;
+    int steps = (int)std::ceilf(simulationTimeSec / timeStep);
 
     // This is our little game loop.
-    for (int32 i = 0; i < 60; ++i)
+    for (int32 i = 0; i < steps; ++i)
     {
         flappy::Box2DBodyComponent::UpdateEvent updateEvent(timeStep);
         rootEntity->events()->post(updateEvent);
 
         // Now print the position and angle of the body.
         auto position = dynamicEntity->component<TransformComponent>()->pos();
+
         float angle = dynamicEntity->component<TransformComponent>()->angle2DRad();
 
         printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);

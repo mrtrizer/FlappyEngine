@@ -32,8 +32,8 @@ Box2DBodyComponent::Box2DBodyComponent() {
 }
 
 b2Body& Box2DBodyComponent::body() {
-    if (m_body == nullptr)
-        throw std::runtime_error("Box2DWorldManager is not found in hierarchy.");
+    if (!isInitialized())
+        throw std::runtime_error("Not initialized.");
     return *m_body;
 }
 

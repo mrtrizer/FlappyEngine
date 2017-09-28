@@ -11,6 +11,7 @@ Box2DWorldManager::Box2DWorldManager():m_world(b2Vec2(0.0f, -9.8f))
 }
 
 void Box2DWorldManager::update(DeltaTime dt) {
+    LOG("%f", dt);
     m_world.Step((float32)dt, (int32)m_velocityIterations, (int32)m_positionIterations);
 }
 

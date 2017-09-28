@@ -15,7 +15,9 @@ DeltaTime DesktopThread::calcTimeDelta() {
     using namespace std::chrono;
     auto newTime = steady_clock::now();
     auto diff = newTime - m_lastTime;
-    DeltaTime timeDelta = diff.count(); // delta in seconds
+    long msCount = duration_cast<milliseconds>(diff).count();
+    DeltaTime timeDelta = (float)msCount / 1000.0f; // delta in seconds
+    LOG("%f", timeDelta);
     m_lastTime = newTime;
     return timeDelta;
 }

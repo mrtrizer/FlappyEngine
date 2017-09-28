@@ -17,9 +17,9 @@ public:
     bool testPoint(glm::vec2 point);
 
 private:
-    b2Body* m_body;
+    b2Body* m_body = nullptr;
     glm::vec3 m_lastTransformPos;
-    float m_lastTransformAngle;
+    float m_lastTransformAngle = 0.0f;
 
     void update(DeltaTime dt);
 };
