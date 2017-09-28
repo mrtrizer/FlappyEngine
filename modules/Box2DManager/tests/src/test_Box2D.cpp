@@ -45,7 +45,7 @@ TEST_CASE("Box2D") {
     float simulationTimeSec = 1.0f;
 
     float32 timeStep = 1.0f / fps;
-    int steps = (int)std::ceilf(simulationTimeSec / timeStep);
+    int steps = (int)std::ceil(simulationTimeSec / timeStep);
 
     // This is our little game loop.
     for (int32 i = 0; i < steps; ++i)
