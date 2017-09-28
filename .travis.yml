@@ -113,6 +113,14 @@ script:
  - popd
  - popd
 
+#JsonRes test project (build only)
+ - pushd modules/Box2DManager/tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests_Box2DManager
+ - popd
+ - popd
+
 #Sdl2Manager test project (build only)
  - pushd modules/Sdl2Manager/tests
  - flappy build cmake

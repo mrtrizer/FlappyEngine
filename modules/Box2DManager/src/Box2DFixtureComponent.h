@@ -39,7 +39,7 @@ private:
 
     void initFixture();
 
-    const b2Shape* m_shape;
+    const b2Shape* m_shape = nullptr;
 
     float m_friction = 0.2f;
     float m_elasticity = 0.0f;
