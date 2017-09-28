@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
                         rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
                         rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
                         rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
-                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(1.0f);
+                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(2.0f);
 
                         // Some rect
                         auto rectEntity = sceneEntity->createEntity();
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
                         rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
 
                         // Dynamic box
-                        rectEntity->component<Box2DBodyComponent>()->body().SetType(b2_dynamicBody);
+                        rectEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
                         rectEntity->component<Box2DFixtureComponent>()->setDensity(10.0f);
@@ -98,8 +98,9 @@ int main(int argc, char *argv[])
                         auto groundEntity = sceneEntity->createEntity();
                         groundEntity->component<MeshComponent>();
                         groundEntity->component<TransformComponent>()->setScale({100.0f, 10.0f});
+                        groundEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.25f);
 
-                        groundEntity->component<Box2DBodyComponent>()->body().SetType(b2_staticBody);
+                        groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
                         groundEntity->component<TransformComponent>()->setPos({0.0f, -100.0f, 0.0f});
                         b2PolygonShape groundBox;
                         groundBox.SetAsBox(100.0f, 10.0f);

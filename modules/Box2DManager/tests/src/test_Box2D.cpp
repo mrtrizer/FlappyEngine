@@ -32,7 +32,7 @@ TEST_CASE("Box2D") {
 
     // Dynamic box
     auto dynamicEntity = rootEntity->createEntity();
-    dynamicEntity->component<Box2DBodyComponent>()->body().SetType(b2_dynamicBody);
+    dynamicEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
     dynamicEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
     dynamicEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
     dynamicEntity->component<Box2DFixtureComponent>()->setDensity(1.0f);

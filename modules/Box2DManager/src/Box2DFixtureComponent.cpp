@@ -19,7 +19,7 @@ Box2DFixtureComponent::Box2DFixtureComponent() {
     events()->subscribe([this](DeinitEvent) {
         if (m_fixture != nullptr) {
             auto bodyComponent = entity()->component<Box2DBodyComponent>();
-            bodyComponent->body().DestroyFixture(m_fixture);
+            bodyComponent->destroyFixture(m_fixture);
             m_fixture = nullptr;
         }
     });
@@ -43,7 +43,7 @@ void Box2DFixtureComponent::initFixture() {
     fixtureDef.filter.maskBits = m_maskBits;
     fixtureDef.filter.groupIndex = m_groupIndex;
 
-    m_fixture = bodyComponent->body().CreateFixture(&fixtureDef);
+    m_fixture = bodyComponent->createFixture(&fixtureDef);
 }
 
 b2Fixture* Box2DFixtureComponent::fixture() const
