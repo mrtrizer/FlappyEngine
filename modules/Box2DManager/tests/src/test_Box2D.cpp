@@ -24,7 +24,7 @@ TEST_CASE("Box2D") {
 
     // Ground
     auto groundEntity = rootEntity->createEntity();
-    groundEntity->component<Box2DBodyComponent>()->body().SetType(b2_staticBody);
+    groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
     groundEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
     b2PolygonShape groundBox;
     groundBox.SetAsBox(100.0f, 1.0f);
