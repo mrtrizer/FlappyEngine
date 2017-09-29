@@ -2,7 +2,9 @@
 
 #include <Component.h>
 
-class DependantTestComponent: public flappy::Component<DependantTestComponent> {
+#include "TestManager.h"
+
+class DependOnManagerTestComponent: public flappy::Component<DependOnManagerTestComponent> {
 public:
     class IMock
     {
@@ -12,7 +14,7 @@ public:
         virtual void update(flappy::DeltaTime dt) = 0;
     };
 
-    DependantTestComponent(IMock* mockComponent = nullptr)
+    DependOnManagerTestComponent(IMock* mockComponent = nullptr)
         : m_mockComponent (mockComponent)
     {
             addDependency(TestManager::id());

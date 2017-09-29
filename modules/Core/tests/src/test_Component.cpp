@@ -7,12 +7,13 @@
 
 #include "TestManager.h"
 #include "TestComponent.h"
+#include "DependOnComponentTestComponent.h"
 
 using namespace flappy;
 using namespace fakeit;
 using namespace std;
 
-TEST_CASE( "Component::setParentEntity() Component::init() Component::deinit() Component::isInitialized()") {
+TEST_CASE( "Adding of Component to Entity") {
     Mock<TestComponent::IMock> mock;
     Fake(Method(mock,init));
     Fake(Method(mock,deinit));
@@ -34,6 +35,31 @@ TEST_CASE( "Component::setParentEntity() Component::init() Component::deinit() C
     Verify(Method(mock,deinit)).Exactly(1);
 
     REQUIRE(component->isInitialized() == false);
+}
+
+TEST_CASE( "Init/deinit of component with another component as dependency") {
+    Mock<DependOnComponentTestComponent::IMock> mock;
+    Fake(Method(mock,init));
+    Fake(Method(mock,deinit));
+
+    auto component = make_shared<DependOnComponentTestComponent>(&mock.get());
+
+    auto entity = make_shared<Entity>();
+    entity->addComponent(component);
+
+    Verify(Method(mock,init)).Exactly(0);
+
+    auto testComponent = entity->createComponent<TestComponent>();
+
+    Verify(Method(mock,init)).Exactly(1);
+
+    entity->removeComponent(testComponent);
+
+    Verify(Method(mock,deinit)).Exactly(1);
+
+    testComponent = entity->createComponent<TestComponent>();
+
+    Verify(Method(mock,init)).Exactly(2);
 }
 
 TEST_CASE( "Component::entity()" ) {

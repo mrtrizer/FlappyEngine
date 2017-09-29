@@ -8,7 +8,7 @@
 
 #include "TestManager.h"
 #include "TestComponent.h"
-#include "DependantTestComponent.h"
+#include "DependOnManagerTestComponent.h"
 
 using namespace flappy;
 using namespace std;
@@ -71,11 +71,11 @@ TEST_CASE("Add/Remove component events") {
 }
 
 TEST_CASE( "Init/deinit of component with dependencies") {
-    Mock<DependantTestComponent::IMock> mock;
+    Mock<DependOnManagerTestComponent::IMock> mock;
     Fake(Method(mock,init));
     Fake(Method(mock,deinit));
 
-    auto component = make_shared<DependantTestComponent>(&mock.get());
+    auto component = make_shared<DependOnManagerTestComponent>(&mock.get());
 
     auto entity = make_shared<Entity>();
     entity->addComponent(component);
