@@ -10,6 +10,11 @@
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/src/test_InputManager.cpp"
 },
 {
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default",
+  "command": "/usr/bin/clang++   -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Catch/libs  -g   -std=c++1y -o CMakeFiles/tests_CoreComponents.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/src/test_Transform.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/src/test_Transform.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/src/test_Transform.cpp"
+},
+{
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreComponents",
   "command": "/usr/bin/clang++  -DCoreComponents_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreComponents.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src/AppManager.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src/AppManager.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src/AppManager.cpp"
@@ -51,6 +56,11 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
+  "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Application.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Application.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/Application.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
   "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ComponentBase.cpp"
 },
@@ -63,6 +73,21 @@
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Core",
   "command": "/usr/bin/clang++  -DCore_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/Core.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src/ManagerBase.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DebugServices.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleService.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleService.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultConsoleService.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
+  "command": "/usr/bin/clang++  -DTools_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs  -g -fPIC   -std=c++1y -o CMakeFiles/Tools.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLoggerService.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLoggerService.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src/DefaultLoggerService.cpp"
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/Tools",
