@@ -34,7 +34,8 @@ bool ComponentBase::isManagerInitialized(TypeId<ComponentBase> id) const {
 }
 
 bool ComponentBase::isComponentInitialized(TypeId<flappy::ComponentBase> id) const {
-    return m_components.getById(id) != nullptr;
+    auto component = m_components.getById(id);
+    return (component != nullptr) && (component->isInitialized());
 }
 
 bool ComponentBase::allDependenciesInitialized() const {

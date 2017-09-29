@@ -1,5 +1,7 @@
 #include "Box2DWorldManager.h"
 
+#include <Entity.h>
+
 namespace flappy {
 
 Box2DWorldManager::Box2DWorldManager():m_world(b2Vec2(0.0f, -9.8f))
@@ -26,7 +28,7 @@ float Box2DWorldManager::sizeFactor() const
 void Box2DWorldManager::setSizeFactor(float sizeFactor)
 {
     m_sizeFactor = sizeFactor;
-    events()->post(Box2DWorldScaleChanged());
+    entity()->events()->post(Box2DWorldScaleChanged());
 }
 
 int Box2DWorldManager::velocityIterations() const
