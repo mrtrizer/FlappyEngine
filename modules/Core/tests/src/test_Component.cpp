@@ -62,6 +62,27 @@ TEST_CASE( "Init/deinit of component with another component as dependency") {
     Verify(Method(mock,init)).Exactly(2);
 }
 
+TEST_CASE( "Component::setActive()") {
+    Mock<TestComponent::IMock> mock;
+    Fake(Method(mock,init));
+    Fake(Method(mock,deinit));
+
+    auto component = make_shared<TestComponent>(&mock.get());
+
+    auto entity = make_shared<Entity>();
+    entity->addComponent(component);
+
+    Verify(Method(mock,init)).Exactly(1);
+
+    component->setActive(false);
+
+    Verify(Method(mock,deinit)).Exactly(1);
+
+    component->setActive(true);
+
+    Verify(Method(mock,init)).Exactly(2);
+}
+
 TEST_CASE( "Component::entity()" ) {
     auto component = make_shared<TestComponent>();
     auto entity = make_shared<Entity>();
