@@ -57,7 +57,7 @@ script:
  - popd
  - popd
 
-#Std test project (build only)
+#Std tests
  - pushd modules/Std/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -65,7 +65,7 @@ script:
  - popd
  - popd
 
-#ResManager test project (build only)
+#ResManager tests
  - pushd modules/ResManager/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -81,7 +81,7 @@ script:
  - popd
  - popd
 
-#EventBus test project (build only)
+#EventBus tests
  - pushd modules/EventBus/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -89,7 +89,7 @@ script:
  - popd
  - popd
 
-#CoreComponents test project (build only)
+#CoreComponents tests
  - pushd modules/CoreComponents/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -97,7 +97,7 @@ script:
  - popd
  - popd
 
-#CoreResources test project (build only)
+#CoreResources tests
  - pushd modules/CoreResources/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -105,7 +105,7 @@ script:
  - popd
  - popd
 
-#JsonRes test project (build only)
+#JsonRes tests
  - pushd modules/JsonRes/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -113,7 +113,7 @@ script:
  - popd
  - popd
 
-#JsonRes test project (build only)
+#Box2DManager tests
  - pushd modules/Box2DManager/tests
  - flappy build cmake
  - pushd generated/cmake/build
@@ -121,7 +121,15 @@ script:
  - popd
  - popd
 
-#Sdl2Manager test project (build only)
+#UI tests
+ - pushd modules/UI/tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests_UI
+ - popd
+ - popd
+
+#Sdl2Manager test
  - pushd modules/Sdl2Manager/tests
  - flappy build cmake
  - popd

@@ -7,19 +7,19 @@
 
 namespace flappy {
 
-UIManager::UIManager():Manager({TouchInputManager::id()})
+UIManager::UIManager()
 {
-    events()->subscribeIn([this](TouchInputManager::TouchDownEvent e) {
+    events()->subscribe([this](TouchInputManager::TouchDownEvent e) {
         auto touchComponent = findTouchComponentInPoint(e.pos);
         if (touchComponent != nullptr)
             touchComponent->touchDown(e.pos, e.index);
     });
-    events()->subscribeIn([this](TouchInputManager::TouchUpEvent e) {
+    events()->subscribe([this](TouchInputManager::TouchUpEvent e) {
         auto touchComponent = findTouchComponentInPoint(e.pos);
         if (touchComponent != nullptr)
             touchComponent->touchUp(e.pos, e.index);
     });
-    events()->subscribeIn([this](TouchInputManager::TouchMoveEvent e) {
+    events()->subscribe([this](TouchInputManager::TouchMoveEvent e) {
         auto touchComponent = findTouchComponentInPoint(e.pos);
         if (touchComponent != nullptr)
             touchComponent->touchMove(e.pos, e.index);
@@ -32,6 +32,7 @@ SafePtr<TouchComponent> UIManager::findTouchComponentInPoint(glm::vec2 point)
         if (touchComponent->testPoint(point))
             return touchComponent;
     }
+    return SafePtr<TouchComponent>();
 }
 
 void UIManager::registerTouchComponent(SafePtr<TouchComponent> touchComponent)

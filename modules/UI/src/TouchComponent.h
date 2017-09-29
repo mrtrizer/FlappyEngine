@@ -14,6 +14,26 @@ namespace flappy
 class TouchComponent: public Component<TouchComponent>
 {
 public:
+    struct TouchEvent: public IEvent {
+        TouchEvent(glm::vec2 pos, int index)
+            : pos(pos), index(index)
+        {}
+        glm::vec2 pos;
+        int index;
+    };
+
+    struct TouchDownEvent: public TouchEvent {
+        using TouchEvent::TouchEvent;
+    };
+
+    struct TouchUpEvent: public TouchEvent {
+        using TouchEvent::TouchEvent;
+    };
+
+    struct TouchMoveEvent: public TouchEvent {
+        using TouchEvent::TouchEvent;
+    };
+
     TouchComponent();
 
     void touchDown(glm::vec2 pos, int index);
@@ -21,10 +41,6 @@ public:
     void touchMove(glm::vec2 pos, int index);
 
     bool testPoint(glm::vec2 pos);
-
-private:
-    void init() final;
-    void deinit() final;
 };
 
 } // flappy
