@@ -26,8 +26,8 @@ TEST_CASE("Box2D") {
     auto groundEntity = rootEntity->createEntity();
     groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
     groundEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(100.0f, 1.0f);
+    auto groundBox = std::make_shared<b2PolygonShape>();
+    groundBox->SetAsBox(100.0f, 1.0f);
     groundEntity->component<Box2DFixtureComponent>()->setShape(groundBox);
 
     // Dynamic box
@@ -37,8 +37,8 @@ TEST_CASE("Box2D") {
     dynamicEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
     dynamicEntity->component<Box2DFixtureComponent>()->setDensity(1.0f);
     dynamicEntity->component<Box2DFixtureComponent>()->setFriction(1.3f);
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(1.0f, 1.0f);
+    auto dynamicBox = std::make_shared<b2PolygonShape>();
+    dynamicBox->SetAsBox(1.0f, 1.0f);
     dynamicEntity->component<Box2DFixtureComponent>()->setShape(dynamicBox);
 
     int fps = 60;

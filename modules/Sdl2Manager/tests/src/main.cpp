@@ -73,25 +73,17 @@ int main(int argc, char *argv[])
                         auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
                         spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
-                        // Box2D world
-                        rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
-                        rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
-                        rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
-                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(2.0f);
-
-                        // Some rect
+                        // Dynamic box
                         auto rectEntity = sceneEntity->createEntity();
                         rectEntity->component<MeshComponent>();
                         rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
-
-                        // Dynamic box
                         rectEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
                         rectEntity->component<Box2DFixtureComponent>()->setDensity(10.0f);
                         rectEntity->component<Box2DFixtureComponent>()->setFriction(0.3f);
-                        b2PolygonShape dynamicBox;
-                        dynamicBox.SetAsBox(10.0f, 10.0f);
+                        auto dynamicBox = std::make_shared<b2PolygonShape>();
+                        dynamicBox->SetAsBox(1.0f, 1.0f);
                         rectEntity->component<Box2DFixtureComponent>()->setShape(dynamicBox);
 
                         // Box2D ground
@@ -99,12 +91,17 @@ int main(int argc, char *argv[])
                         groundEntity->component<MeshComponent>();
                         groundEntity->component<TransformComponent>()->setScale({100.0f, 10.0f});
                         groundEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.25f);
-
                         groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
                         groundEntity->component<TransformComponent>()->setPos({0.0f, -100.0f, 0.0f});
-                        b2PolygonShape groundBox;
-                        groundBox.SetAsBox(100.0f, 10.0f);
+                        auto groundBox = std::make_shared<b2PolygonShape>();
+                        groundBox->SetAsBox(100.0f, 10.0f);
                         groundEntity->component<Box2DFixtureComponent>()->setShape(groundBox);
+
+                        // Box2D world
+                        rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
+                        rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
+                        rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
+                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(2.0f);
 
                         // Try to reinitialize gl context several times
                         rootEntity->removeComponent(sdl2Manager);

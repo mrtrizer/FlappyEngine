@@ -26,6 +26,7 @@ float Box2DWorldManager::sizeFactor() const
 void Box2DWorldManager::setSizeFactor(float sizeFactor)
 {
     m_sizeFactor = sizeFactor;
+    events()->post(Box2DWorldScaleChanged());
 }
 
 int Box2DWorldManager::velocityIterations() const

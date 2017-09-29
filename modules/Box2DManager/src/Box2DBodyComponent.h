@@ -63,9 +63,10 @@ private:
     bool m_angularDamping = 0.0f;
     bool m_angularVelocity = 0.0f;
     bool m_gravityScale = 1.0f;
-    bool m_sleepingAllowed = true;
+    bool m_sleepingAllowed = false;
     bool m_fixedRotation = false;
 
+    void updatePos();
     void update(DeltaTime dt);
     void setMassInternal(float mass);
 };

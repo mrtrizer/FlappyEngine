@@ -8,6 +8,9 @@ namespace flappy {
 
 class Box2DWorldManager: public Manager<Box2DWorldManager> {
 public:
+
+    struct Box2DWorldScaleChanged : public IEvent {};
+
     Box2DWorldManager();
 
     b2World& world() { return m_world; }

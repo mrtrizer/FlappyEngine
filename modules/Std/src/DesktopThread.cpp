@@ -17,7 +17,6 @@ DeltaTime DesktopThread::calcTimeDelta() {
     auto diff = newTime - m_lastTime;
     long msCount = duration_cast<milliseconds>(diff).count();
     DeltaTime timeDelta = (float)msCount / 1000.0f; // delta in seconds
-    LOG("%f", timeDelta);
     m_lastTime = newTime;
     return timeDelta;
 }

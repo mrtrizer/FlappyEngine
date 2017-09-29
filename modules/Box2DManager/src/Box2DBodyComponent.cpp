@@ -10,6 +10,7 @@ namespace flappy {
 
 Box2DBodyComponent::Box2DBodyComponent() {
     addDependency(Box2DWorldManager::id());
+    addDependency(TransformComponent::id());
 
     events()->subscribe([this](InitEvent) {
         b2BodyDef bodyDef;
@@ -25,12 +26,22 @@ Box2DBodyComponent::Box2DBodyComponent() {
         bodyDef.allowSleep = m_sleepingAllowed;
         bodyDef.fixedRotation = m_fixedRotation;
 
-        bodyDef.position.Set(0.0f, 0.0f);
+        float sizeFactor = manager<Box2DWorldManager>()->sizeFactor();
 
+        auto pos = entity()->component<TransformComponent>()->pos();
+        bodyDef.position = b2Vec2(pos.x * sizeFactor, pos.y * sizeFactor);
         m_lastTransformPos = entity()->component<TransformComponent>()->pos();
-        m_lastTransformAngle = entity()->component<TransformComponent>()->angle2DRad();
+
+        auto angle = entity()->component<TransformComponent>()->angle2DRad();
+        bodyDef.angle = angle;
+        m_lastTransformAngle = angle;
 
         m_body = manager<Box2DWorldManager>()->world().CreateBody(&bodyDef);
+    });
+
+    events()->subscribe([this](Box2DWorldManager::Box2DWorldScaleChanged) {
+        if (isInitialized())
+            updatePos();
     });
 
     events()->subscribe([this](DeinitEvent) {
@@ -135,7 +146,7 @@ bool Box2DBodyComponent::testPoint(glm::vec2 point) {
     return false;
 }
 
-void Box2DBodyComponent::update(DeltaTime dt) {
+void Box2DBodyComponent::updatePos() {
     glm::vec3 newTransformPos = entity()->component<TransformComponent>()->pos();
     float newTransformAngle = entity()->component<TransformComponent>()->angle2DRad();
 
@@ -151,6 +162,10 @@ void Box2DBodyComponent::update(DeltaTime dt) {
 
     m_lastTransformPos = entity()->component<TransformComponent>()->pos();
     m_lastTransformAngle = entity()->component<TransformComponent>()->angle2DRad();
+}
+
+void Box2DBodyComponent::update(DeltaTime dt) {
+    updatePos();
 }
 
 void Box2DBodyComponent::setMassInternal(float mass) {

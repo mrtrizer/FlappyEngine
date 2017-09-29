@@ -10,7 +10,7 @@ class Box2DFixtureComponent: public Component<Box2DFixtureComponent> {
 public:
     Box2DFixtureComponent();
 
-    void setShape(const b2Shape &shape);
+    void setShape(std::shared_ptr<b2Shape> shape);
 
     float friction() const;
     void setFriction(float friction);
@@ -39,7 +39,7 @@ private:
 
     void initFixture();
 
-    const b2Shape* m_shape = nullptr;
+    std::shared_ptr<b2Shape> m_shape;
 
     float m_friction = 0.2f;
     float m_elasticity = 0.0f;

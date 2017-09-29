@@ -12,7 +12,7 @@ Box2DFixtureComponent::Box2DFixtureComponent() {
     addDependency(Box2DBodyComponent::id());
 
     events()->subscribe([this](InitEvent) {
-        if ((m_shape != nullptr) && isInitialized())
+        if ((m_shape != nullptr))
             initFixture();
     });
 
@@ -30,7 +30,7 @@ void Box2DFixtureComponent::initFixture() {
     auto bodyComponent = entity()->component<Box2DBodyComponent>();
     b2FixtureDef fixtureDef;
 
-    fixtureDef.shape = m_shape;
+    fixtureDef.shape = m_shape.get();
 
     // physics params
     fixtureDef.friction = m_friction;
@@ -51,8 +51,8 @@ b2Fixture* Box2DFixtureComponent::fixture() const
     return m_fixture;
 }
 
-void Box2DFixtureComponent::setShape(const b2Shape& shape) {
-    m_shape = &shape;
+void Box2DFixtureComponent::setShape(std::shared_ptr<b2Shape> shape) {
+    m_shape = shape;
     setActive(false);
     setActive(true);
 }
