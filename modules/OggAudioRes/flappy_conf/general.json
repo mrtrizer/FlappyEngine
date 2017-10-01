@@ -1,5 +1,5 @@
 {
-    "name":"OpenALManager",
+    "name":"OggAudioRes",
     "modules": [
         {
             "path":"../Core"
@@ -8,7 +8,7 @@
 	    "path":"../ResManager"
 	},
 	{
-	    "path":"../CoreComponents"
+	    "path":"../OpenALManager"
 	}
     ],
     "cxx":{
@@ -25,11 +25,6 @@
     "cmake": {
         "module_path": "cmake",
         "packages": [
-            {
-                "name":"OpenAL",
-                "libs":"${OPENAL_LIBRARY}",
-                "includes":"${OPENAL_INCLUDE_DIR}"
-            },
             {
                 "name":"Vorbis",
                 "libs":"${VORBIS_LIBRARY}",

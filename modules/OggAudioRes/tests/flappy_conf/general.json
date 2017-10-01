@@ -1,0 +1,19 @@
+{
+    "name":"tests_OggResFactory",
+    "modules": [
+        {
+            "path":"../"
+        },
+	{
+	    "path":"../../Std"
+	}    
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

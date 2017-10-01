@@ -9,7 +9,6 @@
 #include <GLIncludes.h>
 #include <GLTools.h>
 #include <GLViewManager.h>
-#include <AppManager.h>
 #include <Entity.h>
 #include <ThreadManager.h>
 #include <Application.h>
@@ -20,7 +19,6 @@ namespace flappy {
 
 Sdl2Manager::Sdl2Manager()
 {
-    addDependency(AppManager::id());
     addDependency(ThreadManager::id());
 
     subscribe([this](InitEvent) {
