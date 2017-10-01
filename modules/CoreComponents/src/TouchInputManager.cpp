@@ -1,5 +1,7 @@
 #include "TouchInputManager.h"
 
+#include <Entity.h>
+
 namespace flappy
 {
 
@@ -45,7 +47,7 @@ void TouchInputManager::setTouchDown(const vec2 &touchPos, int index)
     TouchDownEvent touchDownEvent;
     touchDownEvent.pos = touchPos;
     touchDownEvent.index = index;
-    events()->post(touchDownEvent);
+    entity()->events()->post(touchDownEvent);
 }
 
 void TouchInputManager::setTouchUp(const vec2 &touchPos, int index)
@@ -57,7 +59,7 @@ void TouchInputManager::setTouchUp(const vec2 &touchPos, int index)
     TouchUpEvent touchUpEvent;
     touchUpEvent.pos = touchPos;
     touchUpEvent.index = index;
-    events()->post(touchUpEvent);
+    entity()->events()->post(touchUpEvent);
 }
 
 void TouchInputManager::setTouchPos(const vec2 &touchPos, int index)
@@ -67,7 +69,7 @@ void TouchInputManager::setTouchPos(const vec2 &touchPos, int index)
     TouchMoveEvent touchMoveEvent;
     touchMoveEvent.pos = touchPos;
     touchMoveEvent.index = index;
-    events()->post(touchMoveEvent);
+    entity()->events()->post(touchMoveEvent);
 }
 
 } // flappy

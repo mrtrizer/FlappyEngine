@@ -38,7 +38,7 @@ void TouchComponent::touchMove(glm::vec2 pos, int index)
 
 bool TouchComponent::testPoint(glm::vec2 pos)
 {
-    entity()->component<Box2DBodyComponent>()->testPoint(pos);
+    return entity()->component<Box2DBodyComponent>()->testPoint(pos);
 }
 
 } // flappy
