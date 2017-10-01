@@ -8,6 +8,7 @@ before_install:
  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
  - sudo apt-get update -qq
  - sudo apt-get install libsdl2-dev libsdl2-image-dev
+ - sudo apt-get install libvorbis-dev libopenal-dev
  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
  - sudo apt-get install -qq gcc-6 g++-6 nodejs
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
@@ -47,6 +48,16 @@ script:
  - glslangValidator -V -H -S frag -o texture_shader_frag.spv texture_shader.fglsl --aml
  - spirv-cross ./texture_shader_frag.spv --es
  - spirv-cross ./texture_shader_frag.spv --hlsl
+ - popd
+
+#OggAudioRes build 
+ - pushd modules/OggAudioRes/tests
+ - flappy build cmake
+ - popd
+
+#Sdl2Manager build 
+ - pushd modules/Sdl2Manager/tests
+ - flappy build cmake
  - popd
 
 #Core tests
@@ -127,11 +138,6 @@ script:
  - pushd generated/cmake/build
  - ./tests_UI
  - popd
- - popd
-
-#Sdl2Manager test
- - pushd modules/Sdl2Manager/tests
- - flappy build cmake
  - popd
 
 after_success:
