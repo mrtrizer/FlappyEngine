@@ -13,7 +13,7 @@ Generate default FlappyEngine project with command `flappy init flappy-2d <Proje
 You can find more details in FlappyTools2 documentation.
 
 ## Linux
-Install glew, sdl2 and sdl2_image using standart package manager.
+Install libvorbis-dev, libopenal-dev, glew, sdl2 and sdl2_image using standart package manager.
 
 ## OS X
 1. Install glew and libvorbis using brew. `brew install glew libvorbis`
