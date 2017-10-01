@@ -127,9 +127,6 @@ script:
 #Box2DManager tests
  - pushd modules/Box2DManager/tests
  - flappy build cmake
- - pushd generated/cmake/build
- - ./tests_Box2DManager
- - popd
  - popd
 
 #UI tests

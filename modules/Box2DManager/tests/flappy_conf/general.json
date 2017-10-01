@@ -4,9 +4,13 @@
         {
             "path":"../"
         },
-        {
-            "path":"../../Catch"
-        }
+	{
+	    "path":"../../Sdl2Manager"
+	},
+	{
+	    "path":"../../Std"
+	}
+
     ],
     "cxx":{
         "header_dirs": [
