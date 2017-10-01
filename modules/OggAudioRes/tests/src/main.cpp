@@ -30,6 +30,8 @@ int main(int, char*[]) {
             auto audioRes = audioResManager->getRes("boom");
             source->setAudioRes(audioRes);
             source->play();
+            source->setGain(0.1f);
+            source->setLooping(true);
     });
 
     auto rootEntity = std::make_shared<Entity>();
