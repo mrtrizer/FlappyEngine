@@ -16,7 +16,7 @@ You can find more details in FlappyTools2 documentation.
 Install glew, sdl2 and sdl2_image using standart package manager.
 
 ## OS X
-1. Install glew using brew. 
+1. Install glew and libvorbis using brew. `brew install glew libvorbis`
 
 2. Download SDL2 and SDL2_image here: https://www.libsdl.org/download-2.0.php#source and https://www.libsdl.org/projects/SDL_image/.
 
