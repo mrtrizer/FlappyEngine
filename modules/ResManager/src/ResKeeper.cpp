@@ -41,7 +41,7 @@ void ResKeeper::cleanUpRes()
 bool ResKeeper::dependencyChanged()
 {
     for (auto dependency: actualRes()->dependencyList())
-        if (dependency->resUpdated())
+        if ((dependency != nullptr) && dependency->resUpdated())
             return true;
     return false;
 }

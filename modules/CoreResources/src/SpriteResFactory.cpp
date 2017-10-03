@@ -23,14 +23,23 @@ std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name)  {
 
 std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
     auto splittedName = split(name, ':');
+
+    if (splittedName.size() != 1 && splittedName.size() != 3) {
+        LOGE("Can't create quad with name %s. Use format \"texture:atlas:quad\"", name.c_str());
+        return nullptr;
+    }
+
     auto textureResManager = manager<ResManager<TextureRes>>();
     auto atlasResManager = manager<ResManager<AtlasRes>>();
 
-    if (splittedName.size() == 2) { // if atlas path, load atlas
-        string atlasName = splittedName[0];
-        string quadName = splittedName[1];
+    if (splittedName.size() == 3) { // if atlas path, load atlas
+        string textureName = splittedName[0];
+        auto texture = textureResManager->getRes(textureName);
+
+        string atlasName = splittedName[1];
         auto atlas = atlasResManager->getRes(atlasName);
-        auto texture = textureResManager->getRes(atlasName);
+
+        string quadName = splittedName[2];
         auto quad = make_shared<SpriteRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path

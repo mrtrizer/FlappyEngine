@@ -5,6 +5,10 @@ namespace flappy {
 using namespace std;
 using namespace Tools;
 
+AtlasRes::AtlasRes(std::shared_ptr<JsonRes> jsonRes)
+    : m_jsonRes(jsonRes)
+{}
+
 AtlasRes::SpriteInfo AtlasRes::spriteInfo(const string& name) const {
     auto rectIter = m_rectMap.find(name);
     if (rectIter != m_rectMap.end())

@@ -31,7 +31,7 @@ TEST_CASE( "TextRes::text()") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    rootEntity->createComponent<FileResFactory<TextRes>>();
+    rootEntity->createComponent<FileResFactory>();
     auto textResManager = rootEntity->createComponent<ResManager<TextRes>>();
 
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));

@@ -1,0 +1,12 @@
+{
+    "sprites": {
+        "rect1": {
+            "rect_x": 0.1,
+            "rect_y": 0.2,
+            "rect_w": 0.2,
+            "rect_h": 0.2,
+            "width": 100,
+            "height": 200
+        }
+    }
+}

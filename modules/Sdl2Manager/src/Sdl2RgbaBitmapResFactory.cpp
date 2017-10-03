@@ -1,8 +1,12 @@
+#include "Sdl2RgbaBitmapResFactory.h"
+
 #include <SDL_image.h>
 
+#include <ResManager.h>
+#include <AtlasRes.h>
+#include <TextureRes.h>
 #include <ResRepositoryManager.h>
 
-#include "Sdl2RgbaBitmapResFactory.h"
 #include "Sdl2RgbaBitmapRes.h"
 
 namespace flappy {

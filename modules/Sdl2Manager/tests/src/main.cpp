@@ -43,8 +43,9 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResRepositoryManager>("./resources");
                         rootEntity->createComponent<StdFileMonitorManager>();
                         rootEntity->createComponent<StdFileLoadManager>();
+                        rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
                         rootEntity->createComponent<ResManager<AtlasRes>> ();
-                        rootEntity->createComponent<FileResFactory<TextRes>>();
+                        rootEntity->createComponent<FileResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
@@ -54,7 +55,6 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResManager<SpriteRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
-                        rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
 
                         // Scene
                         auto sceneEntity = rootEntity->createEntity();

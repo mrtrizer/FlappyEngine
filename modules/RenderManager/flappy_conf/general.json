@@ -12,7 +12,10 @@
         },
         {
             "path":"../CoreComponents"
-        }
+        },
+	{
+	    "path":"../JsonRes"
+	}
     ],
     "cxx":{
         "header_dirs": [

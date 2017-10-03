@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResRepositoryManager>("./resources");
                         rootEntity->createComponent<StdFileMonitorManager>();
                         rootEntity->createComponent<StdFileLoadManager>();
-                        rootEntity->createComponent<FileResFactory<TextRes>>();
+                        rootEntity->createComponent<FileResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();

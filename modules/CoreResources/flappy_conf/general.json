@@ -9,7 +9,11 @@
         },
         {
             "path":"../ResManager"
+        },
+        {
+            "path":"../JsonRes"
         }
+
 
     ],
     "cxx":{
