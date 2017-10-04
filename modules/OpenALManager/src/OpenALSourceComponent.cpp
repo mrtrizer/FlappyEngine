@@ -1,11 +1,16 @@
 #include "OpenALSourceComponent.h"
 
+#include <Entity.h>
+#include <TransformComponent.h>
+
 #include "OpenALManager.h"
 
 namespace flappy {
 
 OpenALSourceComponent::OpenALSourceComponent() {
+
     addDependency(OpenALManager::id());
+
     events()->subscribe([this](InitEvent) {
         alGenSources(1, &m_sourceId);
         alSource3f(m_sourceId, AL_POSITION, 0.0f, 0.0f, 0.0f);
@@ -17,6 +22,11 @@ OpenALSourceComponent::OpenALSourceComponent() {
     });
 
     events()->subscribe([this](UpdateEvent) {
+        auto transformComponent = entity()->findComponent<TransformComponent>();
+        if (transformComponent != nullptr) {
+            auto& pos = transformComponent->pos();
+            alSource3f(m_sourceId, AL_POSITION, pos.x, pos.y, pos.z);
+        }
         if ((m_audioRes != nullptr) && (m_audioRes->nextRes() != m_audioRes)) {
             m_audioRes = m_audioRes->lastRes();
             bool needRestart = isPlaying();

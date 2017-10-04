@@ -30,7 +30,7 @@ int main(int, char*[]) {
             auto audioRes = audioResManager->getRes("boom");
             source->setAudioRes(audioRes);
             source->play();
-            source->setGain(0.1f);
+            source->setGain(0.5f);
             source->setLooping(true);
     });
 
