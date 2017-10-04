@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Manager.h>
-#include <IResFactory.h>
+#include <ResFactory.h>
 #include <OpenALAudioRes.h>
 
 namespace flappy {

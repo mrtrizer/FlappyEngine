@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <ResManager.h>
-#include <IResFactory.h>
+#include <ResFactory.h>
 #include <Res.h>
 #include <Tools.h>
 #include <Entity.h>

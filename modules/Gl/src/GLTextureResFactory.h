@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <IResFactory.h>
+#include <ResFactory.h>
 #include <GLTextureRes.h>
 
 namespace flappy {

@@ -3,7 +3,7 @@
 #include <Entity.h>
 #include <ThreadManager.h>
 
-#include "IResFactory.h"
+#include "ResFactory.h"
 #include "ResManager.h"
 
 namespace flappy {

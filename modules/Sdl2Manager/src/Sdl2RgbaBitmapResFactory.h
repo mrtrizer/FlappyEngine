@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <IResFactory.h>
+#include <ResFactory.h>
 #include <IRgbaBitmapRes.h>
 
 namespace flappy {

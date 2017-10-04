@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "IResFactory.h"
+#include "ResFactory.h"
 #include "IFileLoadManager.h"
 #include "IFileMonitorManager.h"
 #include "ResRepositoryManager.h"

@@ -10,7 +10,7 @@
 
 #include "IFileMonitorManager.h"
 #include "ResKeeper.h"
-#include "IResFactory.h"
+#include "ResFactory.h"
 
 namespace flappy {
 

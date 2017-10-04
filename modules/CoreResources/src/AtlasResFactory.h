@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <IResFactory.h>
+#include <ResFactory.h>
 #include <AtlasRes.h>
 
 namespace flappy {

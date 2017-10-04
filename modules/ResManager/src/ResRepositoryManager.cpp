@@ -2,7 +2,6 @@
 
 #include <json/json.hpp>
 
-#include "IResFactory.h"
 #include "Res.h"
 #include "IFileLoadManager.h"
 #include "IFileMonitorManager.h"
