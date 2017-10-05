@@ -13,11 +13,11 @@ View::View()
     addDependency(ViewManager::id());
 
     subscribe([this](InitEvent) {
-        manager<ViewManager>()->registerRenderElement(selfPointer<View>());
+        manager<ViewManager>()->registerRenderElement(selfPointer());
     });
 
     subscribe([this](DeinitEvent) {
-        manager<ViewManager>()->unregisterRenderElement(selfPointer<View>());
+        manager<ViewManager>()->unregisterRenderElement(selfPointer());
     });
 }
 

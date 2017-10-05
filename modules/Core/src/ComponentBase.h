@@ -117,18 +117,6 @@ protected:
     template <typename ManagerT>
     SafePtr<ManagerT> manager() const;
 
-    /// Returns shared_ptr<Component> static casted to shared_ptr<T>
-    template <typename T>
-    std::shared_ptr<T> selfSharedPointer() { return std::static_pointer_cast<T>(shared_from_this()); }
-    template <typename T>
-    const std::shared_ptr<T> selfSharedPointer() const { return std::static_pointer_cast<T>(shared_from_this()); }
-
-    /// Returns SafePtr<Component> static casted to SafePtr<T>
-    template <typename T>
-    SafePtr<T> selfPointer() { return selfSharedPointer<T>(); }
-    template <typename T>
-    const SafePtr<T> selfPointer() const { return selfSharedPointer<T>(); }
-
     /// Use this method to list dependencies.
     /// Component will be initialized once all depenencies are initialized.
     void addDependency(TypeId<ComponentBase> id);

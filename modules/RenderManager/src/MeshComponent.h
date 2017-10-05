@@ -14,7 +14,7 @@ public:
         addDependency(RenderElementFactory::id());
 
         subscribe([this](InitEvent) {
-            m_renderElement = manager<RenderElementFactory>()->createMeshRender(selfPointer<MeshComponent>());
+            m_renderElement = manager<RenderElementFactory>()->createMeshRender(selfPointer());
             entity()->addComponent(m_renderElement);
         });
 

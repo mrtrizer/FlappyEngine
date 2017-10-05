@@ -12,11 +12,11 @@ OpenALListenerComponent::OpenALListenerComponent() {
     addDependency(TransformComponent::id());
 
     events()->subscribe([this](InitEvent) {
-        manager<OpenALManager>()->registerListener(selfPointer<OpenALListenerComponent>());
+        manager<OpenALManager>()->registerListener(selfPointer());
     });
 
     events()->subscribe([this](InitEvent) {
-        manager<OpenALManager>()->unregisterListener(selfPointer<OpenALListenerComponent>());
+        manager<OpenALManager>()->unregisterListener(selfPointer());
     });
 }
 

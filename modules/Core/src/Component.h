@@ -32,6 +32,10 @@ public:
         return GetTypeId<ComponentBase, DerivedT>::value();
     }
 
+protected:
+    SafePtr<DerivedT> selfPointer() { return std::static_pointer_cast<DerivedT>(shared_from_this()); }
+    const SafePtr<DerivedT> selfPointer() const { return std::static_pointer_cast<DerivedT>(shared_from_this()); }
+
 private:
     void initInternal() final {
         LOGI("Init %s", typeName<DerivedT>().c_str());

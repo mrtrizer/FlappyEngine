@@ -15,7 +15,7 @@ public:
         addDependency(RenderElementFactory::id());
 
         subscribe([this](InitEvent) {
-            m_renderElement = manager<RenderElementFactory>()->createSpriteRender(selfPointer<SpriteComponent>());
+            m_renderElement = manager<RenderElementFactory>()->createSpriteRender(selfPointer());
             entity()->addComponent(m_renderElement);
         });
 

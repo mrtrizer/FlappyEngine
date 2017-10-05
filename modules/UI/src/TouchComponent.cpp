@@ -13,11 +13,11 @@ TouchComponent::TouchComponent()
     addDependency(Box2DBodyComponent::id());
 
     events()->subscribe([this](InitEvent) {
-        manager<UIManager>()->registerTouchComponent(selfPointer<TouchComponent>());
+        manager<UIManager>()->registerTouchComponent(selfPointer());
     });
 
     events()->subscribe([this](DeinitEvent) {
-        manager<UIManager>()->unregisterTouchComponent(selfPointer<TouchComponent>());
+        manager<UIManager>()->unregisterTouchComponent(selfPointer());
     });
 }
 
