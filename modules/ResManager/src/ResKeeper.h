@@ -5,6 +5,7 @@
 #include <SafePtr.h>
 
 #include "ResInfo.h"
+#include "ExecType.h"
 
 namespace flappy {
 
@@ -30,7 +31,7 @@ public:
     void cleanUpRes();
     void updateRes();
     bool dependencyChanged();
-    std::shared_ptr<ResBase> actualRes();
+    std::shared_ptr<ResBase> actualRes(ExecType execType);
 
 private:
     SafePtr<IResFactory> m_resFactory;

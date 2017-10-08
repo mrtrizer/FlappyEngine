@@ -17,11 +17,7 @@ SpriteResFactory::SpriteResFactory() {
     addDependency(ResManager<AtlasRes>::id());
 }
 
-std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name)  {
-    return create(name);
-}
-
-std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
+std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name, ExecType execType)  {
     auto splittedName = split(name, ':');
 
     if (splittedName.size() != 1 && splittedName.size() != 3) {
@@ -34,10 +30,10 @@ std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
 
     if (splittedName.size() == 3) { // if atlas path, load atlas
         string textureName = splittedName[0];
-        auto texture = textureResManager->getRes(textureName);
+        auto texture = textureResManager->getRes(textureName, execType);
 
         string atlasName = splittedName[1];
-        auto atlas = atlasResManager->getRes(atlasName);
+        auto atlas = atlasResManager->getRes(atlasName, execType);
 
         string quadName = splittedName[2];
         auto quad = make_shared<SpriteRes>(atlas, texture, quadName);
@@ -45,12 +41,16 @@ std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
     } else { // if just an image path
         string quadName = splittedName[0];
         string defaultQuadName = "__full__";
-        auto texture = textureResManager->getResSync(quadName);
+        auto texture = textureResManager->getRes(quadName, ExecType::SYNC);
         auto atlas = make_shared<AtlasRes>(); // create atlas dependent from image
         atlas->addSpriteInfo(defaultQuadName, AtlasRes::SpriteInfo({0.0f,0.0f,1.0f,1.0f}, texture->size()));
         auto defaultQuad = make_shared<SpriteRes>(atlas, texture, defaultQuadName);
         return defaultQuad;
     }
+}
+
+std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
+    return load(name, ExecType::ASYNC);
 }
 
 std::vector<std::string> SpriteResFactory::split(const std::string &s, char delimiter)

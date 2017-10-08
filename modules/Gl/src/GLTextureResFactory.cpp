@@ -17,15 +17,15 @@ GLTextureResFactory::GLTextureResFactory() {
     addDependency(ThreadManager::id());
 }
 
-std::shared_ptr<ResBase> GLTextureResFactory::load(const std::string& name)  {
-    return create(name);
+std::shared_ptr<ResBase> GLTextureResFactory::load(const std::string& name, ExecType execType)  {
+    auto rootEntity = manager<ThreadManager>()->entity();
+    auto bitmapRes = manager<ResManager<IRgbaBitmapRes>>()->getRes(name, execType);
+    auto res = std::make_shared<GLTextureRes>(rootEntity, bitmapRes);
+    return res;
 }
 
 std::shared_ptr<ResBase> GLTextureResFactory::create(const std::string& name) {
-    auto rootEntity = manager<ThreadManager>()->entity();
-
-    auto res = std::make_shared<GLTextureRes>(rootEntity, manager<ResManager<IRgbaBitmapRes>>()->getRes(name));
-    return res;
+    return load(name, ExecType::ASYNC);
 }
 
 } // flappy

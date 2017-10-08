@@ -11,6 +11,7 @@
 #include "IFileMonitorManager.h"
 #include "ResKeeper.h"
 #include "ResFactory.h"
+#include "ExecType.h"
 
 namespace flappy {
 
@@ -47,10 +48,7 @@ public:
     /// runtime_error exception will be generated.
     /// @return Pointer to inialized resource.
     /// @see ResourceFactory, ResManager::bindResFactory(), ResManager::setRes()
-    std::shared_ptr<ResT> getRes(const std::string& name);
-
-    /// @brief Synchronous version of getRes
-    std::shared_ptr<ResT> getResSync(const std::string& name);
+    std::shared_ptr<ResT> getRes(const std::string& name, ExecType execType);
 
     /// @brief Bind resource factory, used to load and reload resources.
     /// Resource can't be initlalized and loaded without binded factory.
@@ -78,21 +76,10 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 }
 
 template<typename ResT>
-std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name) {
+std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name, ExecType execType) {
     if (!this->template isInitialized())
         throw std::runtime_error(std::string("ResManager for ") + typeName<ResT>() + " is not initialized.");
-    return std::static_pointer_cast<ResT>(getResKeeper(name).actualRes());
-}
-
-/// @brief Synchronous version of getRes
-template<typename ResT>
-std::shared_ptr<ResT> ResManager<ResT>::getResSync(const std::string& name)
-{
-    auto& resKeeper = getResKeeper(name);
-    if (this->isInitialized()) {
-        resKeeper.updateRes();
-    }
-    return std::static_pointer_cast<ResT>(resKeeper.actualRes());
+    return std::static_pointer_cast<ResT>(getResKeeper(name).actualRes(execType));
 }
 
 /// @}

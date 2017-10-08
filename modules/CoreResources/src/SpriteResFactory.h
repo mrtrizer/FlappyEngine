@@ -18,7 +18,7 @@ public:
     /// There are two name formats avaliable:
     /// Path in atlas: "atlas_name:sprite_name"
     /// Image file name: "file_name"
-    std::shared_ptr<ResBase> load(const std::string& name) final;
+    std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;
 
 private:

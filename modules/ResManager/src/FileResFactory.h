@@ -26,7 +26,7 @@ class FileResFactory : public ResFactory<TextRes>
 public:
     FileResFactory();
 
-    std::shared_ptr<ResBase> load(const std::string& name) final;
+    std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;
     bool changed(const std::string& name) final;
 };

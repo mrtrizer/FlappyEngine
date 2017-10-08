@@ -31,10 +31,7 @@ TEST_CASE( "AtlasResFactory loading from file") {
     entity->createComponent<ResRepositoryManager>("./resources/");
     entity->createComponent<AtlasResFactory>();
     auto atlasResManager = entity->createComponent<ResManager<AtlasRes>>();
-    auto atlasTest = atlasResManager->getResSync("test_atlas");
-    entity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    entity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    entity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    auto atlasTest = atlasResManager->getRes("test_atlas", ExecType::SYNC);
     atlasTest = atlasTest->lastRes();
     const auto expectedRect = Tools::Rect(0.1f, 0.2f, 0.3f, 0.4f);
     REQUIRE(atlasTest->spriteInfo("rect1").rectInAtlas == expectedRect);

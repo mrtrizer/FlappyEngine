@@ -28,7 +28,7 @@ public:
         addDependency(IGLManager::id());
 
         subscribe([this](InitEvent) {
-            setShader(manager<ResManager<GLShaderRes>>()->getRes("shape_shader"));
+            setShader(manager<ResManager<GLShaderRes>>()->getRes("shape_shader", ExecType::ASYNC));
         });
     }
 

@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
                         auto spriteEntity = sceneEntity->createEntity();
                         spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
                         spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
-                        auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__");
+                        auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__", ExecType::ASYNC);
                         spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
                         // Dynamic box

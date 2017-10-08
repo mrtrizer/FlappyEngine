@@ -21,7 +21,7 @@ GLShaderResFactory::GLShaderResFactory() {
     addDependency(ThreadManager::id());
 }
 
-std::shared_ptr<ResBase> GLShaderResFactory::load(const std::string& name)  {
+std::shared_ptr<ResBase> GLShaderResFactory::load(const std::string& name, ExecType)  {
     return create(name);
 }
 

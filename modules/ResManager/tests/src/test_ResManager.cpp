@@ -55,6 +55,6 @@ TEST_CASE( "ResManager::getRes()") {
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
     rootEntity->createComponent<FileResFactory>();
     auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
-    auto textRes = resManager->getResSync("dir/text_res");
+    auto textRes = resManager->getRes("dir/text_res", ExecType::SYNC);
     REQUIRE(textRes->text() == "Abuksigun\n");
 }

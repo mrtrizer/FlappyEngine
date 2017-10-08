@@ -36,15 +36,15 @@ TEST_CASE( "TextRes::text()") {
 
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
     writeToFile("./resources/example.txt", "Test text");
-    auto textFile = textResManager->getRes("example");
+    auto textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    textFile = textResManager->getRes("example");
+    textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "Test text");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
     REQUIRE(textFile->nextRes() == textFile); // res should not be updated during update
     writeToFile("./resources/example.txt", "Test text 2");
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    textFile = textResManager->getRes("example");
+    textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "Test text 2");
 }

@@ -12,7 +12,7 @@ FileResFactory::FileResFactory()
     this->addDependency(IFileLoadManager::id());
 }
 
-std::shared_ptr<ResBase> FileResFactory::load(const std::string& name) {
+std::shared_ptr<ResBase> FileResFactory::load(const std::string& name, ExecType) {
     auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
     auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
     auto fileLoadManager = this->template manager<IFileLoadManager>();

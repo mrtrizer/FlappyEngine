@@ -40,14 +40,20 @@ void ResKeeper::cleanUpRes()
 
 bool ResKeeper::dependencyChanged()
 {
-    for (auto dependency: actualRes()->dependencyList())
+    for (auto dependency: actualRes(ExecType::ASYNC)->dependencyList())
         if ((dependency != nullptr) && dependency->resUpdated())
             return true;
     return false;
 }
 
-std::shared_ptr<ResBase> ResKeeper::actualRes()
+std::shared_ptr<ResBase> ResKeeper::actualRes(ExecType execType)
 {
+    if (execType == ExecType::SYNC) {
+        auto loadedRes = m_resFactory->load(m_name, ExecType::SYNC);
+        if (loadedRes != nullptr) {
+            m_res->pushRes(loadedRes);
+        }
+    }
     return m_res->lastResBase();
 }
 
@@ -59,7 +65,7 @@ void ResKeeper::updateRes()
     // reload if anything is changed
     if (changed) {
         try { // swallow all possible exceptions while resource loading
-            auto loadedRes = m_resFactory->load(m_name);
+            auto loadedRes = m_resFactory->load(m_name, ExecType::ASYNC);
             if (loadedRes != nullptr) {
                 m_res->pushRes(loadedRes);
                 m_loaded = true;

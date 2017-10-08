@@ -21,7 +21,7 @@ Sdl2RgbaBitmapResFactory::Sdl2RgbaBitmapResFactory() {
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
-std::shared_ptr<ResBase> Sdl2RgbaBitmapResFactory::load(const std::string& name) {
+std::shared_ptr<ResBase> Sdl2RgbaBitmapResFactory::load(const std::string& name, ExecType) {
     auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
     auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
     string fullPath = fileInfo.path;

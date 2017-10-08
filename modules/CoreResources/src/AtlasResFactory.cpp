@@ -10,9 +10,9 @@ AtlasResFactory::AtlasResFactory() {
     addDependency(ResManager<JsonRes>::id());
 }
 
-std::shared_ptr<ResBase> AtlasResFactory::load(const std::string& name) {
+std::shared_ptr<ResBase> AtlasResFactory::load(const std::string& name, ExecType execType) {
     using namespace nlohmann;
-    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name);
+    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name, execType);
     auto atlasRes = std::make_shared<AtlasRes>(jsonRes);
     auto json = jsonRes->json();
     auto jsonSprites = json["sprites"];
@@ -32,7 +32,7 @@ std::shared_ptr<ResBase> AtlasResFactory::load(const std::string& name) {
 }
 
 std::shared_ptr<ResBase> AtlasResFactory::create(const std::string& name) {
-    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name);
+    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name, ExecType::ASYNC);
     return std::make_shared<AtlasRes>(jsonRes);
 }
 

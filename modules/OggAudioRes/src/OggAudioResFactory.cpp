@@ -18,7 +18,7 @@ OggAudioResFactory::OggAudioResFactory() {
 }
 
 // Based on https://www.gamedev.net/articles/programming/general-and-gameplay-programming/introduction-to-ogg-vorbis-r2031/
-std::shared_ptr<ResBase> OggAudioResFactory::load(const std::string& name) {
+std::shared_ptr<ResBase> OggAudioResFactory::load(const std::string& name, ExecType) {
     const unsigned BUFFER_SIZE = 1024 * 32; // 32 KB buffers
 
     auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);

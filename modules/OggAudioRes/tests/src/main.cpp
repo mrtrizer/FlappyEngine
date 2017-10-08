@@ -27,7 +27,7 @@ int main(int, char*[]) {
             listenerEntity->createComponent<TransformComponent>();
             auto sourceEntity = rootEntity->createEntity();
             auto source = sourceEntity->createComponent<OpenALSourceComponent>();
-            auto audioRes = audioResManager->getRes("boom");
+            auto audioRes = audioResManager->getRes("boom", ExecType::ASYNC);
             source->setAudioRes(audioRes);
             source->play();
             source->setGain(0.5f);
