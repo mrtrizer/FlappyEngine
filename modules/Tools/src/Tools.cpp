@@ -1,5 +1,7 @@
 #include <cmath>
 #include <functional>
+#include <cstdio>
+#include <cstdarg>
 
 #include "Tools.h"
 
@@ -9,6 +11,16 @@ using namespace std;
 
 /// Common tools for model
 namespace Tools {
+
+std::string format(const char* format, ...) {
+    std::string outputBuff(1000, ' ');
+    va_list arglist;
+    va_start(arglist, format);
+    int length = std::vsnprintf(&outputBuff.front(), outputBuff.size(), format, arglist );
+    outputBuff.resize(length);
+    va_end(arglist);
+    return outputBuff;
+}
 
 void printStackTrace() {
     void* callstack[128];

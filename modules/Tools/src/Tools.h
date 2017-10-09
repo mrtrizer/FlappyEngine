@@ -26,6 +26,8 @@ std::string typeName() {
 /// Gives some common tools
 namespace Tools
 {
+    std::string format(const char* format, ...);
+
     void printStackTrace();
 
     struct Rect {
