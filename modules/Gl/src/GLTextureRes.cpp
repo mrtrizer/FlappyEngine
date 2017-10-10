@@ -15,6 +15,29 @@ GLTextureRes::GLTextureRes(SafePtr<Entity> rootEntity, std::shared_ptr<IRgbaBitm
     m_rootEntity(rootEntity),
     m_rgbaBitmapRes(rgbaBitmapRes)
 {
+    int width = rgbaBitmapRes->width();
+    int height = rgbaBitmapRes->height();
+
+    //check width and height
+    if ((width == height) && Tools::isPowOfTwo(width) && Tools::isPowOfTwo(height)) {
+
+
+    } else {
+        int powTwoWidth = Tools::nextHighestPowOfTwo32(width);
+        int powTwoHeight = Tools::nextHighestPowOfTwo32(height);
+
+        int maxPowTwo = std::max(powTwoWidth, powTwoHeight);
+
+        m_relWidth = (float)width / maxPowTwo;
+        m_relHeight = (float)height / maxPowTwo;
+
+        //recalculate UVs
+        m_uvs[2].u = m_relWidth;
+        m_uvs[3].u = m_relWidth;
+        m_uvs[0].v = m_relHeight;
+        m_uvs[2].v = m_relHeight;
+    }
+
     m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitGLTexture();
@@ -69,22 +92,13 @@ void GLTextureRes::initGLTexture() {
 
         int maxPowTwo = std::max(powTwoWidth, powTwoHeight);
 
-        m_relWidth = (float)width / maxPowTwo;
-        m_relHeight = (float)height / maxPowTwo;
-
-        //recalculate UVs
-        m_uvs[2].u = m_relWidth;
-        m_uvs[3].u = m_relWidth;
-        m_uvs[0].v = m_relHeight;
-        m_uvs[2].v = m_relHeight;
-
         //data buffer for square image
         char * newPixBuf = new char[maxPowTwo * maxPowTwo * 4]();
         //image will be located at the top left corner of newPixBuf
         for (int i = 0; i < height; i++)
             memcpy(&newPixBuf[i * maxPowTwo * 4], &bitmapData[i * width * 4], width * 4);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     maxPowTwo, maxPowTwo, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     maxPowTwo, maxPowTwo, 0, GL_BGRA, GL_UNSIGNED_BYTE,
                      static_cast<const GLvoid*>(newPixBuf));
         CHECK_GL_ERROR;
         delete []newPixBuf;

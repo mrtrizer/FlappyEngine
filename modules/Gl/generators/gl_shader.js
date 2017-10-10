@@ -17,7 +17,7 @@ function copyFileToCache(context, file, resSrcDir, cacheSubDir) {
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     copyFileToCache(context, resConfig.fragment, resSrcDir, cacheSubDir);
     copyFileToCache(context, resConfig.vertex, resSrcDir, cacheSubDir);
-    return resConfig;
+    return [resConfig];
 };
 
 module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {

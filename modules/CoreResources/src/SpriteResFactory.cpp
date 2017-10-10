@@ -33,7 +33,7 @@ std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name, ExecTyp
         auto texture = textureResManager->getRes(textureName, execType);
 
         string atlasName = splittedName[1];
-        auto atlas = atlasResManager->getRes(atlasName, execType);
+        auto atlas = atlasResManager->getRes(atlasName, ExecType::SYNC);
 
         string quadName = splittedName[2];
         auto quad = make_shared<SpriteRes>(atlas, texture, quadName);

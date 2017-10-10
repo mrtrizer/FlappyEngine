@@ -26,6 +26,7 @@
 #include <DesktopThread.h>
 #include <PosixApplication.h>
 #include <GLTextureResFactory.h>
+#include <AtlasResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -43,7 +44,9 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResRepositoryManager>("./resources");
                         rootEntity->createComponent<StdFileMonitorManager>();
                         rootEntity->createComponent<StdFileLoadManager>();
-                        rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>>();
+                        rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
+                        rootEntity->createComponent<ResManager<JsonRes>>();
+                        rootEntity->createComponent<AtlasResFactory>();
                         rootEntity->createComponent<ResManager<AtlasRes>> ();
                         rootEntity->createComponent<FileResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
@@ -67,7 +70,8 @@ int main(int argc, char *argv[])
                         auto spriteEntity = sceneEntity->createEntity();
                         spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
                         spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
-                        auto quadRes = rootEntity->component<ResManager<SpriteRes>>()->getRes("__img_missing__", ExecType::ASYNC);
+                        auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
+                        auto quadRes = spriteResManager->getRes("demo_atlas_image:demo_atlas_meta:blue_button01", ExecType::ASYNC);
                         spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
                         // Dynamic box

@@ -15,7 +15,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     logger.logi("Copy to: " + outputPath);
     fse.copySync(inputPath, outputPath);
 
-    return resConfig;
+    return [resConfig];
 };
 
 module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {

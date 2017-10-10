@@ -1,0 +1,5 @@
+{
+    "type":"sprite_folder",
+    "folder":"./demo_sprites/",
+    "atlas_name":"demo_atlas"
+}
