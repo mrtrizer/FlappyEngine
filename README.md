@@ -14,10 +14,13 @@ You can find more details in FlappyTools2 documentation.
 
 ## Linux
 Install libvorbis-dev, libopenal-dev, glew, sdl2 and sdl2_image using standart package manager.
+Also install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ required for atlas and font texture generation.
 
 ## OS X
 1. Install glew and libvorbis using brew. `brew install glew libvorbis`
 
-2. Download SDL2 and SDL2_image here: https://www.libsdl.org/download-2.0.php#source and https://www.libsdl.org/projects/SDL_image/.
+2. Install libraries for font generation and image processing `brew install pkg-config cairo libpng jpeg giflib graphicsmagick`
 
-3. Copy SDL2.framework and SDL2_image.framework to ~/Library/Frameworks (create the folder if needed)
+3. Download SDL2 and SDL2_image here: https://www.libsdl.org/download-2.0.php#source and https://www.libsdl.org/projects/SDL_image/.
+
+4. Copy SDL2.framework and SDL2_image.framework to ~/Library/Frameworks (create the folder if needed)
