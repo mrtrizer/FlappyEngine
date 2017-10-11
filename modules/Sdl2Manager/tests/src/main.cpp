@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
                         // Text
                         auto textEntity = sceneEntity->createEntity();
                         textEntity->component<TransformComponent>()->setPos({-40.0f, 100.0f, 0.0f});
-                        textEntity->component<TextComponent>()->setText("Test");
+                        textEntity->component<TextComponent>()->setText("Test 123");
                         auto glyphSheetRes = glyphResManager->getRes("kenvector_future_meta", ExecType::SYNC);
                         textEntity->component<TextComponent>()->setGlyphSheetRes(glyphSheetRes);
                         auto glyphTexture = textureResManager->getRes("kenvector_future_image", ExecType::ASYNC);

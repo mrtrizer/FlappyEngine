@@ -19,18 +19,19 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     const fontPath = path.join(resSrcDir, resConfig.font);
 
     const opt = {
-        fieldType: 'sdf',
-        reuse: false
+        fieldType: "sdf",
+        reuse: false,
+        outputType: "json"
     };
 
     generateBMFont(fontPath, opt, (error, textures, font) => {
         if (error)
             throw error;
         textures.forEach((sheet, index) => {
-            font.pages = [path.join(cacheSubDir, `${atlasFileName}${index}.png`)];
-            fs.writeFileSync(path.join(cacheSubDir, `${atlasFileName}${index}.png`), sheet);
+            const texturePath = path.join(cacheSubDir, `${atlasFileName}.png`);
+            fs.writeFileSync(texturePath, sheet.texture);
         });
-        fs.writeFileSync(path.join(cacheSubDir, jsonFileName), JSON.stringify(font));
+        fs.writeFileSync(path.join(cacheSubDir, jsonFileName), font.data);
         done = true;
     });
 
@@ -41,7 +42,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
         {
             "name": atlasFileName + "_image",
             "type": "png",
-            "input": atlasFileName + "0.png"
+            "input": atlasFileName + ".png"
         },
         {
             "name": atlasFileName + "_meta",
@@ -55,7 +56,7 @@ module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
 
     const atlasFileName = path.parse(resConfig["font"]).name;
-    const imageFileName = atlasFileName + "0.png";
+    const imageFileName = atlasFileName + ".png";
     const jsonFileName = atlasFileName + ".json";
 
     var list = [

@@ -26,6 +26,9 @@ public:
         });
     }
 
+    void setSize(int size) { m_size = size; }
+    int size() { return m_size; }
+
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color& colorRGBA() { return m_colorRGBA; }
 
@@ -49,6 +52,7 @@ public:
     }
 
 private:
+    int m_size = 20;
     Color m_colorRGBA;
     std::string m_text;
     std::shared_ptr<TextureRes> m_textureRes;

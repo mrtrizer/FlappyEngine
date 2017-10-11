@@ -24,7 +24,6 @@ public:
 private:
     GLAttribArray m_rect;
     SafePtr<TextComponent> m_spriteComponent;
-    std::vector<GLTools::Vertex> m_vertexList;
     std::shared_ptr<TextureRes> m_textureRes;
     std::shared_ptr<GlyphSheetRes> m_glyphSheetRes;
 

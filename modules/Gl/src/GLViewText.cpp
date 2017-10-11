@@ -16,10 +16,6 @@ using namespace std;
 GLViewText::GLViewText(SafePtr<TextComponent> spriteComponent):
     m_rect(GL_TRIANGLE_STRIP),
     m_spriteComponent(spriteComponent),
-    m_vertexList{ {-0.5f, -0.5f},
-                {-0.5f, 0.5f},
-                {0.5f, -0.5f},
-                {0.5f, 0.5f} },
     m_textureRes(spriteComponent->textureRes())
 {
     addDependency(TextComponent::id());
@@ -52,10 +48,10 @@ void GLViewText::updateFrame() {
     auto glyphSheetRes = m_spriteComponent->glyphSheetRes();
     auto texture = m_spriteComponent->textureRes();
     auto str = m_spriteComponent->text();
+    int size = m_spriteComponent->size();
 
     vector<GLTextureRes::UV> uvs;
-
-    m_vertexList.clear();
+    std::vector<GLTools::Vertex> vertices;
 
     for (int i = 0; i < str.length(); i++) {
         char symbol = str[i];
@@ -67,36 +63,28 @@ void GLViewText::updateFrame() {
                                        (glyph.x + glyph.width) / texture->size().x,
                                        (glyph.y + glyph.height) / texture->size().y);
 
-        // Relative width and height of texture are useful for non square atlases.
-        // We need to multiply relative sprite coords and relative atlas size.
-        float textureRelativeWidth = texture->relWidth();
-        float spriteRelativeWidth = textureRelativeWidth * rectInAtlas.size().x;
-        float spriteRelativeX = rectInAtlas.x1 * textureRelativeWidth;
+        float uvWidth = texture->relWidth() * rectInAtlas.size().x;
+        float uvX = rectInAtlas.x1 * texture->relWidth();
 
-        float textureRelativeHeight = texture->relHeight();
-        float spriteRelativeHeight = textureRelativeHeight * rectInAtlas.size().y;
-        float spriteRelativeY = rectInAtlas.y1 * textureRelativeHeight;
+        float uvHeight = texture->relHeight() * rectInAtlas.size().y;
+        float uvY = rectInAtlas.y1 * texture->relWidth();
 
-        uvs.push_back({spriteRelativeX, spriteRelativeY + spriteRelativeHeight});
-        uvs.push_back({spriteRelativeX, spriteRelativeY});
-        uvs.push_back({spriteRelativeX + spriteRelativeWidth, spriteRelativeY + spriteRelativeHeight});
-        uvs.push_back({spriteRelativeX + spriteRelativeWidth, spriteRelativeY});
+        uvs.push_back({uvX, uvY + uvHeight});
+        uvs.push_back({uvX, uvY});
+        uvs.push_back({uvX + uvWidth, uvY + uvHeight});
+        uvs.push_back({uvX + uvWidth, uvY});
 
-        m_rect.reset(GL_TRIANGLE_STRIP);
+        int offsetX = size * i;
 
-        auto spriteSize = glm::vec2(20,20);
-        int offset = spriteSize.x * i;
-
-        m_vertexList.push_back({-0.5f * spriteSize.x + offset, -0.5f * spriteSize.y});
-        m_vertexList.push_back({-0.5f * spriteSize.x + offset, 0.5f * spriteSize.y});
-        m_vertexList.push_back({0.5f * spriteSize.x + offset, -0.5f * spriteSize.y});
-        m_vertexList.push_back({0.5f * spriteSize.x + offset, 0.5f * spriteSize.y});
-
+        vertices.push_back({-0.5f * size + offsetX, -0.5f * size});
+        vertices.push_back({-0.5f * size + offsetX, 0.5f * size});
+        vertices.push_back({0.5f * size + offsetX, -0.5f * size});
+        vertices.push_back({0.5f * size + offsetX, 0.5f * size});
     }
 
+    m_rect.reset(GL_TRIANGLE_STRIP);
     m_rect.addVBO<GLTextureRes::UV>(uvs, shader()->findAttr("aTexCoord"));
-
-    m_rect.addVBO<GLTools::Vertex>(m_vertexList, shader()->findAttr("aPosition"));
+    m_rect.addVBO<GLTools::Vertex>(vertices, shader()->findAttr("aPosition"));
 }
 
 } // flappy
