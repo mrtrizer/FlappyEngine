@@ -3,7 +3,6 @@
 module.exports.type = "ttf";
 
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
-    const spritesmith = require('spritesmith');
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
@@ -15,7 +14,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
 
     var done = false;
 
-    const generateBMFont = require('msdf-bmfont');
+    const generateBMFont = require('msdf-bmfont-xml');
 
     const fontPath = path.join(resSrcDir, resConfig.font);
 
@@ -28,7 +27,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
         if (error)
             throw error;
         textures.forEach((sheet, index) => {
-            font.pages.push(path.join(cacheSubDir, `${atlasFileName}${index}.png`));
+            font.pages = [path.join(cacheSubDir, `${atlasFileName}${index}.png`)];
             fs.writeFileSync(path.join(cacheSubDir, `${atlasFileName}${index}.png`), sheet);
         });
         fs.writeFileSync(path.join(cacheSubDir, jsonFileName), JSON.stringify(font));
