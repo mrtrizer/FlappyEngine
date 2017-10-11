@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "dependencies": {
         "spritesmith": "*",
-        "msdf-bmfont": "*",
+        "msdf-bmfont-xml": "*",
         "deasync": "*"
     }
 }

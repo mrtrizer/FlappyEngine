@@ -20,7 +20,8 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     const fontPath = path.join(resSrcDir, resConfig.font);
 
     const opt = {
-        fieldType: 'sdf'
+        fieldType: 'sdf',
+        reuse: false
     };
 
     generateBMFont(fontPath, opt, (error, textures, font) => {
