@@ -9,6 +9,7 @@ namespace  flappy {
 
 class MeshComponent;
 class SpriteComponent;
+class TextComponent;
 class View;
 
 class RenderElementFactory : public Manager<RenderElementFactory> {
@@ -17,6 +18,7 @@ public:
 
     virtual std::shared_ptr<View> createSpriteRender(SafePtr<SpriteComponent>) = 0;
     virtual std::shared_ptr<View> createMeshRender(SafePtr<MeshComponent>) = 0;
+    virtual std::shared_ptr<View> createTextRender(SafePtr<TextComponent>) = 0;
 
 };
 

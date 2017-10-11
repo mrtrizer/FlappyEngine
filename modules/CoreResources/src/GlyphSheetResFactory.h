@@ -3,14 +3,14 @@
 #include <string>
 
 #include <ResFactory.h>
-#include "AtlasRes.h"
+#include "GlyphSheetRes.h"
 
 namespace flappy {
 
-class AtlasResFactory :public ResFactory<AtlasRes>
+class GlyphSheetResFactory :public ResFactory<GlyphSheetRes>
 {
 public:
-    AtlasResFactory();
+    GlyphSheetResFactory();
     std::shared_ptr<ResBase> load(const std::string&name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string&) final;
 };

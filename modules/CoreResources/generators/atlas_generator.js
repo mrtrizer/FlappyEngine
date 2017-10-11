@@ -34,8 +34,6 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
 
     const sprites = utils.readDirs(path.join(resSrcDir, resConfig["folder"]));
 
-    let wait = [true];
-
     var done = false;
 
     spritesmith.run({src: sprites}, (err, result) => {

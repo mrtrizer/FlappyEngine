@@ -10,22 +10,23 @@ namespace flappy {
 template <typename T>
 class ResHandler;
 
-class SpriteRes;
-
-class SpriteComponent;
+class TextureRes;
+class GlyphSheetRes;
+class TextComponent;
 
 /// Contains shaders and vbos to draw textures on a rectangle.
-class GLViewSprite : public GLView<GLViewSprite>
+class GLViewText : public GLView<GLViewText>
 {
 public:
-    GLViewSprite(SafePtr<SpriteComponent> spriteComponent);
+    GLViewText(SafePtr<TextComponent> spriteComponent);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:
     GLAttribArray m_rect;
-    SafePtr<SpriteComponent> m_spriteComponent;
+    SafePtr<TextComponent> m_spriteComponent;
     std::vector<GLTools::Vertex> m_vertexList;
-    std::shared_ptr<SpriteRes> m_quadRes;
+    std::shared_ptr<TextureRes> m_textureRes;
+    std::shared_ptr<GlyphSheetRes> m_glyphSheetRes;
 
     void updateFrame();
 };

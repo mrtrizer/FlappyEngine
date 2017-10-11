@@ -27,6 +27,9 @@
 #include <PosixApplication.h>
 #include <GLTextureResFactory.h>
 #include <AtlasResFactory.h>
+#include <TextComponent.h>
+#include <GlyphSheetRes.h>
+#include <GlyphSheetResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -53,11 +56,13 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
                         rootEntity->createComponent<GLTextureResFactory>();
-                        rootEntity->createComponent<ResManager<TextureRes>> ();
+                        auto textureResManager = rootEntity->createComponent<ResManager<TextureRes>> ();
                         rootEntity->createComponent<SpriteResFactory>();
                         rootEntity->createComponent<ResManager<SpriteRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<GlyphSheetResFactory> ();
+                        auto glyphResManager = rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
 
                         // Scene
                         auto sceneEntity = rootEntity->createEntity();
@@ -80,6 +85,15 @@ int main(int argc, char *argv[])
                         rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+
+                        // Text
+                        auto textEntity = sceneEntity->createEntity();
+                        textEntity->component<TransformComponent>()->setPos({-40.0f, 100.0f, 0.0f});
+                        textEntity->component<TextComponent>()->setText("Test");
+                        auto glyphSheetRes = glyphResManager->getRes("kenvector_future_meta", ExecType::SYNC);
+                        textEntity->component<TextComponent>()->setGlyphSheetRes(glyphSheetRes);
+                        auto glyphTexture = textureResManager->getRes("kenvector_future_image", ExecType::ASYNC);
+                        textEntity->component<TextComponent>()->setTextureRes(glyphTexture);
 
                         // Try to reinitialize gl context several times
                         rootEntity->removeComponent(sdl2Manager);

@@ -2,6 +2,7 @@
 
 #include "GLViewSprite.h"
 #include "GLViewRect.h"
+#include "GLViewText.h"
 
 namespace flappy {
 
@@ -12,6 +13,10 @@ std::shared_ptr<View> GLRenderElementFactory::createSpriteRender(SafePtr<SpriteC
 
 std::shared_ptr<View> GLRenderElementFactory::createMeshRender(SafePtr<MeshComponent>) {
     return std::make_shared<GLViewRect>();
+}
+
+std::shared_ptr<View> GLRenderElementFactory::createTextRender(SafePtr<TextComponent> textComponent) {
+    return std::make_shared<GLViewText>(textComponent);
 }
 
 } // flappy

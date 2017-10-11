@@ -16,6 +16,7 @@ public:
 
     std::shared_ptr<View> createSpriteRender(SafePtr<SpriteComponent>) final;
     std::shared_ptr<View> createMeshRender(SafePtr<MeshComponent>) final;
+    std::shared_ptr<View> createTextRender(SafePtr<TextComponent>) final;
 
 };
 
