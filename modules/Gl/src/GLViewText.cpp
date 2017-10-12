@@ -7,16 +7,17 @@
 #include <TextureRes.h>
 #include <TextComponent.h>
 #include <GlyphSheetRes.h>
+#include <FontRes.h>
 
 namespace flappy {
 
 using namespace glm;
 using namespace std;
 
-GLViewText::GLViewText(SafePtr<TextComponent> spriteComponent):
+GLViewText::GLViewText(SafePtr<TextComponent> textComponent):
     m_rect(GL_TRIANGLE_STRIP),
-    m_spriteComponent(spriteComponent),
-    m_textureRes(spriteComponent->textureRes())
+    m_spriteComponent(textComponent),
+    m_fontRes(textComponent->fontRes())
 {
     addDependency(TextComponent::id());
 
@@ -27,14 +28,13 @@ GLViewText::GLViewText(SafePtr<TextComponent> spriteComponent):
 
 
 void GLViewText::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    if (m_textureRes != m_spriteComponent->textureRes()) {
+    if (m_fontRes != m_spriteComponent->fontRes()) {
         updateFrame();
-        m_glyphSheetRes = m_spriteComponent->glyphSheetRes();
-        m_textureRes = m_spriteComponent->textureRes();
+        m_fontRes = m_spriteComponent->fontRes();
     }
-    if (m_textureRes != nullptr) {
+    if (m_fontRes != nullptr) {
         shader()->render(m_rect, [this, mvMatrix, pMartrix](){
-            auto texture = m_textureRes;
+            auto texture = m_fontRes->textureRes();
             glUniformMatrix4fv(shader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(shader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
             glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
@@ -45,8 +45,8 @@ void GLViewText::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 }
 
 void GLViewText::updateFrame() {
-    auto glyphSheetRes = m_spriteComponent->glyphSheetRes();
-    auto texture = m_spriteComponent->textureRes();
+    auto glyphSheetRes = m_spriteComponent->fontRes()->glyphSheetRes();
+    auto texture = m_spriteComponent->fontRes()->textureRes();
     auto str = m_spriteComponent->text();
     int size = m_spriteComponent->size();
 

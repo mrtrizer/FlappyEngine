@@ -6,6 +6,7 @@
 #include <RenderElementFactory.h>
 #include <Entity.h>
 #include <GlyphSheetRes.h>
+#include <FontRes.h>
 
 namespace flappy {
 
@@ -35,28 +36,18 @@ public:
     void setText(std::string text) { m_text = text; }
     std::string text() { return m_text; }
 
-    void setTextureRes(std::shared_ptr<TextureRes> textureRes) { m_textureRes = textureRes; }
-    std::shared_ptr<TextureRes> textureRes() {
-        if (m_textureRes != nullptr && m_textureRes->resUpdated()) {
-            m_textureRes = m_textureRes->lastRes();
-        }
-        return m_textureRes;
-    }
-
-    void setGlyphSheetRes(std::shared_ptr<GlyphSheetRes> glyphSheetRes) { m_glyphSheetRes = glyphSheetRes; }
-    std::shared_ptr<GlyphSheetRes> glyphSheetRes() {
-        if (m_glyphSheetRes != nullptr && m_glyphSheetRes->resUpdated()) {
-            m_glyphSheetRes = m_glyphSheetRes->lastRes();
-        }
-        return m_glyphSheetRes;
+    void setFontRes(std::shared_ptr<FontRes> fontRes) { m_fontRes = fontRes; }
+    std::shared_ptr<FontRes> fontRes() {
+        if (m_fontRes != nullptr && m_fontRes->resUpdated())
+            m_fontRes = m_fontRes->lastRes();
+        return m_fontRes;
     }
 
 private:
     int m_size = 20;
     Color m_colorRGBA;
     std::string m_text;
-    std::shared_ptr<TextureRes> m_textureRes;
-    std::shared_ptr<GlyphSheetRes> m_glyphSheetRes;
+    std::shared_ptr<FontRes> m_fontRes;
     std::shared_ptr<View> m_renderElement;
 };
 

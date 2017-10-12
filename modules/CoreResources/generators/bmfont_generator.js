@@ -9,8 +9,8 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     const utils = context.require("./utils");
     const deasync = require("deasync");
 
-    const atlasFileName = path.parse(resConfig["font"]).name;
-    const jsonFileName = atlasFileName + ".json";
+    const atlasName = path.parse(resConfig["font"]).name;
+    const jsonFileName = atlasName + ".json";
 
     var done = false;
 
@@ -28,7 +28,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
         if (error)
             throw error;
         textures.forEach((sheet, index) => {
-            const texturePath = path.join(cacheSubDir, `${atlasFileName}.png`);
+            const texturePath = path.join(cacheSubDir, `${atlasName}.png`);
             fs.writeFileSync(texturePath, sheet.texture);
         });
         fs.writeFileSync(path.join(cacheSubDir, jsonFileName), font.data);
@@ -38,14 +38,20 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     deasync.loopWhile(function(){return !done;});
 
     return [
-        resConfig,
         {
-            "name": atlasFileName + "_image",
-            "type": "png",
-            "input": atlasFileName + ".png"
+            "name": resConfig["name"],
+            "type": module.exports.type,
+            "font": resConfig["font"],
+            "image":  atlasName + "_image",
+            "meta": atlasName + "_meta"
         },
         {
-            "name": atlasFileName + "_meta",
+            "name": atlasName + "_image",
+            "type": "png",
+            "input": atlasName + ".png"
+        },
+        {
+            "name": atlasName + "_meta",
             "type": "json",
             "input": jsonFileName
         }

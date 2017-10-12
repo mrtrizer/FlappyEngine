@@ -231,6 +231,11 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreResources",
+  "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/FontResFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/FontResFactory.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/FontResFactory.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/CoreResources",
   "command": "/usr/bin/clang++  -DCoreResources_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/CoreResources.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/GlyphSheetRes.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/GlyphSheetRes.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src/GlyphSheetRes.cpp"
 },

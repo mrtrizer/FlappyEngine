@@ -30,6 +30,8 @@
 #include <TextComponent.h>
 #include <GlyphSheetRes.h>
 #include <GlyphSheetResFactory.h>
+#include <FontRes.h>
+#include <FontResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -56,13 +58,15 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
                         rootEntity->createComponent<GLTextureResFactory>();
-                        auto textureResManager = rootEntity->createComponent<ResManager<TextureRes>> ();
+                        rootEntity->createComponent<ResManager<TextureRes>> ();
                         rootEntity->createComponent<SpriteResFactory>();
                         rootEntity->createComponent<ResManager<SpriteRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
                         rootEntity->createComponent<GlyphSheetResFactory> ();
-                        auto glyphResManager = rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
+                        rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
+                        rootEntity->createComponent<FontResFactory> ();
+                        auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
 
                         // Scene
                         auto sceneEntity = rootEntity->createEntity();
@@ -79,21 +83,19 @@ int main(int argc, char *argv[])
                         auto quadRes = spriteResManager->getRes("demo_atlas_image:demo_atlas_meta:blue_button01", ExecType::ASYNC);
                         spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
 
-                        // Dynamic box
+                        // Shape
                         auto rectEntity = sceneEntity->createEntity();
                         rectEntity->component<MeshComponent>();
-                        rectEntity->component<TransformComponent>()->setScale({10.0f, 10.0f});
-                        rectEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
+                        rectEntity->component<TransformComponent>()->setScale({100.0f, 100.0f});
+                        rectEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
 
                         // Text
                         auto textEntity = sceneEntity->createEntity();
                         textEntity->component<TransformComponent>()->setPos({-40.0f, 100.0f, 0.0f});
                         textEntity->component<TextComponent>()->setText("Test 123");
-                        auto glyphSheetRes = glyphResManager->getRes("kenvector_future_meta", ExecType::SYNC);
-                        textEntity->component<TextComponent>()->setGlyphSheetRes(glyphSheetRes);
-                        auto glyphTexture = textureResManager->getRes("kenvector_future_image", ExecType::ASYNC);
-                        textEntity->component<TextComponent>()->setTextureRes(glyphTexture);
+                        auto fontRes = fontResManager->getRes("ttf_font", ExecType::ASYNC);
+                        textEntity->component<TextComponent>()->setFontRes(fontRes);
 
                         // Try to reinitialize gl context several times
                         rootEntity->removeComponent(sdl2Manager);
