@@ -76,12 +76,23 @@ int main(int argc, char *argv[])
                         sceneEntity->component<GLRenderElementFactory>();
 
                         // Sprite
-                        auto spriteEntity = sceneEntity->createEntity();
-                        spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
-                        spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
-                        auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
-                        auto quadRes = spriteResManager->getRes("demo_atlas_image:demo_atlas_meta:blue_button01", ExecType::ASYNC);
-                        spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                        {
+                            auto spriteEntity = sceneEntity->createEntity();
+                            spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
+                            spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
+                            auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
+                            auto quadRes = spriteResManager->getRes("demo_atlas:blue_button01", ExecType::ASYNC);
+                            spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                        }
+
+                        // Single image sprite
+                        {
+                            auto spriteEntity = sceneEntity->createEntity();
+                            spriteEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 1.0f});
+                            auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
+                            auto quadRes = spriteResManager->getRes("__img_missing__", ExecType::ASYNC);
+                            spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                        }
 
                         // Shape
                         auto rectEntity = sceneEntity->createEntity();

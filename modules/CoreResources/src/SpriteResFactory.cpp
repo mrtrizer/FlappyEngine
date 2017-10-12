@@ -15,27 +15,33 @@ using namespace std;
 SpriteResFactory::SpriteResFactory() {
     addDependency(ResManager<TextureRes>::id());
     addDependency(ResManager<AtlasRes>::id());
+    addDependency(ResRepositoryManager::id());
 }
 
 std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name, ExecType execType)  {
     auto splittedName = split(name, ':');
 
-    if (splittedName.size() != 1 && splittedName.size() != 3) {
-        LOGE("Can't create quad with name %s. Use format \"texture:atlas:quad\"", name.c_str());
+    if (splittedName.size() != 1 && splittedName.size() != 2) {
+        LOGE("Can't create quad with name %s. Use format \"atlas:quad\"", name.c_str());
         return nullptr;
     }
 
     auto textureResManager = manager<ResManager<TextureRes>>();
     auto atlasResManager = manager<ResManager<AtlasRes>>();
 
-    if (splittedName.size() == 3) { // if atlas path, load atlas
-        string textureName = splittedName[0];
+    if (splittedName.size() == 2) { // if atlas path, load atlas
+        auto repository = manager<ResRepositoryManager>();
+
+        auto meta = repository->findResMeta(splittedName[0]);
+
+        string textureName = meta.data["image"];
         auto texture = textureResManager->getRes(textureName, execType);
 
-        string atlasName = splittedName[1];
+
+        string atlasName = meta.data["meta"];
         auto atlas = atlasResManager->getRes(atlasName, ExecType::SYNC);
 
-        string quadName = splittedName[2];
+        string quadName = splittedName[1];
         auto quad = make_shared<SpriteRes>(atlas, texture, quadName);
         return quad;
     } else { // if just an image path

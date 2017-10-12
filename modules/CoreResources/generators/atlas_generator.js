@@ -48,7 +48,12 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     deasync.loopWhile(function(){return !done;});
 
     return [
-        resConfig,
+        {
+            "name": resConfig["name"],
+            "type": module.exports.type,
+            "image": atlasFileName +  "_image",
+            "meta": atlasFileName +  "_meta"
+        },
         {
             "name": atlasFileName + "_image",
             "type": "png",
