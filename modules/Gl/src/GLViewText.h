@@ -22,7 +22,7 @@ public:
 
 private:
     GLAttribArray m_rect;
-    SafePtr<TextComponent> m_spriteComponent;
+    SafePtr<TextComponent> m_textComponent;
     std::shared_ptr<FontRes> m_fontRes;
 
     void updateFrame();

@@ -30,10 +30,12 @@ public:
     struct BoxedLine {
         int width = 0;
         int height = 0;
+        int yOffset = 0;
         std::vector<BoxedLexem> boxedLexems;
     };
 
     struct BoxedText {
+        BoxedText() = default;
         int width = 0;
         int height = 0;
         std::vector<BoxedLine> boxedLines;
@@ -44,8 +46,8 @@ public:
     void setSize(int size) { m_size = size; }
     int size() { return m_size; }
 
-    void setMaxWidth(int width) { m_width = width; }
-    int maxWidth() { return m_width; }
+    void setMaxWidth(int maxWidth) { m_maxWidth = maxWidth; }
+    int maxWidth() { return m_maxWidth; }
 
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color& colorRGBA() { return m_colorRGBA; }

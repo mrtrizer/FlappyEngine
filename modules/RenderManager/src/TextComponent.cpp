@@ -56,20 +56,23 @@ TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const Gly
     int yOffset = 0;
     int longestLineWidth = 0;
     BoxedText boxedText;
+    LOGI("%d", boxedText.width);
+    LOGI("%d", boxedText.height);
     boxedText.boxedLines.push_back(BoxedLine());
-    BoxedLine& currentLine = *boxedText.boxedLines.end();
+    auto currentLine = boxedText.boxedLines.begin();
     for (auto lexemString : lexems) {
         auto lexem = genBoxedLexem(lexemString, glyphSheet);
-        if (lexem.width + currentLine.width > maxWidth) {
-            yOffset += currentLine.height + glyphSheet.common().lineHeight;
-            if (currentLine.width > longestLineWidth) {
-                longestLineWidth = currentLine.width;
+        if (lexem.width + currentLine->width > maxWidth) {
+            yOffset += currentLine->height + glyphSheet.common().lineHeight;
+            if (currentLine->width > longestLineWidth) {
+                longestLineWidth = currentLine->width;
             }
             boxedText.boxedLines.push_back(BoxedLine());
-            currentLine = *boxedText.boxedLines.end();
+            currentLine = boxedText.boxedLines.end() - 1;
+            currentLine->yOffset = yOffset + glyphSheet.common().lineHeight;
         }
-        currentLine.boxedLexems.push_back(lexem);
-        currentLine.width += lexem.width;
+        currentLine->boxedLexems.push_back(lexem);
+        currentLine->width += lexem.width;
     }
     boxedText.width = longestLineWidth;
     boxedText.height = yOffset + glyphSheet.common().lineHeight;
