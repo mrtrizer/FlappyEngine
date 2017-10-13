@@ -30,25 +30,31 @@ glm::vec2 TextComponent::calcTextSize(std::string text, FontRes& fontRes, int wi
     return glm::vec2(lines.width, lines.height);
 }
 
+
+
 TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexem, const GlyphSheetRes &glyphSheet, int size) {
     std::vector<Box> boxes;
     int offsetX = 0;
-    for (char c : lexem) {
-        Box box;
+    for (int i = 0; i < lexem.length(); i++) {
+        char c = lexem[i];
         auto glyph = glyphSheet.glyph((int)c);
         const int base = glyphSheet.common().base;
         const int newXOffset = (glyph.xoffset * size) / base;
         const int newYOffset = (glyph.yoffset * size) / base;
         const int newWidth = (glyph.width * size) / base;
         const int newHeight = (glyph.height * size) / base;
-        box.rect = Tools::Rect(newXOffset + offsetX,
+        // Apply kerning if the symbol is not the first in a lexem
+        auto kerning = glyphSheet.kerning(glyph.id, i != 0 ?(int)lexem[i - 1]: 0 );
+        const float kerningAmount = (kerning.amount * size) / base;
+        Box box;
+        box.rect = Tools::Rect(newXOffset + offsetX + kerningAmount,
                                 newYOffset,
-                                newXOffset + offsetX + newWidth,
+                                newXOffset + offsetX + newWidth + kerningAmount,
                                 newYOffset + newHeight);
-        const int newXAdvance = (glyph.xadvance * size) / base;
-        offsetX += newXAdvance;
         box.glyph = glyph;
         boxes.push_back(std::move(box));
+        const int newXAdvance = (glyph.xadvance * size) / base;
+        offsetX += newXAdvance;
     }
     BoxedLexem boxedLexem;
     boxedLexem.width = offsetX;
