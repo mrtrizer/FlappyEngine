@@ -78,12 +78,12 @@ void GLViewText::updateFrame() {
 
                 // Notice that Y coord is inverted here because of different coord system
                 // of glyph and GL.
-                vertices.push_back({box.rect.x1 + xOffset, box.rect.y1 - line.yOffset});
-                vertices.push_back({box.rect.x1 + xOffset, box.rect.y2 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, box.rect.y1 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, box.rect.y1 - line.yOffset});
-                vertices.push_back({box.rect.x1 + xOffset, box.rect.y2 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, box.rect.y2 - line.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y2 - line.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - line.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - line.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - line.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - line.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y1 - line.yOffset});
             }
             xOffset += lexem.width;
         }

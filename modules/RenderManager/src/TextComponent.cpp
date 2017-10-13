@@ -36,23 +36,23 @@ TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexem, const 
     for (char c : lexem) {
         Box box;
         auto glyph = glyphSheet.glyph((int)c);
-        int base = glyphSheet.common().base;
-        int newXOffset = (glyph.xoffset * size) / base;
-        int newYOffset = (glyph.yoffset * size) / base;
-        int newWidth = (glyph.width * size) / base;
-        int newHeight = (glyph.height * size) / base;
+        const int base = glyphSheet.common().base;
+        const int newXOffset = (glyph.xoffset * size) / base;
+        const int newYOffset = (glyph.yoffset * size) / base;
+        const int newWidth = (glyph.width * size) / base;
+        const int newHeight = (glyph.height * size) / base;
         box.rect = Tools::Rect(newXOffset + offsetX,
                                 newYOffset,
                                 newXOffset + offsetX + newWidth,
                                 newYOffset + newHeight);
-        int newXAdvance = (glyph.xadvance * size) / base;
+        const int newXAdvance = (glyph.xadvance * size) / base;
         offsetX += newXAdvance;
         box.glyph = glyph;
         boxes.push_back(std::move(box));
     }
     BoxedLexem boxedLexem;
     boxedLexem.width = offsetX;
-    boxedLexem.height = glyphSheet.common().base;
+    boxedLexem.height = size;
     boxedLexem.boxes = boxes;
     return boxedLexem;
 }
@@ -61,13 +61,15 @@ TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const Gly
     auto lexems = splitIntoLexems(text);
     int yOffset = 0;
     int longestLineWidth = 0;
+    const int base = glyphSheet.common().base;
+    const int newLineHeight = (glyphSheet.common().lineHeight * size) / base;
     BoxedText boxedText;
     boxedText.boxedLines.push_back(BoxedLine());
     auto currentLine = boxedText.boxedLines.begin();
     for (auto lexem : lexems) {
         auto boxedLexem = genBoxedLexem(lexem, glyphSheet, size);
         if (boxedLexem.width + currentLine->width > maxWidth || lexem == "\n") {
-            yOffset += currentLine->height + glyphSheet.common().lineHeight;
+            yOffset += currentLine->height + newLineHeight;
             if (currentLine->width > longestLineWidth) {
                 longestLineWidth = currentLine->width;
             }
@@ -81,7 +83,7 @@ TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const Gly
             currentLine->height = boxedLexem.height;
     }
     boxedText.width = longestLineWidth;
-    boxedText.height = yOffset + glyphSheet.common().lineHeight;
+    boxedText.height = yOffset + newLineHeight;
     return boxedText;
 }
 
