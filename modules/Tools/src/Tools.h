@@ -68,6 +68,8 @@ namespace Tools
         newList.merge(second);
         return newList;
     }
+
+    std::vector<std::string> split(const std::string &s, char delimiter);
 }
 
 using DeltaTime = float;

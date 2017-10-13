@@ -7,28 +7,45 @@
 #include <Entity.h>
 #include <GlyphSheetRes.h>
 #include <FontRes.h>
+#include <Tools.h>
 
 namespace flappy {
 
+class View;
+
 class TextComponent: public Component<TextComponent> {
 public:
-    TextComponent()
-    {
-        addDependency(RenderElementFactory::id());
 
-        subscribe([this](InitEvent) {
-            m_renderElement = manager<RenderElementFactory>()->createTextRender(selfPointer());
-            entity()->addComponent(m_renderElement);
-        });
+    struct Box {
+        Tools::Rect rect;
+        GlyphSheetRes::Glyph glyph;
+    };
 
-        subscribe([this](DeinitEvent) {
-            entity()->removeComponent(m_renderElement);
-            m_renderElement.reset();
-        });
-    }
+    struct BoxedLexem {
+        int width = 0;
+        int height = 0;
+        std::vector<Box> boxes;
+    };
+
+    struct BoxedLine {
+        int width = 0;
+        int height = 0;
+        std::vector<BoxedLexem> boxedLexems;
+    };
+
+    struct BoxedText {
+        int width = 0;
+        int height = 0;
+        std::vector<BoxedLine> boxedLines;
+    };
+
+    TextComponent();
 
     void setSize(int size) { m_size = size; }
     int size() { return m_size; }
+
+    void setMaxWidth(int width) { m_width = width; }
+    int maxWidth() { return m_width; }
 
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color& colorRGBA() { return m_colorRGBA; }
@@ -37,16 +54,18 @@ public:
     std::string text() { return m_text; }
 
     void setFontRes(std::shared_ptr<FontRes> fontRes) { m_fontRes = fontRes; }
-    std::shared_ptr<FontRes> fontRes() {
-        if (m_fontRes != nullptr && m_fontRes->resUpdated())
-            m_fontRes = m_fontRes->lastRes();
-        return m_fontRes;
-    }
+    std::shared_ptr<FontRes> fontRes();
+
+    static glm::vec2 calcTextSize(std::string text, FontRes& fontRes, int width);
+    static BoxedLexem genBoxedLexem(std::string lexem, const GlyphSheetRes& glyphSheet);
+    static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth);
 
 private:
     int m_size = 20;
+    int m_maxWidth = 99999;
     Color m_colorRGBA;
     std::string m_text;
+    BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;
     std::shared_ptr<View> m_renderElement;
 };

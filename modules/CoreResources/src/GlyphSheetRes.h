@@ -97,8 +97,10 @@ public:
     Kerning kerning(int firstId, int secondId) const;
 
     void setCommon(Common common) { m_common = common; }
+    const Common& common() const { return m_common; }
 
     void setInfo(Info info) { m_info = info; }
+    const Info& info() const { return m_info; }
 
     std::list<std::shared_ptr<ResBase>> dependencyList() const final { return {m_jsonRes}; }
 

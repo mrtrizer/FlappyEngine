@@ -20,9 +20,6 @@ public:
     /// Image file name: "file_name"
     std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;
-
-private:
-    std::vector<std::string> split(const std::string &s, char delimiter);
 };
 
 } // flappy

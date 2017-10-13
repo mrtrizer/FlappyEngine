@@ -1,8 +1,7 @@
 #include "SpriteResFactory.h"
 
-#include <sstream>
-
 #include <Entity.h>
+#include <Tools.h>
 
 #include "SpriteRes.h"
 #include "AtlasRes.h"
@@ -19,7 +18,7 @@ SpriteResFactory::SpriteResFactory() {
 }
 
 std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name, ExecType execType)  {
-    auto splittedName = split(name, ':');
+    auto splittedName = Tools::split(name, ':');
 
     if (splittedName.size() != 1 && splittedName.size() != 2) {
         LOGE("Can't create quad with name %s. Use format \"atlas:quad\"", name.c_str());
@@ -57,17 +56,6 @@ std::shared_ptr<ResBase> SpriteResFactory::load(const std::string& name, ExecTyp
 
 std::shared_ptr<ResBase> SpriteResFactory::create(const std::string& name) {
     return load(name, ExecType::ASYNC);
-}
-
-std::vector<std::string> SpriteResFactory::split(const std::string &s, char delimiter)
-{
-    std::stringstream ss(s);
-    std::string item;
-    std::vector<std::string> elems;
-    while (std::getline(ss, item, delimiter)) {
-        elems.push_back(std::move(item));
-    }
-    return elems;
 }
 
 } // flappy
