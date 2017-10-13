@@ -9,11 +9,11 @@ GlyphSheetRes::GlyphSheetRes(std::shared_ptr<JsonRes> jsonRes)
     : m_jsonRes(jsonRes)
 {}
 
-void GlyphSheetRes::addGlyph(int id, Glyph glyph) {
+void GlyphSheetRes::addGlyph(char32_t id, Glyph glyph) {
     m_glyphMap.emplace(id, glyph);
 }
 
-GlyphSheetRes::Glyph GlyphSheetRes::glyph(int id) const {
+GlyphSheetRes::Glyph GlyphSheetRes::glyph(char32_t id) const {
     auto rectIter = m_glyphMap.find(id);
     if (rectIter != m_glyphMap.end())
         return rectIter->second;

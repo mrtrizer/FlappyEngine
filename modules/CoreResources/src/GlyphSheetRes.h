@@ -90,8 +90,8 @@ public:
 
     GlyphSheetRes(std::shared_ptr<JsonRes> jsonRes = nullptr);
 
-    void addGlyph(int id, Glyph);
-    Glyph glyph(int id) const;
+    void addGlyph(char32_t id, Glyph);
+    Glyph glyph(char32_t id) const;
 
     void addKerning(Kerning);
     Kerning kerning(int firstId, int secondId) const;
@@ -106,7 +106,7 @@ public:
 
 
 private:  
-    std::unordered_map<int, Glyph> m_glyphMap;
+    std::unordered_map<char32_t, Glyph> m_glyphMap;
     std::list<Kerning> m_kerningList;
     Common m_common;
     Info m_info;

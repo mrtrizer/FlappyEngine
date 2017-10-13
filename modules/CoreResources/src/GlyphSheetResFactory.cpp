@@ -59,7 +59,7 @@ std::shared_ptr<ResBase> GlyphSheetResFactory::load(const std::string& name, Exe
         glyph.xadvance = value.at("xadvance");
         glyph.page = value.at("page");
         glyph.chnl = value.at("chnl");
-        glyphSheetRes->addGlyph(glyph.id, glyph);
+        glyphSheetRes->addGlyph((char32_t)glyph.id, glyph);
     }
 
     auto jsonKernings = jsonData["kernings"];

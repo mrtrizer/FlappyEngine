@@ -34,13 +34,13 @@ glm::vec2 TextComponent::calcTextSize(std::string text, FontRes& fontRes, int wi
 TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexemStr, const GlyphSheetRes &glyphSheet, int size) {
     if (lexemStr == "\n")
         return BoxedLexem();
-    std::vector<int> utf32LexemStr;
+    std::u32string utf32LexemStr;
     utf8::utf8to32(lexemStr.begin(), lexemStr.end(), std::back_inserter(utf32LexemStr));
     std::vector<Box> boxes;
     int offsetX = 0;
     for (int i = 0; i < utf32LexemStr.size(); i++) {
-        int code = utf32LexemStr[i];
-        auto glyph = glyphSheet.glyph((int)code);
+        char32_t code = utf32LexemStr[i];
+        auto glyph = glyphSheet.glyph(code);
         const int base = glyphSheet.common().base;
         const int newXOffset = (glyph.xoffset * size) / base;
         const int newYOffset = (glyph.yoffset * size) / base;
@@ -80,17 +80,14 @@ TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const Gly
         auto boxedLexem = genBoxedLexem(lexem, glyphSheet, size);
         if (boxedLexem.width + currentLine->width > maxWidth || lexem == "\n") {
             yOffset += currentLine->height + lineOffset;
-            if (currentLine->width > longestLineWidth) {
-                longestLineWidth = currentLine->width;
-            }
+            longestLineWidth = std::max(currentLine->width, longestLineWidth);
             boxedText.boxedLines.push_back(BoxedLine());
             currentLine = boxedText.boxedLines.end() - 1;
             currentLine->yOffset = yOffset;
         }
         currentLine->boxedLexems.push_back(boxedLexem);
         currentLine->width += boxedLexem.width;
-        if (boxedLexem.height > currentLine->height)
-            currentLine->height = boxedLexem.height;
+        currentLine->height = std::max(boxedLexem.height, currentLine->height);
     }
     boxedText.width = longestLineWidth;
     boxedText.height = yOffset + lineOffset;
