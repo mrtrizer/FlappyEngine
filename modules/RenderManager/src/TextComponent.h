@@ -16,6 +16,12 @@ class View;
 class TextComponent: public Component<TextComponent> {
 public:
 
+    enum class Align {
+        LEFT,
+        CENTER,
+        RIGHT
+    };
+
     struct Box {
         Tools::Rect rect;
         GlyphSheetRes::Glyph glyph;
@@ -46,6 +52,9 @@ public:
     void setSize(int size) { m_size = size; }
     int size() { return m_size; }
 
+    void setAlign(Align align) { m_align = align; }
+    Align align() { return m_align; }
+
     void setMaxWidth(int maxWidth) { m_maxWidth = maxWidth; }
     int maxWidth() { return m_maxWidth; }
 
@@ -62,10 +71,13 @@ public:
     static BoxedLexem genBoxedLexem(std::string lexem, const GlyphSheetRes& glyphSheet, int size);
     static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth, int size);
     static std::vector<std::string> splitIntoLexems(std::string str);
+    static int calcLineOffset(Align align, BoxedText boxedText, BoxedLine boxedLine);
 
 private:
+    static constexpr int DEFAULT_WIDTH = 99999;
     int m_size = 20;
-    int m_maxWidth = 99999;
+    Align m_align;
+    int m_maxWidth = DEFAULT_WIDTH;
     Color m_colorRGBA;
     std::string m_text;
     BoxedText m_boxedText;

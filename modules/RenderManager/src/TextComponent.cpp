@@ -70,7 +70,7 @@ TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexemStr, con
 TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth, int size) {
     auto lexems = splitIntoLexems(text);
     int yOffset = 0;
-    int longestLineWidth = 0;
+    int longestLineWidth = maxWidth < DEFAULT_WIDTH ? maxWidth: 0;
     const int base = glyphSheet.common().base;
     const int lineOffset = ((glyphSheet.common().lineHeight - base) * size) / base;
     BoxedText boxedText;
@@ -111,6 +111,14 @@ std::vector<std::string> TextComponent::splitIntoLexems(std::string str) {
     }
     lexems.push_back(str.substr(startPos, str.length() - startPos));
     return lexems;
+}
+
+int TextComponent::calcLineOffset(Align align, BoxedText boxedText, BoxedLine boxedLine) {
+    if (align == Align::CENTER)
+        return (boxedText.width - boxedLine.width) / 2;
+    if (align == Align::RIGHT)
+        return boxedText.width - boxedLine.width;
+    return 0;
 }
 
 } // flappy

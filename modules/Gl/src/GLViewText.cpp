@@ -54,9 +54,9 @@ void GLViewText::updateFrame() {
     vector<GLTextureRes::UV> uvs;
     std::vector<GLTools::Vertex> vertices;
 
-    for (auto line : boxedText.boxedLines) {
-        int xOffset = 0;
-        for (auto lexem : line.boxedLexems) {
+    for (auto boxedLine : boxedText.boxedLines) {
+        int xOffset = TextComponent::calcLineOffset(m_textComponent->align(), boxedText, boxedLine);
+        for (auto lexem : boxedLine.boxedLexems) {
             for (auto box : lexem.boxes) {
                 auto rectInAtlas = Tools::Rect(box.glyph.x / texture->size().x,
                                                box.glyph.y / texture->size().y,
@@ -78,12 +78,12 @@ void GLViewText::updateFrame() {
 
                 // Notice that Y coord is inverted here because of different coord system
                 // of glyph and GL.
-                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y2 - line.yOffset});
-                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - line.yOffset});
-                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - line.yOffset});
-                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y1 - line.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y2 - boxedLine.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - boxedLine.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - boxedLine.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y2 - boxedLine.yOffset});
+                vertices.push_back({box.rect.x1 + xOffset, -box.rect.y1 - boxedLine.yOffset});
+                vertices.push_back({box.rect.x2 + xOffset, -box.rect.y1 - boxedLine.yOffset});
             }
             xOffset += lexem.width;
         }

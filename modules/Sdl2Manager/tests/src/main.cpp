@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
                         auto textEntity = sceneEntity->createEntity();
                         textEntity->component<TransformComponent>()->setPos({-40.0f, 200.0f, 0.0f});
                         textEntity->component<TextComponent>()->setText("AVTest ВАСЯ 123\n456 789");
+                        textEntity->component<TextComponent>()->setAlign(TextComponent::Align::CENTER);
                         textEntity->component<TextComponent>()->setMaxWidth(170);
                         auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
                         textEntity->component<TextComponent>()->setFontRes(fontRes);
