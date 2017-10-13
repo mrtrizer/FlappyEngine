@@ -3,8 +3,8 @@ uniform vec4 uColor;
 varying vec2 vTexCoord;
 
 void main() {
-    const float distMin = 0.45;
-    const float distMax = 0.55;
+    const float distMin = 0.35;
+    const float distMax = 0.75;
     float intencity = 0.0;
     intencity = smoothstep(distMin, distMax, texture2D(uTex,vTexCoord).b);
     gl_FragColor = uColor * intencity;
