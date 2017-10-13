@@ -1,4 +1,5 @@
 #include "TextComponent.h"
+#include <utfcpp/utf8.h>
 
 #include <View.h>
 
@@ -30,19 +31,24 @@ glm::vec2 TextComponent::calcTextSize(std::string text, FontRes& fontRes, int wi
     return glm::vec2(lines.width, lines.height);
 }
 
-TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexem, const GlyphSheetRes &glyphSheet, int size) {
+TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexemStr, const GlyphSheetRes &glyphSheet, int size) {
+    if (lexemStr == "\n")
+        return BoxedLexem();
+    std::vector<int> utf32LexemStr;
+    utf8::utf8to32(lexemStr.begin(), lexemStr.end(), std::back_inserter(utf32LexemStr));
     std::vector<Box> boxes;
     int offsetX = 0;
-    for (int i = 0; i < lexem.length(); i++) {
-        char c = lexem[i];
-        auto glyph = glyphSheet.glyph((int)c);
+    for (int i = 0; i < utf32LexemStr.size(); i++) {
+        int code = utf32LexemStr[i];
+        auto glyph = glyphSheet.glyph((int)code);
         const int base = glyphSheet.common().base;
         const int newXOffset = (glyph.xoffset * size) / base;
         const int newYOffset = (glyph.yoffset * size) / base;
         const int newWidth = (glyph.width * size) / base;
         const int newHeight = (glyph.height * size) / base;
+        int prevCode = (i != 0) ?utf32LexemStr[i - 1]: 0;
         // Apply kerning if the symbol is not the first in a lexem
-        auto kerning = glyphSheet.kerning(glyph.id, i != 0 ?(int)lexem[i - 1]: 0 );
+        auto kerning = glyphSheet.kerning(glyph.id,  prevCode);
         const float kerningAmount = (kerning.amount * size) / base;
         Box box;
         box.rect = Tools::Rect(newXOffset + offsetX + kerningAmount,

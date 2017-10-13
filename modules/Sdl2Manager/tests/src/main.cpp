@@ -104,9 +104,9 @@ int main(int argc, char *argv[])
                         // Text
                         auto textEntity = sceneEntity->createEntity();
                         textEntity->component<TransformComponent>()->setPos({-40.0f, 200.0f, 0.0f});
-                        textEntity->component<TextComponent>()->setText("AVTest 123 456 789");
-                        textEntity->component<TextComponent>()->setMaxWidth(160);
-                        auto fontRes = fontResManager->getRes("Crimson-Roman", ExecType::ASYNC);
+                        textEntity->component<TextComponent>()->setText("AVTest ВАСЯ 123\n456 789");
+                        textEntity->component<TextComponent>()->setMaxWidth(170);
+                        auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
                         textEntity->component<TextComponent>()->setFontRes(fontRes);
 
                         // Try to reinitialize gl context several times

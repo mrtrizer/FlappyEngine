@@ -21,7 +21,8 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     const opt = {
         fieldType: "sdf",
         reuse: false,
-        outputType: "json"
+        outputType: "json",
+        charset: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
     };
 
     generateBMFont(fontPath, opt, (error, textures, font) => {
