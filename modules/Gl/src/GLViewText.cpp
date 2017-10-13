@@ -48,9 +48,8 @@ void GLViewText::updateFrame() {
     auto glyphSheetRes = m_textComponent->fontRes()->glyphSheetRes();
     auto texture = m_textComponent->fontRes()->textureRes();
     auto str = m_textComponent->text();
-    auto lineDistance = glyphSheetRes->common().lineHeight;
 
-    auto boxedText = TextComponent::genBoxedText(str, *glyphSheetRes, m_textComponent->maxWidth());
+    auto boxedText = TextComponent::genBoxedText(str, *glyphSheetRes, m_textComponent->maxWidth(), m_textComponent->size());
 
     vector<GLTextureRes::UV> uvs;
     std::vector<GLTools::Vertex> vertices;

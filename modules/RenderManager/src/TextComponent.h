@@ -58,9 +58,9 @@ public:
     void setFontRes(std::shared_ptr<FontRes> fontRes) { m_fontRes = fontRes; }
     std::shared_ptr<FontRes> fontRes();
 
-    static glm::vec2 calcTextSize(std::string text, FontRes& fontRes, int width);
-    static BoxedLexem genBoxedLexem(std::string lexem, const GlyphSheetRes& glyphSheet);
-    static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth);
+    static glm::vec2 calcTextSize(std::string text, FontRes& fontRes, int width, int size);
+    static BoxedLexem genBoxedLexem(std::string lexem, const GlyphSheetRes& glyphSheet, int size);
+    static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth, int size);
     static std::vector<std::string> splitIntoLexems(std::string str);
 
 private:

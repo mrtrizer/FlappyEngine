@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
                         // Text
                         auto textEntity = sceneEntity->createEntity();
                         textEntity->component<TransformComponent>()->setPos({-40.0f, 200.0f, 0.0f});
-                        textEntity->component<TextComponent>()->setText("Test     123 456 ");
+                        textEntity->component<TextComponent>()->setText("Test     123 456 \n\n 789");
                         textEntity->component<TextComponent>()->setMaxWidth(160);
                         auto fontRes = fontResManager->getRes("ttf_font", ExecType::ASYNC);
                         textEntity->component<TextComponent>()->setFontRes(fontRes);
