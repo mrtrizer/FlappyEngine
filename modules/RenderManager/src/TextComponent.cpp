@@ -52,31 +52,47 @@ TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexem, const 
 }
 
 TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth) {
-    auto lexems = Tools::split(text, ' ');
+    auto lexems = splitIntoLexems(text);
     int yOffset = 0;
     int longestLineWidth = 0;
     BoxedText boxedText;
-    LOGI("%d", boxedText.width);
-    LOGI("%d", boxedText.height);
     boxedText.boxedLines.push_back(BoxedLine());
     auto currentLine = boxedText.boxedLines.begin();
     for (auto lexemString : lexems) {
-        auto lexem = genBoxedLexem(lexemString, glyphSheet);
-        if (lexem.width + currentLine->width > maxWidth) {
+        auto boxedLexem = genBoxedLexem(lexemString, glyphSheet);
+        if (boxedLexem.width + currentLine->width > maxWidth) {
             yOffset += currentLine->height + glyphSheet.common().lineHeight;
             if (currentLine->width > longestLineWidth) {
                 longestLineWidth = currentLine->width;
             }
             boxedText.boxedLines.push_back(BoxedLine());
             currentLine = boxedText.boxedLines.end() - 1;
-            currentLine->yOffset = yOffset + glyphSheet.common().lineHeight;
+            currentLine->yOffset = yOffset;
         }
-        currentLine->boxedLexems.push_back(lexem);
-        currentLine->width += lexem.width;
+        currentLine->boxedLexems.push_back(boxedLexem);
+        currentLine->width += boxedLexem.width;
+        if (boxedLexem.height > currentLine->height)
+            currentLine->height = boxedLexem.height;
     }
     boxedText.width = longestLineWidth;
     boxedText.height = yOffset + glyphSheet.common().lineHeight;
     return boxedText;
+}
+
+std::vector<std::string> TextComponent::splitIntoLexems(std::string str) {
+    std::vector<std::string> lexems;
+    int startPos = 0;
+    for (int i = 0; i < str.length(); i++) {
+        char c = str[i];
+        if (c == ' ') {
+            if (startPos != i)
+                lexems.push_back(str.substr(startPos, i - startPos));
+            lexems.push_back(std::string(1, c));
+            startPos = i + 1;
+        }
+    }
+    lexems.push_back(str.substr(startPos, str.length() - startPos));
+    return lexems;
 }
 
 } // flappy
