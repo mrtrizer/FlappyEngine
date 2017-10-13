@@ -1,0 +1,32 @@
+{
+    "name":"TextComponents",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
+        },
+	{
+	    "path":"../JsonRes"
+	},
+	{
+	    "path":"../RenderManager"
+	}
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

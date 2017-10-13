@@ -12,7 +12,11 @@
         },
         {
             "path":"../RenderManager"
+        },
+        {
+            "path":"../TextComponents"
         }
+
     ],
     "cxx":{
         "header_dirs": [

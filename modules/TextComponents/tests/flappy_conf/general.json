@@ -1,0 +1,23 @@
+{
+    "name":"tests_TextComponents",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Std"
+        },
+        {
+            "path":"../../Sdl2Manager"
+        }
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

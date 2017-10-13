@@ -1,5 +1,0 @@
-{
-    "type":"glsl_shader",
-    "fragment":"mcdf_shader.fglsl",
-    "vertex":"texture_shader.vglsl"
-}

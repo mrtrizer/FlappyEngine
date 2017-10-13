@@ -58,8 +58,8 @@ public:
     void setMaxWidth(int maxWidth) { m_maxWidth = maxWidth; }
     int maxWidth() { return m_maxWidth; }
 
-    void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
-    Color& colorRGBA() { return m_colorRGBA; }
+    void setColor(Color color) { m_color = color; }
+    Color& colorRGBA() { return m_color; }
 
     void setText(std::string text) { m_text = text; }
     std::string text() { return m_text; }
@@ -78,7 +78,7 @@ private:
     int m_size = 20;
     Align m_align;
     int m_maxWidth = DEFAULT_WIDTH;
-    Color m_colorRGBA;
+    Color m_color;
     std::string m_text;
     BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;

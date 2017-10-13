@@ -1,0 +1,5 @@
+{
+    "type":"glsl_shader",
+    "fragment":"msdf_shader.fglsl",
+    "vertex":"msdf_shader.vglsl"
+}
