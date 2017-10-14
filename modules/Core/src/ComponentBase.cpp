@@ -104,16 +104,22 @@ void ComponentBase::addDependency(TypeId<ComponentBase> id) {
 void ComponentBase::tryInit() {
     // We have to set the flag before initialization call to avoid recursive calls
     m_initializedFlag = true;
+    m_initialization = true;
     try {
         initInternal();
     } catch (std::exception& e) {
         LOGE("%s initialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = false;
     }
+    m_initialization = false;
+    if (isInitialized() && !m_active) {
+        tryDeinit();
+    }
 }
 
 void ComponentBase::tryDeinit() {
     m_initializedFlag = false;
+    m_initialization = true;
     try {
         // Send remove event first.
         // To allow components access manager before denitialization.
@@ -121,6 +127,10 @@ void ComponentBase::tryDeinit() {
     } catch (std::exception& e) {
         LOGE("%s deinitialization error: %s", componentId().name().c_str(), e.what());
         m_initializedFlag = true;
+    }
+    m_initialization = false;
+    if (!isInitialized() && allDependenciesInitialized() && m_active) {
+        tryInit();
     }
 }
 
@@ -143,11 +153,13 @@ void ComponentBase::unsubscribe(SafePtr<ISubscription> subscription) {
 
 void ComponentBase::setActive(bool active) {
     m_active = active;
-    if (isInitialized() && !active) {
-        tryDeinit();
-    }
-    if (!isInitialized() && allDependenciesInitialized() && active) {
-        tryInit();
+    if (m_initialization == false) {
+        if (isInitialized() && !active) {
+            tryDeinit();
+        }
+        if (!isInitialized() && allDependenciesInitialized() && active) {
+            tryInit();
+        }
     }
 }
 

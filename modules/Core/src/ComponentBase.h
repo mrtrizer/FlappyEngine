@@ -132,6 +132,7 @@ private:
     using TypeIdList = std::list<TypeId<ComponentBase>>;
 
     bool m_initializedFlag = false;
+    bool m_initialization = false;
     bool m_active = true;
     bool m_firstUpdate = true;
     SafePtr<Entity> m_entity;

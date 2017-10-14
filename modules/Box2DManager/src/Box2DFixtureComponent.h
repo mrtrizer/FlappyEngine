@@ -10,34 +10,33 @@ class Box2DFixtureComponent: public Component<Box2DFixtureComponent> {
 public:
     Box2DFixtureComponent();
 
-    void setShape(std::shared_ptr<b2Shape> shape);
-
-    float friction() const;
+    float friction() const { return m_friction; }
     void setFriction(float friction);
 
-    float elasticity() const;
+    float elasticity() const { return m_elasticity; }
     void setElasticity(float elasticity);
 
-    float density() const;
+    float density() const { return m_density; }
     void setDensity(float density);
 
-    bool isSensor() const;
+    bool isSensor() const { return m_isSensor; }
     void setIsSensor(bool isSensor);
 
-    uint16_t categoryBits() const;
+    uint16_t categoryBits() const { return m_categoryBits; }
     void setCategoryBits(const uint16_t &categoryBits);
 
-    uint16_t maskBits() const;
+    uint16_t maskBits() const { return m_maskBits; }
     void setMaskBits(const uint16_t &maskBits);
 
-    int16_t groupIndex() const;
+    int16_t groupIndex() const { return m_groupIndex; }
     void setGroupIndex(const int16_t &groupIndex);
 
-    b2Fixture* fixture() const;
+protected:
+    void setShape(std::shared_ptr<b2Shape> shape);
 
 private:
-
-    void initFixture();
+    void deinitFixture(b2Fixture *fixture);
+    b2Fixture *initFixture(std::shared_ptr<b2Shape> shape);
 
     std::shared_ptr<b2Shape> m_shape;
 

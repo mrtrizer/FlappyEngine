@@ -13,24 +13,28 @@ Box2DFixtureComponent::Box2DFixtureComponent() {
 
     events()->subscribe([this](InitEvent) {
         if ((m_shape != nullptr))
-            initFixture();
+            m_fixture = initFixture(m_shape);
     });
 
     events()->subscribe([this](DeinitEvent) {
-        if (m_fixture != nullptr) {
-            auto bodyComponent = entity()->component<Box2DBodyComponent>();
-            bodyComponent->destroyFixture(m_fixture);
-            m_fixture = nullptr;
-        }
+        deinitFixture(m_fixture);
+        m_fixture = nullptr;
     });
 
 }
 
-void Box2DFixtureComponent::initFixture() {
+void Box2DFixtureComponent::deinitFixture(b2Fixture* fixture) {
+    if (fixture != nullptr) {
+        auto bodyComponent = entity()->component<Box2DBodyComponent>();
+        bodyComponent->destroyFixture(fixture);
+    }
+}
+
+b2Fixture* Box2DFixtureComponent::initFixture(std::shared_ptr<b2Shape> shape) {
     auto bodyComponent = entity()->component<Box2DBodyComponent>();
     b2FixtureDef fixtureDef;
 
-    fixtureDef.shape = m_shape.get();
+    fixtureDef.shape = shape.get();
 
     // physics params
     fixtureDef.friction = m_friction;
@@ -43,23 +47,17 @@ void Box2DFixtureComponent::initFixture() {
     fixtureDef.filter.maskBits = m_maskBits;
     fixtureDef.filter.groupIndex = m_groupIndex;
 
-    m_fixture = bodyComponent->createFixture(&fixtureDef);
-}
-
-b2Fixture* Box2DFixtureComponent::fixture() const
-{
-    return m_fixture;
+    return bodyComponent->createFixture(&fixtureDef);
 }
 
 void Box2DFixtureComponent::setShape(std::shared_ptr<b2Shape> shape) {
     m_shape = shape;
-    setActive(false);
-    setActive(true);
-}
-
-int16_t Box2DFixtureComponent::groupIndex() const
-{
-    return m_groupIndex;
+    if (isInitialized()) {
+        if (m_fixture != nullptr) {
+            deinitFixture(m_fixture);
+        }
+        m_fixture = initFixture(shape);
+    }
 }
 
 void Box2DFixtureComponent::setGroupIndex(const int16_t &groupIndex)
@@ -72,11 +70,6 @@ void Box2DFixtureComponent::setGroupIndex(const int16_t &groupIndex)
     }
 }
 
-uint16_t Box2DFixtureComponent::maskBits() const
-{
-    return m_maskBits;
-}
-
 void Box2DFixtureComponent::setMaskBits(const uint16_t &maskBits)
 {
     m_maskBits = maskBits;
@@ -85,11 +78,6 @@ void Box2DFixtureComponent::setMaskBits(const uint16_t &maskBits)
         filterData.maskBits = maskBits;
         m_fixture->SetFilterData(filterData);
     }
-}
-
-uint16_t Box2DFixtureComponent::categoryBits() const
-{
-    return m_categoryBits;
 }
 
 void Box2DFixtureComponent::setCategoryBits(const uint16_t &categoryBits)
@@ -102,21 +90,11 @@ void Box2DFixtureComponent::setCategoryBits(const uint16_t &categoryBits)
     }
 }
 
-bool Box2DFixtureComponent::isSensor() const
-{
-    return m_isSensor;
-}
-
 void Box2DFixtureComponent::setIsSensor(bool isSensor)
 {
     m_isSensor = isSensor;
     if (m_fixture != nullptr)
         m_fixture->SetSensor(isSensor);
-}
-
-float Box2DFixtureComponent::density() const
-{
-    return m_density;
 }
 
 void Box2DFixtureComponent::setDensity(float density)
@@ -126,21 +104,11 @@ void Box2DFixtureComponent::setDensity(float density)
         m_fixture->SetDensity(density);
 }
 
-float Box2DFixtureComponent::elasticity() const
-{
-    return m_elasticity;
-}
-
 void Box2DFixtureComponent::setElasticity(float elasticity)
 {
     m_elasticity = elasticity;
     if (m_fixture != nullptr)
         m_fixture->SetRestitution(elasticity);
-}
-
-float Box2DFixtureComponent::friction() const
-{
-    return m_friction;
 }
 
 void Box2DFixtureComponent::setFriction(float friction)

@@ -21,7 +21,7 @@
 #include <GLTextureResFactory.h>
 #include <Box2DWorldManager.h>
 #include <Box2DBodyComponent.h>
-#include <Box2DFixtureComponent.h>
+#include <Box2DPolygonComponent.h>
 
 using namespace flappy;
 using namespace std;
@@ -44,6 +44,12 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
 
+                        // Box2D world
+                        rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
+                        rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
+                        rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
+                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(2.0f);
+
                         // Scene
                         auto sceneEntity = rootEntity->createEntity();
                         sceneEntity->component<SceneManager>()->setMainCamera(sceneEntity->component<CameraComponent>());
@@ -58,11 +64,9 @@ int main(int argc, char *argv[])
                         rectEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 4.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
-                        rectEntity->component<Box2DFixtureComponent>()->setDensity(10.0f);
-                        rectEntity->component<Box2DFixtureComponent>()->setFriction(0.3f);
-                        auto dynamicBox = std::make_shared<b2PolygonShape>();
-                        dynamicBox->SetAsBox(1.0f, 1.0f);
-                        rectEntity->component<Box2DFixtureComponent>()->setShape(dynamicBox);
+                        rectEntity->component<Box2DPolygonComponent>()->setDensity(10.0f);
+                        rectEntity->component<Box2DPolygonComponent>()->setFriction(0.3f);
+                        rectEntity->component<Box2DPolygonComponent>()->setSize({10.0f, 10.0f});
 
                         // Box2D ground
                         auto groundEntity = sceneEntity->createEntity();
@@ -74,12 +78,6 @@ int main(int argc, char *argv[])
                         auto groundBox = std::make_shared<b2PolygonShape>();
                         groundBox->SetAsBox(100.0f, 10.0f);
                         groundEntity->component<Box2DFixtureComponent>()->setShape(groundBox);
-
-                        // Box2D world
-                        rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
-                        rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
-                        rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
-                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(2.0f);
 
                     });
     return application.runThread(currentThread);
