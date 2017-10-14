@@ -13,6 +13,8 @@ public:
 
 private:
     glm::vec2 m_size;
+
+    void init(glm::vec2 size);
 };
 
 } // flappy
