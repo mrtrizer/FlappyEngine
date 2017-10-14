@@ -8,13 +8,13 @@ class Box2DPolygonComponent: public Box2DFixtureComponent {
 public:
     Box2DPolygonComponent();
 
-    void setSize(glm::vec2 size);
-    glm::vec2 size() { return m_size; }
+    void setVertices(std::vector<glm::vec2> vertices);
+    std::vector<glm::vec2> vertices() { return m_vertices; }
 
 private:
-    glm::vec2 m_size;
+    std::vector<glm::vec2> m_vertices;
 
-    void init(glm::vec2 size);
+    void init(std::vector<glm::vec2> vertices);
 };
 
 } // flappy

@@ -21,7 +21,7 @@
 #include <GLTextureResFactory.h>
 #include <Box2DWorldManager.h>
 #include <Box2DBodyComponent.h>
-#include <Box2DPolygonComponent.h>
+#include <Box2DBoxComponent.h>
 #include <Box2DCircleComponent.h>
 
 using namespace flappy;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
                         rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
                         rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
                         rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
-                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(1.0f);
+                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(0.1f);
 
                         // Scene
                         auto sceneEntity = rootEntity->createEntity();
@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
                         rectEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
-                        rectEntity->component<Box2DPolygonComponent>()->setDensity(10.0f);
-                        rectEntity->component<Box2DPolygonComponent>()->setFriction(0.3f);
-                        rectEntity->component<Box2DPolygonComponent>()->setSize({20.0f, 20.0f});
+                        rectEntity->component<Box2DBoxComponent>()->setDensity(10.0f);
+                        rectEntity->component<Box2DBoxComponent>()->setFriction(0.3f);
+                        rectEntity->component<Box2DBoxComponent>()->setSize({20.0f, 20.0f});
 
                         // Dynamic circle
                         auto circleEntity = sceneEntity->createEntity();
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
                             groundEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.25f);
                             groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
                             groundEntity->component<TransformComponent>()->setPos({0.0f, -100.0f, 0.0f});
-                            groundEntity->component<Box2DPolygonComponent>()->setSize({100.0f, 10.0f});
+                            groundEntity->component<Box2DBoxComponent>()->setSize({100.0f, 10.0f});
                         }
 
                         {
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
                             groundEntity->component<TransformComponent>()->setAngle2DRad(-M_PI * 0.25f);
                             groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
                             groundEntity->component<TransformComponent>()->setPos({-70.0f, -100.0f, 0.0f});
-                            groundEntity->component<Box2DPolygonComponent>()->setSize({100.0f, 10.0f});
+                            groundEntity->component<Box2DBoxComponent>()->setSize({100.0f, 10.0f});
                         }
 
                     });
