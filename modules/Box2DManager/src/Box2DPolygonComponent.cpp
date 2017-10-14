@@ -2,7 +2,7 @@
 
 #include "Box2DBodyComponent.h"
 #include "Box2DWorldManager.h"
-#include "Utils.h"
+#include "Box2DUtils.h"
 
 namespace flappy {
 
