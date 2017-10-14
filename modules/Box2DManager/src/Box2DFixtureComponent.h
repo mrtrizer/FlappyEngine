@@ -13,8 +13,9 @@ public:
     float friction() const { return m_friction; }
     void setFriction(float friction);
 
-    float elasticity() const { return m_elasticity; }
-    void setElasticity(float elasticity);
+    /// Also known as elasticity or bounciness
+    float restitution() const { return m_elasticity; }
+    void setRestitution(float restitution);
 
     float density() const { return m_density; }
     void setDensity(float density);

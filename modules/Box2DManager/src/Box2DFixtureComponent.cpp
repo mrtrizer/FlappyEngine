@@ -104,7 +104,7 @@ void Box2DFixtureComponent::setDensity(float density)
         m_fixture->SetDensity(density);
 }
 
-void Box2DFixtureComponent::setElasticity(float elasticity)
+void Box2DFixtureComponent::setRestitution(float elasticity)
 {
     m_elasticity = elasticity;
     if (m_fixture != nullptr)

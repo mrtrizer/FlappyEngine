@@ -8,7 +8,7 @@
 #include <UIManager.h>
 #include <TouchComponent.h>
 #include <Box2DBodyComponent.h>
-#include <Box2DFixtureComponent.h>
+#include <Box2DPolygonComponent.h>
 #include <Box2DWorldManager.h>
 #include <MouseInputManager.h>
 #include <TouchInputManager.h>
@@ -31,8 +31,7 @@ TEST_CASE("UIManager") {
     buttonEntity->createComponent<TransformComponent>();
     buttonEntity->createComponent<Box2DBodyComponent>();
     auto shape = std::make_shared<b2PolygonShape>();
-    shape->SetAsBox(50, 25);
-    buttonEntity->component<Box2DFixtureComponent>()->setShape(shape);
+    buttonEntity->component<Box2DPolygonComponent>()->setSize({100, 50});
     auto touchComponent = buttonEntity->createComponent<TouchComponent>();
 
     Mock<ButtonListenerComponent::IMock> mock;
