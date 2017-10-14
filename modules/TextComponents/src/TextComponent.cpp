@@ -85,9 +85,13 @@ TextComponent::BoxedText TextComponent::genBoxedText(std::string text, const Gly
             currentLine = boxedText.boxedLines.end() - 1;
             currentLine->yOffset = yOffset;
         }
-        currentLine->boxedLexems.push_back(boxedLexem);
-        currentLine->width += boxedLexem.width;
-        currentLine->height = std::max(boxedLexem.height, currentLine->height);
+        if (currentLine->width == 0 && lexem == " ") {
+            // skip a space in the begining of a line
+        } else {
+            currentLine->boxedLexems.push_back(boxedLexem);
+            currentLine->width += boxedLexem.width;
+            currentLine->height = std::max(boxedLexem.height, currentLine->height);
+        }
     }
     boxedText.width = longestLineWidth;
     boxedText.height = yOffset + lineOffset;
