@@ -112,9 +112,6 @@ void ComponentBase::tryInit() {
         m_initializedFlag = false;
     }
     m_initialization = false;
-    if (isInitialized() && !m_active) {
-        tryDeinit();
-    }
 }
 
 void ComponentBase::tryDeinit() {
@@ -129,9 +126,6 @@ void ComponentBase::tryDeinit() {
         m_initializedFlag = true;
     }
     m_initialization = false;
-    if (!isInitialized() && allDependenciesInitialized() && m_active) {
-        tryInit();
-    }
 }
 
 void ComponentBase::addedToEntityInternal() {
@@ -160,6 +154,9 @@ void ComponentBase::setActive(bool active) {
         if (!isInitialized() && allDependenciesInitialized() && active) {
             tryInit();
         }
+    } else {
+        throw std::runtime_error(Tools::format("Active state of %s is changed during initialization.",
+                                               componentId().name().c_str()));
     }
 }
 
