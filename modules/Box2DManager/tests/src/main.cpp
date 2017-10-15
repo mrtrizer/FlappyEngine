@@ -111,13 +111,15 @@ int main(int argc, char *argv[])
                             groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
                         }
 
-                        rootEntity->events()->subscribe([&sceneEntity](MouseInputManager::MouseDownEvent e) {
-                            LOG("Pos %f, %f", e.pos.x, e.pos.y);
+                        rootEntity->events()->subscribe([sceneEntity](MouseInputManager::MouseDownEvent e) {
+                            float x = (e.pos.x - 300) * 0.5f;
+                            float y = (300 - e.pos.y) * 0.5f;
+                            LOG("Pos %f, %f", x, y);
                             auto circleEntity = sceneEntity->createEntity();
                             circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
                             circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
                             circleEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
-                            circleEntity->component<TransformComponent>()->setPos({e.pos.x, e.pos.y, 0.0f});
+                            circleEntity->component<TransformComponent>()->setPos({x, y, 0.0f});
                             circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                             circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
                             circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);

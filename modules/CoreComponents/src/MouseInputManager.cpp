@@ -61,7 +61,7 @@ void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos
     m_mousePressed = false;
     this->m_mousePos = mousePos;
 
-    MouseInputManager::MouseDownEvent mouseUpEvent;
+    MouseInputManager::MouseUpEvent mouseUpEvent;
     mouseUpEvent.pos = mousePos;
     mouseUpEvent.button = MouseInputManager::MouseButton::LEFT;
     entity()->events()->post(mouseUpEvent);
