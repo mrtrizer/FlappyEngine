@@ -1,6 +1,6 @@
 #include "RenderUtils.h"
 
-#include <exception>
+#include <stdexcept>
 
 namespace flappy {
 
@@ -19,6 +19,14 @@ std::vector<glm::vec3> genCircleVertices(float r, int vertexN)
         vertexList[i * 3 + 2] = {cos(step * nextI) * r, sin(step * nextI) * r, 0.0f};
     }
     return vertexList;
+}
+
+std::vector<glm::vec2> glmVec3ToVec2(std::vector<glm::vec3> vec3Vertices) {
+    std::vector<glm::vec2> vec2Vertices(vec3Vertices.size());
+    std::transform(vec3Vertices.begin(), vec3Vertices.end(), vec2Vertices.begin(), [](const glm::vec3& item) {
+        return glm::vec2(item.x, item.y);
+    });
+    return vec2Vertices;
 }
 
 } // flappy

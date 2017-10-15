@@ -23,6 +23,7 @@
 #include <Box2DBodyComponent.h>
 #include <Box2DBoxComponent.h>
 #include <Box2DCircleComponent.h>
+#include <RenderUtils.h>
 
 using namespace flappy;
 using namespace std;
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
 
                         // Dynamic circle
                         auto circleEntity = sceneEntity->createEntity();
-                        circleEntity->component<MeshComponent>();
+                        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
                         circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
                         circleEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         circleEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});

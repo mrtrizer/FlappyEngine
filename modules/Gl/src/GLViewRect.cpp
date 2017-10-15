@@ -21,6 +21,7 @@ GLViewRect::GLViewRect(SafePtr<MeshComponent> meshComponent):
             return GLTools::Vertex{vertex.x, vertex.y, vertex.z};
         });
 
+        m_rect.reset(GL_TRIANGLES);
         m_rect.addVBO<GLTools::Vertex>(glVertices, shader()->findAttr("aPosition"));
     });
 }
