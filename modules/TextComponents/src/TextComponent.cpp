@@ -20,6 +20,36 @@ TextComponent::TextComponent()
     });
 }
 
+void TextComponent::setSize(int size) {
+    m_size = size;
+    entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setAlign(Align align) {
+    m_align = align;
+    entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setMaxWidth(int maxWidth) {
+    m_maxWidth = maxWidth;
+    entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setColor(Color color) {
+    m_color = color;
+    entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setText(std::string text) {
+    m_text = text;
+    entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setFontRes(std::shared_ptr<FontRes> fontRes) {
+    m_fontRes = fontRes;
+    entity()->events()->post(TextChangedEvent());
+}
+
 std::shared_ptr<FontRes> TextComponent::fontRes() {
     if (m_fontRes != nullptr && m_fontRes->resUpdated())
         m_fontRes = m_fontRes->lastRes();

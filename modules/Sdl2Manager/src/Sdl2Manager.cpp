@@ -150,6 +150,8 @@ void Sdl2Manager::initWindow(std::string name, int width, int height)
     // Initialize SDL's Video subsystem
     {
         int statusCode = SDL_Init(SDL_INIT_VIDEO);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
         TRACE_SDL_ERRORS;
 
         if (statusCode < 0)

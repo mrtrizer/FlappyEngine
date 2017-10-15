@@ -9,7 +9,11 @@
 	},
 	{
 	    "path":"../../Std"
+	},
+	{
+	    "path":"../../TextComponents"
 	}
+
 
     ],
     "cxx":{

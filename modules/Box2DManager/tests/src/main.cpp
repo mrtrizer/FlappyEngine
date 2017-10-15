@@ -27,6 +27,10 @@
 #include <RenderUtils.h>
 #include <Sdl2MouseInput.h>
 #include <MouseInputManager.h>
+#include <TextComponent.h>
+#include <GlyphSheetResFactory.h>
+#include <FontResFactory.h>
+#include <Sdl2RgbaBitmapResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -48,8 +52,18 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
+                        rootEntity->createComponent<ResManager<JsonRes>>();
                         rootEntity->createComponent<MouseInputManager> ();
                         rootEntity->createComponent<Sdl2MouseInput> ();
+                        rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
+                        rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
+                        rootEntity->createComponent<GLTextureResFactory>();
+                        rootEntity->createComponent<ResManager<TextureRes>> ();
+                        rootEntity->createComponent<GlyphSheetResFactory> ();
+                        rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
+                        rootEntity->createComponent<FontResFactory> ();
+                        auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
 
                         // Box2D world
                         rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
@@ -86,6 +100,13 @@ int main(int argc, char *argv[])
                         circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
                         circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
 
+                        // Counter
+                        auto counterEntity = sceneEntity->createEntity();
+                        counterEntity->component<TextComponent>()->setText("0");
+                        counterEntity->component<TransformComponent>()->setPos({-140.0f, 140.0f, 0.0f});
+                        auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
+                        counterEntity->component<TextComponent>()->setFontRes(fontRes);
+
                         // Box2D ground
                         {
                             std::vector<glm::vec2> vertices(50);
@@ -111,7 +132,7 @@ int main(int argc, char *argv[])
                             groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
                         }
 
-                        rootEntity->events()->subscribe([sceneEntity](MouseInputManager::MouseDownEvent e) {
+                        rootEntity->events()->subscribe([sceneEntity, counterEntity](MouseInputManager::MouseDownEvent e) {
                             float x = (e.pos.x - 300) * 0.5f;
                             float y = (300 - e.pos.y) * 0.5f;
                             LOG("Pos %f, %f", x, y);
@@ -123,6 +144,9 @@ int main(int argc, char *argv[])
                             circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                             circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
                             circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                            int count = std::stoi(counterEntity->component<TextComponent>()->text());
+                            count++;
+                            counterEntity->component<TextComponent>()->setText(std::to_string(count));
                         });
 
                     });

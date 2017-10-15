@@ -24,10 +24,18 @@ GLViewText::GLViewText(SafePtr<TextComponent> textComponent):
     subscribe([this](InitEvent) {
         setShader(manager<ResManager<GLShaderRes>>()->getRes("msdf_shader", ExecType::ASYNC));
     });
+
+    subscribe([this](TextComponent::TextChangedEvent) {
+        m_textChanged = true;
+    });
 }
 
 
 void GLViewText::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
+    if (m_textChanged) {
+        updateFrame();
+        m_textChanged = false;
+    }
     if (m_fontRes != m_textComponent->fontRes()) {
         updateFrame();
         m_fontRes = m_textComponent->fontRes();

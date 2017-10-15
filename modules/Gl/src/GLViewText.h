@@ -24,6 +24,7 @@ private:
     GLAttribArray m_rect;
     SafePtr<TextComponent> m_textComponent;
     std::shared_ptr<FontRes> m_fontRes;
+    bool m_textChanged = false;
 
     void updateFrame();
 };

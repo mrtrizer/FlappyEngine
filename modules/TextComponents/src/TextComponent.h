@@ -16,6 +16,10 @@ class View;
 class TextComponent: public Component<TextComponent> {
 public:
 
+    struct TextChangedEvent : public IEvent {
+
+    };
+
     enum class Align {
         LEFT,
         CENTER,
@@ -49,22 +53,22 @@ public:
 
     TextComponent();
 
-    void setSize(int size) { m_size = size; }
+    void setSize(int size);
     int size() { return m_size; }
 
-    void setAlign(Align align) { m_align = align; }
+    void setAlign(Align align);
     Align align() { return m_align; }
 
-    void setMaxWidth(int maxWidth) { m_maxWidth = maxWidth; }
+    void setMaxWidth(int maxWidth);
     int maxWidth() { return m_maxWidth; }
 
-    void setColor(Color color) { m_color = color; }
+    void setColor(Color color);
     Color& colorRGBA() { return m_color; }
 
-    void setText(std::string text) { m_text = text; }
+    void setText(std::string text);
     std::string text() { return m_text; }
 
-    void setFontRes(std::shared_ptr<FontRes> fontRes) { m_fontRes = fontRes; }
+    void setFontRes(std::shared_ptr<FontRes> fontRes);
     std::shared_ptr<FontRes> fontRes();
 
     static glm::vec2 calcTextSize(std::string text, FontRes& fontRes, int width, int size);
