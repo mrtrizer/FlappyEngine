@@ -1,6 +1,7 @@
 #include "RenderUtils.h"
 
 #include <stdexcept>
+#include <algorithm>
 
 namespace flappy {
 
