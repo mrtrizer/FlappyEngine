@@ -11,8 +11,8 @@ std::shared_ptr<View> GLRenderElementFactory::createSpriteRender(SafePtr<SpriteC
 
 }
 
-std::shared_ptr<View> GLRenderElementFactory::createMeshRender(SafePtr<MeshComponent>) {
-    return std::make_shared<GLViewRect>();
+std::shared_ptr<View> GLRenderElementFactory::createMeshRender(SafePtr<MeshComponent> meshComponent) {
+    return std::make_shared<GLViewRect>(meshComponent);
 }
 
 std::shared_ptr<View> GLRenderElementFactory::createTextRender(SafePtr<TextComponent> textComponent) {

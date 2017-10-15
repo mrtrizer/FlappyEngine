@@ -1,21 +1,27 @@
 #include "GLViewRect.h"
 
+#include <glm/glm.hpp>
+
+#include <MeshComponent.h>
+
 namespace flappy {
 
 using namespace std;
 
-GLViewRect::GLViewRect():
+GLViewRect::GLViewRect(SafePtr<MeshComponent> meshComponent):
     m_rect(GL_TRIANGLE_STRIP)
 {
-    subscribe([this](InitEvent) {
-        vector<GLTools::Vertex> vertexList({
-                      {-0.5f,-0.5f},
-                      {-0.5f,0.5f},
-                      {0.5f,-0.5f},
-                      {0.5f,0.5f}
-                  });
+    addDependency(MeshComponent::id());
 
-        m_rect.addVBO<GLTools::Vertex>(vertexList, shader()->findAttr("aPosition"));
+    subscribe([this, meshComponent](InitEvent) {
+        const auto& vertices = meshComponent->vertices();
+        vector<GLTools::Vertex> glVertices(vertices.size());
+
+        std::transform(vertices.begin(), vertices.end(), glVertices.begin(), [](glm::vec3 vertex) {
+            return GLTools::Vertex{vertex.x, vertex.y, vertex.z};
+        });
+
+        m_rect.addVBO<GLTools::Vertex>(glVertices, shader()->findAttr("aPosition"));
     });
 }
 

@@ -32,6 +32,7 @@
 #include <GlyphSheetResFactory.h>
 #include <FontRes.h>
 #include <FontResFactory.h>
+#include <RenderUtils.h>
 
 using namespace flappy;
 using namespace std;
@@ -96,7 +97,7 @@ int main(int argc, char *argv[])
 
                         // Shape
                         auto rectEntity = sceneEntity->createEntity();
-                        rectEntity->component<MeshComponent>();
+                        rectEntity->component<MeshComponent>()->setVertices(genCircleVertices(1.0f,10));
                         rectEntity->component<TransformComponent>()->setScale({100.0f, 100.0f});
                         rectEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
                         rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);

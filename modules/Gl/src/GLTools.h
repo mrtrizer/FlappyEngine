@@ -19,6 +19,7 @@ namespace GLTools {
     struct Vertex {
       GLfloat x;
       GLfloat y;
+      GLfloat z;
     };
 
     struct GLColorRGBA {

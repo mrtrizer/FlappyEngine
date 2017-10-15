@@ -1,7 +1,10 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <Component.h>
 #include <View.h>
+#include <Entity.h>
 
 #include "RenderElementFactory.h"
 
@@ -9,23 +12,19 @@ namespace flappy {
 
 class MeshComponent: public Component<MeshComponent> {
 public:
-    MeshComponent()
-    {
-        addDependency(RenderElementFactory::id());
+    MeshComponent();
 
-        subscribe([this](InitEvent) {
-            m_renderElement = manager<RenderElementFactory>()->createMeshRender(selfPointer());
-            entity()->addComponent(m_renderElement);
-        });
+    void setVertices(std::vector<glm::vec3> vertices);
 
-        subscribe([this](DeinitEvent) {
-            entity()->removeComponent(m_renderElement);
-            m_renderElement.reset();
-        });
-    }
+    const std::vector<glm::vec3>& vertices() const { return m_vertices; }
 
 private:
     std::shared_ptr<View> m_renderElement;
+
+    std::vector<glm::vec3> m_vertices = {{-0.5f,-0.5f, 0.0f},
+                                         {-0.5f,0.5f, 0.0f},
+                                         {0.5f,-0.5f, 0.0f},
+                                         {0.5f,0.5f, 0.0f}};
 };
 
 } // flappy
