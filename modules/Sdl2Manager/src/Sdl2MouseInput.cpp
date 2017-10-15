@@ -8,6 +8,7 @@ namespace flappy {
 Sdl2MouseInput::Sdl2MouseInput()
 {
     addDependency(Sdl2Manager::id());
+    addDependency(MouseInputManager::id());
 
     subscribe([this](Sdl2Manager::Sdl2Event e) {
         if (e.event.type == SDL_MOUSEMOTION) {

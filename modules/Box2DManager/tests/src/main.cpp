@@ -25,6 +25,8 @@
 #include <Box2DChainComponent.h>
 #include <Box2DCircleComponent.h>
 #include <RenderUtils.h>
+#include <Sdl2MouseInput.h>
+#include <MouseInputManager.h>
 
 using namespace flappy;
 using namespace std;
@@ -46,6 +48,8 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<MouseInputManager> ();
+                        rootEntity->createComponent<Sdl2MouseInput> ();
 
                         // Box2D world
                         rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
@@ -106,6 +110,18 @@ int main(int argc, char *argv[])
                             groundEntity->component<TransformComponent>()->setPos({-150.0f, -100.0f, 0.0f});
                             groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
                         }
+
+                        rootEntity->events()->subscribe([&sceneEntity](MouseInputManager::MouseDownEvent e) {
+                            LOG("Pos %f, %f", e.pos.x, e.pos.y);
+                            auto circleEntity = sceneEntity->createEntity();
+                            circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+                            circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+                            circleEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
+                            circleEntity->component<TransformComponent>()->setPos({e.pos.x, e.pos.y, 0.0f});
+                            circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+                            circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
+                            circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                        });
 
                     });
     return application.runThread(currentThread);

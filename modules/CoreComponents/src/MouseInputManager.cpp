@@ -1,4 +1,5 @@
 #include "MouseInputManager.h"
+#include <Entity.h>
 
 namespace flappy
 {
@@ -49,7 +50,7 @@ void MouseInputManager::setMouseDown(MouseButton mouseButton, const vec2 &mouseP
     MouseInputManager::MouseDownEvent mouseDownEvent;
     mouseDownEvent.pos = mousePos;
     mouseDownEvent.button = MouseInputManager::MouseButton::LEFT;
-    events()->post(mouseDownEvent);
+    entity()->events()->post(mouseDownEvent);
 }
 
 void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos)
@@ -63,7 +64,7 @@ void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos
     MouseInputManager::MouseDownEvent mouseUpEvent;
     mouseUpEvent.pos = mousePos;
     mouseUpEvent.button = MouseInputManager::MouseButton::LEFT;
-    events()->post(mouseUpEvent);
+    entity()->events()->post(mouseUpEvent);
 }
 
 void MouseInputManager::setMousePos(MouseButton mouseButton, const vec2 &mousePos)
@@ -74,7 +75,7 @@ void MouseInputManager::setMousePos(MouseButton mouseButton, const vec2 &mousePo
 
     MouseInputManager::MouseMoveEvent mouseMoveEvent;
     mouseMoveEvent.pos = mousePos;
-    events()->post(mouseMoveEvent);
+    entity()->events()->post(mouseMoveEvent);
 }
 
 } // flappy

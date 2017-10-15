@@ -49,7 +49,7 @@ void Sdl2Manager::update() {
             manager<ThreadManager>()->quit();
             break;
         } else {
-            events()->post(Sdl2Event(event));
+            entity()->events()->post(Sdl2Event(event));
         }
     }
 
