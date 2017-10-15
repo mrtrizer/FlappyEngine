@@ -22,6 +22,7 @@
 #include <Box2DWorldManager.h>
 #include <Box2DBodyComponent.h>
 #include <Box2DBoxComponent.h>
+#include <Box2DChainComponent.h>
 #include <Box2DCircleComponent.h>
 #include <RenderUtils.h>
 
@@ -83,23 +84,27 @@ int main(int argc, char *argv[])
 
                         // Box2D ground
                         {
+                            std::vector<glm::vec2> vertices(50);
+                            float width = 320.0f;
+                            float height = 300.0f;
+                            float xStep = width / vertices.size();
+                            for (int i = 0; i < vertices.size(); i++) {
+                                vertices[i] = {i * xStep, std::sin(i * 0.2) * 10};
+                            }
+                            std::vector<glm::vec3> meshVertices(vertices.size() * 6);
+                            for (int i = 0; i < vertices.size() - 1; i++) {
+                                meshVertices[i * 6 + 0] = glm::vec3(vertices[i].x, vertices[i].y, 0.0f);
+                                meshVertices[i * 6 + 1] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
+                                meshVertices[i * 6 + 2] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
+                                meshVertices[i * 6 + 3] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
+                                meshVertices[i * 6 + 4] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
+                                meshVertices[i * 6 + 5] = glm::vec3(vertices[i + 1].x, -height * 0.5f, 0.0f);
+                            }
                             auto groundEntity = sceneEntity->createEntity();
-                            groundEntity->component<MeshComponent>();
-                            groundEntity->component<TransformComponent>()->setScale({100.0f, 10.0f});
-                            groundEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.25f);
+                            groundEntity->component<MeshComponent>()->setVertices(meshVertices);
                             groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
-                            groundEntity->component<TransformComponent>()->setPos({0.0f, -100.0f, 0.0f});
-                            groundEntity->component<Box2DBoxComponent>()->setSize({100.0f, 10.0f});
-                        }
-
-                        {
-                            auto groundEntity = sceneEntity->createEntity();
-                            groundEntity->component<MeshComponent>();
-                            groundEntity->component<TransformComponent>()->setScale({100.0f, 10.0f});
-                            groundEntity->component<TransformComponent>()->setAngle2DRad(-M_PI * 0.25f);
-                            groundEntity->component<Box2DBodyComponent>()->setType(b2_staticBody);
-                            groundEntity->component<TransformComponent>()->setPos({-70.0f, -100.0f, 0.0f});
-                            groundEntity->component<Box2DBoxComponent>()->setSize({100.0f, 10.0f});
+                            groundEntity->component<TransformComponent>()->setPos({-150.0f, -100.0f, 0.0f});
+                            groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
                         }
 
                     });

@@ -82,8 +82,8 @@ int main(int argc, char *argv[])
                             spriteEntity->component<TransformComponent>()->setAngle2DRad(M_PI / 4);
                             spriteEntity->component<TransformComponent>()->setPos({100.0f, 1.0f, 1.0f});
                             auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
-                            auto quadRes = spriteResManager->getRes("demo_atlas:blue_button01", ExecType::ASYNC);
-                            spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                            auto spriteRes = spriteResManager->getRes("demo_atlas:blue_button01", ExecType::ASYNC);
+                            spriteEntity->component<SpriteComponent>()->setSpriteRes(spriteRes);
                         }
 
                         // Single image sprite
@@ -91,8 +91,8 @@ int main(int argc, char *argv[])
                             auto spriteEntity = sceneEntity->createEntity();
                             spriteEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 1.0f});
                             auto spriteResManager = rootEntity->component<ResManager<SpriteRes>>();
-                            auto quadRes = spriteResManager->getRes("__img_missing__", ExecType::ASYNC);
-                            spriteEntity->component<SpriteComponent>()->setSpriteRes(quadRes);
+                            auto spriteRes = spriteResManager->getRes("__img_missing__", ExecType::ASYNC);
+                            spriteEntity->component<SpriteComponent>()->setSpriteRes(spriteRes);
                         }
 
                         // Shape
