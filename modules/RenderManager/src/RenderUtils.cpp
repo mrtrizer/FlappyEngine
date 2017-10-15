@@ -1,5 +1,7 @@
 #include "RenderUtils.h"
 
+#include <exception>
+
 namespace flappy {
 
 /// Generates vertices for circle drawing in GL_TRIANGLE_FAN format
