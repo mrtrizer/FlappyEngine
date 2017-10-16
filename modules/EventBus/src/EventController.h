@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
+#include <chrono>
 #include "EventBus.h"
 
 #include <SafePtr.h>
@@ -57,7 +58,16 @@ SafePtr<ISubscription> EventController::subscribe(FuncT&& func)
 
 template<typename EventT>
 void EventController::post(EventT&& event) {
+#ifdef PROFILE_EVENTS
+    using namespace std::chrono;
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+#endif
     m_eventBus->post(std::forward<EventT>(event));
+#ifdef PROFILE_EVENTS
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    float duration = duration_cast<microseconds>( t2 - t1 ).count();
+    LOG("%s %f", typeName<EventT>().c_str(), duration / 1000.0f);
+#endif
 }
 
 } // flappy
