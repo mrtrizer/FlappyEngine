@@ -121,11 +121,6 @@
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
-  "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/RenderUtils.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/RenderUtils.cpp",
-  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/RenderUtils.cpp"
-},
-{
-  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/ResManager",
   "command": "/usr/bin/clang++  -DResManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src  -g -fPIC   -std=c++1y -o CMakeFiles/ResManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src/ResBase.cpp"
 },
@@ -253,6 +248,11 @@
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/RenderManager",
   "command": "/usr/bin/clang++  -DRenderManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderElementFactory.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderElementFactory.cpp",
   "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderElementFactory.cpp"
+},
+{
+  "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/RenderManager",
+  "command": "/usr/bin/clang++  -DRenderManager_EXPORTS -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Core/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Tools/libs -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/EventBus/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreResources/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/ResManager/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/JsonRes/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Std/src -I/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src  -g -fPIC   -std=c++1y -o CMakeFiles/RenderManager.dir/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderUtils.cpp.o -c /Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderUtils.cpp",
+  "file": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/RenderManager/src/RenderUtils.cpp"
 },
 {
   "directory": "/Users/deniszdorovtsov/Projects/FlappyEngine/modules/Sdl2Manager/tests/generated/build-cmake-Desktop_Qt_5_9_1_clang_64bit-Default/RenderManager",

@@ -37,8 +37,12 @@ class GLAttribArray {
 public:
     using Method = unsigned int;
 
-    explicit GLAttribArray(Method = GL_TRIANGLES, int m_size = -1);
-    ~GLAttribArray();
+    GLAttribArray(Method = GL_TRIANGLES, int m_size = -1);
+    GLAttribArray(const GLAttribArray&) = delete;
+    GLAttribArray& operator=(const GLAttribArray&) = delete;
+    GLAttribArray(GLAttribArray&&) = default;
+    GLAttribArray& operator=(GLAttribArray&&) & = default;
+    virtual ~GLAttribArray();
 
     void bind() const;
     void unbind() const;

@@ -19,10 +19,12 @@ MeshComponent::MeshComponent()
 
 void MeshComponent::setVertices(std::vector<glm::vec3> vertices) {
     m_vertices = vertices;
-    if (isInitialized()) {
-        m_renderElement->setActive(false);
-        m_renderElement->setActive(true);
-    }
+    entity()->events()->post(MeshChangedEvent());
+}
+
+void MeshComponent::setColor(Color color) {
+    m_color = color;
+    entity()->events()->post(MeshChangedEvent());
 }
 
 } // flappy

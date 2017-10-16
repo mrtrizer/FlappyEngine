@@ -37,6 +37,25 @@
 using namespace flappy;
 using namespace std;
 
+std::vector<glm::vec3> genSinCircleVertices(float r, int vertexN, float offset)
+{
+    if (vertexN < 3)
+        throw std::runtime_error("Too few vertices in circle (has to be >= 3).");
+    std::vector<glm::vec3> vertexList(vertexN * 3);
+    const float factor = 1.0f;
+    const float amplitude = 10.0f;
+    float step = M_PI * 2 / vertexN;
+    for (int i = 0; i < vertexN; i++) {
+        vertexList[i * 3 + 0] = {0.0f, 0.0f, 0.0f};
+        float rCur = r + sin(i * factor + offset) * amplitude + sin(i * factor * 0.5f) * amplitude;
+        float rNext = r + sin((i + 1) * factor + offset) * amplitude + sin((i + 1) * factor * 0.5f) * amplitude;
+        vertexList[i * 3 + 1] = {cos(step * i) * rCur, sin(step * i) * rCur, 0.0f};
+        int nextI = i + 1;
+        vertexList[i * 3 + 2] = {cos(step * nextI) * rNext, sin(step * nextI) * rNext, 0.0f};
+    }
+    return vertexList;
+}
+
 int main(int argc, char *argv[])
 {
     PosixApplication application;
@@ -96,11 +115,10 @@ int main(int argc, char *argv[])
                         }
 
                         // Shape
-                        auto rectEntity = sceneEntity->createEntity();
-                        rectEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,30));
-                        rectEntity->component<TransformComponent>()->setScale({100.0f, 100.0f});
-                        rectEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
-                        rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        auto circleEntity = sceneEntity->createEntity();
+                        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,30));
+                        circleEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
+                        circleEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
 
                         // Text
                         auto textEntity = sceneEntity->createEntity();
@@ -111,6 +129,12 @@ int main(int argc, char *argv[])
                         textEntity->component<TextComponent>()->setSize(30);
                         auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
                         textEntity->component<TextComponent>()->setFontRes(fontRes);
+
+                        rootEntity->events()->subscribe([circleEntity](ComponentBase::UpdateEvent e) {
+                            circleEntity->component<TransformComponent>()->rotate2DRad(e.dt);
+                            float angle = circleEntity->component<TransformComponent>()->angle2DRad();
+                            circleEntity->component<MeshComponent>()->setVertices(genSinCircleVertices(50.f, 30, angle));
+                        });
 
 
                         // Try to reinitialize gl context several times
