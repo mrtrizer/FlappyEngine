@@ -12,6 +12,8 @@ class Box2DBodyComponent: public Component<Box2DBodyComponent> {
 public:
     Box2DBodyComponent();
 
+    b2Body* body() { return m_body; }
+
     void setMass(float mass);
 
     void setLinearDamping(float linearDamping);
@@ -48,6 +50,8 @@ public:
     b2Fixture* createFixture(const b2FixtureDef* def);
 
     bool testPoint(glm::vec2 point);
+
+
 
 private:
     b2Body* m_body = nullptr;

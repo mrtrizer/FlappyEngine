@@ -15,6 +15,9 @@ public:
 
     b2World& world() { return m_world; }
 
+    b2Joint* createJoint(std::shared_ptr<b2JointDef> jointDef);
+    void destroyJoint(b2Joint*);
+
     void setGravity(glm::vec2 gravity);
 
     float sizeFactor() const;
