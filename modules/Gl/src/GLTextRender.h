@@ -2,7 +2,7 @@
 
 #include <Color.h>
 
-#include <GLView.h>
+#include <GLRender.h>
 #include <GLAttribArray.h>
 
 namespace flappy {
@@ -10,22 +10,21 @@ namespace flappy {
 template <typename T>
 class ResHandler;
 
-class SpriteRes;
-
-class SpriteComponent;
+class FontRes;
+class TextComponent;
 
 /// Contains shaders and vbos to draw textures on a rectangle.
-class GLViewSprite : public GLView<GLViewSprite>
+class GLTextRender : public GLRender<GLTextRender>
 {
 public:
-    GLViewSprite(SafePtr<SpriteComponent> spriteComponent);
+    GLTextRender(SafePtr<TextComponent> textComponent);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:
     GLAttribArray m_rect;
-    SafePtr<SpriteComponent> m_spriteComponent;
-    std::vector<GLTools::Vertex> m_vertexList;
-    std::shared_ptr<SpriteRes> m_quadRes;
+    SafePtr<TextComponent> m_textComponent;
+    std::shared_ptr<FontRes> m_fontRes;
+    bool m_textChanged = false;
 
     void updateFrame();
 };

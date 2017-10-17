@@ -1,4 +1,4 @@
-#include "GLViewText.h"
+#include "GLTextRender.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <GLShaderRes.h>
@@ -14,7 +14,7 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLViewText::GLViewText(SafePtr<TextComponent> textComponent):
+GLTextRender::GLTextRender(SafePtr<TextComponent> textComponent):
     m_rect(GL_TRIANGLE_STRIP),
     m_textComponent(textComponent),
     m_fontRes(textComponent->fontRes())
@@ -31,7 +31,7 @@ GLViewText::GLViewText(SafePtr<TextComponent> textComponent):
 }
 
 
-void GLViewText::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
+void GLTextRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_textChanged) {
         updateFrame();
         m_textChanged = false;
@@ -52,7 +52,7 @@ void GLViewText::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     }
 }
 
-void GLViewText::updateFrame() {
+void GLTextRender::updateFrame() {
     auto glyphSheetRes = m_textComponent->fontRes()->glyphSheetRes();
     auto texture = m_textComponent->fontRes()->textureRes();
     auto str = m_textComponent->text();

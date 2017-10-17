@@ -11,7 +11,7 @@
 
 namespace flappy {
 
-class View;
+class Render;
 
 class TextComponent: public Component<TextComponent> {
 public:
@@ -86,7 +86,7 @@ private:
     std::string m_text;
     BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;
-    std::shared_ptr<View> m_renderElement;
+    std::shared_ptr<Render> m_renderElement;
 };
 
 } // flappy

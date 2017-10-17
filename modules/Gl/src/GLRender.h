@@ -2,15 +2,13 @@
 
 #include <memory>
 
-#include <View.h>
+#include <Render.h>
 #include <ResManager.h>
 
 #include "GLShaderRes.h"
 #include "IGLManager.h"
 
 namespace flappy {
-
-// TODO: Right now this class became useless.
 
 /// @brief Holds a shader shared pointer.
 /// @details Takes a pointer from static weak pointer.
@@ -19,10 +17,10 @@ namespace flappy {
 /// You need to remove all instances of derived class to
 /// destroy the instance of GLShaderProgram.
 template<typename Derived>
-class GLView: public View
+class GLRender: public Render
 {
 public:
-    GLView()
+    GLRender()
     {
         addDependency(ResManager<GLShaderRes>::id());
         addDependency(IGLManager::id());

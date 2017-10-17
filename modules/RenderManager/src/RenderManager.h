@@ -9,25 +9,25 @@
 
 namespace flappy {
 
-class View;
+class Render;
 class SceneManager;
 class ScreenManager;
 
-/// @brief Abstract base for View implementations in MVC terms.
+/// @brief Abstract base for Render implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class ViewManager: public Manager<ViewManager> {
+class RenderManager: public Manager<RenderManager> {
 private:
 
     class IViewFactory {
     public:
         virtual ~IViewFactory() = default;
-        virtual std::shared_ptr<View> build() = 0;
+        virtual std::shared_ptr<Render> build() = 0;
     };
 
     template <typename ViewT>
     class ViewFactory: public IViewFactory {
     public:
-        std::shared_ptr<View> build() { return std::make_shared<ViewT>(); }
+        std::shared_ptr<Render> build() { return std::make_shared<ViewT>(); }
     };
 
 public:
@@ -36,17 +36,17 @@ public:
         float height;
     };
 
-    ViewManager();
+    RenderManager();
 
     void update(DeltaTime dt);
 
-    void registerRenderElement(const SafePtr<View> renderElement);
+    void registerRenderElement(const SafePtr<Render> renderElement);
 
-    void unregisterRenderElement(const SafePtr<View> renderElement);
+    void unregisterRenderElement(const SafePtr<Render> renderElement);
 
 protected:
     struct Visual {
-        SafePtr<View> view;
+        SafePtr<Render> view;
         glm::mat4 pos;
         float z;
     };

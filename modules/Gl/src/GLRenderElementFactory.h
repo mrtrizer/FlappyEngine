@@ -2,7 +2,7 @@
 
 #include <RenderElementFactory.h>
 
-#include "GLViewManager.h"
+#include "GLRenderManager.h"
 
 namespace flappy {
 
@@ -11,12 +11,12 @@ public:
 
     GLRenderElementFactory()
     {
-        addDependency(ViewManager::id());
+        addDependency(RenderManager::id());
     }
 
-    std::shared_ptr<View> createSpriteRender(SafePtr<SpriteComponent>) final;
-    std::shared_ptr<View> createMeshRender(SafePtr<MeshComponent>) final;
-    std::shared_ptr<View> createTextRender(SafePtr<TextComponent>) final;
+    std::shared_ptr<Render> createSpriteRender(SafePtr<SpriteComponent>) final;
+    std::shared_ptr<Render> createMeshRender(SafePtr<MeshComponent>) final;
+    std::shared_ptr<Render> createTextRender(SafePtr<TextComponent>) final;
 
 };
 

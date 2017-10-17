@@ -8,7 +8,7 @@
 
 #include <GLIncludes.h>
 #include <GLTools.h>
-#include <GLViewManager.h>
+#include <GLRenderManager.h>
 #include <Entity.h>
 #include <ThreadManager.h>
 #include <Application.h>
@@ -59,7 +59,7 @@ void Sdl2Manager::update() {
 }
 
 void Sdl2Manager::resizeWindow(int width, int height) {
-    ViewManager::OnWindowResize onWindowResizeEvent;
+    RenderManager::OnWindowResize onWindowResizeEvent;
     onWindowResizeEvent.width = width;
     onWindowResizeEvent.height = height;
     events()->post(onWindowResizeEvent);

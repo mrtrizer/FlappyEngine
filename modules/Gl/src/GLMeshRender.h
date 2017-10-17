@@ -3,7 +3,7 @@
 #include <memory>
 
 // FIXME: Strange includes
-#include <GLView.h>
+#include <GLRender.h>
 #include <GLShaderRes.h>
 #include <GLAttribArray.h>
 #include <GLTools.h>
@@ -15,9 +15,9 @@ class MeshComponent;
 
 /// Contains a shader for all shapes and draw implementation.
 /// All derived classes have to impmelent getAttribArray().
-class GLViewShape: public GLView<GLViewShape> {
+class GLMeshRender: public GLRender<GLMeshRender> {
 public:
-    GLViewShape(SafePtr<MeshComponent>);
+    GLMeshRender(SafePtr<MeshComponent>);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:

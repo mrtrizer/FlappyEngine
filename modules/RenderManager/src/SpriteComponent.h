@@ -39,7 +39,7 @@ public:
 private:
     Color m_colorRGBA;
     std::shared_ptr<SpriteRes> m_quadRes;
-    std::shared_ptr<View> m_renderElement;
+    std::shared_ptr<Render> m_renderElement;
 };
 
 } // flappy

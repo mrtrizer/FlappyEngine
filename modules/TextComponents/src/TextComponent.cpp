@@ -1,7 +1,7 @@
 #include "TextComponent.h"
 #include <utfcpp/utf8.h>
 
-#include <View.h>
+#include <Render.h>
 
 namespace flappy {
 

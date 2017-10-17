@@ -2,17 +2,17 @@
 
 #include <vector>
 
-#include <ViewManager.h>
+#include <RenderManager.h>
 
 namespace flappy {
 
-class GLViewFactory;
+class GLRenderFactory;
 
-/// View implementation for work with OpenGL.
+/// Render implementation for work with OpenGL.
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
-class GLViewManager : public ViewManager {
+class GLRenderManager : public RenderManager {
 public:
-    GLViewManager();
+    GLRenderManager();
     void redraw(std::list<Visual> &, glm::mat4 &) final;
 protected:
     void updateViewPort() final;

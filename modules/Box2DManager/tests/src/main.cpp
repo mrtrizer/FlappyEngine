@@ -4,7 +4,7 @@
 #include <Entity.h>
 #include <AppManager.h>
 #include <SceneManager.h>
-#include <GLViewManager.h>
+#include <GLRenderManager.h>
 #include <GLRenderElementFactory.h>
 #include <TransformComponent.h>
 #include <ScreenManager.h>
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
                         auto sceneEntity = rootEntity->createEntity();
                         sceneEntity->component<SceneManager>()->setMainCamera(sceneEntity->component<CameraComponent>());
                         sceneEntity->component<CameraComponent>()->setSize({300, 300});
-                        sceneEntity->component<GLViewManager>();
+                        sceneEntity->component<GLRenderManager>();
                         sceneEntity->component<GLRenderElementFactory>();
 
                         // Dynamic box

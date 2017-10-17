@@ -1,17 +1,17 @@
-#include "ViewManager.h"
+#include "RenderManager.h"
 
 #include <Tools.h>
 #include <SceneManager.h>
 #include <ScreenManager.h>
 #include <TransformComponent.h>
-#include <View.h>
+#include <Render.h>
 
 namespace flappy {
 
 using namespace std;
 using namespace glm;
 
-ViewManager::ViewManager()
+RenderManager::RenderManager()
 {
     addDependency(SceneManager::id());
 
@@ -20,7 +20,7 @@ ViewManager::ViewManager()
     });
 }
 
-void ViewManager::update(DeltaTime dt) {
+void RenderManager::update(DeltaTime dt) {
 
     for (auto i = m_visuals.begin(); i !=  m_visuals.end(); i++) {
         auto& visual = *i;
@@ -54,12 +54,12 @@ void ViewManager::update(DeltaTime dt) {
     redraw(m_visuals, pMatrix);
 }
 
-void ViewManager::registerRenderElement(const SafePtr<View> renderElement) {
+void RenderManager::registerRenderElement(const SafePtr<Render> renderElement) {
     auto visual = Visual{renderElement, {}, 0};
     m_visuals.push_back(visual);
 }
 
-void ViewManager::unregisterRenderElement(const SafePtr<View> renderElement) {
+void RenderManager::unregisterRenderElement(const SafePtr<Render> renderElement) {
     m_visuals.remove_if([&renderElement](const Visual& i){ return i.view == renderElement; });
 }
 

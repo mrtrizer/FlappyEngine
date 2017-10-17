@@ -1,4 +1,4 @@
-#include "GLViewSprite.h"
+#include "GLSpriteRender.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <GLShaderRes.h>
@@ -12,7 +12,7 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
+GLSpriteRender::GLSpriteRender(SafePtr<SpriteComponent> spriteComponent):
     m_rect(GL_TRIANGLE_STRIP),
     m_spriteComponent(spriteComponent),
     m_vertexList{ {-0.5f, -0.5f},
@@ -28,7 +28,7 @@ GLViewSprite::GLViewSprite(SafePtr<SpriteComponent> spriteComponent):
     });
 }
 
-void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
+void GLSpriteRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_quadRes != m_spriteComponent->quadRes()) {
         updateFrame();
         m_quadRes = m_spriteComponent->quadRes();
@@ -45,7 +45,7 @@ void GLViewSprite::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     }
 }
 
-void GLViewSprite::updateFrame() {
+void GLSpriteRender::updateFrame() {
     auto texture = m_spriteComponent->quadRes()->texture();
 
     auto spriteInfo = m_spriteComponent->quadRes()->spriteInfo();

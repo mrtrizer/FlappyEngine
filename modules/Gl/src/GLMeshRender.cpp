@@ -1,4 +1,4 @@
-#include "GLViewShape.h"
+#include "GLMeshRender.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -6,7 +6,7 @@
 
 namespace flappy {
 
-GLViewShape::GLViewShape(SafePtr<MeshComponent> meshComponent):
+GLMeshRender::GLMeshRender(SafePtr<MeshComponent> meshComponent):
     m_attribArray(GL_TRIANGLE_STRIP)
 {
     addDependency(MeshComponent::id());
@@ -23,7 +23,7 @@ GLViewShape::GLViewShape(SafePtr<MeshComponent> meshComponent):
     });
 }
 
-GLAttribArray GLViewShape::genAttribArray(const std::vector<glm::vec3>& vertices) {
+GLAttribArray GLMeshRender::genAttribArray(const std::vector<glm::vec3>& vertices) {
     std::vector<GLTools::Vertex> glVertices(vertices.size());
 
     std::transform(vertices.begin(), vertices.end(), glVertices.begin(), [](glm::vec3 vertex) {
@@ -36,7 +36,7 @@ GLAttribArray GLViewShape::genAttribArray(const std::vector<glm::vec3>& vertices
     return attribArray;
 }
 
-void GLViewShape::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
+void GLMeshRender::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
     if (m_meshChanged) {
         m_attribArray = genAttribArray(m_meshComponent->vertices());
         m_glColorRGBA = GLTools::GLColorRGBA(m_meshComponent->color());

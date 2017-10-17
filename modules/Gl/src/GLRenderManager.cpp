@@ -1,4 +1,4 @@
-#include "GLViewManager.h"
+#include "GLRenderManager.h"
 
 #include <string>
 #include <iostream>
@@ -7,7 +7,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include <View.h>
+#include <Render.h>
 #include <ScreenManager.h>
 #include <IGLManager.h>
 
@@ -20,7 +20,7 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLViewManager::GLViewManager(): ViewManager()
+GLRenderManager::GLRenderManager(): RenderManager()
 {
     addDependency(IGLManager::id());
     addDependency(ScreenManager::id());
@@ -37,7 +37,7 @@ GLViewManager::GLViewManager(): ViewManager()
     });
 }
 
-void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
+void GLRenderManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR;
 
@@ -57,7 +57,7 @@ void GLViewManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
     }
 }
 
-void GLViewManager::updateViewPort() {
+void GLRenderManager::updateViewPort() {
     glViewport(0, 0, manager<ScreenManager>()->width(), manager<ScreenManager>()->height());
     CHECK_GL_ERROR;
 }

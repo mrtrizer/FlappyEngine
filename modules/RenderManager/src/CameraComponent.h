@@ -9,7 +9,7 @@
 namespace flappy {
 
 /// @brief Game camera. Contains screen parameters.
-/// @details A camera can be set as active in GWordCtrl and used by View
+/// @details A camera can be set as active in GWordCtrl and used by Render
 /// to get a perspective transformation matrix. Also camera
 /// manages coordinates of GObjPointer object.
 class CameraComponent : public Component<CameraComponent>

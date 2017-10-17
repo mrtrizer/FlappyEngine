@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include <Component.h>
-#include <View.h>
+#include <Render.h>
 #include <Entity.h>
 
 #include "RenderElementFactory.h"
@@ -23,7 +23,7 @@ public:
     Color color() { return m_color; }
 
 private:
-    std::shared_ptr<View> m_renderElement;
+    std::shared_ptr<Render> m_renderElement;
     std::vector<glm::vec3> m_vertices = {{-0.5f,-0.5f, 0.0f},
                                          {-0.5f,0.5f, 0.0f},
                                          {0.5f,-0.5f, 0.0f},
