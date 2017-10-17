@@ -1,39 +1,48 @@
 #include "Box2DRevoluteJointComponent.h"
 
 #include <Entity.h>
-#include <Box2DBodyComponent.h>
 #include <Box2D.h>
+
+#include "Box2DBodyComponent.h"
+#include "Box2DWorldManager.h"
 
 namespace flappy {
 
 Box2DRevoluteJointComponent::Box2DRevoluteJointComponent() {
-
     subscribe([this](InitEvent) {
-        if (m_targetBody != nullptr)
+        if (isValid())
             init();
     });
-
 }
 
-void Box2DRevoluteJointComponent::setTargetBody(SafePtr<Box2DBodyComponent> targetBody) {
-    m_targetBody = targetBody;
-
-    if (isInitialized() && (m_targetBody != nullptr)) {
-        init();
-    }
+bool Box2DRevoluteJointComponent::isValid() {
+    return (m_bodyA != nullptr) && (m_bodyB != nullptr);
 }
 
 void Box2DRevoluteJointComponent::init() {
     auto jointDef = std::make_shared<b2RevoluteJointDef>();
-    jointDef->bodyA = entity()->component<Box2DBodyComponent>()->body();
-    jointDef->bodyB = m_targetBody->body();
-    jointDef->collideConnected = false;
-    jointDef->localAnchorA.Set(2,2);//the top right corner of the box
-    jointDef->localAnchorB.Set(0,0);
-    jointDef->enableMotor = true;
-    jointDef->motorSpeed = 10.0f;
-    jointDef->maxMotorTorque = 1000.0f;
+    float sizeFactor = manager<Box2DWorldManager>()->sizeFactor();
+    jointDef->bodyA = m_bodyA->body();
+    jointDef->bodyB = m_bodyB->body();
+    jointDef->localAnchorA.Set(m_localAnchorA.x * sizeFactor,m_localAnchorA.y * sizeFactor);
+    jointDef->localAnchorB.Set(m_localAnchorB.x * sizeFactor, m_localAnchorB.y * sizeFactor);
+    jointDef->referenceAngle = m_referenceAngle;
+    jointDef->lowerAngle = m_lowerAngle;
+    jointDef->upperAngle = m_upperAngle;
+    jointDef->maxMotorTorque = m_maxMotorTorque;
+    jointDef->motorSpeed = m_motorSpeed;
+    jointDef->enableLimit = m_enableLimit;
+    jointDef->enableMotor = m_enableMotor;
     setJointDef(jointDef);
+}
+
+void Box2DRevoluteJointComponent::update() {
+    if (isInitialized()) {
+        if (isValid())
+            init();
+        else
+            setJointDef(nullptr);
+    }
 }
 
 }

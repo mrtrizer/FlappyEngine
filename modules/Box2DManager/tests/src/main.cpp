@@ -98,9 +98,14 @@ int main(int argc, char *argv[])
                         circleEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
                         circleEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
                         circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-                        circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
+                        circleEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
                         circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setTargetBody(rectEntity->component<Box2DBodyComponent>());
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setBodyA(circleEntity->component<Box2DBodyComponent>());
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyComponent>());
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({20, 0});
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
 
                         // Counter
                         auto counterEntity = sceneEntity->createEntity();

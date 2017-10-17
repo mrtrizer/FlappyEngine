@@ -11,7 +11,6 @@ namespace flappy {
 
 Box2DJointComponent::Box2DJointComponent() {
 
-    addDependency(Box2DBodyComponent::id());
     addDependency(Box2DWorldManager::id());
 
     subscribe([this](InitEvent) {
@@ -32,7 +31,9 @@ void Box2DJointComponent::setJointDef(std::shared_ptr<b2JointDef> jointDef) {
     if (isInitialized()) {
         if (m_joint != nullptr)
             manager<Box2DWorldManager>()->destroyJoint(m_joint);
-        m_joint = manager<Box2DWorldManager>()->createJoint(jointDef);
+        m_joint = nullptr;
+        if (jointDef != nullptr)
+            m_joint = manager<Box2DWorldManager>()->createJoint(jointDef);
     }
 }
 
