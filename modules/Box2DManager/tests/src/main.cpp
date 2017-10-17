@@ -31,6 +31,7 @@
 #include <GlyphSheetResFactory.h>
 #include <FontResFactory.h>
 #include <Sdl2RgbaBitmapResFactory.h>
+#include <Box2DRevoluteJointComponent.h>
 
 using namespace flappy;
 using namespace std;
@@ -99,6 +100,7 @@ int main(int argc, char *argv[])
                         circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                         circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
                         circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                        circleEntity->component<Box2DRevoluteJointComponent>()->setTargetBody(rectEntity->component<Box2DBodyComponent>());
 
                         // Counter
                         auto counterEntity = sceneEntity->createEntity();

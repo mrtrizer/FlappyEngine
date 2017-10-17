@@ -15,8 +15,6 @@ Box2DJointComponent::Box2DJointComponent() {
     addDependency(Box2DWorldManager::id());
 
     subscribe([this](InitEvent) {
-        if (m_joint != nullptr)
-            manager<Box2DWorldManager>()->destroyJoint(m_joint);
         if (m_jointDef != nullptr)
             m_joint = manager<Box2DWorldManager>()->createJoint(m_jointDef);
     });
@@ -31,17 +29,11 @@ Box2DJointComponent::Box2DJointComponent() {
 
 void Box2DJointComponent::setJointDef(std::shared_ptr<b2JointDef> jointDef) {
     m_jointDef = jointDef;
-    jointDef->bodyA = entity()->component<Box2DBodyComponent>()->body();
-    jointDef->bodyB = m_targetBody->body();
     if (isInitialized()) {
         if (m_joint != nullptr)
             manager<Box2DWorldManager>()->destroyJoint(m_joint);
         m_joint = manager<Box2DWorldManager>()->createJoint(jointDef);
     }
-}
-
-void Box2DJointComponent::setTargetBody(SafePtr<Box2DBodyComponent> targetBody) {
-    m_targetBody = targetBody;
 }
 
 } // flappy
