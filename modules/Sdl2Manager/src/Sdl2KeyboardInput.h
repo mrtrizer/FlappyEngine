@@ -8,6 +8,7 @@ namespace flappy {
 
 class Sdl2KeyboardInput : public Manager<Sdl2KeyboardInput>
 {
+public:
     Sdl2KeyboardInput();
 };
 

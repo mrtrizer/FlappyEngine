@@ -32,6 +32,8 @@
 #include <FontResFactory.h>
 #include <Sdl2RgbaBitmapResFactory.h>
 #include <Box2DRevoluteJointComponent.h>
+#include <KeyboardInputManager.h>
+#include <Sdl2KeyboardInput.h>
 
 using namespace flappy;
 using namespace std;
@@ -64,6 +66,8 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<GlyphSheetResFactory> ();
                         rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
                         rootEntity->createComponent<FontResFactory> ();
+                        rootEntity->createComponent<Sdl2KeyboardInput> ();
+                        rootEntity->createComponent<KeyboardInputManager> ();
                         auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
 
                         // Box2D world
@@ -85,27 +89,43 @@ int main(int argc, char *argv[])
                         rectEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
                         rectEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
                         rectEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
-                        rectEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
                         rectEntity->component<Box2DBoxComponent>()->setDensity(10.0f);
                         rectEntity->component<Box2DBoxComponent>()->setFriction(0.3f);
                         rectEntity->component<Box2DBoxComponent>()->setSize({20.0f, 20.0f});
 
                         // Dynamic circle
-                        auto circleEntity = sceneEntity->createEntity();
-                        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
-                        circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-                        circleEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
-                        circleEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
-                        circleEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
-                        circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-                        circleEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
-                        circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setBodyA(circleEntity->component<Box2DBodyComponent>());
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyComponent>());
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({20, 0});
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
-                        circleEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+                        auto wheelAEntity = sceneEntity->createEntity();
+                        wheelAEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+                        wheelAEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+                        wheelAEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
+                        wheelAEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
+                        wheelAEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        wheelAEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+                        wheelAEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
+                        wheelAEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelAEntity->component<Box2DBodyComponent>());
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyComponent>());
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({20, -10});
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+
+                        // Dynamic circle
+                        auto wheelBEntity = sceneEntity->createEntity();
+                        wheelBEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+                        wheelBEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+                        wheelBEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
+                        wheelBEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
+                        wheelBEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        wheelBEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+                        wheelBEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
+                        wheelBEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelBEntity->component<Box2DBodyComponent>());
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyComponent>());
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({-20, -10});
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
 
                         // Counter
                         auto counterEntity = sceneEntity->createEntity();
@@ -154,6 +174,28 @@ int main(int argc, char *argv[])
                             int count = std::stoi(counterEntity->component<TextComponent>()->text());
                             count++;
                             counterEntity->component<TextComponent>()->setText(std::to_string(count));
+                        });
+
+                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity](KeyboardInputManager::KeyDownEvent e) {
+                            if (e.keyCode == KeyCode::LEFT) {
+                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
+                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
+                            }
+                            if (e.keyCode == KeyCode::RIGHT) {
+                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+                            }
+                        });
+
+                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity](KeyboardInputManager::KeyUpEvent e) {
+                            if (e.keyCode == KeyCode::LEFT) {
+                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                            }
+                            if (e.keyCode == KeyCode::RIGHT) {
+                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+                            }
                         });
 
                     });

@@ -13,11 +13,11 @@ namespace flappy
 class KeyboardInputManager: public Manager<KeyboardInputManager>
 {
 public:
-    struct KeyDown: public IEvent {
+    struct KeyDownEvent: public IEvent {
         KeyCode keyCode;
     };
 
-    struct KeyUp: public IEvent {
+    struct KeyUpEvent: public IEvent {
         KeyCode keyCode;
     };
 
