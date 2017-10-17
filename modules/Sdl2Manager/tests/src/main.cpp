@@ -33,6 +33,7 @@
 #include <FontRes.h>
 #include <FontResFactory.h>
 #include <RenderUtils.h>
+#include <MaterialResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -86,6 +87,8 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<GlyphSheetResFactory> ();
                         rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
                         rootEntity->createComponent<FontResFactory> ();
+                        rootEntity->createComponent<MaterialResFactory> ();
+                        auto materialManager = rootEntity->createComponent<ResManager<MaterialRes>> ();
                         auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
 
                         // Scene
@@ -116,9 +119,11 @@ int main(int argc, char *argv[])
 
                         // Shape
                         auto circleEntity = sceneEntity->createEntity();
-                        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,30));
                         circleEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
                         circleEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,30));
+                        auto testMaterial = materialManager->getRes("test_material", ExecType::SYNC);
+                        circleEntity->component<MeshComponent>()->setMaterialRes(testMaterial);
 
                         // Text
                         auto textEntity = sceneEntity->createEntity();
@@ -135,6 +140,8 @@ int main(int argc, char *argv[])
                             float angle = circleEntity->component<TransformComponent>()->angle2DRad();
                             circleEntity->component<MeshComponent>()->setVertices(genSinCircleVertices(50.f, 30, angle));
                         });
+
+
 
 
                         // Try to reinitialize gl context several times

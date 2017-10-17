@@ -3,6 +3,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <MeshComponent.h>
+#include <MaterialRes.h>
+
+#include "GLTextureRes.h"
 
 namespace flappy {
 
@@ -47,7 +50,19 @@ void GLMeshRender::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
     shader()->render(m_attribArray, [this, mvMatrix, pMartrix](){
         glUniformMatrix4fv(shader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
         glUniformMatrix4fv(shader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-        glUniform4fv(shader()->findUniform("uColor"),1, reinterpret_cast<const GLfloat *>(&m_glColorRGBA));
+        auto materialRes = m_meshComponent->materialRes();
+        for (auto uniformPair : materialRes->vec4Map()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1)
+                glUniform4fv(uniform, 1, glm::value_ptr(uniformPair.second));
+        }
+        for (auto uniformPair : materialRes->textureResMap()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1) {
+                auto glTexture = std::static_pointer_cast<GLTextureRes>(uniformPair.second);
+                glTexture->bind(uniform, 0);
+            }
+        }
     });
 }
 

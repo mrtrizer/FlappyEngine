@@ -1,0 +1,4 @@
+{
+    "(vec4)uColor": [0.5, 1.0, 0.0, 1.0],
+    "(texture)uTexture": "demo_atlas_image"
+}

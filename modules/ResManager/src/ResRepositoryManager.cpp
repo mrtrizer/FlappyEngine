@@ -91,7 +91,7 @@ FileInfo ResRepositoryManager::findFileInfo(std::string name) const {
     if (m_resInfoMap.find(name) != m_resInfoMap.end()) {
         return m_resInfoMap.at(name);
     } else {
-        LOGE("Can't find information about resource in resource repository list.");
+        LOGE("Can't find information about resource in resource repository list. Name: %s", name.c_str());
         auto resPath = Tools::joinPath({m_resRepositoryPath, name});
         return FileInfo{ name, resPath, "*" };
     }
@@ -101,7 +101,7 @@ ResMeta ResRepositoryManager::findResMeta(std::string name) const {
     if (m_resMetaMap.find(name) != m_resMetaMap.end()) {
         return m_resMetaMap.at(name);
     } else {
-        LOGE("Can't find resource meta in resource repository list.");
+        LOGE("Can't find resource meta in resource repository list. Name: %s", name.c_str());
         return ResMeta();
     }
 }
