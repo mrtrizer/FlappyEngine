@@ -24,9 +24,8 @@ private:
     GLAttribArray m_attribArray;
     bool m_meshChanged = false;
     SafePtr<MeshComponent> m_meshComponent;
-    GLTools::GLColorRGBA m_glColorRGBA;
 
-    GLAttribArray genAttribArray(const std::vector<glm::vec3>& vertices);
+    GLAttribArray genAttribArray();
 };
 
 } // flappy

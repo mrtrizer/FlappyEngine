@@ -21,11 +21,11 @@ public:
     void setVertices(std::vector<glm::vec3> vertices);
     const std::vector<glm::vec3>& vertices() const { return m_vertices; }
 
+    void setUVs(std::vector<glm::vec2> uvs);
+    const std::vector<glm::vec2>& uvs() { return m_uvs; }
+
     void setMaterialRes(std::shared_ptr<MaterialRes> materialRes);
     std::shared_ptr<MaterialRes> materialRes() { return m_materialRes; }
-
-    void setColor(Color color);
-    Color color() { return m_color; }
 
 private:
     std::shared_ptr<Render> m_renderElement;
@@ -36,7 +36,11 @@ private:
                                          {0.5f,-0.5f, 0.0f},
                                          {-0.5f,0.5f, 0.0f},
                                          {0.5f,0.5f, 0.0f}};
-    Color m_color;
+
+    std::vector<glm::vec2> m_uvs = {{0.0f, 1.0f},
+                                   {0.0f, 0.0f},
+                                   {1.0f, 1.0f},
+                                   {1.0f, 0.0f}};
 };
 
 } // flappy

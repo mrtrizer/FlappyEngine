@@ -33,13 +33,13 @@ void MeshComponent::setVertices(std::vector<glm::vec3> vertices) {
     entity()->events()->post(MeshChangedEvent());
 }
 
-void MeshComponent::setMaterialRes(std::shared_ptr<MaterialRes> materialRes) {
-    m_materialRes = materialRes;
+void MeshComponent::setUVs(std::vector<glm::vec2> uvs) {
+    m_uvs = uvs;
     entity()->events()->post(MeshChangedEvent());
 }
 
-void MeshComponent::setColor(Color color) {
-    m_color = color;
+void MeshComponent::setMaterialRes(std::shared_ptr<MaterialRes> materialRes) {
+    m_materialRes = materialRes;
     entity()->events()->post(MeshChangedEvent());
 }
 
