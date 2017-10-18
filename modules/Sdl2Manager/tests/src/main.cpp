@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<SpriteResFactory>();
                         rootEntity->createComponent<ResManager<SpriteRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
-                        rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<ResManager<ShaderRes>> ();
                         rootEntity->createComponent<GlyphSheetResFactory> ();
                         rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
                         rootEntity->createComponent<FontResFactory> ();
@@ -140,9 +140,6 @@ int main(int argc, char *argv[])
                             float angle = circleEntity->component<TransformComponent>()->angle2DRad();
                             circleEntity->component<MeshComponent>()->setVertices(genSinCircleVertices(50.f, 30, angle));
                         });
-
-
-
 
                         // Try to reinitialize gl context several times
                         rootEntity->removeComponent(sdl2Manager);

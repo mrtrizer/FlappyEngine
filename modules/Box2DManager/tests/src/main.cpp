@@ -34,6 +34,7 @@
 #include <Box2DRevoluteJointComponent.h>
 #include <KeyboardInputManager.h>
 #include <Sdl2KeyboardInput.h>
+#include <MaterialResFactory.h>
 
 using namespace flappy;
 using namespace std;
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<FileResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
-                        rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<ResManager<ShaderRes>> ();
                         rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
                         rootEntity->createComponent<ResManager<JsonRes>>();
                         rootEntity->createComponent<MouseInputManager> ();
@@ -68,6 +69,8 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<FontResFactory> ();
                         rootEntity->createComponent<Sdl2KeyboardInput> ();
                         rootEntity->createComponent<KeyboardInputManager> ();
+                        rootEntity->createComponent<MaterialResFactory> ();
+                        rootEntity->createComponent<ResManager<MaterialRes>> ();
                         auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
 
                         // Box2D world

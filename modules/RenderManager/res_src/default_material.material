@@ -1,0 +1,6 @@
+{
+    "shader": "shape_shader",
+    "uniforms": {
+        "(vec4)uColor": [1.0, 1.0, 1.0, 1.0]
+    }
+}

@@ -24,7 +24,7 @@ GLSpriteRender::GLSpriteRender(SafePtr<SpriteComponent> spriteComponent):
     addDependency(SpriteComponent::id());
 
     subscribe([this](InitEvent) {
-        setShader(manager<ResManager<GLShaderRes>>()->getRes("texture_shader", ExecType::ASYNC));
+        setShader(manager<ResManager<ShaderRes>>()->getRes("texture_shader", ExecType::ASYNC));
     });
 }
 

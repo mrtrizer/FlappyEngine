@@ -54,6 +54,8 @@ GLAttribArray GLMeshRender::genAttribArray() {
 void GLMeshRender::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
     if (m_meshChanged) {
         m_attribArray = genAttribArray();
+        auto materialRes = m_meshComponent->materialRes();
+        setShader(materialRes->shaderRes());
         m_meshChanged = false;
     }
 
@@ -66,6 +68,26 @@ void GLMeshRender::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
             if (uniform != -1)
                 glUniform4fv(uniform, 1, glm::value_ptr(uniformPair.second));
         }
+        for (auto uniformPair : materialRes->vec3Map()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1)
+                glUniform3fv(uniform, 1, glm::value_ptr(uniformPair.second));
+        }
+        for (auto uniformPair : materialRes->vec2Map()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1)
+                glUniform2fv(uniform, 1, glm::value_ptr(uniformPair.second));
+        }
+        for (auto uniformPair : materialRes->floatMap()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1)
+                glUniform1f(uniform, uniformPair.second);
+        }
+        for (auto uniformPair : materialRes->intMap()) {
+            GLint uniform = shader()->findUniform(uniformPair.first.c_str());
+            if (uniform != -1)
+                glUniform1i(uniform, uniformPair.second);
+        }
         for (auto uniformPair : materialRes->textureResMap()) {
             GLint uniform = shader()->findUniform(uniformPair.first.c_str());
             if (uniform != -1) {
@@ -73,6 +95,7 @@ void GLMeshRender::draw(const glm::mat4 &pMartrix, const glm::mat4 &mvMatrix) {
                 glTexture->bind(uniform, 0);
             }
         }
+
     });
 }
 

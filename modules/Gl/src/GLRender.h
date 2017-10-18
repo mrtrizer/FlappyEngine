@@ -22,18 +22,20 @@ class GLRender: public Render
 public:
     GLRender()
     {
-        addDependency(ResManager<GLShaderRes>::id());
+        addDependency(ResManager<ShaderRes>::id());
         addDependency(IGLManager::id());
 
         subscribe([this](InitEvent) {
-            setShader(manager<ResManager<GLShaderRes>>()->getRes("shape_shader", ExecType::ASYNC));
+            setShader(manager<ResManager<ShaderRes>>()->getRes("shape_shader", ExecType::ASYNC));
         });
     }
 
-    void setShader(std::shared_ptr<GLShaderRes> shaderRes) { m_shaderRes = shaderRes; }
+    void setShader(std::shared_ptr<ShaderRes> shaderRes) {
+        m_shaderRes = std::dynamic_pointer_cast<GLShaderRes>(shaderRes);
+    }
     std::shared_ptr<GLShaderRes> shader() {
         if (m_shaderRes->nextRes() != m_shaderRes)
-            m_shaderRes = m_shaderRes->lastRes();
+            m_shaderRes = std::static_pointer_cast<GLShaderRes>(m_shaderRes->lastRes());
         return m_shaderRes;
     }
 

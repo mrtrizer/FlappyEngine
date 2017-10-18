@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<GLTextureResFactory>();
                         rootEntity->createComponent<ResManager<TextureRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
-                        rootEntity->createComponent<ResManager<GLShaderRes>> ();
+                        rootEntity->createComponent<ResManager<ShaderRes>> ();
                         rootEntity->createComponent<GlyphSheetResFactory> ();
                         rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
                         rootEntity->createComponent<FontResFactory> ();

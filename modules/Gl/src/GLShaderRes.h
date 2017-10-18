@@ -3,7 +3,7 @@
 #include <iostream>
 #include <functional>
 
-#include <Res.h>
+#include <ShaderRes.h>
 #include <TextRes.h>
 #include <SafePtr.h>
 
@@ -14,7 +14,7 @@ namespace flappy {
 class GLAttribArray;
 class Entity;
 
-class GLShaderRes: public Res<GLShaderRes> {
+class GLShaderRes: public ShaderRes {
 public:
     using Program = GLuint;
     using AttribLocation = GLint;

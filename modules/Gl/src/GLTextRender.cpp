@@ -22,7 +22,7 @@ GLTextRender::GLTextRender(SafePtr<TextComponent> textComponent):
     addDependency(TextComponent::id());
 
     subscribe([this](InitEvent) {
-        setShader(manager<ResManager<GLShaderRes>>()->getRes("msdf_shader", ExecType::ASYNC));
+        setShader(manager<ResManager<ShaderRes>>()->getRes("msdf_shader", ExecType::ASYNC));
     });
 
     subscribe([this](TextComponent::TextChangedEvent) {

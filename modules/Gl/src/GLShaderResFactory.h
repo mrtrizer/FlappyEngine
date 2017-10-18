@@ -4,11 +4,11 @@
 #include <vector>
 
 #include <ResFactory.h>
-#include <GLShaderRes.h>
+#include <ShaderRes.h>
 
 namespace flappy {
 
-class GLShaderResFactory: public ResFactory<GLShaderRes> {
+class GLShaderResFactory: public ResFactory<ShaderRes> {
 public:
     GLShaderResFactory();
 

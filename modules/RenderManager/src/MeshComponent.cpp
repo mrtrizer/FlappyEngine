@@ -5,13 +5,14 @@
 namespace flappy {
 
 MeshComponent::MeshComponent()
-    : m_materialRes(std::make_shared<MaterialRes>(nullptr))
+    : m_materialRes(nullptr)
 {
-    m_materialRes->setVec4("uColor", {1.0f, 1.0f, 1.0f, 1.0f});
-
     addDependency(RenderElementFactory::id());
+    addDependency(ResManager<MaterialRes>::id());
 
     subscribe([this](InitEvent) {
+        if (m_materialRes == nullptr)
+            m_materialRes = manager<ResManager<MaterialRes>>()->getRes("default_material", ExecType::SYNC);
         m_renderElement = manager<RenderElementFactory>()->createMeshRender(selfPointer());
         entity()->addComponent(m_renderElement);
     });
@@ -20,6 +21,7 @@ MeshComponent::MeshComponent()
         entity()->removeComponent(m_renderElement);
         m_renderElement.reset();
     });
+
 
     subscribe([this](UpdateEvent) {
         if (m_materialRes->nextRes() != m_materialRes) {
