@@ -98,8 +98,7 @@ int main(int argc, char *argv[])
                         wheelAEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
                         wheelAEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
                         wheelAEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
-                        wheelAEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
-                        wheelAEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        wheelAEntity->component<TransformComponent>()->setPos({20.0f, -10.0f, 0.0f});
                         wheelAEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                         wheelAEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
                         wheelAEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
@@ -115,8 +114,7 @@ int main(int argc, char *argv[])
                         wheelBEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
                         wheelBEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
                         wheelBEntity->component<Box2DBodyComponent>()->setType(b2_dynamicBody);
-                        wheelBEntity->component<TransformComponent>()->setPos({0.0f, 44.0f, 0.0f});
-                        wheelBEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
+                        wheelBEntity->component<TransformComponent>()->setPos({-20.0f, -10.0f, 0.0f});
                         wheelBEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                         wheelBEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
                         wheelBEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
