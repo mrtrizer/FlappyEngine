@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
                         circleEntity->component<TransformComponent>()->setPos({-150.0f, 0.0f, 0.0f});
                         circleEntity->component<TransformComponent>()->setAngle2DRad(M_PI * 0.1f);
                         circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,30));
-                        auto testMaterial = materialManager->getRes("test_material", ExecType::SYNC);
+                        auto testMaterial = materialManager->getRes("test_material", ExecType::ASYNC);
                         circleEntity->component<MeshComponent>()->setMaterialRes(testMaterial);
 
                         // Text
