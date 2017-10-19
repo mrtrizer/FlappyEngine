@@ -1,15 +1,31 @@
 #pragma once
 
 #include <Manager.h>
+#include <Box2DContactListener.h>
+#include <EventHandle.h>
 
 #include <Box2D/Box2D.h>
 
 namespace flappy {
 
+class Box2DFixtureComponent;
+
 class Box2DWorldManager: public Manager<Box2DWorldManager> {
 public:
 
-    struct Box2DWorldScaleChanged : public IEvent {};
+    struct RayCastData {
+        std::vector<Box2DFixtureComponent*> fixtures;
+    };
+
+    struct Box2DWorldScaleChanged : public IEvent{};
+
+    struct ContactStartEvent : public IEvent {
+        SafePtr<Box2DFixtureComponent> fixture;
+    };
+
+    struct ContactEndEvent : public IEvent {
+        SafePtr<Box2DFixtureComponent> fixture;
+    };
 
     Box2DWorldManager();
 
@@ -29,13 +45,25 @@ public:
     int positionIterations() const;
     void setPositionIterations(int positionIterations);
 
+    RayCastData rayCast(glm::vec2 start, glm::vec2 end);
+
 private:
+    struct ContactEventHolder {
+        SafePtr<Entity> entity;
+        EventHandle eventHandle;
+    };
+
+    template<typename ContactEventT>
+    void sendContactEvent(b2Contact* contact);
+    void sendContactEvents();
     void update(DeltaTime dt);
 
+    Box2DContactListener m_contactListener;
     b2World m_world;
     int m_velocityIterations = 6;
     int m_positionIterations = 2;
     float m_sizeFactor = 1.0f;
+    std::list<ContactEventHolder> m_contactEventHolders;
 };
 
 } // flappy

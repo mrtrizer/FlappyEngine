@@ -1,4 +1,6 @@
 #include "Box2DWorldManager.h"
+#include "Box2DRayCastCallback.h"
+#include "Box2DFixtureComponent.h"
 
 #include <Box2D.h>
 
@@ -8,9 +10,37 @@ namespace flappy {
 
 Box2DWorldManager::Box2DWorldManager():m_world(b2Vec2(0.0f, -9.8f))
 {
+    m_world.SetContactListener(&m_contactListener);
+    m_contactListener.setContactStartCallback([this](b2Contact* contact) {
+        sendContactEvent<ContactStartEvent>(contact);
+    });
+    m_contactListener.setContactEndCallback([this](b2Contact* contact) {
+        sendContactEvent<ContactEndEvent>(contact);
+    });
+
     events()->subscribe([this](UpdateEvent e) {
         update(e.dt);
     });
+}
+
+template<typename ContactEventT>
+void Box2DWorldManager::sendContactEvent(b2Contact* contact) {
+    auto fixtureA = contact->GetFixtureA();
+    auto fixtureComponentA = reinterpret_cast<Box2DFixtureComponent*>(fixtureA->GetUserData());
+    auto entityA = fixtureComponentA->entity();
+    auto fixtureB = contact->GetFixtureB();
+    auto fixtureComponentB = reinterpret_cast<Box2DFixtureComponent*>(fixtureB->GetUserData());
+    auto entityB = fixtureComponentB->entity();
+    { // Contact event A
+        ContactEventT contactEventA;
+        contactEventA.fixture = fixtureComponentB->selfPointer();
+        m_contactEventHolders.push_back({entityA, EventHandle(contactEventA)});
+    }
+    { // ContactEvent B
+        ContactEventT contactEventB;
+        contactEventB.fixture = fixtureComponentA->selfPointer();
+        m_contactEventHolders.push_back({entityB, EventHandle(contactEventB)});
+    }
 }
 
 b2Joint* Box2DWorldManager::createJoint(std::shared_ptr<b2JointDef> jointDef) {
@@ -57,8 +87,27 @@ void Box2DWorldManager::setPositionIterations(int positionIterations)
     m_positionIterations = positionIterations;
 }
 
+Box2DWorldManager::RayCastData Box2DWorldManager::rayCast(glm::vec2 start, glm::vec2 end) {
+    Box2DRayCastCallback rayCastCallback;
+    b2Vec2 point1(start.x, start.y);
+    b2Vec2 point2(end.x, end.y);
+    m_world.RayCast(&rayCastCallback, point1, point2);
+    auto fixture = rayCastCallback.fixture();
+    RayCastData rayCastData;
+    rayCastData.fixtures.push_back(reinterpret_cast<Box2DFixtureComponent*>(fixture->GetUserData()));
+    return rayCastData;
+}
+
+void Box2DWorldManager::sendContactEvents() {
+    for (const auto& contactEventHolder : m_contactEventHolders) {
+        contactEventHolder.entity->events()->post(contactEventHolder.eventHandle);
+    }
+    m_contactEventHolders.clear();
+}
+
 void Box2DWorldManager::update(DeltaTime dt) {
     m_world.Step((float32)dt, (int32)m_velocityIterations, (int32)m_positionIterations);
+    sendContactEvents();
 }
 
 

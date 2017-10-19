@@ -172,6 +172,9 @@ int main(int argc, char *argv[])
                             circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
                             circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
                             circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+                            circleEntity->events()->subscribe([circleEntity, sceneEntity](Box2DWorldManager::ContactStartEvent) {
+                                sceneEntity->removeEntity(circleEntity);
+                            });
                             int count = std::stoi(counterEntity->component<TextComponent>()->text());
                             count++;
                             counterEntity->component<TextComponent>()->setText(std::to_string(count));

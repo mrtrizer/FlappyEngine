@@ -31,7 +31,6 @@ void Box2DFixtureComponent::deinitFixture(b2Fixture* fixture) {
 }
 
 b2Fixture* Box2DFixtureComponent::initFixture(std::shared_ptr<b2Shape> shape) {
-    auto bodyComponent = entity()->manager<Box2DBodyManager>();
     b2FixtureDef fixtureDef;
 
     fixtureDef.shape = shape.get();
@@ -47,6 +46,10 @@ b2Fixture* Box2DFixtureComponent::initFixture(std::shared_ptr<b2Shape> shape) {
     fixtureDef.filter.maskBits = m_maskBits;
     fixtureDef.filter.groupIndex = m_groupIndex;
 
+    //user data
+    fixtureDef.userData = (void*)this;
+
+    auto bodyComponent = entity()->manager<Box2DBodyManager>();
     return bodyComponent->createFixture(&fixtureDef);
 }
 
