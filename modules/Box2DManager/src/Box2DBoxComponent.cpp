@@ -1,13 +1,13 @@
 #include "Box2DBoxComponent.h"
 
-#include "Box2DBodyComponent.h"
+#include "Box2DBodyManager.h"
 #include "Box2DWorldManager.h"
 
 namespace flappy {
 
 Box2DBoxComponent::Box2DBoxComponent() {
 
-    addDependency(Box2DBodyComponent::id());
+    addDependency(Box2DBodyManager::id());
     addDependency(Box2DWorldManager::id());
 
     events()->subscribe([this](InitEvent) {

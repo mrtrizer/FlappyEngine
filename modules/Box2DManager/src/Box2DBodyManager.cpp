@@ -1,4 +1,4 @@
-#include "Box2DBodyComponent.h"
+#include "Box2DBodyManager.h"
 
 #include <TransformComponent.h>
 #include <Entity.h>
@@ -8,7 +8,7 @@
 
 namespace flappy {
 
-Box2DBodyComponent::Box2DBodyComponent() {
+Box2DBodyManager::Box2DBodyManager() {
     addDependency(Box2DWorldManager::id());
     addDependency(TransformComponent::id());
 
@@ -53,85 +53,85 @@ Box2DBodyComponent::Box2DBodyComponent() {
     });
 }
 
-void Box2DBodyComponent::setMass(float mass) {
+void Box2DBodyManager::setMass(float mass) {
     m_mass = mass;
     if (isInitialized())
         setMassInternal(mass);
 }
 
-void Box2DBodyComponent::setLinearDamping(float linearDamping) {
+void Box2DBodyManager::setLinearDamping(float linearDamping) {
     m_linearDamping = linearDamping;
     if (isInitialized())
         m_body->SetLinearDamping(linearDamping);
 }
 
-void Box2DBodyComponent::setLinearVelocity(glm::vec2 linearVelocity) {
+void Box2DBodyManager::setLinearVelocity(glm::vec2 linearVelocity) {
     m_linearVelocity = linearVelocity;
     if (isInitialized())
         m_body->SetLinearVelocity(b2Vec2(linearVelocity.x, linearVelocity.y));
 }
 
-void Box2DBodyComponent::setType(b2BodyType type) {
+void Box2DBodyManager::setType(b2BodyType type) {
     m_type = type;
     if (isInitialized())
         m_body->SetType(type);
 }
 
-void Box2DBodyComponent::setBullet(bool bullet) {
+void Box2DBodyManager::setBullet(bool bullet) {
     m_bullet = bullet;
     if (isInitialized())
         m_body->SetBullet(bullet);
 }
 
-void Box2DBodyComponent::setAwake(bool awake) {
+void Box2DBodyManager::setAwake(bool awake) {
     m_awake = awake;
     if (isInitialized())
         m_body->SetAwake(awake);
 }
 
-void Box2DBodyComponent::setAngularDamping(float angularDamping) {
+void Box2DBodyManager::setAngularDamping(float angularDamping) {
     m_angularDamping = angularDamping;
     if (isInitialized())
         m_body->SetAngularDamping(angularDamping);
 }
 
-void Box2DBodyComponent::setAngularVelocity(float angularVelocity) {
+void Box2DBodyManager::setAngularVelocity(float angularVelocity) {
     m_angularVelocity = angularVelocity;
     if (isInitialized())
         m_body->SetAngularVelocity(angularVelocity);
 }
 
-void Box2DBodyComponent::setGravityScale(float gravityScale) {
+void Box2DBodyManager::setGravityScale(float gravityScale) {
     m_gravityScale = gravityScale;
     if (isInitialized())
         m_body->SetGravityScale(gravityScale);
 }
 
-void Box2DBodyComponent::setSleepingAllowed(bool sleepingAllowed) {
+void Box2DBodyManager::setSleepingAllowed(bool sleepingAllowed) {
     m_sleepingAllowed = sleepingAllowed;
     if (isInitialized())
         m_body->SetSleepingAllowed(sleepingAllowed);
 }
 
-void Box2DBodyComponent::setFixedRotation(bool fixedRotation) {
+void Box2DBodyManager::setFixedRotation(bool fixedRotation) {
     m_fixedRotation = fixedRotation;
     if (isInitialized())
         m_body->SetFixedRotation(fixedRotation);
 }
 
-void Box2DBodyComponent::destroyFixture(b2Fixture* fixture) {
+void Box2DBodyManager::destroyFixture(b2Fixture* fixture) {
     if (!isInitialized())
         return;
     m_body->DestroyFixture(fixture);
 }
 
-b2Fixture *Box2DBodyComponent::createFixture(const b2FixtureDef* def) {
+b2Fixture *Box2DBodyManager::createFixture(const b2FixtureDef* def) {
     if (!isInitialized())
-        throw std::runtime_error("Box2DBodyComponent is not initialized. Can't create fixture.");
+        throw std::runtime_error("Box2DBodyManager is not initialized. Can't create fixture.");
     return m_body->CreateFixture(def);
 }
 
-bool Box2DBodyComponent::testPoint(glm::vec2 point) {
+bool Box2DBodyManager::testPoint(glm::vec2 point) {
     if (!isInitialized())
         return false;
     float sizeFactor = manager<Box2DWorldManager>()->sizeFactor();
@@ -146,7 +146,7 @@ bool Box2DBodyComponent::testPoint(glm::vec2 point) {
     return false;
 }
 
-void Box2DBodyComponent::updatePos() {
+void Box2DBodyManager::updatePos() {
     glm::vec3 newTransformPos = entity()->component<TransformComponent>()->pos();
     float newTransformAngle = entity()->component<TransformComponent>()->angle2DRad();
 
@@ -164,11 +164,11 @@ void Box2DBodyComponent::updatePos() {
     m_lastTransformAngle = entity()->component<TransformComponent>()->angle2DRad();
 }
 
-void Box2DBodyComponent::update(DeltaTime dt) {
+void Box2DBodyManager::update(DeltaTime dt) {
     updatePos();
 }
 
-void Box2DBodyComponent::setMassInternal(float mass) {
+void Box2DBodyManager::setMassInternal(float mass) {
     b2MassData massData;
     m_body->GetMassData(&massData);
     massData.mass = mass;

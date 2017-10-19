@@ -1,6 +1,6 @@
 #include "Box2DChainComponent.h"
 
-#include "Box2DBodyComponent.h"
+#include "Box2DBodyManager.h"
 #include "Box2DWorldManager.h"
 #include "Box2DUtils.h"
 
@@ -8,7 +8,7 @@ namespace flappy {
 
 Box2DChainComponent::Box2DChainComponent() {
 
-    addDependency(Box2DBodyComponent::id());
+    addDependency(Box2DBodyManager::id());
     addDependency(Box2DWorldManager::id());
 
     events()->subscribe([this](InitEvent) {

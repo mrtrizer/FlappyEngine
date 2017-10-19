@@ -2,14 +2,14 @@
 
 #include <Entity.h>
 
-#include "Box2DBodyComponent.h"
+#include "Box2DBodyManager.h"
 #include "Box2DFixtureComponent.h"
 
 namespace flappy {
 
 Box2DFixtureComponent::Box2DFixtureComponent() {
 
-    addDependency(Box2DBodyComponent::id());
+    addDependency(Box2DBodyManager::id());
 
     events()->subscribe([this](InitEvent) {
         if ((m_shape != nullptr))
@@ -25,13 +25,13 @@ Box2DFixtureComponent::Box2DFixtureComponent() {
 
 void Box2DFixtureComponent::deinitFixture(b2Fixture* fixture) {
     if (fixture != nullptr) {
-        auto bodyComponent = entity()->component<Box2DBodyComponent>();
+        auto bodyComponent = entity()->manager<Box2DBodyManager>();
         bodyComponent->destroyFixture(fixture);
     }
 }
 
 b2Fixture* Box2DFixtureComponent::initFixture(std::shared_ptr<b2Shape> shape) {
-    auto bodyComponent = entity()->component<Box2DBodyComponent>();
+    auto bodyComponent = entity()->manager<Box2DBodyManager>();
     b2FixtureDef fixtureDef;
 
     fixtureDef.shape = shape.get();

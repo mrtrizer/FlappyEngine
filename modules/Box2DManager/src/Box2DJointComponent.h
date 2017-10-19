@@ -7,7 +7,7 @@ struct b2JointDef;
 
 namespace flappy {
 
-class Box2DBodyComponent;
+class Box2DBodyManager;
 
 class Box2DJointComponent: public Component<Box2DJointComponent> {
 public:

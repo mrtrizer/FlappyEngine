@@ -7,7 +7,7 @@
 #include <TransformComponent.h>
 #include <UIManager.h>
 #include <TouchComponent.h>
-#include <Box2DBodyComponent.h>
+#include <Box2DBodyManager.h>
 #include <Box2DBoxComponent.h>
 #include <Box2DWorldManager.h>
 #include <MouseInputManager.h>
@@ -29,7 +29,7 @@ TEST_CASE("UIManager") {
 
     auto buttonEntity = rootEntity->createEntity();
     buttonEntity->createComponent<TransformComponent>();
-    buttonEntity->createComponent<Box2DBodyComponent>();
+    buttonEntity->createComponent<Box2DBodyManager>();
     buttonEntity->component<Box2DBoxComponent>()->setSize({100, 50});
     auto touchComponent = buttonEntity->createComponent<TouchComponent>();
 

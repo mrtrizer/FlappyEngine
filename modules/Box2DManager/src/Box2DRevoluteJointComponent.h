@@ -8,11 +8,11 @@ class Box2DRevoluteJointComponent: public Box2DJointComponent {
 public:
     Box2DRevoluteJointComponent();
 
-    void setBodyA(SafePtr<Box2DBodyComponent> bodyA) { m_bodyA = bodyA; update(); }
-    SafePtr<Box2DBodyComponent> bodyA() { return m_bodyA; }
+    void setBodyA(SafePtr<Box2DBodyManager> bodyA) { m_bodyA = bodyA; update(); }
+    SafePtr<Box2DBodyManager> bodyA() { return m_bodyA; }
 
-    void setBodyB(SafePtr<Box2DBodyComponent> bodyB) { m_bodyB = bodyB; update(); }
-    SafePtr<Box2DBodyComponent> bodyB() { return m_bodyB; }
+    void setBodyB(SafePtr<Box2DBodyManager> bodyB) { m_bodyB = bodyB; update(); }
+    SafePtr<Box2DBodyManager> bodyB() { return m_bodyB; }
 
     glm::vec2 localAnchorA() { return m_localAnchorA; }
     void setLocalAnchorA(glm::vec2 localAnchorA) { m_localAnchorA = localAnchorA; update(); }
@@ -42,8 +42,8 @@ public:
     void setEnableMotor(bool enableMotor) { m_enableMotor = enableMotor; update();}
 
 private:
-    SafePtr<Box2DBodyComponent> m_bodyA;
-    SafePtr<Box2DBodyComponent> m_bodyB;
+    SafePtr<Box2DBodyManager> m_bodyA;
+    SafePtr<Box2DBodyManager> m_bodyB;
     glm::vec2 m_localAnchorA;
     glm::vec2 m_localAnchorB;
     float m_referenceAngle = 0.0f;

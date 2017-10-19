@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Component.h>
+#include <Manager.h>
 
 #include <glm/vec3.hpp>
 
@@ -8,9 +8,9 @@
 
 namespace flappy {
 
-class Box2DBodyComponent: public Component<Box2DBodyComponent> {
+class Box2DBodyManager: public Manager<Box2DBodyManager> {
 public:
-    Box2DBodyComponent();
+    Box2DBodyManager();
 
     b2Body* body() { return m_body; }
 
