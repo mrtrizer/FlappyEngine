@@ -13,7 +13,6 @@ namespace GLTools {
 
 using namespace std;
 
-//TODO: How to get an error description without GLUT?
 void checkOpenGLerror(const char * file, const char * func, int line) {
     std::map<GLenum, std::string> errCodeMap {
         {GL_INVALID_ENUM, "Unknown error"},
