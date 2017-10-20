@@ -47,7 +47,7 @@ private:
 
     void deinitInternal() override final
     {
-        LOGI("Deinit %s", typeName<DerivedT>().c_str());
+        LOGI("Deinit start %s", typeName<DerivedT>().c_str());
 
         // Send remove event first.
         // To allow components access manager before denitialization.
@@ -58,6 +58,8 @@ private:
             postEvent(createComponentEvent<ManagerAddedEvent>());
 
         events()->post(DeinitEvent());
+
+        LOGI("Deinit end %s", typeName<DerivedT>().c_str());
     }
 
     void addedToEntity() override final

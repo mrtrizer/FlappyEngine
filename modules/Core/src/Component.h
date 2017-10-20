@@ -43,9 +43,11 @@ private:
     }
 
     void deinitInternal() final {
-        LOGI("Deinit %s", typeName<DerivedT>().c_str());
+        LOGI("Deinit start %s", typeName<DerivedT>().c_str());
 
         events()->post(DeinitEvent());
+
+        LOGI("Deinit end %s", typeName<DerivedT>().c_str());
     }
 
 };

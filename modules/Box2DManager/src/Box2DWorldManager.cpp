@@ -109,7 +109,8 @@ Box2DWorldManager::RayCastData Box2DWorldManager::rayCast(glm::vec2 start, glm::
 
 void Box2DWorldManager::sendContactEvents() {
     for (const auto& contactEventHolder : m_contactEventHolders) {
-        contactEventHolder.entity->events()->post(contactEventHolder.eventHandle);
+        if (contactEventHolder.entity != nullptr)
+            contactEventHolder.entity->events()->post(contactEventHolder.eventHandle);
     }
     m_contactEventHolders.clear();
 }

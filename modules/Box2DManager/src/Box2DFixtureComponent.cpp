@@ -25,7 +25,7 @@ Box2DFixtureComponent::Box2DFixtureComponent() {
 
 void Box2DFixtureComponent::deinitFixture(b2Fixture* fixture) {
     if (fixture != nullptr) {
-        auto bodyComponent = entity()->manager<Box2DBodyManager>();
+        auto bodyComponent = manager<Box2DBodyManager>();
         bodyComponent->destroyFixture(fixture);
     }
 }
