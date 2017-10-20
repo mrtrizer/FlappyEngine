@@ -24,22 +24,31 @@ Box2DWorldManager::Box2DWorldManager():m_world(b2Vec2(0.0f, -9.8f))
 }
 
 template<typename ContactEventT>
+EventHandle Box2DWorldManager::createContactEvent(b2Contact* contact, SafePtr<Box2DFixtureComponent> otherFixture) {
+    ContactEventT contactEvent;
+    contactEvent.fixture = otherFixture;
+    auto manifold = contact->GetManifold();
+    contactEvent.pos = {manifold->localPoint.x, manifold->localPoint.y};
+    return EventHandle(contactEvent);
+}
+
+template<typename ContactEventT>
 void Box2DWorldManager::sendContactEvent(b2Contact* contact) {
     auto fixtureA = contact->GetFixtureA();
-    auto fixtureComponentA = reinterpret_cast<Box2DFixtureComponent*>(fixtureA->GetUserData());
-    auto entityA = fixtureComponentA->entity();
+    auto fixtureComponentA = reinterpret_cast<Box2DFixtureComponent*>(fixtureA->GetUserData())->selfPointer();
+
     auto fixtureB = contact->GetFixtureB();
-    auto fixtureComponentB = reinterpret_cast<Box2DFixtureComponent*>(fixtureB->GetUserData());
-    auto entityB = fixtureComponentB->entity();
+    auto fixtureComponentB = reinterpret_cast<Box2DFixtureComponent*>(fixtureB->GetUserData())->selfPointer();
+
     { // Contact event A
-        ContactEventT contactEventA;
-        contactEventA.fixture = fixtureComponentB->selfPointer();
-        m_contactEventHolders.push_back({entityA, EventHandle(contactEventA)});
+        auto evenHandle = createContactEvent<ContactEventT>(contact, fixtureComponentB);
+        auto entityA = fixtureComponentA->entity();
+        m_contactEventHolders.push_back({entityA, std::move(evenHandle)});
     }
     { // ContactEvent B
-        ContactEventT contactEventB;
-        contactEventB.fixture = fixtureComponentA->selfPointer();
-        m_contactEventHolders.push_back({entityB, EventHandle(contactEventB)});
+        auto evenHandle = createContactEvent<ContactEventT>(contact, fixtureComponentA);
+        auto entityB = fixtureComponentB->entity();
+        m_contactEventHolders.push_back({entityB, std::move(evenHandle)});
     }
 }
 

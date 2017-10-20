@@ -19,13 +19,14 @@ public:
 
     struct Box2DWorldScaleChanged : public IEvent{};
 
-    struct ContactStartEvent : public IEvent {
+    struct ContactEvent : public IEvent {
         SafePtr<Box2DFixtureComponent> fixture;
+        glm::vec2 pos;
     };
 
-    struct ContactEndEvent : public IEvent {
-        SafePtr<Box2DFixtureComponent> fixture;
-    };
+    struct ContactStartEvent : public ContactEvent {};
+
+    struct ContactEndEvent : public ContactEvent {};
 
     Box2DWorldManager();
 
@@ -53,7 +54,9 @@ private:
         EventHandle eventHandle;
     };
 
-    template<typename ContactEventT>
+    template <typename ContactEventT>
+    EventHandle createContactEvent(b2Contact* contact, SafePtr<Box2DFixtureComponent> otherFixture);
+    template <typename ContactEventT>
     void sendContactEvent(b2Contact* contact);
     void sendContactEvents();
     void update(DeltaTime dt);

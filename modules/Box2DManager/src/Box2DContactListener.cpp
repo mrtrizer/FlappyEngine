@@ -8,13 +8,11 @@ Box2DContactListener::Box2DContactListener()
 {}
 
 void Box2DContactListener::BeginContact(b2Contact* contact) {
-    LOGI("Begin contact x: %f y: %f", contact->GetManifold()->localPoint.x, contact->GetManifold()->localPoint.y);
     if (m_contactStartCallback != nullptr)
         m_contactStartCallback(contact);
 }
 
 void Box2DContactListener::EndContact(b2Contact* contact) {
-    LOGI("End contact x: %f y: %f", contact->GetManifold()->localPoint.x, contact->GetManifold()->localPoint.y);
     if (m_contactEndCallback != nullptr)
         m_contactEndCallback(contact);
 }
