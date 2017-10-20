@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
                             counterEntity->component<TextComponent>()->setText(std::to_string(count));
                         });
 
-                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity](KeyboardInputManager::KeyDownEvent e) {
+                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity, rectEntity](KeyboardInputManager::KeyDownEvent e) {
                             if (e.keyCode == KeyCode::LEFT) {
                                 wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
                                 wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
@@ -188,6 +188,9 @@ int main(int argc, char *argv[])
                             if (e.keyCode == KeyCode::RIGHT) {
                                 wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
                                 wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+                            }
+                            if (e.keyCode == KeyCode::SPACE) {
+                                rectEntity->component<Box2DBodyManager>()->applyForce({0.0f, 10000.0f}, {0.0f, 0.0f});
                             }
                         });
 

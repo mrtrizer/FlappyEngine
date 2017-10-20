@@ -146,6 +146,26 @@ bool Box2DBodyManager::testPoint(glm::vec2 point) {
     return false;
 }
 
+void Box2DBodyManager::applyForce(glm::vec2 force, glm::vec2 point) {
+    if (isInitialized())
+        m_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), true);
+}
+
+void Box2DBodyManager::applyTorque(float torque) {
+    if (isInitialized())
+        m_body->ApplyTorque(torque, true);
+}
+
+void Box2DBodyManager::applyLinearImulse(glm::vec2 impulse, glm::vec2 point) {
+    if (isInitialized())
+        m_body->ApplyLinearImpulse(b2Vec2(impulse.x, impulse.y), b2Vec2(point.x, point.y), true);
+}
+
+void Box2DBodyManager::applyAngularImpulse(float impulse) {
+    if (isInitialized())
+        m_body->ApplyAngularImpulse(impulse, true);
+}
+
 void Box2DBodyManager::updatePos() {
     glm::vec3 newTransformPos = entity()->component<TransformComponent>()->pos();
     float newTransformAngle = entity()->component<TransformComponent>()->angle2DRad();

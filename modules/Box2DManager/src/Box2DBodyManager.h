@@ -51,7 +51,10 @@ public:
 
     bool testPoint(glm::vec2 point);
 
-
+    void applyForce(glm::vec2 force, glm::vec2 point);
+    void applyTorque(float torque);
+    void applyLinearImulse(glm::vec2 impulse, glm::vec2 point);
+    void applyAngularImpulse(float impulse);
 
 private:
     b2Body* m_body = nullptr;
