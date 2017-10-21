@@ -1,0 +1,23 @@
+{
+    "name":"demo_DebugDraw",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Std"
+        },
+        {
+            "path":"../../Gl"
+        }
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

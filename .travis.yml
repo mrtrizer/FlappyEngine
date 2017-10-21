@@ -138,5 +138,13 @@ script:
  - popd
  - popd
 
+#DebugDraw tests
+ - pushd modules/DebugDraw/demo
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./demo_DebugDraw
+ - popd
+ - popd
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)

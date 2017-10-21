@@ -1,0 +1,30 @@
+{
+    "name":"DebugDraw",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
+        },
+        {
+            "path":"../Sdl2Manager"
+        }
+
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
