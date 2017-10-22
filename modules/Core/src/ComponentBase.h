@@ -50,6 +50,12 @@ public:
 
     struct ComponentEvent: public IEvent
     {
+        ComponentEvent(SafePtr<ComponentBase> pointer)
+            : id (pointer->componentId())
+            , pointer(pointer)
+        {}
+        ComponentEvent()
+        {}
         TypeId<ComponentBase> id;
         SafePtr<ComponentBase> pointer;
         template <typename ComponentT>
@@ -62,16 +68,16 @@ public:
     };
 
     struct ManagerAddedEvent: public ComponentEvent
-    {};
+    { using ComponentEvent::ComponentEvent; };
 
     struct ManagerRemovedEvent: public ComponentEvent
-    {};
+    { using ComponentEvent::ComponentEvent; };
 
     struct ComponentAddedEvent: public ComponentEvent
-    {};
+    { using ComponentEvent::ComponentEvent; };
 
     struct ComponentRemovedEvent: public ComponentEvent
-    {};
+    { using ComponentEvent::ComponentEvent; };
 
     ComponentBase();
     ComponentBase(const ComponentBase&) = delete;
