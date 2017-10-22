@@ -34,6 +34,7 @@
 #include <FontResFactory.h>
 #include <RenderUtils.h>
 #include <MaterialResFactory.h>
+#include <DebugDrawManager.h>
 
 using namespace flappy;
 using namespace std;
@@ -78,8 +79,9 @@ int main(int argc, char *argv[])
                         sceneEntity->component<CameraComponent>()->setSize({600, 600});
                         sceneEntity->component<GLRenderManager>();
                         sceneEntity->component<GLRenderElementFactory>();
+                        auto debugDrawManager = sceneEntity->createComponent<DebugDrawManager>();
 
-
+                        debugDrawManager->drawCircle({0.0f, 0.0f, 0.0f}, 20.0f, 10.0f, "test");
 
                     });
     return application.runThread(currentThread);

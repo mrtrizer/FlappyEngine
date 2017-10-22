@@ -137,9 +137,7 @@ void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController)
         TypeId<ComponentBase> id(i);
         auto manager = m_managers.getById(id);
         if (manager != nullptr) {
-            auto event = ManagerEventT();
-            event.id = id;
-            event.pointer = manager;
+            auto event = ManagerEventT(manager);
             eventController->post(event);
         }
     }

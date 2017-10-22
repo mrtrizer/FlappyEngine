@@ -141,9 +141,6 @@ script:
 #DebugDraw tests
  - pushd modules/DebugDraw/demo
  - flappy build cmake
- - pushd generated/cmake/build
- - ./demo_DebugDraw
- - popd
  - popd
 
 after_success:
