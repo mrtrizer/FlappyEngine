@@ -1,0 +1,7 @@
+{
+    "shader": "shape_shader",
+    "render_mode": "lines",
+    "uniforms": {
+        "(vec4)uColor": [1.0, 1.0, 1.0, 1.0]
+    }
+}

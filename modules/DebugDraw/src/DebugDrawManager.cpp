@@ -20,38 +20,23 @@ DebugDrawManager::DebugDrawManager()
     addDependency(ResManager<MaterialRes>::id());
     addDependency(ResManager<ShaderRes>::id());
     addDependency(IGLManager::id());
+    addDependency(RenderManager::id());
 
     subscribe([this](InitEvent) {
         for (auto pair : m_debugDrawItems) {
-            pair.second.entity->events()->post(ManagerAddedEvent(manager<RenderElementFactory>()));
-            pair.second.entity->events()->post(ManagerAddedEvent(manager<ResManager<MaterialRes>>()));
-            pair.second.entity->events()->post(ManagerAddedEvent(manager<ResManager<ShaderRes>>()));
-            pair.second.entity->events()->post(ManagerAddedEvent(manager<IGLManager>()));
-            pair.second.entity->events()->post(ManagerAddedEvent(manager<RenderManager>()));
+            sendEvents<ManagerAddedEvent>(pair.second.entity);
         }
         for (auto item : m_noNameDebugDrawItems){
-            item.entity->events()->post(ManagerAddedEvent(manager<RenderElementFactory>()));
-            item.entity->events()->post(ManagerAddedEvent(manager<ResManager<MaterialRes>>()));
-            item.entity->events()->post(ManagerAddedEvent(manager<ResManager<ShaderRes>>()));
-            item.entity->events()->post(ManagerAddedEvent(manager<IGLManager>()));
-            item.entity->events()->post(ManagerAddedEvent(manager<RenderManager>()));
+            sendEvents<ManagerAddedEvent>(item.entity);
         }
     });
 
     subscribe([this](DeinitEvent) {
         for (auto pair : m_debugDrawItems) {
-            pair.second.entity->events()->post(ManagerRemovedEvent(manager<RenderElementFactory>()));
-            pair.second.entity->events()->post(ManagerRemovedEvent(manager<ResManager<MaterialRes>>()));
-            pair.second.entity->events()->post(ManagerRemovedEvent(manager<ResManager<ShaderRes>>()));
-            pair.second.entity->events()->post(ManagerRemovedEvent(manager<IGLManager>()));
-            pair.second.entity->events()->post(ManagerRemovedEvent(manager<RenderManager>()));
+            sendEvents<ManagerRemovedEvent>(pair.second.entity);
         }
         for (auto item : m_noNameDebugDrawItems){
-            item.entity->events()->post(ManagerRemovedEvent(manager<RenderElementFactory>()));
-            item.entity->events()->post(ManagerRemovedEvent(manager<ResManager<MaterialRes>>()));
-            item.entity->events()->post(ManagerRemovedEvent(manager<ResManager<ShaderRes>>()));
-            item.entity->events()->post(ManagerRemovedEvent(manager<IGLManager>()));
-            item.entity->events()->post(ManagerRemovedEvent(manager<RenderManager>()));
+            sendEvents<ManagerRemovedEvent>(item.entity);
         }
     });
 
@@ -74,33 +59,73 @@ void DebugDrawManager::cleanUp() {
     m_noNameDebugDrawItems.remove_if([this](const auto& item) { return item.destroyTime <= m_currentTime; });
 }
 
-void DebugDrawManager::drawRect(Tools::Rect rect, float liveTimeSec, std::string name) {
-
-}
-
-void DebugDrawManager::drawCircle(glm::vec3 pos, int radius, float liveTimeSec, std::string name) {
+void DebugDrawManager::drawPolygon(std::vector<glm::vec3> vertices, float liveTimeSec, std::string name) {
     auto meshEntity = std::make_shared<Entity>();
-    meshEntity->component<MeshComponent>()->setVertices(genCircleVertices(radius, 20));
+    auto mesh = meshEntity->component<MeshComponent>();
+    mesh->setVertices(vertices);
+    auto material = manager<ResManager<MaterialRes>>()->getRes("wireframe_material", ExecType::ASYNC);
+    mesh->setMaterialRes(material);
+
     if (isInitialized()) {
-        meshEntity->events()->post(ManagerAddedEvent(manager<RenderElementFactory>()));
-        meshEntity->events()->post(ManagerAddedEvent(manager<ResManager<MaterialRes>>()));
-        meshEntity->events()->post(ManagerAddedEvent(manager<ResManager<ShaderRes>>()));
-        meshEntity->events()->post(ManagerAddedEvent(manager<IGLManager>()));
-        meshEntity->events()->post(ManagerAddedEvent(manager<RenderManager>()));
+        sendEvents<ManagerAddedEvent>(meshEntity);
     }
-    meshEntity->component<TransformComponent>()->setPos(pos);
     if (name.empty())
         m_noNameDebugDrawItems.push_back({meshEntity, m_currentTime + liveTimeSec});
     else
         m_debugDrawItems.emplace(name, DebugDrawItem{meshEntity, liveTimeSec});
 }
 
-void DebugDrawManager::drawLine(glm::vec3 from, glm::vec3 to, float liveTimeSec, std::string name) {
-
+void DebugDrawManager::drawRect(Tools::Rect rect, float liveTimeSec, std::string name) {
+    std::vector<glm::vec3> vertices = {
+        {rect.x1, rect.y1, 0.0f},
+        {rect.x2, rect.y1, 0.0f},
+        {rect.x2, rect.y1, 0.0f},
+        {rect.x2, rect.y2, 0.0f},
+        {rect.x2, rect.y2, 0.0f},
+        {rect.x1, rect.y2, 0.0f},
+        {rect.x1, rect.y2, 0.0f},
+        {rect.x1, rect.y1, 0.0f},
+    };
+    drawPolygon(vertices, liveTimeSec, name);
 }
 
-void DebugDrawManager::drawText(glm::vec3 pos, std::string text, float liveTimeSec, std::string name) {
+static std::vector<glm::vec3> genWireCircleVertices(float r, int vertexN, glm::vec3 pos)
+{
+    if (vertexN < 3)
+        throw std::runtime_error("Too few vertices in circle (has to be >= 3).");
+    std::vector<glm::vec3> vertexList(vertexN * 2);
+    float step = M_PI * 2 / vertexN;
+    for (int i = 0; i < vertexN; i++) {
+        vertexList[i * 2 + 0] = pos + glm::vec3{cos(step * i) * r, sin(step * i) * r, 0.0f};
+        int nextI = i + 1;
+        vertexList[i * 2 + 1] = pos + glm::vec3{cos(step * nextI) * r, sin(step * nextI) * r, 0.0f};
+    }
+    return vertexList;
+}
 
+void DebugDrawManager::drawCircle(glm::vec3 pos, int radius, float liveTimeSec, std::string name) {
+    drawPolygon(genWireCircleVertices(radius, 20, pos), liveTimeSec, name);
+}
+
+void DebugDrawManager::drawLine(glm::vec3 from, glm::vec3 to, float liveTimeSec, std::string name) {
+    std::vector<glm::vec3> vertices = {
+        from,
+        to
+    };
+    drawPolygon(vertices, liveTimeSec, name);
+}
+
+void DebugDrawManager::drawText(glm::vec3, std::string, float, std::string) {
+    LOGE("DebugDrawManager::drawText is not implemented yet");
+}
+
+template<typename EventT>
+void DebugDrawManager::sendEvents(SafePtr<Entity> entity) {
+    entity->events()->post(EventT(manager<RenderElementFactory>()));
+    entity->events()->post(EventT(manager<ResManager<MaterialRes>>()));
+    entity->events()->post(EventT(manager<ResManager<ShaderRes>>()));
+    entity->events()->post(EventT(manager<IGLManager>()));
+    entity->events()->post(EventT(manager<RenderManager>()));
 }
 
 } // flappy

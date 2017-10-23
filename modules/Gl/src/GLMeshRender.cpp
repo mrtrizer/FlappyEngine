@@ -9,6 +9,14 @@
 
 namespace flappy {
 
+const std::unordered_map<MaterialRes::RenderMode, GLenum> GLMeshRender::m_glRenderModes = {
+    {MaterialRes::RenderMode::POINTS, GL_POINTS},
+    {MaterialRes::RenderMode::LINES, GL_LINES},
+    {MaterialRes::RenderMode::TRIANGLES, GL_TRIANGLES},
+    {MaterialRes::RenderMode::TRIANGLE_STRIP, GL_TRIANGLE_STRIP},
+    {MaterialRes::RenderMode::TRIANGLE_FAN, GL_TRIANGLE_FAN}
+};
+
 GLMeshRender::GLMeshRender(SafePtr<MeshComponent> meshComponent):
     m_attribArray(GL_TRIANGLE_STRIP)
 {
@@ -34,7 +42,11 @@ GLAttribArray GLMeshRender::genAttribArray() {
         return GLTools::Vertex{vertex.x, vertex.y, vertex.z};
     });
 
-    GLAttribArray attribArray(GL_TRIANGLES);
+    auto materialRes = m_meshComponent->materialRes();
+
+    auto glRenderMode = m_glRenderModes.at(materialRes->renderMode());
+
+    GLAttribArray attribArray(glRenderMode);
     attribArray.addVBO<GLTools::Vertex>(glVertices, shader()->findAttr("aPosition"));
 
     GLint textureAttr = shader()->findAttr("aTexCoord");

@@ -81,7 +81,8 @@ int main(int argc, char *argv[])
                         sceneEntity->component<GLRenderElementFactory>();
                         auto debugDrawManager = sceneEntity->createComponent<DebugDrawManager>();
 
-                        debugDrawManager->drawCircle({0.0f, 0.0f, 0.0f}, 20.0f, 10.0f, "test");
+                        debugDrawManager->drawCircle({0.0f, 0.0f, 0.0f}, 50.0f, 10.0f, "test1");
+                        debugDrawManager->drawRect({-10.0f, -10.0f, 20.0f, 20.0f}, 5.0f, "test2");
 
                     });
     return application.runThread(currentThread);

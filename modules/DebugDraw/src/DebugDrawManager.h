@@ -15,10 +15,11 @@ class DebugDrawManager : public Manager<DebugDrawManager> {
 public:
     DebugDrawManager();
 
+    void drawPolygon(std::vector<glm::vec3>, float liveTimeSec = 0.0f, std::string name = "");
     void drawRect(Tools::Rect rect, float liveTimeSec = 0.0f, std::string name = "");
     void drawCircle(glm::vec3 pos, int radius, float liveTimeSec = 0.0f, std::string name = "");
     void drawLine(glm::vec3 from, glm::vec3 to, float liveTimeSec = 0.0f, std::string name = "");
-    void drawText(glm::vec3 pos, std::string text, float liveTimeSec = 0.0f, std::string name = "");
+    void drawText(glm::vec3, std::string, float = 0.0f, std::string = "");
 
 private:
     struct DebugDrawItem {
@@ -31,6 +32,9 @@ private:
     std::list<DebugDrawItem> m_noNameDebugDrawItems;
 
     void cleanUp();
+
+    template<typename EventT>
+    void sendEvents(SafePtr<Entity>);
 };
 
 } // flappy

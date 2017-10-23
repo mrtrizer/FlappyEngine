@@ -35,7 +35,7 @@ private:
 /// @see Shader
 class GLAttribArray {
 public:
-    using Method = unsigned int;
+    using Method = GLenum;
 
     GLAttribArray(Method = GL_TRIANGLES, int m_size = -1);
     GLAttribArray(const GLAttribArray&) = delete;

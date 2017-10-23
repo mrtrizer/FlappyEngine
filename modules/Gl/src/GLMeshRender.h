@@ -8,6 +8,7 @@
 #include <GLAttribArray.h>
 #include <GLTools.h>
 #include <Color.h>
+#include <MaterialRes.h>
 
 namespace flappy {
 
@@ -24,6 +25,7 @@ private:
     GLAttribArray m_attribArray;
     bool m_meshChanged = false;
     SafePtr<MeshComponent> m_meshComponent;
+    static const std::unordered_map<MaterialRes::RenderMode, GLenum> m_glRenderModes;
 
     GLAttribArray genAttribArray();
 };

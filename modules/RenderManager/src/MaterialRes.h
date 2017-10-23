@@ -16,10 +16,22 @@ namespace flappy {
 class MaterialRes: public Res<MaterialRes>
 {
 public:
+    enum class RenderMode {
+        POINTS,
+        LINES,
+        TRIANGLES,
+        TRIANGLE_STRIP,
+        TRIANGLE_FAN,
+    };
+
     MaterialRes(std::shared_ptr<JsonRes> jsonRes, std::shared_ptr<ShaderRes> shaderRes)
         : m_jsonRes(jsonRes)
         , m_shaderRes(shaderRes)
     {}
+
+    void setRenderMode(RenderMode renderMode) { m_renderMode = renderMode; }
+    void setRenderModeFromStr(std::string mode);
+    RenderMode renderMode() { return m_renderMode; }
 
     void setVec4(std::string name, glm::vec4 vector) { m_vec4Map.emplace(name, vector); }
 
@@ -44,6 +56,14 @@ public:
     std::list<std::shared_ptr<ResBase>> dependencyList() const final { return {m_jsonRes}; }
 
 private:
+    std::unordered_map<std::string, RenderMode> m_renderModes {
+        {"points", RenderMode::POINTS},
+        {"lines", RenderMode::LINES},
+        {"triangles", RenderMode::TRIANGLES},
+        {"triangle_strip", RenderMode::TRIANGLE_STRIP},
+        {"triangle_fan", RenderMode::TRIANGLE_FAN}
+    };
+    RenderMode m_renderMode = RenderMode::TRIANGLES;
     std::unordered_map<std::string, glm::vec4> m_vec4Map;
     std::unordered_map<std::string, glm::vec3> m_vec3Map;
     std::unordered_map<std::string, glm::vec2> m_vec2Map;

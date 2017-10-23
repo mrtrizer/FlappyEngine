@@ -1,5 +1,6 @@
 #include "MaterialResFactory.h"
 
+#include <stdexcept>
 #include <regex>
 
 #include <MaterialRes.h>
@@ -24,6 +25,12 @@ std::shared_ptr<ResBase> MaterialResFactory::load(const std::string& name, ExecT
     std::string shaderName = jsonObject["shader"];
     auto shaderRes = manager<ResManager<ShaderRes>>()->getRes(shaderName, ExecType::SYNC);
     auto materialRes = std::make_shared<MaterialRes>(jsonRes, shaderRes);
+    try {
+        std::string renderMode = jsonObject.at("render_mode");
+        materialRes->setRenderModeFromStr(renderMode);
+    } catch (const std::exception&) {
+        LOGI("Default render mode is set: TRIANGLES");
+    }
     auto uniformsObject = jsonObject["uniforms"];
     for (auto iter = uniformsObject.begin(); iter != uniformsObject.end(); iter++) {
         std::regex regex("\\((.*?)\\)\\s*(.*)");
