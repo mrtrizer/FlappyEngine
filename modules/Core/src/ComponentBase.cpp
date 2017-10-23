@@ -83,15 +83,16 @@ void ComponentBase::subscribeEvents() {
     });
 }
 
-void ComponentBase::setParentEntity(SafePtr<Entity> entity)
+void ComponentBase::setParentEntity(Entity* entity, SafePtr<flappy::Entity> entitySafePtr)
 {
     if (entity != m_entity) {
         // Deinit if entity was set before
-        if (m_entity) {
+        if (m_entity != nullptr) {
             removedFromEntityInternal();
         }
         m_entity = entity;
-        if (entity) {
+        m_entitySafePtr = entitySafePtr;
+        if (entity != nullptr) {
             addedToEntityInternal();
         }
     }

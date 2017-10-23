@@ -6,6 +6,7 @@
 #include <ShaderRes.h>
 #include <TextRes.h>
 #include <SafePtr.h>
+#include <ISubscription.h>
 
 #include "GLTools.h"
 
@@ -42,6 +43,8 @@ private:
     std::string m_fragmentShaderStr;
     std::string m_vertexShaderStr;
     SafePtr<Entity> m_rootEntity;
+    std::shared_ptr<ISubscription> m_initSubscription;
+    std::shared_ptr<ISubscription> m_deinitSubscription;
 
     GLuint m_fragmentShader = 0;
     GLuint m_vertexShader = 0;

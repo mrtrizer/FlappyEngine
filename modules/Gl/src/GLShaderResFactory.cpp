@@ -36,7 +36,7 @@ std::shared_ptr<ResBase> GLShaderResFactory::create(const std::string& name) {
     auto fragmentShader = manager<IFileLoadManager>()->loadTextFile(fragmentShaderFileInfo.path);
     manager<IFileMonitorManager>()->registerFile(fragmentShaderFileInfo.path);
 
-    auto rootEntity = manager<ThreadManager>()->entity();
+    auto rootEntity = manager<ThreadManager>()->entityRef();
 
     auto shaderRes = std::make_shared<GLShaderRes>(rootEntity, vertexShader, fragmentShader);
     shaderRes->initShader();

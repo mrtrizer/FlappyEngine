@@ -18,7 +18,7 @@ GLTextureResFactory::GLTextureResFactory() {
 }
 
 std::shared_ptr<ResBase> GLTextureResFactory::load(const std::string& name, ExecType execType)  {
-    auto rootEntity = manager<ThreadManager>()->entity();
+    auto rootEntity = manager<ThreadManager>()->entityRef();
     auto bitmapRes = manager<ResManager<IRgbaBitmapRes>>()->getRes(name, execType);
     auto res = std::make_shared<GLTextureRes>(rootEntity, bitmapRes);
     return res;

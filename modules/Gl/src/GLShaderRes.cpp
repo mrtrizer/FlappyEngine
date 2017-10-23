@@ -33,12 +33,12 @@ GLShaderRes::GLShaderRes(SafePtr<Entity> rootEntity, string vertexShaderStr, str
     , m_fragmentShaderStr(fragmentShaderStr)
 {
 
-    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
+    m_initSubscription = m_rootEntity->events()->eventBus()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
         if (e.id == IGLManager::id())
             initShader();
     });
 
-    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
+    m_deinitSubscription = m_rootEntity->events()->eventBus()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
         if (e.id == IGLManager::id())
             deinitShader();
     });

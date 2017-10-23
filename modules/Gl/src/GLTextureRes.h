@@ -20,7 +20,7 @@ class Entity;
 /// of image corners.
 class GLTextureRes: public TextureRes {
 public:
-    GLTextureRes(SafePtr<flappy::Entity> rootEntity, std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
+    GLTextureRes(SafePtr<Entity> rootEntity, std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
     ~GLTextureRes();
     void bind(GLShaderRes::UniformLocation uniformLoc, int n);
     std::list<std::shared_ptr<ResBase> > dependencyList();

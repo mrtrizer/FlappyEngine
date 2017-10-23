@@ -89,7 +89,9 @@ public:
     virtual TypeId<ComponentBase> componentId() const = 0;
 
     /// Returns parent entity (can be null if conponent is not added to entity)
-    SafePtr<Entity> entity() const { return m_entity; }
+    Entity* entity() const { return m_entity; }
+
+    SafePtr<Entity> entityRef() const { return m_entitySafePtr; }
 
     /// Returns EventController
     std::shared_ptr<EventController> events() { return m_eventController; }
@@ -141,7 +143,8 @@ private:
     bool m_initialization = false;
     bool m_active = true;
     bool m_firstUpdate = true;
-    SafePtr<Entity> m_entity;
+    Entity* m_entity = nullptr;
+    SafePtr<Entity> m_entitySafePtr;
     TypeMap<ComponentBase, SafePtr<ManagerBase>> m_managers;
     TypeMap<ComponentBase, SafePtr<ComponentBase>> m_components;
     std::shared_ptr<EventController> m_eventController;
@@ -153,7 +156,7 @@ private:
 
     /// Called when you add a component to an entity
     /// @param entity New entity pointer. Can be nullptr.
-    void setParentEntity(SafePtr<Entity> entity);
+    void setParentEntity(Entity *entity, SafePtr<Entity> entitySafePtr);
 
     bool checkDependencies();
 

@@ -9,15 +9,16 @@ namespace flappy {
 
 DesktopThread::DesktopThread(std::function<void(SafePtr<Entity>)> initCallback)
     : m_initCallback(initCallback)
+    , m_lastTime(std::chrono::steady_clock::now())
 {}
 
 DeltaTime DesktopThread::calcTimeDelta() {
     using namespace std::chrono;
     auto newTime = steady_clock::now();
     auto diff = newTime - m_lastTime;
+    m_lastTime = newTime;
     long msCount = duration_cast<milliseconds>(diff).count();
     DeltaTime timeDelta = (float)msCount / 1000.0f; // delta in seconds
-    m_lastTime = newTime;
     return timeDelta;
 }
 

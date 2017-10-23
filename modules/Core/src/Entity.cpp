@@ -27,6 +27,12 @@ Entity::Entity():
 
 }
 
+Entity::~Entity() {
+    for (auto component : m_components) {
+        component->setActive(false);
+    }
+}
+
 std::shared_ptr<ComponentBase> Entity::componentById(TypeId<ComponentBase> id) {
     for (auto component: m_components)
         if (component->componentId() == id)

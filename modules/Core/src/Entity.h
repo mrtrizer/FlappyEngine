@@ -22,7 +22,7 @@ class Entity: public std::enable_shared_from_this<Entity>
 {
 public:
     Entity();
-    virtual ~Entity() = default;
+    virtual ~Entity();
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
 
@@ -175,7 +175,7 @@ void Entity::addComponent(std::shared_ptr<ComponentT> component)
 
     if (component->entity() != nullptr)
         throw std::runtime_error("Can't add a component to several entities.");
-    component->setParentEntity(shared_from_this());
+    component->setParentEntity(this, shared_from_this());
     m_components.push_back(component);
     // Notify component about accesible managers
     sendManagerEvents<ManagerBase::ManagerAddedEvent>(component->events());
@@ -205,7 +205,7 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
     // Notify components about component removing
     sendComponentEvents<ComponentT, ComponentBase::ComponentRemovedEvent>(component);
 
-    component->setParentEntity(SafePtr<Entity>());
+    component->setParentEntity(nullptr, SafePtr<Entity>());
 
     m_components.remove(component);
 }
