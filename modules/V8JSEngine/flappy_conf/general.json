@@ -1,0 +1,37 @@
+{
+    "name":"V8JSEngine",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
+        }
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src",
+	    "./libs/include",
+	    "./libs/"
+        ],
+        "src_dirs": [
+            "./src"
+        ],
+				"libs": [
+								"./libs/bin/libv8_base.a",
+								"./libs/bin/libv8_init.a",
+								"./libs/bin/libv8_initializers.a",
+								"./libs/bin/libv8_libbase.a",
+								"./libs/bin/libv8_libplatform.a",
+								"./libs/bin/libv8_libsampler.a",
+								"./libs/bin/libv8_nosnapshot.a"
+				]
+    }
+}
