@@ -140,6 +140,14 @@ script:
  - popd
  - popd
 
+#V8JSEngine tests
+ - pushd modules/V8JSEngine/tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests_V8JSEngine
+ - popd
+ - popd
+
 #DebugDraw tests
  - pushd modules/DebugDraw/demo
  - flappy build cmake
