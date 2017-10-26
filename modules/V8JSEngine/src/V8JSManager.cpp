@@ -50,7 +50,7 @@ void V8JSManager::init() {
 
         // Create a string containing the JavaScript source code.
         v8::Local<v8::String> source =
-          v8::String::NewFromUtf8(isolate, "'Hello' + ', World!'",
+          v8::String::NewFromUtf8(isolate, "10 + 10; class Test {}; new Test",
                                   v8::NewStringType::kNormal)
               .ToLocalChecked();
 
