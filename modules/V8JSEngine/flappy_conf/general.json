@@ -17,21 +17,20 @@
     ],
     "cxx":{
         "header_dirs": [
-            "./src",
-	    "./libs/include",
-	    "./libs/"
+            "./src"
         ],
         "src_dirs": [
             "./src"
-        ],
-				"libs": [
-								"./libs/bin/libv8_base.a",
-								"./libs/bin/libv8_init.a",
-								"./libs/bin/libv8_initializers.a",
-								"./libs/bin/libv8_libbase.a",
-								"./libs/bin/libv8_libplatform.a",
-								"./libs/bin/libv8_libsampler.a",
-								"./libs/bin/libv8_nosnapshot.a"
-				]
+        ]
+    },
+    "cmake":{
+        "module_path": "cmake",
+        "packages": [
+            {
+                "name":"V8",
+                "libs":"${V8_LIBRARIES}",
+                "includes":"${V8_INCLUDE_DIR}"
+            }
+        ]
     }
 }

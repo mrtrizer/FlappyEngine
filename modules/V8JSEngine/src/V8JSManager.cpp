@@ -15,6 +15,16 @@ V8JSManager::V8JSManager()
     subscribe([this](DeinitEvent) { deinit(); });
 }
 
+class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+ public:
+  virtual void* Allocate(size_t length) {
+    void* data = AllocateUninitialized(length);
+    return data == NULL ? data : memset(data, 0, length);
+  }
+  virtual void* AllocateUninitialized(size_t length) { return malloc(length); }
+  virtual void Free(void* data, size_t) { free(data); }
+};
+
 void V8JSManager::init() {
     // Initialize V8.
     m_platform = v8::platform::CreateDefaultPlatform();
@@ -23,7 +33,7 @@ void V8JSManager::init() {
 
     // Create a new Isolate and make it the current one.
     v8::Isolate::CreateParams createParams;
-    m_arrayBufferAllocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+    m_arrayBufferAllocator = new ArrayBufferAllocator;
     createParams.array_buffer_allocator = m_arrayBufferAllocator;
     v8::Isolate* isolate = v8::Isolate::New(createParams);
     {
@@ -52,7 +62,7 @@ void V8JSManager::init() {
         v8::Local<v8::Value> result = script->Run(context).ToLocalChecked();
 
         // Convert the result to an UTF8 string and print it.
-        v8::String::Utf8Value utf8(isolate, result);
+        v8::String::Utf8Value utf8(result);
 
         LOG("%s", *utf8);
     }
