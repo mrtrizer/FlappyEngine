@@ -16,16 +16,37 @@
 #include <PosixApplication.h>
 #include <AtlasResFactory.h>
 #include <V8JSManager.h>
+#include <JSComponent.h>
 
 using namespace flappy;
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    PosixApplication application;
-    auto currentThread = std::make_shared<DesktopThread>(
-        [argc, argv](SafePtr<Entity> rootEntity) {
-            auto v8JsManager = rootEntity->createComponent<V8JSManager>();
-        });
-    return application.runThread(currentThread);
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<V8JSManager>();
+    rootEntity->createComponent<JSComponent>(
+                "TestComponent",
+                "class TestComponent extends Component {"
+                "   constructor() {"
+                "       super();"
+                "       log('Constructor');"
+                "   }"
+                "   init() {"
+                "       log('Init');"
+                "   }"
+                "   deinit() {"
+                "       log('Deinit');"
+                "   }"
+                "   update(dt) {"
+                "       log(dt.toString());"
+                "   }"
+                "}"
+                ""
+                "function constructJsObject() {"
+                "   log('constructJsObject start');"
+                "   let testComponent = new TestComponent();"
+                "   log('constructJsObject end');"
+                "   return testComponent;"
+                "}");
 }

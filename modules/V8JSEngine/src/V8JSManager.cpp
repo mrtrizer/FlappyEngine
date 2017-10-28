@@ -19,6 +19,15 @@ V8JSManager::V8JSManager()
     subscribe([this](DeinitEvent) { deinit(); });
 }
 
+static Local<String> toV8Str(std::string stdStr, Isolate* isolate) {
+    auto str = String::NewFromUtf8(
+                isolate,
+                stdStr.c_str(),
+                NewStringType::kNormal,
+                stdStr.length()).ToLocalChecked();
+    return str;
+}
+
 class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
  public:
   virtual void* Allocate(size_t length) {
@@ -40,16 +49,10 @@ void V8JSManager::getType(Local<String> name, const PropertyCallbackInfo<Value>&
     ComponentBase* component = unwrapComponent(info.Holder());
 
     // Fetch the path.
-    const std::string& path = component->componentId().name();
-
-    auto str = String::NewFromUtf8(
-                info.GetIsolate(),
-                path.c_str(),
-                NewStringType::kNormal,
-                path.length()).ToLocalChecked();
+    auto path = toV8Str(component->componentId().name(), info.GetIsolate());
 
     // Wrap the result in a JavaScript string and return it.
-    info.GetReturnValue().Set(str);
+    info.GetReturnValue().Set(path);
 }
 
 Local<ObjectTemplate> V8JSManager::makeComponentTemplate(Isolate* isolate) {
@@ -59,8 +62,7 @@ Local<ObjectTemplate> V8JSManager::makeComponentTemplate(Isolate* isolate) {
     result->SetInternalFieldCount(1);
 
     // Add accessors for each of the fields of the request.
-    auto getTypeName = String::NewFromUtf8(isolate, "type", NewStringType::kInternalized).ToLocalChecked();
-    result->SetAccessor(getTypeName, getType);
+    result->SetAccessor(toV8Str("type", m_isolate), getType);
 
     // Again, return the result through the current handle scope.
     return handle_scope.Escape(result);
@@ -98,21 +100,73 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
     return handle_scope.Escape(result);
 }
 
-static Local<String> toV8Str(std::string stdStr, Isolate* isolate) {
-    auto str = String::NewFromUtf8(
-                isolate,
-                stdStr.c_str(),
-                NewStringType::kNormal,
-                stdStr.length()).ToLocalChecked();
-    return str;
-}
-
 static void log(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if (args.Length() < 1)
       return;
   Local<Value> arg = args[0];
   String::Utf8Value value(arg);
   LOG("%s", *value);
+}
+
+void V8JSManager::runScript(Local<v8::Context>& context, std::string sourceStr) {
+    // Create a string containing the JavaScript source code.
+    v8::Local<v8::String> source = toV8Str(sourceStr, m_isolate);
+
+    // Compile the source code.
+    v8::Local<v8::Script> script = v8::Script::Compile(context, source).ToLocalChecked();
+
+    { // run
+        TryCatch trycatch(m_isolate);
+
+        MaybeLocal<Value> result = script->Run(context);
+
+        if (result.IsEmpty()) {
+          Local<Value> exception = trycatch.Exception();
+          String::Utf8Value exception_str(exception);
+          LOGE("Exception: %s\n", *exception_str);
+        }
+
+    }
+}
+
+MaybeLocal<Value> V8JSManager::callFunction(Local<v8::Context>& context, std::string name, std::vector<Local<Value>> args) {
+    // The script compiled and ran correctly.  Now we fetch out the
+    // Process function from the global object.
+    Local<String> updateName = toV8Str(name, m_isolate);
+    Local<Value> updateVal;
+    auto detected = context->Global()->Get(context, updateName).ToLocal(&updateVal);
+    if (!detected || !updateVal->IsFunction()) {
+        LOGE("%s is not a function", name.c_str());
+    }
+
+    Local<Function> updateFun = Local<Function>::Cast(updateVal);
+
+    TryCatch trycatch(m_isolate);
+
+    auto result = updateFun->Call(context, context->Global(), args.size(), args.data());
+
+    if (result.IsEmpty()) {
+      Local<Value> exception = trycatch.Exception();
+      String::Utf8Value exception_str(exception);
+      LOGE("Exception: %s\n", *exception_str);
+    }
+
+    return result;
+}
+
+UniquePersistent<Object> V8JSManager::runJSComponent(std::string script) {
+    HandleScope handleScope(m_isolate);
+
+    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
+    Context::Scope context_scope (context);
+
+    runScript(context, script);
+    auto jsObject = callFunction(context, "constructJsObject", {});
+    if (jsObject.IsEmpty()) {
+        LOGE("Result is empty");
+    }
+    Local<Value> jsObjectLocal = jsObject.ToLocalChecked();
+    return UniquePersistent<Object>(m_isolate, Local<Object>::Cast(jsObjectLocal));
 }
 
 void V8JSManager::init() {
@@ -127,77 +181,42 @@ void V8JSManager::init() {
     createParams.array_buffer_allocator = m_arrayBufferAllocator;
     m_isolate = v8::Isolate::New(createParams);
     {
-        v8::Isolate::Scope isolate_scope(m_isolate);
-
-        // Create a stack-allocated handle scope.
-        v8::HandleScope handle_scope(m_isolate);
+        m_isolateScope = new v8::Isolate::Scope(m_isolate);
+        HandleScope handleScope(m_isolate);
 
         Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
         global->Set(toV8Str("log", m_isolate), FunctionTemplate::New(m_isolate, log));
 
         // Create a new context.
-        v8::Local<v8::Context> context = v8::Context::New(m_isolate, nullptr, global);
+        m_context = v8::Context::New(m_isolate, nullptr, global);
 
         // Enter the context for compiling and running the hello world script.
-        v8::Context::Scope context_scope(context);
+        v8::Context::Scope context_scope(m_context);
 
+        runScript(m_context,
+                  "class Component {"
+                  "    constructor() {"
+                  "        log('Component constructor');"
+                  "    }"
+                  "}"
+                  ""
+                  "function update(component) {"
+                  "    log('Update' + component.type);"
+                  "};"
+                  "log('Test');");
 
-        // Create a string containing the JavaScript source code.
-        v8::Local<v8::String> source = toV8Str(
-                    "function update(component) {"
-                    "    log('Update' + component.type);"
-                    "}; "
-                    "log('Test');", m_isolate);
+        auto jsComponent = wrapComponent(this);
 
-
-        // Compile the source code.
-        v8::Local<v8::Script> script = v8::Script::Compile(context, source).ToLocalChecked();
-
-        script->Run(context);
-//        // Run the script to get the result.
-//        v8::Local<v8::Value> result = script->Run(context).ToLocalChecked();
-
-//        // Convert the result to an UTF8 string and print it.
-//        v8::String::Utf8Value utf8(result);
-
-//        LOG("%s", *utf8);
-
-
-        // The script compiled and ran correctly.  Now we fetch out the
-        // Process function from the global object.
-        Local<String> updateName = toV8Str("update", m_isolate);
-        Local<Value> updateVal;
-        auto detected = context->Global()->Get(context, updateName).ToLocal(&updateVal);
-        if (!detected)
-            LOGE("update is not detected");
-        // If there is no Process function, or if it is not a function,
-        // bail out
-        if (!updateVal->IsFunction()) {
-            LOGE("update is not a function");
-        }
-
-        Local<Function> updateFun = Local<Function>::Cast(updateVal);
-
-        Global<Function> update;
-
-        // Store the function in a Global handle, since we also want
-        // that to remain after this call returns
-        update.Reset(m_isolate, updateFun);
-
-        Local<Object> jsComponent = wrapComponent(this);
-
-        const int argc = 1;
-        Local<Value> argv[argc] = {jsComponent};
-        v8::Local<v8::Function> process = v8::Local<v8::Function>::New(m_isolate, update);
-        process->Call(context, context->Global(), argc, argv);
+        callFunction(m_context, "update", { jsComponent });
     }
+
 }
 
 void V8JSManager::deinit() {
     // Dispose the isolate and tear down V8.
     v8::V8::Dispose();
     v8::V8::ShutdownPlatform();
-    m_isolate->Dispose();
+    delete m_isolateScope;
     delete m_platform;
     delete m_arrayBufferAllocator;
 }
