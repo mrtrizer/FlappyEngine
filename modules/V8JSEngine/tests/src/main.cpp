@@ -49,4 +49,7 @@ int main(int argc, char *argv[])
                 "   log('constructJsObject end');"
                 "   return testComponent;"
                 "}");
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    rootEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
+    rootEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
 }

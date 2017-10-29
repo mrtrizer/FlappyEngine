@@ -71,10 +71,12 @@ Local<ObjectTemplate> V8JSManager::makeComponentTemplate(Isolate* isolate) {
 
 Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
+    EscapableHandleScope handle_scope(m_isolate);
+    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
+    Context::Scope context_scope (context);
+
     Global<ObjectTemplate> componentTemplate;
 
-    // Local scope for temporary handles.
-    EscapableHandleScope handle_scope(m_isolate);
 
     // Fetch the template for creating JavaScript http request wrappers.
     // It only has to be created once, which we do on demand.
@@ -129,6 +131,32 @@ void V8JSManager::runScript(Local<v8::Context>& context, std::string sourceStr) 
     }
 }
 
+void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<Local<Value>> args) {
+    HandleScope handleScope(m_isolate);
+    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
+    Context::Scope context_scope (context);
+
+    Local<String> methodeName = toV8Str(name, m_isolate);
+    Local<Value> updateVal;
+    jsObject->Get(methodeName);
+    auto detected = jsObject->Get(context, methodeName).ToLocal(&updateVal);
+    if (!detected || !updateVal->IsFunction()) {
+        LOGE("%s is not a function", name.c_str());
+    }
+
+    Local<Function> updateFun = Local<Function>::Cast(updateVal);
+
+    TryCatch trycatch(m_isolate);
+
+    auto result = updateFun->Call(context, context->Global(), args.size(), args.data());
+
+    if (result.IsEmpty()) {
+      Local<Value> exception = trycatch.Exception();
+      String::Utf8Value exception_str(exception);
+      LOGE("Exception: %s\n", *exception_str);
+    }
+}
+
 MaybeLocal<Value> V8JSManager::callFunction(Local<v8::Context>& context, std::string name, std::vector<Local<Value>> args) {
     // The script compiled and ran correctly.  Now we fetch out the
     // Process function from the global object.
@@ -166,7 +194,15 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string script) {
         LOGE("Result is empty");
     }
     Local<Value> jsObjectLocal = jsObject.ToLocalChecked();
+
+    auto jsComponent = wrapComponent(this);
+
     return UniquePersistent<Object>(m_isolate, Local<Object>::Cast(jsObjectLocal));
+}
+
+void V8JSManager::assignComponentWrapper(Local<Object> jsObject, SafePtr<ComponentBase> component) {
+    auto wrapped = wrapComponent(component->shared_from_this().get());
+    callMethod(jsObject, "setWrapper", {wrapped});
 }
 
 void V8JSManager::init() {
@@ -187,27 +223,25 @@ void V8JSManager::init() {
         Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
         global->Set(toV8Str("log", m_isolate), FunctionTemplate::New(m_isolate, log));
 
+        auto context = v8::Context::New(m_isolate, nullptr, global);
+
         // Create a new context.
-        m_context = v8::Context::New(m_isolate, nullptr, global);
+        m_context = UniquePersistent<Context>(m_isolate, context);
 
         // Enter the context for compiling and running the hello world script.
-        v8::Context::Scope context_scope(m_context);
+        v8::Context::Scope context_scope(context);
 
-        runScript(m_context,
-                  "class Component {"
-                  "    constructor() {"
-                  "        log('Component constructor');"
-                  "    }"
-                  "}"
-                  ""
-                  "function update(component) {"
-                  "    log('Update' + component.type);"
-                  "};"
-                  "log('Test');");
-
-        auto jsComponent = wrapComponent(this);
-
-        callFunction(m_context, "update", { jsComponent });
+        runScript(context,
+                    "class Component {"
+                    "    constructor() {"
+                    "        log('Component constructor');"
+                    "    }"
+                    "    setWrapper(wrapper) {"
+                    "        this.wrapper = wrapper;"
+                    "        log(this.wrapper.type);"
+                    "    }"
+                    "}"
+                  );
     }
 
 }

@@ -2,24 +2,37 @@
 
 #include <Entity.h>
 #include <V8JSManager.h>
+#include <v8.h>
 
 namespace flappy {
+
+using namespace v8;
 
 JSComponent::JSComponent(std::string name, std::string script)
 {
     addDependency(V8JSManager::id());
 
     subscribe([this, name, script](InitEvent) {
+        HandleScope handleScope(Isolate::GetCurrent());
+
         m_jsObject = manager<V8JSManager>()->runJSComponent(script);
-        //manager<V8JSManager>()->callMethod(m_jsObject, "init");
+        auto jsObject = v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject);
+        manager<V8JSManager>()->assignComponentWrapper(jsObject, selfPointer());
+        manager<V8JSManager>()->callMethod(jsObject, "init", {});
     });
 
     subscribe([this, name, script](DeinitEvent) {
-        //manager<V8JSManager>()->callMethod(m_jsObject, "deinit");
+        HandleScope handleScope(Isolate::GetCurrent());
+
+        manager<V8JSManager>()->callMethod(v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject), "deinit", {});
     });
 
     subscribe([this, name, script](UpdateEvent e) {
-        //manager<V8JSManager>()->callMethod(m_jsObject, "update", {e.dt});
+        HandleScope handleScope(Isolate::GetCurrent());
+
+        auto jsDt = v8::Number::New(Isolate::GetCurrent(), e.dt);
+
+        manager<V8JSManager>()->callMethod(v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject), "update", {jsDt});
     });
 }
 

@@ -15,13 +15,14 @@ public:
     V8JSManager();
 
     v8::UniquePersistent<v8::Object> runJSComponent(std::string script);
+    void callMethod(v8::Local<v8::Object> jsObject, std::string name, std::vector<v8::Local<v8::Value>> args);
+    void assignComponentWrapper(v8::Local<v8::Object> jsObject, SafePtr<ComponentBase> component);
 
 private:
     v8::Platform* m_platform;
     v8::Isolate* m_isolate;
     v8::Isolate::Scope* m_isolateScope;
-    v8::HandleScope* m_handleScope;
-    v8::Local<v8::Context> m_context;
+    v8::UniquePersistent<v8::Context> m_context;
     v8::ArrayBuffer::Allocator* m_arrayBufferAllocator;
 
     static ComponentBase* unwrapComponent(v8::Local<v8::Object> obj);
