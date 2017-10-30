@@ -14,9 +14,8 @@ class V8JSManager: public Manager<V8JSManager>
 public:
     V8JSManager();
 
-    v8::UniquePersistent<v8::Object> runJSComponent(std::string script);
+    v8::UniquePersistent<v8::Object> runJSComponent(std::string script, SafePtr<ComponentBase> component);
     void callMethod(v8::Local<v8::Object> jsObject, std::string name, std::vector<v8::Local<v8::Value>> args);
-    void assignComponentWrapper(v8::Local<v8::Object> jsObject, SafePtr<ComponentBase> component);
 
 private:
     v8::Platform* m_platform;
@@ -25,10 +24,7 @@ private:
     v8::UniquePersistent<v8::Context> m_context;
     v8::ArrayBuffer::Allocator* m_arrayBufferAllocator;
 
-    static ComponentBase* unwrapComponent(v8::Local<v8::Object> obj);
-    static void getType(v8::Local<v8::String> name, const v8::PropertyCallbackInfo<v8::Value>& info);
-
-    v8::Local<v8::ObjectTemplate> makeComponentTemplate(v8::Isolate* isolate);
+    v8::Local<v8::Object> wrapEntity(Entity* entity);
     v8::Local<v8::Object> wrapComponent(ComponentBase* component);
 
     void runScript(v8::Local<v8::Context>& context, std::string sourceStr);

@@ -15,9 +15,8 @@ JSComponent::JSComponent(std::string name, std::string script)
     subscribe([this, name, script](InitEvent) {
         HandleScope handleScope(Isolate::GetCurrent());
 
-        m_jsObject = manager<V8JSManager>()->runJSComponent(script);
+        m_jsObject = manager<V8JSManager>()->runJSComponent(script, selfPointer());
         auto jsObject = v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject);
-        manager<V8JSManager>()->assignComponentWrapper(jsObject, selfPointer());
         manager<V8JSManager>()->callMethod(jsObject, "init", {});
     });
 
