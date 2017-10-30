@@ -27,22 +27,6 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<V8JSManager>();
     rootEntity->createComponent<JSComponent>(
                 "TestComponent",
-                "\n"
-                "function constructJsObject(wrapper) {\n"
-                "   let ComponentWrapper = function () {"
-                "       log(this.initialized.toString());\n"
-                "       this.testField = 10;\n"
-                "   }\n"
-                "\n"
-                "   ComponentWrapper.prototype = wrapper;\n"
-                "\n"
-                "   class Component extends ComponentWrapper {\n"
-                "       constructor() {\n"
-                "           super();\n"
-                "           log('Component constructor');"
-                "           log(this.initialized.toString());\n"
-                "       }\n"
-                "   }\n"
                 "   class TestComponent extends Component {\n"
                 "       constructor() {"
                 "           super();"
@@ -62,12 +46,7 @@ int main(int argc, char *argv[])
                 "           log(this.entity.testFunc());"
                 "      }"
                 "   }"
-                "   log('constructJsObject start');"
-                "   let testComponent = new TestComponent();"
-                "   log('constructJsObject end');"
-                "   testComponent.update(100);"
-                "   return testComponent;"
-                "}");
+                );
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
     rootEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
     rootEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
