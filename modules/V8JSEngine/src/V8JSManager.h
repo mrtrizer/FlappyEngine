@@ -24,6 +24,7 @@ private:
     v8::UniquePersistent<v8::Context> m_context;
     v8::ArrayBuffer::Allocator* m_arrayBufferAllocator;
 
+    v8::Local<v8::Object> wrapEntity(Entity* entity);
     v8::Local<v8::Object> wrapComponent(ComponentBase* component);
 
     void runScript(v8::Local<v8::Context>& context, std::string sourceStr);

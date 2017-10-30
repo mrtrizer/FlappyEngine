@@ -39,30 +39,62 @@ class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
   virtual void Free(void* data, size_t) { free(data); }
 };
 
+template <typename ObjT>
 static ComponentBase* unwrapComponent(Local<Object> obj) {
   Local<External> field = Local<External>::Cast(obj->GetInternalField(0));
   void* ptr = field->Value();
-  return static_cast<ComponentBase*>(ptr);
+  return static_cast<ObjT*>(ptr);
+}
+
+static void Entity_testFunc_callback(const FunctionCallbackInfo<Value>& info) {
+    Local<External> field = info.Data().As<External>();
+    void* ptr = field->Value();
+    auto name = toV8Str("EntityTest");
+    info.GetReturnValue().Set(name);
+}
+
+Local<Object> V8JSManager::wrapEntity(Entity* entity) {
+
+    EscapableHandleScope handle_scope(m_isolate);
+    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
+    Context::Scope contextScope (context);
+
+    Local<External> jsPtr = External::New(m_isolate, entity);
+
+    v8::Local<v8::FunctionTemplate> funcTemplate = v8::FunctionTemplate::New(m_isolate);
+    v8::Local<v8::Template> prototype = funcTemplate->PrototypeTemplate();
+    prototype->Set(toV8Str("testFunc"), v8::FunctionTemplate::New(m_isolate, Entity_testFunc_callback, jsPtr));
+
+    v8::Local<v8::ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
+    componentTemplate->SetInternalFieldCount(1);
+
+    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
+
+    Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
+
+    result->SetInternalField(0, jsPtr);
+
+    return handle_scope.Escape(result);
 }
 
 static void Component_getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent(info.Holder());
+    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
     auto path = toV8Str(component->componentId().name());
     info.GetReturnValue().Set(path);
 }
 
 static void Component_isInitialized(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent(info.Holder());
+    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
     info.GetReturnValue().Set(component->isInitialized());
 }
 
 static void Component_active(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent(info.Holder());
+    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
     info.GetReturnValue().Set(component->active());
 }
 
 static void Component_setActive(Local<String>, Local<Value> value, const PropertyCallbackInfo<void>& info) {
-    ComponentBase* component = unwrapComponent(info.Holder());
+    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
     component->setActive(value->BooleanValue());
 }
 
@@ -85,6 +117,7 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
     v8::Local<v8::FunctionTemplate> funcTemplate = v8::FunctionTemplate::New(m_isolate);
     v8::Local<v8::Template> prototype = funcTemplate->PrototypeTemplate();
     prototype->Set(toV8Str("testFunc"), v8::FunctionTemplate::New(m_isolate, Component_testFunc_callback, componentJSPtr));
+    prototype->Set(toV8Str("entity"), wrapEntity(component->entity()));
     v8::Local<v8::ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
 
     componentTemplate->SetInternalFieldCount(1);

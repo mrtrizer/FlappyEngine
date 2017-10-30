@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
                 "           log(dt.toString());"
                 "           log(this.testFunc());"
                 "           log(this.initialized.toString());"
+                "           log(this.entity.testFunc());"
                 "      }"
                 "   }"
                 "   log('constructJsObject start');"
