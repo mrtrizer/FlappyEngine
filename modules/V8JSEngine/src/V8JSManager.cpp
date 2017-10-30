@@ -7,7 +7,9 @@
 #include <libplatform/libplatform.h>
 #include <v8.h>
 
+#include <Entity.h>
 #include <ComponentBase.h>
+#include <JSComponent.h>
 
 namespace flappy {
 
@@ -46,11 +48,21 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
   return static_cast<ObjT*>(ptr);
 }
 
-static void Entity_testFunc_callback(const FunctionCallbackInfo<Value>& info) {
-    Local<External> field = info.Data().As<External>();
-    void* ptr = field->Value();
-    auto name = toV8Str("EntityTest");
-    info.GetReturnValue().Set(name);
+namespace V8Entity {
+
+    static void component(const FunctionCallbackInfo<Value>& info) {
+        Local<External> field = info.Data().As<External>();
+        void* ptr = field->Value();
+        auto entity =  static_cast<Entity*>(ptr);
+        String::Utf8Value name(info[0]);
+        auto component = entity->findComponent<JSComponent>([&name](const JSComponent& jsComponent) {
+            if (jsComponent.name() == *name)
+                return true;
+            return false;
+        });
+        info.GetReturnValue().Set(component->jsObject());
+    }
+
 }
 
 Local<Object> V8JSManager::wrapEntity(Entity* entity) {
@@ -63,7 +75,7 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
 
     Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
     Local<Template> prototype = funcTemplate->PrototypeTemplate();
-    prototype->Set(toV8Str("testFunc"), FunctionTemplate::New(m_isolate, Entity_testFunc_callback, jsPtr));
+    prototype->Set(toV8Str("component"), FunctionTemplate::New(m_isolate, V8Entity::component, jsPtr));
 
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
     componentTemplate->SetInternalFieldCount(1);
@@ -77,33 +89,37 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
     return handle_scope.Escape(result);
 }
 
-static void Component_getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-    auto path = toV8Str(component->componentId().name());
-    info.GetReturnValue().Set(path);
-}
+namespace V8Component {
 
-static void Component_isInitialized(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-    info.GetReturnValue().Set(component->isInitialized());
-}
+    static void getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
+        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
+        auto path = toV8Str(component->componentId().name());
+        info.GetReturnValue().Set(path);
+    }
 
-static void Component_active(Local<String>, const PropertyCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-    info.GetReturnValue().Set(component->active());
-}
+    static void isInitialized(Local<String>, const PropertyCallbackInfo<Value>& info) {
+        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
+        info.GetReturnValue().Set(component->isInitialized());
+    }
 
-static void Component_setActive(Local<String>, Local<Value> value, const PropertyCallbackInfo<void>& info) {
-    ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-    component->setActive(value->BooleanValue());
-}
+    static void active(Local<String>, const PropertyCallbackInfo<Value>& info) {
+        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
+        info.GetReturnValue().Set(component->active());
+    }
 
-static void Component_testFunc_callback(const FunctionCallbackInfo<Value>& info) {
-    Local<External> field = info.Data().As<External>();
-    void* ptr = field->Value();
-    auto component =  static_cast<ComponentBase*>(ptr);
-    auto name = toV8Str(component->componentId().name());
-    info.GetReturnValue().Set(name);
+    static void setActive(Local<String>, Local<Value> value, const PropertyCallbackInfo<void>& info) {
+        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
+        component->setActive(value->BooleanValue());
+    }
+
+    static void testFunc(const FunctionCallbackInfo<Value>& info) {
+        Local<External> field = info.Data().As<External>();
+        void* ptr = field->Value();
+        auto component =  static_cast<ComponentBase*>(ptr);
+        auto name = toV8Str(component->componentId().name());
+        info.GetReturnValue().Set(name);
+    }
+
 }
 
 Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
@@ -116,16 +132,16 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
     Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
     Local<Template> prototype = funcTemplate->PrototypeTemplate();
-    prototype->Set(toV8Str("testFunc"), FunctionTemplate::New(m_isolate, Component_testFunc_callback, componentJSPtr));
+    prototype->Set(toV8Str("testFunc"), FunctionTemplate::New(m_isolate, V8Component::testFunc, componentJSPtr));
     prototype->Set(toV8Str("entity"), wrapEntity(component->entity()));
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
 
     componentTemplate->SetInternalFieldCount(1);
 
     // Add accessors for each of the fields of the request.
-    componentTemplate->SetAccessor(toV8Str("type"), Component_getType);
-    componentTemplate->SetAccessor(toV8Str("initialized"), Component_isInitialized);
-    componentTemplate->SetAccessor(toV8Str("active"), Component_active, Component_setActive);
+    componentTemplate->SetAccessor(toV8Str("type"), V8Component::getType);
+    componentTemplate->SetAccessor(toV8Str("initialized"), V8Component::isInitialized);
+    componentTemplate->SetAccessor(toV8Str("active"), V8Component::active, V8Component::setActive);
 
     Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
 
@@ -160,16 +176,16 @@ void V8JSManager::runScript(Local<Context>& context, std::string sourceStr) {
             int lineNumberInt = message->GetLineNumber();
             String::Utf8Value exceptionStr(exception);
             LOGE("Exception: %s %d\n", *exceptionStr, lineNumberInt);
-        }
+        } else {
+            Local<Script> script = compileResult.ToLocalChecked();
 
-        Local<Script> script = compileResult.ToLocalChecked();
+            MaybeLocal<Value> result = script->Run(context);
 
-        MaybeLocal<Value> result = script->Run(context);
-
-        if (result.IsEmpty()) {
-          Local<Value> exception = trycatch.Exception();
-          String::Utf8Value exception_str(exception);
-          LOGE("Exception: %s\n", *exception_str);
+            if (result.IsEmpty()) {
+              Local<Value> exception = trycatch.Exception();
+              String::Utf8Value exception_str(exception);
+              LOGE("Exception: %s\n", *exception_str);
+            }
         }
 
     }

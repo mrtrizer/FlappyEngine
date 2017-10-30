@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
                 "           super();"
                 "           log('Constructor 1');"
                 "           log(this.initialized.toString());"
+                "           this.name = 'Vasia';"
                 "       }"
                 "       init() {"
                 "           log('Init');"
@@ -40,15 +41,14 @@ int main(int argc, char *argv[])
                 "       deinit() {"
                 "           log('Deinit');"
                 "       }"
+                "       hello() {"
+                "           log('Hello, Im ' + this.name);"
+                "       }"
                 "       update(dt) {"
-                "           log(dt.toString());"
-                "           log(this.testFunc());"
-                "           log(this.initialized.toString());"
-                "           log(this.entity.testFunc());"
-                "      }"
+                "       }"
                 "   }"
                 );
-    childEntity->createComponent<JSComponent>(
+    rootEntity->createComponent<JSComponent>(
                 "TestComponent2",
                 "   class TestComponent2 extends Component {\n"
                 "       constructor() {"
@@ -63,10 +63,8 @@ int main(int argc, char *argv[])
                 "           log('Deinit');"
                 "       }"
                 "       update(dt) {"
-                "           log(dt.toString());"
-                "           log(this.testFunc());"
-                "           log(this.initialized.toString());"
-                "           log(this.entity.testFunc());"
+                "           this.entity.component('TestComponent1').hello();"
+                "           log(this.entity.component('TestComponent1').name);\n"
                 "      }"
                 "   }"
                 );

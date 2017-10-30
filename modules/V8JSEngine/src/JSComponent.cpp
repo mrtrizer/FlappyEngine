@@ -9,6 +9,8 @@ namespace flappy {
 using namespace v8;
 
 JSComponent::JSComponent(std::string name, std::string script)
+    : m_name(name)
+    , m_script(script)
 {
     addDependency(V8JSManager::id());
 
