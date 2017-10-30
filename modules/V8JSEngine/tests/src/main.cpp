@@ -63,8 +63,8 @@ int main(int argc, char *argv[])
                 "           log('Deinit');"
                 "       }"
                 "       update(dt) {"
-                "           this.entity.component('TestComponent1').hello();"
-                "           log(this.entity.component('TestComponent1').name);\n"
+                "           this.entity.jsComponent('TestComponent1').hello();"
+                "           log(this.entity.jsComponent('TestComponent1').name);\n"
                 "      }"
                 "   }"
                 );

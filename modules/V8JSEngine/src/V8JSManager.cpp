@@ -50,7 +50,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
 
 namespace V8Entity {
 
-    static void component(const FunctionCallbackInfo<Value>& info) {
+    static void jsComponent(const FunctionCallbackInfo<Value>& info) {
         Local<External> field = info.Data().As<External>();
         void* ptr = field->Value();
         auto entity =  static_cast<Entity*>(ptr);
@@ -75,7 +75,7 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
 
     Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
     Local<Template> prototype = funcTemplate->PrototypeTemplate();
-    prototype->Set(toV8Str("component"), FunctionTemplate::New(m_isolate, V8Entity::component, jsPtr));
+    prototype->Set(toV8Str("jsComponent"), FunctionTemplate::New(m_isolate, V8Entity::jsComponent, jsPtr));
 
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
     componentTemplate->SetInternalFieldCount(1);
