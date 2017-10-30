@@ -225,11 +225,11 @@ MaybeLocal<Value> V8JSManager::callFunction(Local<Context>& context, std::string
     return result;
 }
 
-UniquePersistent<Object> V8JSManager::runJSComponent(std::string script, SafePtr<ComponentBase> component) {
+UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::string script, SafePtr<ComponentBase> component) {
     HandleScope handleScope(m_isolate);
 
     auto extendedScript = Tools::format("\n"
-                                        "function constructJsObject(wrapper) {\n"
+                                        "function constructJsComponent(wrapper) {\n"
                                         "   let ComponentWrapper = function () {"
                                         "       log(this.initialized.toString());\n"
                                         "       this.testField = 10;\n"
@@ -246,11 +246,11 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string script, SafePtr
                                         "   }\n"
                                         "   %s"
                                         "   log('constructJsObject start');"
-                                        "   let testComponent = new TestComponent();"
+                                        "   let testComponent = new %s();"
                                         "   log('constructJsObject end');"
                                         "   testComponent.update(100);"
                                         "   return testComponent;"
-                                        "}", script.c_str());
+                                        "}", script.c_str(), name.c_str());
 
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
@@ -258,7 +258,7 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string script, SafePtr
     runScript(context, extendedScript);
     auto wrapped = wrapComponent(component->shared_from_this().get());
 
-    auto jsObject = callFunction(context, "constructJsObject", {wrapped});
+    auto jsObject = callFunction(context, "constructJsComponent", {wrapped});
     if (jsObject.IsEmpty()) {
         LOGE("Result is empty");
     }

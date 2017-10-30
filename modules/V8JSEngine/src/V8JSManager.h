@@ -14,7 +14,7 @@ class V8JSManager: public Manager<V8JSManager>
 public:
     V8JSManager();
 
-    v8::UniquePersistent<v8::Object> runJSComponent(std::string script, SafePtr<ComponentBase> component);
+    v8::UniquePersistent<v8::Object> runJSComponent(std::string name, std::string script, SafePtr<ComponentBase> component);
     void callMethod(v8::Local<v8::Object> jsObject, std::string name, std::vector<v8::Local<v8::Value>> args);
 
 private:

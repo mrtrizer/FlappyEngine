@@ -24,13 +24,36 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     auto rootEntity = std::make_shared<Entity>();
+    auto childEntity = rootEntity->createEntity();
     rootEntity->createComponent<V8JSManager>();
     rootEntity->createComponent<JSComponent>(
-                "TestComponent",
-                "   class TestComponent extends Component {\n"
+                "TestComponent1",
+                "   class TestComponent1 extends Component {\n"
                 "       constructor() {"
                 "           super();"
-                "           log('Constructor');"
+                "           log('Constructor 1');"
+                "           log(this.initialized.toString());"
+                "       }"
+                "       init() {"
+                "           log('Init');"
+                "       }"
+                "       deinit() {"
+                "           log('Deinit');"
+                "       }"
+                "       update(dt) {"
+                "           log(dt.toString());"
+                "           log(this.testFunc());"
+                "           log(this.initialized.toString());"
+                "           log(this.entity.testFunc());"
+                "      }"
+                "   }"
+                );
+    childEntity->createComponent<JSComponent>(
+                "TestComponent2",
+                "   class TestComponent2 extends Component {\n"
+                "       constructor() {"
+                "           super();"
+                "           log('Constructor 2');"
                 "           log(this.initialized.toString());"
                 "       }"
                 "       init() {"
