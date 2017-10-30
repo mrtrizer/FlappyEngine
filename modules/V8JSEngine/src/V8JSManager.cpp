@@ -20,9 +20,9 @@ V8JSManager::V8JSManager()
 }
 
 // TODO: Remove isolate param
-static Local<String> toV8Str(std::string stdStr, Isolate* isolate) {
+static Local<String> toV8Str(std::string stdStr) {
     auto str = String::NewFromUtf8(
-                isolate,
+                Isolate::GetCurrent(),
                 stdStr.c_str(),
                 NewStringType::kNormal,
                 stdStr.length()).ToLocalChecked();
@@ -47,7 +47,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
 
 static void Component_getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
     ComponentBase* component = unwrapComponent(info.Holder());
-    auto path = toV8Str(component->componentId().name(), info.GetIsolate());
+    auto path = toV8Str(component->componentId().name());
     info.GetReturnValue().Set(path);
 }
 
@@ -67,63 +67,38 @@ static void Component_setActive(Local<String>, Local<Value> value, const Propert
 }
 
 static void Component_testFunc_callback(const FunctionCallbackInfo<Value>& info) {
-    ComponentBase* component = unwrapComponent(info.Holder());
-    info.GetReturnValue().Set(toV8Str(component->componentId().name(), info.GetIsolate()));
-}
-
-static void Component_testFunc(Local<String>, const PropertyCallbackInfo<Value>& info) {
-
-}
-
-Local<Object> V8JSManager::wrapEntity(Entity* entity) {
-
-    EscapableHandleScope handle_scope(m_isolate);
-    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
-    Context::Scope context_scope (context);
-
-    Global<ObjectTemplate> componentTemplate;
-
-    Local<ObjectTemplate> rawComponentTemplate = ObjectTemplate::New(m_isolate);
-    rawComponentTemplate->SetInternalFieldCount(1);
-
-    componentTemplate.Reset(m_isolate, rawComponentTemplate);
-
-    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
-
-    Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
-
-    Local<External> request_ptr = External::New(m_isolate, entity);
-
-    result->SetInternalField(0, request_ptr);
-
-    return handle_scope.Escape(result);
+    Local<External> field = info.Data().As<External>();
+    void* ptr = field->Value();
+    auto component =  static_cast<ComponentBase*>(ptr);
+    auto name = toV8Str(component->componentId().name());
+    info.GetReturnValue().Set(name);
 }
 
 Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
     EscapableHandleScope handle_scope(m_isolate);
     v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
-    Context::Scope context_scope (context);
+    Context::Scope contextScope (context);
 
-    Global<ObjectTemplate> componentTemplate;
+    Local<External> componentJSPtr = External::New(m_isolate, component);
 
-    Local<ObjectTemplate> rawComponentTemplate = ObjectTemplate::New(m_isolate);
-    rawComponentTemplate->SetInternalFieldCount(1);
+    v8::Local<v8::FunctionTemplate> funcTemplate = v8::FunctionTemplate::New(m_isolate);
+    v8::Local<v8::Template> prototype = funcTemplate->PrototypeTemplate();
+    prototype->Set(toV8Str("testFunc"), v8::FunctionTemplate::New(m_isolate, Component_testFunc_callback, componentJSPtr));
+    v8::Local<v8::ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
+
+    componentTemplate->SetInternalFieldCount(1);
 
     // Add accessors for each of the fields of the request.
-    rawComponentTemplate->SetAccessor(toV8Str("type", m_isolate), Component_getType);
-    rawComponentTemplate->SetAccessor(toV8Str("initialized", m_isolate), Component_isInitialized);
-    rawComponentTemplate->SetAccessor(toV8Str("active", m_isolate), Component_active, Component_setActive);
-
-    componentTemplate.Reset(m_isolate, rawComponentTemplate);
+    componentTemplate->SetAccessor(toV8Str("type"), Component_getType);
+    componentTemplate->SetAccessor(toV8Str("initialized"), Component_isInitialized);
+    componentTemplate->SetAccessor(toV8Str("active"), Component_active, Component_setActive);
 
     Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
 
     Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
 
-    Local<External> request_ptr = External::New(m_isolate, component);
-
-    result->SetInternalField(0, request_ptr);
+    result->SetInternalField(0, componentJSPtr);
 
     return handle_scope.Escape(result);
 }
@@ -138,7 +113,7 @@ static void log(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
 void V8JSManager::runScript(Local<v8::Context>& context, std::string sourceStr) {
     // Create a string containing the JavaScript source code.
-    v8::Local<v8::String> source = toV8Str(sourceStr, m_isolate);
+    v8::Local<v8::String> source = toV8Str(sourceStr);
 
     { // run
         TryCatch trycatch(m_isolate);
@@ -170,9 +145,9 @@ void V8JSManager::runScript(Local<v8::Context>& context, std::string sourceStr) 
 void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<Local<Value>> args) {
     HandleScope handleScope(m_isolate);
     v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
-    Context::Scope context_scope (context);
+    Context::Scope contextScope (context);
 
-    Local<String> methodeName = toV8Str(name, m_isolate);
+    Local<String> methodeName = toV8Str(name);
     Local<Value> updateVal;
     auto detected = jsObject->Get(context, methodeName).ToLocal(&updateVal);
     if (!detected || !updateVal->IsFunction()) {
@@ -195,7 +170,7 @@ void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vect
 MaybeLocal<Value> V8JSManager::callFunction(Local<v8::Context>& context, std::string name, std::vector<Local<Value>> args) {
     // The script compiled and ran correctly.  Now we fetch out the
     // Process function from the global object.
-    Local<String> updateName = toV8Str(name, m_isolate);
+    Local<String> updateName = toV8Str(name);
     Local<Value> updateVal;
     auto detected = context->Global()->Get(context, updateName).ToLocal(&updateVal);
     if (!detected || !updateVal->IsFunction()) {
@@ -221,10 +196,11 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string script, SafePtr
     HandleScope handleScope(m_isolate);
 
     v8::Local <v8::Context> context = v8::Local <v8::Context>::New (m_isolate, m_context);
-    Context::Scope context_scope (context);
+    Context::Scope contextScope (context);
 
     runScript(context, script);
     auto wrapped = wrapComponent(component->shared_from_this().get());
+
     auto jsObject = callFunction(context, "constructJsObject", {wrapped});
     if (jsObject.IsEmpty()) {
         LOGE("Result is empty");
@@ -250,7 +226,7 @@ void V8JSManager::init() {
         HandleScope handleScope(m_isolate);
 
         Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
-        global->Set(toV8Str("log", m_isolate), FunctionTemplate::New(m_isolate, log));
+        global->Set(toV8Str("log"), FunctionTemplate::New(m_isolate, log));
 
         auto context = v8::Context::New(m_isolate, nullptr, global);
 
@@ -258,7 +234,7 @@ void V8JSManager::init() {
         m_context = UniquePersistent<Context>(m_isolate, context);
 
         // Enter the context for compiling and running the hello world script.
-        v8::Context::Scope context_scope(context);
+        v8::Context::Scope contextScope(context);
 
     }
 
