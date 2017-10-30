@@ -10,6 +10,7 @@
 #include <Entity.h>
 #include <ComponentBase.h>
 #include <JSComponent.h>
+#include <TransformComponent.h>
 
 namespace flappy {
 
@@ -48,6 +49,50 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
   return static_cast<ObjT*>(ptr);
 }
 
+namespace V8TransformComponent {
+
+    static void setPos(const FunctionCallbackInfo<Value>& info) {
+        Local<External> field = info.Data().As<External>();
+        void* ptr = field->Value();
+        auto objectPtr =  static_cast<TransformComponent*>(ptr);
+        Local<Object> vec3Object = info[0].As<Object>();
+        auto context = Isolate::GetCurrent()->GetCurrentContext();
+        float x = vec3Object->Get(context, toV8Str("x")).ToLocalChecked().As<Number>()->Value();
+        float y = vec3Object->Get(context, toV8Str("y")).ToLocalChecked().As<Number>()->Value();
+        float z = vec3Object->Get(context, toV8Str("z")).ToLocalChecked().As<Number>()->Value();
+        objectPtr->setPos(glm::vec3(x, y, z));
+    }
+
+    Local<Object> wrap(void* ptr) {
+        auto ptrTransformComponent = static_cast<TransformComponent*>(ptr);
+
+        EscapableHandleScope handle_scope(Isolate::GetCurrent());
+        Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());
+        Context::Scope contextScope (context);
+
+        Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);
+
+        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());
+        Local<Template> prototype = funcTemplate->PrototypeTemplate();
+        prototype->Set(toV8Str("setPos"), FunctionTemplate::New(Isolate::GetCurrent(), setPos, jsPtr));
+
+        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
+        componentTemplate->SetInternalFieldCount(1);
+
+        Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);
+
+        Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();
+
+        result->SetInternalField(0, jsPtr);
+
+        return handle_scope.Escape(result);
+    }
+}
+
+std::unordered_map<std::string, std::function<Local<Object>(void*)>> wrapperMap = {
+    { "flappy::TransformComponent]",  V8TransformComponent::wrap}
+};
+
 namespace V8Entity {
 
     static void jsComponent(const FunctionCallbackInfo<Value>& info) {
@@ -63,6 +108,21 @@ namespace V8Entity {
         info.GetReturnValue().Set(component->jsObject());
     }
 
+    static void component(const FunctionCallbackInfo<Value>& info) {
+        Local<External> field = info.Data().As<External>();
+        void* ptr = field->Value();
+        auto entity =  static_cast<Entity*>(ptr);
+        String::Utf8Value name(info[0]);
+        std::string fullName = std::string("flappy::") + *name + "]";
+        auto component = entity->findComponent<ComponentBase>([&fullName](const ComponentBase& сomponent) {
+            if (сomponent.componentId().name() == fullName)
+                return true;
+            return false;
+        });
+        auto wrapperFunc = wrapperMap[component->componentId().name()];
+        info.GetReturnValue().Set(wrapperFunc(component->shared_from_this().get()));
+    }
+
 }
 
 Local<Object> V8JSManager::wrapEntity(Entity* entity) {
@@ -76,6 +136,7 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
     Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
     Local<Template> prototype = funcTemplate->PrototypeTemplate();
     prototype->Set(toV8Str("jsComponent"), FunctionTemplate::New(m_isolate, V8Entity::jsComponent, jsPtr));
+    prototype->Set(toV8Str("component"), FunctionTemplate::New(m_isolate, V8Entity::component, jsPtr));
 
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
     componentTemplate->SetInternalFieldCount(1);
@@ -261,6 +322,7 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
                                         "       }\n"
                                         "   }\n"
                                         "   %s"
+                                        "   \n"
                                         "   log('constructJsObject start');"
                                         "   let testComponent = new %s();"
                                         "   log('constructJsObject end');"

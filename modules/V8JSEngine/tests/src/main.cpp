@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     auto rootEntity = std::make_shared<Entity>();
     auto childEntity = rootEntity->createEntity();
     rootEntity->createComponent<V8JSManager>();
+    rootEntity->createComponent<TransformComponent>();
     rootEntity->createComponent<JSComponent>(
                 "TestComponent1",
                 "   class TestComponent1 extends Component {\n"
@@ -63,9 +64,12 @@ int main(int argc, char *argv[])
                 "           log('Deinit');"
                 "       }"
                 "       update(dt) {"
-                "           this.entity.jsComponent('TestComponent1').hello();"
+                "           this.entity.jsComponent('TestComponent1').hello();\n"
+                "           let transform = this.entity.component('TransformComponent');\n"
+                "           let newPos = {'x':1,'y':2,'z':3};\n"
+                "           transform.setPos(newPos);\n"
                 "           log(this.entity.jsComponent('TestComponent1').name);\n"
-                "      }"
+                "       }"
                 "   }"
                 );
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));

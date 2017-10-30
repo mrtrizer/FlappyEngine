@@ -14,7 +14,7 @@ using namespace std;
 namespace Tools {
 
 std::string format(const char* format, ...) {
-    std::string outputBuff(1000, ' ');
+    std::string outputBuff(5000, ' ');
     va_list arglist;
     va_start(arglist, format);
     int length = std::vsnprintf(&outputBuff.front(), outputBuff.size(), format, arglist );
