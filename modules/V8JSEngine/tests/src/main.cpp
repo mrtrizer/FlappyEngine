@@ -72,7 +72,11 @@ int main(int argc, char *argv[])
                 "       }"
                 "   }"
                 );
+    auto pos = rootEntity->component<TransformComponent>()->pos();
+    LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    pos = rootEntity->component<TransformComponent>()->pos();
+    LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
     rootEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
     rootEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
 }

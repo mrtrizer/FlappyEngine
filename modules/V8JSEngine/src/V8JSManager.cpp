@@ -323,10 +323,7 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
                                         "   }\n"
                                         "   %s"
                                         "   \n"
-                                        "   log('constructJsObject start');"
                                         "   let testComponent = new %s();"
-                                        "   log('constructJsObject end');"
-                                        "   testComponent.update(100);"
                                         "   return testComponent;"
                                         "}", script.c_str(), name.c_str());
 
