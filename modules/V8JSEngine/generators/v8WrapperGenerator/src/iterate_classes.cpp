@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <unistd.h>
 #include <sstream>
+#include <unordered_set>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -50,8 +51,8 @@ std::string generateWrapperHeader(std::string className) {
 
 }
 
-std::string generateWrapperCpp(std::string className) {
-    std::vector<char> output(5000);
+std::string generateWrapperCpp(std::string className, std::string methodBodies, std::string methodRefs) {
+    std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
             "#include <V8JSManager.h>\n"
             "#include <%s.h>\n"
@@ -61,7 +62,9 @@ std::string generateWrapperCpp(std::string className) {
             "using namespace v8;\n"
 
             "namespace V8%s {\n"
-
+            "\n"
+            "%s"
+            "\n"
             "    Local<Object> wrap(void* ptr) {\n"
             "        auto castedPtr = static_cast<%s*>(ptr);\n"
 
@@ -73,7 +76,8 @@ std::string generateWrapperCpp(std::string className) {
 
             "        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
             "        Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
-
+            "%s"
+            "\n"
             "        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
             "        componentTemplate->SetInternalFieldCount(1);\n"
 
@@ -91,8 +95,25 @@ std::string generateWrapperCpp(std::string className) {
             "} // flappy \n",
             className.c_str(),
             className.c_str(),
+            methodBodies.c_str(),
             className.c_str(),
+            methodRefs.c_str(),
             className.c_str());
+    return std::string(output.data());
+}
+
+std::string generateMethodBody(std::string name, std::string type) {
+    std::vector<char> output(10000);
+    snprintf(output.data(), output.size(),
+            "\n"
+            "static void %s(const FunctionCallbackInfo<Value>& info) {\n"
+            "    Local<External> field = info.Data().As<External>();\n"
+            "    void* ptr = field->Value();\n"
+            "    auto objectPtr =  static_cast<%s*>(ptr);\n"
+            "}\n"
+            "\n",
+            name.c_str(),
+            type.c_str());
     return std::string(output.data());
 }
 
@@ -110,12 +131,9 @@ public :
     }
 
     virtual void run(const MatchFinder::MatchResult &Result) {
+
         if (const CXXRecordDecl *md = Result.Nodes.getNodeAs<clang::CXXRecordDecl>("classes")) {
             auto className = md->getNameAsString();
-
-            auto cppFileData = generateWrapperCpp(className);
-            auto cppFileName = std::string("V8") + className + ".cpp";
-            writeTextFile(cppFileName, cppFileData);
 
             auto headerFileData = generateWrapperHeader(className);
             auto headerFileName = std::string("V8") + className + ".h";
@@ -123,9 +141,30 @@ public :
 
             m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = V8" << className << "::wrap;\n";
 
+            std::cout << "class " << className << std::endl;
+
+            std::stringstream methodBodies;
+            std::stringstream methodRefs;
+
+            std::unordered_set<std::string> processedMethods;
+
             for (auto iter = md->method_begin(); iter != md->method_end(); iter++) {
-                // std::cout << "method " << iter->getNameAsString() << std::endl;
+                if (iter->isInstance() && iter->isUserProvided()) {
+                    const auto& methodName = iter->getNameAsString();
+                    if (processedMethods.find(methodName) == processedMethods.end()) {
+                        processedMethods.insert(methodName);
+                        std::cout << "    method " << methodName << std::endl;
+                        methodBodies << generateMethodBody(iter->getNameAsString(), className);
+                        methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
+                        methodRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent()," << methodName;
+                        methodRefs << ", jsPtr));\n";
+                    }
+                }
             }
+
+            auto cppFileData = generateWrapperCpp(className, methodBodies.str(), methodRefs.str());
+            auto cppFileName = std::string("V8") + className + ".cpp";
+            writeTextFile(cppFileName, cppFileData);
         }
     }
 
