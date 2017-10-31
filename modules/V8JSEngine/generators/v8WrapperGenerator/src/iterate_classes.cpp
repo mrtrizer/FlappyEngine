@@ -15,6 +15,7 @@
 #include <thread>
 #include <stdexcept>
 #include <unistd.h>
+#include <sstream>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -102,10 +103,10 @@ public :
     {}
 
     void writeTextFile(std::string name, std::string data) {
-        std::ofstream myfile;
-        myfile.open(m_path + "/" + name);
-        myfile << data;
-        myfile.close();
+        std::ofstream textFile;
+        textFile.open(m_path + "/new_wrappers/" + name);
+        textFile << data;
+        textFile.close();
     }
 
     virtual void run(const MatchFinder::MatchResult &Result) {
@@ -120,14 +121,43 @@ public :
             auto headerFileName = std::string("V8") + className + ".h";
             writeTextFile(headerFileName, headerFileData);
 
+            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = V8" << className << "::wrap;\n";
+
             for (auto iter = md->method_begin(); iter != md->method_end(); iter++) {
                 // std::cout << "method " << iter->getNameAsString() << std::endl;
             }
         }
     }
+
+    std::string initializersStr() {
+        return m_initializerStream.str();
+    }
+
 private:
     std::string m_path;
+    std::stringstream m_initializerStream;
 };
+
+std::string generateInitializerCpp(std::string initializers) {
+    std::vector<char> output(5000);
+    snprintf(output.data(), output.size(),
+
+            "#include \"WrapperInitializer.h\"\n"
+
+            "#include <V8JSManager.h>\n"
+
+            "#include \"new_wrappers/V8TransformComponent.h\"\n"
+
+            "namespace flappy {\n"
+
+            "void initV8Wrappers() {\n"
+                "%s"
+            "}\n"
+
+            "} // flappy\n"
+             ,initializers.c_str());
+    return std::string(output.data());
+}
 
 // CommonOptionsParser declares HelpMessage with a description of the common
 // command-line options related to the compilation database and input files.
@@ -155,5 +185,12 @@ int main(int argc, const char **argv) {
     MatchFinder finder;
     finder.addMatcher(methodMatcher, &printer);
 
-    return tool.run(newFrontendActionFactory(&finder).get());
+    auto result = tool.run(newFrontendActionFactory(&finder).get());
+
+    std::ofstream wrapperInitializerFile;
+    wrapperInitializerFile.open(outputPath.getValue() + "/WrapperInitializer.cpp");
+    wrapperInitializerFile << generateInitializerCpp(printer.initializersStr());
+    wrapperInitializerFile.close();
+
+    return result;
 }
