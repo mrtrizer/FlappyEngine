@@ -17,12 +17,15 @@
 #include <AtlasResFactory.h>
 #include <V8JSManager.h>
 #include <JSComponent.h>
+#include <WrapperInitializer.h>
 
 using namespace flappy;
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+    initV8Wrappers();
+
     auto rootEntity = std::make_shared<Entity>();
     auto childEntity = rootEntity->createEntity();
     rootEntity->createComponent<V8JSManager>();

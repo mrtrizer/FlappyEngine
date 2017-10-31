@@ -10,10 +10,12 @@
     ],
     "cxx":{
         "header_dirs": [
-            "./src"
+            "./src",
+            "./flappy_cache/V8JSEngine"
         ],
         "src_dirs": [
-            "./src"
+            "./src",
+            "./flappy_cache/V8JSEngine"
         ]
     }
 }

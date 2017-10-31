@@ -22,8 +22,7 @@ V8JSManager::V8JSManager()
     subscribe([this](DeinitEvent) { deinit(); });
 }
 
-// TODO: Remove isolate param
-static Local<String> toV8Str(std::string stdStr) {
+Local<String> toV8Str(std::string stdStr) {
     auto str = String::NewFromUtf8(
                 Isolate::GetCurrent(),
                 stdStr.c_str(),
@@ -49,49 +48,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
   return static_cast<ObjT*>(ptr);
 }
 
-namespace V8TransformComponent {
-
-    static void setPos(const FunctionCallbackInfo<Value>& info) {
-        Local<External> field = info.Data().As<External>();
-        void* ptr = field->Value();
-        auto objectPtr =  static_cast<TransformComponent*>(ptr);
-        Local<Object> vec3Object = info[0].As<Object>();
-        auto context = Isolate::GetCurrent()->GetCurrentContext();
-        float x = vec3Object->Get(context, toV8Str("x")).ToLocalChecked().As<Number>()->Value();
-        float y = vec3Object->Get(context, toV8Str("y")).ToLocalChecked().As<Number>()->Value();
-        float z = vec3Object->Get(context, toV8Str("z")).ToLocalChecked().As<Number>()->Value();
-        objectPtr->setPos(glm::vec3(x, y, z));
-    }
-
-    Local<Object> wrap(void* ptr) {
-        auto ptrTransformComponent = static_cast<TransformComponent*>(ptr);
-
-        EscapableHandleScope handle_scope(Isolate::GetCurrent());
-        Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());
-        Context::Scope contextScope (context);
-
-        Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);
-
-        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());
-        Local<Template> prototype = funcTemplate->PrototypeTemplate();
-        prototype->Set(toV8Str("setPos"), FunctionTemplate::New(Isolate::GetCurrent(), setPos, jsPtr));
-
-        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
-        componentTemplate->SetInternalFieldCount(1);
-
-        Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);
-
-        Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();
-
-        result->SetInternalField(0, jsPtr);
-
-        return handle_scope.Escape(result);
-    }
-}
-
-std::unordered_map<std::string, std::function<Local<Object>(void*)>> wrapperMap = {
-    { "flappy::TransformComponent]",  V8TransformComponent::wrap}
-};
+std::unordered_map<std::string, std::function<Local<Object>(void*)>> wrapperMap;
 
 namespace V8Entity {
 
