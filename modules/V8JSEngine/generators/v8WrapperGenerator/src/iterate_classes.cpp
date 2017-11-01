@@ -102,7 +102,68 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
     return std::string(output.data());
 }
 
-std::string generateMethodBody(std::string name, std::string type) {
+std::string generateGlmVec3ArgWrapper(int argIndex) {
+    std::vector<char> output(2000);
+    snprintf(output.data(), output.size(),
+            "    Local<Object> vec3Object = info[%d].As<Object>();\n"
+            "    auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
+            "    float x = vec3Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
+            "    float y = vec3Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
+            "    float z = vec3Object->Get(context, toV8Str(\"z\")).ToLocalChecked().As<Number>()->Value();\n"
+            "    auto arg%d = glm::vec3(x, y, z);\n",
+             argIndex,
+             argIndex);
+    return std::string(output.data());
+}
+
+std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
+    std::string name = methodDecl->getNameAsString();
+
+    //methodDecl->dump();
+
+    int generatedParams = 0;
+    int requiredParams = methodDecl->param_size();
+
+    std::stringstream argWrappers;
+    std::stringstream argRefs;
+    {
+        int index = 0;
+        for (auto paramIter = methodDecl->param_begin(); paramIter != methodDecl->param_end(); paramIter++) {
+            //(*paramIter)->dump();
+            std::cout << (*paramIter)->getNameAsString() << " : ";
+            auto qualType = (*paramIter)->getType().getNonReferenceType().getAtomicUnqualifiedType();
+            auto typeName = qualType.getAsString();
+            std::cout << typeName << std::endl;
+            if (typeName == "glm::vec3") {
+                argWrappers << generateGlmVec3ArgWrapper(index);
+                std::string comma = (index == 0? "" : ",") ;
+                argRefs << comma << "arg" << index;
+                generatedParams++;
+            }
+            index++;
+        }
+    }
+
+    if (generatedParams == requiredParams) {
+        std::vector<char> output(10000);
+        snprintf(output.data(), output.size(),
+                "%s"
+                "\n"
+                "    objectPtr->%s(%s);\n",
+                argWrappers.str().c_str(),
+                name.c_str(),
+                argRefs.str().c_str());
+        return std::string(output.data());
+    } else {
+        return "    LOGE(\"Wrapper for this method is not implemented\");";
+    }
+}
+
+std::string generateMethodBody(const CXXMethodDecl* methodDecl, std::string type) {
+    std::string name = methodDecl->getNameAsString();
+
+    auto methodCallBlock = generateMethodCall(methodDecl, type);
+
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
             "\n"
@@ -110,10 +171,13 @@ std::string generateMethodBody(std::string name, std::string type) {
             "    Local<External> field = info.Data().As<External>();\n"
             "    void* ptr = field->Value();\n"
             "    auto objectPtr =  static_cast<%s*>(ptr);\n"
+            "\n"
+            "%s"
             "}\n"
             "\n",
             name.c_str(),
-            type.c_str());
+            type.c_str(),
+            methodCallBlock.c_str());
     return std::string(output.data());
 }
 
@@ -154,7 +218,7 @@ public :
                     if (processedMethods.find(methodName) == processedMethods.end()) {
                         processedMethods.insert(methodName);
                         std::cout << "    method " << methodName << std::endl;
-                        methodBodies << generateMethodBody(iter->getNameAsString(), className);
+                        methodBodies << generateMethodBody(*iter, className);
                         methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
                         methodRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent()," << methodName;
                         methodRefs << ", jsPtr));\n";
@@ -217,6 +281,17 @@ int main(int argc, const char **argv) {
         std::cout << "Set output dirrectory with --output parameter" << std::endl;
         return 1;
     }
+
+    std::cout << "CDB: " << optionsParser.getCompilations().getAllCompileCommands().size() << std::endl;
+    auto commands = optionsParser.getCompilations().getCompileCommands(
+                StringRef("/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src/TransformComponent.cpp"));
+    std::cout << "CommandN: " << commands.size() << std::endl;
+    std::cout << "Command0: ";
+    for (auto command : commands[0].CommandLine) {
+        std::cout << command << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "File: " << optionsParser.getSourcePathList()[0] << std::endl;
 
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
