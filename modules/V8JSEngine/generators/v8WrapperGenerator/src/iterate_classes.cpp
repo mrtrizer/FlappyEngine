@@ -104,20 +104,63 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
 
 std::string generateFloatReturn() {
     return std::string(
-                "    Local<Number> jsNumber = Number::New(Isolate::GetCurrent(), result);\n"
-                "    info.GetReturnValue().Set(jsNumber);\n"
-                );
+        "    Local<Number> jsNumber = Number::New(Isolate::GetCurrent(), result);\n"
+        "    info.GetReturnValue().Set(jsNumber);\n"
+        );
+}
+
+std::string generateVec3Return() {
+    return std::string(
+        "    Local<Object> vec3Obj = Object::New(Isolate::GetCurrent());\n"
+        "    auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
+        "    (void)vec3Obj->Set(context, toV8Str(\"x\"), Number::New(Isolate::GetCurrent(), result.x));\n"
+        "    (void)vec3Obj->Set(context, toV8Str(\"y\"), Number::New(Isolate::GetCurrent(), result.y));\n"
+        "    (void)vec3Obj->Set(context, toV8Str(\"z\"), Number::New(Isolate::GetCurrent(), result.z));\n"
+        "    info.GetReturnValue().Set(vec3Obj);\n"
+        );
+}
+
+std::string generateStringReturn() {
+    return std::string(
+        "    Local<String> resultStr = String::NewFromUtf8(Isolate::GetCurrent(), result.c_str());\n"
+        "    info.GetReturnValue().Set(resultStr);\n"
+        );
+}
+
+std::string generateResultWrapper(std::string typeName) {
+    if (typeName == "float")
+        return generateFloatReturn();
+    if (typeName == "glm::vec3")
+        return generateVec3Return();
+    return "";
 }
 
 std::string generateGlmVec3ArgWrapper(int argIndex) {
     std::vector<char> output(2000);
     snprintf(output.data(), output.size(),
-            "    Local<Object> vec3Object = info[%d].As<Object>();\n"
-            "    auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
-            "    float x = vec3Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
-            "    float y = vec3Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
-            "    float z = vec3Object->Get(context, toV8Str(\"z\")).ToLocalChecked().As<Number>()->Value();\n"
-            "    auto arg%d = glm::vec3(x, y, z);\n",
+            "    auto arg%d = [&](){\n"
+            "        Local<Object> vec3Object = info[%d].As<Object>();\n"
+            "        auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
+            "        float x = vec3Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
+            "        float y = vec3Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
+            "        float z = vec3Object->Get(context, toV8Str(\"z\")).ToLocalChecked().As<Number>()->Value();\n"
+            "        return glm::vec3(x, y, z);\n"
+            "    }();\n",
+             argIndex,
+             argIndex);
+    return std::string(output.data());
+}
+
+std::string generateGlmVec2ArgWrapper(int argIndex) {
+    std::vector<char> output(2000);
+    snprintf(output.data(), output.size(),
+            "    auto arg%d = [&](){\n"
+            "        Local<Object> vec2Object = info[%d].As<Object>();\n"
+            "        auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
+            "        float x = vec2Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
+            "        float y = vec2Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
+            "        return glm::vec2(x, y);\n"
+            "    }();\n",
              argIndex,
              argIndex);
     return std::string(output.data());
@@ -126,8 +169,7 @@ std::string generateGlmVec3ArgWrapper(int argIndex) {
 std::string generateFloatArgWrapper(int argIndex) {
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    Local<Number> jsNumber = info[%d].As<Number>();\n"
-            "    auto arg%d = float(jsNumber->Value());\n",
+            "    auto arg%d = float(info[%d].As<Number>()->Value());\n",
              argIndex,
              argIndex);
     return std::string(output.data());
@@ -136,17 +178,19 @@ std::string generateFloatArgWrapper(int argIndex) {
 std::string generateIntArgWrapper(int argIndex) {
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    Local<Number> jsNumber = info[%d].As<Number>();\n"
-            "    auto arg%d = int(jsNumber->Value());\n",
+            "    auto arg%d = int(info[%d].As<Number>()->Value());\n",
              argIndex,
              argIndex);
     return std::string(output.data());
 }
 
-std::string generateResultWrapper(std::string typeName) {
-    if (typeName == "float")
-        return generateFloatReturn();
-    return "";
+std::string generateStringArgWrapper(int argIndex) {
+    std::vector<char> output(1000);
+    snprintf(output.data(), output.size(),
+            "    auto arg%d = std::string(*jsStr(info[0]));\n",
+             argIndex,
+             argIndex);
+    return std::string(output.data());
 }
 
 std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
@@ -168,12 +212,20 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
                 argWrappers << generateGlmVec3ArgWrapper(index);
                 generatedParams++;
             }
+            if (typeName == "glm::vec2") {
+                argWrappers << generateGlmVec3ArgWrapper(index);
+                generatedParams++;
+            }
             if (typeName == "float") {
                 argWrappers << generateFloatArgWrapper(index);
                 generatedParams++;
             }
             if (typeName == "int") {
                 argWrappers << generateIntArgWrapper(index);
+                generatedParams++;
+            }
+            if (typeName == "std::string") {
+                argWrappers << generateStringArgWrapper(index);
                 generatedParams++;
             }
             std::string comma = (index == 0? "" : ",") ;

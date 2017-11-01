@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
                 "           let transform = this.entity.component('TransformComponent');\n"
                 "           let newPos = {'x':1,'y':2,'z':3};\n"
                 "           transform.setPos(newPos);\n"
+                "           log(transform.pos().z);\n"
                 "           log(this.entity.jsComponent('TestComponent1').name);\n"
                 "           this.entity.component('TransformComponent').setAngle2DRad(1.5);\n"
                 "           log(\"Angle: \" + this.entity.component('TransformComponent').angle2DRad());\n"
