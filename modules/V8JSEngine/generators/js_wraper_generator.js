@@ -2,11 +2,43 @@
 
 module.exports.type = "js_wrapper";
 
+function isComponentCpp(fileName) {
+    return (fileName.indexOf(".cpp") != -1)
+            && ((fileName.indexOf("Component") != -1)
+            || (fileName.indexOf("Manager") != -1));
+}
+
+function getSourceList(context) {
+    const utils = context.require("./utils");
+    const modules = context.require("./modules");
+    const path = require('path');
+
+    let sourceList = [];
+
+    const moduleContexts = modules.findAllModules(context);
+    for (const i in moduleContexts) {
+        const moduleContext = moduleContexts[i];
+        //console.log(JSON.stringify(moduleContext));
+        const srcDir = path.join(moduleContext.projectRoot, "src");
+        const files = utils.readDirs(srcDir);
+        for (const i in files) {
+            const filePath = files[i];
+            const fileName = path.parse(filePath).base;
+            if (isComponentCpp(fileName)) {
+                console.log(filePath);
+                sourceList.push(filePath);
+            }
+        }
+    }
+    return sourceList.join(" ");
+}
+
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
-    const utils = context.require("./utils");
+
+    const sourceList = getSourceList(context);
 
     function call(command, cwd) {
         const childProcess = require("child_process");
@@ -17,7 +49,6 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     // Make automatic searching of DCMAKE_PREFIX_PATH
     // Search -extra-arg automatically too
     // Run flappy gen cmake and CMake before wrapper generation
-    // Scan all modules for files with Component and Manager postfix
     fse.mkdirsSync(buildDir);
     const outputDir = path.join(context.projectRoot, "flappy_cache/V8JSEngine");
     fse.mkdirsSync(path.join(outputDir, "wrappers"));
@@ -28,7 +59,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     + ' -extra-arg "-I/usr/local/Cellar/llvm/5.0.0/lib/clang/5.0.0/include"'
     + ' -p "' + context.targetOutDir + '"'
     + ' --output \"' + outputDir + '\"'
-    + ' ' + path.join(context.projectRoot, '../../CoreComponents/src/TransformComponent.cpp')
+    + ' ' + sourceList
     , buildDir);
 
     return [];

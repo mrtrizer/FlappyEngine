@@ -166,7 +166,7 @@ std::string generateIntArgWrapper(int argIndex) {
 std::string generateStringArgWrapper(int argIndex) {
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    auto arg%d = std::string(*jsStr(info[0]));\n",
+            "    auto arg%d = std::string(*String::Utf8Value(info[0]));\n",
              argIndex);
     return std::string(output.data());
 }
@@ -191,7 +191,7 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
                 generatedParams++;
             }
             if (typeName == "glm::vec2") {
-                argWrappers << generateGlmVec3ArgWrapper(index);
+                argWrappers << generateGlmVec2ArgWrapper(index);
                 generatedParams++;
             }
             if (typeName == "float") {
@@ -246,7 +246,7 @@ std::string generateMethodBody(const CXXMethodDecl* methodDecl, std::string type
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
             "\n"
-            "static void %s(const FunctionCallbackInfo<Value>& info) {\n"
+            "static void method_%s(const FunctionCallbackInfo<Value>& info) {\n"
             "    Local<External> field = info.Data().As<External>();\n"
             "    void* ptr = field->Value();\n"
             "    auto objectPtr =  static_cast<%s*>(ptr);\n"
@@ -276,14 +276,19 @@ public :
     virtual void run(const MatchFinder::MatchResult &Result) {
         if (const CXXRecordDecl *md = Result.Nodes.getNodeAs<clang::CXXRecordDecl>("classes")) {
             auto className = md->getNameAsString();
-            if (className == "Component")
+            if ((className == "Component") || (className== "Manager") || (className == "JSComponent"))
                 return;
+            if (m_wrappedClasses.find(className) != m_wrappedClasses.end())
+                return;
+
+            m_wrappedClasses.insert(className);
 
             auto headerFileData = generateWrapperHeader(className);
             auto headerFileName = std::string("V8") + className + ".h";
             writeTextFile(headerFileName, headerFileData);
 
             m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = V8" << className << "::wrap;\n";
+            m_initializerHeadersStream << "#include \"wrappers/V8" << className << ".h\"\n";
 
             std::cout << "class " << className << std::endl;
 
@@ -293,14 +298,15 @@ public :
             std::unordered_set<std::string> processedMethods;
 
             for (auto iter = md->method_begin(); iter != md->method_end(); iter++) {
-                if (iter->isInstance() && iter->isUserProvided()) {
+                if (iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) {
                     const auto& methodName = iter->getNameAsString();
-                    if (processedMethods.find(methodName) == processedMethods.end()) {
+                    if ((methodName != className)
+                        && (processedMethods.find(methodName) == processedMethods.end())) {
                         processedMethods.insert(methodName);
                         std::cout << "    method " << methodName << std::endl;
                         methodBodies << generateMethodBody(*iter, className);
                         methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
-                        methodRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent()," << methodName;
+                        methodRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent(), method_" << methodName;
                         methodRefs << ", jsPtr));\n";
                     }
                 }
@@ -316,23 +322,30 @@ public :
         return m_initializerStream.str();
     }
 
+    std::string initializerHeadersStream() {
+        return m_initializerHeadersStream.str();
+    }
+
 private:
     std::string m_path;
     std::stringstream m_initializerStream;
+    std::stringstream m_initializerHeadersStream;
+    std::unordered_set<std::string> m_wrappedClasses;
 };
 
-std::string generateInitializerCpp(std::string initializers) {
+std::string generateInitializerCpp(const std::string& initializers, const std::string& initializerHeadersStream) {
     std::vector<char> output(5000);
     snprintf(output.data(), output.size(),
 
             "#include \"WrapperInitializer.h\"\n"
             "#include <V8JSManager.h>\n"
-            "#include \"wrappers/V8TransformComponent.h\"\n"
+            "%s\n"
             "namespace flappy {\n"
             "void initV8Wrappers() {\n"
                 "%s"
             "}\n"
             "} // flappy\n"
+             ,initializerHeadersStream.c_str()
              ,initializers.c_str());
     return std::string(output.data());
 }
@@ -368,7 +381,7 @@ int main(int argc, const char **argv) {
 
     std::ofstream wrapperInitializerCpp;
     wrapperInitializerCpp.open(outputPath.getValue() + "/WrapperInitializer.cpp");
-    wrapperInitializerCpp << generateInitializerCpp(printer.initializersStr());
+    wrapperInitializerCpp << generateInitializerCpp(printer.initializersStr(), printer.initializerHeadersStream());
     wrapperInitializerCpp.close();
 
     std::ofstream wrapperInitializerHeader;
