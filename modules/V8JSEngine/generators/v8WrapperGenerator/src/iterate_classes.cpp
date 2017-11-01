@@ -1,9 +1,7 @@
-// Declares clang::SyntaxOnlyAction.
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Tooling.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
-// Declares llvm::cl::extrahelp.
 #include "llvm/Support/CommandLine.h"
 
 #include "clang/ASTMatchers/ASTMatchers.h"
@@ -23,26 +21,19 @@ using namespace clang::ast_matchers;
 using namespace clang::tooling;
 using namespace llvm;
 
-auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), hasName("TransformComponent")).bind("classes");
+auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
 
 std::string generateWrapperHeader(std::string className) {
 
     std::vector<char> output(5000);
     snprintf(output.data(), output.size(),
             "#pragma once\n"
-
             "#include <v8.h>\n"
-
             "namespace flappy {\n"
-
             "namespace V8%s {\n"
-
             "    void setPos(const v8::FunctionCallbackInfo<v8::Value>& info);\n"
-
             "    v8::Local<v8::Object> wrap(void* ptr);\n"
-
             "} // V8%s\n"
-
             "} // flappy\n",
 
              className.c_str(),
@@ -56,42 +47,30 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
     snprintf(output.data(), output.size(),
             "#include <V8JSManager.h>\n"
             "#include <%s.h>\n"
-
             "namespace flappy {\n"
-
             "using namespace v8;\n"
-
             "namespace V8%s {\n"
             "\n"
             "%s"
             "\n"
             "Local<Object> wrap(void* ptr) {\n"
             "    auto castedPtr = static_cast<%s*>(ptr);\n"
-
             "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
             "    Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
             "    Context::Scope contextScope (context);\n"
-
             "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), castedPtr);\n"
-
             "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
             "    Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
             "%s"
             "\n"
             "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
             "    componentTemplate->SetInternalFieldCount(1);\n"
-
             "    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
-
             "    Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();\n"
-
             "    result->SetInternalField(0, jsPtr);\n"
-
             "    return handle_scope.Escape(result);\n"
             "}\n"
-
             "} // V8%s \n"
-
             "} // flappy \n",
             className.c_str(),
             className.c_str(),
@@ -188,7 +167,6 @@ std::string generateStringArgWrapper(int argIndex) {
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
             "    auto arg%d = std::string(*jsStr(info[0]));\n",
-             argIndex,
              argIndex);
     return std::string(output.data());
 }
@@ -296,9 +274,10 @@ public :
     }
 
     virtual void run(const MatchFinder::MatchResult &Result) {
-
         if (const CXXRecordDecl *md = Result.Nodes.getNodeAs<clang::CXXRecordDecl>("classes")) {
             auto className = md->getNameAsString();
+            if (className == "Component")
+                return;
 
             auto headerFileData = generateWrapperHeader(className);
             auto headerFileName = std::string("V8") + className + ".h";
@@ -347,17 +326,12 @@ std::string generateInitializerCpp(std::string initializers) {
     snprintf(output.data(), output.size(),
 
             "#include \"WrapperInitializer.h\"\n"
-
             "#include <V8JSManager.h>\n"
-
             "#include \"wrappers/V8TransformComponent.h\"\n"
-
             "namespace flappy {\n"
-
             "void initV8Wrappers() {\n"
                 "%s"
             "}\n"
-
             "} // flappy\n"
              ,initializers.c_str());
     return std::string(output.data());
@@ -371,16 +345,9 @@ std::string generateInitializerHeader() {
             "} // flappy\n");
 }
 
-// CommonOptionsParser declares HelpMessage with a description of the common
-// command-line options related to the compilation database and input files.
-// It's nice to have this help message in all tools.
 static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
-
-// A help message for this specific tool can be added afterwards.
 static cl::extrahelp MoreHelp("\nMore help text...");
-
 static cl::OptionCategory v8JSGeneratorOptions("My tool options");
-
 static cl::opt<std::string> outputPath("output", cl::cat(v8JSGeneratorOptions));
 
 int main(int argc, const char **argv) {
@@ -390,17 +357,6 @@ int main(int argc, const char **argv) {
         std::cout << "Set output dirrectory with --output parameter" << std::endl;
         return 1;
     }
-
-    std::cout << "CDB: " << optionsParser.getCompilations().getAllCompileCommands().size() << std::endl;
-    auto commands = optionsParser.getCompilations().getCompileCommands(
-                StringRef("/Users/deniszdorovtsov/Projects/FlappyEngine/modules/CoreComponents/src/TransformComponent.cpp"));
-    std::cout << "CommandN: " << commands.size() << std::endl;
-    std::cout << "Command0: ";
-    for (auto command : commands[0].CommandLine) {
-        std::cout << command << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "File: " << optionsParser.getSourcePathList()[0] << std::endl;
 
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
