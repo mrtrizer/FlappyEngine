@@ -116,10 +116,28 @@ std::string generateGlmVec3ArgWrapper(int argIndex) {
     return std::string(output.data());
 }
 
+std::string generateFloatArgWrapper(int argIndex) {
+    std::vector<char> output(1000);
+    snprintf(output.data(), output.size(),
+            "    Local<Number> jsNumber = info[%d].As<Number>();\n"
+            "    auto arg%d = float(jsNumber->Value());\n",
+             argIndex,
+             argIndex);
+    return std::string(output.data());
+}
+
+std::string generateIntArgWrapper(int argIndex) {
+    std::vector<char> output(1000);
+    snprintf(output.data(), output.size(),
+            "    Local<Number> jsNumber = info[%d].As<Number>();\n"
+            "    auto arg%d = int(jsNumber->Value());\n",
+             argIndex,
+             argIndex);
+    return std::string(output.data());
+}
+
 std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
     std::string name = methodDecl->getNameAsString();
-
-    //methodDecl->dump();
 
     int generatedParams = 0;
     int requiredParams = methodDecl->param_size();
@@ -136,10 +154,18 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
             std::cout << typeName << std::endl;
             if (typeName == "glm::vec3") {
                 argWrappers << generateGlmVec3ArgWrapper(index);
-                std::string comma = (index == 0? "" : ",") ;
-                argRefs << comma << "arg" << index;
                 generatedParams++;
             }
+            if (typeName == "float") {
+                argWrappers << generateFloatArgWrapper(index);
+                generatedParams++;
+            }
+            if (typeName == "int") {
+                argWrappers << generateIntArgWrapper(index);
+                generatedParams++;
+            }
+            std::string comma = (index == 0? "" : ",") ;
+            argRefs << comma << "arg" << index;
             index++;
         }
     }

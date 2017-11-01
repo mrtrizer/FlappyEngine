@@ -10,7 +10,6 @@
 #include <Entity.h>
 #include <ComponentBase.h>
 #include <JSComponent.h>
-#include <TransformComponent.h>
 
 namespace flappy {
 
