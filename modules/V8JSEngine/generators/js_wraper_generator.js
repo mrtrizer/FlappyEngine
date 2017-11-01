@@ -23,7 +23,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     fse.mkdirsSync(path.join(outputDir, "wrappers"));
     call("cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"/usr/local/Cellar/llvm/5.0.0/lib/cmake/llvm\" ..", buildDir);
     call("ninja", buildDir);
-    call("./example "
+    call("./js_wrapper_generator "
     + ' -extra-arg "-I/usr/local/Cellar/llvm/5.0.0/include/c++/v1/"'
     + ' -extra-arg "-I/usr/local/Cellar/llvm/5.0.0/lib/clang/5.0.0/include"'
     + ' -p "' + context.targetOutDir + '"'

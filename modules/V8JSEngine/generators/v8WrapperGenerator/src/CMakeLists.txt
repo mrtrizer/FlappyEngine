@@ -7,7 +7,7 @@ set(CMAKE_SUPPRESS_REGENERATION TRUE)
 #   setting Project informations
 ############################################################
 
-set(PROJECT_NAME example)
+set(PROJECT_NAME js_wrapper_generator)
 
 set(LIBRARY_LIST clangFrontend  clangSerialization clangDriver clangParse clangRewriteFrontend clangStaticAnalyzerFrontend clangSema)
 set(LIBRARY_LIST ${LIBRARY_LIST} clangAnalysis clangEdit clangAST clangLex clangBasic clangTooling clangASTMatchers)
