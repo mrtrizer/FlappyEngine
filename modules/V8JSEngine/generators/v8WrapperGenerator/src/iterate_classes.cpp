@@ -65,30 +65,30 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "\n"
             "%s"
             "\n"
-            "    Local<Object> wrap(void* ptr) {\n"
-            "        auto castedPtr = static_cast<%s*>(ptr);\n"
+            "Local<Object> wrap(void* ptr) {\n"
+            "    auto castedPtr = static_cast<%s*>(ptr);\n"
 
-            "        EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
-            "        Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
-            "        Context::Scope contextScope (context);\n"
+            "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
+            "    Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
+            "    Context::Scope contextScope (context);\n"
 
-            "        Local<External> jsPtr = External::New(Isolate::GetCurrent(), castedPtr);\n"
+            "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), castedPtr);\n"
 
-            "        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
-            "        Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
+            "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
+            "    Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
             "%s"
             "\n"
-            "        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
-            "        componentTemplate->SetInternalFieldCount(1);\n"
+            "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
+            "    componentTemplate->SetInternalFieldCount(1);\n"
 
-            "        Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
+            "    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
 
-            "        Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();\n"
+            "    Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();\n"
 
-            "        result->SetInternalField(0, jsPtr);\n"
+            "    result->SetInternalField(0, jsPtr);\n"
 
-            "        return handle_scope.Escape(result);\n"
-            "    }\n"
+            "    return handle_scope.Escape(result);\n"
+            "}\n"
 
             "} // V8%s \n"
 
@@ -100,6 +100,13 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             methodRefs.c_str(),
             className.c_str());
     return std::string(output.data());
+}
+
+std::string generateFloatReturn() {
+    return std::string(
+                "    Local<Number> jsNumber = Number::New(Isolate::GetCurrent(), result);\n"
+                "    info.GetReturnValue().Set(jsNumber);\n"
+                );
 }
 
 std::string generateGlmVec3ArgWrapper(int argIndex) {
@@ -136,6 +143,12 @@ std::string generateIntArgWrapper(int argIndex) {
     return std::string(output.data());
 }
 
+std::string generateResultWrapper(std::string typeName) {
+    if (typeName == "float")
+        return generateFloatReturn();
+    return "";
+}
+
 std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
     std::string name = methodDecl->getNameAsString();
 
@@ -147,7 +160,6 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
     {
         int index = 0;
         for (auto paramIter = methodDecl->param_begin(); paramIter != methodDecl->param_end(); paramIter++) {
-            //(*paramIter)->dump();
             std::cout << (*paramIter)->getNameAsString() << " : ";
             auto qualType = (*paramIter)->getType().getNonReferenceType().getAtomicUnqualifiedType();
             auto typeName = qualType.getAsString();
@@ -170,15 +182,26 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
         }
     }
 
+    auto resultQualType = methodDecl->getReturnType().getNonReferenceType().getAtomicUnqualifiedType();
+    auto resultTypeName = resultQualType.getAsString();
+    std::cout << "Return: " << resultTypeName << std::endl;
+    std::string resultCodeBlock;
+    if (resultTypeName != "void") {
+        resultCodeBlock = "auto result = ";
+    }
+
     if (generatedParams == requiredParams) {
         std::vector<char> output(10000);
         snprintf(output.data(), output.size(),
                 "%s"
                 "\n"
-                "    objectPtr->%s(%s);\n",
+                "    %sobjectPtr->%s(%s);\n"
+                "%s\n",
                 argWrappers.str().c_str(),
+                resultCodeBlock.c_str(),
                 name.c_str(),
-                argRefs.str().c_str());
+                argRefs.str().c_str(),
+                generateResultWrapper(resultTypeName).c_str());
         return std::string(output.data());
     } else {
         return "    LOGE(\"Wrapper for this method is not implemented\");";
