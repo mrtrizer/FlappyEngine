@@ -290,7 +290,7 @@ public :
 
     void writeTextFile(std::string name, std::string data) {
         std::ofstream textFile;
-        textFile.open(m_path + "/new_wrappers/" + name);
+        textFile.open(m_path + "/wrappers/" + name);
         textFile << data;
         textFile.close();
     }
@@ -350,7 +350,7 @@ std::string generateInitializerCpp(std::string initializers) {
 
             "#include <V8JSManager.h>\n"
 
-            "#include \"new_wrappers/V8TransformComponent.h\"\n"
+            "#include \"wrappers/V8TransformComponent.h\"\n"
 
             "namespace flappy {\n"
 
@@ -361,6 +361,14 @@ std::string generateInitializerCpp(std::string initializers) {
             "} // flappy\n"
              ,initializers.c_str());
     return std::string(output.data());
+}
+
+std::string generateInitializerHeader() {
+    return std::string(
+            "#pragma once\n"
+            "namespace flappy {\n"
+            "    void initV8Wrappers();\n"
+            "} // flappy\n");
 }
 
 // CommonOptionsParser declares HelpMessage with a description of the common
@@ -402,10 +410,15 @@ int main(int argc, const char **argv) {
 
     auto result = tool.run(newFrontendActionFactory(&finder).get());
 
-    std::ofstream wrapperInitializerFile;
-    wrapperInitializerFile.open(outputPath.getValue() + "/WrapperInitializer.cpp");
-    wrapperInitializerFile << generateInitializerCpp(printer.initializersStr());
-    wrapperInitializerFile.close();
+    std::ofstream wrapperInitializerCpp;
+    wrapperInitializerCpp.open(outputPath.getValue() + "/WrapperInitializer.cpp");
+    wrapperInitializerCpp << generateInitializerCpp(printer.initializersStr());
+    wrapperInitializerCpp.close();
+
+    std::ofstream wrapperInitializerHeader;
+    wrapperInitializerHeader.open(outputPath.getValue() + "/WrapperInitializer.h");
+    wrapperInitializerHeader << generateInitializerHeader();
+    wrapperInitializerHeader.close();
 
     return result;
 }
