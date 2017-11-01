@@ -27,62 +27,24 @@ int main(int argc, char *argv[])
     initV8Wrappers();
 
     auto rootEntity = std::make_shared<Entity>();
-    auto childEntity = rootEntity->createEntity();
+    rootEntity->createComponent<ResRepositoryManager>("./resources");
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
+    rootEntity->createComponent<FileResFactory>();
+    rootEntity->createComponent<ResManager<TextRes>> ();
     rootEntity->createComponent<V8JSManager>();
-    rootEntity->createComponent<TransformComponent>();
-    rootEntity->createComponent<JSComponent>(
-                "TestComponent1",
-                "   class TestComponent1 extends Component {\n"
-                "       constructor() {"
-                "           super();"
-                "           log('Constructor 1');"
-                "           log(this.initialized.toString());"
-                "           this.name = 'Vasia';"
-                "       }"
-                "       init() {"
-                "           log('Init');"
-                "       }"
-                "       deinit() {"
-                "           log('Deinit');"
-                "       }"
-                "       hello() {"
-                "           log('Hello, Im ' + this.name);"
-                "       }"
-                "       update(dt) {"
-                "       }"
-                "   }"
-                );
-    rootEntity->createComponent<JSComponent>(
-                "TestComponent2",
-                "   class TestComponent2 extends Component {\n"
-                "       constructor() {"
-                "           super();"
-                "           log('Constructor 2');"
-                "           log(this.initialized.toString());"
-                "       }"
-                "       init() {"
-                "           log('Init');"
-                "       }"
-                "       deinit() {"
-                "           log('Deinit');"
-                "       }"
-                "       update(dt) {"
-                "           this.entity.jsComponent('TestComponent1').hello();\n"
-                "           let transform = this.entity.component('TransformComponent');\n"
-                "           let newPos = {'x':1,'y':2,'z':3};\n"
-                "           transform.setPos(newPos);\n"
-                "           log(transform.pos().z);\n"
-                "           log(this.entity.jsComponent('TestComponent1').name);\n"
-                "           this.entity.component('TransformComponent').setAngle2DRad(1.5);\n"
-                "           log(\"Angle: \" + this.entity.component('TransformComponent').angle2DRad());\n"
-                "       }"
-                "   }"
-                );
+
+    auto childEntity = rootEntity->createEntity();
+    childEntity->createComponent<TransformComponent>();
+    auto testComponent1Res = rootEntity->manager<ResManager<TextRes>>()->getRes("TestComponent1", ExecType::SYNC);
+    childEntity->createComponent<JSComponent>("TestComponent1", testComponent1Res);
+    auto testComponent2Res = rootEntity->manager<ResManager<TextRes>>()->getRes("TestComponent2", ExecType::SYNC);
+    childEntity->createComponent<JSComponent>("TestComponent2", testComponent2Res);
     auto pos = rootEntity->component<TransformComponent>()->pos();
     LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    pos = rootEntity->component<TransformComponent>()->pos();
+    pos = childEntity->component<TransformComponent>()->pos();
     LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
-    rootEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
-    rootEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
+    childEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
+    childEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
 }

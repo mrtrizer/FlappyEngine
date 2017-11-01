@@ -208,7 +208,7 @@ void V8JSManager::runScript(Local<Context>& context, std::string sourceStr) {
     }
 }
 
-void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<Local<Value>> args) {
+void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<v8::Local<Value> > args) {
     HandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
