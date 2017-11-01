@@ -58,13 +58,14 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     fse.mkdirsSync(path.join(outputDir, "wrappers"));
     call(`cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
     call(`ninja`, buildDir);
-    call(`./js_wrapper_generator `
-    + ` -extra-arg \"-I${clangIncludes1}\"`
-    + ` -extra-arg \"-I${clangIncludes2}\"`
-    + ` -p \"${context.targetOutDir}\"`
-    + ` --output \"${outputDir}\"`
-    + ' ' + sourceList
-    , buildDir);
+    const generateCommand = `./js_wrapper_generator `
+                            + ` -extra-arg \"-I${clangIncludes1}\"`
+                            + ` -extra-arg \"-I${clangIncludes2}\"`
+                            + ` -p \"${context.targetOutDir}\"`
+                            + ` --output \"${outputDir}\"`
+                            + ' ' + sourceList;
+    console.log("Generation command: ", generateCommand);
+    call(generateCommand, buildDir);
 
     return [];
 };

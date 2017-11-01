@@ -23,6 +23,11 @@ using namespace llvm;
 
 auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
 
+static std::unordered_set<std::string> standardTypes = {"int", "float", "_Bool", "std::string", "glm::vec2", "glm::vec3", "glm::quad"};
+static bool isStandard(std::string type) {
+    return (standardTypes.find(type) != standardTypes.end());
+}
+
 std::string generateWrapperHeader(std::string className) {
 
     std::vector<char> output(5000);
@@ -46,6 +51,8 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
             "#include <V8JSManager.h>\n"
+            "#include <V8BasicTypeWrappers.h>\n"
+            "#include <algorithm>\n"
             "#include <%s.h>\n"
             "namespace flappy {\n"
             "using namespace v8;\n"
@@ -81,92 +88,29 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
     return std::string(output.data());
 }
 
-std::string generateFloatReturn() {
-    return std::string(
-        "    Local<Number> jsNumber = Number::New(Isolate::GetCurrent(), result);\n"
-        "    info.GetReturnValue().Set(jsNumber);\n"
-        );
-}
-
-std::string generateVec3Return() {
-    return std::string(
-        "    Local<Object> vec3Obj = Object::New(Isolate::GetCurrent());\n"
-        "    auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
-        "    (void)vec3Obj->Set(context, toV8Str(\"x\"), Number::New(Isolate::GetCurrent(), result.x));\n"
-        "    (void)vec3Obj->Set(context, toV8Str(\"y\"), Number::New(Isolate::GetCurrent(), result.y));\n"
-        "    (void)vec3Obj->Set(context, toV8Str(\"z\"), Number::New(Isolate::GetCurrent(), result.z));\n"
-        "    info.GetReturnValue().Set(vec3Obj);\n"
-        );
-}
-
-std::string generateStringReturn() {
-    return std::string(
-        "    Local<String> resultStr = String::NewFromUtf8(Isolate::GetCurrent(), result.c_str());\n"
-        "    info.GetReturnValue().Set(resultStr);\n"
-        );
+std::string generateStandardReturn(std::string type) {
+    std::replace(type.begin(), type.end(), ':', '_');
+    std::vector<char> output(500);
+    snprintf(output.data(),
+             output.size(),
+             "    info.GetReturnValue().Set(%s_to_v8(result));\n",
+             type.c_str());
+    return std::string(output.data());
 }
 
 std::string generateResultWrapper(std::string typeName) {
-    if (typeName == "float")
-        return generateFloatReturn();
-    if (typeName == "glm::vec3")
-        return generateVec3Return();
+    if (isStandard(typeName))
+        return generateStandardReturn(typeName);
     return "";
 }
 
-std::string generateGlmVec3ArgWrapper(int argIndex) {
-    std::vector<char> output(2000);
-    snprintf(output.data(), output.size(),
-            "    auto arg%d = [&](){\n"
-            "        Local<Object> vec3Object = info[%d].As<Object>();\n"
-            "        auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
-            "        float x = vec3Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
-            "        float y = vec3Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
-            "        float z = vec3Object->Get(context, toV8Str(\"z\")).ToLocalChecked().As<Number>()->Value();\n"
-            "        return glm::vec3(x, y, z);\n"
-            "    }();\n",
-             argIndex,
-             argIndex);
-    return std::string(output.data());
-}
-
-std::string generateGlmVec2ArgWrapper(int argIndex) {
-    std::vector<char> output(2000);
-    snprintf(output.data(), output.size(),
-            "    auto arg%d = [&](){\n"
-            "        Local<Object> vec2Object = info[%d].As<Object>();\n"
-            "        auto context = Isolate::GetCurrent()->GetCurrentContext();\n"
-            "        float x = vec2Object->Get(context, toV8Str(\"x\")).ToLocalChecked().As<Number>()->Value();\n"
-            "        float y = vec2Object->Get(context, toV8Str(\"y\")).ToLocalChecked().As<Number>()->Value();\n"
-            "        return glm::vec2(x, y);\n"
-            "    }();\n",
-             argIndex,
-             argIndex);
-    return std::string(output.data());
-}
-
-std::string generateFloatArgWrapper(int argIndex) {
+std::string generateStandardArgWrapper(std::string type, int argIndex) {
+    std::replace(type.begin(), type.end(), ':', '_');
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    auto arg%d = float(info[%d].As<Number>()->Value());\n",
+            "    auto arg%d = v8_to_%s(info[%d]);\n",
              argIndex,
-             argIndex);
-    return std::string(output.data());
-}
-
-std::string generateIntArgWrapper(int argIndex) {
-    std::vector<char> output(1000);
-    snprintf(output.data(), output.size(),
-            "    auto arg%d = int(info[%d].As<Number>()->Value());\n",
-             argIndex,
-             argIndex);
-    return std::string(output.data());
-}
-
-std::string generateStringArgWrapper(int argIndex) {
-    std::vector<char> output(1000);
-    snprintf(output.data(), output.size(),
-            "    auto arg%d = std::string(*String::Utf8Value(info[0]));\n",
+             type.c_str(),
              argIndex);
     return std::string(output.data());
 }
@@ -186,24 +130,8 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
             auto qualType = (*paramIter)->getType().getNonReferenceType().getAtomicUnqualifiedType();
             auto typeName = qualType.getAsString();
             std::cout << typeName << std::endl;
-            if (typeName == "glm::vec3") {
-                argWrappers << generateGlmVec3ArgWrapper(index);
-                generatedParams++;
-            }
-            if (typeName == "glm::vec2") {
-                argWrappers << generateGlmVec2ArgWrapper(index);
-                generatedParams++;
-            }
-            if (typeName == "float") {
-                argWrappers << generateFloatArgWrapper(index);
-                generatedParams++;
-            }
-            if (typeName == "int") {
-                argWrappers << generateIntArgWrapper(index);
-                generatedParams++;
-            }
-            if (typeName == "std::string") {
-                argWrappers << generateStringArgWrapper(index);
+            if (isStandard(typeName)) {
+                argWrappers << generateStandardArgWrapper(typeName, index);
                 generatedParams++;
             }
             std::string comma = (index == 0? "" : ",") ;
@@ -234,7 +162,7 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
                 generateResultWrapper(resultTypeName).c_str());
         return std::string(output.data());
     } else {
-        return "    LOGE(\"Wrapper for this method is not implemented\");";
+        return "    LOGE(\"Wrapper for this method is not implemented\");\n";
     }
 }
 
@@ -336,7 +264,6 @@ private:
 std::string generateInitializerCpp(const std::string& initializers, const std::string& initializerHeadersStream) {
     std::vector<char> output(5000);
     snprintf(output.data(), output.size(),
-
             "#include \"WrapperInitializer.h\"\n"
             "#include <V8JSManager.h>\n"
             "%s\n"
