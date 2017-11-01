@@ -49,16 +49,20 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     // Make automatic searching of DCMAKE_PREFIX_PATH
     // Search -extra-arg automatically too
     // Run flappy gen cmake and CMake before wrapper generation
+    const llvmDir = "/usr/local/Cellar/llvm/5.0.0/"
+    const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
+    const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
+    const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
     fse.mkdirsSync(buildDir);
     const outputDir = path.join(context.projectRoot, "flappy_cache/V8JSEngine");
     fse.mkdirsSync(path.join(outputDir, "wrappers"));
-    call("cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"/usr/local/Cellar/llvm/5.0.0/lib/cmake/llvm\" ..", buildDir);
-    call("ninja", buildDir);
-    call("./js_wrapper_generator "
-    + ' -extra-arg "-I/usr/local/Cellar/llvm/5.0.0/include/c++/v1/"'
-    + ' -extra-arg "-I/usr/local/Cellar/llvm/5.0.0/lib/clang/5.0.0/include"'
-    + ' -p "' + context.targetOutDir + '"'
-    + ' --output \"' + outputDir + '\"'
+    call(`cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
+    call(`ninja`, buildDir);
+    call(`./js_wrapper_generator `
+    + ` -extra-arg \"-I${clangIncludes1}\"`
+    + ` -extra-arg \"-I${clangIncludes2}\"`
+    + ` -p \"${context.targetOutDir}\"`
+    + ` --output \"${outputDir}\"`
     + ' ' + sourceList
     , buildDir);
 
