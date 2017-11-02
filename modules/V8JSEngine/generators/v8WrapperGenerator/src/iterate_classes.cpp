@@ -287,7 +287,8 @@ public :
             auto headerFileName = std::string("V8") + className + ".h";
             writeTextFile(headerFileName, headerFileData);
 
-            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = {V8" << className << "::wrap, V8" << className << "::createConstructor };\n";
+            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = {\"" << className << "\", "
+                                <<"V8" << className << "::wrap, V8" << className << "::createConstructor };\n";
             m_initializerHeadersStream << "#include \"wrappers/V8" << className << ".h\"\n";
 
             std::cout << "class " << className << std::endl;
@@ -350,7 +351,6 @@ public :
     }
 
 };
-
 
 std::string generateInitializerCpp(const std::string& initializers, const std::string& initializerHeadersStream) {
     std::vector<char> output(5000);

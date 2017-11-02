@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
 
 #include <libplatform/libplatform.h>
 #include <v8.h>
@@ -317,14 +318,18 @@ void V8JSManager::init() {
         // Enter the context for compiling and running the hello world script.
         Context::Scope contextScope(context);
 
-        runScript(context, "let TransformComponent = {};"
-                           "log('Init script started');"
-                           "function setTransformComponent(func) {"
-                           "    TransformComponent = func;"
-                           "    log('TransformComponent is set up.')"
-                           "}");
-        auto constructor = wrapperMap["flappy::TransformComponent]"].createConstructor();
-        callFunction(context, "setTransformComponent", {constructor});
+        for (auto pair : wrapperMap) {
+            auto className = pair.second.name;
+            std::stringstream ss;
+            ss << "let " << className << " = {};";
+            ss << "function set" << className << "(func) {";
+            ss << "    " << className << " = func;";
+            ss << "    log('" << className << " is ready')";
+            ss << "}";
+            runScript(context, ss.str());
+            auto constructor = wrapperMap["flappy::" + className + "]"].createConstructor();
+            callFunction(context, "set" + className, {constructor});
+        }
 
     }
 
