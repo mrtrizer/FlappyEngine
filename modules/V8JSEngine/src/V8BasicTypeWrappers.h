@@ -20,7 +20,80 @@ using _Bool = bool;
 // Type matchers
 
 template <typename T>
-bool isMatchCpp(v8::Local<v8::Value>);
+struct isMatchCpp {
+    static bool check(v8::Local<v8::Value>) {
+        LOGE("Unknown type");
+        return true;
+    }
+};
+
+template <template<typename...> class T, typename ... Args>
+struct isMatchCpp<T<Args...>> {
+    static bool check(v8::Local<v8::Value> value) {
+        LOGE("Array matcher is not implemented");
+        return true;
+    }
+};
+
+template <>
+struct isMatchCpp<std::string> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsString();
+    }
+};
+
+template <>
+struct isMatchCpp<bool> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsBoolean();
+    }
+};
+
+template <>
+struct isMatchCpp<int> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsNumber();
+    }
+};
+
+template <>
+struct isMatchCpp<float> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsNumber();
+    }
+};
+
+template <>
+struct isMatchCpp<glm::vec3> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsObject()
+                && value.As<v8::Object>()->Has(toV8Str("x"))
+                && value.As<v8::Object>()->Has(toV8Str("y"))
+                && value.As<v8::Object>()->Has(toV8Str("z"));
+    }
+};
+
+template <>
+struct isMatchCpp<glm::vec2> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsObject()
+                && value.As<v8::Object>()->Has(toV8Str("x"))
+                && value.As<v8::Object>()->Has(toV8Str("y"));
+    }
+};
+
+template <>
+struct isMatchCpp<glm::quat> {
+    static bool check(v8::Local<v8::Value> value) {
+        return value->IsObject()
+                && value.As<v8::Object>()->Has(toV8Str("x"))
+                && value.As<v8::Object>()->Has(toV8Str("y"))
+                && value.As<v8::Object>()->Has(toV8Str("z"))
+                && value.As<v8::Object>()->Has(toV8Str("w"));
+    }
+};
+
+
 
 // Wrapper templates
 

@@ -104,7 +104,7 @@ std::string generateCallConditions(const CXXMethodDecl* methodDecl) {
     for (auto paramIter = methodDecl->param_begin(); paramIter != methodDecl->param_end(); ++paramIter) {
         auto qualType = (*paramIter)->getType().getNonReferenceType().getAtomicUnqualifiedType();
         auto typeName = qualType.getAsString();
-        conditions << " && " << "isMatchCpp<" << typeName << ">(info[" << index << "])";
+        conditions << " && " << "isMatchCpp<" << typeName << ">::check(info[" << index << "])";
         ++index;
     }
 
