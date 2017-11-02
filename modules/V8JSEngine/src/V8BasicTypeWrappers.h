@@ -29,69 +29,90 @@ struct toCpp {
 
 // Arrays
 
-template<template<typename, typename> class X, typename T1, typename T2>
-struct toV8<X<T1, T2>> {
-    static v8::Local<v8::Value> cast(X<T1, T2> iterative) {
-        return v8::Array::New(v8::Isolate::GetCurrent(), iterative.size());
+template<typename T, typename SubT, typename ... Args>
+static v8::Local<v8::Value> toV8Array(T iterative) {
+    auto array = v8::Array::New(v8::Isolate::GetCurrent(), iterative.size());
+    int index = 0;
+    for (auto iter = iterative.begin(); iter != iterative.end(); iter++) {
+        (void)array->Set(v8::Isolate::GetCurrent()->GetCurrentContext(), index, toV8<SubT>::cast(*iter));
+        index++;
+    }
+    return array;
+}
+
+template<template<typename ...> class T, typename ... Args>
+struct toV8<T<Args...>> {
+    static v8::Local<v8::Value> cast(T<Args...> iterative) {
+        return toV8Array<T<Args...>, Args...>(iterative);
     }
 };
 
-template<template<typename, typename, typename, typename> class X, typename T1, typename T2, typename T3, typename T4>
-struct toV8<X<T1, T2, T3, T4>> {
-    static v8::Local<v8::Value> cast(X<T1, T2, T3, T4> iterative) {
-        return v8::Array::New(v8::Isolate::GetCurrent(), iterative.size());
+template<typename T, typename SubT, typename ... Args>
+static T arrayToCpp(v8::Local<v8::Value> value) {
+    auto jsArray = value.As<v8::Array>();
+    T cppIterative(jsArray->Length());
+    for (int i = 0; i < jsArray->Length(); i++) {
+        cppIterative[i] = toCpp<SubT>(jsArray->Get(v8::Isolate::GetCurrent()->GetCurrentContext(), i));
     }
-};
+    return cppIterative;
+}
 
-template<template<typename> class X, typename T>
-struct toCpp<X<T>> {
-    X<T> cast(v8::Local<v8::Value> value) {
-        return X<T>();
-    }
-};
-
-template<template<typename, typename> class X, typename T1, typename T2>
-struct toCpp<X<T1, T2>> {
-    static X<T1, T2> cast(v8::Local<v8::Value> value) {
-        return X<T1, T2>();
-    }
-};
-
-template<template<typename, typename, typename, typename> class X, typename T1, typename T2, typename T3, typename T4>
-struct toCpp<X<T1, T2, T3, T4>> {
-    static X<T1, T2, T3, T4> cast(v8::Local<v8::Value> value) {
-        return X<T1, T2, T3, T4>();
+template<template<typename ...> class T, typename ... Args>
+struct toCpp<T<Args...>> {
+    T<Args...> cast(v8::Local<v8::Value> value) {
+        return arrayToCpp<T<Args...>, Args...>(value);
     }
 };
 
 // Dictionaries
 
-template<typename T1, typename T2>
-struct toV8<std::map<T1, T2>> {
-    static v8::Local<v8::Value> cast(std::map<T1, T2> iterative) {
-        return v8::Object::New(v8::Isolate::GetCurrent());
+template<typename DictT, typename ValueT>
+static v8::Local<v8::Value> toV8Dict(DictT iterative) {
+    auto jsObj = v8::Object::New(v8::Isolate::GetCurrent());
+    for (auto iter = iterative.begin(); iter != iterative.end(); iter++) {
+        jsObj->Set(toV8Str(iter->first), toV8<ValueT>::cast(iter->second));
+    }
+    return jsObj;
+}
+
+template<typename ValueT>
+struct toV8<std::map<std::string, ValueT>> {
+    static v8::Local<v8::Value> cast(std::map<std::string, ValueT> iterative) {
+        return toV8Dict<std::map<std::string, ValueT>, ValueT>(iterative);
     }
 };
 
-template<typename T1, typename T2>
-struct toV8<std::unordered_map<T1, T2>> {
-    static v8::Local<v8::Value> cast(std::unordered_map<T1, T2> iterative) {
-        return v8::Object::New(v8::Isolate::GetCurrent());
+template<typename ValueT>
+struct toV8<std::unordered_map<std::string, ValueT>> {
+    static v8::Local<v8::Value> cast(std::unordered_map<std::string, ValueT> iterative) {
+        return toV8Dict<std::unordered_map<std::string, ValueT>, ValueT>(iterative);
     }
 };
 
+template <typename DictT, typename ValueT>
+static DictT toCppDict(v8::Local<v8::Value> value) {
+    DictT cppDict;
+    auto jsObj = value.As<v8::Object>();
+    auto properties = jsObj->GetPropertyNames();
+    for (int i = 0; i < properties->Length(); i++) {
+        auto jsKey = properties->Get(i);
+        auto key = std::string(*v8::String::Utf8Value(jsKey));
+        cppDict[key] = toCpp<ValueT>::cast(jsObj->Get(v8::Isolate::GetCurrent()->GetCurrentContext(), jsKey));
+    }
+    return cppDict;
+}
 
-template<typename T1, typename T2>
-struct toCpp<std::map<T1, T2>> {
-    static std::map<T1, T2> cast(v8::Local<v8::Value> value) {
-        return std::map<T1, T2>();
+template<typename ValueT>
+struct toCpp<std::map<std::string, ValueT>> {
+    static std::map<std::string, ValueT> cast(v8::Local<v8::Value> value) {
+        return toCppDict<std::map<std::string, ValueT>, ValueT>(value);
     }
 };
 
-template<typename T1, typename T2>
-struct toCpp<std::unordered_map<T1, T2>> {
-    static std::unordered_map<T1, T2> cast(v8::Local<v8::Value> value) {
-        return std::unordered_map<T1, T2>();
+template<typename ValueT>
+struct toCpp<std::unordered_map<std::string, ValueT>> {
+    static std::unordered_map<std::string, ValueT> cast(v8::Local<v8::Value> value) {
+        return toCppDict<std::unordered_map<std::string, ValueT>, ValueT>(value);
     }
 };
 
