@@ -21,9 +21,9 @@ using namespace clang::ast_matchers;
 using namespace clang::tooling;
 using namespace llvm;
 
-auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
+static std::unordered_set<std::string> standardTypes = {
+    "int", "float", "_Bool", "std::string", "glm::vec2", "glm::vec3", "glm::quad"};
 
-static std::unordered_set<std::string> standardTypes = {"int", "float", "_Bool", "std::string", "glm::vec2", "glm::vec3", "glm::quad"};
 static bool isStandard(std::string type) {
     return (standardTypes.find(type) != standardTypes.end());
 }
@@ -89,11 +89,10 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
 }
 
 std::string generateStandardReturn(std::string type) {
-    std::replace(type.begin(), type.end(), ':', '_');
     std::vector<char> output(500);
     snprintf(output.data(),
              output.size(),
-             "    info.GetReturnValue().Set(%s_to_v8(result));\n",
+             "    info.GetReturnValue().Set(toV8<%s>(result));\n",
              type.c_str());
     return std::string(output.data());
 }
@@ -105,10 +104,9 @@ std::string generateResultWrapper(std::string typeName) {
 }
 
 std::string generateStandardArgWrapper(std::string type, int argIndex) {
-    std::replace(type.begin(), type.end(), ':', '_');
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    auto arg%d = v8_to_%s(info[%d]);\n",
+            "    auto arg%d = toCpp<%s>(info[%d]);\n",
              argIndex,
              type.c_str(),
              argIndex);
@@ -302,6 +300,7 @@ int main(int argc, const char **argv) {
 
     MethodPrinter printer(outputPath.getValue());
     MatchFinder finder;
+    auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
     finder.addMatcher(methodMatcher, &printer);
 
     auto result = tool.run(newFrontendActionFactory(&finder).get());
