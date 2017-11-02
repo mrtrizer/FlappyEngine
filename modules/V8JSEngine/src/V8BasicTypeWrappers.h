@@ -78,7 +78,8 @@ struct isMatchCpp<glm::vec2> {
     static bool check(v8::Local<v8::Value> value) {
         return value->IsObject()
                 && value.As<v8::Object>()->Has(toV8Str("x"))
-                && value.As<v8::Object>()->Has(toV8Str("y"));
+                && value.As<v8::Object>()->Has(toV8Str("y"))
+                && !value.As<v8::Object>()->Has(toV8Str("z"));
     }
 };
 

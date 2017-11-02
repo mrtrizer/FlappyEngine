@@ -76,7 +76,7 @@ GeneratedArgs generateArgs(const CXXMethodDecl* methodDecl) {
     {
         int index = 0;
         for (auto paramIter = methodDecl->param_begin(); paramIter != methodDecl->param_end(); paramIter++) {
-            std::cout << (*paramIter)->getNameAsString() << " : ";
+            std::cout << "         " << (*paramIter)->getNameAsString() << " : ";
             auto qualType = (*paramIter)->getType().getNonReferenceType().getAtomicUnqualifiedType();
             auto typeName = qualType.getAsString();
             std::cout << typeName << std::endl;
@@ -118,7 +118,7 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
 
     auto resultQualType = methodDecl->getReturnType().getNonReferenceType().getAtomicUnqualifiedType();
     auto resultTypeName = resultQualType.getAsString();
-    std::cout << "Return: " << resultTypeName << std::endl;
+    std::cout << "         Return: " << resultTypeName << std::endl;
     std::string resultCodeBlock;
     if (resultTypeName != "void") {
         resultCodeBlock = "auto result = ";
@@ -145,33 +145,6 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
     }
 }
 
-std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, const CXXRecordDecl* classDecl) {
-    auto className = classDecl->getNameAsString();
-    auto args = generateArgs(methods[0]);
-    if (args.success && !classDecl->isAbstract()) {
-        std::vector<char> output(10000);
-        snprintf(output.data(), output.size(),
-                "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
-                "%s\n"
-                "   auto sharedPtr = std::make_shared<%s>(%s);\n"
-                "   auto ptr = new std::shared_ptr<%s>(sharedPtr);\n"
-                "   Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
-                "   setMethods(info.This(), jsPtr);\n"
-                "}\n"
-                "\n",
-                 args.argWrappers.c_str(),
-                 className.c_str(),
-                 args.argRefs.c_str(),
-                 className.c_str());
-        return std::string(output.data());
-    } else {
-        return "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
-                "}\n"
-                "\n";
-    }
-
-}
-
 std::string generateMethodBody(std::string methodName, std::string className, const std::vector<CXXMethodDecl*> methods) {
     std::stringstream methodConditionBlock;
     for (auto methodDecl : methods) {
@@ -195,6 +168,48 @@ std::string generateMethodBody(std::string methodName, std::string className, co
     return std::string(output.data());
 }
 
+std::string generateConstructorCall(const CXXMethodDecl* methodDecl, std::string className) {
+    auto args = generateArgs(methodDecl);
+    if (args.success) {
+        std::vector<char> output(10000);
+        snprintf(output.data(), output.size(),
+                "if (%s) {\n"
+                "%s\n"
+                "    auto sharedPtr = std::make_shared<%s>(%s);\n"
+                "    auto ptr = new std::shared_ptr<%s>(sharedPtr);\n"
+                "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
+                "    setMethods(info.This(), jsPtr);\n"
+                "}\n"
+                "\n",
+                 generateCallConditions(methodDecl).c_str(),
+                 args.argWrappers.c_str(),
+                 className.c_str(),
+                 args.argRefs.c_str(),
+                 className.c_str());
+        return std::string(output.data());
+    } else {
+        return "";
+    }
+}
+
+std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, const CXXRecordDecl* classDecl) {
+    auto className = classDecl->getNameAsString();
+    std::stringstream methodConditionBlock;
+    if (!classDecl->isAbstract()) {
+        for (auto methodDecl : methods) {
+            methodConditionBlock << generateConstructorCall(methodDecl, className);
+        }
+    }
+    std::vector<char> output(10000);
+    snprintf(output.data(), output.size(),
+            "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
+            "%s\n"
+            "}\n"
+            "\n",
+             methodConditionBlock.str().c_str());
+    return std::string(output.data());
+}
+
 GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::string& className) {
     std::stringstream methodBodies;
     std::stringstream methodRefs;
@@ -203,7 +218,7 @@ GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::strin
 
     for (auto iter = classDecl->method_begin(); iter != classDecl->method_end(); iter++) {
         const auto& methodName = iter->getNameAsString();
-        if (iter->isInstance() && (iter->isUserProvided() || methodName == className) && iter->getAccess() == AS_public) {
+        if (iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) {
             methods[methodName].push_back(*iter);
         }
     }
@@ -212,17 +227,14 @@ GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::strin
     for (auto methodPair : methods) {
         auto methods = methodPair.second;
         auto methodName = methodPair.first;
-        if ((processedMethods.find(methodName) == processedMethods.end())) {
-            processedMethods.insert(methodName);
-            std::cout << "    method " << methodName << std::endl;
-            if (methodName == className) {
-                methodBodies << generateConstructorBody(methods, classDecl);
-            } else {
-                methodBodies << generateMethodBody(methodName, className, methods);
-                methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
-                methodRefs << "\"), Function::New(Isolate::GetCurrent(), method_" << methodName;
-                methodRefs << ", jsPtr));\n";
-            }
+        std::cout << "    method " << methodName << std::endl;
+        if (methodName == className) {
+            methodBodies << generateConstructorBody(methods, classDecl);
+        } else {
+            methodBodies << generateMethodBody(methodName, className, methods);
+            methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
+            methodRefs << "\"), Function::New(Isolate::GetCurrent(), method_" << methodName;
+            methodRefs << ", jsPtr));\n";
         }
     }
 
