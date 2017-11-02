@@ -53,6 +53,7 @@ std::string generateWrapperHeader(std::string className) {
             "namespace V8%s {\n"
             "    void setPos(const v8::FunctionCallbackInfo<v8::Value>& info);\n"
             "    v8::Local<v8::Object> wrap(void* ptr);\n"
+            "    v8::Local<v8::Function> createConstructor();\n"
             "} // V8%s\n"
             "} // flappy\n",
 
@@ -75,6 +76,31 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "\n"
             "%s"
             "\n"
+            ""
+            "template <typename T>\n"
+            "void setMethods(Local<T> prototype, Local<External> jsPtr) {\n"
+            "%s"
+            "}\n"
+            "\n"
+
+            "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
+                 // Call real constructor and pass arguments
+//                 auto sharedPtr = std::make_shared<TransformComponent>();\n
+//                 auto ptr = new std::shared_ptr<TransformComponent>(sharedPtr);
+//                 Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);
+
+//                 setMethods(info.This(), jsPtr);
+            "}\n"
+            "\n"
+
+            "Local<Function> createConstructor() {\n"
+            "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
+            "    Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
+            "    Context::Scope contextScope (context);\n"
+            "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent(), method_constructor);\n"
+            "    return handle_scope.Escape(funcTemplate->GetFunction());\n"
+            "}\n"
+            "\n"
             "Local<Object> wrap(void* ptr) {\n"
             "    auto castedPtr = static_cast<%s*>(ptr);\n"
             "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
@@ -83,7 +109,7 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), castedPtr);\n"
             "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
             "    Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
-            "%s"
+            "    setMethods(prototype, jsPtr);\n"
             "\n"
             "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
             "    componentTemplate->SetInternalFieldCount(1);\n"
@@ -97,8 +123,8 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             className.c_str(),
             className.c_str(),
             methodBodies.c_str(),
-            className.c_str(),
             methodRefs.c_str(),
+            className.c_str(),
             className.c_str());
     return std::string(output.data());
 }
@@ -228,7 +254,7 @@ public :
             auto headerFileName = std::string("V8") + className + ".h";
             writeTextFile(headerFileName, headerFileData);
 
-            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = V8" << className << "::wrap;\n";
+            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = {V8" << className << "::wrap, V8" << className << "::createConstructor };\n";
             m_initializerHeadersStream << "#include \"wrappers/V8" << className << ".h\"\n";
 
             std::cout << "class " << className << std::endl;

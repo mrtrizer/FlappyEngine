@@ -36,6 +36,11 @@ private:
 
 v8::Local<v8::String> toV8Str(std::string stdStr);
 
-extern std::unordered_map<std::string, std::function<v8::Local<v8::Object>(void*)>> wrapperMap;
+struct Wrapper {
+    std::function<v8::Local<v8::Object>(void*)> wrapper;
+    std::function<v8::Local<v8::Function>()> createConstructor;
+};
+
+extern std::unordered_map<std::string, Wrapper> wrapperMap;
 
 } // flappy

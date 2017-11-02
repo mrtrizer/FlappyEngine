@@ -47,7 +47,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
   return static_cast<ObjT*>(ptr);
 }
 
-std::unordered_map<std::string, std::function<Local<Object>(void*)>> wrapperMap;
+std::unordered_map<std::string, Wrapper> wrapperMap;
 
 namespace V8Entity {
 
@@ -75,7 +75,7 @@ namespace V8Entity {
                 return true;
             return false;
         });
-        auto wrapperFunc = wrapperMap[component->componentId().name()];
+        auto wrapperFunc = wrapperMap[component->componentId().name()].wrapper;
         info.GetReturnValue().Set(wrapperFunc(component->shared_from_this().get()));
     }
 
@@ -263,20 +263,13 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
 
     auto extendedScript = Tools::format("\n"
                                         "function constructJsComponent(wrapper) {\n"
-                                        "   let ComponentWrapper = function () {"
+                                        "   let Component = function () {"
                                         "       log(this.initialized.toString());\n"
                                         "       this.testField = 10;\n"
                                         "   }\n"
                                         "\n"
-                                        "   ComponentWrapper.prototype = wrapper;\n"
+                                        "   Component.prototype = wrapper;\n"
                                         "\n"
-                                        "   class Component extends ComponentWrapper {\n"
-                                        "       constructor() {\n"
-                                        "           super();\n"
-                                        "           log('Component constructor');"
-                                        "           log(this.initialized.toString());\n"
-                                        "       }\n"
-                                        "   }\n"
                                         "   %s"
                                         "   \n"
                                         "   let testComponent = new %s();"
@@ -323,6 +316,15 @@ void V8JSManager::init() {
 
         // Enter the context for compiling and running the hello world script.
         Context::Scope contextScope(context);
+
+        runScript(context, "let TransformComponent = {};"
+                           "log('Init script started');"
+                           "function setTransformComponent(func) {"
+                           "    TransformComponent = func;"
+                           "    log('TransformComponent is set up.')"
+                           "}");
+        auto constructor = wrapperMap["flappy::TransformComponent]"].createConstructor();
+        callFunction(context, "setTransformComponent", {constructor});
 
     }
 

@@ -4,6 +4,7 @@ class TestComponent1 extends Component {
         log('Constructor 1');
         log(this.initialized.toString());
         this.name = 'Vasia';
+        let transformComponent = new TransformComponent();
     }
     init() {
         log('Init');
