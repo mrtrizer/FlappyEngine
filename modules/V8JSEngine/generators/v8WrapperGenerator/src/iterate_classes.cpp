@@ -22,10 +22,25 @@ using namespace clang::tooling;
 using namespace llvm;
 
 static std::unordered_set<std::string> standardTypes = {
-    "int", "float", "_Bool", "std::string", "glm::vec2", "glm::vec3", "glm::quad"};
+    "int",
+    "float",
+    "_Bool",
+    "std::string",
+    "glm::vec2",
+    "glm::vec3",
+    "glm::quad",
+    "std::vector",
+    "std::list",
+    "std::unordered_map",
+    "std::map",
+    "std::unordered_set",
+    "std::set"
+};
 
 static bool isStandard(std::string type) {
-    return (standardTypes.find(type) != standardTypes.end());
+    int templateBracketIndex = type.find('<');
+    auto baseTypeName = type.substr(0, templateBracketIndex);
+    return (standardTypes.find(baseTypeName) != standardTypes.end());
 }
 
 std::string generateWrapperHeader(std::string className) {
@@ -92,7 +107,7 @@ std::string generateStandardReturn(std::string type) {
     std::vector<char> output(500);
     snprintf(output.data(),
              output.size(),
-             "    info.GetReturnValue().Set(toV8<%s>(result));\n",
+             "    info.GetReturnValue().Set(toV8<%s>::cast(result));\n",
              type.c_str());
     return std::string(output.data());
 }
@@ -106,7 +121,7 @@ std::string generateResultWrapper(std::string typeName) {
 std::string generateStandardArgWrapper(std::string type, int argIndex) {
     std::vector<char> output(1000);
     snprintf(output.data(), output.size(),
-            "    auto arg%d = toCpp<%s>(info[%d]);\n",
+            "    auto arg%d = toCpp<%s>::cast(info[%d]);\n",
              argIndex,
              type.c_str(),
              argIndex);
