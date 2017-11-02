@@ -218,7 +218,7 @@ GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::strin
 
     for (auto iter = classDecl->method_begin(); iter != classDecl->method_end(); iter++) {
         const auto& methodName = iter->getNameAsString();
-        if (iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) {
+        if ((iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) || (methodName == className)) {
             methods[methodName].push_back(*iter);
         }
     }

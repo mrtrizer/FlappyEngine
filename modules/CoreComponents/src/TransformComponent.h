@@ -15,6 +15,8 @@ namespace flappy
 class TransformComponent: public Component<TransformComponent>
 {
 public:
+    TransformComponent() {}
+
     glm::mat4x4 transformMatrix();
 
     void setPos(const glm::vec3& pos) {m_pos = pos;}

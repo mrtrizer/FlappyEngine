@@ -8,6 +8,7 @@
 namespace flappy
 {
 
+
 class MouseInputManager: public Manager<MouseInputManager>
 {
 public:
