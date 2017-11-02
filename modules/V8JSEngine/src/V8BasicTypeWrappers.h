@@ -17,6 +17,13 @@ namespace flappy {
 
 using _Bool = bool;
 
+// Type matchers
+
+template <typename T>
+bool isMatchCpp(v8::Local<v8::Value>);
+
+// Wrapper templates
+
 template <typename T>
 struct toV8 {
     static v8::Local<v8::Value> cast(const T&);
