@@ -73,6 +73,8 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "namespace flappy {\n"
             "using namespace v8;\n"
             "namespace V8%s {\n"
+            "template <typename T>\n"
+            "void setMethods(Local<T> prototype, Local<External> jsPtr);\n"
             "\n"
             "%s"
             "\n"
@@ -82,17 +84,6 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "%s"
             "}\n"
             "\n"
-
-            "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
-                 // Call real constructor and pass arguments
-//                 auto sharedPtr = std::make_shared<TransformComponent>();\n
-//                 auto ptr = new std::shared_ptr<TransformComponent>(sharedPtr);
-//                 Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);
-
-//                 setMethods(info.This(), jsPtr);
-            "}\n"
-            "\n"
-
             "Local<Function> createConstructor() {\n"
             "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
             "    Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
@@ -154,7 +145,13 @@ std::string generateStandardArgWrapper(std::string type, int argIndex) {
     return std::string(output.data());
 }
 
-std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
+struct GeneratedArgs {
+    bool success;
+    std::string argWrappers;
+    std::string argRefs;
+};
+
+GeneratedArgs generateArgs(const CXXMethodDecl* methodDecl) {
     std::string name = methodDecl->getNameAsString();
 
     int generatedParams = 0;
@@ -179,6 +176,16 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
         }
     }
 
+    bool success = (requiredParams == generatedParams);
+    GeneratedArgs generatedArgs = {success, argWrappers.str(), argRefs.str()};
+    return generatedArgs;
+}
+
+std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type) {
+    std::string name = methodDecl->getNameAsString();
+
+    auto generatedArgs = generateArgs(methodDecl);
+
     auto resultQualType = methodDecl->getReturnType().getNonReferenceType().getAtomicUnqualifiedType();
     auto resultTypeName = resultQualType.getAsString();
     std::cout << "Return: " << resultTypeName << std::endl;
@@ -187,22 +194,48 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
         resultCodeBlock = "auto result = ";
     }
 
-    if (generatedParams == requiredParams) {
+    if (generatedArgs.success) {
         std::vector<char> output(10000);
         snprintf(output.data(), output.size(),
                 "%s"
                 "\n"
                 "    %sobjectPtr->%s(%s);\n"
                 "%s\n",
-                argWrappers.str().c_str(),
+                generatedArgs.argWrappers.c_str(),
                 resultCodeBlock.c_str(),
                 name.c_str(),
-                argRefs.str().c_str(),
+                generatedArgs.argRefs.c_str(),
                 generateResultWrapper(resultTypeName).c_str());
         return std::string(output.data());
     } else {
         return "    LOGE(\"Wrapper for this method is not implemented\");\n";
     }
+}
+
+std::string generateConstructorBody(const CXXMethodDecl* methodDecl, const CXXRecordDecl* classDecl, const std::string& className) {
+    auto args = generateArgs(methodDecl);
+    if (args.success && !classDecl->isAbstract()) {
+        std::vector<char> output(10000);
+        snprintf(output.data(), output.size(),
+                "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
+                "%s\n"
+                "   auto sharedPtr = std::make_shared<%s>(%s);\n"
+                "   auto ptr = new std::shared_ptr<%s>(sharedPtr);\n"
+                "   Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
+                "   setMethods(info.This(), jsPtr);\n"
+                "}\n"
+                "\n",
+                 args.argWrappers.c_str(),
+                 className.c_str(),
+                 args.argRefs.c_str(),
+                 className.c_str());
+        return std::string(output.data());
+    } else {
+        return "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
+                "}\n"
+                "\n";
+    }
+
 }
 
 std::string generateMethodBody(const CXXMethodDecl* methodDecl, std::string type) {
@@ -265,16 +298,20 @@ public :
             std::unordered_set<std::string> processedMethods;
 
             for (auto iter = md->method_begin(); iter != md->method_end(); iter++) {
-                if (iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) {
-                    const auto& methodName = iter->getNameAsString();
-                    if ((methodName != className)
-                        && (processedMethods.find(methodName) == processedMethods.end())) {
+                const auto& methodName = iter->getNameAsString();
+                if (iter->isInstance() && (iter->isUserProvided() || methodName == className) && iter->getAccess() == AS_public) {
+
+                    if ((processedMethods.find(methodName) == processedMethods.end())) {
                         processedMethods.insert(methodName);
                         std::cout << "    method " << methodName << std::endl;
-                        methodBodies << generateMethodBody(*iter, className);
-                        methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
-                        methodRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent(), method_" << methodName;
-                        methodRefs << ", jsPtr));\n";
+                        if (methodName == className) {
+                            methodBodies << generateConstructorBody(*iter, md, className);
+                        } else {
+                            methodBodies << generateMethodBody(*iter, className);
+                            methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
+                            methodRefs << "\"), Function::New(Isolate::GetCurrent(), method_" << methodName;
+                            methodRefs << ", jsPtr));\n";
+                        }
                     }
                 }
             }
@@ -299,6 +336,21 @@ private:
     std::stringstream m_initializerHeadersStream;
     std::unordered_set<std::string> m_wrappedClasses;
 };
+
+class EnumPrinter : public MatchFinder::MatchCallback {
+public :
+    virtual void run(const MatchFinder::MatchResult &Result) {
+        if (const EnumDecl *md = Result.Nodes.getNodeAs<clang::EnumDecl>("enum")) {
+            auto enumName = md->getNameAsString();
+            //std::cout << "Enum: " + enumName << std::endl;
+            for (auto iter = md->enumerator_begin(); iter != md->enumerator_end(); iter++) {
+                //std::cout << iter->getNameAsString() << std::endl;
+            }
+        }
+    }
+
+};
+
 
 std::string generateInitializerCpp(const std::string& initializers, const std::string& initializerHeadersStream) {
     std::vector<char> output(5000);
@@ -339,10 +391,14 @@ int main(int argc, const char **argv) {
 
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
-    MethodPrinter printer(outputPath.getValue());
+
     MatchFinder finder;
     auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
+    MethodPrinter printer(outputPath.getValue());
     finder.addMatcher(methodMatcher, &printer);
+    auto enumMatcher = enumDecl().bind("enum");
+    EnumPrinter enumPrinter;
+    finder.addMatcher(enumMatcher, &enumPrinter);
 
     auto result = tool.run(newFrontendActionFactory(&finder).get());
 
