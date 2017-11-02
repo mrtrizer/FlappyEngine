@@ -35,7 +35,7 @@ add_definitions(
 -D__STDC_CONSTANT_MACROS
 )
 
-add_executable(${PROJECT_NAME} iterate_classes.cpp)
+add_executable(${PROJECT_NAME} main.cpp generate_method.cpp generate_method.h)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   foreach(link_lib IN LISTS LIBRARY_LIST)
