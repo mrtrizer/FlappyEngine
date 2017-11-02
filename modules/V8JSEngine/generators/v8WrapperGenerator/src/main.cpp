@@ -44,7 +44,7 @@ std::string generateWrapperHeader(std::string className) {
 }
 
 std::string generateWrapperCpp(std::string className, std::string methodBodies, std::string methodRefs) {
-    std::vector<char> output(10000);
+    std::vector<char> output(50000);
     snprintf(output.data(), output.size(),
             "#include <V8JSManager.h>\n"
             "#include <V8BasicTypeWrappers.h>\n"

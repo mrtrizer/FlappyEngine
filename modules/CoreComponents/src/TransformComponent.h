@@ -15,7 +15,8 @@ namespace flappy
 class TransformComponent: public Component<TransformComponent>
 {
 public:
-    TransformComponent() {}
+    TransformComponent() { LOG(">>>>"); }
+    ~TransformComponent() { LOG("<<<<"); }
 
     glm::mat4x4 transformMatrix();
 

@@ -179,12 +179,16 @@ std::string generateConstructorCall(const CXXMethodDecl* methodDecl, std::string
                 "    auto ptr = new std::shared_ptr<%s>(sharedPtr);\n"
                 "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
                 "    setMethods(info.This(), jsPtr);\n"
+                "    UniquePersistent<External> external(Isolate::GetCurrent(), jsPtr);\n"
+                "    external.SetWeak<std::shared_ptr<%s>>(ptr, callback, WeakCallbackType::kParameter);\n"
+                "    persistentHolder.push_back(std::move(external));\n"
                 "}\n"
                 "\n",
                  generateCallConditions(methodDecl).c_str(),
                  args.argWrappers.c_str(),
                  className.c_str(),
                  args.argRefs.c_str(),
+                 className.c_str(),
                  className.c_str());
         return std::string(output.data());
     } else {
@@ -202,10 +206,15 @@ std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, c
     }
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
+            "void callback(const WeakCallbackInfo<std::shared_ptr<%s>> &data) {\n"
+            "     delete data.GetParameter();\n"
+            "}\n"
+            "\n"
             "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
             "%s\n"
             "}\n"
             "\n",
+             className.c_str(),
              methodConditionBlock.str().c_str());
     return std::string(output.data());
 }
@@ -218,7 +227,8 @@ GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::strin
 
     for (auto iter = classDecl->method_begin(); iter != classDecl->method_end(); iter++) {
         const auto& methodName = iter->getNameAsString();
-        if ((iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public) || (methodName == className)) {
+        if ((iter->isInstance() && iter->isUserProvided() && iter->getAccess() == AS_public && (methodName != "~" + className))
+                || (methodName == className)) {
             methods[methodName].push_back(*iter);
         }
     }

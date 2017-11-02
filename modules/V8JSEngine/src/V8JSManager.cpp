@@ -49,6 +49,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
 }
 
 std::unordered_map<std::string, Wrapper> wrapperMap;
+std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
 
 namespace V8Entity {
 

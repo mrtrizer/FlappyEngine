@@ -43,6 +43,6 @@ struct Wrapper {
 };
 
 extern std::unordered_map<std::string, Wrapper> wrapperMap;
-extern std::string jsInitCode;
+extern std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
 
 } // flappy
