@@ -35,6 +35,9 @@ private:
 
     void init(std::string name, std::string script);
 
+    template <typename ... ArgsT>
+    typename std::enable_if<sizeof...(ArgsT) == 0>::type wrap(std::vector<v8::Local<v8::Value> > &) {}
+
     template <typename ArgT>
     void wrap(std::vector<v8::Local<v8::Value> > &jsArgs, ArgT arg);
 
@@ -49,6 +52,8 @@ private:
 template <typename ResultT, typename ... ArgsT>
 ResultT JSComponent::call(std::string name, ArgsT ... args) {
     v8::HandleScope handleScope(v8::Isolate::GetCurrent());
+    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (v8::Isolate::GetCurrent(), *manager<V8JSManager>()->context());
+    v8::Context::Scope contextScope (context);
     std::vector<v8::Local<v8::Value> > jsArgs;
     wrap(jsArgs, args ...);
     return toCpp<ResultT>::cast(callMethod(name, jsArgs));

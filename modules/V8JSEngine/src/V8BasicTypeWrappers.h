@@ -133,14 +133,14 @@ static T arrayToCpp(v8::Local<v8::Value> value) {
     auto jsArray = value.As<v8::Array>();
     T cppIterative(jsArray->Length());
     for (int i = 0; i < jsArray->Length(); i++) {
-        cppIterative[i] = toCpp<SubT>(jsArray->Get(v8::Isolate::GetCurrent()->GetCurrentContext(), i));
+        cppIterative[i] = toCpp<SubT>::cast(jsArray->Get(v8::Isolate::GetCurrent()->GetCurrentContext(), i).ToLocalChecked());
     }
     return cppIterative;
 }
 
 template<template<typename ...> class T, typename ... Args>
 struct toCpp<T<Args...>> {
-    T<Args...> cast(v8::Local<v8::Value> value) {
+    static T<Args...> cast(v8::Local<v8::Value> value) {
         return arrayToCpp<T<Args...>, Args...>(value);
     }
 };
@@ -203,6 +203,13 @@ template <>
 struct toV8<std::string> {
     static v8::Local<v8::Value> cast(const std::string& value) {
         return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), value.c_str());
+    }
+};
+
+template <>
+struct toV8<const char*> {
+    static v8::Local<v8::Value> cast(const char* value) {
+        return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), value);
     }
 };
 

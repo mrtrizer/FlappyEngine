@@ -37,6 +37,14 @@ TEST_CASE("JS function call") {
     auto childEntity = rootEntity->createEntity();
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("TrivialComponent", ExecType::SYNC);
     auto jsComponent = childEntity->createComponent<JSComponent>("TrivialComponent", jsRes);
-    float result = jsComponent->call<float>("multiply", 10, 2);
-    REQUIRE(result == 20);
+    float result1 = jsComponent->call<float>("multiply", 10, 2);
+    REQUIRE(result1 == 20);
+    float result2 = jsComponent->call<int>("sumArray", std::vector<int>{10,100,1000});
+    REQUIRE(result2 == 1110);
+    auto result3 = jsComponent->call<std::string>("sumArray", std::vector<std::string>{"10","100","1000"});
+    REQUIRE(result3 == "0101001000");
+    auto result4 = jsComponent->call<std::string>("getHelloWorld");
+    REQUIRE(result4 == "Hello, world!");
+    auto result5 = jsComponent->call<std::vector<std::string>>("splitStr", "str1 str2 str3");
+    REQUIRE(result5[1] == "str2");
 }

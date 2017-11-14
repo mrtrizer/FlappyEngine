@@ -17,6 +17,8 @@ public:
     v8::UniquePersistent<v8::Object> runJSComponent(std::string name, std::string script, SafePtr<ComponentBase> component);
     v8::Local<v8::Value> callMethod(v8::Local<v8::Object> jsObject, std::string name, std::vector<v8::Local<v8::Value> > args);
 
+    const v8::UniquePersistent<v8::Context>* context() const { return &m_context; }
+
 private:
     v8::Platform* m_platform;
     v8::Isolate* m_isolate;
