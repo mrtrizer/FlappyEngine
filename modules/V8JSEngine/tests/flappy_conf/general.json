@@ -6,7 +6,11 @@
         },
         {
             "path":"../../Std"
+        },
+        {
+            "path":"../../Catch"
         }
+
     ],
     "cxx":{
         "header_dirs": [

@@ -74,9 +74,9 @@ JSComponent::JSComponent(std::string name, std::shared_ptr<TextRes> textRes)
     });
 }
 
-void JSComponent::callMethod(std::string name, const std::vector<v8::Local<v8::Value>>& args) {
+Local<Value> JSComponent::callMethod(std::string name, const std::vector<v8::Local<v8::Value>>& args) {
     auto jsObject = v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject);
-    manager<V8JSManager>()->callMethod(jsObject, name, args);
+    return manager<V8JSManager>()->callMethod(jsObject, name, args);
 }
 
 void JSComponent::init(std::string name, std::string script) {

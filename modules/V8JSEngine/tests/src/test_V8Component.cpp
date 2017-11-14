@@ -1,5 +1,6 @@
 #include <memory>
 
+#include <catch.h>
 #include <Entity.h>
 #include <AppManager.h>
 #include <TransformComponent.h>
@@ -22,8 +23,7 @@
 using namespace flappy;
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+TEST_CASE("JS function call") {
     initV8Wrappers();
 
     auto rootEntity = std::make_shared<Entity>();
@@ -35,16 +35,8 @@ int main(int argc, char *argv[])
     rootEntity->createComponent<V8JSManager>();
 
     auto childEntity = rootEntity->createEntity();
-    childEntity->createComponent<TransformComponent>();
-    auto testComponent1Res = rootEntity->manager<ResManager<TextRes>>()->getRes("TestComponent1", ExecType::SYNC);
-    childEntity->createComponent<JSComponent>("TestComponent1", testComponent1Res);
-    auto testComponent2Res = rootEntity->manager<ResManager<TextRes>>()->getRes("TestComponent2", ExecType::SYNC);
-    childEntity->createComponent<JSComponent>("TestComponent2", testComponent2Res);
-    auto pos = rootEntity->component<TransformComponent>()->pos();
-    LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
-    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
-    pos = childEntity->component<TransformComponent>()->pos();
-    LOG("x: %f y: %f z: %f", pos.x, pos.y, pos.z);
-    childEntity->events()->post(ComponentBase::UpdateEvent(2.0f));
-    childEntity->events()->post(ComponentBase::UpdateEvent(3.0f));
+    auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("TrivialComponent", ExecType::SYNC);
+    auto jsComponent = childEntity->createComponent<JSComponent>("TrivialComponent", jsRes);
+    float result = jsComponent->call<float>("multiply", 10, 2);
+    REQUIRE(result == 20);
 }

@@ -210,7 +210,7 @@ void V8JSManager::runScript(Local<Context>& context, std::string sourceStr) {
     }
 }
 
-void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<v8::Local<Value> > args) {
+Local<Value> V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<v8::Local<Value> > args) {
     HandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
@@ -233,6 +233,8 @@ void V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vect
       String::Utf8Value exception_str(exception);
       LOGE("Exception: %s\n", *exception_str);
     }
+
+    return result;
 }
 
 MaybeLocal<Value> V8JSManager::callFunction(Local<Context>& context, std::string name, std::vector<Local<Value>> args) {
@@ -267,7 +269,9 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
                                         "function constructJsComponent(wrapper) {\n"
                                         "   let Component = function () {"
                                         "       log(this.initialized.toString());\n"
-                                        "       this.testField = 10;\n"
+                                        "       this.init = ()=>{};\n"
+                                        "       this.deinit = ()=>{};\n"
+                                        "       this.update = (dt)=>{};\n"
                                         "   }\n"
                                         "\n"
                                         "   Component.prototype = wrapper;\n"
