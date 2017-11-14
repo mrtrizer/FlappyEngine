@@ -15,14 +15,36 @@ namespace flappy
 
 class TextRes;
 
+class ResultValue {
+public:
+    ResultValue(v8::Isolate* isolate, const v8::UniquePersistent<v8::Context>& globalContext)
+        : m_handleScope(std::make_shared<v8::HandleScope>(isolate))
+        , m_contextScope(v8::Local <v8::Context>::New (isolate, globalContext))
+    {}
+
+    void setValue(v8::Local<v8::Value> value) {
+        m_value = value;
+    }
+
+    template <typename T>
+    T as() {
+        return toCpp<T>::cast(m_value);
+    }
+
+private:
+    std::shared_ptr<v8::HandleScope> m_handleScope;
+    v8::Context::Scope m_contextScope;
+    v8::Local<v8::Value> m_value;
+};
+
 class JSComponent: public Component<JSComponent>
 {
 public:
     JSComponent(std::string name, std::string script);
     JSComponent(std::string name, std::shared_ptr<TextRes> textRes);
 
-    template <typename ResultT, typename ... ArgsT>
-    ResultT call(std::string name, ArgsT ... args);
+    template <typename ... ArgsT>
+    ResultValue call(std::string name, ArgsT ... args);
 
     std::string name() const { return m_name; }
     const v8::UniquePersistent<v8::Object>& jsObject() const { return m_jsObject; }
@@ -49,14 +71,13 @@ private:
 
 
 
-template <typename ResultT, typename ... ArgsT>
-ResultT JSComponent::call(std::string name, ArgsT ... args) {
-    v8::HandleScope handleScope(v8::Isolate::GetCurrent());
-    v8::Local <v8::Context> context = v8::Local <v8::Context>::New (v8::Isolate::GetCurrent(), *manager<V8JSManager>()->context());
-    v8::Context::Scope contextScope (context);
+template <typename ... ArgsT>
+ResultValue JSComponent::call(std::string name, ArgsT ... args) {
+    ResultValue resultValue(v8::Isolate::GetCurrent(), *manager<V8JSManager>()->context());
     std::vector<v8::Local<v8::Value> > jsArgs;
     wrap(jsArgs, args ...);
-    return toCpp<ResultT>::cast(callMethod(name, jsArgs));
+    resultValue.setValue(callMethod(name, jsArgs));
+    return resultValue;
 }
 
 template <typename ArgT>

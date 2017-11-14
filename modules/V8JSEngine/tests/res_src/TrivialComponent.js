@@ -15,4 +15,7 @@ class TrivialComponent extends Component {
     splitStr(str) {
         return str.split(' ');
     }
+    printStr(str) {
+        log(str);
+    }
 }
