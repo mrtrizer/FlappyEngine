@@ -22,7 +22,6 @@ public:
 private:
     v8::Platform* m_platform;
     v8::Isolate* m_isolate;
-    v8::Isolate::Scope* m_isolateScope;
     v8::UniquePersistent<v8::Context> m_context;
     v8::ArrayBuffer::Allocator* m_arrayBufferAllocator;
 

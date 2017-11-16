@@ -54,6 +54,7 @@ JSComponent::JSComponent(std::string name, std::shared_ptr<TextRes> textRes)
         HandleScope handleScope(Isolate::GetCurrent());
 
         callMethod( "deinit");
+        m_jsObject.Reset();
     });
 
     subscribe([this, name, textRes](UpdateEvent e) {

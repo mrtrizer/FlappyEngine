@@ -23,7 +23,7 @@
 using namespace flappy;
 using namespace std;
 
-TEST_CASE("JS function call") {
+TEST_CASE("Call of a JS function") {
     initV8Wrappers();
 
     auto rootEntity = std::make_shared<Entity>();
@@ -56,4 +56,36 @@ TEST_CASE("JS function call") {
     jsComponent->call("printStr", "Hello, world!");
 
     // Pass an object to js
+}
+
+TEST_CASE("Access to Cpp components") {
+    initV8Wrappers();
+
+    auto rootEntity = std::make_shared<Entity>();
+    rootEntity->createComponent<ResRepositoryManager>("./resources");
+    rootEntity->createComponent<StdFileMonitorManager>();
+    rootEntity->createComponent<StdFileLoadManager>();
+    rootEntity->createComponent<FileResFactory>();
+    rootEntity->createComponent<ResManager<TextRes>> ();
+    rootEntity->createComponent<V8JSManager>();
+
+    auto childEntity = rootEntity->createEntity();
+    auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("CppAccessComponent", ExecType::SYNC);
+    auto transformComponent = childEntity->createComponent<TransformComponent>();
+    auto jsComponent = childEntity->createComponent<JSComponent>("CppAccessComponent", jsRes);
+
+    jsComponent->call("setAngleToTransform", 1.0f);
+    REQUIRE(transformComponent->angle2DRad() == 1.0f);
+    auto newAngle = jsComponent->call("getAngleFromTransform");
+    REQUIRE(newAngle.as<float>() == 1.0f);
+
+    auto targetPos = glm::vec3(1.0f, 2.0f, 3.0f);
+    jsComponent->call("setPosToTransform", targetPos);
+    REQUIRE(transformComponent->pos() == targetPos);
+    //auto newPos = jsComponent->call("getPosFromTransform");
+    //REQUIRE(newAngle.as<glm::vec3>() == targetPos);
+}
+
+TEST_CASE("Access to Js components") {
+
 }

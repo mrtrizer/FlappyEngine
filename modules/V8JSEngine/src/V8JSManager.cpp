@@ -308,8 +308,8 @@ void V8JSManager::init() {
     m_arrayBufferAllocator = new ArrayBufferAllocator;
     createParams.array_buffer_allocator = m_arrayBufferAllocator;
     m_isolate = Isolate::New(createParams);
+    m_isolate->Enter();
     {
-        m_isolateScope = new Isolate::Scope(m_isolate);
         HandleScope handleScope(m_isolate);
 
         Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
@@ -320,7 +320,6 @@ void V8JSManager::init() {
         // Create a new context.
         m_context = UniquePersistent<Context>(m_isolate, context);
 
-        // Enter the context for compiling and running the hello world script.
         Context::Scope contextScope(context);
 
         for (auto pair : wrapperMap) {
@@ -341,12 +340,14 @@ void V8JSManager::init() {
 }
 
 void V8JSManager::deinit() {
+    m_context.Reset();
+    m_isolate->Exit();
+    m_isolate->Dispose();
     // Dispose the isolate and tear down V8.
-    V8::Dispose();
+    //V8::Dispose();
     V8::ShutdownPlatform();
-    delete m_isolateScope;
-    delete m_platform;
     delete m_arrayBufferAllocator;
+    delete m_platform;
 }
 
 } // flappy
