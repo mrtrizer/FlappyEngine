@@ -29,7 +29,7 @@ private:
     v8::Local<v8::Object> wrapComponent(ComponentBase* component);
 
     void runScript(v8::Local<v8::Context>& context, std::string sourceStr);
-    v8::MaybeLocal<v8::Value> callFunction(v8::Local<v8::Context>& context, std::string name, std::vector<v8::Local<v8::Value>> args);
+    v8::Local<v8::Value> callFunction(std::string name, std::vector<v8::Local<v8::Value>> args);
 
     void init();
     void deinit();

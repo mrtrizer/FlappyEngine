@@ -38,20 +38,30 @@ TEST_CASE("Call of a JS function") {
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("TrivialComponent", ExecType::SYNC);
     auto jsComponent = childEntity->createComponent<JSComponent>("TrivialComponent", jsRes);
 
-    auto result1 = jsComponent->call("multiply", 10, 2);
-    REQUIRE(result1.as<float>() == 20);
+    {
+        auto result1 = jsComponent->call("multiply", 10, 2);
+        REQUIRE(result1.as<float>() == 20);
+    }
 
-    auto result2 = jsComponent->call("sumArray", std::vector<int>{10,100,1000});
-    REQUIRE(result2.as<int>() == 1110);
+    {
+        auto result2 = jsComponent->call("sumArray", std::vector<int>{10,100,1000});
+        REQUIRE(result2.as<int>() == 1110);
+    }
 
-    auto result3 = jsComponent->call("sumArray", std::vector<std::string>{"10","100","1000"});
-    REQUIRE(result3.as<std::string>() == "0101001000");
+    {
+        auto result3 = jsComponent->call("sumArray", std::vector<std::string>{"10","100","1000"});
+        REQUIRE(result3.as<std::string>() == "0101001000");
+    }
 
-    auto result4 = jsComponent->call("getHelloWorld");
-    REQUIRE(result4.as<std::string>() == "Hello, world!");
+    {
+        auto result4 = jsComponent->call("getHelloWorld");
+        REQUIRE(result4.as<std::string>() == "Hello, world!");
+    }
 
-    auto result5 = jsComponent->call("splitStr", "str1 str2 str3");
-    REQUIRE(result5.as<std::vector<std::string>>()[1] == "str2");
+    {
+        auto result5 = jsComponent->call("splitStr", "str1 str2 str3");
+        REQUIRE(result5.as<std::vector<std::string>>()[1] == "str2");
+    }
 
     jsComponent->call("printStr", "Hello, world!");
 
@@ -74,16 +84,22 @@ TEST_CASE("Access to Cpp components") {
     auto transformComponent = childEntity->createComponent<TransformComponent>();
     auto jsComponent = childEntity->createComponent<JSComponent>("CppAccessComponent", jsRes);
 
-    jsComponent->call("setAngleToTransform", 1.0f);
-    REQUIRE(transformComponent->angle2DRad() == 1.0f);
-    auto newAngle = jsComponent->call("getAngleFromTransform");
-    REQUIRE(newAngle.as<float>() == 1.0f);
+    {
+        jsComponent->call("setAngleToTransform", 1.0f);
+        REQUIRE(transformComponent->angle2DRad() == 1.0f);
+        auto newAngle = jsComponent->call("getAngleFromTransform");
+        REQUIRE(newAngle.as<float>() == 1.0f);
+    }
 
-    auto targetPos = glm::vec3(1.0f, 2.0f, 3.0f);
-    jsComponent->call("setPosToTransform", targetPos);
-    REQUIRE(transformComponent->pos() == targetPos);
-    //auto newPos = jsComponent->call("getPosFromTransform");
-    //REQUIRE(newAngle.as<glm::vec3>() == targetPos);
+    {
+        auto targetPos = glm::vec3(1.0f, 2.0f, 3.0f);
+        jsComponent->call("setPosToTransform", targetPos);
+        REQUIRE(transformComponent->pos() == targetPos);
+        auto newPos = jsComponent->call("getPosFromTransform");
+        auto vec3NewPos = newPos.as<glm::vec3>();
+        LOG("%f %f %f", vec3NewPos.x, vec3NewPos.y, vec3NewPos.z);
+        REQUIRE(vec3NewPos == targetPos);
+    }
 }
 
 TEST_CASE("Access to Js components") {

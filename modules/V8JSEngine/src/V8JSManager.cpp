@@ -143,7 +143,7 @@ namespace V8Component {
 
 Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
-    EscapableHandleScope handle_scope(m_isolate);
+    EscapableHandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
 
@@ -168,7 +168,7 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
     result->SetInternalField(0, componentJSPtr);
 
-    return handle_scope.Escape(result);
+    return handleScope.Escape(result);
 }
 
 static void log(const FunctionCallbackInfo<Value>& args) {
@@ -211,7 +211,7 @@ void V8JSManager::runScript(Local<Context>& context, std::string sourceStr) {
 }
 
 Local<Value> V8JSManager::callMethod(Local<Object> jsObject, std::string name, std::vector<v8::Local<Value> > args) {
-    HandleScope handleScope(m_isolate);
+    EscapableHandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
 
@@ -226,23 +226,25 @@ Local<Value> V8JSManager::callMethod(Local<Object> jsObject, std::string name, s
 
     TryCatch trycatch(m_isolate);
 
-    auto result = updateFun->Call(jsObject, args.size(), args.data());
+    auto result = updateFun->Call(context, jsObject, args.size(), args.data());
 
     if (result.IsEmpty()) {
-      Local<Value> exception = trycatch.Exception();
-      String::Utf8Value exception_str(exception);
-      LOGE("Exception: %s\n", *exception_str);
+        Local<Value> exception = trycatch.Exception();
+        String::Utf8Value exception_str(exception);
+        LOGE("Exception: %s\n", *exception_str);
     }
 
-    return result;
+    return handleScope.Escape(result.ToLocalChecked());
 }
 
-MaybeLocal<Value> V8JSManager::callFunction(Local<Context>& context, std::string name, std::vector<Local<Value>> args) {
-    // The script compiled and ran correctly.  Now we fetch out the
-    // Process function from the global object.
-    Local<String> updateName = toV8Str(name);
+Local<Value> V8JSManager::callFunction(std::string name, std::vector<Local<Value>> args) {
+    EscapableHandleScope handleScope(m_isolate);
+    Local <Context> context = Local <Context>::New (m_isolate, m_context);
+    Context::Scope contextScope (context);
+
+    Local<String> functionName = toV8Str(name);
     Local<Value> updateVal;
-    auto detected = context->Global()->Get(context, updateName).ToLocal(&updateVal);
+    auto detected = context->Global()->Get(context, functionName).ToLocal(&updateVal);
     if (!detected || !updateVal->IsFunction()) {
         LOGE("%s is not a function", name.c_str());
     }
@@ -254,12 +256,12 @@ MaybeLocal<Value> V8JSManager::callFunction(Local<Context>& context, std::string
     auto result = updateFun->Call(context, context->Global(), args.size(), args.data());
 
     if (result.IsEmpty()) {
-      Local<Value> exception = trycatch.Exception();
-      String::Utf8Value exception_str(exception);
-      LOGE("Exception: %s\n", *exception_str);
+        Local<Value> exception = trycatch.Exception();
+        String::Utf8Value exception_str(exception);
+        LOGE("Exception: %s\n", *exception_str);
     }
 
-    return result;
+    return handleScope.Escape(result.ToLocalChecked());
 }
 
 UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::string script, SafePtr<ComponentBase> component) {
@@ -288,13 +290,9 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
     runScript(context, extendedScript);
     auto wrapped = wrapComponent(component->shared_from_this().get());
 
-    auto jsObject = callFunction(context, "constructJsComponent", {wrapped});
-    if (jsObject.IsEmpty()) {
-        LOGE("Result is empty");
-    }
-    Local<Value> jsObjectLocal = jsObject.ToLocalChecked();
+    auto jsObject = callFunction("constructJsComponent", {wrapped});
 
-    return UniquePersistent<Object>(m_isolate, Local<Object>::Cast(jsObjectLocal));
+    return UniquePersistent<Object>(m_isolate, jsObject.As<Object>());
 }
 
 void V8JSManager::init() {
@@ -332,7 +330,7 @@ void V8JSManager::init() {
             ss << "}";
             runScript(context, ss.str());
             auto constructor = wrapperMap["flappy::" + className + "]"].createConstructor();
-            callFunction(context, "set" + className, {constructor});
+            callFunction("set" + className, {constructor});
         }
 
     }
