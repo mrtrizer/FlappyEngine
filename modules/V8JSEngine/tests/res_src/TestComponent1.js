@@ -1,21 +1,7 @@
 class TestComponent1 extends Component {
-    constructor() {
-        super();
-        log('Constructor 1');
-        log(this.initialized.toString());
-        this.name = 'Vasia';
-        let transformComponent = new TransformComponent();
+
+    calcSum(val1, val2) {
+        return val1 + val2;
     }
-    init() {
-        log('Init');
-    }
-    deinit() {
-        log('Deinit');
-    }
-    hello() {
-        log('Hello, Im ' + this.name);
-    }
-    update(dt) {
-        log('TestComponent1 update');
-    }
+
 }

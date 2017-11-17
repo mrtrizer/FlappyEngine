@@ -23,7 +23,7 @@
 using namespace flappy;
 using namespace std;
 
-TEST_CASE("Call of a JS function") {
+std::shared_ptr<Entity> createRootEntity() {
     initV8Wrappers();
 
     auto rootEntity = std::make_shared<Entity>();
@@ -33,6 +33,12 @@ TEST_CASE("Call of a JS function") {
     rootEntity->createComponent<FileResFactory>();
     rootEntity->createComponent<ResManager<TextRes>> ();
     rootEntity->createComponent<V8JSManager>();
+
+    return rootEntity;
+}
+
+TEST_CASE("Call of a JS function") {
+    auto rootEntity = createRootEntity();
 
     auto childEntity = rootEntity->createEntity();
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("TrivialComponent", ExecType::SYNC);
@@ -63,21 +69,15 @@ TEST_CASE("Call of a JS function") {
         REQUIRE(result5.as<std::vector<std::string>>()[1] == "str2");
     }
 
-    jsComponent->call("printStr", "Hello, world!");
+    {
+        jsComponent->call("printStr", "Hello, world!");
+    }
 
     // Pass an object to js
 }
 
-TEST_CASE("Access to Cpp components") {
-    initV8Wrappers();
-
-    auto rootEntity = std::make_shared<Entity>();
-    rootEntity->createComponent<ResRepositoryManager>("./resources");
-    rootEntity->createComponent<StdFileMonitorManager>();
-    rootEntity->createComponent<StdFileLoadManager>();
-    rootEntity->createComponent<FileResFactory>();
-    rootEntity->createComponent<ResManager<TextRes>> ();
-    rootEntity->createComponent<V8JSManager>();
+TEST_CASE("Access to Cpp components from a JS component") {
+    auto rootEntity = createRootEntity();
 
     auto childEntity = rootEntity->createEntity();
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("CppAccessComponent", ExecType::SYNC);
@@ -101,6 +101,29 @@ TEST_CASE("Access to Cpp components") {
     }
 }
 
-TEST_CASE("Access to Js components") {
+TEST_CASE("Access to another JS component from a JS component") {
+    auto rootEntity = createRootEntity();
+
+    auto childEntity = rootEntity->createEntity();
+    auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("JsAccessComponent", ExecType::SYNC);
+    auto jsComponent = childEntity->createComponent<JSComponent>("JsAccessComponent", jsRes);
+    auto testJsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("TestComponent1", ExecType::SYNC);
+    auto testJsComponent = childEntity->createComponent<JSComponent>("TestComponent1", testJsRes);
+
+    {
+        auto result = jsComponent->call("callCalcSum", 1.0f, 2.0f);
+        REQUIRE(result.as<float>() == 3.0f);
+    }
+}
+
+TEST_CASE("JS component initialization") {
+    auto rootEntity = createRootEntity();
+
+    auto childEntity = rootEntity->createEntity();
+    auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("InitTestComponent", ExecType::SYNC);
+    auto jsComponent = childEntity->createComponent<JSComponent>("InitTestComponent", jsRes);
+}
+
+TEST_CASE("Passing and receiving events to JS component") {
 
 }

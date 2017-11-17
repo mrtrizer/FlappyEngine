@@ -85,7 +85,7 @@ void JSComponent::init(std::string name, std::string script) {
     if (!m_jsObject.IsEmpty())
         callMethod("init");
     else
-        throw std::runtime_error("Can't initialize JS component");
+        throw std::runtime_error("Can't execute a JS component");
 }
 
 } // flappy
