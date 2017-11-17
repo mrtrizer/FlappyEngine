@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 #include <Tools.h>
 
 namespace flappy {
@@ -12,6 +13,7 @@ public:
         if (index >= m_names.size())
             m_names.resize(index + 1);
         m_names[index] = typeName;
+        m_indexMap[typeName] = index;
     }
     static std::string getName(unsigned index) {
         if (index >= m_names.size())
@@ -19,12 +21,19 @@ public:
         else
             return m_names[index];
     }
+    static unsigned getIndexByName(std::string name) {
+        return m_indexMap[name];
+    }
 
     static std::vector<std::string> m_names;
+    static std::unordered_map<std::string, unsigned> m_indexMap;
 };
 
 template <typename ContextT>
 std::vector<std::string> TypeNames<ContextT>::m_names;
+
+template <typename ContextT>
+std::unordered_map<std::string, unsigned> TypeNames<ContextT>::m_indexMap;
 
 template <typename ContextT>
 class TypeCounter {

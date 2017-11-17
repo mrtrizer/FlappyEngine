@@ -66,8 +66,6 @@ JSComponent::JSComponent(std::string name, std::shared_ptr<TextRes> textRes)
                 init(name, textRes->text());
             }
 
-            auto jsDt = v8::Number::New(Isolate::GetCurrent(), e.dt);
-
             call("update", e.dt);
         }
     });

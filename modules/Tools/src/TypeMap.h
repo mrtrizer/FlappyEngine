@@ -47,6 +47,12 @@ public:
         return int(m_elements.size());
     }
 
+    ElementT getByName(std::string name) const
+    {
+        unsigned index = TypeNames<ContextT>::getIndexByName(name);
+        return m_elements.at(index);
+    }
+
     ElementT getById(TypeId<ContextT> id) const
     {
         return m_elements.at(id.toUnsigned());
