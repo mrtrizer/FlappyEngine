@@ -304,9 +304,6 @@ struct toCpp<glm::vec3> {
     static glm::vec3 cast(v8::Local<v8::Value> value) {
         v8::Local<v8::Object> vec3Object = value.As<v8::Object>();
         auto context = v8::Isolate::GetCurrent()->GetCurrentContext();
-        std::cout << vec3Object->Has(context, toV8Str("x")).FromMaybe(false) << std::endl;
-        std::cout << vec3Object->Has(context, toV8Str("y")).FromMaybe(false) << std::endl;
-        std::cout << vec3Object->Has(context, toV8Str("z")).FromMaybe(false) << std::endl;
         float x = vec3Object->Get(context, toV8Str("x")).ToLocalChecked().As<v8::Number>()->Value();
         float y = vec3Object->Get(context, toV8Str("y")).ToLocalChecked().As<v8::Number>()->Value();
         float z = vec3Object->Get(context, toV8Str("z")).ToLocalChecked().As<v8::Number>()->Value();

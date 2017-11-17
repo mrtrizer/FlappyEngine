@@ -97,7 +97,6 @@ TEST_CASE("Access to Cpp components") {
         REQUIRE(transformComponent->pos() == targetPos);
         auto newPos = jsComponent->call("getPosFromTransform");
         auto vec3NewPos = newPos.as<glm::vec3>();
-        LOG("%f %f %f", vec3NewPos.x, vec3NewPos.y, vec3NewPos.z);
         REQUIRE(vec3NewPos == targetPos);
     }
 }
