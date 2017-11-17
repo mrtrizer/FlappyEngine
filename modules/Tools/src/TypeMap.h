@@ -49,7 +49,7 @@ public:
 
     ElementT getByName(std::string name) const
     {
-        unsigned index = TypeNames<ContextT>::getIndexByName(name);
+        unsigned index = TypeNames<ContextT>::instance().getIndexByName(name);
         return m_elements.at(index);
     }
 

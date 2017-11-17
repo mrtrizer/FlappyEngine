@@ -9,31 +9,29 @@ namespace flappy {
 template <typename ContextT>
 class TypeNames {
 public:
-    static void setName(unsigned index, std::string typeName) {
+    static TypeNames& instance() {
+        static TypeNames typeNames;
+        return typeNames;
+    }
+    void setName(unsigned index, std::string typeName) {
         if (index >= m_names.size())
             m_names.resize(index + 1);
         m_names[index] = typeName;
         m_indexMap[typeName] = index;
     }
-    static std::string getName(unsigned index) {
+    std::string getName(unsigned index) {
         if (index >= m_names.size())
             return "Unknown";
         else
             return m_names[index];
     }
-    static unsigned getIndexByName(std::string name) {
+    unsigned getIndexByName(std::string name) {
         return m_indexMap[name];
     }
 
-    static std::vector<std::string> m_names;
-    static std::unordered_map<std::string, unsigned> m_indexMap;
+    std::vector<std::string> m_names;
+    std::unordered_map<std::string, unsigned> m_indexMap;
 };
-
-template <typename ContextT>
-std::vector<std::string> TypeNames<ContextT>::m_names;
-
-template <typename ContextT>
-std::unordered_map<std::string, unsigned> TypeNames<ContextT>::m_indexMap;
 
 template <typename ContextT>
 class TypeCounter {
@@ -41,7 +39,7 @@ public:
     TypeCounter(std::string name):
         m_curId(m_count) {
         m_count++;
-        TypeNames<ContextT>::setName(m_curId, name);
+        TypeNames<ContextT>::instance().setName(m_curId, name);
     }
     unsigned id() { return m_curId; }
     static unsigned count() { return m_count; }
@@ -69,7 +67,7 @@ public:
     bool operator!=(const TypeId& other) const { return other.toUnsigned() != toUnsigned(); }
     unsigned toUnsigned() const { return m_id; }
     bool isValid() const { return m_id != -1; }
-    std::string name() { return TypeNames<ContextT>::getName(m_id); }
+    std::string name() { return TypeNames<ContextT>::instance().getName(m_id); }
 private:
     unsigned m_id;
     std::string m_name;
