@@ -237,19 +237,34 @@ Local<Value> V8JSManager::callMethod(Local<Object> jsObject, std::string name, s
     return handleScope.Escape(result.ToLocalChecked());
 }
 
+v8::Local<v8::Value> V8JSManager::getField(v8::Local<v8::Object> jsObject, std::string name) {
+    EscapableHandleScope handleScope(m_isolate);
+    Local <Context> context = Local <Context>::New (m_isolate, m_context);
+    Context::Scope contextScope (context);
+
+    Local<String> methodeName = toV8Str(name);
+    Local<Value> fieldValue;
+    auto detected = jsObject->Get(context, methodeName).ToLocal(&fieldValue);
+    if (!detected) {
+        LOGE("%s is not a field", name.c_str());
+    }
+
+    return handleScope.Escape(fieldValue);
+}
+
 Local<Value> V8JSManager::callFunction(std::string name, std::vector<Local<Value>> args) {
     EscapableHandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
     Context::Scope contextScope (context);
 
     Local<String> functionName = toV8Str(name);
-    Local<Value> updateVal;
-    auto detected = context->Global()->Get(context, functionName).ToLocal(&updateVal);
-    if (!detected || !updateVal->IsFunction()) {
+    Local<Value> functionValue;
+    auto detected = context->Global()->Get(context, functionName).ToLocal(&functionValue);
+    if (!detected || !functionValue->IsFunction()) {
         LOGE("%s is not a function", name.c_str());
     }
 
-    Local<Function> updateFun = Local<Function>::Cast(updateVal);
+    Local<Function> updateFun = Local<Function>::Cast(functionValue);
 
     TryCatch trycatch(m_isolate);
 
@@ -271,12 +286,12 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
                                         "function constructJsComponent(wrapper) {\n"
                                         "   let Component = function () {"
                                         "       log(this.initialized.toString());\n"
-                                        "       this.init = ()=>{};\n"
-                                        "       this.deinit = ()=>{};\n"
-                                        "       this.update = (dt)=>{};\n"
                                         "   }\n"
                                         "\n"
                                         "   Component.prototype = wrapper;\n"
+                                        "   Component.prototype.init = ()=>{};\n"
+                                        "   Component.prototype.deinit = ()=>{};\n"
+                                        "   Component.prototype.update = (dt)=>{};\n"
                                         "\n"
                                         "   %s"
                                         "   \n"

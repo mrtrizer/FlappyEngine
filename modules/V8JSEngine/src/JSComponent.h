@@ -46,6 +46,8 @@ public:
     template <typename ... ArgsT>
     ResultValue call(std::string name, ArgsT ... args);
 
+    ResultValue field(std::string name);
+
     std::string name() const { return m_name; }
     const v8::UniquePersistent<v8::Object>& jsObject() const { return m_jsObject; }
 
@@ -66,17 +68,15 @@ private:
     template <typename ArgT, typename ... ArgsT>
     void wrap(std::vector<v8::Local<v8::Value> > &jsArgs, ArgT arg, ArgsT ... args);
 
-    v8::Local<v8::Value> callMethod(std::string name, const std::vector<v8::Local<v8::Value> > &args = {});
 };
-
-
 
 template <typename ... ArgsT>
 ResultValue JSComponent::call(std::string name, ArgsT ... args) {
     ResultValue resultValue(v8::Isolate::GetCurrent(), *manager<V8JSManager>()->context());
     std::vector<v8::Local<v8::Value> > jsArgs;
     wrap(jsArgs, args ...);
-    resultValue.setValue(callMethod(name, jsArgs));
+    auto jsObject = v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject);
+    resultValue.setValue(manager<V8JSManager>()->callMethod(jsObject, name, jsArgs));
     return resultValue;
 }
 

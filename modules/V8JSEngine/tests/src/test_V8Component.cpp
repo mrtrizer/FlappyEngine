@@ -73,7 +73,9 @@ TEST_CASE("Call of a JS function") {
         jsComponent->call("printStr", "Hello, world!");
     }
 
-    // Pass an object to js
+    // Pass an object to js and return back
+
+    // Pass a dictionary to js and return back
 }
 
 TEST_CASE("Access to Cpp components from a JS component") {
@@ -122,6 +124,12 @@ TEST_CASE("JS component initialization") {
     auto childEntity = rootEntity->createEntity();
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("InitTestComponent", ExecType::SYNC);
     auto jsComponent = childEntity->createComponent<JSComponent>("InitTestComponent", jsRes);
+    REQUIRE(jsComponent->field("constructorCounter").as<int>() == 1);
+    REQUIRE(jsComponent->field("initCounter").as<int>() == 1);
+    REQUIRE(jsComponent->field("deinitCounter").as<int>() == 0);
+    REQUIRE(jsComponent->field("updateCounter").as<int>() == 0);
+    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    REQUIRE(jsComponent->field("updateCounter").as<int>() == 1);
 }
 
 TEST_CASE("Passing and receiving events to JS component") {

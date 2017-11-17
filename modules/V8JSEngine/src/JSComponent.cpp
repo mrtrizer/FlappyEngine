@@ -26,15 +26,13 @@ JSComponent::JSComponent(std::string name, std::string script)
     subscribe([this, name, script](DeinitEvent) {
         HandleScope handleScope(Isolate::GetCurrent());
 
-        callMethod( "deinit");
+        call( "deinit");
     });
 
     subscribe([this, name, script](UpdateEvent e) {
         HandleScope handleScope(Isolate::GetCurrent());
 
-        auto jsDt = v8::Number::New(Isolate::GetCurrent(), e.dt);
-
-       callMethod("update", {jsDt});
+        call("update", e.dt);
     });
 }
 
@@ -53,7 +51,7 @@ JSComponent::JSComponent(std::string name, std::shared_ptr<TextRes> textRes)
     subscribe([this, name, textRes](DeinitEvent) {
         HandleScope handleScope(Isolate::GetCurrent());
 
-        callMethod( "deinit");
+        call( "deinit");
         m_jsObject.Reset();
     });
 
@@ -64,26 +62,28 @@ JSComponent::JSComponent(std::string name, std::shared_ptr<TextRes> textRes)
             // reinitialization of a script
             if (m_textRes->lastRes() != m_textRes) {
                 m_textRes = m_textRes->lastRes();
-                callMethod( "deinit");
+                call( "deinit");
                 init(name, textRes->text());
             }
 
             auto jsDt = v8::Number::New(Isolate::GetCurrent(), e.dt);
 
-            callMethod("update", {jsDt});
+            call("update", e.dt);
         }
     });
 }
 
-Local<Value> JSComponent::callMethod(std::string name, const std::vector<v8::Local<v8::Value>>& args) {
+ResultValue JSComponent::field(std::string name) {
+    ResultValue resultValue(v8::Isolate::GetCurrent(), *manager<V8JSManager>()->context());
     auto jsObject = v8::Local<v8::Object>::New(v8::Isolate::GetCurrent(), m_jsObject);
-    return manager<V8JSManager>()->callMethod(jsObject, name, args);
+    resultValue.setValue(manager<V8JSManager>()->getField(jsObject, name));
+    return resultValue;
 }
 
 void JSComponent::init(std::string name, std::string script) {
     m_jsObject = manager<V8JSManager>()->runJSComponent(name, script, selfPointer());
     if (!m_jsObject.IsEmpty())
-        callMethod("init");
+        call("init");
     else
         throw std::runtime_error("Can't execute a JS component");
 }
