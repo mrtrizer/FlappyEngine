@@ -86,7 +86,6 @@ TEST_CASE("Call of a JS function") {
     }
 
     // Pass a dictionary to js and return back
-    persistentHolder.clear();
 }
 
 TEST_CASE("Access to Cpp components from a JS component") {

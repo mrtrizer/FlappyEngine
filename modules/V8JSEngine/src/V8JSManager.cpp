@@ -353,6 +353,7 @@ void V8JSManager::init() {
 }
 
 void V8JSManager::deinit() {
+    persistentHolder.clear();
     m_context.Reset();
     m_isolate->Exit();
     m_isolate->Dispose();
