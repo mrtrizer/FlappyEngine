@@ -24,7 +24,7 @@ using namespace flappy;
 using namespace std;
 
 std::shared_ptr<Entity> createRootEntity() {
-    initV8Wrappers();
+    wrapperMap = getV8Wrappers();
 
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<ResRepositoryManager>("./resources");
@@ -73,9 +73,20 @@ TEST_CASE("Call of a JS function") {
         jsComponent->call("printStr", "Hello, world!");
     }
 
-    // Pass an object to js and return back
+    {
+        auto transform = std::make_shared<TransformComponent>();
+        transform->setPos({10, 20, 30});
+        auto result = jsComponent->call("extractZPosFromObject", transform);
+        REQUIRE(result.as<float>() == 30.0f);
+    }
+
+    {
+        auto result = jsComponent->call("extractZPosFromSavedObject");
+        REQUIRE(result.as<float>() == 30.0f);
+    }
 
     // Pass a dictionary to js and return back
+    persistentHolder.clear();
 }
 
 TEST_CASE("Access to Cpp components from a JS component") {

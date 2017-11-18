@@ -12,6 +12,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include "V8JSManager.h"
+#include "SharedPtrHolder.h"
 
 namespace flappy {
 
@@ -194,6 +195,25 @@ template<typename ValueT>
 struct toCpp<std::unordered_map<std::string, ValueT>> {
     static std::unordered_map<std::string, ValueT> cast(v8::Local<v8::Value> value) {
         return toCppDict<std::unordered_map<std::string, ValueT>, ValueT>(value);
+    }
+};
+
+// Classes
+
+void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolder> &data);
+
+template<typename T>
+struct toV8<std::shared_ptr<T>> {
+    static v8::Local<v8::Value> cast(const std::shared_ptr<T>& value) {
+        auto ptr = new SharedPtrHolder<T>(value);
+        v8::Local<v8::External> jsPtr = v8::External::New(v8::Isolate::GetCurrent(), ptr);
+        v8::UniquePersistent<v8::External> external(v8::Isolate::GetCurrent(), jsPtr);
+        external.SetWeak<CppObjectHolder>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
+        persistentHolder.push_back(std::move(external));
+
+        auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
+        wrapperdObject->SetInternalField(0, jsPtr);
+        return wrapperdObject;
     }
 };
 

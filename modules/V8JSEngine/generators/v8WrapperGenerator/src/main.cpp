@@ -46,9 +46,10 @@ std::string generateWrapperHeader(std::string className) {
 std::string generateWrapperCpp(std::string className, std::string methodBodies, std::string methodRefs) {
     std::vector<char> output(50000);
     snprintf(output.data(), output.size(),
+            "#include <algorithm>\n"
             "#include <V8JSManager.h>\n"
             "#include <V8BasicTypeWrappers.h>\n"
-            "#include <algorithm>\n"
+            "#include <SharedPtrHolder.h>\n"
             "#include <%s.h>\n"
             "namespace flappy {\n"
             "using namespace v8;\n"
@@ -127,9 +128,10 @@ public :
             auto headerFileName = std::string("V8") + className + ".h";
             writeTextFile(headerFileName, headerFileData);
 
-            m_initializerStream << "wrapperMap[\"flappy::" << className << "]\"] = {\"" << className << "\", "
-                                <<"V8" << className << "::wrap, V8" << className << "::createConstructor };\n";
+            m_initializerStream << "    wrapperMap.set<" << className << ", Wrapper>({\"" << className << "\", "
+                                <<"V8" << className << "::wrap, V8" << className << "::createConstructor });\n";
             m_initializerHeadersStream << "#include \"wrappers/V8" << className << ".h\"\n";
+            m_initializerHeadersStream << "#include <" << className << ".h>\n";
 
             std::cout << "class " << className << std::endl;
 
@@ -163,8 +165,10 @@ std::string generateInitializerCpp(const std::string& initializers, const std::s
             "#include <V8JSManager.h>\n"
             "%s\n"
             "namespace flappy {\n"
-            "void initV8Wrappers() {\n"
-                "%s"
+            "TypeMap<void, Wrapper> getV8Wrappers() {\n"
+            "    TypeMap<void, Wrapper> wrapperMap;\n"
+            "%s"
+            "    return wrapperMap;\n"
             "}\n"
             "} // flappy\n"
              ,initializerHeadersStream.c_str()
@@ -175,8 +179,10 @@ std::string generateInitializerCpp(const std::string& initializers, const std::s
 std::string generateInitializerHeader() {
     return std::string(
             "#pragma once\n"
+            "#include <TypeMap.h>\n"
+            "#include <V8JSManager.h>\n"
             "namespace flappy {\n"
-            "    void initV8Wrappers();\n"
+            "    TypeMap<void, Wrapper> getV8Wrappers();\n"
             "} // flappy\n");
 }
 

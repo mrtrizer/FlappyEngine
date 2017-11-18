@@ -176,11 +176,11 @@ std::string generateConstructorCall(const CXXMethodDecl* methodDecl, std::string
                 "if (%s) {\n"
                 "%s\n"
                 "    auto sharedPtr = std::make_shared<%s>(%s);\n"
-                "    auto ptr = new std::shared_ptr<%s>(sharedPtr);\n"
+                "    auto ptr = new SharedPtrHolder<%s>(sharedPtr);\n"
                 "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
                 "    setMethods(info.This(), jsPtr);\n"
                 "    UniquePersistent<External> external(Isolate::GetCurrent(), jsPtr);\n"
-                "    external.SetWeak<std::shared_ptr<%s>>(ptr, callback, WeakCallbackType::kParameter);\n"
+                "    external.SetWeak<CppObjectHolder>(ptr, v8DestroyHolder, WeakCallbackType::kParameter);\n"
                 "    persistentHolder.push_back(std::move(external));\n"
                 "}\n"
                 "\n",
@@ -198,24 +198,20 @@ std::string generateConstructorCall(const CXXMethodDecl* methodDecl, std::string
 
 std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, const CXXRecordDecl* classDecl) {
     auto className = classDecl->getNameAsString();
-    std::stringstream methodConditionBlock;
+    std::stringstream constructorBody;
     if (!classDecl->isAbstract()) {
         for (auto methodDecl : methods) {
-            methodConditionBlock << generateConstructorCall(methodDecl, className);
+            constructorBody << generateConstructorCall(methodDecl, className);
         }
     }
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),
-            "void callback(const WeakCallbackInfo<std::shared_ptr<%s>> &data) {\n"
-            "     delete data.GetParameter();\n"
-            "}\n"
             "\n"
             "static void method_constructor(const FunctionCallbackInfo<Value>& info) {\n"
             "%s\n"
             "}\n"
             "\n",
-             className.c_str(),
-             methodConditionBlock.str().c_str());
+             constructorBody.str().c_str());
     return std::string(output.data());
 }
 

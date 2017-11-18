@@ -4,4 +4,8 @@
 
 namespace flappy {
 
+void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolder> &data) {
+     delete data.GetParameter();
+}
+
 } // flappy

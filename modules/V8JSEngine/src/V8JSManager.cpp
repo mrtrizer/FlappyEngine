@@ -48,7 +48,7 @@ static ComponentBase* unwrapComponent(Local<Object> obj) {
   return static_cast<ObjT*>(ptr);
 }
 
-std::unordered_map<std::string, Wrapper> wrapperMap;
+TypeMap<void, Wrapper> wrapperMap;
 std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
 
 namespace V8Entity {
@@ -77,7 +77,7 @@ namespace V8Entity {
                 return true;
             return false;
         });
-        auto wrapperFunc = wrapperMap[component->componentId().name()].wrapper;
+        auto wrapperFunc = wrapperMap.getByName(component->componentId().name()).wrapper;
         info.GetReturnValue().Set(wrapperFunc(component->shared_from_this().get()));
     }
 
@@ -335,8 +335,8 @@ void V8JSManager::init() {
 
         Context::Scope contextScope(context);
 
-        for (auto pair : wrapperMap) {
-            auto className = pair.second.name;
+        for (auto wrapper : wrapperMap) {
+            auto className = wrapper.name;
             std::stringstream ss;
             ss << "let " << className << " = {};";
             ss << "function set" << className << "(func) {";
@@ -344,7 +344,7 @@ void V8JSManager::init() {
             ss << "    log('" << className << " is ready')";
             ss << "}";
             runScript(context, ss.str());
-            auto constructor = wrapperMap["flappy::" + className + "]"].createConstructor();
+            auto constructor = wrapperMap.getByName(wrapper.name).createConstructor();
             callFunction("set" + className, {constructor});
         }
 

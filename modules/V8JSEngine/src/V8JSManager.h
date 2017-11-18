@@ -44,7 +44,7 @@ struct Wrapper {
     std::function<v8::Local<v8::Function>()> createConstructor;
 };
 
-extern std::unordered_map<std::string, Wrapper> wrapperMap;
+extern TypeMap<void, Wrapper> wrapperMap;
 extern std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
 
 } // flappy
