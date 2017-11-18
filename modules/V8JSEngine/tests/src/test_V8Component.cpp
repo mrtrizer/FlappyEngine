@@ -85,6 +85,11 @@ TEST_CASE("Call of a JS function") {
         REQUIRE(result.as<float>() == 30.0f);
     }
 
+    {
+        auto result = jsComponent->call("getSavedObject");
+        REQUIRE(result.as<std::shared_ptr<TransformComponent>>()->pos().x == 10.0f);
+    }
+
     // Pass a dictionary to js and return back
 }
 

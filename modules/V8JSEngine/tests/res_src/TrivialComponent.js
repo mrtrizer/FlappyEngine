@@ -29,4 +29,7 @@ class TrivialComponent extends Component {
         log("x: " + this.objHolder.pos().x);
         return this.objHolder.pos().z;
     }
+    getSavedObject() {
+        return this.objHolder;
+    }
 }

@@ -217,6 +217,15 @@ struct toV8<std::shared_ptr<T>> {
     }
 };
 
+template<typename T>
+struct toCpp<std::shared_ptr<T>> {
+    static std::shared_ptr<T> cast(v8::Local<v8::Value> value) {
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        return sharedPtrHolder->sharedPtr();
+    }
+};
+
 // Simple types
 
 template <>

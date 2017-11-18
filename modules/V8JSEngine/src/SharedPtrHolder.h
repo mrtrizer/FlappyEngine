@@ -17,6 +17,7 @@ public:
         : m_sharedPtr(sharedPtr)
     {}
 
+    std::shared_ptr<T> sharedPtr() { return m_sharedPtr; }
 
 private:
     std::shared_ptr<T> m_sharedPtr;
