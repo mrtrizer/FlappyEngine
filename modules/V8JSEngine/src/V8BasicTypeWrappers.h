@@ -251,7 +251,10 @@ template<typename T>
 struct toCpp<std::shared_ptr<T>> {
     static std::shared_ptr<T> cast(v8::Local<v8::Value> value) {
         v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
-        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
+        if (cppObjectHolder->holderType() != HolderType::SHARED)
+            throw std::runtime_error("Object can't be casted to shared_ptr.");
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(cppObjectHolder);
         return sharedPtrHolder->sharedPtr();
     }
 };
@@ -269,7 +272,10 @@ template<typename T>
 struct toCpp<T*> {
     static T* cast(v8::Local<v8::Value> value) {
         v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
-        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
+        if (cppObjectHolder->holderType() != HolderType::SHARED)
+            throw std::runtime_error("Object can't be casted to pointer.");
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(cppObjectHolder);
         return sharedPtrHolder->sharedPtr().get();
     }
 };
@@ -278,7 +284,10 @@ template<typename T>
 struct toCpp<T&> {
     static T& cast(v8::Local<v8::Value> value) {
         v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
-        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
+        if (cppObjectHolder->holderType() != HolderType::SHARED)
+            throw std::runtime_error("Object can't be casted to refference.");
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(cppObjectHolder);
         return *sharedPtrHolder->sharedPtr().get();
     }
 };
