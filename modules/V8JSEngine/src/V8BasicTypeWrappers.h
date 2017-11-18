@@ -19,6 +19,8 @@ namespace flappy {
 
 using _Bool = bool;
 
+void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolderBase> &data);
+
 // Type matchers
 
 template <typename T>
@@ -102,12 +104,26 @@ struct isMatchCpp<glm::quat> {
 
 template <typename T>
 struct toV8 {
-    static v8::Local<v8::Value> cast(const T&);
+    static v8::Local<v8::Value> cast(const T& value) {
+        auto ptr = new SharedPtrHolder<T>(std::make_shared(value));
+        v8::Local<v8::External> jsPtr = v8::External::New(v8::Isolate::GetCurrent(), ptr);
+        v8::UniquePersistent<v8::External> external(v8::Isolate::GetCurrent(), jsPtr);
+        external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
+        persistentHolder.push_back(std::move(external));
+
+        auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
+        wrapperdObject->SetInternalField(0, jsPtr);
+        return wrapperdObject;
+    }
 };
 
 template <typename T>
 struct toCpp {
-    static T cast(v8::Local<v8::Value>);
+    static T cast(v8::Local<v8::Value> value) {
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        return *sharedPtrHolder->sharedPtr().get();
+    }
 };
 
 // Arrays
@@ -201,8 +217,6 @@ struct toCpp<std::unordered_map<std::string, ValueT>> {
 
 // Classes
 
-void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolderBase> &data);
-
 template<typename T>
 struct toV8<std::shared_ptr<T>> {
     static v8::Local<v8::Value> cast(const std::shared_ptr<T>& value) {
@@ -248,6 +262,24 @@ struct toCpp<SafePtr<T>> {
         v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
         auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
         return cppObjectHolder->safePtr();
+    }
+};
+
+template<typename T>
+struct toCpp<T*> {
+    static T* cast(v8::Local<v8::Value> value) {
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        return sharedPtrHolder->sharedPtr().get();
+    }
+};
+
+template<typename T>
+struct toCpp<T&> {
+    static T& cast(v8::Local<v8::Value> value) {
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
+        return *sharedPtrHolder->sharedPtr().get();
     }
 };
 
