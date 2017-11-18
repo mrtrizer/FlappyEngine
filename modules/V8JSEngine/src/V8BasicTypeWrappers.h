@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include <Manager.h>
+#include <SafePtr.h>
 
 #include <v8.h>
 
@@ -200,7 +201,7 @@ struct toCpp<std::unordered_map<std::string, ValueT>> {
 
 // Classes
 
-void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolder> &data);
+void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolderBase> &data);
 
 template<typename T>
 struct toV8<std::shared_ptr<T>> {
@@ -208,7 +209,22 @@ struct toV8<std::shared_ptr<T>> {
         auto ptr = new SharedPtrHolder<T>(value);
         v8::Local<v8::External> jsPtr = v8::External::New(v8::Isolate::GetCurrent(), ptr);
         v8::UniquePersistent<v8::External> external(v8::Isolate::GetCurrent(), jsPtr);
-        external.SetWeak<CppObjectHolder>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
+        external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
+        persistentHolder.push_back(std::move(external));
+
+        auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
+        wrapperdObject->SetInternalField(0, jsPtr);
+        return wrapperdObject;
+    }
+};
+
+template<typename T>
+struct toV8<SafePtr<T>> {
+    static v8::Local<v8::Value> cast(const SafePtr<T>& value) {
+        auto ptr = new SafePtrHolder<T>(value);
+        v8::Local<v8::External> jsPtr = v8::External::New(v8::Isolate::GetCurrent(), ptr);
+        v8::UniquePersistent<v8::External> external(v8::Isolate::GetCurrent(), jsPtr);
+        external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
         persistentHolder.push_back(std::move(external));
 
         auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
@@ -223,6 +239,15 @@ struct toCpp<std::shared_ptr<T>> {
         v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
         auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
         return sharedPtrHolder->sharedPtr();
+    }
+};
+
+template<typename T>
+struct toCpp<SafePtr<T>> {
+    static SafePtr<T> cast(v8::Local<v8::Value> value) {
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
+        return cppObjectHolder->safePtr();
     }
 };
 
