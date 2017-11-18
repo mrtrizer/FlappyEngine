@@ -7,8 +7,14 @@
 
 namespace  flappy {
 
+class SafePtrBase
+{
+public:
+    virtual ~SafePtrBase() = default;
+};
+
 template <typename T>
-class SafePtr
+class SafePtr: public SafePtrBase
 {
 public:
     SafePtr(std::shared_ptr<T> sharedPtr = nullptr):

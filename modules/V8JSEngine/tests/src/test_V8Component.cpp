@@ -105,6 +105,11 @@ TEST_CASE("Call of a JS function") {
         REQUIRE(result.as<TransformComponent&>().pos().x == 10.0f);
     }
 
+    {
+        auto result = jsComponent->call("createCppObject");
+        REQUIRE(result.as<std::shared_ptr<TransformComponent>>()->pos().x == 100.0f);
+    }
+
     // Pass a dictionary to js and return back
 }
 

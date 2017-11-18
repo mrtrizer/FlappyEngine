@@ -129,7 +129,7 @@ std::string generateMethodCall(const CXXMethodDecl* methodDecl, std::string type
         snprintf(output.data(), output.size(),
                 "    if (%s) {\n"
                 "%s\n"
-                "        %sobjectPtr->%s(%s);\n"
+                "        %sobjectPtr->safePtr()->%s(%s);\n"
                 "%s\n"
                 "        return;\n"
                 "    }\n",
@@ -155,9 +155,9 @@ std::string generateMethodBody(std::string methodName, std::string className, co
     snprintf(output.data(), output.size(),
             "\n"
             "static void method_%s(const FunctionCallbackInfo<Value>& info) {\n"
-            "    Local<External> field = info.Data().As<External>();\n"
+            "    Local<External> field = info.This()->GetHiddenValue(toV8Str(\"cpp_ptr\")).As<External>();\n"
             "    void* ptr = field->Value();\n"
-            "    auto objectPtr =  static_cast<%s*>(ptr);\n"
+            "    auto objectPtr =  static_cast<CppObjectHolder<%s>*>(ptr);\n"
             "\n"
             "%s"
             "}\n"
@@ -168,28 +168,37 @@ std::string generateMethodBody(std::string methodName, std::string className, co
     return std::string(output.data());
 }
 
-std::string generateConstructorCall(const CXXMethodDecl* methodDecl, std::string className) {
+std::string generateConstructorCall(std::string argWrappers, std::string className, std::string argRefs) {
+    std::vector<char> output(10000);
+    snprintf(output.data(), output.size(),
+            "%s\n"
+            "    auto sharedPtr = std::make_shared<%s>(%s);\n"
+            "    auto ptr = new SharedPtrHolder<%s>(sharedPtr);\n"
+            "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
+            "    setMethods(info.This(), jsPtr);\n"
+            "    UniquePersistent<External> external(Isolate::GetCurrent(), jsPtr);\n"
+            "    external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, WeakCallbackType::kParameter);\n"
+            "    persistentHolder.push_back(std::move(external));\n"
+            "    info.This()->SetHiddenValue(toV8Str(\"cpp_ptr\"), jsPtr);\n"
+            "\n",
+             argWrappers.c_str(),
+             className.c_str(),
+             argRefs.c_str(),
+             className.c_str());
+    return std::string(output.data());
+}
+
+std::string generateConditionalConstructorCall(const CXXMethodDecl* methodDecl, std::string className) {
     auto args = generateArgs(methodDecl);
     if (args.success) {
         std::vector<char> output(10000);
         snprintf(output.data(), output.size(),
                 "if (%s) {\n"
                 "%s\n"
-                "    auto sharedPtr = std::make_shared<%s>(%s);\n"
-                "    auto ptr = new SharedPtrHolder<%s>(sharedPtr);\n"
-                "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), ptr);\n"
-                "    setMethods(info.This(), jsPtr);\n"
-                "    UniquePersistent<External> external(Isolate::GetCurrent(), jsPtr);\n"
-                "    external.SetWeak<CppObjectHolder>(ptr, v8DestroyHolder, WeakCallbackType::kParameter);\n"
-                "    persistentHolder.push_back(std::move(external));\n"
                 "}\n"
                 "\n",
                  generateCallConditions(methodDecl).c_str(),
-                 args.argWrappers.c_str(),
-                 className.c_str(),
-                 args.argRefs.c_str(),
-                 className.c_str(),
-                 className.c_str());
+                 generateConstructorCall(args.argWrappers, className, args.argRefs).c_str());
         return std::string(output.data());
     } else {
         return "";
@@ -201,8 +210,11 @@ std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, c
     std::stringstream constructorBody;
     if (!classDecl->isAbstract()) {
         for (auto methodDecl : methods) {
-            constructorBody << generateConstructorCall(methodDecl, className);
+            constructorBody << generateConditionalConstructorCall(methodDecl, className);
         }
+        // default constructor
+        if (classDecl->hasDefaultConstructor())
+            constructorBody << generateConstructorCall("", className, "");
     }
     std::vector<char> output(10000);
     snprintf(output.data(), output.size(),

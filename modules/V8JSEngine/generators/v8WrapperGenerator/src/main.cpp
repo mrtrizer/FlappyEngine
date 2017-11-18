@@ -32,7 +32,7 @@ std::string generateWrapperHeader(std::string className) {
             "namespace flappy {\n"
             "namespace V8%s {\n"
             "    void setPos(const v8::FunctionCallbackInfo<v8::Value>& info);\n"
-            "    v8::Local<v8::Object> wrap(void* ptr);\n"
+            "    v8::Local<v8::Object> wrap(SafePtrBase& ptr);\n"
             "    v8::Local<v8::Function> createConstructor();\n"
             "} // V8%s\n"
             "} // flappy\n",
@@ -50,6 +50,7 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "#include <V8JSManager.h>\n"
             "#include <V8BasicTypeWrappers.h>\n"
             "#include <SharedPtrHolder.h>\n"
+            "#include <SafePtrHolder.h>\n"
             "#include <%s.h>\n"
             "namespace flappy {\n"
             "using namespace v8;\n"
@@ -73,21 +74,20 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "    return handle_scope.Escape(funcTemplate->GetFunction());\n"
             "}\n"
             "\n"
-            "Local<Object> wrap(void* ptr) {\n"
-            "    auto castedPtr = static_cast<%s*>(ptr);\n"
+            "Local<Object> wrap(SafePtrBase& ptr) {\n"
+            "    auto castedPtr = static_cast<SafePtr<%s>&>(ptr);\n"
             "    EscapableHandleScope handle_scope(Isolate::GetCurrent());\n"
             "    Local <Context> context = Local <Context>::New (Isolate::GetCurrent(), Isolate::GetCurrent()->GetCurrentContext());\n"
             "    Context::Scope contextScope (context);\n"
-            "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), castedPtr);\n"
+            "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), new SafePtrHolder<%s>(castedPtr));\n"
             "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
             "    Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
             "    setMethods(prototype, jsPtr);\n"
             "\n"
             "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
-            "    componentTemplate->SetInternalFieldCount(1);\n"
             "    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
             "    Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();\n"
-            "    result->SetInternalField(0, jsPtr);\n"
+            "    result->SetHiddenValue(toV8Str(\"cpp_ptr\"), jsPtr);\n"
             "    return handle_scope.Escape(result);\n"
             "}\n"
             "} // V8%s \n"
@@ -96,6 +96,7 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             className.c_str(),
             methodBodies.c_str(),
             methodRefs.c_str(),
+            className.c_str(),
             className.c_str(),
             className.c_str());
     return std::string(output.data());

@@ -43,7 +43,7 @@ class ArrayBufferAllocator : public ArrayBuffer::Allocator {
 
 template <typename ObjT>
 static ComponentBase* unwrapComponent(Local<Object> obj) {
-  Local<External> field = Local<External>::Cast(obj->GetInternalField(0));
+  Local<External> field = Local<External>::Cast(obj->GetHiddenValue(toV8Str("cpp_ptr")));
   void* ptr = field->Value();
   return static_cast<ObjT*>(ptr);
 }
@@ -78,7 +78,8 @@ namespace V8Entity {
             return false;
         });
         auto wrapperFunc = wrapperMap.getByName(component->componentId().name()).wrapper;
-        info.GetReturnValue().Set(wrapperFunc(component->shared_from_this().get()));
+        auto safePtr = SafePtr<ComponentBase>(component);
+        info.GetReturnValue().Set(wrapperFunc(safePtr));
     }
 
 }
@@ -97,13 +98,12 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
     prototype->Set(toV8Str("component"), FunctionTemplate::New(m_isolate, V8Entity::component, jsPtr));
 
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
-    componentTemplate->SetInternalFieldCount(1);
 
     Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
 
     Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
 
-    result->SetInternalField(0, jsPtr);
+    result->SetHiddenValue(toV8Str("cpp_ptr"), jsPtr);
 
     return handle_scope.Escape(result);
 }
@@ -155,8 +155,6 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
     prototype->Set(toV8Str("entity"), wrapEntity(component->entity()));
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
 
-    componentTemplate->SetInternalFieldCount(1);
-
     // Add accessors for each of the fields of the request.
     componentTemplate->SetAccessor(toV8Str("type"), V8Component::getType);
     componentTemplate->SetAccessor(toV8Str("initialized"), V8Component::isInitialized);
@@ -166,7 +164,7 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
     Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
 
-    result->SetInternalField(0, componentJSPtr);
+    result->SetHiddenValue(toV8Str("cpp_ptr"), componentJSPtr);
 
     return handleScope.Escape(result);
 }

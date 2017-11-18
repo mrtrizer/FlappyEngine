@@ -19,17 +19,20 @@ class TrivialComponent extends Component {
         log(str);
     }
     extractZPosFromObject(obj) {
-        log(typeof obj);
-        log("x: " + obj.pos().x);
         this.objHolder = obj;
         return obj.pos().z;
     }
     extractZPosFromSavedObject() {
-        log(typeof this.objHolder);
-        log("x: " + this.objHolder.pos().x);
         return this.objHolder.pos().z;
     }
     getSavedObject() {
         return this.objHolder;
+    }
+
+    createCppObject() {
+        let cppObject = new TransformComponent();
+        cppObject.setPos({x: 100, y:200, z:300});
+        log("x:" + cppObject.pos().x);
+        return cppObject;
     }
 }

@@ -14,6 +14,7 @@
 
 #include "V8JSManager.h"
 #include "SharedPtrHolder.h"
+#include "SafePtrHolder.h"
 
 namespace flappy {
 
@@ -112,7 +113,7 @@ struct toV8 {
         persistentHolder.push_back(std::move(external));
 
         auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
-        wrapperdObject->SetInternalField(0, jsPtr);
+        wrapperdObject->SetHiddenValue(toV8Str("cpp_ptr"), jsPtr);
         return wrapperdObject;
     }
 };
@@ -120,7 +121,7 @@ struct toV8 {
 template <typename T>
 struct toCpp {
     static T cast(v8::Local<v8::Value> value) {
-        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetHiddenValue(toV8Str("cpp_ptr")).As<v8::External>();
         auto sharedPtrHolder = static_cast<SharedPtrHolder<T>*>(internal->Value());
         return *sharedPtrHolder->sharedPtr().get();
     }
@@ -226,8 +227,9 @@ struct toV8<std::shared_ptr<T>> {
         external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, v8::WeakCallbackType::kParameter);
         persistentHolder.push_back(std::move(external));
 
-        auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
-        wrapperdObject->SetInternalField(0, jsPtr);
+        SafePtr<T> safePtr (value);
+        auto wrapperdObject = wrapperMap.get<T>().wrapper(safePtr);
+        wrapperdObject->SetHiddenValue(toV8Str("cpp_ptr"), jsPtr);
         return wrapperdObject;
     }
 };
@@ -242,7 +244,7 @@ struct toV8<SafePtr<T>> {
         persistentHolder.push_back(std::move(external));
 
         auto wrapperdObject = wrapperMap.get<T>().wrapper(value.get());
-        wrapperdObject->SetInternalField(0, jsPtr);
+        wrapperdObject->SetHiddenValue(toV8Str("cpp_ptr"), jsPtr);
         return wrapperdObject;
     }
 };
@@ -250,7 +252,7 @@ struct toV8<SafePtr<T>> {
 template<typename T>
 struct toCpp<std::shared_ptr<T>> {
     static std::shared_ptr<T> cast(v8::Local<v8::Value> value) {
-        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetHiddenValue(toV8Str("cpp_ptr")).As<v8::External>();
         auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
         if (cppObjectHolder->holderType() != HolderType::SHARED)
             throw std::runtime_error("Object can't be casted to shared_ptr.");
@@ -262,7 +264,7 @@ struct toCpp<std::shared_ptr<T>> {
 template<typename T>
 struct toCpp<SafePtr<T>> {
     static SafePtr<T> cast(v8::Local<v8::Value> value) {
-        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetHiddenValue(toV8Str("cpp_ptr")).As<v8::External>();
         auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
         return cppObjectHolder->safePtr();
     }
@@ -271,7 +273,7 @@ struct toCpp<SafePtr<T>> {
 template<typename T>
 struct toCpp<T*> {
     static T* cast(v8::Local<v8::Value> value) {
-        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetHiddenValue(toV8Str("cpp_ptr")).As<v8::External>();
         auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
         if (cppObjectHolder->holderType() != HolderType::SHARED)
             throw std::runtime_error("Object can't be casted to pointer.");
@@ -283,7 +285,7 @@ struct toCpp<T*> {
 template<typename T>
 struct toCpp<T&> {
     static T& cast(v8::Local<v8::Value> value) {
-        v8::Local<v8::External> internal = value.As<v8::Object>()->GetInternalField(0).As<v8::External>();
+        v8::Local<v8::External> internal = value.As<v8::Object>()->GetHiddenValue(toV8Str("cpp_ptr")).As<v8::External>();
         auto cppObjectHolder = static_cast<CppObjectHolder<T>*>(internal->Value());
         if (cppObjectHolder->holderType() != HolderType::SHARED)
             throw std::runtime_error("Object can't be casted to refference.");

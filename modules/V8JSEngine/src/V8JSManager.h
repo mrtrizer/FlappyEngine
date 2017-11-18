@@ -40,7 +40,7 @@ v8::Local<v8::String> toV8Str(std::string stdStr);
 
 struct Wrapper {
     std::string name;
-    std::function<v8::Local<v8::Object>(void*)> wrapper;
+    std::function<v8::Local<v8::Object>(SafePtrBase&)> wrapper;
     std::function<v8::Local<v8::Function>()> createConstructor;
 };
 
