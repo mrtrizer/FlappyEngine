@@ -231,6 +231,7 @@ std::string generateConstructorBody(const std::vector<CXXMethodDecl*> methods, c
 GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::string& className) {
     std::stringstream methodBodies;
     std::stringstream methodRefs;
+    std::stringstream methodTemplateRefs;
 
     std::unordered_map<std::string, std::vector<CXXMethodDecl*>> methods;
 
@@ -254,9 +255,12 @@ GeneratedMethods processMethods(const CXXRecordDecl* classDecl, const std::strin
             methodRefs << "        prototype->Set(toV8Str(\"" << methodName;
             methodRefs << "\"), Function::New(Isolate::GetCurrent(), method_" << methodName;
             methodRefs << ", jsPtr));\n";
+            methodTemplateRefs << "        prototype->Set(toV8Str(\"" << methodName;
+            methodTemplateRefs << "\"), FunctionTemplate::New(Isolate::GetCurrent(), method_" << methodName;
+            methodTemplateRefs << ", jsPtr));\n";
         }
     }
 
-    return GeneratedMethods{methodBodies.str(), methodRefs.str()};
+    return GeneratedMethods{methodBodies.str(), methodRefs.str(), methodTemplateRefs.str()};
 }
 

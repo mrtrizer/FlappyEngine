@@ -12,6 +12,7 @@
 struct GeneratedMethods {
     std::string methodBodies;
     std::string methodRefs;
+    std::string methodTemplateRefs;
 };
 
 GeneratedMethods processMethods(const clang::CXXRecordDecl* classDecl, const std::string &className);

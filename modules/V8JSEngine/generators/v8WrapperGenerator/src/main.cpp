@@ -43,7 +43,7 @@ std::string generateWrapperHeader(std::string className) {
 
 }
 
-std::string generateWrapperCpp(std::string className, std::string methodBodies, std::string methodRefs) {
+std::string generateWrapperCpp(std::string className, GeneratedMethods generatedMethods) {
     std::vector<char> output(50000);
     snprintf(output.data(), output.size(),
             "#include <algorithm>\n"
@@ -55,14 +55,15 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "namespace flappy {\n"
             "using namespace v8;\n"
             "namespace V8%s {\n"
-            "template <typename T>\n"
-            "void setMethods(Local<T> prototype, Local<External> jsPtr);\n"
+            "void setMethods(Local<Object> prototype, Local<External> jsPtr);\n"
             "\n"
             "%s"
             "\n"
             ""
-            "template <typename T>\n"
-            "void setMethods(Local<T> prototype, Local<External> jsPtr) {\n"
+            "void setMethods(Local<Object> prototype, Local<External> jsPtr) {\n"
+            "%s"
+            "}\n"
+            "void setMethodTemplates(Local<ObjectTemplate> prototype, Local<External> jsPtr) {\n"
             "%s"
             "}\n"
             "\n"
@@ -81,8 +82,8 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "    Context::Scope contextScope (context);\n"
             "    Local<External> jsPtr = External::New(Isolate::GetCurrent(), new SafePtrHolder<%s>(castedPtr));\n"
             "    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(Isolate::GetCurrent());\n"
-            "    Local<Template> prototype = funcTemplate->PrototypeTemplate();\n"
-            "    setMethods(prototype, jsPtr);\n"
+            "    Local<ObjectTemplate> prototype = funcTemplate->PrototypeTemplate();\n"
+            "    setMethodTemplates(prototype, jsPtr);\n"
             "\n"
             "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
             "    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
@@ -94,8 +95,9 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "} // flappy \n",
             className.c_str(),
             className.c_str(),
-            methodBodies.c_str(),
-            methodRefs.c_str(),
+            generatedMethods.methodBodies.c_str(),
+            generatedMethods.methodRefs.c_str(),
+            generatedMethods.methodTemplateRefs.c_str(),
             className.c_str(),
             className.c_str(),
             className.c_str());
@@ -138,7 +140,7 @@ public :
 
             auto generatedMethods = processMethods(classDecl, className);
 
-            auto cppFileData = generateWrapperCpp(className, generatedMethods.methodBodies, generatedMethods.methodRefs);
+            auto cppFileData = generateWrapperCpp(className, generatedMethods);
             auto cppFileName = std::string("V8") + className + ".cpp";
             writeTextFile(cppFileName, cppFileData);
         }
