@@ -15,11 +15,7 @@ function getSourceList(context, cacheSubDir) {
     const fs = require('fs');
     const fse = context.require("fs-extra");
 
-    const timestampCachePath = path.join(cacheSubDir, "timestampCache.json");
-    let timestamps = {};
-    try {
-        timestamps = fse.readJsonSync(timestampCachePath);
-    } catch (e) {}
+    let timestampCache = new utils.TimestampCache(context);
 
     let sourceList = [];
 
@@ -27,24 +23,19 @@ function getSourceList(context, cacheSubDir) {
     for (const i in moduleContexts) {
         const moduleContext = moduleContexts[i];
         //console.log(JSON.stringify(moduleContext));
-        const srcDir = path.join(moduleContext.projectRoot, "src");
+        const srcDir = path.join(moduleContext.moduleRoot, "src");
         const files = utils.readDirs(srcDir);
         for (const i in files) {
             const filePath = files[i];
-            const lastModifTime = Math.floor(fs.statSync(filePath).mtime);
-            if (!(filePath in timestamps) || timestamps[filePath] != lastModifTime) {
-                console.log(filePath + " - Changed : " + lastModifTime);
+            if (timestampCache.isChanged(filePath)) {
                 const fileName = path.parse(filePath).base;
                 if (isComponentCpp(fileName)) {
                     console.log(filePath);
                     sourceList.push(filePath);
                 }
-                timestamps[filePath] = lastModifTime;
             }
         }
     }
-
-    fse.outputJson(timestampCachePath, timestamps, {spaces: 4});
 
     return sourceList.join(" ");
 }
@@ -72,7 +63,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     // Generate
     const sourceList = getSourceList(context, cacheSubDir);
     if (sourceList.length > 0) {
-        const outputDir = path.join(context.projectRoot, "flappy_cache/V8JSEngine");
+        const outputDir = path.join(context.moduleRoot, "flappy_cache/V8JSEngine");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
