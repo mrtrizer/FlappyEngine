@@ -60,11 +60,16 @@ function findLLVMDir() {
 }
 
 function generateCompilationDB(context) {
+    const path = require("path");
+    const fse = context.require("fs-extra");
     const utils = context.require("./utils");
     const generateProject = context.require("./generate_project");
     var params = utils.findParams(context.projectRoot, "cmake", null, [], []);
     generateProject.generateProject(params);
-    call(`cmake -G "Unix Makefiles"`, context.targetOutDir);
+    const buildDir = path.join(context.targetOutDir, "build");
+    fse.mkdirsSync(buildDir);
+    call(`cmake -G "Unix Makefiles" ..`, buildDir);
+    fse.removeSync(buildDir);
 }
 
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
