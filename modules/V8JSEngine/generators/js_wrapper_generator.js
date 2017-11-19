@@ -69,7 +69,9 @@ function generateCompilationDB(context) {
     const buildDir = path.join(context.targetOutDir, "build");
     fse.mkdirsSync(buildDir);
     call(`cmake -G "Unix Makefiles" ..`, buildDir);
+    fse.copySync(path.join(buildDir, "compile_commands.json"), path.join(context.projectRoot, "compile_commands.json"));
     fse.removeSync(buildDir);
+    fse.mkdirsSync(buildDir);
 }
 
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
