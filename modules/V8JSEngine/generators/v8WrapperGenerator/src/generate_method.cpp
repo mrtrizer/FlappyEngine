@@ -155,7 +155,8 @@ std::string generateMethodBody(std::string methodName, std::string className, co
     snprintf(output.data(), output.size(),
             "\n"
             "static void method_%s(const FunctionCallbackInfo<Value>& info) {\n"
-            "    Local<External> field = info.This()->GetHiddenValue(toV8Str(\"cpp_ptr\")).As<External>();\n"
+            "    Local<Value> value = info.This()->GetPrivate(currentContext(), toV8PrivateKey(\"cpp_ptr\")).ToLocalChecked();\n"
+            "    Local<External> field = value.As<External>();\n"
             "    void* ptr = field->Value();\n"
             "    auto objectPtr =  static_cast<CppObjectHolder<%s>*>(ptr);\n"
             "\n"
@@ -179,7 +180,7 @@ std::string generateConstructorCall(std::string argWrappers, std::string classNa
             "    UniquePersistent<External> external(Isolate::GetCurrent(), jsPtr);\n"
             "    external.SetWeak<CppObjectHolderBase>(ptr, v8DestroyHolder, WeakCallbackType::kParameter);\n"
             "    persistentHolder.push_back(std::move(external));\n"
-            "    info.This()->SetHiddenValue(toV8Str(\"cpp_ptr\"), jsPtr);\n"
+            "    info.This()->SetPrivate(currentContext(), toV8PrivateKey(\"cpp_ptr\"), jsPtr);\n"
             "\n",
              argWrappers.c_str(),
              className.c_str(),

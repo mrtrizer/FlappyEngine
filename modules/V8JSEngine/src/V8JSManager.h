@@ -36,7 +36,9 @@ private:
     void deinit();
 };
 
+v8::Local<v8::Context> currentContext();
 v8::Local<v8::String> toV8Str(std::string stdStr);
+v8::Local<v8::Private> toV8PrivateKey(std::string stdStr);
 
 struct Wrapper {
     std::string name;

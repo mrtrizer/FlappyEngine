@@ -22,6 +22,10 @@ V8JSManager::V8JSManager()
     subscribe([this](DeinitEvent) { deinit(); });
 }
 
+Local<Context> currentContext() {
+    return Isolate::GetCurrent()->GetCurrentContext();
+}
+
 Local<String> toV8Str(std::string stdStr) {
     auto str = String::NewFromUtf8(
                 Isolate::GetCurrent(),
@@ -31,21 +35,32 @@ Local<String> toV8Str(std::string stdStr) {
     return str;
 }
 
+Local<Private> toV8PrivateKey(std::string stdStr) {
+    auto str = String::NewFromUtf8(
+                Isolate::GetCurrent(),
+                stdStr.c_str(),
+                NewStringType::kNormal,
+                stdStr.length()).ToLocalChecked();
+    auto privateKey = Private::ForApi(Isolate::GetCurrent(), str);
+    return privateKey;
+}
+
 class ArrayBufferAllocator : public ArrayBuffer::Allocator {
- public:
-  virtual void* Allocate(size_t length) {
-    void* data = AllocateUninitialized(length);
-    return data == NULL ? data : memset(data, 0, length);
-  }
-  virtual void* AllocateUninitialized(size_t length) { return malloc(length); }
-  virtual void Free(void* data, size_t) { free(data); }
+    public:
+    virtual void* Allocate(size_t length) {
+        void* data = AllocateUninitialized(length);
+        return data == NULL ? data : memset(data, 0, length);
+    }
+    virtual void* AllocateUninitialized(size_t length) { return malloc(length); }
+    virtual void Free(void* data, size_t) { free(data); }
 };
 
 template <typename ObjT>
-static ComponentBase* unwrapComponent(Local<Object> obj) {
-  Local<External> field = Local<External>::Cast(obj->GetHiddenValue(toV8Str("cpp_ptr")));
-  void* ptr = field->Value();
-  return static_cast<ObjT*>(ptr);
+static ComponentBase* unwrapComponent(Local<Object> object) {
+    auto internalValue = object->GetPrivate(currentContext(), toV8PrivateKey("cpp_ptr")).ToLocalChecked();
+    v8::Local<v8::External> internal = internalValue.As<v8::External>();
+    void* ptr = internal->Value();
+    return static_cast<ObjT*>(ptr);
 }
 
 TypeMap<void, Wrapper> wrapperMap;
@@ -103,7 +118,7 @@ Local<Object> V8JSManager::wrapEntity(Entity* entity) {
 
     Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
 
-    result->SetHiddenValue(toV8Str("cpp_ptr"), jsPtr);
+    result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), jsPtr);
 
     return handle_scope.Escape(result);
 }
@@ -164,7 +179,7 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
 
     Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
 
-    result->SetHiddenValue(toV8Str("cpp_ptr"), componentJSPtr);
+    result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), componentJSPtr);
 
     return handleScope.Escape(result);
 }

@@ -87,7 +87,7 @@ std::string generateWrapperCpp(std::string className, std::string methodBodies, 
             "    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();\n"
             "    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(Isolate::GetCurrent(), componentTemplate);\n"
             "    Local<Object> result = templ->NewInstance(Isolate::GetCurrent()->GetCurrentContext()).ToLocalChecked();\n"
-            "    result->SetHiddenValue(toV8Str(\"cpp_ptr\"), jsPtr);\n"
+            "    result->SetPrivate(currentContext(), toV8PrivateKey(\"cpp_ptr\"), jsPtr);\n"
             "    return handle_scope.Escape(result);\n"
             "}\n"
             "} // V8%s \n"

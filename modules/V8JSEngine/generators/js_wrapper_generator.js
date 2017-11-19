@@ -45,6 +45,20 @@ function call(command, cwd) {
     childProcess.execSync(command, {"cwd": cwd, stdio: "inherit"});
 }
 
+function findLLVMDir() {
+    const fs = require('fs');
+    const possibleDirs = [
+        "/usr/local/Cellar/llvm/5.0.0/",
+        "/usr/lib/llvm-5.0/"
+    ];
+    for (const i in possibleDirs) {
+        const dir = possibleDirs[i];
+        if (fs.existsSync(dir))
+            return dir;
+    }
+    throw new Error("Can't find llvm-5.0 library.");
+}
+
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
@@ -52,10 +66,10 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     // Build
     const buildDir = path.join(resSrcDir, "../generators/v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
-    // TODO: Make automatic searching of DCMAKE_PREFIX_PATH
-    // TODO: Search -extra-arg automatically too
+    // TODO: Make automatic searching of llvmDir
     // TODO: Run flappy gen cmake and CMake before wrapper generation
-    const llvmDir = "/usr/local/Cellar/llvm/5.0.0/"
+    const llvmDir = findLLVMDir();
+    console.log("LLVM found: " + llvmDir);
     const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
     fse.mkdirsSync(buildDir);
     call(`cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
