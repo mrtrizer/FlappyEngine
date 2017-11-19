@@ -59,10 +59,20 @@ function findLLVMDir() {
     throw new Error("Can't find llvm-5.0 library.");
 }
 
+function generateCompilationDB(context) {
+    const utils = context.require("./utils");
+    const generateProject = context.require("./generate_project");
+    var params = utils.findParams(context.projectRoot, "cmake", null, [], []);
+    generateProject.generateProject(params);
+    call(`cmake -G "Unix Makefiles"`, context.targetOutDir);
+}
+
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
+    // Generate compile_commands.json
+    generateCompilationDB(context);
     // Build
     const buildDir = path.join(resSrcDir, "../generators/v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
