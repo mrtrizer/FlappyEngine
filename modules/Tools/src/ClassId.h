@@ -58,6 +58,10 @@ public:
         : m_id(id)
         , m_name(typeName<ContextT>())
     {}
+    explicit TypeId(std::string name)
+        : m_id(TypeNames<ContextT>::instance().getIndexByName(name))
+        , m_name(name)
+    {}
     TypeId(const TypeId&) = default;
     TypeId(TypeId&&) = default;
     TypeId& operator = (const TypeId&) = default;

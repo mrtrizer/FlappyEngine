@@ -87,11 +87,7 @@ namespace V8Entity {
         auto entity =  static_cast<Entity*>(ptr);
         String::Utf8Value name(info[0]);
         std::string fullName = std::string("flappy::") + *name;
-        auto component = entity->findComponent<ComponentBase>([&fullName](const ComponentBase& component) {
-            if (component.componentId().name() == fullName)
-                return true;
-            return false;
-        });
+        auto component = entity->componentById(TypeId<ComponentBase>(fullName));
         auto wrapperFunc = wrapperMap.getByName(component->componentId().name()).wrapper;
         auto safePtr = SafePtr<ComponentBase>(component);
         info.GetReturnValue().Set(wrapperFunc(safePtr));

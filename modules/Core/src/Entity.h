@@ -42,8 +42,6 @@ public:
     /// Also can be used to create multiple components of same type in
     /// single entity. Prefere using component<T>() for creation of components with
     /// empty constructors.
-    /// Creating of multiple components of the same type
-    /// is not allowed.
     /// @see findComponent(), components()
     template <typename ComponentT, typename ... Args>
     std::shared_ptr<ComponentT> createComponent(Args ... args);
