@@ -16,7 +16,7 @@ namespace flappy {
 
 template <typename Type>
 std::string typeName() {
-    std::regex regex("Type = ([A-Za-z:]*)");
+    std::regex regex("Type = ([0-9A-Za-z:]*)");
     std::smatch match;
     std::string str(__PRETTY_FUNCTION__);
     std::regex_search(str, match, regex);

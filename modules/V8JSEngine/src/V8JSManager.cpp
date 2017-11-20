@@ -11,6 +11,7 @@
 #include <Entity.h>
 #include <ComponentBase.h>
 #include <JSComponent.h>
+#include <V8ComponentWrapper.h>
 
 namespace flappy {
 
@@ -55,133 +56,8 @@ class ArrayBufferAllocator : public ArrayBuffer::Allocator {
     virtual void Free(void* data, size_t) { free(data); }
 };
 
-template <typename ObjT>
-static ComponentBase* unwrapComponent(Local<Object> object) {
-    auto internalValue = object->GetPrivate(currentContext(), toV8PrivateKey("cpp_ptr")).ToLocalChecked();
-    v8::Local<v8::External> internal = internalValue.As<v8::External>();
-    void* ptr = internal->Value();
-    return static_cast<ObjT*>(ptr);
-}
-
 TypeMap<void, Wrapper> wrapperMap;
 std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
-
-namespace V8Entity {
-
-    static void jsComponent(const FunctionCallbackInfo<Value>& info) {
-        Local<External> field = info.Data().As<External>();
-        void* ptr = field->Value();
-        auto entity =  static_cast<Entity*>(ptr);
-        String::Utf8Value name(info[0]);
-        auto component = entity->findComponent<JSComponent>([&name](const JSComponent& jsComponent) {
-            if (jsComponent.name() == *name)
-                return true;
-            return false;
-        });
-        info.GetReturnValue().Set(component->jsObject());
-    }
-
-    static void component(const FunctionCallbackInfo<Value>& info) {
-        Local<External> field = info.Data().As<External>();
-        void* ptr = field->Value();
-        auto entity =  static_cast<Entity*>(ptr);
-        String::Utf8Value name(info[0]);
-        std::string fullName = std::string("flappy::") + *name;
-        auto component = entity->componentById(TypeId<ComponentBase>(fullName));
-        auto wrapperFunc = wrapperMap.getByName(component->componentId().name()).wrapper;
-        auto safePtr = SafePtr<ComponentBase>(component);
-        info.GetReturnValue().Set(wrapperFunc(safePtr));
-    }
-
-}
-
-namespace V8Component {
-
-    Local<Object> wrapEntity(Entity* entity) {
-
-        auto isolate = Isolate::GetCurrent();
-
-        EscapableHandleScope handle_scope(isolate);
-        Local <Context> context = Local <Context>::New (isolate, isolate->GetCurrentContext());
-        Context::Scope contextScope (context);
-
-        Local<External> jsPtr = External::New(isolate, entity);
-
-        Local<ObjectTemplate> entityTemplate = ObjectTemplate::New(isolate);
-        entityTemplate->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, V8Entity::jsComponent, jsPtr));
-        entityTemplate->Set(toV8Str("component"), FunctionTemplate::New(isolate, V8Entity::component, jsPtr));
-
-        Local<Object> result = entityTemplate->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
-
-        result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), jsPtr);
-
-        return handle_scope.Escape(result);
-    }
-
-    static void getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
-        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-        auto path = toV8Str(component->componentId().name());
-        info.GetReturnValue().Set(path);
-    }
-
-    static void isInitialized(Local<String>, const PropertyCallbackInfo<Value>& info) {
-        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-        info.GetReturnValue().Set(component->isInitialized());
-    }
-
-    static void active(Local<String>, const PropertyCallbackInfo<Value>& info) {
-        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-        info.GetReturnValue().Set(component->active());
-    }
-
-    static void setActive(Local<String>, Local<Value> value, const PropertyCallbackInfo<void>& info) {
-        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-        component->setActive(value->BooleanValue());
-    }
-
-    static void testFunc(const FunctionCallbackInfo<Value>& info) {
-        Local<External> field = info.Data().As<External>();
-        void* ptr = field->Value();
-        auto component =  static_cast<ComponentBase*>(ptr);
-        auto name = toV8Str(component->componentId().name());
-        info.GetReturnValue().Set(name);
-    }
-
-    // TODO: Don't wrap entity every time. It would be better to keep it somewhere else
-    static void entity(Local<String>, const PropertyCallbackInfo<Value>& info) {
-        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
-        info.GetReturnValue().Set(wrapEntity(component->entity()));
-    }
-
-}
-
-Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
-
-    EscapableHandleScope handleScope(m_isolate);
-    Local <Context> context = Local <Context>::New (m_isolate, m_context);
-    Context::Scope contextScope (context);
-
-    Local<External> componentJSPtr = External::New(m_isolate, component);
-
-    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
-    Local<Template> prototype = funcTemplate->PrototypeTemplate();
-    prototype->Set(toV8Str("testFunc"), FunctionTemplate::New(m_isolate, V8Component::testFunc, componentJSPtr));
-    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
-
-    // Add accessors for each of the fields of the request.
-    componentTemplate->SetAccessor(toV8Str("type"), V8Component::getType);
-    componentTemplate->SetAccessor(toV8Str("initialized"), V8Component::isInitialized);
-    componentTemplate->SetAccessor(toV8Str("active"), V8Component::active, V8Component::setActive);
-    componentTemplate->SetAccessor(toV8Str("entity"), V8Component::entity);
-
-    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
-
-    Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
-
-    result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), componentJSPtr);
-
-    return handleScope.Escape(result);
-}
 
 static void log(const FunctionCallbackInfo<Value>& args) {
   if (args.Length() < 1)
@@ -370,8 +246,6 @@ void V8JSManager::deinit() {
     m_context.Reset();
     m_isolate->Exit();
     m_isolate->Dispose();
-    // Dispose the isolate and tear down V8.
-    //V8::Dispose();
     V8::ShutdownPlatform();
     delete m_arrayBufferAllocator;
     delete m_platform;
