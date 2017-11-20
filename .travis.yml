@@ -7,10 +7,13 @@ before_install:
  - sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
  - sudo add-apt-repository ppa:pinepain/libv8-5.2 -y
+ - sudo add-apt-repository ppa:jonathonf/llvm -y
  - sudo apt-get update -qq
  - sudo apt-get install libsdl2-dev libsdl2-image-dev
  - sudo apt-get install libvorbis-dev libopenal-dev
  - sudo apt-get install libv8-5.2-dev
+ - sudo apt-get install llvm-5.0-dev
+ - sudo apt-get install clang-5.0-dev
  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
  - sudo apt-get install -qq gcc-6 g++-6 nodejs
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
@@ -141,12 +144,12 @@ script:
  - popd
 
 #V8JSEngine tests
- # - pushd modules/V8JSEngine/tests
- # - flappy build cmake
- # - pushd generated/cmake/build
- # - ./tests_V8JSEngine
- # - popd
- # - popd
+ - pushd modules/V8JSEngine/tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests_V8JSEngine
+ - popd
+ - popd
 
 #DebugDraw tests
  - pushd modules/DebugDraw/demo
