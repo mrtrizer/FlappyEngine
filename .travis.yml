@@ -41,6 +41,15 @@ before_install:
  - popd
 
 script:
+
+#V8JSEngine tests
+ - pushd modules/V8JSEngine/tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests_V8JSEngine
+ - popd
+ - popd
+
 # Test of shader compilation to SPIR-V
  - pushd modules/Gl/res_src_330
  - glslangValidator -V -H -S vert -o shape_shader_vert.spv shape_shader.vglsl --aml
@@ -141,14 +150,6 @@ script:
  - flappy build cmake
  - pushd generated/cmake/build
  - ./tests_UI
- - popd
- - popd
-
-#V8JSEngine tests
- - pushd modules/V8JSEngine/tests
- - flappy build cmake
- - pushd generated/cmake/build
- - ./tests_V8JSEngine
  - popd
  - popd
 
