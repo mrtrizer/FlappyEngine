@@ -111,16 +111,11 @@ namespace V8Component {
 
         Local<External> jsPtr = External::New(isolate, entity);
 
-        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(isolate);
-        Local<Template> prototype = funcTemplate->PrototypeTemplate();
-        prototype->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, V8Entity::jsComponent, jsPtr));
-        prototype->Set(toV8Str("component"), FunctionTemplate::New(isolate, V8Entity::component, jsPtr));
+        Local<ObjectTemplate> entityTemplate = ObjectTemplate::New(isolate);
+        entityTemplate->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, V8Entity::jsComponent, jsPtr));
+        entityTemplate->Set(toV8Str("component"), FunctionTemplate::New(isolate, V8Entity::component, jsPtr));
 
-        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
-
-        Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(isolate, componentTemplate);
-
-        Local<Object> result = templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
+        Local<Object> result = entityTemplate->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
 
         result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), jsPtr);
 
