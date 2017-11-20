@@ -20,7 +20,10 @@ std::string typeName() {
     std::smatch match;
     std::string str(__PRETTY_FUNCTION__);
     std::regex_search(str, match, regex);
-    return match[1].str();
+    std::string result = match[1].str();
+    if (result[result.size() - 1] == ']')
+        return result.substr(0, result.size() - 1);
+    return result;
 }
 
 /// Gives some common tools

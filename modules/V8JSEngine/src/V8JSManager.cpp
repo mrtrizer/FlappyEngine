@@ -86,7 +86,7 @@ namespace V8Entity {
         void* ptr = field->Value();
         auto entity =  static_cast<Entity*>(ptr);
         String::Utf8Value name(info[0]);
-        std::string fullName = std::string("flappy::") + *name + "]";
+        std::string fullName = std::string("flappy::") + *name;
         auto component = entity->findComponent<ComponentBase>([&fullName](const ComponentBase& сomponent) {
             if (сomponent.componentId().name() == fullName)
                 return true;
@@ -328,6 +328,7 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
 
 void V8JSManager::init() {
     // Initialize V8.
+    V8::InitializeICU();
     m_platform = platform::CreateDefaultPlatform();
     V8::InitializePlatform(m_platform);
     V8::Initialize();
