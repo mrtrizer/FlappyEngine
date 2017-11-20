@@ -99,31 +99,33 @@ namespace V8Entity {
 
 }
 
-Local<Object> V8JSManager::wrapEntity(Entity* entity) {
-
-    EscapableHandleScope handle_scope(m_isolate);
-    Local <Context> context = Local <Context>::New (m_isolate, m_context);
-    Context::Scope contextScope (context);
-
-    Local<External> jsPtr = External::New(m_isolate, entity);
-
-    Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
-    Local<Template> prototype = funcTemplate->PrototypeTemplate();
-    prototype->Set(toV8Str("jsComponent"), FunctionTemplate::New(m_isolate, V8Entity::jsComponent, jsPtr));
-    prototype->Set(toV8Str("component"), FunctionTemplate::New(m_isolate, V8Entity::component, jsPtr));
-
-    Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
-
-    Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
-
-    Local<Object> result = templ->NewInstance(m_isolate->GetCurrentContext()).ToLocalChecked();
-
-    result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), jsPtr);
-
-    return handle_scope.Escape(result);
-}
-
 namespace V8Component {
+
+    Local<Object> wrapEntity(Entity* entity) {
+
+        auto isolate = Isolate::GetCurrent();
+
+        EscapableHandleScope handle_scope(isolate);
+        Local <Context> context = Local <Context>::New (isolate, isolate->GetCurrentContext());
+        Context::Scope contextScope (context);
+
+        Local<External> jsPtr = External::New(isolate, entity);
+
+        Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(isolate);
+        Local<Template> prototype = funcTemplate->PrototypeTemplate();
+        prototype->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, V8Entity::jsComponent, jsPtr));
+        prototype->Set(toV8Str("component"), FunctionTemplate::New(isolate, V8Entity::component, jsPtr));
+
+        Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
+
+        Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(isolate, componentTemplate);
+
+        Local<Object> result = templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
+
+        result->SetPrivate(currentContext(), toV8PrivateKey("cpp_ptr"), jsPtr);
+
+        return handle_scope.Escape(result);
+    }
 
     static void getType(Local<String>, const PropertyCallbackInfo<Value>& info) {
         ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
@@ -154,6 +156,12 @@ namespace V8Component {
         info.GetReturnValue().Set(name);
     }
 
+    // TODO: Don't wrap entity every time. It would be better to keep it somewhere else
+    static void entity(Local<String>, const PropertyCallbackInfo<Value>& info) {
+        ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
+        info.GetReturnValue().Set(wrapEntity(component->entity()));
+    }
+
 }
 
 Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
@@ -167,13 +175,13 @@ Local<Object> V8JSManager::wrapComponent(ComponentBase* component) {
     Local<FunctionTemplate> funcTemplate = FunctionTemplate::New(m_isolate);
     Local<Template> prototype = funcTemplate->PrototypeTemplate();
     prototype->Set(toV8Str("testFunc"), FunctionTemplate::New(m_isolate, V8Component::testFunc, componentJSPtr));
-    prototype->Set(toV8Str("entity"), wrapEntity(component->entity()));
     Local<ObjectTemplate> componentTemplate = funcTemplate->InstanceTemplate();
 
     // Add accessors for each of the fields of the request.
     componentTemplate->SetAccessor(toV8Str("type"), V8Component::getType);
     componentTemplate->SetAccessor(toV8Str("initialized"), V8Component::isInitialized);
     componentTemplate->SetAccessor(toV8Str("active"), V8Component::active, V8Component::setActive);
+    componentTemplate->SetAccessor(toV8Str("entity"), V8Component::entity);
 
     Local<ObjectTemplate> templ = Local<ObjectTemplate>::New(m_isolate, componentTemplate);
 
