@@ -16,14 +16,11 @@ namespace flappy {
 
 template <typename Type>
 std::string typeName() {
-    std::regex regex("Type = (.*)]");
+    std::regex regex("Type = ([A-Za-z:]*)");
     std::smatch match;
     std::string str(__PRETTY_FUNCTION__);
     std::regex_search(str, match, regex);
-    std::string result = match[1].str();
-    if (result[result.size() - 1] == ']')
-        return result.substr(0, result.size() - 1);
-    return result;
+    return match[1].str();
 }
 
 /// Gives some common tools
