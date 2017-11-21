@@ -6,6 +6,6 @@
 
 namespace flappy {
 
-v8::Local<v8::Object> wrapComponent(ComponentBase* component);
+v8::Local<v8::Object> wrapComponent(SafePtr<ComponentBase> component);
 
 } // flappy

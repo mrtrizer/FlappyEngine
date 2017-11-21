@@ -6,6 +6,6 @@
 
 namespace flappy {
 
-v8::Local<v8::Object> wrapEntity(Entity* entity);
+v8::Local<v8::Object> wrapEntity(SafePtr<Entity> entity);
 
 } // flappy

@@ -55,7 +55,7 @@ using namespace v8;
 static void jsComponent(const FunctionCallbackInfo<Value>& info) {
     Local<External> field = info.Data().As<External>();
     void* ptr = field->Value();
-    auto entity =  static_cast<Entity*>(ptr);
+    auto entity =  static_cast<CppObjectHolder<Entity>*>(ptr)->safePtr();
     String::Utf8Value name(info[0]);
     auto component = entity->findComponent<JSComponent>([&name](const JSComponent& jsComponent) {
         if (jsComponent.name() == *name)
@@ -68,7 +68,7 @@ static void jsComponent(const FunctionCallbackInfo<Value>& info) {
 static void component(const FunctionCallbackInfo<Value>& info) {
     Local<External> field = info.Data().As<External>();
     void* ptr = field->Value();
-    auto entity =  static_cast<Entity*>(ptr);
+    auto entity =  static_cast<CppObjectHolder<Entity>*>(ptr)->safePtr();
     String::Utf8Value name(info[0]);
     std::string fullName = std::string("flappy::") + *name;
     auto component = entity->componentById(TypeId<ComponentBase>(fullName));
@@ -78,7 +78,7 @@ static void component(const FunctionCallbackInfo<Value>& info) {
 }
 
 
-Local<Object> wrapEntity(Entity* entity) {
+Local<Object> wrapEntity(SafePtr<Entity> entity) {
 
     auto isolate = Isolate::GetCurrent();
 
@@ -86,7 +86,7 @@ Local<Object> wrapEntity(Entity* entity) {
     Local <Context> context = Local <Context>::New (isolate, isolate->GetCurrentContext());
     Context::Scope contextScope (context);
 
-    Local<External> jsPtr = External::New(isolate, entity);
+    Local<External> jsPtr = External::New(isolate, new SafePtrHolder<Entity>(entity));
 
     Local<ObjectTemplate> entityTemplate = ObjectTemplate::New(isolate);
     entityTemplate->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, jsComponent, jsPtr));

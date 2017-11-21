@@ -87,15 +87,15 @@ TEST_CASE( "Component::entity()" ) {
     auto component = make_shared<TestComponent>();
     auto entity = make_shared<Entity>();
 
-    REQUIRE(component->entity() == nullptr);
+    REQUIRE(component->entityRef() == nullptr);
 
     entity->addComponent(component);
 
-    REQUIRE(component->entity() == entity.get());
+    REQUIRE(component->entityRef() == entity.get());
 
     entity->removeComponent(component);
 
-    REQUIRE(component->entity() == nullptr);
+    REQUIRE(component->entityRef() == nullptr);
 
 }
 

@@ -173,7 +173,6 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
     auto extendedScript = Tools::format("\n"
                                         "function constructJsComponent(wrapper) {\n"
                                         "   let Component = function () {"
-                                        "       log(this.initialized.toString());\n"
                                         "   }\n"
                                         "\n"
                                         "   Component.prototype = wrapper;\n"
@@ -191,7 +190,7 @@ UniquePersistent<Object> V8JSManager::runJSComponent(std::string name, std::stri
     Context::Scope contextScope (context);
 
     runScript(context, extendedScript);
-    auto wrapped = wrapComponent(component->shared_from_this().get());
+    auto wrapped = wrapComponent(component);
 
     auto jsObject = callFunction("constructJsComponent", {wrapped});
 

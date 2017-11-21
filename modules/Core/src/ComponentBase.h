@@ -88,9 +88,6 @@ public:
 
     virtual TypeId<ComponentBase> componentId() const = 0;
 
-    /// Returns parent entity (can be null if conponent is not added to entity)
-    Entity* entity() const { return m_entity; }
-
     SafePtr<Entity> entityRef() const { return m_entitySafePtr; }
 
     /// Returns EventController
@@ -109,6 +106,9 @@ public:
     bool active() { return m_active; }
 
 protected:
+    /// Returns parent entity (can be null if conponent is not added to entity)
+    Entity* entity() const { return m_entity; }
+
     bool isManagerInitialized(TypeId<ComponentBase> id) const;
 
     bool isComponentInitialized(TypeId<ComponentBase> id) const;
