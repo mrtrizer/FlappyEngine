@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <ClassId.h>
+#include <TypeId.h>
 
 using namespace flappy;
 using namespace std;

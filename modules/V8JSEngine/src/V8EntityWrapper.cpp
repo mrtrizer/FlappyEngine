@@ -18,6 +18,40 @@ namespace flappy {
 
 using namespace v8;
 
+// We need implement next methods for runtime component access
+// Notice that we have to implement virtual name() method for components
+// to be able to override it in JSComponent and return name of JS component
+// instead of name of a class.
+// Actually it's not necessary to add postfix ByName after name of function.
+// We could just use overloading.
+
+//void addComponent(std::shared_ptr<ComponentBase> component);
+
+//void removeComponent(std::shared_ptr<ComponentBase> component);
+
+//std::shared_ptr<ComponentBase> findComponentByName(std::string name, unsigned depth = 0);
+
+//std::shared_ptr<ComponentBase> componentByName(std::string name);
+
+//std::list<std::shared_ptr<ComponentBase>> findComponentsByName(std::string name, unsigned depth = 0) const;
+
+//SafePtr<ComponentBase> managerByName(std::string name);
+
+//SafePtr<Entity> parent(); // Ok!
+
+//SafePtr<Entity> root(); // Ok!
+
+//std::shared_ptr<EventController> events() { return m_eventController; } // Ok!
+
+//void addEntity(std::shared_ptr<Entity> entity); // Ok!
+
+//std::shared_ptr<Entity> createEntity(); // Ok!
+
+//void removeEntity(std::shared_ptr<Entity> entity); // Ok!
+
+//std::list<std::shared_ptr<Entity>> findEntities(unsigned depth = 0); // Ok!
+
+// Remove this method. We can use only one method for access to both c++ and js components by name
 static void jsComponent(const FunctionCallbackInfo<Value>& info) {
     Local<External> field = info.Data().As<External>();
     void* ptr = field->Value();

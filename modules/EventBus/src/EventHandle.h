@@ -3,7 +3,7 @@
 #include <memory>
 #include <type_traits>
 
-#include <ClassId.h>
+#include <TypeId.h>
 #include <TypeTraits.h>
 
 namespace flappy {

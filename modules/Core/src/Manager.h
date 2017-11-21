@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <ClassId.h>
+#include <TypeId.h>
 
 #include "ManagerBase.h"
 

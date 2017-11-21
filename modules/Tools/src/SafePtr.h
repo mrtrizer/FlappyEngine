@@ -1,5 +1,4 @@
-#ifndef SAFEPTR_H
-#define SAFEPTR_H
+#pragma once
 
 #include <memory>
 #include <stdexcept>
@@ -85,5 +84,3 @@ public:
 };
 
 } // flappy
-
-#endif // SAFEPTR_H

@@ -55,7 +55,7 @@ static void testFunc(const FunctionCallbackInfo<Value>& info) {
     info.GetReturnValue().Set(name);
 }
 
-// TODO: Don't wrap entity every time. It would be better to keep it somewhere else
+// TODO: Don't wrap entity every time. It would be better to store it somewhere
 static void entity(Local<String>, const PropertyCallbackInfo<Value>& info) {
     ComponentBase* component = unwrapComponent<ComponentBase>(info.Holder());
     info.GetReturnValue().Set(wrapEntity(component->entity()));

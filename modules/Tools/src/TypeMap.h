@@ -1,10 +1,9 @@
-#ifndef TYPEMAP_H
-#define TYPEMAP_H
+#pragma once
 
 #include <vector>
 #include <stdexcept>
 
-#include "ClassId.h"
+#include "TypeId.h"
 
 namespace  flappy
 {
@@ -88,5 +87,3 @@ private:
 };
 
 } // flappy
-
-#endif // TYPEMAP_H
