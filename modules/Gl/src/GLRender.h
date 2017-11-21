@@ -40,7 +40,7 @@ void GLRender<Derived>::setShader(std::shared_ptr<ShaderRes> shaderRes) {
 
 template<typename Derived>
 std::shared_ptr<GLShaderRes> GLRender<Derived>::shader() {
-    if (m_shaderRes->nextRes() != m_shaderRes)
+    if (m_shaderRes->resUpdated())
         m_shaderRes = std::static_pointer_cast<GLShaderRes>(m_shaderRes->lastRes());
     return m_shaderRes;
 }

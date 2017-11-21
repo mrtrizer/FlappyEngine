@@ -24,7 +24,7 @@ MeshComponent::MeshComponent()
 
 
     subscribe([this](UpdateEvent) {
-        if (m_materialRes->nextRes() != m_materialRes) {
+        if (m_materialRes->resUpdated()) {
             m_materialRes = m_materialRes->lastRes();
         }
     });
