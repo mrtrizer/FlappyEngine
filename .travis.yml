@@ -67,12 +67,12 @@ script:
  - popd
 
 #OggAudioRes build
- - pushd modules/OggAudioRes/tests
+ - pushd modules/OggAudioRes/demo
  - flappy build cmake
  - popd
 
 #Sdl2Manager build
- - pushd modules/Sdl2Manager/tests
+ - pushd modules/Sdl2Manager/demo
  - flappy build cmake
  - popd
 
@@ -141,7 +141,7 @@ script:
  - popd
 
 #Box2DManager tests
- - pushd modules/Box2DManager/tests
+ - pushd modules/Box2DManager/demo
  - flappy build cmake
  - popd
 
