@@ -33,4 +33,17 @@ private:
     void deinit();
 };
 
+v8::Local<v8::Context> currentContext();
+v8::Local<v8::String> toV8Str(std::string stdStr);
+v8::Local<v8::Private> toV8PrivateKey(std::string stdStr);
+
+struct Wrapper {
+    std::string name;
+    std::function<v8::Local<v8::Object>(SafePtrBase&)> wrapper;
+    std::function<v8::Local<v8::Function>()> createConstructor;
+};
+
+extern TypeMap<void, Wrapper> wrapperMap;
+extern std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
+
 } // flappy

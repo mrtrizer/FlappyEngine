@@ -12,13 +12,8 @@
         },
         {
             "path":"../CoreComponents"
-        },
-    	{
-    	    "path":"../V8JSUtils"
-    	},
-    	{
-            "path":"^/V8JSWrappers"
-    	}
+        }
+
     ],
     "cxx":{
         "header_dirs": [
@@ -26,6 +21,16 @@
         ],
         "src_dirs": [
             "./src"
+        ]
+    },
+    "cmake":{
+        "module_path": "cmake",
+        "packages": [
+            {
+                "name":"V8",
+                "libs":"${V8_LIBRARIES}",
+                "includes":"${V8_INCLUDE_DIR}"
+            }
         ]
     }
 }

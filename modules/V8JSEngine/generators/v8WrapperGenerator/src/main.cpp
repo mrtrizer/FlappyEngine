@@ -47,7 +47,7 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
     std::vector<char> output(50000);
     snprintf(output.data(), output.size(),
             "#include <algorithm>\n"
-            "#include <V8JSUtils.h>\n"
+            "#include <V8JSManager.h>\n"
             "#include <V8BasicTypeWrappers.h>\n"
             "#include <SharedPtrHolder.h>\n"
             "#include <SafePtrHolder.h>\n"
@@ -165,7 +165,7 @@ std::string generateInitializerCpp(const std::string& initializers, const std::s
     std::vector<char> output(5000);
     snprintf(output.data(), output.size(),
             "#include \"WrapperInitializer.h\"\n"
-            "#include <V8JSUtils.h>\n"
+            "#include <V8JSManager.h>\n"
             "%s\n"
             "namespace flappy {\n"
             "TypeMap<void, Wrapper> getV8Wrappers() {\n"
@@ -183,7 +183,7 @@ std::string generateInitializerHeader() {
     return std::string(
             "#pragma once\n"
             "#include <TypeMap.h>\n"
-            "#include <V8JSUtils.h>\n"
+            "#include <V8JSManager.h>\n"
             "namespace flappy {\n"
             "    TypeMap<void, Wrapper> getV8Wrappers();\n"
             "} // flappy\n");

@@ -12,7 +12,7 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "V8JSUtils.h"
+#include "V8JSManager.h"
 #include "SharedPtrHolder.h"
 #include "SafePtrHolder.h"
 
