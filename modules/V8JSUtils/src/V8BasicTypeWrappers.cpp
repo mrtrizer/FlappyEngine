@@ -1,6 +1,6 @@
 #include "V8BasicTypeWrappers.h"
 
-#include "V8JSManager.h"
+#include "V8JSUtils.h"
 
 namespace flappy {
 

@@ -12,6 +12,8 @@
 #include <ComponentBase.h>
 #include <JSComponent.h>
 #include <V8ComponentWrapper.h>
+#include <V8JSUtils.h>
+#include <WrapperInitializer.h>
 
 namespace flappy {
 
@@ -23,29 +25,6 @@ V8JSManager::V8JSManager()
     subscribe([this](DeinitEvent) { deinit(); });
 }
 
-Local<Context> currentContext() {
-    return Isolate::GetCurrent()->GetCurrentContext();
-}
-
-Local<String> toV8Str(std::string stdStr) {
-    auto str = String::NewFromUtf8(
-                Isolate::GetCurrent(),
-                stdStr.c_str(),
-                NewStringType::kNormal,
-                stdStr.length()).ToLocalChecked();
-    return str;
-}
-
-Local<Private> toV8PrivateKey(std::string stdStr) {
-    auto str = String::NewFromUtf8(
-                Isolate::GetCurrent(),
-                stdStr.c_str(),
-                NewStringType::kNormal,
-                stdStr.length()).ToLocalChecked();
-    auto privateKey = Private::ForApi(Isolate::GetCurrent(), str);
-    return privateKey;
-}
-
 class ArrayBufferAllocator : public ArrayBuffer::Allocator {
     public:
     virtual void* Allocate(size_t length) {
@@ -55,9 +34,6 @@ class ArrayBufferAllocator : public ArrayBuffer::Allocator {
     virtual void* AllocateUninitialized(size_t length) { return malloc(length); }
     virtual void Free(void* data, size_t) { free(data); }
 };
-
-TypeMap<void, Wrapper> wrapperMap;
-std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
 
 static void log(const FunctionCallbackInfo<Value>& args) {
   if (args.Length() < 1)
@@ -232,7 +208,7 @@ void V8JSManager::init() {
             ss << "    log('" << className << " is ready')";
             ss << "}";
             runScript(context, ss.str());
-            auto constructor = wrapperMap.getByName(wrapper.name).createConstructor();
+            auto constructor = wrapper.createConstructor();
             callFunction("set" + className, {constructor});
         }
 

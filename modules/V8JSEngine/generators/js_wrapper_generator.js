@@ -2,6 +2,8 @@
 
 module.exports.type = "js_wrapper";
 
+const generatedModuleName = "V8JSWrappers";
+
 function isComponentCpp(fileName) {
     return (fileName.indexOf(".cpp") != -1)
             && ((fileName.indexOf("Component") != -1)
@@ -22,7 +24,12 @@ function getSourceList(context, cacheSubDir) {
     const moduleContexts = modules.findAllModules(context);
     for (const i in moduleContexts) {
         const moduleContext = moduleContexts[i];
-        //console.log(JSON.stringify(moduleContext));
+        if (moduleContext.config.name == "V8JSEngine")
+            continue;
+        if (moduleContext.config.name == "V8JSUtils")
+            continue;
+        if (moduleContext.config.name == generatedModuleName)
+            continue;
         const srcDir = path.join(moduleContext.moduleRoot, "src");
         const files = utils.readDirs(srcDir);
         for (const i in files) {
@@ -59,7 +66,7 @@ function findLLVMDir() {
     throw new Error("Can't find llvm-5.0 library.");
 }
 
-function generateCompilationDB(context) {
+function generateCompilationDB(context, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
     const utils = context.require("./utils");
@@ -79,27 +86,50 @@ function generateCompilationDB(context) {
     fse.removeSync(buildDir);
 }
 
+function createFlappyConf(context, moduleDir) {
+    const fse = context.require("fs-extra");
+    const path = require('path');
+    const flappyConfPath = path.join(moduleDir, "flappy_conf", "general.json");
+    const flappyConfData = {
+        "name":generatedModuleName,
+        "modules": [
+            {
+                "path": path.join(context.projectRoot, "../../V8JSUtils")
+            }
+        ],
+        "cxx":{
+            "header_dirs": [
+                "./src"
+            ],
+            "src_dirs": [
+                "./src"
+            ]
+        }
+    }
+    fse.outputJsonSync(flappyConfPath, flappyConfData, {"spaces" : 4});
+}
+
 module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
     // Generate compile_commands.json
-    generateCompilationDB(context);
+    generateCompilationDB(context, cacheSubDir);
     // Build
     const buildDir = path.join(resSrcDir, "../generators/v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
-    // TODO: Make automatic searching of llvmDir
-    // TODO: Run flappy gen cmake and CMake before wrapper generation
     const llvmDir = findLLVMDir();
     console.log("LLVM found: " + llvmDir);
     const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
     fse.mkdirsSync(buildDir);
-    call(`cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
-    call(`ninja`, buildDir);
+    call(`cmake -G "Unix Makefiles" -DCMAKE_PREFIX_PATH="${cmakePath}" ..`, buildDir);
+    call(`make`, buildDir);
     // Generate
     const sourceList = getSourceList(context, cacheSubDir);
     if (sourceList.length > 0) {
-        const outputDir = path.join(context.moduleRoot, "flappy_cache/V8JSEngine");
+        const genModulePath = path.join(cacheSubDir, generatedModuleName);
+        createFlappyConf(context, genModulePath);
+        const outputDir = path.join(genModulePath, "src");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");

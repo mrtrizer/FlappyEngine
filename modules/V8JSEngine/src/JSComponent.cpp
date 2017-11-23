@@ -5,8 +5,6 @@
 #include <Entity.h>
 #include <TextRes.h>
 
-#include "V8JSManager.h"
-
 namespace flappy {
 
 using namespace v8;

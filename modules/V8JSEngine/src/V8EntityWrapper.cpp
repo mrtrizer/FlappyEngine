@@ -10,9 +10,12 @@
 
 #include <Entity.h>
 #include <ComponentBase.h>
-#include <JSComponent.h>
 
-#include "V8JSManager.h"
+#include <CppObjectHolder.h>
+#include <SafePtrHolder.h>
+#include <V8JSUtils.h>
+#include "V8EntityWrapper.h"
+#include "JSComponent.h"
 
 namespace flappy {
 
