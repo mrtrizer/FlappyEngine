@@ -21,6 +21,7 @@ using namespace v8;
 
 V8JSManager::V8JSManager()
 {
+    wrapperMap = getV8Wrappers();
     subscribe([this](InitEvent) { init(); });
     subscribe([this](DeinitEvent) { deinit(); });
 }
