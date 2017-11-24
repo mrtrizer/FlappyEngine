@@ -14,7 +14,7 @@ function copyFileToCache(context, file, resSrcDir, cacheSubDir) {
     fse.copySync(inputPath, outputPath);
 }
 
-module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
+module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     copyFileToCache(context, resConfig.fragment, resSrcDir, cacheSubDir);
     copyFileToCache(context, resConfig.vertex, resSrcDir, cacheSubDir);
     return [resConfig];

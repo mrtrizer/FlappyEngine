@@ -15,11 +15,11 @@
     "cxx":{
         "header_dirs": [
             "./src",
-            "./flappy_cache/V8JSEngine"
+            "^/V8SJWrappers"
         ],
         "src_dirs": [
             "./src",
-            "./flappy_cache/V8JSEngine"
+            "^/V8SJWrappers"
         ]
     }
 }

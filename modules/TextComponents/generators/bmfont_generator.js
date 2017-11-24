@@ -2,7 +2,7 @@
 
 module.exports.type = "ttf";
 
-module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
+module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");

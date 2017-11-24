@@ -79,14 +79,14 @@ function generateCompilationDB(context) {
     fse.removeSync(buildDir);
 }
 
-module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
+module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
     // Generate compile_commands.json
     generateCompilationDB(context);
     // Build
-    const buildDir = path.join(resSrcDir, "../generators/v8WrapperGenerator/src/build");
+    const buildDir = path.join(scriptContext.moduleRoot, "generators/v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
     // TODO: Make automatic searching of llvmDir
     // TODO: Run flappy gen cmake and CMake before wrapper generation
@@ -99,7 +99,7 @@ module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) 
     // Generate
     const sourceList = getSourceList(context, cacheSubDir);
     if (sourceList.length > 0) {
-        const outputDir = path.join(context.moduleRoot, "flappy_cache/V8JSEngine");
+        const outputDir = path.join(cacheSubDir, "V8SJWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");

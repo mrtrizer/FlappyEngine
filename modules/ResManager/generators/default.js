@@ -2,7 +2,7 @@
 
 module.exports.type = "*";
 
-module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
+module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
     const logger = context.require("./logger.js");

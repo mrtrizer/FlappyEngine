@@ -20,7 +20,7 @@ function generateJson(coordinates, properties) {
     return {"sprites":sprites};
 }
 
-module.exports.generate = function (context, resConfig, resSrcDir, cacheSubDir) {
+module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     const spritesmith = require('spritesmith');
     const fs = require('fs');
     const path = require('path');
