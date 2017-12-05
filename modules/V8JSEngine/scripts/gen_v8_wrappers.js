@@ -1,11 +1,13 @@
 "strict"
 
-module.exports.type = "js_wrapper";
-
 function isComponentCpp(fileName) {
     return (fileName.indexOf(".cpp") != -1)
             && ((fileName.indexOf("Component") != -1)
             || (fileName.indexOf("Manager") != -1));
+}
+
+module.exports.getHelp = function() {
+    return "flappy gen_v8_wrappers - Generate wrappers for v8 js engine.";
 }
 
 function getSourceList(context, cacheSubDir) {
@@ -63,10 +65,10 @@ function generateCompilationDB(context) {
     const path = require("path");
     const fse = context.require("fs-extra");
     const utils = context.require("./utils");
-    const generateProject = context.require("./generate_project");
-    var params = utils.findParams(context.projectRoot, "cmake", null, [], []);
-    generateProject.generateProject(params);
-    const buildDir = path.join(context.targetOutDir, "build");
+    context.requireFlappyScript("gen_target").run(context, ["cmake"]);
+    const generatorPath = utils.findTemplate(context.searchDirs,"cmake");
+    const projectBuildContext = utils.createBuildContext(context, generatorPath, "project_conf");
+    const buildDir = path.join(projectBuildContext.targetOutDir, "build");
     fse.mkdirsSync(buildDir);
     call(`cmake -G "Unix Makefiles" ..`, buildDir);
     const compileCommandsSource = fse.readJsonSync(path.join(buildDir, "compile_commands.json"));
@@ -79,14 +81,14 @@ function generateCompilationDB(context) {
     fse.removeSync(buildDir);
 }
 
-module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
+module.exports.run = function (context, args) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
     // Generate compile_commands.json
     generateCompilationDB(context);
     // Build
-    const buildDir = path.join(scriptContext.moduleRoot, "generators/v8WrapperGenerator/src/build");
+    const buildDir = path.join(__dirname, "v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
     // TODO: Make automatic searching of llvmDir
     // TODO: Run flappy gen cmake and CMake before wrapper generation
@@ -94,12 +96,12 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
     console.log("LLVM found: " + llvmDir);
     const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
     fse.mkdirsSync(buildDir);
-    call(`cmake -G \"Ninja\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
-    call(`ninja`, buildDir);
+    call(`cmake -G \"Unix Makefiles\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
+    call(`make`, buildDir);
     // Generate
-    const sourceList = getSourceList(context, cacheSubDir);
+    const sourceList = getSourceList(context, context.cacheDir);
     if (sourceList.length > 0) {
-        const outputDir = path.join(cacheSubDir, "V8SJWrappers");
+        const outputDir = path.join(context.cacheDir, "V8SJWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
@@ -116,12 +118,3 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
 
     return [];
 };
-
-module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
-    const path = require("path");
-
-    var list = [
-
-    ]
-    return list;
-}
