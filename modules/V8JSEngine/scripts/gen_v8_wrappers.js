@@ -90,8 +90,6 @@ module.exports.run = function (context, args) {
     // Build
     const buildDir = path.join(__dirname, "v8WrapperGenerator/src/build");
     console.log("Build dir: " + buildDir);
-    // TODO: Make automatic searching of llvmDir
-    // TODO: Run flappy gen cmake and CMake before wrapper generation
     const llvmDir = findLLVMDir();
     console.log("LLVM found: " + llvmDir);
     const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
@@ -115,6 +113,4 @@ module.exports.run = function (context, args) {
         console.log("Generation command: ", generateCommand);
         call(generateCommand, buildDir);
     }
-
-    return [];
 };
