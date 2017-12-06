@@ -6,10 +6,6 @@ function isComponentCpp(fileName) {
             || (fileName.indexOf("Manager") != -1));
 }
 
-module.exports.getHelp = function() {
-    return "flappy gen_v8_wrappers - Generate wrappers for v8 js engine.";
-}
-
 function getSourceList(context, cacheSubDir) {
     const utils = context.require("./utils");
     const modules = context.require("./modules");
@@ -79,6 +75,20 @@ function generateCompilationDB(context) {
     const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
     fse.outputJsonSync(compileCommandsPath, compileCommandsSource,  {"spaces" : 4});
     fse.removeSync(buildDir);
+}
+
+module.exports.getHelp = function() {
+    return "flappy gen_v8_wrappers - Generate wrappers for v8 js engine.";
+}
+
+module.exports.onScriptReadyToStart = function (context, name) {
+    console.log("Script ready to start: " + name);
+    if (name == "gen_target")
+        module.exports.run(context, context.args.plainArgs);
+}
+
+module.exports.onScriptFinished = function (context, name) {
+    console.log("Script finished: " + name);
 }
 
 module.exports.run = function (context, args) {
