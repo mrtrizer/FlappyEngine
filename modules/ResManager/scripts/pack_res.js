@@ -6,8 +6,8 @@ module.exports.getHelp = function getHelp() {
 }
 
 function packResources(context, templateName) {
-    const utils = context.require("./utils.js");
-    const logger = context.require("./logger.js");
+    const utils = context.requireFlappyScript("utils");
+    const logger = context.requireFlappyScript("logger");
 
     const generatorPath = utils.findTemplate(context.searchDirs, templateName);
     const buildContext = utils.createBuildContext(context, generatorPath, "project_conf");

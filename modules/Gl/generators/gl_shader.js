@@ -5,7 +5,7 @@ module.exports.type = "glsl_shader";
 function copyFileToCache(context, file, resSrcDir, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
-    const logger = context.require("./logger.js");
+    const logger = context.requireFlappyScript("logger");
 
     const inputPath = path.join(resSrcDir, file)
     const outputPath = path.join(cacheSubDir, file)

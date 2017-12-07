@@ -6,7 +6,7 @@ const fs = require("fs");
 function getListOfResConfigs(context, resSrcDir) {
     if (!fs.existsSync(resSrcDir))
         return;
-    const utils = context.require("./utils.js");
+    const utils = context.requireFlappyScript("utils");
     const resConfigPathList = utils.readDirs(resSrcDir);
     let resConfigList = new Array();
     for (const i in resConfigPathList) {
@@ -31,7 +31,7 @@ function getListOfResConfigs(context, resSrcDir) {
 }
 
 function installNodeModules(context, generatorsDirPath) {
-    const utils = context.require("./utils.js");
+    const utils = context.requireFlappyScript("utils");
     const content = utils.readDirs(generatorsDirPath);
     const packageFiles = content.filter(item =>
         path.parse(item).base == "package.json" && item.indexOf("node_modules") == -1);
@@ -48,7 +48,7 @@ function installNodeModules(context, generatorsDirPath) {
 }
 
 function findGeneratorsInContext(context) {
-    const utils = context.require("./utils.js");
+    const utils = context.requireFlappyScript("utils");
     let generatorScripts = new Array();
     const generatorsDirPath = path.join(context.moduleRoot, "generators");
     if (fs.existsSync(generatorsDirPath)) {
@@ -70,7 +70,7 @@ function findGeneratorsInContext(context) {
 }
 
 function getListOfGenerators(context) {
-    const modules = context.require("./modules.js");
+    const modules = context.requireFlappyScript("modules");
 
     let generators = findGeneratorsInContext(context);
 
@@ -87,7 +87,7 @@ function iterateResourcesInContext(context, generatorList, cacheDir, callback) {
     const fse = context.require('fs-extra');
 
     const findGenerator = function (resConfig, resSrcDir, cacheSubDir) {
-        const logger = context.require("./logger.js");
+        const logger = context.requireFlappyScript("logger");
         let resultGenerator = null;
         for (const i in generatorList) {
             const generator = generatorList[i];
@@ -119,7 +119,7 @@ function getCacheDir(context) {
 }
 
 function iterateResourcesRecursive(context, callback) {
-    const modules = context.require("./modules.js");
+    const modules = context.requireFlappyScript("modules");
 
     const cacheDir = getCacheDir(context);
     const generatorList = getListOfGenerators(context);

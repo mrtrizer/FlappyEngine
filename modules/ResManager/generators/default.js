@@ -5,7 +5,7 @@ module.exports.type = "*";
 module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
     const path = require("path");
     const fse = context.require("fs-extra");
-    const logger = context.require("./logger.js");
+    const logger = context.requireFlappyScript("logger");
 
     const inputPath = path.join(resSrcDir, resConfig.input)
     const outputPath = path.join(cacheSubDir, resConfig.input)

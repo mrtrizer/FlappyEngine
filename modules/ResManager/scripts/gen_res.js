@@ -6,9 +6,9 @@ module.exports.getHelp = function() {
 }
 
 module.exports.run = function(context, args) {
-    const utils = context.require("./utils.js");
+    const utils = context.requireFlappyScript("utils");
     const res_utils = require("./res_utils.js");
-    const logger = context.require("./logger.js");
+    const logger = context.requireFlappyScript("logger");
     const fse = context.require("fs-extra");
     const path = require("path");
 
