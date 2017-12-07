@@ -81,14 +81,6 @@ module.exports.getHelp = function() {
     return "flappy gen_v8_wrappers - Generate wrappers for v8 js engine.";
 }
 
-module.exports.onScriptReadyToStart = function (context, name) {
-    if (name == "gen_target")
-        context.runFlappyScript("gen_v8_wrappers", "run")
-}
-
-module.exports.onScriptFinished = function (context, name) {
-}
-
 module.exports.run = function (context, args) {
     const fs = require('fs');
     const path = require('path');
@@ -122,3 +114,5 @@ module.exports.run = function (context, args) {
         call(generateCommand, buildDir);
     }
 };
+
+module.exports.before = ["gen"];
