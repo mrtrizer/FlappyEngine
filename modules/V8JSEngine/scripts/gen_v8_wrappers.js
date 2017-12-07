@@ -82,13 +82,11 @@ module.exports.getHelp = function() {
 }
 
 module.exports.onScriptReadyToStart = function (context, name) {
-    console.log("Script ready to start: " + name);
     if (name == "gen_target")
-        module.exports.run(context, context.args.plainArgs);
+        context.runFlappyScript("gen_v8_wrappers", "run")
 }
 
 module.exports.onScriptFinished = function (context, name) {
-    console.log("Script finished: " + name);
 }
 
 module.exports.run = function (context, args) {
@@ -117,7 +115,7 @@ module.exports.run = function (context, args) {
         const generateCommand = `./js_wrapper_generator `
                                 + ` -extra-arg \"-I${clangIncludes1}\"`
                                 + ` -extra-arg \"-I${clangIncludes2}\"`
-                                + ` -p \"${context.targetOutDir}\"`
+                                + ` -p \"${context.projectRoot}\"`
                                 + ` --output \"${outputDir}\"`
                                 + ' ' + sourceList;
         console.log("Generation command: ", generateCommand);
