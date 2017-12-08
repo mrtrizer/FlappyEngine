@@ -5,7 +5,7 @@ module.exports.getHelp = function() {
     return "flappy gen_res - Generate resources.";
 }
 
-module.exports.run = function(context, args) {
+module.exports.run = function(context) {
     const utils = context.requireFlappyScript("utils");
     const res_utils = require("./res_utils.js");
     const logger = context.requireFlappyScript("logger");

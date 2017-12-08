@@ -62,7 +62,7 @@ function generateCompilationDB(context) {
     const fse = context.require("fs-extra");
     const utils = context.require("./utils");
     context.requireFlappyScript("gen_target").run(context, ["cmake"]);
-    const generatorPath = utils.findTemplate(context.searchDirs,"cmake");
+    const generatorPath = utils.findTemplate(context.searchDirs, "cmake");
     const projectBuildContext = utils.createBuildContext(context, generatorPath, "project_conf");
     const buildDir = path.join(projectBuildContext.targetOutDir, "build");
     fse.mkdirsSync(buildDir);
@@ -81,7 +81,7 @@ module.exports.getHelp = function() {
     return "flappy gen_v8_wrappers - Generate wrappers for v8 js engine.";
 }
 
-module.exports.run = function (context, args) {
+module.exports.run = function (context) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");

@@ -19,10 +19,10 @@ function packResources(context, templateName) {
     }
 }
 
-module.exports.run = function(context, args) {
-    if (args.length < 1)
+module.exports.run = function(context) {
+    if (context.args.plainArgs.length < 1)
         throw new Error("At least template name expected");
-    const templateName = args[0];
+    const templateName = context.args.plainArgs[0];
 
     packResources(context, templateName);
 }
