@@ -32,10 +32,11 @@ function getListOfResConfigs(context, resSrcDir) {
 
 function installNodeModules(context, generatorsDirPath) {
     const utils = context.requireFlappyScript("utils");
+    const timestamp_cache = context.requireFlappyScript("timestamp_cache");
     const content = utils.readDirs(generatorsDirPath);
     const packageFiles = content.filter(item =>
         path.parse(item).base == "package.json" && item.indexOf("node_modules") == -1);
-    let timestampCache = new utils.TimestampCache(context);
+    let timestampCache = new timestamp_cache.TimestampCache(context);
     for (const i in packageFiles) {
         const packageFile = packageFiles[i];
         if (timestampCache.isChanged(packageFile)) {

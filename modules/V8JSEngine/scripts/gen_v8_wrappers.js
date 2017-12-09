@@ -7,13 +7,14 @@ function isComponentCpp(fileName) {
 }
 
 function getSourceList(context, cacheSubDir) {
-    const utils = context.require("./utils");
-    const modules = context.require("./modules");
+    const utils = context.requireFlappyScript("utils");
+    const modules = context.requireFlappyScript("modules");
     const path = require('path');
     const fs = require('fs');
     const fse = context.require("fs-extra");
+    const timestamp_cache = context.requireFlappyScript("timestamp_cache");
 
-    let timestampCache = new utils.TimestampCache(context);
+    let timestampCache = new timestamp_cache.TimestampCache(context);
 
     let sourceList = [];
 
@@ -60,8 +61,10 @@ function findLLVMDir() {
 function generateCompilationDB(context) {
     const path = require("path");
     const fse = context.require("fs-extra");
-    const utils = context.require("./utils");
-    context.requireFlappyScript("gen_target").run(context, ["cmake"]);
+    const utils = context.requireFlappyScript("utils");
+    const genTarget = context.requireFlappyScript("gen_target");
+    context.args.plainArgs = ["cmake"];
+    genTarget.run(context);
     const generatorPath = utils.findTemplate(context.searchDirs, "cmake");
     const projectBuildContext = utils.createBuildContext(context, generatorPath, "project_conf");
     const buildDir = path.join(projectBuildContext.targetOutDir, "build");
