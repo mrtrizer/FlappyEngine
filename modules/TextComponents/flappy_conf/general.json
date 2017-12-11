@@ -13,13 +13,15 @@
         {
             "path":"../CoreComponents"
         },
-	{
-	    "path":"../JsonRes"
-	},
-	{
-	    "path":"../RenderManager"
-	}
-
+    	{
+    	    "path":"../JsonRes"
+    	},
+    	{
+    	    "path":"../RenderManager"
+    	}
+    ],
+    "res_dirs": [
+        "res_src"
     ],
     "cxx":{
         "header_dirs": [

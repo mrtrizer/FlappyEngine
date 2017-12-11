@@ -68,6 +68,10 @@ function getListOfGenerators(context) {
 
 function iterateResourcesInContext(context, generatorList, cacheDir, callback) {
     const fse = context.require('fs-extra');
+    const logger = context.requireFlappyScript("logger");
+
+    if (typeof context.config.res_dirs !== "object")
+        return;
 
     const findGenerator = function (resConfig, resSrcDir, cacheSubDir) {
         const logger = context.requireFlappyScript("logger");
@@ -80,20 +84,27 @@ function iterateResourcesInContext(context, generatorList, cacheDir, callback) {
                 resultGenerator = generator;
         }
         if (resultGenerator == null) {
-            logger.loge("Can't find generator for " + resConfig.type);
+            logger.loge(`Can't find generator for ${resConfig.type}`);
         }
         return resultGenerator;
     }
 
     const cacheSubDir = path.join(cacheDir, context.config.name);
-    const resSrcDir = path.join(context.moduleRoot, "res_src");
 
-    const resConfigList = getListOfResConfigs(context, resSrcDir);
-    for (const i in resConfigList) {
-        const resConfig = resConfigList[i];
-        const generator = findGenerator(resConfig, resSrcDir, cacheSubDir);
-        if (generator != null)
-            callback(resConfig, generator, resSrcDir, cacheSubDir);
+    for (const i in context.config.res_dirs) {
+        const resSrcDir = path.join(context.moduleRoot, context.config.res_dirs[i]);
+        if (!fse.existsSync(resSrcDir)) {
+            logger.logw(`Resource folder is missing "${resSrcDir}"`);
+            continue;
+        }
+
+        const resConfigList = getListOfResConfigs(context, resSrcDir);
+        for (const i in resConfigList) {
+            const resConfig = resConfigList[i];
+            const generator = findGenerator(resConfig, resSrcDir, cacheSubDir);
+            if (generator != null)
+                callback(resConfig, generator, resSrcDir, cacheSubDir);
+        }
     }
 }
 

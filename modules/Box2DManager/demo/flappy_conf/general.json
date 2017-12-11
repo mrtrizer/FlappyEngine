@@ -4,17 +4,18 @@
         {
             "path":"../"
         },
-	{
-	    "path":"../../Sdl2Manager"
-	},
-	{
-	    "path":"../../Std"
-	},
-	{
-	    "path":"../../TextComponents"
-	}
-
-
+    	{
+    	    "path":"../../Sdl2Manager"
+    	},
+    	{
+    	    "path":"../../Std"
+    	},
+    	{
+    	    "path":"../../TextComponents"
+    	}
+    ],
+    "res_dirs": [
+        "res_src"
     ],
     "cxx":{
         "header_dirs": [

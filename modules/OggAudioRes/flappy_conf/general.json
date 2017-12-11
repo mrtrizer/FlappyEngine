@@ -4,12 +4,12 @@
         {
             "path":"../Core"
         },
-	{
-	    "path":"../ResManager"
-	},
-	{
-	    "path":"../OpenALManager"
-	}
+    	{
+    	    "path":"../ResManager"
+    	},
+    	{
+    	    "path":"../OpenALManager"
+    	}
     ],
     "cxx":{
         "flags": [

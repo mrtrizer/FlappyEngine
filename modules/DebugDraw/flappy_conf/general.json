@@ -16,8 +16,9 @@
         {
             "path":"../Sdl2Manager"
         }
-
-
+    ],
+    "res_dirs": [
+        "res_src"
     ],
     "cxx":{
         "header_dirs": [

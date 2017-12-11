@@ -11,6 +11,9 @@
             "path":"../CoreComponents"
         }
     ],
+    "res_dirs": [
+        "res_src"
+    ],
     "cxx":{
         "flags": [
             "-std=c++1y"

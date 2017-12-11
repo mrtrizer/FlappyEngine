@@ -8,6 +8,9 @@
             "path":"../../Std"
         }
     ],
+    "res_dirs": [
+        "res_src"
+    ],
     "cxx":{
         "header_dirs": [
             "./src"
