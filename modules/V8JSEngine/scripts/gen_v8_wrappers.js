@@ -62,11 +62,15 @@ function generateCompilationDB(context) {
     const path = require("path");
     const fse = context.require("fs-extra");
     const utils = context.requireFlappyScript("utils");
+    const targetUtils = context.requireFlappyScript("target_utils");
     const genTarget = context.requireFlappyScript("gen_target");
+
     context.args.plainArgs = ["cmake"];
     genTarget.run(context);
-    const generatorPath = utils.findTemplate(context.searchDirs, "cmake");
-    const projectBuildContext = utils.createBuildContext(context, generatorPath, "project_conf");
+    const cmakeGenerator = targetUtils.findGenerator(context, "cmake");
+    const cmakeGeneratorDir = path.parse(cmakeGenerator.path).dir;
+
+    const projectBuildContext = utils.createBuildContext(context, cmakeGeneratorDir, "project_conf");
     const buildDir = path.join(projectBuildContext.targetOutDir, "build");
     fse.mkdirsSync(buildDir);
     call(`cmake -G "Unix Makefiles" ..`, buildDir);

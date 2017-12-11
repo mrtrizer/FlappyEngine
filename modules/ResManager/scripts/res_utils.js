@@ -30,30 +30,12 @@ function getListOfResConfigs(context, resSrcDir) {
     return resConfigList;
 }
 
-function installNodeModules(context, generatorsDirPath) {
-    const utils = context.requireFlappyScript("utils");
-    const timestamp_cache = context.requireFlappyScript("timestamp_cache");
-    const content = utils.readDirs(generatorsDirPath);
-    const packageFiles = content.filter(item =>
-        path.parse(item).base == "package.json" && item.indexOf("node_modules") == -1);
-    let timestampCache = new timestamp_cache.TimestampCache(context);
-    for (const i in packageFiles) {
-        const packageFile = packageFiles[i];
-        if (timestampCache.isChanged(packageFile)) {
-            const packageDir = path.parse(packageFile).dir;
-            const childProcess = require("child_process");
-            const npmCommand = "npm install"
-            childProcess.execSync(npmCommand, {"cwd": packageDir, stdio: "inherit"});
-        }
-    }
-}
-
 function findGeneratorsInContext(context) {
     const utils = context.requireFlappyScript("utils");
     let generatorScripts = new Array();
     const generatorsDirPath = path.join(context.moduleRoot, "generators");
     if (fs.existsSync(generatorsDirPath)) {
-        installNodeModules(context, generatorsDirPath);
+        utils.installNodeModules(context, generatorsDirPath);
         const content = utils.readDirs(generatorsDirPath);
         const generatorFiles = content.filter(item =>
             path.extname(item) == ".js" && item.indexOf("node_modules") == -1);

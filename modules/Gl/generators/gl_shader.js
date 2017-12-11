@@ -15,25 +15,22 @@ function copyFileToCache(context, file, resSrcDir, cacheSubDir) {
 }
 
 module.exports.generate = function (context, scriptContext, resConfig, resSrcDir, cacheSubDir) {
+    const path = require("path");
     copyFileToCache(context, resConfig.fragment, resSrcDir, cacheSubDir);
     copyFileToCache(context, resConfig.vertex, resSrcDir, cacheSubDir);
-    return [resConfig];
-};
-
-module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
-    const path = require("path");
-
-    var list = [
+    return [
+        resConfig,
         {
             "path": resConfig.vertex,
+            "name": path.parse(resConfig.vertex).name + "_vertex",
             "fullPath": path.join(cacheSubDir, resConfig.vertex),
-            "type": "glsl_shader/vertex"
+            "type": "file"
         },
         {
             "path": resConfig.fragment,
+            "name": path.parse(resConfig.fragment).name + "_fragment",
             "fullPath": path.join(cacheSubDir, resConfig.fragment),
-            "type": "glsl_shader/fragment"
+            "type": "file"
         }
     ]
-    return list;
-}
+};

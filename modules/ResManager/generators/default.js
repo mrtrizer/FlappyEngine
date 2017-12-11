@@ -15,21 +15,11 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
     logger.logi("Copy to: " + outputPath);
     fse.copySync(inputPath, outputPath);
 
-    return [resConfig];
+    const metaData = Object.assign({}, resConfig, {
+        "path": resConfig.input,
+        "fullPath": outputPath,
+        "type": "file"
+    });
+
+    return [metaData];
 };
-
-module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
-    const path = require("path");
-    const relativePath = path.join(resConfig.input);
-    const outputPath = path.join(cacheSubDir, resConfig.input);
-
-    var list = [
-        {
-            "path": relativePath,
-            "fullPath": outputPath,
-            "type": resConfig.type
-        }
-    ];
-
-    return list;
-}

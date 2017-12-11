@@ -23,7 +23,7 @@ module.exports.run = function(context) {
                 cacheMetaMap[name] = cacheMetaItem;
             }
         } catch (e) {
-            logger.loge("Generator fault: " + e.message);
+            logger.loge("Generator fault: " + e.message + "\n" + e.stack);
         }
     });
 
@@ -35,3 +35,5 @@ module.exports.run = function(context) {
         spaces: "    "
     });
 }
+
+module.exports.before = ["pack_res"];

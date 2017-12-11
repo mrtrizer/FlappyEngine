@@ -56,35 +56,17 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
         },
         {
             "name": atlasFileName + "_image",
-            "type": "png",
-            "input": imageFileName
+            "type": "file",
+            "input": imageFileName,
+            "path": imageFileName,
+            "fullPath": path.join(cacheSubDir, imageFileName),
         },
         {
             "name": atlasFileName + "_meta",
-            "type": "json",
-            "input": jsonFileName
+            "type": "file",
+            "input": jsonFileName,
+            "path": jsonFileName,
+            "fullPath": path.join(cacheSubDir, jsonFileName),
         }
     ];
 };
-
-module.exports.getResList = function (resConfig, resSrcDir, cacheSubDir) {
-    const path = require("path");
-
-    const atlasFileName = resConfig["atlas_name"];
-    const imageFileName = atlasFileName + ".png";
-    const jsonFileName = atlasFileName + ".json";
-
-    var list = [
-        {
-            "path": imageFileName,
-            "fullPath": path.join(cacheSubDir, imageFileName),
-            "type": "file/drawable/png"
-        },
-        {
-            "path": jsonFileName,
-            "fullPath": path.join(cacheSubDir, jsonFileName),
-            "type": "file/json"
-        }
-    ]
-    return list;
-}
