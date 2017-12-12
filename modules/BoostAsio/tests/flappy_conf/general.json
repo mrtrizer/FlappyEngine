@@ -1,0 +1,19 @@
+{
+    "name":"tests_BoostAsio",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Catch"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

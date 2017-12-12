@@ -1,0 +1,29 @@
+{
+    "name":"BoostAsio",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    },
+    "cmake":{
+        "module_path": "cmake",
+        "packages": [
+            {
+                "name":"Boost COMPONENTS date_time system",
+                "libs":"${Boost_LIBRARIES}",
+                "includes":"${Boost_INCLUDE_DIRS}"
+            }
+        ]
+    }
+}
