@@ -6,12 +6,17 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
-    const utils = context.require("./utils");
+    const utils = context.requireFlappyScript("utils");
     const deasync = require("deasync");
+    const logger = context.requireFlappyScript("logger");
 
     const atlasName = path.parse(resConfig["font"]).name;
     const jsonFileName = atlasName + ".json";
     const imageFileName = atlasName + ".png";
+
+    logger.logi("Font generator start");
+    logger.logi("JSON file name: " + jsonFileName);
+    logger.logi("Image file name: " + imageFileName);
 
     var done = false;
 

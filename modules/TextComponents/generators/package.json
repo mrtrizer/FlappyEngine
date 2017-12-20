@@ -2,7 +2,7 @@
     "name": "FontAtlasGenerator",
     "version": "0.0.1",
     "dependencies": {
-        "msdf-bmfont-xml": "*",
-        "deasync": "*"
+        "deasync": "*",
+        "msdf-bmfont-xml": "*"
     }
 }
