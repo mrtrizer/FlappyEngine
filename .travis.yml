@@ -15,6 +15,7 @@ before_install:
  - sudo apt-get install llvm-5.0-dev
  - sudo apt-get install clang-5.0-dev
  - sudo apt-get install ninja-build
+ - sudo apt-get install -y ccache
  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
  - sudo apt-get install -qq gcc-6 g++-6 nodejs
  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
@@ -39,6 +40,7 @@ before_install:
  - make
  - sudo ln -s `pwd`/spirv-cross /usr/local/bin/spirv-cross
  - popd
+ - export CXX="ccache g++"
 
 script:
 
