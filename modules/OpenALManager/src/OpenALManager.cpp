@@ -40,7 +40,7 @@ OpenALManager::OpenALManager()
 }
 
 void OpenALManager::registerListener(SafePtr<OpenALListenerComponent> listener) {
-    auto transform = listener->entityRef()->component<TransformComponent>();
+    auto transform = listener->entityPtr()->component<TransformComponent>();
     auto position = transform->pos();
     alListener3f(AL_POSITION, position.x, position.y, position.z);
     CHECK_AL_ERROR;

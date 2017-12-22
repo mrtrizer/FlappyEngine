@@ -47,7 +47,7 @@ static void setActive(const FunctionCallbackInfo<Value>& info) {
 static void entity(const FunctionCallbackInfo<Value>& info) {
     Local<External> field = info.Data().As<External>();
     auto component = static_cast<CppObjectHolder<ComponentBase>*>(field->Value())->safePtr();
-    info.GetReturnValue().Set(wrapEntity(component->entityRef()));
+    info.GetReturnValue().Set(wrapEntity(component->entityPtr()));
 }
 
 Local<Object> wrapComponent(SafePtr<ComponentBase> component) {

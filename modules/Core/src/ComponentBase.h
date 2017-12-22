@@ -88,7 +88,7 @@ public:
 
     virtual TypeId<ComponentBase> componentId() const = 0;
 
-    SafePtr<Entity> entityRef() const { return m_entitySafePtr; }
+    SafePtr<Entity> entityPtr() const { return m_entitySafePtr; }
 
     /// Returns EventController
     std::shared_ptr<EventController> events() { return m_eventController; }

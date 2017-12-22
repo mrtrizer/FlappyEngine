@@ -65,7 +65,7 @@ std::shared_ptr<ResBase> OggAudioResFactory::load(const std::string& name, ExecT
 
     ov_clear(&oggFile);
 
-    auto rootEntity = manager<ThreadManager>()->entityRef();
+    auto rootEntity = manager<ThreadManager>()->entityPtr();
     return std::make_shared<OpenALAudioRes>(rootEntity, std::move(buffer), format, freq);
 }
 
@@ -73,7 +73,7 @@ std::shared_ptr<ResBase> OggAudioResFactory::create(const std::string&) {
     ALenum format = AL_FORMAT_MONO8;
     ALsizei freq = 22050;
     std::vector<char> buffer(2205);
-    auto rootEntity = manager<ThreadManager>()->entityRef();
+    auto rootEntity = manager<ThreadManager>()->entityPtr();
     return std::make_shared<OpenALAudioRes>(rootEntity, std::move(buffer), format, freq);
 }
 

@@ -26,11 +26,11 @@ void RenderManager::update(DeltaTime dt) {
         auto& visual = *i;
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = visual.view->entityRef()->component<TransformComponent>();
+        auto curTransform = visual.view->entityPtr()->component<TransformComponent>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->transformMatrix() * transformMatrix;
             z += curTransform->pos().z;
-            auto entityPtr = curTransform->entityRef();
+            auto entityPtr = curTransform->entityPtr();
             if (auto parentPtr = entityPtr->parent())
                 curTransform = parentPtr->component<TransformComponent>();
             else

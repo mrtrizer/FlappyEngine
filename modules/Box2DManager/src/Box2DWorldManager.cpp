@@ -42,12 +42,12 @@ void Box2DWorldManager::sendContactEvent(b2Contact* contact) {
 
     { // Contact event A
         auto evenHandle = createContactEvent<ContactEventT>(contact, fixtureComponentB);
-        auto entityA = fixtureComponentA->entityRef();
+        auto entityA = fixtureComponentA->entityPtr();
         m_contactEventHolders.push_back({entityA, std::move(evenHandle)});
     }
     { // ContactEvent B
         auto evenHandle = createContactEvent<ContactEventT>(contact, fixtureComponentA);
-        auto entityB = fixtureComponentB->entityRef();
+        auto entityB = fixtureComponentB->entityPtr();
         m_contactEventHolders.push_back({entityB, std::move(evenHandle)});
     }
 }
