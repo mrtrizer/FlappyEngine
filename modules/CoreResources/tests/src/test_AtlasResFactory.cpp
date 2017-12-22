@@ -13,7 +13,7 @@
 #include <JsonRes.h>
 #include <TextRes.h>
 #include <DefaultResFactory.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <Tools.h>
 
 using namespace flappy;
@@ -24,7 +24,7 @@ TEST_CASE( "AtlasResFactory loading from file") {
     auto entity = std::make_shared<Entity>();
     entity->createComponent<StdFileLoadManager>();
     entity->createComponent<StdFileMonitorManager>();
-    entity->createComponent<FileResFactory>();
+    entity->createComponent<TextResFactory>();
     entity->createComponent<ResManager<TextRes>>();
     entity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
     entity->createComponent<ResManager<JsonRes>>();

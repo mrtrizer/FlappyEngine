@@ -18,7 +18,7 @@
 #include <GLShaderResFactory.h>
 #include <IRgbaBitmapRes.h>
 #include <GLTextureRes.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <DesktopThread.h>
 #include <PosixApplication.h>
 #include <GLTextureResFactory.h>
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<StdFileLoadManager>();
                         rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
                         rootEntity->createComponent<ResManager<JsonRes>>();
-                        rootEntity->createComponent<FileResFactory>();
+                        rootEntity->createComponent<TextResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();

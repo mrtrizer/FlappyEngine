@@ -22,7 +22,7 @@
 #include <IRgbaBitmapRes.h>
 #include <GLTextureRes.h>
 #include <SpriteComponent.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <DesktopThread.h>
 #include <PosixApplication.h>
 #include <GLTextureResFactory.h>
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResManager<JsonRes>>();
                         rootEntity->createComponent<AtlasResFactory>();
                         rootEntity->createComponent<ResManager<AtlasRes>> ();
-                        rootEntity->createComponent<FileResFactory>();
+                        rootEntity->createComponent<TextResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
                         rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();

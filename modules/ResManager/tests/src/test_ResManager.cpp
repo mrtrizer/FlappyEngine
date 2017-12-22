@@ -11,7 +11,7 @@
 #include <StdFileMonitorManager.h>
 #include <StdFileLoadManager.h>
 #include <ResRepositoryManager.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <TextRes.h>
 
 using namespace flappy;
@@ -53,7 +53,7 @@ TEST_CASE( "ResManager::getRes()") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    rootEntity->createComponent<FileResFactory>();
+    rootEntity->createComponent<TextResFactory>();
     auto resManager = rootEntity->createComponent<ResManager<TextRes>>();
     auto textRes = resManager->getRes("dir/text_res", ExecType::SYNC);
     REQUIRE(textRes->text() == "Abuksigun\n");

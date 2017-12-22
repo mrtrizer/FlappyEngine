@@ -9,7 +9,7 @@
 #include <Entity.h>
 #include <StdFileMonitorManager.h>
 #include <StdFileLoadManager.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <thread>
 
 using namespace flappy;
@@ -31,7 +31,7 @@ TEST_CASE( "TextRes::text()") {
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    rootEntity->createComponent<FileResFactory>();
+    rootEntity->createComponent<TextResFactory>();
     auto textResManager = rootEntity->createComponent<ResManager<TextRes>>();
 
     rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));

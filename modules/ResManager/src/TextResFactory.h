@@ -16,15 +16,10 @@ class Entity;
 /// @addtogroup ResManager
 /// @{
 
-/// Base class for file based resource factory.
-/// @details File based resources have no dependencies.
-/// Usially, they also supports function of auto-update.
-/// To support auto-update of resource, pass implementation
-/// of file monitor to constructor.
-class FileResFactory : public ResFactory<TextRes>
+class TextResFactory : public ResFactory<TextRes>
 {
 public:
-    FileResFactory();
+    TextResFactory();
 
     std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;

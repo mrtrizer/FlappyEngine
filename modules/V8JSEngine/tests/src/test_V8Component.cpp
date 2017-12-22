@@ -12,7 +12,7 @@
 #include <ResRepositoryManager.h>
 #include <StdFileLoadManager.h>
 #include <DefaultResFactory.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <DesktopThread.h>
 #include <PosixApplication.h>
 #include <AtlasResFactory.h>
@@ -30,7 +30,7 @@ std::shared_ptr<Entity> createRootEntity() {
     rootEntity->createComponent<ResRepositoryManager>("./resources");
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
-    rootEntity->createComponent<FileResFactory>();
+    rootEntity->createComponent<TextResFactory>();
     rootEntity->createComponent<ResManager<TextRes>> ();
     rootEntity->createComponent<V8JSManager>();
 

@@ -15,7 +15,7 @@
 #include <StdFileLoadManager.h>
 #include <DefaultResFactory.h>
 #include <GLShaderResFactory.h>
-#include <FileResFactory.h>
+#include <TextResFactory.h>
 #include <DesktopThread.h>
 #include <PosixApplication.h>
 #include <GLTextureResFactory.h>
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
                         rootEntity->createComponent<ResRepositoryManager>("./resources");
                         rootEntity->createComponent<StdFileMonitorManager>();
                         rootEntity->createComponent<StdFileLoadManager>();
-                        rootEntity->createComponent<FileResFactory>();
+                        rootEntity->createComponent<TextResFactory>();
                         rootEntity->createComponent<ResManager<TextRes>> ();
                         rootEntity->createComponent<GLShaderResFactory> ();
                         rootEntity->createComponent<ResManager<ShaderRes>> ();
