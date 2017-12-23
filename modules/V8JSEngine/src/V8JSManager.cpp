@@ -140,6 +140,71 @@ v8::Local<v8::Value> V8JSManager::getField(v8::Local<v8::Object> jsObject, std::
     return handleScope.Escape(fieldValue);
 }
 
+void V8JSManager::registerWrappers(const TypeMap<void, Wrapper>& wrappers)
+{
+    for (auto pair : wrappers) {
+        auto counterIter = m_counterMap.find(pair.second.name);
+        if (counterIter == m_counterMap.end()) {
+            defineWrapperHelpers(pair.second);
+            wrapperMap.setById(pair.first, pair.second);
+            m_counterMap[pair.second.name] = 1;
+        }
+        registerWrapper(pair.second);
+    }
+}
+
+void V8JSManager::unregisterWrappers(const TypeMap<void, Wrapper> &wrappers)
+{
+    for (auto pair : wrappers) {
+        auto counterIter = m_counterMap.find(pair.second.name);
+        if (counterIter != m_counterMap.end()) {
+            if (counterIter->second > 0) {
+                unregisterWrapper(pair.second.name);
+                counterIter->second--;
+            }
+        }
+    }
+}
+
+void V8JSManager::defineWrapperHelpers(const Wrapper& wrapper)
+{
+    HandleScope handleScope(m_isolate);
+    auto context = m_context.Get(m_isolate);
+    Context::Scope contextScope (context);
+
+    auto className = wrapper.name;
+    std::stringstream ss;
+    ss << "let " << className << " = {};";
+    ss << "function register" << className << "(func) {";
+    ss << "    " << className << " = func;";
+    ss << "    log('" << className << " is registered')";
+    ss << "}";
+    ss << "function unregister" << className << "() {";
+    ss << "    " << className << " = undefined;";
+    ss << "    log('" << className << " is unregistered')";
+    ss << "}";
+    runScript(context, ss.str());
+}
+
+void V8JSManager::registerWrapper(const Wrapper& wrapper)
+{
+    HandleScope handleScope(m_isolate);
+    auto context = m_context.Get(m_isolate);
+    Context::Scope contextScope (context);
+
+    auto constructor = wrapper.createConstructor();
+    callFunction("register" + wrapper.name, {constructor});
+}
+
+void V8JSManager::unregisterWrapper(const std::string& className)
+{
+    HandleScope handleScope(m_isolate);
+    auto context = m_context.Get(m_isolate);
+    Context::Scope contextScope (context);
+
+    callFunction("unregister" + className);
+}
+
 Local<Value> V8JSManager::callFunction(std::string name, std::vector<Local<Value>> args) {
     EscapableHandleScope handleScope(m_isolate);
     Local <Context> context = Local <Context>::New (m_isolate, m_context);
@@ -210,37 +275,23 @@ void V8JSManager::init() {
     createParams.array_buffer_allocator = m_arrayBufferAllocator;
     m_isolate = Isolate::New(createParams);
     m_isolate->Enter();
-    {
-        HandleScope handleScope(m_isolate);
 
-        Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
-        global->Set(toV8Str("log"), FunctionTemplate::New(m_isolate, log));
+    HandleScope handleScope(m_isolate);
 
-        auto context = Context::New(m_isolate, nullptr, global);
+    Local<ObjectTemplate> global = ObjectTemplate::New(m_isolate);
+    global->Set(toV8Str("log"), FunctionTemplate::New(m_isolate, log));
 
-        // Create a new context.
-        m_context = UniquePersistent<Context>(m_isolate, context);
+    auto context = Context::New(m_isolate, nullptr, global);
 
-        Context::Scope contextScope(context);
-
-        for (auto wrapper : wrapperMap) {
-            auto className = wrapper.name;
-            std::stringstream ss;
-            ss << "let " << className << " = {};";
-            ss << "function set" << className << "(func) {";
-            ss << "    " << className << " = func;";
-            ss << "    log('" << className << " is ready')";
-            ss << "}";
-            runScript(context, ss.str());
-            auto constructor = wrapperMap.getByName(wrapper.name).createConstructor();
-            callFunction("set" + className, {constructor});
-        }
-
-    }
-
+    // Create a new context.
+    m_context = UniquePersistent<Context>(m_isolate, context);
 }
 
 void V8JSManager::deinit() {
+    for (auto pair : m_counterMap) {
+        if (pair.second > 0)
+            unregisterWrapper(pair.first);
+    }
     persistentHolder.clear();
     m_context.Reset();
     m_isolate->Exit();

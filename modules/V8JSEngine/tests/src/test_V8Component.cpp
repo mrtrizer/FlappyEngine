@@ -24,15 +24,13 @@ using namespace flappy;
 using namespace std;
 
 std::shared_ptr<Entity> createRootEntity() {
-    wrapperMap = getV8Wrappers();
-
     auto rootEntity = std::make_shared<Entity>();
     rootEntity->createComponent<ResRepositoryManager>("./resources");
     rootEntity->createComponent<StdFileMonitorManager>();
     rootEntity->createComponent<StdFileLoadManager>();
     rootEntity->createComponent<TextResFactory>();
     rootEntity->createComponent<ResManager<TextRes>> ();
-    rootEntity->createComponent<V8JSManager>();
+    rootEntity->createComponent<V8JSManager>()->registerWrappers(getV8Wrappers());
 
     return rootEntity;
 }

@@ -6,15 +6,12 @@ function isComponentCpp(fileName) {
             || (fileName.indexOf("Manager") != -1));
 }
 
-function getSourceList(context, cacheSubDir) {
+function getSourceList(context) {
     const utils = context.requireFlappyScript("utils");
     const modules = context.requireFlappyScript("modules");
     const path = require('path');
     const fs = require('fs');
     const fse = context.require("fs-extra");
-    const timestamp_cache = context.requireFlappyScript("timestamp_cache");
-
-    let timestampCache = new timestamp_cache.TimestampCache(context);
 
     let sourceList = [];
 
@@ -26,12 +23,10 @@ function getSourceList(context, cacheSubDir) {
         const files = utils.readDirs(srcDir);
         for (const i in files) {
             const filePath = files[i];
-            if (timestampCache.isChanged(filePath)) {
-                const fileName = path.parse(filePath).base;
-                if (isComponentCpp(fileName)) {
-                    console.log(filePath);
-                    sourceList.push(filePath);
-                }
+            const fileName = path.parse(filePath).base;
+            if (isComponentCpp(fileName)) {
+                console.log(filePath);
+                sourceList.push(filePath);
             }
         }
     }
@@ -104,7 +99,7 @@ module.exports.run = function (context) {
     call(`cmake -G \"Unix Makefiles\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
     call(`make`, buildDir);
     // Generate
-    const sourceList = getSourceList(context, context.cacheDir);
+    const sourceList = getSourceList(context);
     if (sourceList.length > 0) {
         const outputDir = path.join(context.cacheDir, "V8SJWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));

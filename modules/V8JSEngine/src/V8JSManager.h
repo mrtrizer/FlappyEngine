@@ -9,6 +9,12 @@ namespace flappy {
 class TouchComponent;
 class ComponentBase;
 
+struct Wrapper {
+    std::string name;
+    std::function<v8::Local<v8::Object>(SafePtrBase&)> wrapper;
+    std::function<v8::Local<v8::Function>()> createConstructor;
+};
+
 class V8JSManager: public Manager<V8JSManager>
 {
 public:
@@ -20,14 +26,21 @@ public:
 
     const v8::UniquePersistent<v8::Context>* context() const { return &m_context; }
 
+    void registerWrappers(const TypeMap<void, Wrapper>& wrapperMap);
+    void unregisterWrappers(const TypeMap<void, Wrapper>& wrappeMap);
+
 private:
     v8::Platform* m_platform;
     v8::Isolate* m_isolate;
     v8::UniquePersistent<v8::Context> m_context;
     v8::ArrayBuffer::Allocator* m_arrayBufferAllocator;
+    std::unordered_map<std::string, int> m_counterMap;
 
+    void defineWrapperHelpers(const Wrapper& wrapper);
+    void registerWrapper(const Wrapper&);
+    void unregisterWrapper(const std::string &className);
     void runScript(v8::Local<v8::Context>& context, std::string sourceStr);
-    v8::Local<v8::Value> callFunction(std::string name, std::vector<v8::Local<v8::Value>> args);
+    v8::Local<v8::Value> callFunction(std::string name, std::vector<v8::Local<v8::Value>> args = {});
 
     void init();
     void deinit();
@@ -36,12 +49,6 @@ private:
 v8::Local<v8::Context> currentContext();
 v8::Local<v8::String> toV8Str(std::string stdStr);
 v8::Local<v8::Private> toV8PrivateKey(std::string stdStr);
-
-struct Wrapper {
-    std::string name;
-    std::function<v8::Local<v8::Object>(SafePtrBase&)> wrapper;
-    std::function<v8::Local<v8::Function>()> createConstructor;
-};
 
 extern TypeMap<void, Wrapper> wrapperMap;
 extern std::vector<v8::UniquePersistent<v8::External>> persistentHolder;
