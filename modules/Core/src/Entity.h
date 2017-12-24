@@ -34,8 +34,7 @@ public:
     /// Method Component::init() will be called.
     /// Adding of multiple components of the same type
     /// is not allowed.
-    template <typename ComponentT>
-    void addComponent(std::shared_ptr<ComponentT> component);
+    void addComponent(std::shared_ptr<ComponentBase> component);
 
     /// @brief Useful for manual control of component creation.
     /// @details Use to create components with constructor with arguments.
@@ -124,25 +123,23 @@ private:
     template <typename ManagerEventT>
     void sendManagerEvents(std::shared_ptr<EventController> eventController);
 
-    template<typename ComponentT, typename ComponentEventT>
-    void sendComponentEvents(std::shared_ptr<ComponentT> component);
+    template<typename ComponentEventT>
+    void sendComponentEvents(std::shared_ptr<ComponentBase> component);
 };
 
 
 template <typename ManagerEventT>
 void Entity::sendManagerEvents(std::shared_ptr<EventController> eventController) {
-    for (int i = 0; i < m_managers.size(); i++) {
-        TypeId<ComponentBase> id(i);
-        auto manager = m_managers.getById(id);
-        if (manager != nullptr) {
-            auto event = ManagerEventT(manager);
+    for (auto manager : m_managers) {
+        if (manager.second != nullptr) {
+            auto event = ManagerEventT(manager.second);
             eventController->post(event);
         }
     }
 }
 
-template<typename ComponentT, typename ComponentEventT>
-void Entity::sendComponentEvents(std::shared_ptr<ComponentT> component) {
+template<typename ComponentEventT>
+void Entity::sendComponentEvents(std::shared_ptr<ComponentBase> component) {
     // Mutual notifications of new component and existing ones
     for (auto currentComponent : m_components) {
         if (currentComponent != component) {
@@ -163,29 +160,13 @@ void Entity::sendComponentEvents(std::shared_ptr<ComponentT> component) {
 
 // Component managment
 
-template<typename ComponentT>
-void Entity::addComponent(std::shared_ptr<ComponentT> component)
-{
-    static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
-
-    if (component->entity() != nullptr)
-        throw std::runtime_error("Can't add a component to several entities.");
-    component->setParentEntity(this, shared_from_this());
-    m_components.push_back(component);
-    // Notify component about accesible managers
-    sendManagerEvents<ManagerBase::ManagerAddedEvent>(component->events());
-
-    // Notify components about new component
-    sendComponentEvents<ComponentT, ComponentBase::ComponentAddedEvent>(component);
-}
-
 template <typename ComponentT, typename ... Args>
 std::shared_ptr<ComponentT> Entity::createComponent(Args ... args)
 {
     static_assert(isBaseOf<ComponentBase, ComponentT>(), "Type must be a descendant of Component");
 
     auto component = std::make_shared<ComponentT>(args...);
-    addComponent<ComponentT>(component);
+    addComponent(component);
     return component;
 }
 
@@ -198,7 +179,7 @@ void Entity::removeComponent(std::shared_ptr<ComponentT> component)
     sendManagerEvents<ManagerBase::ManagerRemovedEvent>(component->events());
 
     // Notify components about component removing
-    sendComponentEvents<ComponentT, ComponentBase::ComponentRemovedEvent>(component);
+    sendComponentEvents<ComponentBase::ComponentRemovedEvent>(component);
 
     component->setParentEntity(nullptr, SafePtr<Entity>());
 

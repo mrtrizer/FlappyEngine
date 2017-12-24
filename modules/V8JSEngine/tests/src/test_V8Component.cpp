@@ -116,10 +116,13 @@ TEST_CASE("Access to Cpp components from a JS component") {
 
     auto childEntity = rootEntity->createEntity();
     auto jsRes = rootEntity->manager<ResManager<TextRes>>()->getRes("CppAccessComponent", ExecType::SYNC);
-    auto transformComponent = childEntity->createComponent<TransformComponent>();
     auto jsComponent = childEntity->createComponent<JSComponent>("CppAccessComponent", jsRes);
 
+    jsComponent->call("createTransformComponent");
+    REQUIRE(childEntity->findComponent<TransformComponent>() != nullptr);
+
     {
+        auto transformComponent = childEntity->component<TransformComponent>();
         jsComponent->call("setAngleToTransform", 1.0f);
         REQUIRE(transformComponent->angle2DRad() == 1.0f);
         auto newAngle = jsComponent->call("getAngleFromTransform");
@@ -127,6 +130,7 @@ TEST_CASE("Access to Cpp components from a JS component") {
     }
 
     {
+        auto transformComponent = childEntity->component<TransformComponent>();
         auto targetPos = glm::vec3(1.0f, 2.0f, 3.0f);
         jsComponent->call("setPosToTransform", targetPos);
         REQUIRE(transformComponent->pos() == targetPos);

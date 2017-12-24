@@ -17,11 +17,11 @@
     "cxx":{
         "header_dirs": [
             "./src",
-            "^/V8SJWrappers"
+            "^/V8JSWrappers"
         ],
         "src_dirs": [
             "./src",
-            "^/V8SJWrappers"
+            "^/V8JSWrappers"
         ]
     }
 }

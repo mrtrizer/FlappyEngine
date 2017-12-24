@@ -16,8 +16,9 @@ function getSourceList(context) {
     let sourceList = [];
 
     const moduleContexts = modules.findAllModules(context);
-    for (const i in moduleContexts) {
-        const moduleContext = moduleContexts[i];
+    const contexts = [context].concat(moduleContexts);
+    for (const i in contexts) {
+        const moduleContext = contexts[i];
         //console.log(JSON.stringify(moduleContext));
         const srcDir = path.join(moduleContext.moduleRoot, "src");
         const files = utils.readDirs(srcDir);
@@ -101,7 +102,7 @@ module.exports.run = function (context) {
     // Generate
     const sourceList = getSourceList(context);
     if (sourceList.length > 0) {
-        const outputDir = path.join(context.cacheDir, "V8SJWrappers");
+        const outputDir = path.join(context.cacheDir, "V8JSWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");

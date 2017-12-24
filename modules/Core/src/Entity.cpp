@@ -33,6 +33,19 @@ Entity::~Entity() {
     }
 }
 
+void Entity::addComponent(std::shared_ptr<ComponentBase> component)
+{
+    if (component->entity() != nullptr)
+        throw std::runtime_error("Can't add a component to several entities.");
+    component->setParentEntity(this, shared_from_this());
+    m_components.push_back(component);
+    // Notify component about accesible managers
+    sendManagerEvents<ManagerBase::ManagerAddedEvent>(component->events());
+
+    // Notify components about new component
+    sendComponentEvents<ComponentBase::ComponentAddedEvent>(component);
+}
+
 std::shared_ptr<ComponentBase> Entity::componentById(TypeId<ComponentBase> id) {
     for (auto component: m_components)
         if (component->componentId() == id)

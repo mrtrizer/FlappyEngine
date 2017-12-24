@@ -77,6 +77,17 @@ static void component(const FunctionCallbackInfo<Value>& info) {
     info.GetReturnValue().Set(wrapperFunc(safePtr));
 }
 
+static void addComponent(const FunctionCallbackInfo<Value>& info) {
+    Local<External> field = info.Data().As<External>();
+    void* ptr = field->Value();
+    auto entity =  static_cast<CppObjectHolder<Entity>*>(ptr)->safePtr();
+    Local<Object> componentObjectRef(info[0].As<Object>());
+    Local<Value> internalValue = componentObjectRef->GetPrivate(currentContext(), toV8PrivateKey("cpp_ptr")).ToLocalChecked();
+    v8::Local<v8::External> internal = internalValue.As<v8::External>();
+    auto componentHolder = static_cast<SharedPtrHolder<ComponentBase>*>(internal->Value());
+    auto component = componentHolder->sharedPtr();
+    entity->addComponent(component);
+}
 
 Local<Object> wrapEntity(SafePtr<Entity> entity) {
 
@@ -91,6 +102,7 @@ Local<Object> wrapEntity(SafePtr<Entity> entity) {
     Local<ObjectTemplate> entityTemplate = ObjectTemplate::New(isolate);
     entityTemplate->Set(toV8Str("jsComponent"), FunctionTemplate::New(isolate, jsComponent, jsPtr));
     entityTemplate->Set(toV8Str("component"), FunctionTemplate::New(isolate, component, jsPtr));
+    entityTemplate->Set(toV8Str("addComponent"), FunctionTemplate::New(isolate, addComponent, jsPtr));
 
     Local<Object> result = entityTemplate->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
 

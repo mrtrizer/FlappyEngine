@@ -11,4 +11,7 @@ class CppAccessComponent extends Component {
     getPosFromTransform() {
         return this.entity().component('TransformComponent').pos();
     }
+    createTransformComponent() {
+        this.entity().addComponent(new TransformComponent());
+    }
 }
