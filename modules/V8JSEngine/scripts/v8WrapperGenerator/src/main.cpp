@@ -221,5 +221,5 @@ int main(int argc, const char **argv) {
     wrapperInitializerHeader << generateInitializerHeader();
     wrapperInitializerHeader.close();
 
-    return result;
+    return 0;
 }
