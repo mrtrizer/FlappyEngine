@@ -122,6 +122,8 @@ public :
             auto className = classDecl->getNameAsString();
             if ((className == "Component") || (className== "Manager") || (className == "JSComponent"))
                 return;
+            if (classDecl->getDescribedClassTemplate() != nullptr)
+                return;
             if (m_wrappedClasses.find(className) != m_wrappedClasses.end())
                 return;
 
