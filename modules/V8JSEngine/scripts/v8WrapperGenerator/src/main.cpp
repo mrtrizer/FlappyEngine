@@ -122,8 +122,18 @@ public :
             auto className = classDecl->getNameAsString();
             if ((className == "Component") || (className== "Manager") || (className == "JSComponent"))
                 return;
-            if (classDecl->getDescribedClassTemplate() != nullptr)
+            if (classDecl->getDescribedClassTemplate() != nullptr) {
+                std::cout << "Skip template class " << classDecl->getNameAsString() << std::endl;
                 return;
+            }
+            if (classDecl->getDeclKind() == clang::Decl::ClassTemplatePartialSpecialization) {
+                std::cout << "Skip template partial specialization " << classDecl->getNameAsString() << std::endl;
+                return;
+            }
+            if (classDecl->getDeclKind() == clang::Decl::ClassTemplateSpecialization) {
+                std::cout << "Skip template specialization " << classDecl->getNameAsString() << std::endl;
+                return;
+            }
             if (m_wrappedClasses.find(className) != m_wrappedClasses.end())
                 return;
 
@@ -164,7 +174,7 @@ private:
 };
 
 std::string generateInitializerCpp(const std::string& initializers, const std::string& initializerHeadersStream) {
-    std::vector<char> output(5000);
+    std::vector<char> output(20000);
     snprintf(output.data(), output.size(),
             "#include \"WrapperInitializer.h\"\n"
             "#include <V8JSManager.h>\n"
