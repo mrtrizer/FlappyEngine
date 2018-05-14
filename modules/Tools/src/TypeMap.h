@@ -149,7 +149,7 @@ public:
 #ifndef SHARED_TYPE_ID
         return m_elements.at(id.toUnsigned());
 #else
-        static ElementT defaultReturn;
+        static ElementT defaultReturn = {};
         auto iter = m_elements.find(id);
         if (iter == m_elements.end())
             return defaultReturn;
