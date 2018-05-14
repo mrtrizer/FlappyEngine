@@ -25,7 +25,7 @@ sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build
 2. Install llvm 5.0 + clang 5.0 and libv8 5.2
 ```
 sudo add-apt-repository ppa:jonathonf/llvm
-sudo add-apt-repository ppa:pinepain/libv8-5.2
+sudo add-apt-repository ppa:pinepain/libv8-archived
 sudo apt-get update
 sudo apt-get install llvm-5.0-dev
 sudo apt-get install clang-5.0-dev
