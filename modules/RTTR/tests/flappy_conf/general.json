@@ -1,0 +1,27 @@
+{
+    "name":"tests_RTTR",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Std"
+        },
+        {
+            "path":"../../Catch"
+        }
+    ],
+    "cxx":{
+        "flags": [
+            "-std=c++14"
+        ],
+        "header_dirs": [
+            "./src",
+	    "^/V8JSWrappers"
+        ],
+        "src_dirs": [
+            "./src",
+	    "^/V8JSWrappers"
+        ]
+    }
+}

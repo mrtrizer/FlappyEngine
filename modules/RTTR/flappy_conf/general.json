@@ -1,0 +1,34 @@
+{
+    "name":"RTTR",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    },
+    "cmake":{
+        "module_path": "../../../../../../../../Users/deniszdorovtsov/Downloads/rttr-0.9.6/build/install/share/rttr/cmake",
+        "packages": [
+            {
+                "name":"RTTR",
+                "libs":"RTTR::Core"
+            }
+        ]
+    }
+}

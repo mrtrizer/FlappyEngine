@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <Tools.h>
+#include <type_traits>
 
 #include "TypeNames.h"
 
