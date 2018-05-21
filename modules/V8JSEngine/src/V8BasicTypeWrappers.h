@@ -18,7 +18,9 @@
 
 namespace flappy {
 
+#ifndef _Bool
 using _Bool = bool;
+#endif
 
 void v8DestroyHolder(const v8::WeakCallbackInfo<CppObjectHolderBase> &data);
 

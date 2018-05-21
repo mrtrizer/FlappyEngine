@@ -10,7 +10,5 @@
         "src_dirs": [
             "./libs"
         ]
-    },
-    "cmake":{
     }
 }
