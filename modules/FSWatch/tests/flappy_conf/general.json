@@ -1,5 +1,5 @@
 {
-    "name":"tests_RTTR",
+    "name":"tests_FSWatch",
     "modules": [
         {
             "path":"../"

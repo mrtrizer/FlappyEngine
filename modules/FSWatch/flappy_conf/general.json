@@ -1,0 +1,14 @@
+{
+    "name":"FSWatch",
+    "version":"1.11.3",
+    "modules": [
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./libs"
+        ],
+        "src_dirs": [
+            "./libs"
+        ]
+    }
+}
