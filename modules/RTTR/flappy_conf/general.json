@@ -2,13 +2,18 @@
     "name":"RTTR",
     "version":"0.9.6",
     "modules": [
+        {
+            "path": "../Core"
+        }
     ],
     "cxx":{
         "header_dirs": [
-            "./libs"
+            "./libs",
+            "./src"
         ],
         "src_dirs": [
-            "./libs"
+            "./libs",
+            "./src"
         ]
     }
 }

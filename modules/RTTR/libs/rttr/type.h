@@ -39,6 +39,10 @@
 #include <memory>
 #include <cstdint>
 
+namespace flappy {
+    class RTTRLibrary;
+}
+
 namespace rttr
 {
 
@@ -1200,6 +1204,7 @@ class RTTR_API type
         friend class instance;
         friend class detail::type_register;
         friend class detail::type_register_private;
+        friend class flappy::RTTRLibrary;
 
         friend type detail::create_type(detail::type_data*) RTTR_NOEXCEPT;
 

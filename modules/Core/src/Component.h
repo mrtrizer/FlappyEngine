@@ -23,9 +23,12 @@ class Component: public ComponentBase
 {
 public:
     using ComponentBase::ComponentBase;
+    Component()
+        : m_typeId(GetTypeId<ComponentBase, DerivedT>::value())
+    {}
 
     TypeId<ComponentBase> componentId() const final {
-        return GetTypeId<ComponentBase, DerivedT>::value();
+        return m_typeId;
     }
 
     static TypeId<ComponentBase> id() {
@@ -50,6 +53,7 @@ private:
         LOGI("Deinit end %s", typeName<DerivedT>().c_str());
     }
 
+    TypeId<ComponentBase> m_typeId;
 };
 
 } // flappy
