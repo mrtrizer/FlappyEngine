@@ -3,6 +3,10 @@ compiler: gcc
 sudo: required
 dist: trusty
 
+env:
+  global:
+    - CODECOV_TOKEN=:32cab459-0975-4208-a94c-cb3be426159b
+
 before_install:
  - sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -40,7 +44,7 @@ before_install:
  - make
  - sudo ln -s `pwd`/spirv-cross /usr/local/bin/spirv-cross
  - popd
- - export CXX="ccache g++"
+ - export CXX="ccache g++ -coverage -O0"
 
 script:
 
