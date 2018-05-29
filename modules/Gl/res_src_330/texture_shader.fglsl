@@ -1,11 +1,11 @@
-#version 330
+#version 420
 
 
 uniform colors {
     vec4 uColor;
 };
 
-uniform sampler2D uTex;
+layout(binding=0) uniform sampler2D uTex;
 
 in vec2 vTexCoord;
 out vec4 fragColor;
