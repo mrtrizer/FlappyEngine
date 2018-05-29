@@ -42,7 +42,7 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /u
 ## OS X
 1. Install glew and libvorbis using brew. `brew install glew libvorbis`
 
-2. Install v8 5.1 and llvm 5.0 using brew. `brew install v8 llvm`
+2. Install v8 5.1 (optional, if going to code js) and llvm 5.0 using brew. `brew install v8 llvm`
 
 3. Install libraries for font generation and image processing `brew install pkg-config cairo libpng jpeg giflib graphicsmagick`
 
