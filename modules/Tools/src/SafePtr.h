@@ -16,6 +16,10 @@ template <typename T>
 class SafePtr: public SafePtrBase
 {
 public:
+    SafePtr(std::nullptr_t) :
+        m_weakPtr()
+    {}
+
     SafePtr(std::shared_ptr<T> sharedPtr = nullptr):
         m_weakPtr(sharedPtr)
     {}

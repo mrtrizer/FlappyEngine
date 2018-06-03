@@ -19,6 +19,8 @@ function getSourceList(context) {
     const contexts = [context].concat(moduleContexts);
     for (const i in contexts) {
         const moduleContext = contexts[i];
+        if (moduleContext.config.name == "RTTR" || moduleContext.config.name == "RTTRGenerator")
+            continue;
         //console.log(JSON.stringify(moduleContext));
         const srcDir = path.join(moduleContext.moduleRoot, "src");
         const files = utils.readDirs(srcDir);

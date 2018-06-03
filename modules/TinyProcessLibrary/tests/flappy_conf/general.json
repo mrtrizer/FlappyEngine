@@ -1,21 +1,18 @@
 {
-    "name":"RTTR",
-    "version":"0.9.6",
+    "name":"tests_TinyProcessLibrary",
     "modules": [
         {
-            "path": "../Core"
+            "path":".."
         },
         {
-            "path": "../ResManager"
+            "path":"../../Catch"
         }
     ],
     "cxx":{
         "header_dirs": [
-            "./libs",
             "./src"
         ],
         "src_dirs": [
-            "./libs",
             "./src"
         ]
     }

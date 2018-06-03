@@ -16,6 +16,7 @@ public:
 
     virtual void registerFile(std::string path) = 0;
     virtual bool changed(std::string path) = 0;
+    virtual bool exists(std::string path) = 0;
 };
 
 } // flappy

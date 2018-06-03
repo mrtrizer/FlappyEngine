@@ -53,4 +53,9 @@ bool StdFileMonitorManager::changed(std::string path) {
     return changed;
 }
 
+bool StdFileMonitorManager::exists(std::string path) {
+    struct stat fileStat;
+    return stat(path.c_str(), &fileStat) == 0;
+}
+
 } // flappy

@@ -1,0 +1,16 @@
+{
+    "name":"TinyProcessLibrary",
+    "version":"2.0",
+    "modules": [
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src/",
+            "./src_unix/"
+        ],
+        "src_dirs": [
+            "./src/",
+            "./src_unix/"
+        ]
+    }
+}
