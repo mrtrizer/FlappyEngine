@@ -7,9 +7,13 @@ module.exports.generate = function (context, scriptContext, resConfig, resSrcDir
     const fse = context.require("fs-extra");
     const logger = context.requireFlappyScript("logger");
 
+    logger.logi("Default generator start");
+    logger.logi("Res src dir: " + resSrcDir);
+    logger.logi("Cache subdir: " + cacheSubDir);
+
+    logger.logi("Res config: " + JSON.stringify(resConfig));
     const inputPath = path.join(resSrcDir, resConfig.input)
     const outputPath = path.join(cacheSubDir, resConfig.input)
-    logger.logi("Default generator start");
     logger.logi("Res type: " + resConfig.type);
     logger.logi("Copy from: " + inputPath);
     logger.logi("Copy to: " + outputPath);

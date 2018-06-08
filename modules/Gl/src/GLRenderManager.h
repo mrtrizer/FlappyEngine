@@ -13,9 +13,9 @@ class GLRenderFactory;
 class GLRenderManager : public RenderManager {
 public:
     GLRenderManager();
-    void redraw(std::list<Visual> &, glm::mat4 &) final;
 protected:
     void updateViewPort() final;
+    void redraw(std::list<Visual> &, glm::mat4 &) final;
 };
 
 } // flappy

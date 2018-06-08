@@ -8,10 +8,15 @@ namespace flappy {
 TextComponent::TextComponent()
 {
     addDependency(RenderElementFactory::id());
+    addDependency(ResManager<FontRes>::id());
 
     subscribe([this](InitEvent) {
         m_renderElement = manager<RenderElementFactory>()->createTextRender(selfPointer());
         entity()->addComponent(m_renderElement);
+        if (!m_fontResPath.empty()) {
+            m_fontRes = manager<ResManager<FontRes>>()->getRes(m_fontResPath, ExecType::ASYNC);
+            entity()->events()->post(TextChangedEvent());
+        }
     });
 
     subscribe([this](DeinitEvent) {
@@ -48,6 +53,14 @@ void TextComponent::setText(std::string text) {
 void TextComponent::setFontRes(std::shared_ptr<FontRes> fontRes) {
     m_fontRes = fontRes;
     entity()->events()->post(TextChangedEvent());
+}
+
+void TextComponent::setFontResPath(std::string fontResPath) {
+    m_fontResPath = fontResPath;
+    if (isInitialized()) {
+        m_fontRes = manager<ResManager<FontRes>>()->getRes(fontResPath, ExecType::ASYNC);
+        entity()->events()->post(TextChangedEvent());
+    }
 }
 
 std::shared_ptr<FontRes> TextComponent::fontRes() {

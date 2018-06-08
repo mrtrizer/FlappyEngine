@@ -38,13 +38,13 @@ std::shared_ptr<ComponentBase> RTTRService::createComponent(TypeId<ComponentBase
     try {
         auto rttrType = toRTTRType(type);
         if (!rttrType.is_valid())
-            throw new std::runtime_error("Type is invalid");
+            throw std::runtime_error("Type is invalid");
         auto rttrVariant = rttrType.create();
         if (!rttrVariant.is_valid())
-            throw new std::runtime_error("Variant is invalid");
+            throw std::runtime_error("Variant is invalid");
         auto instance = rttrVariant.get_value<std::shared_ptr<ComponentBase>>();
         if (instance == nullptr)
-            throw new std::runtime_error("Invalid cast to ComponentBase");
+            throw std::runtime_error("Invalid cast to ComponentBase");
         return instance;
     } catch (const std::exception& e) {
         LOGE("Can't create component of type %s. %s", type.name().c_str(), e.what());

@@ -71,6 +71,9 @@ public:
     void setFontRes(std::shared_ptr<FontRes> fontRes);
     std::shared_ptr<FontRes> fontRes();
 
+    void setFontResPath(std::string fontResPath);
+    std::string fontResPath() { return m_fontResPath; }
+
     static glm::vec2 calcTextSize(std::string text, FontRes& fontRes, int width, int size);
     static BoxedLexem genBoxedLexem(std::string lexem, const GlyphSheetRes& glyphSheet, int size);
     static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth, int size);
@@ -84,6 +87,7 @@ private:
     int m_maxWidth = DEFAULT_WIDTH;
     Color m_color = {1.0f, 1.0f, 1.0f, 1.0f};
     std::string m_text;
+    std::string m_fontResPath;
     BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;
     std::shared_ptr<Render> m_renderElement;
