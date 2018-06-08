@@ -105,6 +105,10 @@ public:
     /// Returns value of active field. Components are activated by default.
     bool active() { return m_active; }
 
+    TypeMap<ComponentBase, SafePtr<ManagerBase>> managers() {
+        return m_managers;
+    }
+
 protected:
     /// Returns parent entity (can be null if conponent is not added to entity)
     Entity* entity() const { return m_entity; }

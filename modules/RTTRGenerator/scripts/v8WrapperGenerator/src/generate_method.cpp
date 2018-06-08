@@ -44,7 +44,7 @@ std::string generateArgs(const CXXMethodDecl* methodDecl) {
 std::string generateMethodBody(std::string methodName, std::string className, const std::vector<CXXMethodDecl*> methods) {
     std::stringstream methodConditionBlock;
     for (auto methodDecl : methods) {
-        auto resultQualType = methodDecl->getReturnType().getNonReferenceType().getAtomicUnqualifiedType();
+        auto resultQualType = methodDecl->getReturnType();//.getNonReferenceType().getAtomicUnqualifiedType();
         auto resultTypeName = resultQualType.getAsString();
         replace(resultTypeName, "_Bool", "bool");
         auto args = generateArgs(methodDecl);

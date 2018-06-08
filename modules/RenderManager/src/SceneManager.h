@@ -8,6 +8,7 @@
 #include <Manager.h>
 
 #include "Entity.h"
+#include "CameraComponent.h"
 
 namespace flappy
 {

@@ -82,7 +82,7 @@ private:
     int m_size = 20;
     Align m_align;
     int m_maxWidth = DEFAULT_WIDTH;
-    Color m_color;
+    Color m_color = {1.0f, 1.0f, 1.0f, 1.0f};
     std::string m_text;
     BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;

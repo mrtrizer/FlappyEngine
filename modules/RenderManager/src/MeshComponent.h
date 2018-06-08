@@ -6,6 +6,7 @@
 #include <Render.h>
 #include <Entity.h>
 
+#include "MaterialRes.h"
 #include "RenderElementFactory.h"
 
 namespace flappy {

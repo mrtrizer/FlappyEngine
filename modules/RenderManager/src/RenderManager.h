@@ -7,9 +7,10 @@
 #include <CameraComponent.h>
 #include <TransformComponent.h>
 
+#include "Render.h"
+
 namespace flappy {
 
-class Render;
 class SceneManager;
 class ScreenManager;
 

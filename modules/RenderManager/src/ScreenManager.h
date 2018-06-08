@@ -6,6 +6,8 @@
 
 #include <Manager.h>
 
+#include "CameraComponent.h"
+
 namespace flappy {
 
 class ScreenManager: public Manager<ScreenManager>
