@@ -43,7 +43,7 @@ std::string joinPath(std::vector<std::string> pathList) {
     return outPath;
 }
 
-bool Rect::operator==(const Rect& rect)
+bool Rect::operator==(const Rect& rect) const
 {
     return x1 == rect.x1
             && y1 == rect.y1
