@@ -104,6 +104,8 @@ module.exports.run = function (context) {
     call(`make`, buildDir);
     // Generate
     const sourceList = getSourceList(context);
+    // Filter sourceList via cache
+    // Remove all not in cache 
     if (sourceList.length > 0) {
         const outputDir = path.join(context.cacheDir, "V8JSWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
@@ -118,6 +120,7 @@ module.exports.run = function (context) {
                                 + ' ' + sourceList;
         console.log("Generation command: ", generateCommand);
         call(generateCommand, buildDir);
+        // save source list to cache
     }
 };
 
