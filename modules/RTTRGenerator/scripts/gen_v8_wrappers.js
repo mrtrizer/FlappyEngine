@@ -104,6 +104,14 @@ module.exports.run = function (context) {
     call(`make`, buildDir);
     // Generate
     const sourceList = getSourceList(context);
+    console.log("sourceList: " + JSON.stringify(sourceList));
+    const fileList = [];
+    const outputDir = path.join(context.cacheDir, "V8JSWrappers");
+    const wrappersDir = path.join(outputDir, "wrappers");
+    fs.readdirSync(wrappersDir).forEach(file => {
+        fileList.push(path.join(wrappersDir,file));
+    })
+    console.log("fileList: " + JSON.stringify(fileList));
     // Remove all not in list
     // for (path in fileList)
     // if (sourceList.indexOf(path) == -1) {
@@ -115,7 +123,6 @@ module.exports.run = function (context) {
     // const filteredSourceList = sourceList.filter(item => cache.indexOf(item) == -1 && isChanged(cache[item]));
     // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
-        const outputDir = path.join(context.cacheDir, "V8JSWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
