@@ -104,8 +104,16 @@ module.exports.run = function (context) {
     call(`make`, buildDir);
     // Generate
     const sourceList = getSourceList(context);
+    // Remove all not in list
+    // for (path in fileList)
+    // if (sourceList.indexOf(path) == -1) {
+    // fs.unlinkSync(path);
+    // console.log("Removed: " + path);
+    // }
+    //
     // Filter sourceList via cache
-    // Remove all not in cache 
+    // const filteredSourceList = sourceList.filter(item => cache.indexOf(item) == -1 && isChanged(cache[item]));
+    // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
         const outputDir = path.join(context.cacheDir, "V8JSWrappers");
         fse.mkdirsSync(path.join(outputDir, "wrappers"));

@@ -6,6 +6,7 @@
 
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
+#include "llvm/ADT/StringRef.h"
 
 #include "generate_method.h"
 
@@ -92,12 +93,19 @@ public :
             auto cppFileData = generateWrapperCpp(className, generatedMethods);
             auto cppFileName = std::string("RTTR") + className + ".cpp";
             writeTextFile(cppFileName, cppFileData);
+
+            m_sourcesToGeneratedMap.emplace(cppFileName, result.SourceManager->getFilename(classDecl->getLocation()).str());
         }
+    }
+
+    std::map<std::string, std::string> sourcesToGeneratedMap() {
+        return m_sourcesToGeneratedMap;
     }
 
 private:
     std::string m_path;
     std::unordered_set<std::string> m_wrappedClasses;
+    std::map<std::string, std::string> m_sourcesToGeneratedMap;
 };
 
 static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
@@ -121,6 +129,10 @@ int main(int argc, const char **argv) {
     finder.addMatcher(methodMatcher, &printer);
 
     auto result = tool.run(newFrontendActionFactory(&finder).get());
+
+    for (auto pair : printer.sourcesToGeneratedMap()) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+    }
 
     return 0;
 }
