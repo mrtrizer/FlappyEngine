@@ -106,24 +106,34 @@ module.exports.run = function (context) {
     const sourceList = getSourceList(context);
     console.log("sourceList: " + JSON.stringify(sourceList));
     const fileList = [];
-    const outputDir = path.join(context.cacheDir, "V8JSWrappers");
-    const wrappersDir = path.join(outputDir, "wrappers");
-    fs.readdirSync(wrappersDir).forEach(file => {
-        fileList.push(path.join(wrappersDir,file));
-    })
-    console.log("fileList: " + JSON.stringify(fileList));
-    // Remove all not in list
-    // for (path in fileList)
-    // if (sourceList.indexOf(path) == -1) {
-    // fs.unlinkSync(path);
-    // console.log("Removed: " + path);
-    // }
+    const outputDir = path.join(context.cacheDir, "RTTRWrappers");
+    const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
+    if (fs.existsSync(outputDir) && fs.existsSync(rttrToSourcesPath)) {
+        fs.readdirSync(outputDir).forEach(file => {
+            fileList.push(path.join(outputDir,file));
+        })
+        console.log("fileList: " + JSON.stringify(fileList));
+        const rttrToHMap = fse.readJsonSync(rttrToSourcesPath);
+        console.log("rttrToHMap: " + JSON.stringify(rttrToHMap));
+        const rttrToCppMap = {};
+        for (const key in rttrToHMap)
+            rttrToCppMap[key] = rttrToHMap[key].replace(/\.h/, ".cpp")
+        console.log("rttrToCppMap: " + JSON.stringify(rttrToCppMap));
+        // Remove all not in list
+        for (const i in fileList) {
+            const path = fileList[i];
+            if (sourceList.indexOf(rttrToCppMap[path]) == -1) {
+                fs.unlinkSync(path);
+                console.log("Removed: " + path);
+            }
+        }
+    }
     //
     // Filter sourceList via cache
     // const filteredSourceList = sourceList.filter(item => cache.indexOf(item) == -1 && isChanged(cache[item]));
     // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
-        fse.mkdirsSync(path.join(outputDir, "wrappers"));
+        fse.mkdirsSync(outputDir);
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
 

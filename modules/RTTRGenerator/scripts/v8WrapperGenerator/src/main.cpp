@@ -51,18 +51,18 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
     return std::string(output.data());
 }
 
+void writeTextFile(std::string path, std::string data) {
+    std::ofstream textFile;
+    textFile.open(path);
+    textFile << data;
+    textFile.close();
+}
+
 class ClassHandler : public MatchFinder::MatchCallback {
 public :
     ClassHandler(std::string path)
         : m_path(path)
     {}
-
-    void writeTextFile(std::string name, std::string data) {
-        std::ofstream textFile;
-        textFile.open(m_path + "/wrappers/" + name);
-        textFile << data;
-        textFile.close();
-    }
 
     virtual void run(const MatchFinder::MatchResult &result) {
         if (const CXXRecordDecl *classDecl = result.Nodes.getNodeAs<clang::CXXRecordDecl>("classes")) {
@@ -92,7 +92,7 @@ public :
 
             auto cppFileData = generateWrapperCpp(className, generatedMethods);
             auto cppFileName = std::string("RTTR") + className + ".cpp";
-            writeTextFile(cppFileName, cppFileData);
+            writeTextFile(m_path + "/" + cppFileName, cppFileData);
 
             m_sourcesToGeneratedMap.emplace(cppFileName, result.SourceManager->getFilename(classDecl->getLocation()).str());
         }
@@ -128,11 +128,24 @@ int main(int argc, const char **argv) {
     ClassHandler printer(outputPath.getValue());
     finder.addMatcher(methodMatcher, &printer);
 
-    auto result = tool.run(newFrontendActionFactory(&finder).get());
+    tool.run(newFrontendActionFactory(&finder).get());
 
-    for (auto pair : printer.sourcesToGeneratedMap()) {
-        std::cout << pair.first << " " << pair.second << std::endl;
+    auto map = printer.sourcesToGeneratedMap();
+
+    std::stringstream rttrToCppMap;
+
+    rttrToCppMap << "{" << std::endl;
+    for (auto pairIter = map.begin(); pairIter != map.end(); ++pairIter) {
+        rttrToCppMap << "\t\"" << outputPath.getValue() << "/" << pairIter->first << "\" : \"" << pairIter->second << "\"";
+        if (std::next(pairIter) != map.end())
+            rttrToCppMap << ", ";
+        rttrToCppMap << std::endl;
     }
+    rttrToCppMap << "}" << std::endl;
+
+    std::cout << "RTTR to CPP Map: "<< rttrToCppMap.str();
+
+    writeTextFile(outputPath.getValue() + "/../rttr_to_sources.json", rttrToCppMap.str());
 
     return 0;
 }
