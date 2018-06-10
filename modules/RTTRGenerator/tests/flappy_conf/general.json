@@ -17,11 +17,11 @@
         ],
         "header_dirs": [
             "./src",
-	    "^/V8JSWrappers"
+	    "^/RTTRWrappers"
         ],
         "src_dirs": [
             "./src",
-	    "^/V8JSWrappers"
+	    "^/RTTRWrappers"
         ]
     }
 }

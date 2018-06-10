@@ -34,7 +34,7 @@ function getSourceList(context) {
         }
     }
 
-    return sourceList.join(" ");
+    return sourceList;
 }
 
 function call(command, cwd) {
@@ -103,7 +103,7 @@ module.exports.run = function (context) {
     call(`cmake -G \"Unix Makefiles\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
     call(`make`, buildDir);
     // Generate
-    const sourceList = getSourceList(context);
+    var sourceList = getSourceList(context);
     console.log("sourceList: " + JSON.stringify(sourceList));
     const fileList = [];
     const outputDir = path.join(context.cacheDir, "RTTRWrappers");
@@ -127,9 +127,39 @@ module.exports.run = function (context) {
                 console.log("Removed: " + path);
             }
         }
+
+        var filteredSourceList = [];
+        
+        const TimestampCache = context.requireFlappyScript("timestamp_cache").TimestampCache;
+        const timestampCache = new TimestampCache(context);
+        for (const i in sourceList) {
+            const source = sourceList[i];
+            console.log("source: " + source);
+            const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
+            const compilationDatabase = fse.readJsonSync(compileCommandsPath);
+            const unitInfo = compilationDatabase.find(element => element["file"] == source);
+            const childProcess = require("child_process");
+            const command = unitInfo["command"].replace(/\-o.*?\.o/, "") + " -MM";
+            const output = childProcess.execSync(command, {"cwd": buildDir, stdio: "pipe"});
+            const dependencies = output.toString().replace(/.*?: \\/, "").split("\\");
+            for (const i in dependencies) {
+                const dependency = dependencies[i].trim();
+                if (timestampCache.isChanged(dependency)) {
+                    console.log("Cached " + source + " because of " + dependency);
+                    if (filteredSourceList.indexOf(source) == -1)
+                        filteredSourceList.push(source);
+                }
+            }
+        }
+
+        console.log("Filtered sources: " + JSON.stringify(filteredSourceList));
+        sourceList = filteredSourceList;
+
     }
     //
     // Filter sourceList via cache
+    
+
     // const filteredSourceList = sourceList.filter(item => cache.indexOf(item) == -1 && isChanged(cache[item]));
     // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
@@ -142,7 +172,7 @@ module.exports.run = function (context) {
                                 + ` -extra-arg \"-I${clangIncludes2}\"`
                                 + ` -p \"${context.projectRoot}\"`
                                 + ` --output \"${outputDir}\"`
-                                + ' ' + sourceList;
+                                + ' ' + sourceList.join(" ");
         console.log("Generation command: ", generateCommand);
         call(generateCommand, buildDir);
         // save source list to cache
