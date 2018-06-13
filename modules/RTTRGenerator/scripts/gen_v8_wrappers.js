@@ -80,7 +80,7 @@ function generateCompilationDB(context) {
     }
     const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
     fse.outputJsonSync(compileCommandsPath, compileCommandsSource,  {"spaces" : 4});
-    fse.removeSync(buildDir);
+    //fse.removeSync(buildDir);
 }
 
 module.exports.getHelp = function() {
