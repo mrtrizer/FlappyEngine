@@ -33,7 +33,7 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
             "\n"
             "namespace flappy {\n"
             "\n"
-            "RTTR_REGISTRATION\n"
+            "RTTR_PLUGIN_REGISTRATION\n"
             "{\n"
             "     using namespace rttr;\n"
             "\n"
