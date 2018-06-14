@@ -15,8 +15,8 @@
             "./src"
         ],
         "src_dirs": [
-            "./libs",
             "./src"
-        ]
+        ],
+        "libs": ["./lib/librttr_core.dylib"]
     }
 }

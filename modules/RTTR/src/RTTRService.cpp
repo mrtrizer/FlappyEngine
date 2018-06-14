@@ -19,7 +19,7 @@ void RTTRService::loadLibrary(const std::string& filePath) {
 }
 
 rttr::type RTTRService::findType(const std::string& name) {
-    auto types = rttr::type::get_types();
+    auto types = m_rttrLibrary->get_types();
     auto foundIter = std::find_if(types.begin(), types.end(), [name](auto item){
         return item.get_name() == name;
     });
