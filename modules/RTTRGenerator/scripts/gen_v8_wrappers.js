@@ -108,6 +108,7 @@ module.exports.run = function (context) {
     var sourceList = getSourceList(context);
     var dependencyMap = {};
     var allHeaders = [];
+    console.log("sourceList: " + JSON.stringify(sourceList));
     for (const i in sourceList) {
         const source = sourceList[i];
         console.log("source: " + source);
@@ -119,11 +120,12 @@ module.exports.run = function (context) {
         const childProcess = require("child_process");
         const command = unitInfo["command"].replace(/\-o.*?\.o/, "") + " -MM";
         const output = childProcess.execSync(command, {"cwd": buildDir, stdio: "pipe"});
-        const dependencies = output.toString().replace(/.*?: \\/, "").split("\\");
+        const rawDependencies = output.toString().replace(/.*?: \\/, "").split("\\");
+        const dependencies = Array.from(rawDependencies, item => path.normalize(item.trim()));
         dependencyMap[source] = dependencies;
         allHeaders = allHeaders.concat(dependencies);
     }
-    console.log("sourceList: " + JSON.stringify(sourceList));
+    console.log("allHeaders: " + JSON.stringify(allHeaders));
     const fileList = [];
     const outputDir = path.join(context.cacheDir, "RTTRWrappers");
     const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
@@ -136,13 +138,18 @@ module.exports.run = function (context) {
         console.log("rttrToHMap: " + JSON.stringify(rttrToHMap));
         // Remove all not in list
         for (const i in fileList) {
-            const path = fileList[i];
-            const headerPath = rttrToHMap[path].trim();
-            console.log(headerPath);
-            if (typeof(headerPath) === "string" && allHeaders.indexOf(path.normalize(headerPath)) == -1) {
-                fs.unlinkSync(path);
-                timestampCache.isChanged(rttrToHMap[path]);
-                console.log("Removed: " + path);
+            const rttrFilePath = fileList[i];
+            const headerPath = rttrToHMap[rttrFilePath].trim();
+            console.log("headrPIah: " + headerPath);
+            if (typeof(headerPath) === "string") {
+                const index = allHeaders.indexOf(path.normalize(headerPath))
+                console.log("Index:" + index);
+                if (index === -1) {
+                    console.log("Header: " + path.normalize(headerPath));
+                    fs.unlinkSync(rttrFilePath);
+                    timestampCache.isChanged(headerPath);
+                    console.log("Removed: " + rttrFilePath);
+                }
             }
         }
 
