@@ -44,7 +44,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   endforeach()
 else()
   target_link_libraries(${PROJECT_NAME} ${LIBRARY_LIST})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-parameter -fno-strict-aliasing -fno-exceptions -fno-rtti")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-parameter -fno-strict-aliasing -fno-rtti")
   #set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 endif()
 

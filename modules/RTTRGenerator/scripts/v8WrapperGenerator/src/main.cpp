@@ -9,6 +9,7 @@
 #include "llvm/ADT/StringRef.h"
 
 #include "generate_method.h"
+#include "json.hpp"
 
 #include <cstdio>
 #include <iostream>
@@ -23,6 +24,7 @@ using namespace clang;
 using namespace clang::ast_matchers;
 using namespace clang::tooling;
 using namespace llvm;
+using namespace nlohmann;
 
 std::string generateWrapperCpp(std::string className, GeneratedMethods generatedMethods) {
     std::vector<char> output(50000);
@@ -56,6 +58,17 @@ void writeTextFile(std::string path, std::string data) {
     textFile.open(path);
     textFile << data;
     textFile.close();
+}
+
+std::string readTextFile(std::string path) {
+    std::ifstream textFile;
+    textFile.open(path);
+    if (!textFile.is_open())
+        return {};
+    std::stringstream ss;
+    ss << textFile.rdbuf();
+    textFile.close();
+    return ss.str();
 }
 
 class ClassHandler : public MatchFinder::MatchCallback {
@@ -132,20 +145,24 @@ int main(int argc, const char **argv) {
 
     auto map = printer.sourcesToGeneratedMap();
 
-    std::stringstream rttrToCppMap;
+    auto rttrToSourcesPath = outputPath.getValue() + "/../rttr_to_sources.json";
 
-    rttrToCppMap << "{" << std::endl;
+    auto jsonText = readTextFile(rttrToSourcesPath);
+    json parsedJson = jsonText.empty() ? json() : json::parse(jsonText);
+
+    std::cout << "RTTR to CPP Map before: "<< parsedJson.dump(4);
+
     for (auto pairIter = map.begin(); pairIter != map.end(); ++pairIter) {
-        rttrToCppMap << "\t\"" << outputPath.getValue() << "/" << pairIter->first << "\" : \"" << pairIter->second << "\"";
-        if (std::next(pairIter) != map.end())
-            rttrToCppMap << ", ";
-        rttrToCppMap << std::endl;
+        auto rttrFilePath = outputPath.getValue() + "/" + pairIter->first;
+        auto cppFilePath = pairIter->second;
+        parsedJson[rttrFilePath] = cppFilePath;
     }
-    rttrToCppMap << "}" << std::endl;
 
-    std::cout << "RTTR to CPP Map: "<< rttrToCppMap.str();
+    auto newJsonText = parsedJson.dump(4);
 
-    writeTextFile(outputPath.getValue() + "/../rttr_to_sources.json", rttrToCppMap.str());
+    std::cout << "RTTR to CPP Map after: "<< newJsonText;
+
+    writeTextFile(rttrToSourcesPath, newJsonText);
 
     return 0;
 }

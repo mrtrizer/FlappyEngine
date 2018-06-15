@@ -91,6 +91,8 @@ module.exports.run = function (context) {
     const fs = require('fs');
     const path = require('path');
     const fse = context.require("fs-extra");
+    const TimestampCache = context.requireFlappyScript("timestamp_cache").TimestampCache;
+    const timestampCache = new TimestampCache(context);
     // Generate compile_commands.json
     generateCompilationDB(context);
     // Build
@@ -104,6 +106,23 @@ module.exports.run = function (context) {
     call(`make`, buildDir);
     // Generate
     var sourceList = getSourceList(context);
+    var dependencyMap = {};
+    var allHeaders = [];
+    for (const i in sourceList) {
+        const source = sourceList[i];
+        console.log("source: " + source);
+        const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
+        const compilationDatabase = fse.readJsonSync(compileCommandsPath);
+        const unitInfo = compilationDatabase.find(element => element["file"] == source);
+        if (!unitInfo)
+            continue;
+        const childProcess = require("child_process");
+        const command = unitInfo["command"].replace(/\-o.*?\.o/, "") + " -MM";
+        const output = childProcess.execSync(command, {"cwd": buildDir, stdio: "pipe"});
+        const dependencies = output.toString().replace(/.*?: \\/, "").split("\\");
+        dependencyMap[source] = dependencies;
+        allHeaders = allHeaders.concat(dependencies);
+    }
     console.log("sourceList: " + JSON.stringify(sourceList));
     const fileList = [];
     const outputDir = path.join(context.cacheDir, "RTTRWrappers");
@@ -115,33 +134,22 @@ module.exports.run = function (context) {
         console.log("fileList: " + JSON.stringify(fileList));
         const rttrToHMap = fse.readJsonSync(rttrToSourcesPath);
         console.log("rttrToHMap: " + JSON.stringify(rttrToHMap));
-        const rttrToCppMap = {};
-        for (const key in rttrToHMap)
-            rttrToCppMap[key] = rttrToHMap[key].replace(/\.h/, ".cpp")
-        console.log("rttrToCppMap: " + JSON.stringify(rttrToCppMap));
         // Remove all not in list
         for (const i in fileList) {
             const path = fileList[i];
-            if (sourceList.indexOf(rttrToCppMap[path]) == -1) {
+            const headerPath = rttrToHMap[path].trim();
+            console.log(headerPath);
+            if (typeof(headerPath) === "string" && allHeaders.indexOf(path.normalize(headerPath)) == -1) {
                 fs.unlinkSync(path);
+                timestampCache.isChanged(rttrToHMap[path]);
                 console.log("Removed: " + path);
             }
         }
 
         var filteredSourceList = [];
-        
-        const TimestampCache = context.requireFlappyScript("timestamp_cache").TimestampCache;
-        const timestampCache = new TimestampCache(context);
         for (const i in sourceList) {
             const source = sourceList[i];
-            console.log("source: " + source);
-            const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
-            const compilationDatabase = fse.readJsonSync(compileCommandsPath);
-            const unitInfo = compilationDatabase.find(element => element["file"] == source);
-            const childProcess = require("child_process");
-            const command = unitInfo["command"].replace(/\-o.*?\.o/, "") + " -MM";
-            const output = childProcess.execSync(command, {"cwd": buildDir, stdio: "pipe"});
-            const dependencies = output.toString().replace(/.*?: \\/, "").split("\\");
+            const dependencies = dependencyMap[source];
             for (const i in dependencies) {
                 const dependency = dependencies[i].trim();
                 if (timestampCache.isChanged(dependency)) {
