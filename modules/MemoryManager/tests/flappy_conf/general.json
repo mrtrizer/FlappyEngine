@@ -1,6 +1,12 @@
 {
     "name":"tests_MemoryManager",
     "modules": [
+        {
+            "path":".."
+        },
+        {
+            "path":"../../Catch"
+        }
     ],
     "cxx":{
         "header_dirs": [
