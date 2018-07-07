@@ -1,0 +1,13 @@
+{
+    "name":"MemoryManager",
+    "modules": [
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
