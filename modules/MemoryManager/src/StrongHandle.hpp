@@ -18,17 +18,25 @@ private:
     virtual void updateStrongHandle(StrongHandle<DataT>* strongHandle) noexcept = 0;
 };
 
-template <typename DataT>
-class ChankArray;
+//template<size_t ChankSize>
+//class ChankArray;
 
 template <typename DataT>
 class Handle;
 
 template <typename DataT>
 class StrongHandle {
-    friend class ChankArray<DataT>; // to update pointer
+    //friend class ChankArray<DataT>; // to update pointer
     friend class Handle<DataT>; // to register/unregister of handles
 public:
+    // FIXME: Move to private
+    StrongHandle(DataT* dataPointer,
+                 std::function<void(void)>&& removeCallback,
+                 std::function<void(StrongHandle*)>&& updateCallback) noexcept
+        : m_dataPointer(dataPointer)
+        , m_removeCallback(std::move(removeCallback))
+        , m_updateCallback(std::move(updateCallback))
+    {}
     StrongHandle(StrongHandle&& strongHandle) noexcept {
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;
@@ -60,20 +68,7 @@ public:
         return m_dataPointer;
     }
 
-private:
-    DataT* m_dataPointer = nullptr;
-    std::function<void(void)> m_removeCallback;
-    std::function<void(StrongHandle*)> m_updateCallback;
-    std::vector<IHandle<DataT>*> m_handles;
-
-    StrongHandle(DataT* dataPointer,
-                 std::function<void(void)>&& removeCallback,
-                 std::function<void(StrongHandle*)>&& updateCallback) noexcept
-        : m_dataPointer(dataPointer)
-        , m_removeCallback(std::move(removeCallback))
-        , m_updateCallback(std::move(updateCallback))
-    {}
-
+    // FIXME: Move to private
     void updatePointer(DataT* dataPointer,
                        const std::function<void(void)>& removeCallback,
                        const std::function<void(StrongHandle*)>& updateCallback) noexcept {
@@ -88,6 +83,12 @@ private:
         m_removeCallback = removeCallback;
         m_updateCallback = updateCallback;
     }
+
+private:
+    DataT* m_dataPointer = nullptr;
+    std::function<void(void)> m_removeCallback;
+    std::function<void(StrongHandle*)> m_updateCallback;
+    std::vector<IHandle<DataT>*> m_handles;
 
     void registerHandle(IHandle<DataT>* handle) noexcept {
         DEBUG_ASSERT(handle != nullptr);
