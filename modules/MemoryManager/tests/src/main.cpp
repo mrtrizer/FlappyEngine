@@ -28,7 +28,7 @@ private:
 
 TEST_CASE( "Adding of Component to Entity") {
 
-    ChankArray<20> chankArray(10);
+    ChankArray<64> chankArray(10);
     {
         auto a = chankArray.create<Test>(10);
         REQUIRE(a->value() == 10);

@@ -39,7 +39,7 @@ class ChankArray {
     using Allocator = std::allocator<ChankBytes>;
     using AllocatorTraits = std::allocator_traits<Allocator>;
 public:
-    ChankArray(size_t capacity)
+    ChankArray(std::size_t capacity)
         : m_capacity(capacity)
     {
         USER_ASSERT(capacity > 0);
@@ -64,6 +64,7 @@ public:
         DEBUG_ASSERT(m_end != nullptr);
 
         static_assert(std::is_class<DataT>(), "ChankArray doesn't support basic types.");
+        static_assert(sizeof(Chank<DataT>) <= ChankSize, "DataT doesn't fit into a chank of size ChankSize.");
 
         if (m_length >= m_capacity)
             throw FlappyException(sstr("You have reached limit of chanks. Max: ", m_capacity));
@@ -103,8 +104,8 @@ private:
         DEBUG_ASSERT(m_end != nullptr);
 
         reinterpret_cast<IChank*>(chank)->~IChank();
-        auto last = m_end - 1;
         if (m_length > 1 && reinterpret_cast<ChankBytes*>(chank) != std::prev(m_end)) {
+            auto last = m_end - 1;
             Chank<DataT>::construct(chank, std::move(*reinterpret_cast<Chank<DataT>*>(last)));
             updatePointer(chank->strongHandle(), chank);
             reinterpret_cast<IChank*>(last)->~IChank();

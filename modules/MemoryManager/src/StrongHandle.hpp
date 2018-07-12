@@ -18,15 +18,13 @@ private:
     virtual void updateStrongHandle(StrongHandle<DataT>* strongHandle) noexcept = 0;
 };
 
-//template<size_t ChankSize>
-//class ChankArray;
-
 template <typename DataT>
 class Handle;
 
 template <typename DataT>
 class StrongHandle {
-    //friend class ChankArray<DataT>; // to update pointer
+    template<size_t ChankSize>
+    friend class ChankArray; // to update pointer
     friend class Handle<DataT>; // to register/unregister of handles
 public:
     // FIXME: Move to private
