@@ -4,7 +4,6 @@
 
 #include "Utility.hpp"
 
-
 template <typename DataT>
 class StrongHandle;
 
@@ -25,7 +24,7 @@ template <typename DataT>
 class StrongHandle {
     template<size_t ChankSize>
     friend class ChankArray; // to update pointer
-    friend class Handle<DataT>; // to register/unregister of handles
+    friend class Handle<DataT>; // to register/unregister handles
 public:
     StrongHandle(StrongHandle&& strongHandle) noexcept {
         m_dataPointer = strongHandle.m_dataPointer;
