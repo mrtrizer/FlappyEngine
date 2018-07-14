@@ -37,23 +37,15 @@ public:
         static_assert(std::is_class<DataT>(), "ChankArray doesn't support basic types.");
         static_assert(sizeof(DataT) <= ChankSize, "DataT doesn't fit into a chank of size ChankSize.");
 
-        if (m_length >= m_capacity)
-            throw FlappyException(sstr("You have reached limit of chanks. Max: ", m_capacity));
-
-        auto onDestroyed = [this](Chank<ChankSize>* chank) noexcept {
-            // if the chank is not the last element, replace it with the last element
-            auto last = m_end - 1;
-            if (chank != last)
-                *chank = std::move(*last);
-            m_end = last;
-            m_length--;
-        };
+        USER_ASSERT_MSG(m_length < m_capacity, "You have reached limit of chanks. Max: ", m_capacity);
 
         auto end = m_end;
         auto length = m_length;
 
         try {
-            auto strongHandle = end->template construct<DataT>(onDestroyed, std::forward<Args>(args)...);
+            auto strongHandle = end->template construct<DataT>(
+                        std::bind(&ChankArray::onDestroyed, this, std::placeholders::_1),
+                        std::forward<Args>(args)...);
             m_end = end + 1;
             m_length = length + 1;
             return strongHandle;
@@ -70,4 +62,13 @@ private:
     Allocator m_allocator;
     Chank<ChankSize>* m_first = nullptr;
     Chank<ChankSize>* m_end = nullptr;
+
+    void onDestroyed (Chank<ChankSize>* chank) noexcept {
+        // if the chank is not the last element, replace it with the last element
+        auto last = m_end - 1;
+        if (chank != last)
+            *chank = std::move(*last);
+        m_end = last;
+        m_length--;
+    };
 };
