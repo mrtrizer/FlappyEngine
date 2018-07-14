@@ -24,6 +24,7 @@ class Chank;
 
 template <typename DataT>
 class StrongHandle {
+    FORDEBUG(friend class ObjectPoolDebugger);
     friend class Chank; // to construct
     template<typename T>
     friend class ChankFunctions; // to update pointer
@@ -32,13 +33,12 @@ public:
     StrongHandle(StrongHandle&& strongHandle) noexcept {
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;
-        m_removeCallback = strongHandle.m_removeCallback;
-        m_updateCallback = strongHandle.m_updateCallback;
         m_chank = strongHandle.m_chank;
+        strongHandle.m_chank = nullptr;
         auto& handles = m_handles = std::move(strongHandle.m_handles);
         for (auto handle : handles)
             handle->updateStrongHandle(this);
-        m_updateCallback(strongHandle.m_chank, this);
+        [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (m_chank, this);
     }
     StrongHandle& operator=(StrongHandle&&) = delete;
     StrongHandle(const StrongHandle&) = delete;
@@ -49,7 +49,8 @@ public:
         for (auto handle : m_handles)
             handle->invalidate();
         try {
-            m_removeCallback(m_chank);
+            if (m_chank != nullptr)
+                [](auto chank) { chank->clear(); } (m_chank);
         } catch (...) {
             DEBUG_ASSERT(false);
         }
@@ -64,18 +65,12 @@ public:
 private:
     DataT* m_dataPointer = nullptr;
     Chank* m_chank = nullptr;
-    std::function<void(Chank*)> m_removeCallback;
-    std::function<void(Chank*, StrongHandle*)> m_updateCallback;
     std::vector<IHandle<DataT>*> m_handles;
 
     StrongHandle(DataT* dataPointer,
-                 Chank* chank,
-                 std::function<void(Chank*)>&& removeCallback,
-                 std::function<void(Chank*, StrongHandle*)>&& updateCallback) noexcept
+                 Chank* chank) noexcept
         : m_dataPointer(dataPointer)
         , m_chank(chank)
-        , m_removeCallback(std::move(removeCallback))
-        , m_updateCallback(std::move(updateCallback))
     {}
 
     void updatePointer(DataT* dataPointer, Chank* chank) noexcept {

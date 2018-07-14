@@ -10,6 +10,8 @@ class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
     friend class ObjectPool;
     friend class std::allocator<Chank>;
+    template <typename DataT>
+    friend class StrongHandle;
 
     /// The interface generalises work with different data types with minimal overhead
     class IChankFunctions {
@@ -60,13 +62,23 @@ class Chank {
     }
 
     ~Chank() {
-        if (m_chankFunctions != nullptr)
+        if (m_chankFunctions != nullptr) {
             m_chankFunctions->destroy(m_data);
+            m_destroyedCallback(this);
+        }
     }
 
     void moveFrom(Chank* chank) {
+        DEBUG_ASSERT(chank->m_size == m_size);
+        DEBUG_ASSERT(chank->m_data != m_data);
+
         chank->m_chankFunctions->move(chank->m_data, m_data);
         chank->m_chankFunctions->updateHandle(chank->m_strongHandle, this, m_data);
+
+        m_strongHandle = chank->m_strongHandle;
+        m_chankFunctions = chank->m_chankFunctions;
+        m_destroyedCallback = chank->m_destroyedCallback;
+
         chank->clear();
     }
 
@@ -84,11 +96,7 @@ class Chank {
         try {
             auto data = new (m_data) DataT(std::forward<Args>(args)...);
 
-            StrongHandle<DataT> strongHandle(
-                data,
-                        this,
-                [] (Chank* chank) noexcept { chank->clear(); },
-                [] (Chank* chank, StrongHandle<DataT>* strongHandle) noexcept{ chank->m_strongHandle = strongHandle; });
+            StrongHandle<DataT> strongHandle(data, this);
 
             // This pointer is automatically updated if the strong handle is moved to a new location
             m_strongHandle = &strongHandle;
@@ -106,18 +114,22 @@ class Chank {
 
     /// Method destroys underlaying instance if it is was initialized.
     void clear() noexcept {
-        if (cunstructed()) {
+        if (constructed()) {
             DEBUG_ASSERT(m_strongHandle != nullptr);
             DEBUG_ASSERT(m_destroyedCallback != nullptr);
 
             m_chankFunctions->destroy(m_data);
+            auto destroyedCallback = m_destroyedCallback;
+
             m_strongHandle = nullptr;
             m_chankFunctions = nullptr;
             m_destroyedCallback = nullptr;
+
+            destroyedCallback(this);
         }
     }
 
-    [[nodiscard]] bool cunstructed() const noexcept {
+    [[nodiscard]] bool constructed() const noexcept {
         return m_chankFunctions != nullptr;
     }
 

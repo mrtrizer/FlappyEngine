@@ -20,7 +20,7 @@ public:
     }
     ObjectPool(const ObjectPool&) = delete;
     ObjectPool& operator= (const ObjectPool&) = delete;
-    ObjectPool(ObjectPool&& chankArray) = delete;
+    ObjectPool(ObjectPool&&) = delete;
     ObjectPool& operator= (ObjectPool&&) = default;
     ~ObjectPool() {
         // To be sure that m_chanks cleared before m_bytes destroyed
