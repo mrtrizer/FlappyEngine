@@ -30,7 +30,7 @@ public:
     }
 
     template <typename DataT, typename...Args>
-    StrongHandle<DataT> create(Args ... args) {
+    [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
         DEBUG_ASSERT(m_first != nullptr);
         DEBUG_ASSERT(m_end != nullptr);
 
@@ -40,21 +40,28 @@ public:
         if (m_length >= m_capacity)
             throw FlappyException(sstr("You have reached limit of chanks. Max: ", m_capacity));
 
-        auto onDestroyed = [this](Chank<ChankSize>* chank) {
+        auto onDestroyed = [this](Chank<ChankSize>* chank) noexcept {
             // if the chank is not the last element, replace it with the last element
             auto last = m_end - 1;
             if (chank != last)
                 *chank = std::move(*last);
-            m_end--;
+            m_end = last;
             m_length--;
         };
 
-        auto strongHandle =  m_end->template construct<DataT>(onDestroyed, std::forward<Args>(args)...);
+        auto end = m_end;
+        auto length = m_length;
 
-        m_end++;
-        m_length++;
-
-        return strongHandle;
+        try {
+            auto strongHandle = end->template construct<DataT>(onDestroyed, std::forward<Args>(args)...);
+            m_end = end + 1;
+            m_length = length + 1;
+            return strongHandle;
+        } catch (...) {
+            m_end = end;
+            m_length = length;
+            throw;
+        }
     }
 
 private:

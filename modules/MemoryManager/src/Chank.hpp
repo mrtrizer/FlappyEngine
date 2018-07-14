@@ -5,37 +5,49 @@
 
 #include "StrongHandle.hpp"
 
-template<size_t ChankSize>
-class Chank;
+template <size_t ChankSize>
+class ChankArray;
 
-template<size_t ChankSize>
-class IChankFunctions {
-public:
-    virtual void destroy(std::byte* data) = 0;
-    virtual void updateHandle(void* handle, Chank<ChankSize>* chank) = 0;
-    virtual void move(std::byte* source, std::byte* destination) = 0;
-};
-
-template<typename DataT, size_t ChankSize>
-class ChankFunctions : public IChankFunctions<ChankSize> {
-public:
-    void destroy(std::byte* data) override {
-        reinterpret_cast<DataT*>(data)->~DataT();
-    }
-
-    void updateHandle(void* strongHandle, Chank<ChankSize>* chank) override;
-
-    void move(std::byte* source, std::byte* destination) override;
-
-    static IChankFunctions<ChankSize>& instance() {
-        static ChankFunctions<DataT, ChankSize> staticInstance;
-        return staticInstance;
-    }
-};
-
+/// The class holds object of any type within size limit
 template<size_t ChankSize>
 class Chank {
-public:
+    friend class ChankArray<ChankSize>;
+    friend class std::allocator<Chank<ChankSize>>;
+
+    /// The interface generalises work with different data types with minimal overhead
+    class IChankFunctions {
+    public:
+        virtual void destroy(std::byte* data) = 0;
+        virtual void updateHandle(void* handle, Chank<ChankSize>* chank) = 0;
+        virtual void move(std::byte* source, std::byte* destination) = 0;
+    };
+
+    template<typename DataT>
+    class ChankFunctions : public IChankFunctions {
+    public:
+        void destroy(std::byte* data) override {
+            reinterpret_cast<DataT*>(data)->~DataT();
+        }
+
+        void updateHandle(void* strongHandle, Chank<ChankSize>* chank) override {
+            reinterpret_cast<StrongHandle<DataT>*>(strongHandle)->updatePointer(
+                chank->template data<DataT>(),
+                [chank] () noexcept { chank->clear(); },
+                [this, chank] (StrongHandle<DataT>* strongHandle) noexcept { updateHandle(strongHandle, chank); }
+            );
+        }
+
+        void move(std::byte* source, std::byte* destination) override {
+            new (destination) DataT(std::move(*reinterpret_cast<DataT*>(source)));
+        }
+    };
+
+    template <typename DataT>
+    static IChankFunctions* chankFunctionsForType() {
+        static ChankFunctions<DataT> instance;
+        return &instance;
+    }
+
     Chank() = default;
 
     Chank& operator=(Chank&& other) noexcept {
@@ -54,8 +66,10 @@ public:
             m_chankFunctions->destroy(m_data);
     }
 
+    /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
+    /// @param destroyedCallback Called when underlying class is destroyed
     template <typename DataT, typename ... Args>
-    StrongHandle<DataT> construct(std::function<void(Chank*)> destroyedCallback, Args&& ... args) {
+    [[nodiscard]] StrongHandle<DataT> construct(std::function<void(Chank*)> destroyedCallback, Args&& ... args) {
         DEBUG_ASSERT(destroyedCallback != nullptr);
         DEBUG_ASSERT(m_strongHandle == nullptr);
         DEBUG_ASSERT(m_chankFunctions == nullptr);
@@ -66,12 +80,14 @@ public:
         try {
             auto data = new (m_data) DataT(std::forward<Args>(args)...);
 
-            StrongHandle<DataT> strongHandle(data,
-                                             [this] { clear(); },
-                                             [this] (StrongHandle<DataT>* strongHandle) { m_chankFunctions->updateHandle(strongHandle, this); });
+            StrongHandle<DataT> strongHandle(
+                data,
+                [this] () noexcept { clear(); },
+                [this] (StrongHandle<DataT>* strongHandle) noexcept{ m_chankFunctions->updateHandle(strongHandle, this); });
 
+            // This pointer is automatically updated if the strong handle is moved to a new location
             m_strongHandle = &strongHandle;
-            m_chankFunctions = &ChankFunctions<DataT, ChankSize>::instance();
+            m_chankFunctions = chankFunctionsForType<DataT>();
             m_destroyedCallback = destroyedCallback;
 
             return strongHandle;
@@ -83,45 +99,32 @@ public:
         }
     }
 
-    bool cunstructed() {
-        return m_chankFunctions != nullptr;
+    /// Method destroys underlaying instance if it is was initialized.
+    void clear() noexcept {
+        if (cunstructed()) {
+            DEBUG_ASSERT(m_strongHandle != nullptr);
+            DEBUG_ASSERT(m_destroyedCallback != nullptr);
+
+            m_chankFunctions->destroy(m_data);
+            m_strongHandle = nullptr;
+            m_chankFunctions = nullptr;
+            m_destroyedCallback = nullptr;
+        }
     }
 
-    void clear() noexcept {
-        DEBUG_ASSERT(m_strongHandle != nullptr);
-        DEBUG_ASSERT(m_chankFunctions != nullptr);
-        DEBUG_ASSERT(m_destroyedCallback != nullptr);
-
-        m_chankFunctions->destroy(m_data);
-        m_strongHandle = nullptr;
-        m_chankFunctions = nullptr;
-        m_destroyedCallback = nullptr;
+    [[nodiscard]] bool cunstructed() const noexcept {
+        return m_chankFunctions != nullptr;
     }
 
     template <typename DataT>
     DataT* data() noexcept {
-        DEBUG_ASSERT(m_chankFunctions == &(ChankFunctions<DataT, ChankSize>::instance()));
+        DEBUG_ASSERT(m_chankFunctions == chankFunctionsForType<DataT>());
 
         return reinterpret_cast<DataT*>(m_data);
     }
 
-private:
     std::byte m_data[ChankSize];
-    void* m_strongHandle = nullptr;
-    IChankFunctions<ChankSize>* m_chankFunctions;
+    void* m_strongHandle = nullptr; // I prefer manual casting instead of introducing an interface
+    IChankFunctions* m_chankFunctions;
     std::function<void(Chank*)> m_destroyedCallback;
 };
-
-template<typename DataT, size_t ChankSize>
-void ChankFunctions<DataT, ChankSize>::updateHandle(void* strongHandle, Chank<ChankSize>* chank) {
-    reinterpret_cast<StrongHandle<DataT>*>(strongHandle)->updatePointer(
-                chank->template data<DataT>(),
-                [this, chank] { chank->clear(); },
-                [this, chank] (StrongHandle<DataT>* strongHandle) { updateHandle(strongHandle, chank); }
-    );
-}
-
-template<typename DataT, size_t ChankSize>
-void ChankFunctions<DataT, ChankSize>::move(std::byte* source, std::byte* destination) {
-    new (destination) DataT(std::move(*reinterpret_cast<DataT*>(source)));
-}
