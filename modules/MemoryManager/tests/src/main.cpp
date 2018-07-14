@@ -3,7 +3,7 @@
 #include <catch.h>
 #include <fakeit.h>
 
-#include <ChankArray.hpp>
+#include <ObjectPool.hpp>
 #include <Handle.hpp>
 
 using namespace fakeit;
@@ -28,20 +28,20 @@ private:
 
 TEST_CASE( "Adding of Component to Entity") {
 
-    ChankArray<64> chankArray(10);
+    ObjectPool<64> objectPool(10);
     {
-        auto a = chankArray.create<Test>(10);
+        auto a = objectPool.create<Test>(10);
         REQUIRE(a->value() == 10);
         Handle<Test> b = nullptr;
         {
-            auto strongHandle = chankArray.create<Test>(20);
-            auto strongHandle2 = chankArray.create<Test2>(20, "Fuck");
+            auto strongHandle = objectPool.create<Test>(20);
+            auto strongHandle2 = objectPool.create<Test2>(20, "Fuck");
             b = strongHandle;
             auto otherStrongHandle = std::move(strongHandle);
             REQUIRE(b->value() == 20);
         }
         REQUIRE_THROWS(b->value());
-        auto c = chankArray.create<Test>(30);
+        auto c = objectPool.create<Test>(30);
         REQUIRE(c->value() == 30);
     }
 }

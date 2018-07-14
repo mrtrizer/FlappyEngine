@@ -3,11 +3,12 @@
 #include "Chank.hpp"
 
 template<size_t ChankSize>
-class ChankArray {
+class ObjectPool {
+    FORDEBUG(friend class ObjectPoolDebugger);
     using Allocator = std::allocator<Chank<ChankSize>>;
     using AllocatorTraits = std::allocator_traits<Allocator>;
 public:
-    ChankArray(std::size_t capacity)
+    ObjectPool(std::size_t capacity)
         : m_capacity(capacity)
     {
         USER_ASSERT(capacity > 0);
@@ -16,11 +17,11 @@ public:
         for (int i = 0; i < m_capacity; ++i)
             AllocatorTraits::construct(m_allocator, &array[i]);
     }
-    ChankArray(const ChankArray&) = delete;
-    ChankArray& operator= (const ChankArray&) = delete;
-    ChankArray(ChankArray&& chankArray) = delete;
-    ChankArray& operator= (ChankArray&&) = default;
-    ~ChankArray() {
+    ObjectPool(const ObjectPool&) = delete;
+    ObjectPool& operator= (const ObjectPool&) = delete;
+    ObjectPool(ObjectPool&& chankArray) = delete;
+    ObjectPool& operator= (ObjectPool&&) = default;
+    ~ObjectPool() {
         DEBUG_ASSERT(m_first != nullptr);
         DEBUG_ASSERT(m_end != nullptr);
 
@@ -44,7 +45,7 @@ public:
 
         try {
             auto strongHandle = end->template construct<DataT>(
-                        std::bind(&ChankArray::onDestroyed, this, std::placeholders::_1),
+                        std::bind(&ObjectPool::onDestroyed, this, std::placeholders::_1),
                         std::forward<Args>(args)...);
             m_end = end + 1;
             m_length = length + 1;

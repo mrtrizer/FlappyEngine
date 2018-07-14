@@ -6,12 +6,13 @@
 #include "StrongHandle.hpp"
 
 template <size_t ChankSize>
-class ChankArray;
+class ObjectPool;
 
 /// The class holds object of any type within size limit
 template<size_t ChankSize>
 class Chank {
-    friend class ChankArray<ChankSize>;
+    FORDEBUG(friend class ObjectPoolDebugger);
+    friend class ObjectPool<ChankSize>;
     friend class std::allocator<Chank<ChankSize>>;
 
     /// The interface generalises work with different data types with minimal overhead

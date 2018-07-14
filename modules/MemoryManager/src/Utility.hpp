@@ -35,6 +35,12 @@ private:
     #define DEBUG_ASSERT(statement) assert(statement && __FILE__ && __LINE__)
 #endif
 
+#ifdef NDEBUG
+    #define FORDEBUG(expression)
+#else
+    #define FORDEBUG(expression) expression
+#endif
+
 template <typename... Args>
 std::string sstr(Args &&... args)
 {
