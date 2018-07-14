@@ -20,11 +20,12 @@ private:
 template <typename DataT>
 class Handle;
 
+class Chank;
+
 template <typename DataT>
 class StrongHandle {
-    template<size_t ChankSize>
     friend class Chank; // to construct
-    template<typename T, size_t ChankSize>
+    template<typename T>
     friend class ChankFunctions; // to update pointer
     friend class Handle<DataT>; // to register/unregister handles
 public:
@@ -33,10 +34,11 @@ public:
         strongHandle.m_dataPointer = nullptr;
         m_removeCallback = strongHandle.m_removeCallback;
         m_updateCallback = strongHandle.m_updateCallback;
+        m_chank = strongHandle.m_chank;
         auto& handles = m_handles = std::move(strongHandle.m_handles);
         for (auto handle : handles)
             handle->updateStrongHandle(this);
-        m_updateCallback(this);
+        m_updateCallback(strongHandle.m_chank, this);
     }
     StrongHandle& operator=(StrongHandle&&) = delete;
     StrongHandle(const StrongHandle&) = delete;
@@ -47,7 +49,7 @@ public:
         for (auto handle : m_handles)
             handle->invalidate();
         try {
-            m_removeCallback();
+            m_removeCallback(m_chank);
         } catch (...) {
             DEBUG_ASSERT(false);
         }
@@ -61,31 +63,29 @@ public:
 
 private:
     DataT* m_dataPointer = nullptr;
-    std::function<void(void)> m_removeCallback;
-    std::function<void(StrongHandle*)> m_updateCallback;
+    Chank* m_chank = nullptr;
+    std::function<void(Chank*)> m_removeCallback;
+    std::function<void(Chank*, StrongHandle*)> m_updateCallback;
     std::vector<IHandle<DataT>*> m_handles;
 
     StrongHandle(DataT* dataPointer,
-                 std::function<void(void)>&& removeCallback,
-                 std::function<void(StrongHandle*)>&& updateCallback) noexcept
+                 Chank* chank,
+                 std::function<void(Chank*)>&& removeCallback,
+                 std::function<void(Chank*, StrongHandle*)>&& updateCallback) noexcept
         : m_dataPointer(dataPointer)
+        , m_chank(chank)
         , m_removeCallback(std::move(removeCallback))
         , m_updateCallback(std::move(updateCallback))
     {}
 
-    void updatePointer(DataT* dataPointer,
-                       const std::function<void(void)>& removeCallback,
-                       const std::function<void(StrongHandle*)>& updateCallback) noexcept {
+    void updatePointer(DataT* dataPointer, Chank* chank) noexcept {
         DEBUG_ASSERT(dataPointer != nullptr);
-        DEBUG_ASSERT(removeCallback != nullptr);
-        DEBUG_ASSERT(updateCallback != nullptr);
+        DEBUG_ASSERT(chank != nullptr);
         DEBUG_ASSERT(m_dataPointer != nullptr);
-        DEBUG_ASSERT(m_removeCallback != nullptr);
-        DEBUG_ASSERT(m_updateCallback != nullptr);
+        DEBUG_ASSERT(m_chank != nullptr);
 
         m_dataPointer = dataPointer;
-        m_removeCallback = removeCallback;
-        m_updateCallback = updateCallback;
+        m_chank = chank;
     }
 
     void registerHandle(IHandle<DataT>* handle) noexcept {

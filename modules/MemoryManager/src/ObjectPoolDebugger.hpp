@@ -2,17 +2,16 @@
 
 #include "ObjectPool.hpp"
 
-template <size_t ChankSize>
 class ObjectPoolDebugger {
 public:
-    ObjectPoolDebugger(const ObjectPool<ChankSize>& objectPool)
+    ObjectPoolDebugger(const ObjectPool& objectPool)
         : m_objectPool(objectPool)
     {}
 
     int getChankIndex(const StrongHandle& strongHandle) {
-
+        return size_t(strongHandle.chank->m_data - m_objectPool.m_bytes[0]) / m_objectPool.m_maxObjectSize;
     }
 
 private:
-    ObjectPool<ChankSize>& objectPool;
+    ObjectPool& objectPool;
 };

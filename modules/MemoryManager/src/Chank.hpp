@@ -5,21 +5,17 @@
 
 #include "StrongHandle.hpp"
 
-template <size_t ChankSize>
-class ObjectPool;
-
 /// The class holds object of any type within size limit
-template<size_t ChankSize>
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
-    friend class ObjectPool<ChankSize>;
-    friend class std::allocator<Chank<ChankSize>>;
+    friend class ObjectPool;
+    friend class std::allocator<Chank>;
 
     /// The interface generalises work with different data types with minimal overhead
     class IChankFunctions {
     public:
         virtual void destroy(std::byte* data) = 0;
-        virtual void updateHandle(void* handle, Chank<ChankSize>* chank) = 0;
+        virtual void updateHandle(void* handle, Chank* chank, std::byte* data) = 0;
         virtual void move(std::byte* source, std::byte* destination) = 0;
     };
 
@@ -30,11 +26,9 @@ class Chank {
             reinterpret_cast<DataT*>(data)->~DataT();
         }
 
-        void updateHandle(void* strongHandle, Chank<ChankSize>* chank) override {
+        void updateHandle(void* strongHandle, Chank* chank, std::byte* data) override {
             reinterpret_cast<StrongHandle<DataT>*>(strongHandle)->updatePointer(
-                chank->template data<DataT>(),
-                [chank] () noexcept { chank->clear(); },
-                [this, chank] (StrongHandle<DataT>* strongHandle) noexcept { updateHandle(strongHandle, chank); }
+                reinterpret_cast<DataT*>(data), chank
             );
         }
 
@@ -49,22 +43,31 @@ class Chank {
         return &instance;
     }
 
-    Chank() = default;
+    Chank(std::byte* data, size_t size)
+        : m_data(data)
+        , m_size(size)
+    {}
 
-    Chank& operator=(Chank&& other) noexcept {
-        // FIXME: Order dependant code. other.clear() should be called last
-        other.m_chankFunctions->move(other.m_data, m_data);
-        other.m_chankFunctions->updateHandle(other.m_strongHandle, this);
+    Chank(Chank&& other) noexcept {
+        if (other.m_chankFunctions != nullptr) {
+            other.m_chankFunctions->updateHandle(other.m_strongHandle, this, other.m_data);
+        }
+        m_data = other.m_data;
+        m_size = other.m_size;
         m_strongHandle = other.m_strongHandle;
         m_chankFunctions = other.m_chankFunctions;
         m_destroyedCallback = other.m_destroyedCallback;
-        other.clear();
-        return *this;
     }
 
     ~Chank() {
         if (m_chankFunctions != nullptr)
             m_chankFunctions->destroy(m_data);
+    }
+
+    void moveFrom(Chank* chank) {
+        chank->m_chankFunctions->move(chank->m_data, m_data);
+        chank->m_chankFunctions->updateHandle(chank->m_strongHandle, this, m_data);
+        chank->clear();
     }
 
     /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
@@ -83,8 +86,9 @@ class Chank {
 
             StrongHandle<DataT> strongHandle(
                 data,
-                [this] () noexcept { clear(); },
-                [this] (StrongHandle<DataT>* strongHandle) noexcept{ m_chankFunctions->updateHandle(strongHandle, this); });
+                        this,
+                [] (Chank* chank) noexcept { chank->clear(); },
+                [] (Chank* chank, StrongHandle<DataT>* strongHandle) noexcept{ chank->m_strongHandle = strongHandle; });
 
             // This pointer is automatically updated if the strong handle is moved to a new location
             m_strongHandle = &strongHandle;
@@ -124,8 +128,9 @@ class Chank {
         return reinterpret_cast<DataT*>(m_data);
     }
 
-    std::byte m_data[ChankSize];
+    std::byte* m_data = nullptr;
+    size_t m_size;
     void* m_strongHandle = nullptr; // I prefer manual casting instead of introducing an interface
-    IChankFunctions* m_chankFunctions;
+    IChankFunctions* m_chankFunctions = nullptr;
     std::function<void(Chank*)> m_destroyedCallback;
 };

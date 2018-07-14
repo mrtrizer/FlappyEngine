@@ -28,7 +28,7 @@ private:
 
 TEST_CASE( "Adding of Component to Entity") {
 
-    ObjectPool<64> objectPool(10);
+    ObjectPool objectPool(64, 10);
     {
         auto a = objectPool.create<Test>(10);
         REQUIRE(a->value() == 10);

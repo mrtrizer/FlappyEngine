@@ -2,43 +2,40 @@
 
 #include "Chank.hpp"
 
-template<size_t ChankSize>
 class ObjectPool {
     FORDEBUG(friend class ObjectPoolDebugger);
-    using Allocator = std::allocator<Chank<ChankSize>>;
-    using AllocatorTraits = std::allocator_traits<Allocator>;
 public:
-    ObjectPool(std::size_t capacity)
-        : m_capacity(capacity)
+    ObjectPool(size_t maxObjectSize, size_t capacity)
+        : m_maxObjectSize(maxObjectSize)
+        , m_bytes(capacity * maxObjectSize)
     {
         USER_ASSERT(capacity > 0);
+        USER_ASSERT(maxObjectSize >= sizeof(int));
 
-        auto array = m_end = m_first = AllocatorTraits::allocate(m_allocator, capacity);
-        for (int i = 0; i < m_capacity; ++i)
-            AllocatorTraits::construct(m_allocator, &array[i]);
+        m_chanks.reserve(capacity);
+        for (size_t i = 0; i < capacity; ++i)
+            m_chanks.emplace_back(Chank(&m_bytes[maxObjectSize * i], maxObjectSize));
+
+        m_end = &m_chanks[0];
     }
     ObjectPool(const ObjectPool&) = delete;
     ObjectPool& operator= (const ObjectPool&) = delete;
     ObjectPool(ObjectPool&& chankArray) = delete;
     ObjectPool& operator= (ObjectPool&&) = default;
     ~ObjectPool() {
-        DEBUG_ASSERT(m_first != nullptr);
-        DEBUG_ASSERT(m_end != nullptr);
-
-        for (int i = 0; i < m_capacity; ++i)
-            AllocatorTraits::destroy(m_allocator, &m_first[i]);
-        AllocatorTraits::deallocate(m_allocator, m_first, m_capacity);
+        // To be sure that m_chanks cleared before m_bytes destroyed
+        for (auto& chank : m_chanks) {
+            chank.clear();
+        }
     }
 
     template <typename DataT, typename...Args>
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
-        DEBUG_ASSERT(m_first != nullptr);
         DEBUG_ASSERT(m_end != nullptr);
 
-        static_assert(std::is_class<DataT>(), "ChankArray doesn't support basic types.");
-        static_assert(sizeof(DataT) <= ChankSize, "DataT doesn't fit into a chank of size ChankSize.");
-
-        USER_ASSERT_MSG(m_length < m_capacity, "You have reached limit of chanks. Max: ", m_capacity);
+        static_assert(std::is_class<DataT>(), "ObjectPool doesn't support basic types.");
+        USER_ASSERT_MSG(sizeof(DataT) <= m_maxObjectSize, "DataT exeeds max size (", sizeof(DataT), " > ",  m_maxObjectSize, ")");
+        USER_ASSERT_MSG(m_length < m_chanks.size(), "You have reached limit of chanks. Max: ", m_chanks.size());
 
         auto end = m_end;
         auto length = m_length;
@@ -58,18 +55,19 @@ public:
     }
 
 private:
-    size_t m_capacity = 0;
-    size_t m_length = 0;
-    Allocator m_allocator;
-    Chank<ChankSize>* m_first = nullptr;
-    Chank<ChankSize>* m_end = nullptr;
+    size_t m_maxObjectSize = 0;
+    std::vector<Chank> m_chanks;
+    std::vector<std::byte> m_bytes;
+    Chank* m_end = nullptr;
+    int m_length = 0;
 
-    void onDestroyed (Chank<ChankSize>* chank) noexcept {
+
+    void onDestroyed (Chank* chank) noexcept {
         // if the chank is not the last element, replace it with the last element
         auto last = m_end - 1;
         if (chank != last)
-            *chank = std::move(*last);
+            chank->moveFrom(last);
         m_end = last;
         m_length--;
-    };
+    }
 };

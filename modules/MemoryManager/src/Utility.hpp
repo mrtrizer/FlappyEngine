@@ -20,9 +20,9 @@ private:
 
 // Use USER_ASSERT assert in public methods or methods, called from public methods.
 // It throws an exception for wrong statement. Use when case is exceptional but execution can be continued.
-#define USER_ASSERT(statement) { if (!(statement)) { throw FlappyException(sstr(__FILE__, __LINE__)); } }
+#define USER_ASSERT(statement) { if (!(statement)) { throw FlappyException(sstr(__FILE__, ' ', __LINE__, ' ', #statement)); } }
 
-#define USER_ASSERT_MSG(statement, ...) { if (!(statement)) { throw FlappyException(sstr(__FILE__, __LINE__, __VA_ARGS__)); } }
+#define USER_ASSERT_MSG(statement, ...) { if (!(statement)) { throw FlappyException(sstr(__FILE__, ' ', __LINE__, ' ', #statement, ' ', __VA_ARGS__)); } }
 
 // Use DEBUG_ASSERT only for next applications:
 // 1. Check class has valid state.
