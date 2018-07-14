@@ -23,7 +23,9 @@ class Handle;
 template <typename DataT>
 class StrongHandle {
     template<size_t ChankSize>
-    friend class ChankArray; // to update pointer
+    friend class Chank; // to construct
+    template<typename T, size_t ChankSize>
+    friend class ChankFunctions; // to update pointer
     friend class Handle<DataT>; // to register/unregister handles
 public:
     StrongHandle(StrongHandle&& strongHandle) noexcept {
