@@ -27,7 +27,7 @@ private:
     std::string m_text;
 };
 
-TEST_CASE( "Adding of Component to Entity") {
+TEST_CASE( "Constructors, destructors, assignments") {
 
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
@@ -42,14 +42,24 @@ TEST_CASE( "Adding of Component to Entity") {
         {
             auto strongHandle = objectPool.create<Test>(20);
             REQUIRE(debugger.getChankIndex(strongHandle) == 1);
+            strongHandle = nullptr;
+            REQUIRE(!strongHandle.isValid());
 
             auto strongHandle2 = objectPool.create<Test2>(20, "Fuck");
-            REQUIRE(debugger.getChankIndex(strongHandle2) == 2);
+            REQUIRE(debugger.getChankIndex(strongHandle2) == 1);
+            auto b2 = strongHandle2.handle();
             b = strongHandle;
 
+            debugger.printState();
+
+            strongHandle = objectPool.create<Test>(30);
+            REQUIRE(debugger.getChankIndex(strongHandle) == 2);
+
+            debugger.printState();
+
             auto otherStrongHandle = std::move(strongHandle);
-            REQUIRE(debugger.getChankIndex(otherStrongHandle) == 1);
-            REQUIRE(b->value() == 20);
+            REQUIRE(debugger.getChankIndex(otherStrongHandle) == 2);
+            REQUIRE(b->value() == 30);
 
             debugger.printState();
         }

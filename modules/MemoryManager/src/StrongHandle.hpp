@@ -33,32 +33,59 @@ public:
     StrongHandle(StrongHandle&& strongHandle) noexcept {
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;
-        m_chank = strongHandle.m_chank;
+        auto chank = m_chank = strongHandle.m_chank;
         strongHandle.m_chank = nullptr;
         auto& handles = m_handles = std::move(strongHandle.m_handles);
         for (auto handle : handles)
             handle->updateStrongHandle(this);
-        [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (m_chank, this);
+        if (chank != nullptr)
+            [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (chank, this);
     }
-    StrongHandle& operator=(StrongHandle&&) = delete;
+    StrongHandle& operator=(std::nullptr_t) noexcept {
+        reset();
+        return *this;
+    }
+    StrongHandle& operator=(StrongHandle&& strongHandle) {
+        m_dataPointer = strongHandle.m_dataPointer;
+        strongHandle.m_dataPointer = nullptr;
+        auto chank = m_chank = strongHandle.m_chank;
+        strongHandle.m_chank = nullptr;
+        for (auto handle : strongHandle.m_handles)
+            handle->updateStrongHandle(this);
+        m_handles.insert(m_handles.end(),
+                         std::make_move_iterator(strongHandle.m_handles.begin()),
+                         std::make_move_iterator(strongHandle.m_handles.end()));
+        if (chank != nullptr)
+            [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (chank, this);
+        return *this;
+    }
     StrongHandle(const StrongHandle&) = delete;
     StrongHandle& operator=(const StrongHandle&) = delete;
     ~StrongHandle() {
-        if (m_dataPointer == nullptr)
-            return;
-        for (auto handle : m_handles)
-            handle->invalidate();
-        try {
-            if (m_chank != nullptr)
-                [](auto chank) { chank->clear(); } (m_chank);
-        } catch (...) {
-            DEBUG_ASSERT(false);
-        }
+        reset();
     }
 
-    DataT* operator->() const noexcept {
-        DEBUG_ASSERT(m_dataPointer != nullptr);
+    Handle<DataT> handle() noexcept {
+        return Handle<DataT>(*this);
+    }
 
+    bool isValid() const noexcept {
+        return m_dataPointer != nullptr;
+    }
+
+    void reset() noexcept {
+        for (auto handle : m_handles)
+            handle->invalidate();
+        m_handles.clear();
+        if (m_chank != nullptr)
+            [](auto chank) { chank->clear(); } (m_chank);
+        m_chank = nullptr;
+        m_dataPointer = nullptr;
+    }
+
+    DataT* operator->() {
+        if (!isValid())
+            throw FlappyException("Invalid handle");
         return m_dataPointer;
     }
 
@@ -85,7 +112,6 @@ private:
 
     void registerHandle(IHandle<DataT>* handle) noexcept {
         DEBUG_ASSERT(handle != nullptr);
-        DEBUG_ASSERT(m_dataPointer != nullptr);
 
         m_handles.emplace_back(handle);
     }

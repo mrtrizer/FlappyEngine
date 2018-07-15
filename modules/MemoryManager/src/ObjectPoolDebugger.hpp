@@ -10,6 +10,8 @@ public:
 
     template<typename StrongHandleT>
     int getChankIndex(StrongHandleT& strongHandle) {
+        if (!strongHandle.isValid())
+            return -1;
         return size_t(strongHandle.m_chank->m_data - &m_objectPool.m_bytes.front()) / m_objectPool.m_maxObjectSize;
     }
 

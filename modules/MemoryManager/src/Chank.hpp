@@ -8,10 +8,10 @@
 /// The class holds object of any type within size limit
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
-    friend class ObjectPool;
-    friend class std::allocator<Chank>;
+    friend class ObjectPool; // to create instance and call methods
+    friend class std::allocator<Chank>; // to move instance in vector reallocation
     template <typename DataT>
-    friend class StrongHandle;
+    friend class StrongHandle; // to update handle
 
     /// The interface generalises work with different data types with minimal overhead
     class IChankFunctions {
@@ -119,6 +119,8 @@ class Chank {
             DEBUG_ASSERT(m_destroyedCallback != nullptr);
 
             m_chankFunctions->destroy(m_data);
+            // FIXME: Looks like bad design. Handle should remove chank via ObjectPool.
+            // Destroy callback should be called at the end because it can change class
             auto destroyedCallback = m_destroyedCallback;
 
             m_strongHandle = nullptr;

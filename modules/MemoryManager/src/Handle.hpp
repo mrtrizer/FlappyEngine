@@ -49,7 +49,11 @@ public:
             m_strongHandle->unregisterHandle(this);
     }
 
-    DataT* operator->() const {
+    bool isValid() {
+        return m_strongHandle != nullptr && m_strongHandle->isValid();
+    }
+
+    DataT* operator->() {
         if (m_strongHandle == nullptr)
             throw FlappyException("Invalid handle");
         return m_strongHandle->operator->();
