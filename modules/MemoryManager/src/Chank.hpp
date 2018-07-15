@@ -45,42 +45,11 @@ class Chank {
         return &instance;
     }
 
-    Chank(std::byte* data, size_t size)
-        : m_data(data)
-        , m_size(size)
-    {}
+    Chank(std::byte* data, size_t size);
+    Chank(Chank&& other) noexcept;
+    ~Chank();
 
-    Chank(Chank&& other) noexcept {
-        if (other.m_chankFunctions != nullptr) {
-            other.m_chankFunctions->updateHandle(other.m_strongHandle, this, other.m_data);
-        }
-        m_data = other.m_data;
-        m_size = other.m_size;
-        m_strongHandle = other.m_strongHandle;
-        m_chankFunctions = other.m_chankFunctions;
-        m_destroyedCallback = other.m_destroyedCallback;
-    }
-
-    ~Chank() {
-        if (m_chankFunctions != nullptr) {
-            m_chankFunctions->destroy(m_data);
-            m_destroyedCallback(this);
-        }
-    }
-
-    void moveFrom(Chank* chank) {
-        DEBUG_ASSERT(chank->m_size == m_size);
-        DEBUG_ASSERT(chank->m_data != m_data);
-
-        chank->m_chankFunctions->move(chank->m_data, m_data);
-        chank->m_chankFunctions->updateHandle(chank->m_strongHandle, this, m_data);
-
-        m_strongHandle = chank->m_strongHandle;
-        m_chankFunctions = chank->m_chankFunctions;
-        m_destroyedCallback = chank->m_destroyedCallback;
-
-        chank->clear();
-    }
+    void moveFrom(Chank* chank);
 
     /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
     /// @param destroyedCallback Called when underlying class is destroyed
@@ -113,32 +82,13 @@ class Chank {
     }
 
     /// Method destroys underlaying instance if it is was initialized.
-    void clear() noexcept {
-        if (constructed()) {
-            DEBUG_ASSERT(m_strongHandle != nullptr);
-            DEBUG_ASSERT(m_destroyedCallback != nullptr);
+    void clear() noexcept;
 
-            m_chankFunctions->destroy(m_data);
-            // FIXME: Looks like bad design. Handle should remove chank via ObjectPool.
-            // Destroy callback should be called at the end because it can change class
-            auto destroyedCallback = m_destroyedCallback;
-
-            m_strongHandle = nullptr;
-            m_chankFunctions = nullptr;
-            m_destroyedCallback = nullptr;
-
-            destroyedCallback(this);
-        }
-    }
-
-    [[nodiscard]] bool constructed() const noexcept {
-        return m_chankFunctions != nullptr;
-    }
+    [[nodiscard]] bool constructed() const noexcept;
 
     template <typename DataT>
     DataT* data() noexcept {
         DEBUG_ASSERT(m_chankFunctions == chankFunctionsForType<DataT>());
-
         return reinterpret_cast<DataT*>(m_data);
     }
 
