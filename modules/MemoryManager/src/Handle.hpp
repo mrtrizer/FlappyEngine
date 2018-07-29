@@ -5,6 +5,8 @@
 
 #include "StrongHandle.hpp"
 
+// TODO: Anonimous handles
+
 template <typename DataT>
 class Handle : public IHandle<DataT> {
 public:

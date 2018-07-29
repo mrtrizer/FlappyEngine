@@ -6,6 +6,7 @@
 #include <ObjectPool.hpp>
 #include <Handle.hpp>
 #include <ObjectPoolDebugger.hpp>
+#include <Heap.hpp>
 
 using namespace fakeit;
 using namespace std;
@@ -27,8 +28,12 @@ private:
     std::string m_text;
 };
 
-TEST_CASE( "Constructors, destructors, assignments") {
+TEST_CASE( "Heap") {
+    auto testObject = Heap::create<Test>(10);
+    REQUIRE(testObject->value() == 10);
+}
 
+TEST_CASE( "Constructors, destructors, assignments") {
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
     {

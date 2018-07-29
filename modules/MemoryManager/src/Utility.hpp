@@ -48,3 +48,11 @@ std::string sstr(Args &&... args)
     (sstr << ... << args);
     return sstr.str();
 }
+
+using TypeId = intptr_t;
+
+template <typename TypeT>
+TypeId getTypeId() {
+    static int dummy;
+    return reinterpret_cast<TypeId>(&dummy);
+}

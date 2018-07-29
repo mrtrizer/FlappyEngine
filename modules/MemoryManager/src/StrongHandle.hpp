@@ -4,6 +4,8 @@
 
 #include "Utility.hpp"
 
+// TODO: Anonimous strong handles
+
 template <typename DataT>
 class StrongHandle;
 

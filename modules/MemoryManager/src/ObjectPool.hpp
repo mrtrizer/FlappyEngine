@@ -2,6 +2,17 @@
 
 #include "Chank.hpp"
 
+template <typename ObjectT>
+class EnableSelfHandle {
+    friend class ObjectPool; // to assign self handle
+protected:
+    Handle<ObjectT> selfHandle() { return m_selfHandle; }
+private:
+    Handle<ObjectT> m_selfHandle;
+};
+
+// TODO: Moving objects between pools
+
 class ObjectPool {
     FORDEBUG(friend class ObjectPoolDebugger);
 public:
@@ -11,6 +22,8 @@ public:
     ObjectPool(ObjectPool&&) = delete;
     ObjectPool& operator= (ObjectPool&&) = default;
     ~ObjectPool();
+
+    // TODO: Autoresize on exeeding the limit of chanks (should be easy with vectors)
 
     template <typename DataT, typename...Args>
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
@@ -27,6 +40,7 @@ public:
             auto strongHandle = end->template construct<DataT>(
                         std::bind(&ObjectPool::onDestroyed, this, std::placeholders::_1),
                         std::forward<Args>(args)...);
+            setSelfHandle(&strongHandle);
             m_end = end + 1;
             m_length = length + 1;
             return strongHandle;
@@ -45,4 +59,21 @@ private:
     int m_length = 0;
 
     void onDestroyed (Chank* chank) noexcept;
+
+    template <typename ObjectT>
+    void setSelfHandle(StrongHandle<ObjectT> *object) {
+        if constexpr (std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>()) {
+            (*object)->m_selfHandle = object->handle();
+        }
+    }
+
+//    template <typename ObjectT, typename = std::enable_if_t<std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>::value>>
+//    inline void setSelfHandle(StrongHandle<ObjectT>* object) {
+//        (*object)->m_selfHandle = object->handle();
+//    }
+
+//    template <typename ObjectT, typename = std::enable_if_t<!std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>::value>>
+//    inline void setSelfHandle(StrongHandle<ObjectT>* object) {
+//        // do nothing if not a base of EnableSelfHandle
+//    }
 };

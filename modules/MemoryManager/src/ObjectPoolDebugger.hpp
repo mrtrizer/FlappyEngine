@@ -4,7 +4,7 @@
 
 class ObjectPoolDebugger {
 public:
-    ObjectPoolDebugger(ObjectPool& objectPool)
+    explicit ObjectPoolDebugger(ObjectPool& objectPool)
         : m_objectPool(objectPool)
     {}
 
