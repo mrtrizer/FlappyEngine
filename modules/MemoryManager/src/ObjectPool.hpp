@@ -51,6 +51,10 @@ public:
         }
     }
 
+    size_t maxObjectSize() const {
+        return m_maxObjectSize;
+    }
+
 private:
     size_t m_maxObjectSize = 0;
     std::vector<Chank> m_chanks;
@@ -66,14 +70,4 @@ private:
             (*object)->m_selfHandle = object->handle();
         }
     }
-
-//    template <typename ObjectT, typename = std::enable_if_t<std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>::value>>
-//    inline void setSelfHandle(StrongHandle<ObjectT>* object) {
-//        (*object)->m_selfHandle = object->handle();
-//    }
-
-//    template <typename ObjectT, typename = std::enable_if_t<!std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>::value>>
-//    inline void setSelfHandle(StrongHandle<ObjectT>* object) {
-//        // do nothing if not a base of EnableSelfHandle
-//    }
 };

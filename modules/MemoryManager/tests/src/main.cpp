@@ -33,6 +33,10 @@ TEST_CASE( "Heap") {
     REQUIRE(testObject->value() == 10);
 }
 
+// TODO: Test self handle
+
+// TODO: Test derived type casting
+
 TEST_CASE( "Constructors, destructors, assignments") {
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
