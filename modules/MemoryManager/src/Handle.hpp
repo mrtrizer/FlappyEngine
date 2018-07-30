@@ -18,7 +18,7 @@ public:
         m_strongHandle->registerHandle(this);
     }
 
-    Handle(std::nullptr_t)
+    Handle(std::nullptr_t) noexcept
     {}
 
     // Copy constructor/assignment
@@ -26,22 +26,22 @@ public:
         setNewHandle(handle.m_strongHandle);
     }
 
-    Handle& operator=(const Handle& handle) {
+    Handle& operator=(const Handle& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
         return *this;
     }
 
-    Handle& operator=(StrongHandle<DataT>& handle) {
+    Handle& operator=(StrongHandle<DataT>& handle) noexcept {
         setNewHandle(&handle);
         return *this;
     }
 
     // Move constructor/assignment
-    Handle(Handle&& handle) {
+    Handle(Handle&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
     }
 
-    Handle& operator=(Handle&& handle) {
+    Handle& operator=(Handle&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
         return *this;
     }
@@ -51,7 +51,7 @@ public:
             m_strongHandle->unregisterHandle(this);
     }
 
-    bool isValid() {
+    bool isValid() noexcept {
         return m_strongHandle != nullptr && m_strongHandle->isValid();
     }
 
@@ -64,7 +64,7 @@ public:
 private:
     StrongHandle<DataT>* m_strongHandle = nullptr;
 
-    void setNewHandle(StrongHandle<DataT>* strongHandle) {
+    void setNewHandle(StrongHandle<DataT>* strongHandle) noexcept {
         if (m_strongHandle != nullptr)
             m_strongHandle->unregisterHandle(this);
         m_strongHandle = strongHandle;

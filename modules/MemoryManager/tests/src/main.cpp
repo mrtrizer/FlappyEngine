@@ -19,10 +19,13 @@ private:
     int m_i = 0;
 };
 
-class Test2 {
+class Test2 : public EnableSelfHandle<Test2> {
 public:
     Test2(int i, std::string text) : m_i(i), m_text(text) {}
     int value() { return m_i; }
+    Handle<Test2> extractHandle() {
+        return selfHandle();
+    }
 private:
     int m_i = 0;
     std::string m_text;
@@ -33,7 +36,10 @@ TEST_CASE( "Heap") {
     REQUIRE(testObject->value() == 10);
 }
 
-// TODO: Test self handle
+TEST_CASE("Self handle") {
+    auto testObject = Heap::create<Test2>(100, "Self heap");
+    REQUIRE(testObject->extractHandle()->value() == 100);
+}
 
 // TODO: Test derived type casting
 

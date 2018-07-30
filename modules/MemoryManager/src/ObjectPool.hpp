@@ -40,7 +40,8 @@ public:
             auto strongHandle = end->template construct<DataT>(
                         std::bind(&ObjectPool::onDestroyed, this, std::placeholders::_1),
                         std::forward<Args>(args)...);
-            setSelfHandle(&strongHandle);
+            if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
+                strongHandle->m_selfHandle = strongHandle.handle();
             m_end = end + 1;
             m_length = length + 1;
             return strongHandle;
@@ -63,11 +64,4 @@ private:
     int m_length = 0;
 
     void onDestroyed (Chank* chank) noexcept;
-
-    template <typename ObjectT>
-    void setSelfHandle(StrongHandle<ObjectT> *object) {
-        if constexpr (std::is_base_of<ObjectT, EnableSelfHandle<ObjectT>>()) {
-            (*object)->m_selfHandle = object->handle();
-        }
-    }
 };
