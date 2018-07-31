@@ -15,11 +15,17 @@ public:
     Handle() noexcept {}
 
     template <typename DerivedT>
-    explicit Handle(StrongHandle<DerivedT>& strongHandle) noexcept
+    Handle(StrongHandle<DerivedT>& strongHandle) noexcept
         : m_strongHandle(reinterpret_cast<StrongHandle<DataT>*>(&strongHandle))
     {
         static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
         m_strongHandle->registerHandle(this);
+    }
+
+    template <typename DerivedT>
+    Handle& operator=(StrongHandle<DerivedT>& handle) noexcept {
+        setNewHandle(&handle);
+        return *this;
     }
 
     Handle(std::nullptr_t) noexcept
@@ -36,10 +42,14 @@ public:
 
     Handle(Handle&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
+        handle.m_strongHandle->unregisterHandle(&handle);
+        handle.invalidate();
     }
 
     Handle& operator=(Handle&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
+        handle.m_strongHandle->unregisterHandle(&handle);
+        handle.invalidate();
         return *this;
     }
 
@@ -51,12 +61,6 @@ public:
     template <typename DerivedT>
     Handle& operator=(const Handle<DerivedT>& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
-        return *this;
-    }
-
-    template <typename DerivedT>
-    Handle& operator=(StrongHandle<DerivedT>& handle) noexcept {
-        setNewHandle(&handle);
         return *this;
     }
 

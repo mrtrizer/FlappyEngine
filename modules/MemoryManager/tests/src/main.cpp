@@ -47,22 +47,79 @@ TEST_CASE("Self handle") {
     REQUIRE(testObject->extractHandle()->value() == 100);
 }
 
-TEST_CASE("StrongHandle derived class cast") {
-    auto testObject1 = static_cast<StrongHandle<ITest>>(Heap::create<Test>(10));
+TEST_CASE("StrongHandle::StrongHandle(StrongHandle<DerivedT>&& strongHandle)") {
+    auto testObject1 = Heap::create<Test>(10);
     REQUIRE(testObject1->value() == 10);
 
-    testObject1 = Heap::create<Test>(100);
-    REQUIRE(testObject1->value() == 100);
+    StrongHandle<ITest> testObject2 = Heap::create<Test>(100);
+    REQUIRE(testObject2->value() == 100);
 }
 
-TEST_CASE("Handle derived class cast") {
+TEST_CASE("StrongHandle::operator=(StrongHandle<DerivedT>&& strongHandle)") {
+    auto testObject1 = Heap::create<Test>(10);
+    REQUIRE(testObject1->value() == 10);
+
+    StrongHandle<ITest> testObject2 = Heap::create<Test>(100);
+    REQUIRE(testObject2->value() == 100);
+
+    testObject2 = std::move(testObject1);
+    REQUIRE(testObject2->value() == 10);
+    REQUIRE_THROWS(testObject1->value());
+}
+
+
+TEST_CASE("Handle::Handle(StrongHandle<DerivedT>& strongHandle)") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    Handle<ITest> test1 (strongHandle);
+    REQUIRE(test1->value() == 10);
+}
+
+TEST_CASE("Handle::operator=(StrongHandle<DerivedT>& handle)") {
     auto strongHandle = Heap::create<Test>(10);
 
     Handle<ITest> test1 (strongHandle);
     test1 = strongHandle.handle();
+    REQUIRE(test1->value() == 10);
 }
 
-TEST_CASE( "Constructors, destructors, assignments") {
+TEST_CASE("Handle::Handle(const Handle<DerivedT>& handle)") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    auto test2 = strongHandle.handle();
+    Handle<ITest> test3 = test2;
+    REQUIRE(test3->value() == 10);
+}
+
+TEST_CASE("Handle::operator=(const Handle<DerivedT>& handle)") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    auto test2 = strongHandle.handle();
+    Handle<ITest> test3;
+    test3 = test2;
+    REQUIRE(test3->value() == 10);
+}
+
+TEST_CASE("Handle::Handle(Handle<DerivedT>&& handle)") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    auto test2 = strongHandle.handle();
+    Handle<ITest> test3 = std::move(test2);
+    REQUIRE(test3->value() == 10);
+    REQUIRE_THROWS(test2->value());
+}
+
+TEST_CASE("Handle::operator=(Handle<DerivedT>&& handle)") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    auto test2 = strongHandle.handle();
+    Handle<ITest> test3;
+    test3 = std::move(test2);
+    REQUIRE(test3->value() == 10);
+    REQUIRE_THROWS(test2->value());
+}
+
+TEST_CASE( "General flow test") {
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
     {
