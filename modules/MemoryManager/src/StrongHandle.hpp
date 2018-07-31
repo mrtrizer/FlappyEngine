@@ -11,7 +11,7 @@ class StrongHandle;
 
 template <typename DataT>
 class IHandle {
-    template <typename T>
+    template <typename DerivedT>
     friend class StrongHandle; // to invalidate and update handle
 public:
     virtual ~IHandle() = default;
@@ -41,13 +41,13 @@ public:
         return *this;
     }
 
-    template <typename T>
-    StrongHandle(StrongHandle<T>&& strongHandle) noexcept {
+    template <typename DerivedT>
+    StrongHandle(StrongHandle<DerivedT>&& strongHandle) noexcept {
         moveFromStrongHandle(std::move(strongHandle));
     }
 
-    template <typename T>
-    StrongHandle& operator=(StrongHandle<T>&& strongHandle) noexcept {
+    template <typename DerivedT>
+    StrongHandle& operator=(StrongHandle<DerivedT>&& strongHandle) noexcept {
         moveFromStrongHandle(std::move(strongHandle));
         return *this;
     }
@@ -102,9 +102,9 @@ private:
         , m_chank(chank)
     {}
 
-    template <typename T>
-    void moveFromStrongHandle(StrongHandle<T>&& strongHandle) {
-        static_assert(std::is_base_of<DataT, T>::value, "DerivedT should be derived from BaseT");
+    template <typename DerivedT>
+    void moveFromStrongHandle(StrongHandle<DerivedT>&& strongHandle) {
+        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
 
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;

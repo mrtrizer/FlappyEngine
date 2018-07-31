@@ -28,9 +28,6 @@ private:
 class Test2 : public EnableSelfHandle<Test2> {
 public:
     Test2(int i, std::string text) : m_i(i), m_text(text) {}
-//    ~Test2() {
-
-//    }
     int value() { return m_i; }
     Handle<Test2> extractHandle() {
         return selfHandle();
