@@ -11,7 +11,8 @@ class StrongHandle;
 
 template <typename DataT>
 class IHandle {
-    friend class StrongHandle<DataT>; // to invalidate and update handle
+    template <typename T>
+    friend class StrongHandle; // to invalidate and update handle
 public:
     virtual ~IHandle() = default;
 private:
@@ -30,37 +31,36 @@ class StrongHandle {
     friend class Chank; // to construct
     template<typename T>
     friend class ChankFunctions; // to update pointer
-    friend class Handle<DataT>; // to register/unregister handles
+    template <typename T>
+    friend class Handle; // to register/unregister handles
+    template <typename T>
+    friend class StrongHandle;
 public:
-    StrongHandle(StrongHandle&& strongHandle) noexcept {
-        m_dataPointer = strongHandle.m_dataPointer;
-        strongHandle.m_dataPointer = nullptr;
-        auto chank = m_chank = strongHandle.m_chank;
-        strongHandle.m_chank = nullptr;
-        auto& handles = m_handles = std::move(strongHandle.m_handles);
-        for (auto handle : handles)
-            handle->updateStrongHandle(this);
-        if (chank != nullptr)
-            [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (chank, this);
-    }
     StrongHandle& operator=(std::nullptr_t) noexcept {
         reset();
         return *this;
     }
-    StrongHandle& operator=(StrongHandle&& strongHandle) {
-        m_dataPointer = strongHandle.m_dataPointer;
-        strongHandle.m_dataPointer = nullptr;
-        auto chank = m_chank = strongHandle.m_chank;
-        strongHandle.m_chank = nullptr;
-        for (auto handle : strongHandle.m_handles)
-            handle->updateStrongHandle(this);
-        m_handles.insert(m_handles.end(),
-                         std::make_move_iterator(strongHandle.m_handles.begin()),
-                         std::make_move_iterator(strongHandle.m_handles.end()));
-        if (chank != nullptr)
-            [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (chank, this);
+
+    template <typename T>
+    StrongHandle(StrongHandle<T>&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
+    }
+
+    template <typename T>
+    StrongHandle& operator=(StrongHandle<T>&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
         return *this;
     }
+
+    StrongHandle(StrongHandle&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
+    }
+
+    StrongHandle& operator=(StrongHandle&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
+        return *this;
+    }
+
     StrongHandle(const StrongHandle&) = delete;
     StrongHandle& operator=(const StrongHandle&) = delete;
     ~StrongHandle() {
@@ -101,6 +101,23 @@ private:
         : m_dataPointer(dataPointer)
         , m_chank(chank)
     {}
+
+    template <typename T>
+    void moveFromStrongHandle(StrongHandle<T>&& strongHandle) {
+        static_assert(std::is_base_of<DataT, T>::value, "DerivedT should be derived from BaseT");
+
+        m_dataPointer = strongHandle.m_dataPointer;
+        strongHandle.m_dataPointer = nullptr;
+        auto chank = m_chank = strongHandle.m_chank;
+        strongHandle.m_chank = nullptr;
+        for (auto handle : strongHandle.m_handles)
+            m_handles.emplace_back(reinterpret_cast<Handle<DataT>*>(handle));
+        strongHandle.m_handles.clear();
+        for (auto handle : m_handles)
+            handle->updateStrongHandle(this);
+        if (chank != nullptr)
+            [](auto chank, StrongHandle* strongHandle) { chank->m_strongHandle = strongHandle; } (chank, this);
+    }
 
     void updatePointer(DataT* dataPointer, Chank* chank) noexcept {
         DEBUG_ASSERT(dataPointer != nullptr);

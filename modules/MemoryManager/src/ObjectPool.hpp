@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Chank.hpp"
+#include "Handle.hpp"
 
 template <typename ObjectT>
 class EnableSelfHandle {

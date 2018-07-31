@@ -11,10 +11,16 @@
 using namespace fakeit;
 using namespace std;
 
-class Test {
+class ITest {
+public:
+    virtual ~ITest() = default;
+    virtual int value() = 0;
+};
+
+class Test : public ITest {
 public:
     Test(int i) : m_i(i) {}
-    int value() { return m_i; }
+    int value() override { return m_i; }
 private:
     int m_i = 0;
 };
@@ -22,6 +28,9 @@ private:
 class Test2 : public EnableSelfHandle<Test2> {
 public:
     Test2(int i, std::string text) : m_i(i), m_text(text) {}
+//    ~Test2() {
+
+//    }
     int value() { return m_i; }
     Handle<Test2> extractHandle() {
         return selfHandle();
@@ -41,7 +50,20 @@ TEST_CASE("Self handle") {
     REQUIRE(testObject->extractHandle()->value() == 100);
 }
 
-// TODO: Test derived type casting
+TEST_CASE("StrongHandle derived class cast") {
+    auto testObject1 = static_cast<StrongHandle<ITest>>(Heap::create<Test>(10));
+    REQUIRE(testObject1->value() == 10);
+
+    testObject1 = Heap::create<Test>(100);
+    REQUIRE(testObject1->value() == 100);
+}
+
+TEST_CASE("Handle derived class cast") {
+    auto strongHandle = Heap::create<Test>(10);
+
+    Handle<ITest> test1 (strongHandle);
+    test1 = strongHandle.handle();
+}
 
 TEST_CASE( "Constructors, destructors, assignments") {
     ObjectPool objectPool(64, 10);
