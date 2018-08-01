@@ -5,6 +5,7 @@
 
 #include <ObjectPool.hpp>
 #include <Handle.hpp>
+#include <UnknownHandle.hpp>
 #include <ObjectPoolDebugger.hpp>
 #include <Heap.hpp>
 
@@ -119,6 +120,10 @@ TEST_CASE("Handle::operator=(Handle<DerivedT>&& handle)") {
     REQUIRE_THROWS(test2->value());
 }
 
+TEST_CASE("Handle size") {
+    REQUIRE(sizeof(Handle<Test>) == sizeof(intptr_t));
+}
+
 TEST_CASE( "General flow test") {
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
@@ -128,6 +133,9 @@ TEST_CASE( "General flow test") {
         REQUIRE(a->value() == 10);
 
         debugger.printState();
+
+        UnknownHandle unknown = a;
+        REQUIRE(unknown.get<Test>()->value() == 10);
 
         Handle<Test> b = nullptr;
         {

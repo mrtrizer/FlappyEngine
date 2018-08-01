@@ -20,14 +20,69 @@ struct HandleCalls {
     std::function<void(void* strongHandle)> updateStrongHandle;
 };
 
+class StrongHandleBase {
+    template <typename T>
+    friend class Handle; // to register/unregister handles
+    friend class UnknownHandle; // to register/unregister handles
+public:
+    bool isValid() const noexcept {
+        return m_dataPointer != nullptr;
+    }
+
+protected:
+    TypeId m_typeId;
+    void* m_dataPointer = nullptr;
+    Chank* m_chank = nullptr;
+    std::vector<HandleCalls> m_handles;
+
+    StrongHandleBase(TypeId typeId = 0,
+                     void* dataPointer = nullptr,
+                     Chank* chank = nullptr) noexcept
+        : m_typeId(typeId)
+        , m_dataPointer(dataPointer)
+        , m_chank(chank)
+    {}
+
+    template <typename T>
+    void registerHandle(T* handle) noexcept {
+        DEBUG_ASSERT(handle != nullptr);
+
+       m_handles.emplace_back(HandleCalls{
+           handle,
+           std::bind(&T::invalidate, handle),
+           std::bind(&T::updateStrongHandle, handle, std::placeholders::_1)
+       });
+    }
+
+    void unregisterHandle(void* handle) noexcept {
+        // TODO: A room for optimization
+        DEBUG_ASSERT(handle != nullptr);
+        DEBUG_ASSERT(m_dataPointer != nullptr);
+        DEBUG_ASSERT(!m_handles.empty());
+
+        if (m_handles.back().rawPointer != handle) {
+            auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
+                return item.rawPointer == handle;
+            });
+            DEBUG_ASSERT(iter != m_handles.end());
+            *iter = std::move(m_handles.back());
+        }
+
+        m_handles.erase(std::prev(m_handles.end()), m_handles.end());
+    }
+
+
+    TypeId typeId() const noexcept{
+        return m_typeId;
+    }
+};
+
 template <typename DataT>
-class StrongHandle {
+class StrongHandle : public StrongHandleBase {
     FORDEBUG(friend class ObjectPoolDebugger);
     friend class Chank; // to construct
     template<typename T>
     friend class ChankFunctions; // to update pointer
-    template <typename T>
-    friend class Handle; // to register/unregister handles
     template <typename T>
     friend class StrongHandle;
 public:
@@ -62,14 +117,6 @@ public:
         reset();
     }
 
-    Handle<DataT> handle() noexcept {
-        return Handle<DataT>(*this);
-    }
-
-    bool isValid() const noexcept {
-        return m_dataPointer != nullptr;
-    }
-
     void reset() noexcept {
         for (auto handle : m_handles)
             handle.invalidate();
@@ -80,27 +127,27 @@ public:
         m_dataPointer = nullptr;
     }
 
+    Handle<DataT> handle() noexcept {
+        return Handle<DataT>(*this);
+    }
+
     DataT* operator->() {
         if (!isValid())
             throw FlappyException("Invalid handle");
-        return m_dataPointer;
+        return static_cast<DataT*>(m_dataPointer);
     }
 
 private:
-    DataT* m_dataPointer = nullptr;
-    Chank* m_chank = nullptr;
-    std::vector<HandleCalls> m_handles;
-
     StrongHandle(DataT* dataPointer,
                  Chank* chank) noexcept
-        : m_dataPointer(dataPointer)
-        , m_chank(chank)
+        : StrongHandleBase(getTypeId<DataT>(), dataPointer, chank)
     {}
 
     template <typename DerivedT>
     void moveFromStrongHandle(StrongHandle<DerivedT>&& strongHandle) {
         static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
 
+        m_typeId = strongHandle.m_typeId;
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;
         auto chank = m_chank = strongHandle.m_chank;
@@ -122,33 +169,5 @@ private:
 
         m_dataPointer = dataPointer;
         m_chank = chank;
-    }
-
-    template <typename T>
-    void registerHandle(T* handle) noexcept {
-        DEBUG_ASSERT(handle != nullptr);
-
-       m_handles.emplace_back(HandleCalls{
-           handle,
-           std::bind(&T::invalidate, handle),
-           std::bind(&T::updateStrongHandle, handle, std::placeholders::_1)
-       });
-    }
-
-    void unregisterHandle(Handle<DataT>* handle) noexcept {
-        // TODO: A room for optimization
-        DEBUG_ASSERT(handle != nullptr);
-        DEBUG_ASSERT(m_dataPointer != nullptr);
-        DEBUG_ASSERT(!m_handles.empty());
-
-        if (m_handles.back().rawPointer != handle) {
-            auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
-                return item.rawPointer == handle;
-            });
-            DEBUG_ASSERT(iter != m_handles.end());
-            *iter = std::move(m_handles.back());
-        }
-
-        m_handles.erase(std::prev(m_handles.end()), m_handles.end());
     }
 };

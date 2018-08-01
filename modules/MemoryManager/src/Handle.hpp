@@ -10,9 +10,10 @@
 template <typename DataT>
 class Handle {
     template <typename T>
-    friend class Handle;
+    friend class Handle; // for interided type convertion
     template <typename T>
-    friend class StrongHandle; // to access invalidate and setNewHandle
+    friend class StrongHandle; // for access to invalidate() and setNewHandle()
+    friend class StrongHandleBase; // for access to invalidate() and setNewHandle()
 public:
     Handle() noexcept {}
 
@@ -115,6 +116,7 @@ private:
         m_strongHandle = nullptr;
     }
 
+    // strongHandlePtr is void* to support anonymous handles
     void updateStrongHandle(void* strongHandlePtr) noexcept {
         DEBUG_ASSERT(m_strongHandle != nullptr);
         DEBUG_ASSERT(strongHandlePtr != nullptr);
