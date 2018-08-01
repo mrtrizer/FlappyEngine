@@ -1,6 +1,14 @@
 export OLD_CXX=$CXX
 export CXX="ccache c++"
 
+#MemoryManager tests
+pushd modules/MemoryManager/tests
+flappy build cmake
+pushd generated/cmake/build
+./tests_MemoryManager
+popd
+popd
+
 #V8JSEngine tests
 pushd modules/V8JSEngine/tests
 flappy build cmake
