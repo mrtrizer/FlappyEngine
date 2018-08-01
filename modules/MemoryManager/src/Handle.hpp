@@ -8,9 +8,11 @@
 // TODO: Anonimous handles
 
 template <typename DataT>
-class Handle : public IHandle<DataT> {
+class Handle {
     template <typename T>
     friend class Handle;
+    template <typename T>
+    friend class StrongHandle; // to access invalidate and setNewHandle
 public:
     Handle() noexcept {}
 
@@ -107,16 +109,16 @@ private:
             strongHandle->registerHandle(reinterpret_cast<Handle<DerivedT>*>(this));
     }
 
-    void invalidate() noexcept override {
+    void invalidate() noexcept {
         DEBUG_ASSERT(m_strongHandle != nullptr);
 
         m_strongHandle = nullptr;
     }
 
-    void updateStrongHandle(StrongHandle<DataT>* strongHandle) noexcept override {
+    void updateStrongHandle(void* strongHandlePtr) noexcept {
         DEBUG_ASSERT(m_strongHandle != nullptr);
-        DEBUG_ASSERT(strongHandle != nullptr);
+        DEBUG_ASSERT(strongHandlePtr != nullptr);
 
-        m_strongHandle = strongHandle;
+        m_strongHandle = static_cast<StrongHandle<DataT>*>(strongHandlePtr);
     }
 };
