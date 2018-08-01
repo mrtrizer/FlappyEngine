@@ -124,6 +124,18 @@ TEST_CASE("Handle size") {
     REQUIRE(sizeof(Handle<Test>) == sizeof(intptr_t));
 }
 
+TEST_CASE("Unknown handle") {
+    auto a = Heap::create<Test>(10);
+    UnknownHandle unknown = a;
+    REQUIRE(unknown.get<Test>()->value() == 10);
+}
+
+TEST_CASE("Unknown strong handle") {
+    StrongHandleBase a = Heap::create<Test>(10);
+    UnknownHandle unknown = a;
+    REQUIRE(unknown.get<Test>()->value() == 10);
+}
+
 TEST_CASE( "General flow test") {
     ObjectPool objectPool(64, 10);
     ObjectPoolDebugger debugger(objectPool);
@@ -133,9 +145,6 @@ TEST_CASE( "General flow test") {
         REQUIRE(a->value() == 10);
 
         debugger.printState();
-
-        UnknownHandle unknown = a;
-        REQUIRE(unknown.get<Test>()->value() == 10);
 
         Handle<Test> b = nullptr;
         {

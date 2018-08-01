@@ -8,16 +8,14 @@ class Handle;
 class UnknownHandle {
     friend class StrongHandleBase; // to access invalidate() and setNewHandle()
 public:
-    template <typename DerivedT>
-    UnknownHandle(StrongHandle<DerivedT>& strongHandle) noexcept
-        : m_strongHandle(reinterpret_cast<StrongHandleBase*>(&strongHandle))
+    UnknownHandle(StrongHandleBase& strongHandle) noexcept
+        : m_strongHandle(&strongHandle)
     {
         m_strongHandle->registerHandle(this);
     }
 
-    template <typename DerivedT>
-    UnknownHandle& operator=(StrongHandle<DerivedT>& handle) noexcept {
-        setNewHandle(&handle);
+    UnknownHandle& operator=(StrongHandleBase& strongHandle) noexcept {
+        setNewHandle(&strongHandle);
         return *this;
     }
 
@@ -71,13 +69,12 @@ public:
 private:
     StrongHandleBase* m_strongHandle = nullptr;
 
-    template <typename DerivedT>
-    void setNewHandle(StrongHandle<DerivedT>* strongHandle) noexcept {
+    void setNewHandle(StrongHandleBase* strongHandle) noexcept {
         if (m_strongHandle != nullptr)
             m_strongHandle->unregisterHandle(this);
         m_strongHandle = reinterpret_cast<StrongHandleBase*>(strongHandle);
         if (strongHandle != nullptr)
-            strongHandle->registerHandle(reinterpret_cast<Handle<DerivedT>*>(this));
+            strongHandle->registerHandle(this);
     }
 
     void invalidate() noexcept {
