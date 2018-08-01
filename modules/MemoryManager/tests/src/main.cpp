@@ -5,7 +5,7 @@
 
 #include <ObjectPool.hpp>
 #include <Handle.hpp>
-#include <UnknownHandle.hpp>
+#include <AnyHandle.hpp>
 #include <ObjectPoolDebugger.hpp>
 #include <Heap.hpp>
 
@@ -126,13 +126,13 @@ TEST_CASE("Handle size") {
 
 TEST_CASE("Unknown handle") {
     auto a = Heap::create<Test>(10);
-    UnknownHandle unknown = a;
+    AnyHandle unknown = a;
     REQUIRE(unknown.get<Test>()->value() == 10);
 }
 
 TEST_CASE("Unknown strong handle") {
-    StrongHandleBase a = Heap::create<Test>(10);
-    UnknownHandle unknown = a;
+    AnyStrongHandle a = Heap::create<Test>(10);
+    AnyHandle unknown = a;
     REQUIRE(unknown.get<Test>()->value() == 10);
 }
 

@@ -5,50 +5,50 @@
 template <typename T>
 class Handle;
 
-class UnknownHandle {
-    friend class StrongHandleBase; // to access invalidate() and setNewHandle()
+class AnyHandle {
+    friend class AnyStrongHandle; // to access invalidate() and setNewHandle()
 public:
-    UnknownHandle(StrongHandleBase& strongHandle) noexcept
+    AnyHandle(AnyStrongHandle& strongHandle) noexcept
         : m_strongHandle(&strongHandle)
     {
         m_strongHandle->registerHandle(this);
     }
 
-    UnknownHandle& operator=(StrongHandleBase& strongHandle) noexcept {
+    AnyHandle& operator=(AnyStrongHandle& strongHandle) noexcept {
         setNewHandle(&strongHandle);
         return *this;
     }
 
-    UnknownHandle(std::nullptr_t) noexcept
+    AnyHandle(std::nullptr_t) noexcept
     {}
 
     template <typename DerivedT>
-    UnknownHandle(const Handle<DerivedT>& handle) noexcept {
+    AnyHandle(const Handle<DerivedT>& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
     }
 
     template <typename DerivedT>
-    UnknownHandle& operator=(const Handle<DerivedT>& handle) noexcept {
+    AnyHandle& operator=(const Handle<DerivedT>& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
         return *this;
     }
 
     template <typename DerivedT>
-    UnknownHandle(Handle<DerivedT>&& handle) noexcept {
+    AnyHandle(Handle<DerivedT>&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
         handle.m_strongHandle->unregisterHandle(&handle);
         handle.invalidate();
     }
 
     template <typename DerivedT>
-    UnknownHandle& operator=(Handle<DerivedT>&& handle) noexcept {
+    AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
         setNewHandle(handle.m_strongHandle);
         handle.m_strongHandle->unregisterHandle(&handle);
         handle.invalidate();
         return *this;
     }
 
-    ~UnknownHandle() {
+    ~AnyHandle() {
         if (m_strongHandle != nullptr)
             m_strongHandle->unregisterHandle(this);
     }
@@ -67,12 +67,12 @@ public:
     }
 
 private:
-    StrongHandleBase* m_strongHandle = nullptr;
+    AnyStrongHandle* m_strongHandle = nullptr;
 
-    void setNewHandle(StrongHandleBase* strongHandle) noexcept {
+    void setNewHandle(AnyStrongHandle* strongHandle) noexcept {
         if (m_strongHandle != nullptr)
             m_strongHandle->unregisterHandle(this);
-        m_strongHandle = reinterpret_cast<StrongHandleBase*>(strongHandle);
+        m_strongHandle = reinterpret_cast<AnyStrongHandle*>(strongHandle);
         if (strongHandle != nullptr)
             strongHandle->registerHandle(this);
     }
@@ -88,6 +88,6 @@ private:
         DEBUG_ASSERT(m_strongHandle != nullptr);
         DEBUG_ASSERT(strongHandlePtr != nullptr);
 
-        m_strongHandle = static_cast<StrongHandleBase*>(strongHandlePtr);
+        m_strongHandle = static_cast<AnyStrongHandle*>(strongHandlePtr);
     }
 };
