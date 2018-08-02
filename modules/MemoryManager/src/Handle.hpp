@@ -5,7 +5,7 @@
 
 #include "StrongHandle.hpp"
 
-// TODO: Anonimous handles
+// TODO: Inherit Handle from AnyHandle
 
 template <typename DataT>
 class Handle {

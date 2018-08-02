@@ -68,7 +68,6 @@ TEST_CASE("StrongHandle::operator=(StrongHandle<DerivedT>&& strongHandle)") {
     REQUIRE_THROWS(testObject1->value());
 }
 
-
 TEST_CASE("Handle::Handle(StrongHandle<DerivedT>& strongHandle)") {
     auto strongHandle = Heap::create<Test>(10);
 
@@ -124,15 +123,18 @@ TEST_CASE("Handle size") {
     REQUIRE(sizeof(Handle<Test>) == sizeof(intptr_t));
 }
 
-TEST_CASE("Unknown handle") {
+TEST_CASE("AnyHandle basics") {
     auto a = Heap::create<Test>(10);
     AnyHandle unknown = a;
     REQUIRE(unknown.get<Test>()->value() == 10);
 }
 
-TEST_CASE("Unknown strong handle") {
+TEST_CASE("AnyStrongHandle basics") {
     AnyStrongHandle a = Heap::create<Test>(10);
+    AnyStrongHandle b = std::move(a);
     AnyHandle unknown = a;
+    REQUIRE_THROWS(unknown.get<Test>()->value());
+    unknown = b;
     REQUIRE(unknown.get<Test>()->value() == 10);
 }
 

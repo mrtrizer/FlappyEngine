@@ -20,6 +20,10 @@ class AnyStrongHandle {
     friend class Handle; // to register/unregister handles
     friend class AnyHandle; // to register/unregister handles
 public:
+    AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
+    }
+
     ~AnyStrongHandle() {
         reset();
     }
@@ -68,9 +72,7 @@ protected:
     }
 
     void unregisterHandle(void* handle) noexcept {
-        // TODO: A room for optimization
         DEBUG_ASSERT(handle != nullptr);
-        DEBUG_ASSERT(m_dataPointer != nullptr);
         DEBUG_ASSERT(!m_handles.empty());
 
         if (m_handles.back().rawPointer != handle) {
@@ -84,8 +86,7 @@ protected:
         m_handles.erase(std::prev(m_handles.end()), m_handles.end());
     }
 
-    template <typename DerivedT>
-    void moveFromStrongHandle(StrongHandle<DerivedT>&& strongHandle) {
+    void moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
         m_typeId = strongHandle.m_typeId;
         m_dataPointer = strongHandle.m_dataPointer;
         strongHandle.m_dataPointer = nullptr;

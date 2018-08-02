@@ -11,8 +11,6 @@ class StrongHandle : public AnyStrongHandle {
     friend class Chank; // to construct
     template<typename T>
     friend class ChankFunctions; // to update pointer
-    template <typename T>
-    friend class StrongHandle;
 public:
     StrongHandle& operator=(std::nullptr_t) noexcept {
         reset();
@@ -20,9 +18,10 @@ public:
     }
 
     template <typename DerivedT>
-    StrongHandle(StrongHandle<DerivedT>&& strongHandle) noexcept {
+    StrongHandle(StrongHandle<DerivedT>&& strongHandle) noexcept
+        : AnyStrongHandle(std::move(strongHandle))
+    {
         checkType<DerivedT>();
-        moveFromStrongHandle(std::move(strongHandle));
     }
 
     template <typename DerivedT>
@@ -32,9 +31,9 @@ public:
         return *this;
     }
 
-    StrongHandle(StrongHandle&& strongHandle) noexcept {
-        moveFromStrongHandle(std::move(strongHandle));
-    }
+    StrongHandle(StrongHandle&& strongHandle) noexcept
+        : AnyStrongHandle(std::move(strongHandle))
+    {}
 
     StrongHandle& operator=(StrongHandle&& strongHandle) noexcept {
         moveFromStrongHandle(std::move(strongHandle));
