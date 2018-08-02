@@ -20,8 +20,18 @@ class AnyStrongHandle {
     friend class Handle; // to register/unregister handles
     friend class AnyHandle; // to register/unregister handles
 public:
+    AnyStrongHandle& operator=(std::nullptr_t) noexcept {
+        reset();
+        return *this;
+    }
+
     AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
         moveFromStrongHandle(std::move(strongHandle));
+    }
+
+    AnyStrongHandle& operator=(AnyStrongHandle&& strongHandle) noexcept {
+        moveFromStrongHandle(std::move(strongHandle));
+        return *this;
     }
 
     ~AnyStrongHandle() {

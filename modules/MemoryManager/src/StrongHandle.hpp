@@ -7,13 +7,13 @@ class Handle;
 
 template <typename DataT>
 class StrongHandle : public AnyStrongHandle {
-    FORDEBUG(friend class ObjectPoolDebugger);
+    FORDEBUG(friend class ObjectPoolDebugger); // to access handles and a chank
     friend class Chank; // to construct
     template<typename T>
-    friend class ChankFunctions; // to update pointer
+    friend class ChankFunctions; // to update pointer if chank is moved
 public:
     StrongHandle& operator=(std::nullptr_t) noexcept {
-        reset();
+        AnyStrongHandle::operator=(nullptr);
         return *this;
     }
 
@@ -21,22 +21,24 @@ public:
     StrongHandle(StrongHandle<DerivedT>&& strongHandle) noexcept
         : AnyStrongHandle(std::move(strongHandle))
     {
-        checkType<DerivedT>();
+        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
     }
 
     template <typename DerivedT>
     StrongHandle& operator=(StrongHandle<DerivedT>&& strongHandle) noexcept {
-        checkType<DerivedT>();
-        moveFromStrongHandle(std::move(strongHandle));
+        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
+        AnyStrongHandle::operator=(std::move(strongHandle));
         return *this;
     }
 
+    /// A duplicate of a copy constructor to support an implicit construction
     StrongHandle(StrongHandle&& strongHandle) noexcept
         : AnyStrongHandle(std::move(strongHandle))
     {}
 
+    /// A duplicate of operator= to support an implicit construction
     StrongHandle& operator=(StrongHandle&& strongHandle) noexcept {
-        moveFromStrongHandle(std::move(strongHandle));
+        AnyStrongHandle::operator=(std::move(strongHandle));
         return *this;
     }
 
@@ -54,13 +56,9 @@ public:
     }
 
 private:
+    /// Strong handle can't be constructed outside ObjectPool
     StrongHandle(DataT* dataPointer,
                  Chank* chank) noexcept
         : AnyStrongHandle(getTypeId<DataT>(), dataPointer, chank)
     {}
-
-    template <typename DerivedT>
-    constexpr void checkType() {
-        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
-    }
 };

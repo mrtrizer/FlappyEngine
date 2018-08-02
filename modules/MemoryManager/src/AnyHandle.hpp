@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StrongHandle.hpp"
+#include "AnyStrongHandle.hpp"
 
 template <typename T>
 class Handle;
