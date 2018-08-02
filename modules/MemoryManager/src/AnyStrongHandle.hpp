@@ -34,6 +34,7 @@ public:
         return *this;
     }
 
+    // Destructor should not be virtual
     ~AnyStrongHandle() {
         reset();
     }
@@ -131,3 +132,5 @@ private:
         chank->m_strongHandle = strongHandle;
     }
 };
+
+static_assert(!std::is_polymorphic<AnyStrongHandle>(), "AnyStrongHandle should not be a polymorphic!");

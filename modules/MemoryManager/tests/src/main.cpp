@@ -119,10 +119,6 @@ TEST_CASE("Handle::operator=(Handle<DerivedT>&& handle)") {
     REQUIRE_THROWS(test2->value());
 }
 
-TEST_CASE("Handle size") {
-    REQUIRE(sizeof(Handle<Test>) == sizeof(intptr_t));
-}
-
 TEST_CASE("AnyHandle basics") {
     auto a = Heap::create<Test>(10);
     AnyHandle unknown = a;

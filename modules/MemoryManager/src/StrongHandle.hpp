@@ -21,12 +21,12 @@ public:
     StrongHandle(StrongHandle<DerivedT>&& strongHandle) noexcept
         : AnyStrongHandle(std::move(strongHandle))
     {
-        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
+        assertDerived<DataT, DerivedT>();
     }
 
     template <typename DerivedT>
     StrongHandle& operator=(StrongHandle<DerivedT>&& strongHandle) noexcept {
-        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
+        assertDerived<DataT, DerivedT>();
         AnyStrongHandle::operator=(std::move(strongHandle));
         return *this;
     }
@@ -49,7 +49,7 @@ public:
         return Handle<DataT>(*this);
     }
 
-    DataT* operator->() {
+    DataT* operator->() const {
         if (!isValid())
             throw FlappyException("Invalid handle");
         return static_cast<DataT*>(m_dataPointer);

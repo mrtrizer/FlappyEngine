@@ -56,3 +56,10 @@ TypeId getTypeId() {
     static int dummy;
     return reinterpret_cast<TypeId>(&dummy);
 }
+
+template <typename BaseT, typename DerivedT>
+constexpr void assertDerived() {
+    static_assert(std::is_base_of<BaseT, DerivedT>::value, "DerivedT should be derived from BaseT");
+}
+
+

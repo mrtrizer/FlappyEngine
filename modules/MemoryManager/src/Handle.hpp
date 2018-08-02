@@ -4,123 +4,86 @@
 #include <memory>
 
 #include "StrongHandle.hpp"
-
-// TODO: Inherit Handle from AnyHandle
+#include "AnyHandle.hpp"
 
 template <typename DataT>
-class Handle {
+class Handle : public AnyHandle {
     template <typename T>
     friend class Handle; // for interided type convertion
     template <typename T>
     friend class StrongHandle; // for access to invalidate() and setNewHandle()
     friend class AnyStrongHandle; // for access to invalidate() and setNewHandle()
 public:
-    Handle() noexcept {}
+    Handle() = default;
 
     template <typename DerivedT>
     Handle(StrongHandle<DerivedT>& strongHandle) noexcept
-        : m_strongHandle(reinterpret_cast<StrongHandle<DataT>*>(&strongHandle))
+        : AnyHandle(strongHandle)
     {
-        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
-        m_strongHandle->registerHandle(this);
+        assertDerived<DataT, DerivedT>();
     }
 
     template <typename DerivedT>
-    Handle& operator=(StrongHandle<DerivedT>& handle) noexcept {
-        setNewHandle(&handle);
+    Handle& operator=(StrongHandle<DerivedT>& strongHandle) noexcept {
+        assertDerived<DataT, DerivedT>();
+        AnyHandle::operator=(strongHandle);
+        return *this;
+    }
+
+    template <typename DerivedT>
+    Handle(const Handle<DerivedT>& handle, int i = 0) noexcept
+        : AnyHandle(handle)
+    {
+        assertDerived<DataT, DerivedT>();
+    }
+
+    template <typename DerivedT>
+    Handle& operator=(const Handle<DerivedT>& handle) noexcept {
+        assertDerived<DataT, DerivedT>();
+        AnyHandle::operator=(handle);
+        return *this;
+    }
+
+    template <typename DerivedT>
+    Handle(Handle<DerivedT>&& handle, int i = 0) noexcept
+        : AnyHandle(std::move(handle))
+    {
+        assertDerived<DataT, DerivedT>();
+    }
+
+    template <typename DerivedT>
+    Handle& operator=(Handle<DerivedT>&& handle) noexcept {
+        assertDerived<DataT, DerivedT>();
+        AnyHandle::operator =(std::move(handle));
         return *this;
     }
 
     Handle(std::nullptr_t) noexcept
     {}
 
-    Handle(const Handle& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-    }
+    Handle(const Handle& handle) noexcept
+        : Handle<DataT>(handle, 1)
+    {}
 
     Handle& operator=(const Handle& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        return *this;
+        return operator=<DataT>(handle);
     }
 
-    Handle(Handle&& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        handle.m_strongHandle->unregisterHandle(&handle);
-        handle.invalidate();
-    }
+    Handle(Handle&& handle) noexcept
+        : Handle<DataT>(std::move(handle), 1)
+    {}
 
     Handle& operator=(Handle&& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        handle.m_strongHandle->unregisterHandle(&handle);
-        handle.invalidate();
-        return *this;
-    }
-
-    template <typename DerivedT>
-    Handle(const Handle<DerivedT>& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-    }
-
-    template <typename DerivedT>
-    Handle& operator=(const Handle<DerivedT>& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        return *this;
-    }
-
-    template <typename DerivedT>
-    Handle(Handle<DerivedT>&& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        handle.m_strongHandle->unregisterHandle(&handle);
-        handle.invalidate();
-    }
-
-    template <typename DerivedT>
-    Handle& operator=(Handle<DerivedT>&& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
-        handle.m_strongHandle->unregisterHandle(&handle);
-        handle.invalidate();
-        return *this;
-    }
-
-    ~Handle() {
-        if (m_strongHandle != nullptr)
-            m_strongHandle->unregisterHandle(this);
+        return operator=<DataT>(std::move(handle));
     }
 
     bool isValid() noexcept {
         return m_strongHandle != nullptr && m_strongHandle->isValid();
     }
 
-    DataT* operator->() {
+    DataT* operator->() const {
         if (m_strongHandle == nullptr)
             throw FlappyException("Invalid handle");
-        return m_strongHandle->operator->();
-    }
-
-private:
-    StrongHandle<DataT>* m_strongHandle = nullptr;
-
-    template <typename DerivedT>
-    void setNewHandle(StrongHandle<DerivedT>* strongHandle) noexcept {
-        static_assert(std::is_base_of<DataT, DerivedT>::value, "DerivedT should be derived from BaseT");
-        if (m_strongHandle != nullptr)
-            m_strongHandle->unregisterHandle(this);
-        m_strongHandle = reinterpret_cast<StrongHandle<DataT>*>(strongHandle);
-        if (strongHandle != nullptr)
-            strongHandle->registerHandle(reinterpret_cast<Handle<DerivedT>*>(this));
-    }
-
-    void invalidate() noexcept {
-        DEBUG_ASSERT(m_strongHandle != nullptr);
-
-        m_strongHandle = nullptr;
-    }
-
-    // strongHandlePtr is void* to support anonymous handles
-    void updateStrongHandle(void* strongHandlePtr) noexcept {
-        DEBUG_ASSERT(m_strongHandle != nullptr);
-        DEBUG_ASSERT(strongHandlePtr != nullptr);
-
-        m_strongHandle = static_cast<StrongHandle<DataT>*>(strongHandlePtr);
+        return static_cast<const StrongHandle<DataT>*>(m_strongHandle)->operator->();
     }
 };
