@@ -10,8 +10,6 @@ ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
     m_chanks.reserve(capacity);
     for (size_t i = 0; i < capacity; ++i)
         m_chanks.emplace_back(Chank(&m_bytes[maxObjectSize * i], maxObjectSize));
-
-    m_end = &m_chanks[0];
 }
 
 ObjectPool::~ObjectPool() {
@@ -22,10 +20,11 @@ ObjectPool::~ObjectPool() {
 }
 
 void ObjectPool::onDestroyed (Chank* chank) noexcept {
-    // if the chank is not the last element, replace it with the last element
-    auto last = m_end - 1;
+    DEBUG_ASSERT(m_length > 0);
+    // if the chank is not the last element, move the last element in place of it
+    auto last = &m_chanks[m_length - 1];
     if (chank != last)
         chank->moveFrom(last);
-    m_end = last;
-    m_length--;
+    else
+        --m_length;
 }
