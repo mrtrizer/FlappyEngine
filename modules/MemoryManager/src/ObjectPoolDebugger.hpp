@@ -2,6 +2,7 @@
 
 #include "ObjectPool.hpp"
 
+#ifndef NDEBUG
 class ObjectPoolDebugger {
 public:
     explicit ObjectPoolDebugger(ObjectPool& objectPool)
@@ -26,3 +27,4 @@ public:
 private:
     ObjectPool& m_objectPool;
 };
+#endif

@@ -1,13 +1,16 @@
 {
     "name":"Hayai",
+    "version":"1.0.2",
     "modules": [
     ],
     "cxx":{
         "header_dirs": [
-            "./lib/hayai-1.0.2"
+            "./lib/hayai-1.0.2/src",
+            "./src"
         ],
         "src_dirs": [
-            "./lib/hayai-1.0.2"
+            "./lib/hayai-1.0.2/src",
+            "./src"
         ]
     }
 }

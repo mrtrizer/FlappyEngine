@@ -12,8 +12,6 @@ private:
     Handle<ObjectT> m_selfHandle;
 };
 
-// TODO: Moving objects between pools
-
 class ObjectPool {
     FORDEBUG(friend class ObjectPoolDebugger);
 public:
@@ -23,8 +21,6 @@ public:
     ObjectPool(ObjectPool&&) = delete;
     ObjectPool& operator= (ObjectPool&&) = default;
     ~ObjectPool();
-
-    // TODO: Autoresize on exeeding the limit of chanks (should be easy with vectors)
 
     template <typename DataT, typename...Args>
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
