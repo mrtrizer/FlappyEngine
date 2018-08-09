@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 
 #include "Utility.hpp"
 
@@ -10,7 +10,14 @@ template <typename DataT>
 class StrongHandle;
 
 struct HandleCalls {
-    void* rawPointer;
+    HandleCalls(void* rawPointer_,
+                std::function<void(void)> invalidate_,
+                std::function<void(void* strongHandle)> updateStrongHandle_)
+        : rawPointer(rawPointer_)
+        , invalidate(invalidate_)
+        , updateStrongHandle(updateStrongHandle_)
+    {}
+    void* rawPointer = nullptr;
     std::function<void(void)> invalidate;
     std::function<void(void* strongHandle)> updateStrongHandle;
 };
@@ -20,117 +27,47 @@ class AnyStrongHandle {
     friend class Handle; // to register/unregister handles
     friend class AnyHandle; // to register/unregister handles
 public:
-    AnyStrongHandle& operator=(std::nullptr_t) noexcept {
-        reset();
-        return *this;
-    }
+    AnyStrongHandle& operator=(std::nullptr_t) noexcept;
 
-    AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
-        moveFromStrongHandle(std::move(strongHandle));
-    }
+    AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept;
 
-    AnyStrongHandle& operator=(AnyStrongHandle&& strongHandle) noexcept {
-        moveFromStrongHandle(std::move(strongHandle));
-        return *this;
-    }
+    AnyStrongHandle& operator=(AnyStrongHandle&& strongHandle) noexcept;
 
     // Destructor should not be virtual
-    ~AnyStrongHandle() {
-        reset();
-    }
+    ~AnyStrongHandle();
 
-    bool isValid() const noexcept {
-        return m_dataPointer != nullptr;
-    }
+    bool isValid() const noexcept;
 
-    TypeId typeId() const noexcept{
-        return m_typeId;
-    }
+    TypeId typeId() const noexcept;
 
 protected:
     TypeId m_typeId;
     void* m_dataPointer = nullptr;
     Chank* m_chank = nullptr;
-    std::vector<HandleCalls> m_handles;
+    std::list<HandleCalls> m_handles;
 
     AnyStrongHandle(TypeId typeId = 0,
                      void* dataPointer = nullptr,
-                     Chank* chank = nullptr) noexcept
-        : m_typeId(typeId)
-        , m_dataPointer(dataPointer)
-        , m_chank(chank)
-    {}
+                     Chank* chank = nullptr) noexcept;
 
-    void reset() noexcept {
-        for (auto handle : m_handles)
-            handle.invalidate();
-        m_handles.clear();
-        if (m_chank != nullptr)
-            clearChank (m_chank);
-        m_chank = nullptr;
-        m_dataPointer = nullptr;
-    }
+    void reset() noexcept;
 
     template <typename T>
     void registerHandle(T* handle) noexcept {
         DEBUG_ASSERT(handle != nullptr);
 
-       m_handles.emplace_back(HandleCalls{
+       m_handles.emplace_back(
            handle,
            std::bind(&T::invalidate, handle),
            std::bind(&T::updateStrongHandle, handle, std::placeholders::_1)
-       });
+       );
     }
 
-    void unregisterHandle(void* handle) noexcept {
-        DEBUG_ASSERT(handle != nullptr);
-        DEBUG_ASSERT(!m_handles.empty());
+    void unregisterHandle(void* handle) noexcept;
 
-        if (m_handles.back().rawPointer != handle) {
-            auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
-                return item.rawPointer == handle;
-            });
-            DEBUG_ASSERT(iter != m_handles.end());
-            *iter = std::move(m_handles.back());
-        }
+    void moveFromStrongHandle(AnyStrongHandle&& strongHandle);
 
-        m_handles.erase(std::prev(m_handles.end()), m_handles.end());
-    }
-
-    void moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
-        m_typeId = strongHandle.m_typeId;
-        m_dataPointer = strongHandle.m_dataPointer;
-        strongHandle.m_dataPointer = nullptr;
-        auto chank = m_chank = strongHandle.m_chank;
-        strongHandle.m_chank = nullptr;
-        std::move(strongHandle.m_handles.begin(), strongHandle.m_handles.end(), std::back_inserter(m_handles));
-        strongHandle.m_handles.clear();
-        for (auto handle : m_handles)
-            handle.updateStrongHandle(this);
-        if (chank != nullptr)
-            updateChankStrongHandle (chank, this);
-    }
-
-    void updatePointer(void* dataPointer, Chank* chank) noexcept {
-        DEBUG_ASSERT(dataPointer != nullptr);
-        DEBUG_ASSERT(chank != nullptr);
-        DEBUG_ASSERT(m_dataPointer != nullptr);
-        DEBUG_ASSERT(m_chank != nullptr);
-
-        m_dataPointer = dataPointer;
-        m_chank = chank;
-    }
-
-private:
-    template <typename ChankT>
-    void clearChank(ChankT* chank) {
-        chank->clear();
-    }
-
-    template <typename ChankT>
-    void updateChankStrongHandle(ChankT* chank, AnyStrongHandle* strongHandle) {
-        chank->m_strongHandle = strongHandle;
-    }
+    void updatePointer(void* dataPointer, Chank* chank) noexcept;
 };
 
 static_assert(!std::is_polymorphic<AnyStrongHandle>(), "AnyStrongHandle should not be a polymorphic!");

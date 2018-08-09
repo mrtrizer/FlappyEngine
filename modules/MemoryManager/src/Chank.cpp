@@ -46,7 +46,7 @@ void Chank::clear() noexcept {
         m_chankFunctions->destroy(m_data);
         // FIXME: Looks like bad design. Handle should remove chank via ObjectPool.
         // Destroy callback should be called at the end because it can change class
-        auto destroyedCallback = m_destroyedCallback;
+        auto destroyedCallback = std::move(m_destroyedCallback);
 
         m_strongHandle = nullptr;
         m_chankFunctions = nullptr;

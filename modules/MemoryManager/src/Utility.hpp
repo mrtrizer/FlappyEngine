@@ -33,6 +33,7 @@ private:
 #else
 // FIXME: Use std::terminate and custom output
     #define DEBUG_ASSERT(statement) assert(statement && __FILE__ && __LINE__)
+    //#define DEBUG_ASSERT (void)
 #endif
 
 #ifdef NDEBUG
@@ -42,7 +43,7 @@ private:
 #endif
 
 template <typename... Args>
-std::string sstr(Args &&... args)
+std::string sstr(Args &&... args) noexcept
 {
     std::ostringstream sstr;
     (sstr << ... << args);
@@ -52,7 +53,7 @@ std::string sstr(Args &&... args)
 using TypeId = intptr_t;
 
 template <typename TypeT>
-TypeId getTypeId() {
+TypeId getTypeId() noexcept {
     static int dummy;
     return reinterpret_cast<TypeId>(&dummy);
 }

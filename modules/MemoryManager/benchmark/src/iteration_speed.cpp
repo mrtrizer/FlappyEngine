@@ -16,7 +16,7 @@ public:
     virtual void update() = 0;
 };
 
-class Test2 : public EnableSelfHandle<Test2>, public ITest {
+class Test2 : public EnableSelfHandle<Test2>, public std::enable_shared_from_this<Test2>, public ITest {
 public:
     Test2(int i, std::string text) : m_i(i), m_text(text) {}
     int value() { return m_i; }
@@ -34,7 +34,7 @@ private:
     int m_array[10] = {0};
 };
 
-const size_t N = 10000;
+const size_t N = 1000;
 
 BENCHMARK(ObjectPoolTests, CreationTest_ObjectPool, 100, 1)
 {

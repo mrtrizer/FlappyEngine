@@ -55,7 +55,7 @@ class Chank {
     /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
     /// @param destroyedCallback Called when underlying class is destroyed
     template <typename DataT, typename ... Args>
-    [[nodiscard]] StrongHandle<DataT> construct(std::function<void(Chank*)> destroyedCallback, Args&& ... args) {
+    [[nodiscard]] StrongHandle<DataT> construct(std::function<void(Chank*)>&& destroyedCallback, Args&& ... args) {
         DEBUG_ASSERT(destroyedCallback != nullptr);
         DEBUG_ASSERT(m_strongHandle == nullptr);
         DEBUG_ASSERT(m_chankFunctions == nullptr);
@@ -71,7 +71,7 @@ class Chank {
             // This pointer is automatically updated if the strong handle is moved to a new location
             m_strongHandle = &strongHandle;
             m_chankFunctions = chankFunctionsForType<DataT>();
-            m_destroyedCallback = destroyedCallback;
+            m_destroyedCallback = std::move(destroyedCallback);
 
             return strongHandle;
         } catch(...) {
@@ -84,6 +84,8 @@ class Chank {
 
     /// Method destroys underlaying instance if it is was initialized.
     void clear() noexcept;
+
+    bool empty() const noexcept { return m_strongHandle == nullptr; }
 
     [[nodiscard]] bool constructed() const noexcept;
 

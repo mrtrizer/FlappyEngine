@@ -1,0 +1,17 @@
+{
+    "name":"object_pool_cache_misses",
+    "modules": [
+        {
+            "path":"../.."
+        }
+    ],
+    "cxx":{
+        "flags": ["--std=c++17"],
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

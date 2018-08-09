@@ -10,9 +10,6 @@ template <typename DataT>
 class Handle : public AnyHandle {
     template <typename T>
     friend class Handle; // for interided type convertion
-    template <typename T>
-    friend class StrongHandle; // for access to invalidate() and setNewHandle()
-    friend class AnyStrongHandle; // for access to invalidate() and setNewHandle()
 public:
     Handle() = default;
 

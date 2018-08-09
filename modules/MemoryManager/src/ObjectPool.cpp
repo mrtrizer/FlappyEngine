@@ -21,10 +21,18 @@ ObjectPool::~ObjectPool() {
 
 void ObjectPool::onDestroyed (Chank* chank) noexcept {
     DEBUG_ASSERT(m_length > 0);
-    // if the chank is not the last element, move the last element in place of it
-    auto last = &m_chanks[m_length - 1];
-    if (chank != last)
-        chank->moveFrom(last);
-    else
-        --m_length;
+    if (chank == &m_chanks[m_length - 1]) {
+        do
+            --m_length;
+        while (m_length > 0 && m_chanks[m_length - 1].empty());
+    }
+}
+
+Chank* ObjectPool::findEmptyChank() noexcept {
+    if (m_length != m_chanks.size())
+        return &m_chanks[m_length];
+    for (auto& chank : m_chanks)
+        if (chank.empty())
+            return &chank;
+    return nullptr;
 }

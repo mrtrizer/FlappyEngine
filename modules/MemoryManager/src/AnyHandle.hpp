@@ -1,6 +1,11 @@
 #pragma once
 
-#include "AnyStrongHandle.hpp"
+#include <cstddef>
+#include <cstdint>
+
+#include "Utility.hpp"
+
+class AnyStrongHandle;
 
 template <typename T>
 class Handle;
@@ -10,16 +15,9 @@ class AnyHandle {
 public:
     AnyHandle() = default;
 
-    AnyHandle(AnyStrongHandle& strongHandle) noexcept
-        : m_strongHandle(&strongHandle)
-    {
-        m_strongHandle->registerHandle(this);
-    }
+    AnyHandle(AnyStrongHandle& strongHandle) noexcept;
 
-    AnyHandle& operator=(AnyStrongHandle& strongHandle) noexcept {
-        setNewHandle(&strongHandle);
-        return *this;
-    }
+    AnyHandle& operator=(AnyStrongHandle& strongHandle) noexcept;
 
     AnyHandle(std::nullptr_t) noexcept
     {}
@@ -28,7 +26,7 @@ public:
     AnyHandle(const Handle<DerivedT>& handle) noexcept
         : m_strongHandle(handle.m_strongHandle)
     {
-        m_strongHandle->registerHandle(this);
+        registerInStrongHandle();
     }
 
     template <typename DerivedT>
@@ -54,45 +52,26 @@ public:
     }
 
     // Destructor should not be virtual in this case
-    ~AnyHandle() {
-        if (m_strongHandle != nullptr)
-            m_strongHandle->unregisterHandle(this);
-    }
+    ~AnyHandle();
 
-    bool isValid() noexcept {
-        return m_strongHandle != nullptr && m_strongHandle->isValid();
-    }
+    bool isValid() noexcept;
 
     template <typename DataT>
     const Handle<DataT>& get() const {
-        if (m_strongHandle->typeId() == getTypeId<DataT>())
+        if (typeId() == getTypeId<DataT>())
             return *static_cast<const Handle<DataT>*>(this);
         else
             throw FlappyException("AnyHandle points to another type.");
     }
 
+    TypeId typeId() const noexcept;
+
 protected:
-    void setNewHandle(AnyStrongHandle* strongHandle) noexcept {
-        if (m_strongHandle != nullptr)
-            m_strongHandle->unregisterHandle(this);
-        m_strongHandle = reinterpret_cast<AnyStrongHandle*>(strongHandle);
-        if (strongHandle != nullptr)
-            strongHandle->registerHandle(this);
-    }
-
-    void invalidate() noexcept {
-        DEBUG_ASSERT(m_strongHandle != nullptr);
-
-        m_strongHandle = nullptr;
-    }
-
+    void setNewHandle(AnyStrongHandle* strongHandle) noexcept;
+    void invalidate() noexcept;
     // strongHandlePtr is void* to support anonymous handles
-    void updateStrongHandle(void* strongHandlePtr) noexcept {
-        DEBUG_ASSERT(m_strongHandle != nullptr);
-        DEBUG_ASSERT(strongHandlePtr != nullptr);
-
-        m_strongHandle = static_cast<AnyStrongHandle*>(strongHandlePtr);
-    }
+    void updateStrongHandle(void* strongHandlePtr) noexcept;
+    void registerInStrongHandle() noexcept;
 
     AnyStrongHandle* m_strongHandle = nullptr;
 };
