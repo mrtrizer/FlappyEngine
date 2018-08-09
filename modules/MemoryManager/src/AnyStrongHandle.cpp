@@ -1,6 +1,7 @@
 #include "AnyStrongHandle.hpp"
 
 #include "Chank.hpp"
+#include "AnyHandle.hpp"
 
 AnyStrongHandle& AnyStrongHandle::operator=(std::nullptr_t) noexcept {
     reset();
@@ -41,7 +42,7 @@ AnyStrongHandle::AnyStrongHandle(TypeId typeId,
 
 void AnyStrongHandle::reset() noexcept {
     for (auto handle : m_handles)
-        handle.invalidate();
+        handle->invalidate();
     m_handles.clear();
     if (m_chank != nullptr)
         m_chank->clear();
@@ -49,23 +50,29 @@ void AnyStrongHandle::reset() noexcept {
     m_dataPointer = nullptr;
 }
 
+void AnyStrongHandle::registerHandle(AnyHandle* handle) noexcept {
+    DEBUG_ASSERT(handle != nullptr);
+
+   m_handles.emplace_back(handle);
+}
+
 void AnyStrongHandle::unregisterHandle(void* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
     DEBUG_ASSERT(!m_handles.empty());
 
-//        if (m_handles.back().rawPointer != handle) {
-//            auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
-//                return item.rawPointer == handle;
-//            });
-//            DEBUG_ASSERT(iter != m_handles.end());
-//            *iter = std::move(m_handles.back());
-//        }
+//    if (m_handles.back() != handle) {
+//        auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
+//            return item == handle;
+//        });
+//        DEBUG_ASSERT(iter != m_handles.end());
+//        *iter = std::move(m_handles.back());
+//    }
 
     m_handles.remove_if([handle](const auto& item) {
-        return item.rawPointer == handle;
+        return item == handle;
     });
 
-    //m_handles.erase(std::prev(m_handles.end()), m_handles.end());
+//    m_handles.erase(std::prev(m_handles.end()), m_handles.end());
 }
 
 void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
@@ -77,7 +84,7 @@ void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
     std::move(strongHandle.m_handles.begin(), strongHandle.m_handles.end(), std::back_inserter(m_handles));
     strongHandle.m_handles.clear();
     for (auto handle : m_handles)
-        handle.updateStrongHandle(this);
+        handle->updateStrongHandle(this);
     if (chank != nullptr)
         chank->m_strongHandle = this;
 }

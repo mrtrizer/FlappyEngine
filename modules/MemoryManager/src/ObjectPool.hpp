@@ -39,7 +39,7 @@ public:
                         std::bind(&ObjectPool::onDestroyed, this, std::placeholders::_1),
                         std::forward<Args>(args)...);
             if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
-                strongHandle->m_selfHandle = strongHandle.handle();
+                strongHandle->m_selfHandle = strongHandle;
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;
             return strongHandle;

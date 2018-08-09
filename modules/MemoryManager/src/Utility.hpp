@@ -32,8 +32,8 @@ private:
     #define DEBUG_ASSERT (void)
 #else
 // FIXME: Use std::terminate and custom output
-    #define DEBUG_ASSERT(statement) assert(statement && __FILE__ && __LINE__)
-    //#define DEBUG_ASSERT (void)
+    //#define DEBUG_ASSERT(statement) assert(statement && __FILE__ && __LINE__)
+    #define DEBUG_ASSERT (void)
 #endif
 
 #ifdef NDEBUG

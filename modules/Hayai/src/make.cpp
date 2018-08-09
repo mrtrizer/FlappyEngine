@@ -1,6 +1,7 @@
 #include <hayai.hpp>
+#include <hayai_main.hpp>
 
-int main()
+int main(int argc, char** argv)
 {
     // Set up the main runner.
     ::hayai::MainRunner runner;

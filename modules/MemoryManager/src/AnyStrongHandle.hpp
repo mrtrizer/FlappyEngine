@@ -5,22 +5,10 @@
 #include "Utility.hpp"
 
 class Chank;
+class AnyHandle;
 
 template <typename DataT>
 class StrongHandle;
-
-struct HandleCalls {
-    HandleCalls(void* rawPointer_,
-                std::function<void(void)> invalidate_,
-                std::function<void(void* strongHandle)> updateStrongHandle_)
-        : rawPointer(rawPointer_)
-        , invalidate(invalidate_)
-        , updateStrongHandle(updateStrongHandle_)
-    {}
-    void* rawPointer = nullptr;
-    std::function<void(void)> invalidate;
-    std::function<void(void* strongHandle)> updateStrongHandle;
-};
 
 class AnyStrongHandle {
     template <typename T>
@@ -44,7 +32,7 @@ protected:
     TypeId m_typeId;
     void* m_dataPointer = nullptr;
     Chank* m_chank = nullptr;
-    std::list<HandleCalls> m_handles;
+    std::list<AnyHandle*> m_handles;
 
     AnyStrongHandle(TypeId typeId = 0,
                      void* dataPointer = nullptr,
@@ -52,16 +40,7 @@ protected:
 
     void reset() noexcept;
 
-    template <typename T>
-    void registerHandle(T* handle) noexcept {
-        DEBUG_ASSERT(handle != nullptr);
-
-       m_handles.emplace_back(
-           handle,
-           std::bind(&T::invalidate, handle),
-           std::bind(&T::updateStrongHandle, handle, std::placeholders::_1)
-       );
-    }
+    void registerHandle(AnyHandle* handle) noexcept;
 
     void unregisterHandle(void* handle) noexcept;
 
