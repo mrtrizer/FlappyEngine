@@ -19,7 +19,10 @@ AnyStrongHandle& AnyStrongHandle::operator=(AnyStrongHandle&& strongHandle) noex
 
 // Destructor should not be virtual
 AnyStrongHandle::~AnyStrongHandle() {
-    reset();
+    for (auto handle : m_handles)
+        handle->invalidate();
+    if (m_chank != nullptr)
+        m_chank->clear();
 }
 
 bool AnyStrongHandle::isValid() const noexcept {

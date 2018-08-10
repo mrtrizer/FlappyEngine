@@ -16,6 +16,7 @@ private:
 
 class ObjectPool {
     FORDEBUG(friend class ObjectPoolDebugger);
+    friend class Chank; // for calling of onDestroyed()
 public:
     ObjectPool(size_t maxObjectSize, size_t capacity);
     ObjectPool(const ObjectPool&) = delete;
@@ -28,16 +29,14 @@ public:
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
         static_assert(std::is_class<DataT>(), "ObjectPool doesn't support basic types.");
         USER_ASSERT_MSG(sizeof(DataT) <= m_maxObjectSize, "DataT exeeds max size (", sizeof(DataT), " > ",  m_maxObjectSize, ")");
-        DEBUG_ASSERT(m_length <= m_chanks.size());
+        DEBUG_ASSERT(m_length <= m_capacity);
 
         auto emptyChank = findEmptyChank();
         DEBUG_ASSERT(emptyChank == nullptr || emptyChank->empty());
         if (emptyChank == nullptr)
             throw FlappyException("No empty memory chanks left. Review parameters of the object pool!");
         try {
-            auto strongHandle = emptyChank->construct<DataT>(
-                        std::bind(&ObjectPool::onDestroyed, this, std::placeholders::_1),
-                        std::forward<Args>(args)...);
+            auto strongHandle = emptyChank->construct<DataT>(this, std::forward<Args>(args)...);
             if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
                 strongHandle->m_selfHandle = strongHandle;
             if (&m_chanks[m_length] == emptyChank)
@@ -54,11 +53,20 @@ public:
 
 private:
     size_t m_maxObjectSize = 0;
-    std::vector<Chank> m_chanks;
-    std::vector<std::byte> m_bytes;
+    Chank* m_chanks; // array
+    std::byte* m_bytes;
     size_t m_length = 0;
+    size_t m_capacity = 0;
 
     void onDestroyed (Chank* chank) noexcept;
 
-    Chank* findEmptyChank() noexcept;
+    inline Chank* findEmptyChank() noexcept {
+        if (m_length != m_capacity)
+            return &m_chanks[m_length];
+        for (size_t i = 0; i < m_capacity; ++i) {
+            if (m_chanks[i].empty())
+                return &m_chanks[i];
+        }
+        return nullptr;
+    }
 };

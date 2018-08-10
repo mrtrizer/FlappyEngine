@@ -2,21 +2,25 @@
 
 ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
     : m_maxObjectSize(maxObjectSize)
-    , m_bytes(capacity * maxObjectSize)
+    , m_bytes()
+    , m_capacity(capacity)
 {
     USER_ASSERT(capacity > 0);
     USER_ASSERT(maxObjectSize >= sizeof(int));
 
-    m_chanks.reserve(capacity);
+    m_bytes = (std::byte*)malloc(capacity * maxObjectSize);
+    m_chanks = (Chank*)malloc(sizeof(Chank) * capacity);
     for (size_t i = 0; i < capacity; ++i)
-        m_chanks.emplace_back(Chank(&m_bytes[maxObjectSize * i], maxObjectSize));
+        new (m_chanks + i) Chank(&m_bytes[maxObjectSize * i], maxObjectSize);
 }
 
 ObjectPool::~ObjectPool() {
     // To be sure that m_chanks cleared before m_bytes destroyed
-    for (auto& chank : m_chanks) {
-        chank.clear();
+    for (size_t i = 0; i < m_capacity; ++i) {
+        m_chanks[i].clear();
     }
+    free(m_chanks);
+    free(m_bytes);
 }
 
 void ObjectPool::onDestroyed (Chank* chank) noexcept {
@@ -24,15 +28,8 @@ void ObjectPool::onDestroyed (Chank* chank) noexcept {
     if (chank == &m_chanks[m_length - 1]) {
         do
             --m_length;
-        while (m_length > 0 && m_chanks[m_length - 1].empty());
+        while (m_chanks[m_length - 1].empty() && m_length > 0);
     }
 }
 
-Chank* ObjectPool::findEmptyChank() noexcept {
-    if (m_length != m_chanks.size())
-        return &m_chanks[m_length];
-    for (auto& chank : m_chanks)
-        if (chank.empty())
-            return &chank;
-    return nullptr;
-}
+

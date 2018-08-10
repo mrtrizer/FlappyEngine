@@ -13,13 +13,14 @@ public:
     int getChankIndex(StrongHandleT& strongHandle) {
         if (!strongHandle.isValid())
             return -1;
-        return size_t(strongHandle.m_chank->m_data - &m_objectPool.m_bytes.front()) / m_objectPool.m_maxObjectSize;
+        return size_t(strongHandle.m_chank->m_data - m_objectPool.m_bytes) / m_objectPool.m_maxObjectSize;
+        return 0;
     }
 
     void printState() {
         std::stringstream ss;
-        for (const auto& chank : m_objectPool.m_chanks) {
-            ss << (chank.constructed() ? "1" : "0");
+        for (size_t i = 0; i < m_objectPool.m_capacity; ++i) {
+            ss << (m_objectPool.m_chanks[i].constructed() ? "1" : "0");
         }
         std::cout << ss.str() << std::endl;
     }
