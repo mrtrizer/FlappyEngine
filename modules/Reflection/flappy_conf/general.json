@@ -1,11 +1,12 @@
 {
-    "name":"MemoryManager",
+    "name":"Reflection",
     "modules": [
-	{
-        "path":"../Utility"
-	}
+        {
+            "path":"../Utility"
+        }
     ],
     "cxx":{
+        "flags": ["--std=c++17"],
         "header_dirs": [
             "./src"
         ],

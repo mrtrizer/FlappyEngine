@@ -1,0 +1,20 @@
+{
+    "name":"tests_Reflection",
+    "modules": [
+        {
+            "path":".."
+        },
+        {
+            "path":"../../Catch"
+        }
+    ],
+    "cxx":{
+        "flags": ["--std=c++17"],
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

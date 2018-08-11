@@ -1,9 +1,6 @@
 {
-    "name":"MemoryManager",
+    "name":"Utility",
     "modules": [
-	{
-        "path":"../Utility"
-	}
     ],
     "cxx":{
         "header_dirs": [
