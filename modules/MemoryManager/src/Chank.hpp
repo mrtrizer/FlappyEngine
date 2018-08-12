@@ -11,9 +11,6 @@ class ObjectPool;
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
     friend class ObjectPool; // to create instance and call methods
-    friend class std::allocator<Chank>; // to move instance in vector reallocation
-    template <typename DataT>
-    friend class StrongHandle; // to update handle
     friend class AnyStrongHandle; // to update handle
 
     /// The interface generalises work with different data types with minimal overhead

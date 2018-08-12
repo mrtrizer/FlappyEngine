@@ -54,7 +54,7 @@ public:
 private:
     size_t m_maxObjectSize = 0;
     Chank* m_chanks; // array
-    std::byte* m_bytes;
+    std::byte* m_bytes; // array
     size_t m_length = 0;
     size_t m_capacity = 0;
 

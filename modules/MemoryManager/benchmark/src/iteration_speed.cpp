@@ -69,7 +69,37 @@ BENCHMARK(ObjectPoolTests, CreationTest_SharedPtr, 100, 1)
         tests.emplace_back(std::make_shared<Test2>(i, "Test!"));
 }
 
-class ObjectPoolPrepareFixture :   public ::hayai::Fixture
+struct PODType {
+    int a = 0;
+    int b = 10;
+};
+
+class ObjectPoolDestroyFixturePOD :   public ::hayai::Fixture
+{
+public:
+    virtual void SetUp()
+    {
+        tests.clear();
+    }
+
+    ObjectPool pool {sizeof(PODType), N};
+    std::vector<StrongHandle<PODType>> tests;
+};
+
+BENCHMARK_F(ObjectPoolDestroyFixturePOD, Creation_POD_ObjectPool, 100, 1)
+{
+    for (size_t i = 0; i < N; ++i)
+        tests.emplace_back(pool.create<PODType>());
+}
+
+BENCHMARK(ObjectPoolTests, CreationTest_POD_SharedPtr, 100, 1)
+{
+    std::vector<std::shared_ptr<PODType>> tests;
+    for (size_t i = 0; i < N; ++i)
+        tests.emplace_back(std::make_shared<PODType>());
+}
+
+class ObjectPoolPrepareFixture : public ::hayai::Fixture
 {
 public:
     virtual void SetUp()
@@ -92,10 +122,11 @@ public:
     std::vector<StrongHandle<ITest>> tests3;
 };
 
-BENCHMARK_F(ObjectPoolPrepareFixture, Iterations_ObjectPool, 10, 1000)
+BENCHMARK_F(ObjectPoolPrepareFixture, Iterations_ObjectPool, 10, 10)
 {
-    for (const auto& iter : tests)
-        iter->update();
+    for (int i = 0; i < 100; ++i)
+        for (const auto& iter : tests)
+            iter->update();
 }
 
 class SharedPtrListPrepareFixture :   public ::hayai::Fixture
@@ -117,8 +148,9 @@ public:
     std::vector<std::shared_ptr<ITest>> tests3;
 };
 
-BENCHMARK_F(SharedPtrListPrepareFixture, Iterations_SharedPtr, 10, 1000)
+BENCHMARK_F(SharedPtrListPrepareFixture, Iterations_SharedPtr, 10, 10)
 {
-    for (const auto& iter : tests)
-        iter->update();
+    for (int i = 0; i < 100; ++i)
+        for (const auto& iter : tests)
+            iter->update();
 }

@@ -17,7 +17,6 @@ AnyStrongHandle& AnyStrongHandle::operator=(AnyStrongHandle&& strongHandle) noex
     return *this;
 }
 
-// Destructor should not be virtual
 AnyStrongHandle::~AnyStrongHandle() {
     for (auto handle : m_handles)
         handle->invalidate();
@@ -39,8 +38,16 @@ AnyStrongHandle::AnyStrongHandle(TypeId typeId,
     : m_typeId(typeId)
     , m_dataPointer(dataPointer)
     , m_chank(chank)
-{
-    //m_handles.reserve(5);
+{}
+
+void AnyStrongHandle::updatePointer(void* dataPointer, Chank* chank) noexcept {
+    DEBUG_ASSERT(dataPointer != nullptr);
+    DEBUG_ASSERT(chank != nullptr);
+    DEBUG_ASSERT(m_dataPointer != nullptr);
+    DEBUG_ASSERT(m_chank != nullptr);
+
+    m_dataPointer = dataPointer;
+    m_chank = chank;
 }
 
 void AnyStrongHandle::reset() noexcept {
@@ -63,19 +70,9 @@ void AnyStrongHandle::unregisterHandle(void* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
     DEBUG_ASSERT(!m_handles.empty());
 
-//    if (m_handles.back() != handle) {
-//        auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](const auto& item) {
-//            return item == handle;
-//        });
-//        DEBUG_ASSERT(iter != m_handles.end());
-//        *iter = std::move(m_handles.back());
-//    }
-
     m_handles.remove_if([handle](const auto& item) {
         return item == handle;
     });
-
-//    m_handles.erase(std::prev(m_handles.end()), m_handles.end());
 }
 
 void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
@@ -90,14 +87,4 @@ void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) {
         handle->updateStrongHandle(this);
     if (chank != nullptr)
         chank->m_strongHandle = this;
-}
-
-void AnyStrongHandle::updatePointer(void* dataPointer, Chank* chank) noexcept {
-    DEBUG_ASSERT(dataPointer != nullptr);
-    DEBUG_ASSERT(chank != nullptr);
-    DEBUG_ASSERT(m_dataPointer != nullptr);
-    DEBUG_ASSERT(m_chank != nullptr);
-
-    m_dataPointer = dataPointer;
-    m_chank = chank;
 }

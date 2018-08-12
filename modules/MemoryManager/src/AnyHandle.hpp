@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "Utility.hpp"
+#include <Utility.hpp>
 
 class AnyStrongHandle;
 
@@ -44,14 +44,14 @@ public:
     }
 
     template <typename DerivedT>
-    AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept{
+    AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
         operator=(handle); // explicit call assignment operator
         handle.m_strongHandle->unregisterHandle(&handle);
         handle.invalidate();
         return *this;
     }
 
-    // Destructor should not be virtual in this case
+    // Not virtual because the only derived class has no data members
     ~AnyHandle();
 
     bool isValid() noexcept;
@@ -67,13 +67,15 @@ public:
     TypeId typeId() const noexcept;
 
 protected:
+    AnyStrongHandle* strongHandle() const noexcept { return m_strongHandle; }
+
+private:
+    AnyStrongHandle* m_strongHandle = nullptr;
+
     void setNewHandle(AnyStrongHandle* strongHandle) noexcept;
     void invalidate() noexcept;
-    // strongHandlePtr is void* to support anonymous handles
-    void updateStrongHandle(void* strongHandlePtr) noexcept;
+    void updateStrongHandle(AnyStrongHandle* strongHandlePtr) noexcept;
     void registerInStrongHandle() noexcept;
-
-    AnyStrongHandle* m_strongHandle = nullptr;
 };
 
 static_assert(!std::is_polymorphic<AnyHandle>(), "AnyHandle should not be a polymorphic!");

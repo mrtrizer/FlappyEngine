@@ -74,13 +74,9 @@ public:
         return operator=<DataT>(std::move(handle));
     }
 
-    bool isValid() noexcept {
-        return m_strongHandle != nullptr && m_strongHandle->isValid();
-    }
-
     DataT* operator->() const {
-        if (m_strongHandle == nullptr)
+        if (strongHandle() == nullptr)
             throw FlappyException("Invalid handle");
-        return static_cast<const StrongHandle<DataT>*>(m_strongHandle)->operator->();
+        return static_cast<const StrongHandle<DataT>*>(strongHandle())->operator->();
     }
 };

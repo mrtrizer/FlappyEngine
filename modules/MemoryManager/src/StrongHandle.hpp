@@ -9,8 +9,6 @@ template <typename DataT>
 class StrongHandle : public AnyStrongHandle {
     FORDEBUG(friend class ObjectPoolDebugger); // to access handles and a chank
     friend class Chank; // to construct
-    template<typename T>
-    friend class ChankFunctions; // to update pointer if chank is moved
 public:
     StrongHandle& operator=(std::nullptr_t) noexcept {
         AnyStrongHandle::operator=(nullptr);
@@ -52,7 +50,7 @@ public:
     DataT* operator->() const {
         if (!isValid())
             throw FlappyException("Invalid handle");
-        return static_cast<DataT*>(m_dataPointer);
+        return static_cast<DataT*>(dataPointer());
     }
 
 private:

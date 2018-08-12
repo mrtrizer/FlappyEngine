@@ -16,7 +16,6 @@ AnyHandle& AnyHandle::operator=(AnyStrongHandle& strongHandle) noexcept {
     return *this;
 }
 
-// Destructor should not be virtual in this case
 AnyHandle::~AnyHandle() {
     if (m_strongHandle != nullptr)
         m_strongHandle->unregisterHandle(this);
@@ -44,12 +43,11 @@ void AnyHandle::invalidate() noexcept {
     m_strongHandle = nullptr;
 }
 
-// strongHandlePtr is void* to support anonymous handles
-void AnyHandle::updateStrongHandle(void* strongHandlePtr) noexcept {
+void AnyHandle::updateStrongHandle(AnyStrongHandle *strongHandlePtr) noexcept {
     DEBUG_ASSERT(m_strongHandle != nullptr);
     DEBUG_ASSERT(strongHandlePtr != nullptr);
 
-    m_strongHandle = static_cast<AnyStrongHandle*>(strongHandlePtr);
+    m_strongHandle = strongHandlePtr;
 }
 
 void AnyHandle::registerInStrongHandle() noexcept {
