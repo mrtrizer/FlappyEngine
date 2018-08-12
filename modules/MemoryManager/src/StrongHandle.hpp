@@ -57,6 +57,6 @@ private:
     /// Strong handle can't be constructed outside ObjectPool
     StrongHandle(DataT* dataPointer,
                  Chank* chank) noexcept
-        : AnyStrongHandle(getTypeId<DataT>(), dataPointer, chank)
+        : AnyStrongHandle(dataPointer, chank)
     {}
 };

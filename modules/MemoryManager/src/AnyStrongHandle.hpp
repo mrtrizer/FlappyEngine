@@ -29,22 +29,17 @@ public:
     TypeId typeId() const noexcept;
 
 protected:
-    AnyStrongHandle(TypeId typeId = 0,
-                     void* dataPointer = nullptr,
+    AnyStrongHandle(void* dataPointer = nullptr,
                      Chank* chank = nullptr) noexcept;
 
     void* dataPointer() const noexcept { return m_dataPointer; }
     void updatePointer(void* dataPointer, Chank* chank) noexcept;
 
 private:
-    TypeId m_typeId;
     void* m_dataPointer = nullptr;
     Chank* m_chank = nullptr;
-    std::list<AnyHandle*> m_handles;
 
     void reset() noexcept;
-    void registerHandle(AnyHandle* handle) noexcept;
-    void unregisterHandle(void* handle) noexcept;
     void moveFromStrongHandle(AnyStrongHandle&& strongHandle);
 };
 

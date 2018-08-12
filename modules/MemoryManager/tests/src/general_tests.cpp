@@ -127,8 +127,8 @@ TEST_CASE("AnyHandle basics") {
 
 TEST_CASE("AnyStrongHandle basics") {
     AnyStrongHandle a = Heap::create<Test>(10);
-    AnyStrongHandle b = std::move(a);
-    AnyHandle unknown = a;
+    AnyStrongHandle b = std::move(a); // a bacomes invalid
+    AnyHandle unknown = a; // unknown is invalid
     REQUIRE_THROWS(unknown.get<Test>()->value());
     unknown = b;
     REQUIRE(unknown.get<Test>()->value() == 10);
@@ -155,6 +155,7 @@ TEST_CASE( "General flow test") {
             REQUIRE(debugger.getChankIndex(strongHandle2) == 1);
             auto b2 = strongHandle2.handle();
             b = strongHandle;
+            REQUIRE_THROWS(b->value());
 
             debugger.printState();
 
@@ -165,7 +166,6 @@ TEST_CASE( "General flow test") {
 
             auto otherStrongHandle = std::move(strongHandle);
             REQUIRE(debugger.getChankIndex(otherStrongHandle) == 2);
-            REQUIRE(b->value() == 30);
 
             debugger.printState();
         }

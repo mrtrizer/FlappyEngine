@@ -5,13 +5,14 @@
 
 #include <Utility.hpp>
 
+class Chank;
 class AnyStrongHandle;
 
 template <typename T>
 class Handle;
 
 class AnyHandle {
-    friend class AnyStrongHandle; // to access invalidate() and setNewHandle()
+    friend class Chank; // to access invalidate() and setNewHandle()
 public:
     AnyHandle() = default;
 
@@ -24,14 +25,14 @@ public:
 
     template <typename DerivedT>
     AnyHandle(const Handle<DerivedT>& handle) noexcept
-        : m_strongHandle(handle.m_strongHandle)
+        : m_chank(handle.m_chank)
     {
-        registerInStrongHandle();
+        handle.m_chank->registerHandle(this);
     }
 
     template <typename DerivedT>
     AnyHandle& operator=(const Handle<DerivedT>& handle) noexcept {
-        setNewHandle(handle.m_strongHandle);
+        setNewChank(handle.m_chank);
         return *this;
     }
 
@@ -39,14 +40,14 @@ public:
     AnyHandle(Handle<DerivedT>&& handle) noexcept
         : AnyHandle(handle) // explicit call copy constructor
     {
-        handle.m_strongHandle->unregisterHandle(&handle);
+        handle.m_chank->unregisterHandle(&handle);
         handle.invalidate();
     }
 
     template <typename DerivedT>
     AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
         operator=(handle); // explicit call assignment operator
-        handle.m_strongHandle->unregisterHandle(&handle);
+        handle.m_chank->unregisterHandle(&handle);
         handle.invalidate();
         return *this;
     }
@@ -67,15 +68,13 @@ public:
     TypeId typeId() const noexcept;
 
 protected:
-    AnyStrongHandle* strongHandle() const noexcept { return m_strongHandle; }
+    Chank* chank() const noexcept { return m_chank; }
 
 private:
-    AnyStrongHandle* m_strongHandle = nullptr;
+    Chank* m_chank = nullptr;
 
-    void setNewHandle(AnyStrongHandle* strongHandle) noexcept;
+    void setNewChank(Chank* chank) noexcept;
     void invalidate() noexcept;
-    void updateStrongHandle(AnyStrongHandle* strongHandlePtr) noexcept;
-    void registerInStrongHandle() noexcept;
 };
 
 static_assert(!std::is_polymorphic<AnyHandle>(), "AnyHandle should not be a polymorphic!");

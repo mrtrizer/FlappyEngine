@@ -1,55 +1,48 @@
 #include "AnyHandle.hpp"
 
+#include "Chank.hpp"
 #include "AnyStrongHandle.hpp"
 
 template <typename T>
 class Handle;
 
 AnyHandle::AnyHandle(AnyStrongHandle& strongHandle) noexcept
-    : m_strongHandle(&strongHandle)
+    : m_chank(strongHandle.m_chank)
 {
-    m_strongHandle->registerHandle(this);
+    if (m_chank != nullptr)
+        m_chank->registerHandle(this);
 }
 
 AnyHandle& AnyHandle::operator=(AnyStrongHandle& strongHandle) noexcept {
-    setNewHandle(&strongHandle);
+    setNewChank(strongHandle.m_chank);
     return *this;
 }
 
 AnyHandle::~AnyHandle() {
-    if (m_strongHandle != nullptr)
-        m_strongHandle->unregisterHandle(this);
+    if (m_chank != nullptr)
+        m_chank->unregisterHandle(this);
 }
 
 bool AnyHandle::isValid() noexcept {
-    return m_strongHandle != nullptr && m_strongHandle->isValid();
+    return m_chank != nullptr;
 }
 
 TypeId AnyHandle::typeId() const noexcept {
-    return m_strongHandle->typeId();
+    if (m_chank == nullptr)
+        return UnknownType;
+    return m_chank->typeId();
 }
 
-void AnyHandle::setNewHandle(AnyStrongHandle* strongHandle) noexcept {
-    if (m_strongHandle != nullptr)
-        m_strongHandle->unregisterHandle(this);
-    m_strongHandle = reinterpret_cast<AnyStrongHandle*>(strongHandle);
-    if (strongHandle != nullptr)
-        strongHandle->registerHandle(this);
+void AnyHandle::setNewChank(Chank* chank) noexcept {
+    if (m_chank != nullptr)
+        m_chank->unregisterHandle(this);
+    m_chank = chank;
+    if (chank != nullptr)
+        chank->registerHandle(this);
 }
 
 void AnyHandle::invalidate() noexcept {
-    DEBUG_ASSERT(m_strongHandle != nullptr);
+    DEBUG_ASSERT(m_chank != nullptr);
 
-    m_strongHandle = nullptr;
-}
-
-void AnyHandle::updateStrongHandle(AnyStrongHandle *strongHandlePtr) noexcept {
-    DEBUG_ASSERT(m_strongHandle != nullptr);
-    DEBUG_ASSERT(strongHandlePtr != nullptr);
-
-    m_strongHandle = strongHandlePtr;
-}
-
-void AnyHandle::registerInStrongHandle() noexcept {
-    m_strongHandle->registerHandle(this);
+    m_chank = nullptr;
 }

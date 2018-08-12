@@ -25,11 +25,11 @@ ObjectPool::~ObjectPool() {
 }
 
 void ObjectPool::onDestroyed (Chank* chank) noexcept {
-    DEBUG_ASSERT(m_length > 0);
-    if (chank == &m_chanks[m_length - 1]) {
+    DEBUG_ASSERT(m_length > 0); // 1
+    if (chank == &m_chanks[m_length - 1]) { // 1 - 1
         do
-            --m_length;
-        while (m_chanks[m_length - 1].empty() && m_length > 0);
+            --m_length; // 1 - 1 = 0
+        while (m_length > 0 && m_chanks[m_length - 1].empty());
     }
 }
 

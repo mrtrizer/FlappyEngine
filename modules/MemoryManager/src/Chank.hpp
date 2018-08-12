@@ -11,9 +11,12 @@ class ObjectPool;
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
     friend class ObjectPool; // to create instance and call methods
-    friend class AnyStrongHandle; // to update handle
+    friend class AnyStrongHandle; // to update strong handle
+    friend class AnyHandle; // to register/unregister handles
     template <typename T>
     friend class EnableSelfHandle; // to access m_strongHandle
+    template <typename T>
+    friend class Handle;
 
     Chank(ObjectPool* objectPool, std::byte* data, size_t size);
     ~Chank();
@@ -36,6 +39,7 @@ class Chank {
             // This pointer is automatically updated if the strong handle is moved to a new location
             m_strongHandle = &strongHandle;
             m_dataDescructor = [](void* data) { reinterpret_cast<DataT*>(data)->~DataT(); };
+            m_typeId = getTypeId<DataT>();
 
             return strongHandle;
         } catch(...) {
@@ -50,7 +54,12 @@ class Chank {
 
     bool empty() const noexcept { return m_strongHandle == nullptr; }
 
+    TypeId typeId() const noexcept { return m_typeId; }
+
     [[nodiscard]] bool constructed() const noexcept;
+
+    void registerHandle(AnyHandle* handle) noexcept;
+    void unregisterHandle(void* handle) noexcept;
 
     template <typename DataT>
     DataT* data() noexcept {
@@ -63,4 +72,6 @@ class Chank {
     AnyStrongHandle* m_strongHandle = nullptr;
     std::function<void(void*)> m_dataDescructor;
     ObjectPool* m_objectPool = nullptr;
+    std::list<AnyHandle*> m_handles;
+    TypeId m_typeId;
 };

@@ -51,6 +51,7 @@ std::string sstr(Args &&... args) noexcept
 }
 
 using TypeId = intptr_t;
+constexpr TypeId UnknownType = 0;
 
 template <typename TypeT>
 TypeId getTypeId() noexcept {

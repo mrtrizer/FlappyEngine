@@ -17,6 +17,8 @@ Chank::~Chank() {
         m_dataDescructor(m_data);
         m_objectPool->onDestroyed(this);
     }
+    for (auto handle : m_handles)
+        handle->invalidate();
 }
 
 /// Method destroys underlaying instance if it is was initialized.
@@ -31,10 +33,29 @@ void Chank::clear() noexcept {
     m_strongHandle = nullptr;
     m_dataDescructor = nullptr;
 
+    for (auto handle : m_handles)
+        handle->invalidate();
+    m_handles.clear();
+
     // onDestroyed() should be called in the end
     m_objectPool->onDestroyed(this);
 }
 
 bool Chank::constructed() const noexcept {
     return m_dataDescructor != nullptr;
+}
+
+void Chank::registerHandle(AnyHandle* handle) noexcept {
+    DEBUG_ASSERT(handle != nullptr);
+
+   m_handles.emplace_back(handle);
+}
+
+void Chank::unregisterHandle(void* handle) noexcept {
+    DEBUG_ASSERT(handle != nullptr);
+    DEBUG_ASSERT(!m_handles.empty());
+
+    m_handles.remove_if([handle](const auto& item) {
+        return item == handle;
+    });
 }

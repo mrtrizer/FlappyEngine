@@ -75,8 +75,8 @@ public:
     }
 
     DataT* operator->() const {
-        if (strongHandle() == nullptr)
+        if (chank() == nullptr)
             throw FlappyException("Invalid handle");
-        return static_cast<const StrongHandle<DataT>*>(strongHandle())->operator->();
+        return chank()->template data<DataT>();
     }
 };
