@@ -44,5 +44,5 @@ void AnyHandle::setNewChank(Chank* chank) noexcept {
 void AnyHandle::invalidate() noexcept {
     DEBUG_ASSERT(m_chank != nullptr);
 
-    m_chank = nullptr;
+    setNewChank(nullptr);
 }

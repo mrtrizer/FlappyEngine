@@ -16,6 +16,8 @@ ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
 }
 
 ObjectPool::~ObjectPool() {
+    if (m_chanks == nullptr)
+        return;
     // To be sure that m_chanks cleared before m_bytes destroyed
     for (size_t i = 0; i < m_capacity; ++i) {
         m_chanks[i].clear();

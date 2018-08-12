@@ -40,14 +40,12 @@ public:
     AnyHandle(Handle<DerivedT>&& handle) noexcept
         : AnyHandle(handle) // explicit call copy constructor
     {
-        handle.m_chank->unregisterHandle(&handle);
         handle.invalidate();
     }
 
     template <typename DerivedT>
     AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
         operator=(handle); // explicit call assignment operator
-        handle.m_chank->unregisterHandle(&handle);
         handle.invalidate();
         return *this;
     }

@@ -23,7 +23,7 @@ public:
     ObjectPool(const ObjectPool&) = delete;
     ObjectPool& operator= (const ObjectPool&) = delete;
     ObjectPool(ObjectPool&&) = delete;
-    ObjectPool& operator= (ObjectPool&&) = default;
+    ObjectPool& operator= (ObjectPool&&) = delete;
     ~ObjectPool();
 
     template <typename DataT, typename...Args>
