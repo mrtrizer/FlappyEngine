@@ -105,15 +105,18 @@ public:
     virtual void SetUp()
     {
         for (size_t i = 0; i < N; ++i) {
-            tests.emplace_back(pool.create<Test2>(i, "Test!"));
+            auto strongHandle = pool.create<Test2>(i, "Test!");
+            testsWeak.emplace_back(strongHandle.handle());
+            tests.emplace_back(std::move(strongHandle));
             tests1.emplace_back(pool1.create<Test2>(i, "Test!"));
             tests2.emplace_back(pool2.create<Test2>(i, "Test!"));
             tests3.emplace_back(pool3.create<Test2>(i, "Test!"));
         }
     }
 
-    ObjectPool pool {sizeof(Test2), N};
+    ObjectPool pool {sizeof(Test2) + 10, N};
     std::vector<StrongHandle<ITest>> tests;
+    std::vector<Handle<ITest>> testsWeak;
     ObjectPool pool1 {sizeof(Test2), N};
     std::vector<StrongHandle<ITest>> tests1;
     ObjectPool pool2 {sizeof(Test2), N};
@@ -126,6 +129,13 @@ BENCHMARK_F(ObjectPoolPrepareFixture, Iterations_ObjectPool, 10, 10)
 {
     for (int i = 0; i < 100; ++i)
         for (const auto& iter : tests)
+            iter->update();
+}
+
+BENCHMARK_F(ObjectPoolPrepareFixture, Iterations_ObjectPool_WeakHandle, 10, 10)
+{
+    for (int i = 0; i < 100; ++i)
+        for (const auto& iter : testsWeak)
             iter->update();
 }
 

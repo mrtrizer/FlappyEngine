@@ -8,10 +8,11 @@ ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
     USER_ASSERT(capacity > 0);
     USER_ASSERT(maxObjectSize >= sizeof(int));
 
+    // TODO: Rework with using std::allocator or std::vector or at least operator new
     m_bytes = (std::byte*)malloc(capacity * maxObjectSize);
     m_chanks = (Chank*)malloc(sizeof(Chank) * capacity);
     for (size_t i = 0; i < capacity; ++i)
-        new (m_chanks + i) Chank(&m_bytes[maxObjectSize * i], maxObjectSize);
+        new (m_chanks + i) Chank(this, &m_bytes[maxObjectSize * i], maxObjectSize);
 }
 
 ObjectPool::~ObjectPool() {

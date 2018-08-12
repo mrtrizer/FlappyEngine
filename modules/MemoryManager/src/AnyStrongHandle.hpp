@@ -13,6 +13,7 @@ class StrongHandle;
 class AnyStrongHandle {
     FORDEBUG(friend class ObjectPoolDebugger); // for access debug information
     friend class AnyHandle; // to register/unregister handles
+    friend class Chank; // for access to updatePointer()
 public:
     AnyStrongHandle& operator=(std::nullptr_t) noexcept;
 

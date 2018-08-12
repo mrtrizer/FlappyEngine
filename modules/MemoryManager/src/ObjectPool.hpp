@@ -9,9 +9,10 @@ template <typename ObjectT>
 class EnableSelfHandle {
     friend class ObjectPool; // to assign self handle
 protected:
-    Handle<ObjectT> selfHandle() { return m_selfHandle; }
+    Handle<ObjectT> selfHandle() { return *static_cast<StrongHandle<ObjectT>*>(m_selfChankPtr->m_strongHandle); }
 private:
-    Handle<ObjectT> m_selfHandle;
+    // Pointer to chank allows me access an actual pointer to a StrongHandle
+    Chank* m_selfChankPtr;
 };
 
 class ObjectPool {
@@ -36,9 +37,9 @@ public:
         if (emptyChank == nullptr)
             throw FlappyException("No empty memory chanks left. Review parameters of the object pool!");
         try {
-            auto strongHandle = emptyChank->construct<DataT>(this, std::forward<Args>(args)...);
+            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
             if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
-                strongHandle->m_selfHandle = strongHandle;
+                strongHandle->m_selfChankPtr = emptyChank;
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;
             return strongHandle;
