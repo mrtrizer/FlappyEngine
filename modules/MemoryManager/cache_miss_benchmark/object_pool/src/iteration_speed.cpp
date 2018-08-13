@@ -32,18 +32,16 @@ private:
     int m_array[10] = {0};
 };
 
-const size_t N = 10000;
+const size_t N = 100000;
 
 int main(int argc, char** argv)
 {
     ObjectPool pool(sizeof(Test2), N);
-    for (size_t i = 0; i < N; ++i) {
-        auto object = pool.create<Test2>(10, "Test!");
-        object->update();
-    }
-//    std::vector<StrongHandle<Test2>> tests;
-//    for (size_t i = 0; i < N; ++i)
-//        tests.emplace_back(pool.create<Test2>(i, "Test!"));
-//    for (const auto& iter : tests)
-//        iter->update();
+    std::vector<StrongHandle<Test2>> tests;
+    for (size_t i = 0; i < N; ++i)
+        tests.emplace_back(pool.create<Test2>(i, "Test!"));
+    for (size_t i = 0; i < 100; ++i)
+        for (const auto& iter : tests)
+            iter->update();
+    return 0;
 }

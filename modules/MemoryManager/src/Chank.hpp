@@ -10,6 +10,8 @@ class ObjectPool;
 /// The class holds object of any type within size limit
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
+    template <typename T>
+    friend class std::allocator; // to construct
     friend class ObjectPool; // to create instance and call methods
     friend class AnyStrongHandle; // to update strong handle
     friend class AnyHandle; // to register/unregister handles

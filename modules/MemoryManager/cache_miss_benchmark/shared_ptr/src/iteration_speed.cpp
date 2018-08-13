@@ -32,13 +32,14 @@ private:
     int m_array[10] = {0};
 };
 
-const size_t N = 10000;
+const size_t N = 100000;
 
 int main(int argc, char** argv)
 {
     std::vector<std::shared_ptr<Test2>> tests;
     for (size_t i = 0; i < N; ++i)
         tests.emplace_back(std::make_shared<Test2>(i, "Test!"));
-    for (const auto& iter : tests)
-        iter->update();
+    for (size_t i = 0; i < 100; ++i)
+        for (const auto& iter : tests)
+            iter->update();
 }
