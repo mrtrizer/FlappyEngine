@@ -129,7 +129,13 @@ private:
 };
 
 template <>
-AnyArg::AnyArg (Value& value)
+AnyArg::AnyArg (const Value& value)
+    : m_valuePtr(value.valuePtr())
+    , m_typeId(value.typeId())
+{}
+
+template <>
+AnyArg::AnyArg (Value&& value)
     : m_valuePtr(value.valuePtr())
     , m_typeId(value.typeId())
 {}
@@ -217,6 +223,13 @@ void Reflection::addType(const std::shared_ptr<Type>& type) {
     m_types.emplace(type->typeId(), type);
 }
 
+template <typename ResultT, typename ... ArgT>
+Function constructor(const std::shared_ptr<Reflection>& reflection) {
+    auto lambda = [](ArgT...args) { return ResultT(args...); };
+    typedef ResultT (*Func) (ArgT...);
+    return Function(reflection, static_cast<Func>(lambda) );
+}
+
 // Test functions
 
 int somePrettyFunction(int a, int b, int& result) {
@@ -229,17 +242,20 @@ void test(std::string str) {
     std::cout << str << std::endl;
 }
 
-std::string strConstructor(const char* cstr) {
-    return std::string(cstr);
-}
-
 TEST_CASE("General") {
     auto reflection = std::make_shared<Reflection>();
-    reflection->addType(std::make_shared<Type>(getTypeId<std::string>(), std::vector<Function>{Function(reflection, strConstructor)}));
+    auto lambda = [](const char* cstr) { return std::string(cstr); };
+    typedef std::string (*Func) (const char*);
+    reflection->addType(std::make_shared<Type>(getTypeId<std::string>(), std::vector<Function>{
+                                                   constructor<std::string, const char*>(reflection),
+                                                   constructor<std::string, std::string>(reflection),
+                                                   constructor<std::string, size_t, char>(reflection)
+                                               }));
     auto wrappedFunc1 = Function(reflection, &somePrettyFunction);
     int result = 0;
     std::cout << wrappedFunc1(10, 20, result).as<int>() << std::endl;
     std::cout << result << std::endl;
     auto wrappedFunc2 = Function(reflection, &test);
     wrappedFunc2("Hello, World!");
+    wrappedFunc2(reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a'));
 }
