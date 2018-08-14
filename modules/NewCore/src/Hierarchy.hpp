@@ -1,31 +1,43 @@
 #pragma once
 
-#include "Entity.hpp"
+#include <array>
+
 #include "IManager.hpp"
 #include "ObjectPool.hpp"
 
+class Entity;
+
 class Hierarchy : public EnableSelfHandle<Hierarchy> {
 public:
-    Hierarchy() {
-        m_rootEntity = m_entityPool.create<Entity>();
-    }
+    Hierarchy()
+        : m_rootEntity(m_entityPool.create<Entity>())
+    {}
 
     void update(float dt) {
-        for (auto service : m_services) {
-             service->update(dt);
-        }
+        for (const auto& manager : m_managers)
+            manager->update(dt);
         updateEntity(m_rootEntity, dt);
     }
 
     template <typename ManagerT, typename DerivedServiceT = ManagerT>
     Handle<ManagerT> initManager() {
-        auto iter = m_services.find_if([](const auto& handle) {
-           handle.id() == getTypeId<ManagerT>();
+        auto iter = std::find_if(m_managers.begin(), m_managers.end(), [](const auto& handle) {
+            handle.id() == getTypeId<ManagerT>();
         });
-        if (iter != m_services.end())
+        if (iter != m_managers.end())
             *iter = create<DerivedServiceT>(selfHandle());
         else
-            m_services.emplace_back(m_managerPool);
+            m_managers.emplace_back(create<DerivedServiceT>(selfHandle()));
+    }
+
+    template <typename DataT, typename...Args>
+    [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
+        size_t size = sizeof(DataT);
+        for (const auto& objectPool : m_objectPools) {
+            if (objectPool.maxObjectSize() >= size)
+                return objectPool.create<DataT>(std::forward<Args>(args)...);
+        }
+        throw std::runtime_error(sstr("Can't find appropriate object pool for object of size ", size));
     }
 
 private:
@@ -34,22 +46,5 @@ private:
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };
 
-    template <typename DataT, typename...Args>
-    [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
-        size_t size = sizeof(DataT);
-        for (auto objectPool : m_objectPools) {
-            if (objectPool.maxObjectSize() >= size)
-                return objectPool.create<DataT>(std::forward<Args>(args)...);
-        }
-        throw std::runtime_error(sstr("Can't find appropriate object pool for object of size ", size));
-    }
-
-    void updateEntity(Handle<Entity> entity, float dt) {
-        for (auto updateFunction : entity->updateFunctions()) {
-            updateFunction(dt);
-        }
-        for (auto subEntity : entity->children()) {
-            updateEntity(subEntity, dt);
-        }
-    }
-}
+    void updateEntity(const StrongHandle<Entity> &entity, float dt);
+};

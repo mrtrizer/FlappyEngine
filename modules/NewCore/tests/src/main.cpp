@@ -5,18 +5,19 @@
 
 #include <Hierarchy.hpp>
 #include <Heap.hpp>
+#include <Component.hpp>
 
 using namespace fakeit;
 using namespace std;
 
-class OtherTestComponet {
+class OtherTestComponent {
 public:
     void move(float dt) {
 
     }
 };
 
-class TestComponent : public PutAfter<OtherTestComponet> {
+class TestComponent : public PutAfter<OtherTestComponent> {
 public:
     TestComponent(Handle<Entity> entity)
         : m_entity(entity)
@@ -36,11 +37,12 @@ private:
     Handle<Entity> m_entity;
 };
 
-HierarchyTemplate createButton() {
-    // ...
-}
+//EntityBlueprint createButton() {
+//    // ...
+//}
 
-int main(char** argv, int argc) {
+
+TEST_CASE( "Hierarchy") {
     auto hierarchy = Heap::create<Hierarchy>();
     auto testManager = hierarchy->initManager<ITestManager, TestManager>();
     testManager->setSomething(100);
@@ -50,12 +52,7 @@ int main(char** argv, int argc) {
 
     auto entity1 = hierarchy->rootEntity()->createEntity();
     entity1->component<TestComponent>()->setSomething(100);
-    entity1->insertSubtree(createButton());
+    //entity1->insertSubtree(createButton());
 
     hierarchy->update(1.0f);
-}
-
-TEST_CASE( "Hierarchy") {
-
-
 }
