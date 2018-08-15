@@ -61,7 +61,7 @@ private:
 
 class Type;
 
-class Reflection {
+class Reflection : public std::enable_shared_from_this<Reflection> {
 public:
     void addType(const std::shared_ptr<Type>& type);
 
@@ -71,6 +71,9 @@ public:
             return iter->second;
         throw std::runtime_error("Type is not registered. Requested: " + getTypeName(typeId));
     }
+
+    template <typename TypeT, typename ... ArgT>
+    void registerType(const ArgT&...);
 
 private:
     std::unordered_map<TypeId, std::shared_ptr<Type>> m_types;
@@ -223,12 +226,22 @@ void Reflection::addType(const std::shared_ptr<Type>& type) {
     m_types.emplace(type->typeId(), type);
 }
 
-template <typename ResultT, typename ... ArgT>
-Function constructor(const std::shared_ptr<Reflection>& reflection) {
-    auto lambda = [](ArgT...args) { return ResultT(args...); };
-    typedef ResultT (*Func) (ArgT...);
-    return Function(reflection, static_cast<Func>(lambda) );
+template <typename TypeT, typename ... ArgT>
+void Reflection::registerType(const ArgT&...args) {
+    auto type = std::make_shared<Type>(getTypeId<TypeT>(), std::vector<Function>{ args.template generate<TypeT>(shared_from_this()) ... });
+    m_types.emplace(type->typeId(), type);
 }
+
+template <typename ... ArgT>
+class Constructor {
+    friend class Reflection;
+    template <typename ResultT>
+    Function generate(const std::shared_ptr<Reflection>& reflection) const {
+        auto lambda = [](ArgT...args) { return ResultT(args...); };
+        typedef ResultT (*Func) (ArgT...);
+        return Function(reflection, static_cast<Func>(lambda) );
+    }
+};
 
 // Test functions
 
@@ -242,15 +255,15 @@ void test(std::string str) {
     std::cout << str << std::endl;
 }
 
-TEST_CASE("General") {
+void test() {
     auto reflection = std::make_shared<Reflection>();
     auto lambda = [](const char* cstr) { return std::string(cstr); };
     typedef std::string (*Func) (const char*);
-    reflection->addType(std::make_shared<Type>(getTypeId<std::string>(), std::vector<Function>{
-                                                   constructor<std::string, const char*>(reflection),
-                                                   constructor<std::string, std::string>(reflection),
-                                                   constructor<std::string, size_t, char>(reflection)
-                                               }));
+    reflection->registerType<std::string>(
+                            Constructor<const char*>(),
+                            Constructor<std::string>(),
+                            Constructor<size_t, char>());
+
     auto wrappedFunc1 = Function(reflection, &somePrettyFunction);
     int result = 0;
     std::cout << wrappedFunc1(10, 20, result).as<int>() << std::endl;
@@ -258,4 +271,8 @@ TEST_CASE("General") {
     auto wrappedFunc2 = Function(reflection, &test);
     wrappedFunc2("Hello, World!");
     wrappedFunc2(reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a'));
+}
+
+TEST_CASE("General") {
+    test();
 }
