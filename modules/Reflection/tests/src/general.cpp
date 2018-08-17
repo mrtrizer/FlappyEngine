@@ -184,9 +184,7 @@ private:
     }
 
     template <typename...>
-    bool fitArgsInternal(size_t) const {
-        return true;
-    }
+    bool fitArgsInternal(size_t) const { return true; }
 
     template <typename FrontArgT, typename ... ArgT>
     bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
@@ -195,6 +193,86 @@ private:
         else
             return getTypeId<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
     }
+};
+
+template <typename ... ArgT>
+class ConstructorRef {
+public:
+    template <typename ResultT>
+    Function generate(const std::shared_ptr<Reflection>& reflection) const {
+        auto lambda = [](ArgT...args) { return ResultT(args...); };
+        typedef ResultT (*Func) (ArgT...);
+        return Function(reflection, static_cast<Func>(lambda) );
+    }
+};
+
+
+class Method {
+public:
+    template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
+    Method(const std::shared_ptr<Reflection>& reflection, ResultT (TypeT::*func) (ArgT ...))
+        : m_function([func, reflection] (const AnyArg& object, const std::vector<AnyArg>& anyArgs) -> Value {
+            using ArgsTuple = std::tuple<ArgT...>;
+            if constexpr (std::is_same<ResultT, void>::value)
+                return call<TypeT, ArgsTuple>(*reflection, func, object, anyArgs, Indices{}), AnyArg();
+            else
+                return call<TypeT, ArgsTuple>(*reflection, func, object, anyArgs, Indices{});
+        })
+        , m_argumentTypeIds {getTypeId<ArgT>()...}
+        , m_resultTypeId (getTypeId<ResultT>())
+    {}
+
+    template <typename ... ArgT>
+    Value operator()(const AnyArg& object, ArgT&& ... anyArgs) const {
+        if (sizeof...(ArgT) != m_argumentTypeIds.size())
+            throw std::runtime_error("Wrong number of arguments. Expected: " + std::to_string(m_argumentTypeIds.size()) + " Received: " + std::to_string(sizeof...(ArgT)));
+        return m_function(object, std::vector<AnyArg>{AnyArg(std::forward<ArgT>(anyArgs)) ...});
+    }
+
+    template <typename ... ArgT>
+    bool fitArgs(const ArgT& ... args) const {
+        return sizeof...(ArgT) == m_argumentTypeIds.size() && fitArgsInternal<ArgT...>(0, args ...);
+    }
+
+    const std::vector<TypeId>& argumentTypeIds() const { return m_argumentTypeIds; }
+    TypeId resultTypeId() const { return m_resultTypeId; }
+
+private:
+    std::function<Value(const AnyArg& object, const std::vector<AnyArg>& anyArgs)> m_function;
+    std::vector<TypeId> m_argumentTypeIds;
+    TypeId m_resultTypeId;
+
+    template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
+    static auto call(const Reflection& reflection, FuncT&& func, const AnyArg& object, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
+        return (object.as<TypeT>(reflection).*func)(args[I].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
+    }
+
+    template <typename...>
+    bool fitArgsInternal(size_t) const { return true; }
+
+    template <typename FrontArgT, typename ... ArgT>
+    bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
+        if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
+            return frontArg.typeId() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
+        else
+            return getTypeId<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
+    }
+};
+
+template <typename TypeT, typename ResultT, typename ... ArgT>
+class MethodRef {
+public:
+    explicit MethodRef(ResultT (TypeT::*method) (ArgT ...))
+        :m_method(method)
+    {}
+
+    Method generate(const std::shared_ptr<Reflection>& reflection) const {
+        typedef ResultT (*Func) (ArgT...);
+        return Method(reflection, m_method);
+    }
+
+private:
+    ResultT (TypeT::*m_method) (ArgT ...);
 };
 
 class Type {
@@ -217,31 +295,37 @@ public:
     }
 
     TypeId typeId() const { return m_typeId; }
+
+    template <typename ReturnT, typename ... ArgT>
+    void registerMember(const ConstructorRef<ArgT...>& constructorRef, const std::shared_ptr<Reflection>& reflection) {
+        m_constructors.emplace_back(constructorRef.template generate<ReturnT>(reflection));
+    }
+
+    template <typename ReturnT, typename ... ArgT>
+    void registerMember(const MethodRef<ArgT...>& methodRef, const std::shared_ptr<Reflection>& reflection) {
+        m_methods.emplace_back(methodRef.generate(reflection));
+    }
 private:
     TypeId m_typeId;
     std::vector<Function> m_constructors;
+    std::vector<Method> m_methods;
 };
 
 void Reflection::addType(const std::shared_ptr<Type>& type) {
     m_types.emplace(type->typeId(), type);
 }
 
-template <typename TypeT, typename ... ArgT>
-void Reflection::registerType(const ArgT&...args) {
-    auto type = std::make_shared<Type>(getTypeId<TypeT>(), std::vector<Function>{ args.template generate<TypeT>(shared_from_this()) ... });
-    m_types.emplace(type->typeId(), type);
+template <typename ... ArgT>
+void f(ArgT...) {
+
 }
 
-template <typename ... ArgT>
-class Constructor {
-    friend class Reflection;
-    template <typename ResultT>
-    Function generate(const std::shared_ptr<Reflection>& reflection) const {
-        auto lambda = [](ArgT...args) { return ResultT(args...); };
-        typedef ResultT (*Func) (ArgT...);
-        return Function(reflection, static_cast<Func>(lambda) );
-    }
-};
+template <typename TypeT, typename ... ArgT>
+void Reflection::registerType(const ArgT&...args) {
+    auto type = std::make_shared<Type>(getTypeId<TypeT>(), std::vector<Function>{ });
+    f((type->template registerMember<TypeT>(args, shared_from_this()), 0)...);
+    m_types.emplace(type->typeId(), type);
+}
 
 // Test functions
 
@@ -251,24 +335,26 @@ int somePrettyFunction(int a, int b, int& result) {
     return a + b;
 }
 
-void test(std::string str) {
+void testFunc(std::string str) {
     std::cout << str << std::endl;
 }
 
 void test() {
     auto reflection = std::make_shared<Reflection>();
     auto lambda = [](const char* cstr) { return std::string(cstr); };
-    typedef std::string (*Func) (const char*);
+    typedef std::string::size_type (std::string::*Func) ();
     reflection->registerType<std::string>(
-                            Constructor<const char*>(),
-                            Constructor<std::string>(),
-                            Constructor<size_t, char>());
-
+                            ConstructorRef<const char*>(),
+                            ConstructorRef<std::string>(),
+                            ConstructorRef<size_t, char>(),
+                            MethodRef<std::string, std::string::size_type>((Func)&std::string::capacity)
+                );
     auto wrappedFunc1 = Function(reflection, &somePrettyFunction);
     int result = 0;
     std::cout << wrappedFunc1(10, 20, result).as<int>() << std::endl;
-    std::cout << result << std::endl;
-    auto wrappedFunc2 = Function(reflection, &test);
+    std::string str;
+    std::cout << result << str.capacity() << std::endl;
+    auto wrappedFunc2 = Function(reflection, &testFunc);
     wrappedFunc2("Hello, World!");
     wrappedFunc2(reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a'));
 }
