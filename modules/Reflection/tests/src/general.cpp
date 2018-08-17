@@ -63,20 +63,18 @@ class Type;
 
 class Reflection : public std::enable_shared_from_this<Reflection> {
 public:
-    void addType(const std::shared_ptr<Type>& type);
-
     const std::shared_ptr<Type>& getType(TypeId typeId) const {
-        auto iter = m_types.find(typeId);
-        if (iter != m_types.end())
+        auto iter = m_typesMap.find(typeId);
+        if (iter != m_typesMap.end())
             return iter->second;
         throw std::runtime_error("Type is not registered. Requested: " + getTypeName(typeId));
     }
 
     template <typename TypeT, typename ... ArgT>
-    void registerType(const ArgT&...);
+    std::shared_ptr<Type> registerType(const ArgT&...);
 
 private:
-    std::unordered_map<TypeId, std::shared_ptr<Type>> m_types;
+    std::unordered_map<TypeId, std::shared_ptr<Type>> m_typesMap;
 };
 
 class AnyArg {
@@ -244,7 +242,7 @@ private:
 
     template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
     static auto call(const Reflection& reflection, FuncT&& func, const AnyArg& object, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
-        return (object.as<TypeT>(reflection).*func)(args[I].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
+        return (object.as<TypeT&>(reflection).*func)(args[I].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
     }
 
     template <typename...>
@@ -262,8 +260,9 @@ private:
 template <typename TypeT, typename ResultT, typename ... ArgT>
 class MethodRef {
 public:
-    explicit MethodRef(ResultT (TypeT::*method) (ArgT ...))
-        :m_method(method)
+    explicit MethodRef(std::string name, ResultT (TypeT::*method) (ArgT ...))
+        : m_name(name)
+        , m_method(method)
     {}
 
     Method generate(const std::shared_ptr<Reflection>& reflection) const {
@@ -271,20 +270,24 @@ public:
         return Method(reflection, m_method);
     }
 
+    const std::string& name() const { return m_name; }
+
 private:
     ResultT (TypeT::*m_method) (ArgT ...);
+    std::string m_name;
 };
 
 class Type {
 public:
-    Type(TypeId typeId, std::vector<Function> constructors)
+    Type(TypeId typeId)
         : m_typeId(typeId)
-        , m_constructors(constructors)
     {}
 
-    const std::vector<Function>& constructors() const {
-        return m_constructors;
-    }
+    const std::vector<Function>& constructors() const { return m_constructors; }
+
+    const std::unordered_map<std::string, Method>& methodsMap() const { return m_methodsMap; }
+
+    const Method& method(std::string name) const { return m_methodsMap.at(name); }
 
     template <typename ... ArgT>
     Value construct(ArgT&& ... anyArgs) const {
@@ -303,28 +306,20 @@ public:
 
     template <typename ReturnT, typename ... ArgT>
     void registerMember(const MethodRef<ArgT...>& methodRef, const std::shared_ptr<Reflection>& reflection) {
-        m_methods.emplace_back(methodRef.generate(reflection));
+        m_methodsMap.emplace(methodRef.name(), methodRef.generate(reflection));
     }
 private:
     TypeId m_typeId;
     std::vector<Function> m_constructors;
-    std::vector<Method> m_methods;
+    std::unordered_map<std::string, Method> m_methodsMap;
 };
 
-void Reflection::addType(const std::shared_ptr<Type>& type) {
-    m_types.emplace(type->typeId(), type);
-}
-
-template <typename ... ArgT>
-void f(ArgT...) {
-
-}
-
 template <typename TypeT, typename ... ArgT>
-void Reflection::registerType(const ArgT&...args) {
-    auto type = std::make_shared<Type>(getTypeId<TypeT>(), std::vector<Function>{ });
-    f((type->template registerMember<TypeT>(args, shared_from_this()), 0)...);
-    m_types.emplace(type->typeId(), type);
+std::shared_ptr<Type> Reflection::registerType(const ArgT&...args) {
+    auto type = std::make_shared<Type>(getTypeId<TypeT>());
+    (type->template registerMember<TypeT>(args, shared_from_this()), ...);
+    m_typesMap.emplace(type->typeId(), type);
+    return type;
 }
 
 // Test functions
@@ -339,21 +334,38 @@ void testFunc(std::string str) {
     std::cout << str << std::endl;
 }
 
+struct TestClass {
+    TestClass(int c)
+        : m_c(c)
+    {}
+    int testMethod(int a, int b) {
+        return a * b * m_c;
+    }
+
+    int m_c = 0;
+};
+
 void test() {
     auto reflection = std::make_shared<Reflection>();
-    auto lambda = [](const char* cstr) { return std::string(cstr); };
-    typedef std::string::size_type (std::string::*Func) ();
-    reflection->registerType<std::string>(
+    //typedef std::string::size_type (std::string::*Func) ();
+    auto stringType = reflection->registerType<std::string>(
                             ConstructorRef<const char*>(),
                             ConstructorRef<std::string>(),
-                            ConstructorRef<size_t, char>(),
-                            MethodRef<std::string, std::string::size_type>((Func)&std::string::capacity)
+                            ConstructorRef<size_t, char>()
+                            //MethodRef<std::string, std::string::size_type>((Func)&std::string::capacity)
                 );
+
+    auto type = reflection->registerType<TestClass>(
+                            MethodRef("testMethod", &TestClass::testMethod)
+                );
+
+    TestClass testClass(30);
     auto wrappedFunc1 = Function(reflection, &somePrettyFunction);
     int result = 0;
     std::cout << wrappedFunc1(10, 20, result).as<int>() << std::endl;
-    std::string str;
-    std::cout << result << str.capacity() << std::endl;
+    std::cout << result << std::endl;
+    std::cout << type->method("testMethod")(testClass, 10, 20).as<int>() << std::endl;
+
     auto wrappedFunc2 = Function(reflection, &testFunc);
     wrappedFunc2("Hello, World!");
     wrappedFunc2(reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a'));
