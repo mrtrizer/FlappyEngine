@@ -37,6 +37,7 @@ std::string sstr(Args &&... args) noexcept
     return sstr.str();
 }
 
+// FIXME: Value should be deeply copied
 class Value {
 public:
     Value() = default;
@@ -91,10 +92,16 @@ public:
     AnyArg(const AnyArg&) = default;
     AnyArg(AnyArg&&) = default;
 
-    template <typename T, typename = std::enable_if_t<!std::is_pointer_v<T>> >
-    AnyArg(T&& value)
+    template <typename T >
+    AnyArg(T&& value, std::enable_if_t<!std::is_pointer_v<T> && !std::is_convertible_v<T, Value>>* = 0)
         : m_valuePtr(&value)
         , m_typeId(getTypeId<std::decay_t<T>>())
+    {}
+
+    template <typename T >
+    AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, Value>>* = 0)
+        : m_valuePtr(value.valuePtr())
+        , m_typeId(value.typeId())
     {}
 
     template <typename T>
@@ -136,24 +143,6 @@ private:
     TypeId m_typeId;
     mutable Value m_constructedValue;
 };
-
-template <>
-AnyArg::AnyArg (Value& value)
-    : m_valuePtr(value.valuePtr())
-    , m_typeId(value.typeId())
-{}
-
-template <>
-AnyArg::AnyArg (const Value& value)
-    : m_valuePtr(value.valuePtr())
-    , m_typeId(value.typeId())
-{}
-
-template <>
-AnyArg::AnyArg (Value&& value)
-    : m_valuePtr(value.valuePtr())
-    , m_typeId(value.typeId())
-{}
 
 class Function {
 public:
