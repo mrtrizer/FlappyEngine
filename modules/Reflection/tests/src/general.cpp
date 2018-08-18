@@ -48,7 +48,7 @@ public:
     template <typename T, typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
     Value(T&& value)
         : m_value(std::make_shared<std::decay_t<T>>(std::forward<T>(value)))
-        , m_typeId(getTypeId<T>())
+        , m_typeId(getTypeId<std::decay_t<T>>())
     {}
 
     TypeId typeId() const { return m_typeId; }
@@ -56,9 +56,9 @@ public:
     void* valuePtr() const { return m_value.get(); }
 
     template <typename T>
-    T& as() const {
-        if (getTypeId<T>() != m_typeId)
-            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeId<T>(), " Passed: ", m_typeId));
+    std::decay_t<T>& as() const {
+        if (getTypeId<std::decay_t<T>>() != m_typeId)
+            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<std::decay_t<T>>()), " Passed: ", getTypeName(m_typeId)));
         return *static_cast<std::decay_t<T>*>(m_value.get());
     }
 
@@ -94,13 +94,13 @@ public:
     template <typename T, typename = std::enable_if_t<!std::is_pointer_v<T>> >
     AnyArg(T&& value)
         : m_valuePtr(&value)
-        , m_typeId(getTypeId<T>())
+        , m_typeId(getTypeId<std::decay_t<T>>())
     {}
 
     template <typename T>
     AnyArg(T* value)
-        : m_valuePtr(const_cast<std::decay_t<T>*>(value))
-        , m_typeId(getTypeId<T*>())
+        : m_valuePtr(const_cast<std::remove_const_t<T>*>(value))
+        , m_typeId(getTypeId<std::remove_pointer_t<T>*>())
     {}
 
     AnyArg(void* valuePtr, TypeId typeId)
@@ -109,13 +109,13 @@ public:
     {}
 
     template <typename T, typename = std::enable_if_t<!std::is_pointer_v<T>> >
-    T& as(const Reflection& reflection) const {
-        if (getTypeId<T>() != m_typeId) {
+    std::decay_t<T>& as(const Reflection& reflection) const {
+        if (getTypeId<std::decay_t<T>>() != m_typeId) {
             try {
-                m_constructedValue = reflection.getType(getTypeId<T>())->construct(*this);
-                return m_constructedValue.as<T>();
+                m_constructedValue = reflection.getType(getTypeId<std::decay_t<T>>())->construct(*this);
+                return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_typeId)));
+                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<std::decay_t<T>>())," from type " + getTypeName(m_typeId)));
             }
         }
         return *static_cast<std::decay_t<T>*>(m_valuePtr);
@@ -136,6 +136,12 @@ private:
     TypeId m_typeId;
     mutable Value m_constructedValue;
 };
+
+template <>
+AnyArg::AnyArg (Value& value)
+    : m_valuePtr(value.valuePtr())
+    , m_typeId(value.typeId())
+{}
 
 template <>
 AnyArg::AnyArg (const Value& value)
@@ -240,6 +246,7 @@ class MethodRef {
 public:
     using FunctionPointer =  ResultT (TypeT::*) (ArgT ...);
     using ConstFunctionPointer =  ResultT (TypeT::*) (ArgT ...) const;
+    using Lambda = ResultT (*) (TypeT&, ArgT ...);
 
     explicit MethodRef(std::string name, FunctionPointer method)
         : m_name(name)
@@ -251,12 +258,20 @@ public:
         , m_method(reinterpret_cast<FunctionPointer>(method))
     {}
 
-    Function generate(const std::shared_ptr<Reflection>& reflection) const { return Function(reflection, m_method); }
+    explicit MethodRef(std::string name, Lambda method)
+        : m_name(name)
+        , m_wrappedMethod(method)
+    {}
+
+    Function generate(const std::shared_ptr<Reflection>& reflection) const {
+        return m_wrappedMethod ? Function(reflection, m_wrappedMethod) : Function(reflection, m_method);
+    }
 
     const std::string& name() const { return m_name; }
 
 private:
     FunctionPointer m_method;
+    Lambda m_wrappedMethod;
     std::string m_name;
 };
 
@@ -337,8 +352,8 @@ void test() {
     auto stringType = reflection->registerType<std::string>(
                             ConstructorRef<const char*>(),
                             ConstructorRef<std::string>(),
-                            ConstructorRef<size_t, char>()//,
-                            //MethodRef("capacity", &std::string::capacity)
+                            ConstructorRef<size_t, char>(),
+                            MethodRef<std::string, unsigned long>("capacity", [](std::string& obj){ return obj.capacity(); } )
                 );
 
     auto type = reflection->registerType<TestClass>(
@@ -355,7 +370,10 @@ void test() {
 
     auto wrappedFunc2 = Function(reflection, &testFunc);
     wrappedFunc2("Hello, World!");
-    wrappedFunc2(reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a'));
+    auto str = reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a');
+    auto& strRef = str;
+    wrappedFunc2(str);
+    std::cout << reflection->getType(getTypeId<std::string>())->method("capacity")(strRef).as<unsigned long>() << std::endl;
 }
 
 TEST_CASE("General") {
