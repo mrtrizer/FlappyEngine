@@ -230,7 +230,7 @@ public:
     template <typename ResultT>
     Function generate(const std::shared_ptr<Reflection>& reflection) const {
         auto lambda = [](ArgT...args) { return ResultT(args...); };
-        typedef ResultT (*Func) (ArgT...);
+        using Func = ResultT (*) (ArgT...);
         return Function(reflection, static_cast<Func>(lambda) );
     }
 };
@@ -238,20 +238,25 @@ public:
 template <typename TypeT, typename ResultT, typename ... ArgT>
 class MethodRef {
 public:
-    explicit MethodRef(std::string name, ResultT (TypeT::*method) (ArgT ...))
+    using FunctionPointer =  ResultT (TypeT::*) (ArgT ...);
+    using ConstFunctionPointer =  ResultT (TypeT::*) (ArgT ...) const;
+
+    explicit MethodRef(std::string name, FunctionPointer method)
         : m_name(name)
         , m_method(method)
     {}
 
-    Function generate(const std::shared_ptr<Reflection>& reflection) const {
-        typedef ResultT (*Func) (ArgT...);
-        return Function(reflection, m_method);
-    }
+    explicit MethodRef(std::string name, ConstFunctionPointer method)
+        : m_name(name)
+        , m_method(reinterpret_cast<FunctionPointer>(method))
+    {}
+
+    Function generate(const std::shared_ptr<Reflection>& reflection) const { return Function(reflection, m_method); }
 
     const std::string& name() const { return m_name; }
 
 private:
-    ResultT (TypeT::*m_method) (ArgT ...);
+    FunctionPointer m_method;
     std::string m_name;
 };
 
@@ -316,6 +321,10 @@ struct TestClass {
     TestClass(int c)
         : m_c(c)
     {}
+    int testMethodConst(int a, int b) const {
+        return a * b * m_c;
+    }
+
     int testMethod(int a, int b) {
         return a * b * m_c;
     }
@@ -325,16 +334,16 @@ struct TestClass {
 
 void test() {
     auto reflection = std::make_shared<Reflection>();
-    //typedef std::string::size_type (std::string::*Func) ();
     auto stringType = reflection->registerType<std::string>(
                             ConstructorRef<const char*>(),
                             ConstructorRef<std::string>(),
-                            ConstructorRef<size_t, char>()
-                            //MethodRef<std::string, std::string::size_type>((Func)&std::string::capacity)
+                            ConstructorRef<size_t, char>()//,
+                            //MethodRef("capacity", &std::string::capacity)
                 );
 
     auto type = reflection->registerType<TestClass>(
-                            MethodRef("testMethod", &TestClass::testMethod)
+                            MethodRef("testMethod", &TestClass::testMethod),
+                            MethodRef("testMethodConst", &TestClass::testMethod)
                 );
 
     TestClass testClass(30);
