@@ -29,6 +29,14 @@ TypeId getTypeId() {
     return reinterpret_cast<std::intptr_t>(&getTypeId<T>);
 }
 
+template <typename... Args>
+std::string sstr(Args &&... args) noexcept
+{
+    std::ostringstream sstr;
+    (sstr << ... << args);
+    return sstr.str();
+}
+
 class Value {
 public:
     Value() = default;
@@ -50,7 +58,7 @@ public:
     template <typename T>
     T& as() const {
         if (getTypeId<T>() != m_typeId)
-            throw std::runtime_error("Value of wrong type! Expects: " + std::to_string(getTypeId<T>()) + " Passed: " + std::to_string(m_typeId));
+            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeId<T>(), " Passed: ", m_typeId));
         return *static_cast<std::decay_t<T>*>(m_value.get());
     }
 
@@ -67,7 +75,7 @@ public:
         auto iter = m_typesMap.find(typeId);
         if (iter != m_typesMap.end())
             return iter->second;
-        throw std::runtime_error("Type is not registered. Requested: " + getTypeName(typeId));
+        throw std::runtime_error(sstr("Type is not registered. Requested: ", getTypeName(typeId)));
     }
 
     template <typename TypeT, typename ... ArgT>
@@ -107,7 +115,7 @@ public:
                 m_constructedValue = reflection.getType(getTypeId<T>())->construct(*this);
                 return m_constructedValue.as<T>();
             } catch (const std::exception& e) {
-                throw std::runtime_error("No convertion to type " + getTypeName(getTypeId<T>()) + " from type " + getTypeName(m_typeId));
+                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_typeId)));
             }
         }
         return *static_cast<std::decay_t<T>*>(m_valuePtr);
@@ -116,7 +124,7 @@ public:
     template <typename T, typename = std::enable_if_t<std::is_pointer_v<T>>>
     T as(const Reflection& reflection) const {
         if (getTypeId<T>() != m_typeId) {
-            throw std::runtime_error("Wrong pointer type " + getTypeName(getTypeId<T>()) + " from type " + getTypeName(m_typeId));
+            throw std::runtime_error(sstr("Wrong pointer type ", getTypeName(getTypeId<T>()), " from type ", getTypeName(m_typeId)));
         }
         return static_cast<T>(m_valuePtr);
     }
@@ -143,6 +151,7 @@ AnyArg::AnyArg (Value&& value)
 
 class Function {
 public:
+    // Constructor for non-member functions
     template <typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
     Function(const std::shared_ptr<Reflection>& reflection, ResultT (* func) (ArgT ...))
         : m_function([func, reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
@@ -153,13 +162,29 @@ public:
                 return call<ArgsTuple>(*reflection, func, anyArgs, Indices{});
         })
         , m_argumentTypeIds {getTypeId<ArgT>()...}
+        , m_classTypeId (0)
+        , m_resultTypeId (getTypeId<ResultT>())
+    {}
+
+    // Constructor for member functions
+    template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
+    Function(const std::shared_ptr<Reflection>& reflection, ResultT (TypeT::*func) (ArgT ...))
+        : m_function([func, reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
+            using ArgsTuple = std::tuple<ArgT...>;
+            if constexpr (std::is_same<ResultT, void>::value)
+                return callMember<TypeT, ArgsTuple>(*reflection, func, anyArgs, Indices{}), AnyArg();
+            else
+                return callMember<TypeT, ArgsTuple>(*reflection, func, anyArgs, Indices{});
+        })
+        , m_argumentTypeIds {getTypeId<ArgT>()...}
+        , m_classTypeId (getTypeId<TypeT>())
         , m_resultTypeId (getTypeId<ResultT>())
     {}
 
     template <typename ... ArgT>
     Value operator()(ArgT&& ... anyArgs) const {
-        if (sizeof...(ArgT) != m_argumentTypeIds.size())
-            throw std::runtime_error("Wrong number of arguments. Expected: " + std::to_string(m_argumentTypeIds.size()) + " Received: " + std::to_string(sizeof...(ArgT)));
+        if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId == 0 ? 0 : 1))
+            throw std::runtime_error(sstr("Wrong number of arguments. Expected: ", m_argumentTypeIds.size(), " Received: ", sizeof...(ArgT)));
         return m_function(std::vector<AnyArg>{AnyArg(std::forward<ArgT>(anyArgs)) ...});
     }
 
@@ -174,11 +199,17 @@ public:
 private:
     std::function<Value(const std::vector<AnyArg>& anyArgs)> m_function;
     std::vector<TypeId> m_argumentTypeIds;
+    TypeId m_classTypeId = 0; // only for member functions
     TypeId m_resultTypeId;
 
     template<typename ArgsTupleT, typename FuncT,  std::size_t... I>
     static auto call(const Reflection& reflection, FuncT&& func, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
         return func(args[I].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
+    }
+
+    template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
+    static auto callMember(const Reflection& reflection, FuncT&& func, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
+        return (args.front().as<TypeT&>(reflection).*func)(args[I + 1].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
     }
 
     template <typename...>
@@ -204,59 +235,6 @@ public:
     }
 };
 
-
-class Method {
-public:
-    template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
-    Method(const std::shared_ptr<Reflection>& reflection, ResultT (TypeT::*func) (ArgT ...))
-        : m_function([func, reflection] (const AnyArg& object, const std::vector<AnyArg>& anyArgs) -> Value {
-            using ArgsTuple = std::tuple<ArgT...>;
-            if constexpr (std::is_same<ResultT, void>::value)
-                return call<TypeT, ArgsTuple>(*reflection, func, object, anyArgs, Indices{}), AnyArg();
-            else
-                return call<TypeT, ArgsTuple>(*reflection, func, object, anyArgs, Indices{});
-        })
-        , m_argumentTypeIds {getTypeId<ArgT>()...}
-        , m_resultTypeId (getTypeId<ResultT>())
-    {}
-
-    template <typename ... ArgT>
-    Value operator()(const AnyArg& object, ArgT&& ... anyArgs) const {
-        if (sizeof...(ArgT) != m_argumentTypeIds.size())
-            throw std::runtime_error("Wrong number of arguments. Expected: " + std::to_string(m_argumentTypeIds.size()) + " Received: " + std::to_string(sizeof...(ArgT)));
-        return m_function(object, std::vector<AnyArg>{AnyArg(std::forward<ArgT>(anyArgs)) ...});
-    }
-
-    template <typename ... ArgT>
-    bool fitArgs(const ArgT& ... args) const {
-        return sizeof...(ArgT) == m_argumentTypeIds.size() && fitArgsInternal<ArgT...>(0, args ...);
-    }
-
-    const std::vector<TypeId>& argumentTypeIds() const { return m_argumentTypeIds; }
-    TypeId resultTypeId() const { return m_resultTypeId; }
-
-private:
-    std::function<Value(const AnyArg& object, const std::vector<AnyArg>& anyArgs)> m_function;
-    std::vector<TypeId> m_argumentTypeIds;
-    TypeId m_resultTypeId;
-
-    template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
-    static auto call(const Reflection& reflection, FuncT&& func, const AnyArg& object, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
-        return (object.as<TypeT&>(reflection).*func)(args[I].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
-    }
-
-    template <typename...>
-    bool fitArgsInternal(size_t) const { return true; }
-
-    template <typename FrontArgT, typename ... ArgT>
-    bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
-        if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
-            return frontArg.typeId() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
-        else
-            return getTypeId<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
-    }
-};
-
 template <typename TypeT, typename ResultT, typename ... ArgT>
 class MethodRef {
 public:
@@ -265,9 +243,9 @@ public:
         , m_method(method)
     {}
 
-    Method generate(const std::shared_ptr<Reflection>& reflection) const {
+    Function generate(const std::shared_ptr<Reflection>& reflection) const {
         typedef ResultT (*Func) (ArgT...);
-        return Method(reflection, m_method);
+        return Function(reflection, m_method);
     }
 
     const std::string& name() const { return m_name; }
@@ -285,9 +263,9 @@ public:
 
     const std::vector<Function>& constructors() const { return m_constructors; }
 
-    const std::unordered_map<std::string, Method>& methodsMap() const { return m_methodsMap; }
+    const std::unordered_map<std::string, Function>& methodsMap() const { return m_methodsMap; }
 
-    const Method& method(std::string name) const { return m_methodsMap.at(name); }
+    const Function& method(std::string name) const { return m_methodsMap.at(name); }
 
     template <typename ... ArgT>
     Value construct(ArgT&& ... anyArgs) const {
@@ -311,7 +289,7 @@ public:
 private:
     TypeId m_typeId;
     std::vector<Function> m_constructors;
-    std::unordered_map<std::string, Method> m_methodsMap;
+    std::unordered_map<std::string, Function> m_methodsMap;
 };
 
 template <typename TypeT, typename ... ArgT>
