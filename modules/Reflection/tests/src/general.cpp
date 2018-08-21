@@ -6,27 +6,84 @@
 #include <tuple>
 #include <regex>
 #include <unordered_map>
+#include <bitset>
+#include <type_traits>
 
 #include <catch.h>
 
 // Implementation
 
-using TypeId = std::intptr_t;
+class TypeId {
+    friend class std::hash<TypeId>; // To calculate hash
+public:
+    TypeId() = default;
+    bool isPointer() const { return m_flags[PointerFlagIndex]; }
+    bool isConst() const { return m_flags[ConstFlagIndex]; }
+    bool canAssignTo(const TypeId& target) const {
+        return target.m_serial == m_serial
+            && target.isPointer() == target.isPointer()
+            && (target.isConst() || isConst() == target.isConst());
+    }
+    bool operator==(const TypeId& other) const {
+        return m_flags == other.m_flags
+                && m_serial == other.m_serial;
+    }
+    bool operator!=(const TypeId& other) const {
+        return !operator==(other);
+    }
 
-std::unordered_map<TypeId, std::string> typeNames;
+    bool isValid() const { return m_serial != 0; }
 
-std::string getTypeName(TypeId id) {
-    return typeNames[id];
+    TypeId(intptr_t serial, bool pointerFlag, bool constFlag)
+        : m_serial(serial)
+        , m_flags(pointerFlag << PointerFlagIndex | constFlag << ConstFlagIndex)
+    {}
+
+    TypeId(TypeId typeId, bool pointerFlag, bool constFlag)
+        : TypeId(typeId.m_serial, pointerFlag, constFlag)
+    {}
+
+private:
+    static constexpr size_t PointerFlagIndex = 0;
+    static constexpr size_t ConstFlagIndex = 1;
+
+    intptr_t m_serial = 0;
+    std::bitset<8> m_flags;
+};
+
+namespace std {
+template <>
+struct hash <TypeId> {
+    size_t operator()(const TypeId& typeId) const {
+        return static_cast<size_t>(typeId.m_serial) * static_cast<size_t>(typeId.m_flags.to_ulong());
+    }
+};
+} // std
+
+template <typename T>
+intptr_t getTypeSerial() {
+    static int placeholder;
+    return reinterpret_cast<intptr_t>(&placeholder);
 }
+
+// FIXME: Remove
+std::unordered_map<TypeId, std::string> typeNames;
 
 template <typename T>
 TypeId getTypeId() {
+    // FIXME: Remove name parsing
     std::regex regex("Type = ([0-9A-Za-z:<>, ]*)");
     std::smatch match;
     std::string str(__PRETTY_FUNCTION__);
     std::regex_search(str, match, regex);
-    typeNames[reinterpret_cast<std::intptr_t>(&getTypeId<T>)] = str;
-    return reinterpret_cast<std::intptr_t>(&getTypeId<T>);
+    TypeId typeId(getTypeSerial<std::decay_t<T>>(), std::is_pointer_v<T>, std::is_const_v<std::remove_reference_t<T>>);
+    typeNames[typeId] = str;
+    return typeId;
+}
+
+// FIXME: Remove
+std::string getTypeName(TypeId id) {
+    return typeNames[id];
 }
 
 template <typename... Args>
@@ -66,7 +123,7 @@ public:
 
 private:
     std::shared_ptr<void> m_value;
-    TypeId m_typeId = {};
+    TypeId m_typeId;
 };
 
 class Type;
@@ -87,21 +144,6 @@ private:
     std::unordered_map<TypeId, std::shared_ptr<Type>> m_typesMap;
 };
 
-struct ArgInfo {
-    TypeId typeId;
-    const bool constFlag = false;
-    const bool pointerFlag = false;
-    bool operator==(const ArgInfo& argInfo) const {
-        return argInfo.typeId == typeId
-                && argInfo.pointerFlag == pointerFlag
-                && argInfo.constFlag == constFlag;
-    }
-};
-
-template <typename ArgT>
-ArgInfo makeArgInfo() {
-    return ArgInfo { getTypeId<std::decay_t<ArgT>>(), std::is_const_v<ArgT>, std::is_pointer_v<ArgT> };
-}
 
 class AnyArg {
 public:
@@ -112,69 +154,69 @@ public:
     template <typename T >
     AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value>>* = 0)
         : m_valuePtr(&value)
-        , m_argInfo(makeArgInfo<T>())
+        , m_argInfo(getTypeId<T>())
     {}
 
     template <typename T >
     AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, Value>>* = 0)
         : m_valuePtr(value.voidPointer())
-        , m_argInfo(ArgInfo {value.typeId(), false, false} )
+        , m_argInfo(TypeId {value.typeId(), false, false} )
     {}
 
     template <typename T >
     AnyArg(T* value)
         : m_valuePtr(const_cast<std::decay_t<T>*>(value))
-        , m_argInfo(makeArgInfo<T*>())
+        , m_argInfo(getTypeId<T*>())
     {}
 
-    AnyArg(void* valuePtr, TypeId typeId, bool constFlag, bool pointerFlag)
+    AnyArg(void* valuePtr, TypeId typeId)
         : m_valuePtr(valuePtr)
-        , m_argInfo(ArgInfo {typeId, constFlag, pointerFlag} )
+        , m_argInfo(typeId)
     {}
 
     // FIXME: Looks like as() functions for pointers and references could be unified
     template <typename T, typename = std::enable_if_t<!std::is_pointer_v<T>> >
     std::decay_t<T>& as(const Reflection& reflection) const {
-        if (getTypeId<std::decay_t<T>>() != m_argInfo.typeId) {
+        if (getTypeId<std::decay_t<T>>() != m_argInfo) {
             try {
                 m_constructedValue = reflection.getType(getTypeId<std::decay_t<T>>())->construct(*this);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<std::decay_t<T>>())," from type " + getTypeName(m_argInfo.typeId)));
+                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<std::decay_t<T>>())," from type " + getTypeName(m_argInfo)));
             }
         }
-        if (m_argInfo.pointerFlag)
-            throw std::runtime_error(sstr("Reference required, but pointer type provided ", getTypeName(m_argInfo.typeId)));
+        if (m_argInfo.isPointer())
+            throw std::runtime_error(sstr("Reference required, but pointer type provided ", getTypeName(m_argInfo)));
         return *static_cast<std::decay_t<T>*>(m_valuePtr);
     }
 
     template <typename T, typename = std::enable_if_t<std::is_pointer_v<T>>>
     T as(const Reflection& reflection) const {
-        if (!m_argInfo.pointerFlag)
-            throw std::runtime_error(sstr("Pointer required, but reference type provided ", getTypeName(m_argInfo.typeId)));
-        if (m_valuePtr != nullptr && getTypeId<T>() != m_argInfo.typeId)
-            throw std::runtime_error(sstr("Wrong pointer type ", getTypeName(getTypeId<T>()), " from type ", getTypeName(m_argInfo.typeId)));
+        if (!m_argInfo.isPointer())
+            throw std::runtime_error(sstr("Pointer required, but reference type provided ", getTypeName(m_argInfo)));
+        if (m_valuePtr != nullptr && getTypeId<T>() != m_argInfo)
+            throw std::runtime_error(sstr("Wrong pointer type ", getTypeName(getTypeId<T>()), " from type ", getTypeName(m_argInfo)));
         return static_cast<T>(m_valuePtr);
     }
 
-    const ArgInfo& argInfo() const { return m_argInfo; }
+    const TypeId& argInfo() const { return m_argInfo; }
     void* voidPointer() const { return m_valuePtr; }
 
 private:
     void* m_valuePtr = nullptr;
-    ArgInfo m_argInfo;
+    TypeId m_argInfo;
     mutable Value m_constructedValue;
 };
 
 // FIXME: Could be implemented as addressof operator in Value class
 AnyArg addressOf(const Value& value) {
-    return AnyArg(value.voidPointer(), value.typeId(), false, true);
+    return AnyArg(value.voidPointer(), TypeId(value.typeId(), true, value.typeId().isConst()));
 }
 
 AnyArg dereference(const AnyArg& pointer) {
-    if (!pointer.argInfo().pointerFlag)
-        throw std::runtime_error(sstr("Can't dereference non pointer type ", getTypeName(pointer.argInfo().typeId)));
-    return AnyArg(pointer.voidPointer(), pointer.argInfo().typeId, pointer.argInfo().constFlag, false);
+    if (!pointer.argInfo().isPointer())
+        throw std::runtime_error(sstr("Can't dereference non pointer type ", getTypeName(pointer.argInfo())));
+    return AnyArg(pointer.voidPointer(), TypeId(pointer.argInfo(), false, pointer.argInfo().isConst()));
 }
 
 class Function {
@@ -189,8 +231,7 @@ public:
             else
                 return call<ArgsTuple>(*reflection, func, anyArgs, Indices{});
         })
-        , m_argumentTypeIds {makeArgInfo<ArgT>()...}
-        , m_classTypeId (0)
+        , m_argumentTypeIds {getTypeId<ArgT>()...}
         , m_resultTypeId (getTypeId<ResultT>())
     {}
 
@@ -204,14 +245,14 @@ public:
             else
                 return callMember<TypeT, ArgsTuple>(*reflection, func, anyArgs, Indices{});
         })
-        , m_argumentTypeIds {makeArgInfo<ArgT>()...}
+        , m_argumentTypeIds {getTypeId<ArgT>()...}
         , m_classTypeId (getTypeId<TypeT>())
         , m_resultTypeId (getTypeId<ResultT>())
     {}
 
     template <typename ... ArgT>
     Value operator()(ArgT&& ... anyArgs) const {
-        if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId == 0 ? 0 : 1))
+        if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId.isValid() ? 1 : 0))
             throw std::runtime_error(sstr("Wrong number of arguments. Expected: ", m_argumentTypeIds.size(), " Received: ", sizeof...(ArgT)));
         return m_function(std::vector<AnyArg>{AnyArg(std::forward<ArgT>(anyArgs)) ...});
     }
@@ -221,13 +262,13 @@ public:
         return sizeof...(ArgT) == m_argumentTypeIds.size() && fitArgsInternal<ArgT...>(0, args ...);
     }
 
-    const std::vector<ArgInfo>& argumentTypeIds() const { return m_argumentTypeIds; }
+    const std::vector<TypeId>& argumentTypeIds() const { return m_argumentTypeIds; }
     TypeId resultTypeId() const { return m_resultTypeId; }
 
 private:
     std::function<Value(const std::vector<AnyArg>& anyArgs)> m_function;
-    std::vector<ArgInfo> m_argumentTypeIds;
-    TypeId m_classTypeId = 0; // only for member functions
+    std::vector<TypeId> m_argumentTypeIds;
+    TypeId m_classTypeId; // only for member functions
     TypeId m_resultTypeId;
 
     template<typename ArgsTupleT, typename FuncT,  std::size_t... I>
@@ -248,7 +289,7 @@ private:
         if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
             return frontArg.argInfo() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
         else
-            return makeArgInfo<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
+            return getTypeId<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
     }
 };
 
