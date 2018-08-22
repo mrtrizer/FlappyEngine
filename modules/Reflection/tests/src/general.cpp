@@ -151,7 +151,6 @@ private:
     std::unordered_map<TypeId, std::shared_ptr<Type>> m_typesMap;
 };
 
-
 class AnyArg {
 public:
     AnyArg() = default;
@@ -159,8 +158,15 @@ public:
     AnyArg(AnyArg&&) = default;
 
     template <typename T>
-    AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value>>* = 0)
+    AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && !std::is_rvalue_reference_v<T&&>>* = 0)
         : m_valuePtr(&value)
+        , m_typeId(getTypeId<T>())
+    {}
+
+    template <typename T>
+    AnyArg (T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && std::is_rvalue_reference_v<T&&>>* = 0)
+        : m_tmpValue(std::make_shared<T>(std::forward<T>(value)))
+        , m_valuePtr(m_tmpValue.get())
         , m_typeId(getTypeId<T>())
     {}
 
@@ -169,6 +175,8 @@ public:
         : m_valuePtr(value.voidPointer())
         , m_typeId(value.typeId())
     {}
+
+    // FIXME: Add constructor for rvalues. Without it, as() method will read to crash with rvalues.
 
     template <typename T>
     AnyArg (T* value)
