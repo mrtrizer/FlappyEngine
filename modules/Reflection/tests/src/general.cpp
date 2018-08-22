@@ -21,7 +21,7 @@ public:
     bool isConst() const { return m_flags[ConstFlagIndex]; }
     bool canAssignTo(const TypeId& target) const {
         return target.m_serial == m_serial
-            && target.isPointer() == target.isPointer()
+            && target.isPointer() == isPointer()
             && (target.isConst() || isConst() == target.isConst());
     }
     bool operator==(const TypeId& other) const {
@@ -42,6 +42,8 @@ public:
     TypeId(TypeId typeId, bool pointerFlag, bool constFlag)
         : TypeId(typeId.m_serial, pointerFlag, constFlag)
     {}
+
+    std::string name;
 
 private:
     static constexpr size_t PointerFlagIndex = 0;
@@ -76,8 +78,13 @@ TypeId getTypeId() {
     std::smatch match;
     std::string str(__PRETTY_FUNCTION__);
     std::regex_search(str, match, regex);
-    TypeId typeId(getTypeSerial<std::decay_t<T>>(), std::is_pointer_v<T>, std::is_const_v<std::remove_reference_t<T>>);
-    typeNames[typeId] = str;
+    TypeId typeId(getTypeSerial<std::remove_pointer_t<std::decay_t<T>>>(),
+                  std::is_pointer_v<std::decay_t<T>>,
+                  std::is_const_v<std::remove_pointer_t<std::remove_reference_t<T>>>);
+    typeNames[typeId] = str
+            + std::to_string(typeId.isPointer())
+            + std::to_string(typeId.isConst());
+    typeId.name = typeNames[typeId];
     return typeId;
 }
 
@@ -107,7 +114,7 @@ public:
     template <typename T, typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
     Value(T&& value)
         : m_value(std::make_shared<std::decay_t<T>>(std::forward<T>(value)))
-        , m_typeId(getTypeId<std::decay_t<T>>())
+        , m_typeId(getTypeId<T>())
     {}
 
     TypeId typeId() const { return m_typeId; }
@@ -115,10 +122,10 @@ public:
     void* voidPointer() const { return m_value.get(); }
 
     template <typename T>
-    std::decay_t<T>& as() const {
-        if (getTypeId<std::decay_t<T>>() != m_typeId)
-            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<std::decay_t<T>>()), " Passed: ", getTypeName(m_typeId)));
-        return *static_cast<std::decay_t<T>*>(m_value.get());
+    std::remove_reference_t<T>& as() const {
+        if (getTypeId<T>() != m_typeId)
+            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<T>()), " Passed: ", getTypeName(m_typeId)));
+        return *static_cast<std::remove_reference_t<T>*>(m_value.get());
     }
 
 private:
@@ -148,63 +155,54 @@ private:
 class AnyArg {
 public:
     AnyArg() = default;
-    AnyArg(const AnyArg&) = default;
+    AnyArg(const AnyArg&) = default; // FIXME: Remove copy constructor
     AnyArg(AnyArg&&) = default;
 
-    template <typename T >
+    template <typename T>
     AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value>>* = 0)
         : m_valuePtr(&value)
-        , m_argInfo(getTypeId<T>())
+        , m_typeId(getTypeId<T>())
     {}
 
-    template <typename T >
+    template <typename T>
     AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, Value>>* = 0)
         : m_valuePtr(value.voidPointer())
-        , m_argInfo(TypeId {value.typeId(), false, false} )
+        , m_typeId(value.typeId())
     {}
 
-    template <typename T >
-    AnyArg(T* value)
-        : m_valuePtr(const_cast<std::decay_t<T>*>(value))
-        , m_argInfo(getTypeId<T*>())
+    template <typename T>
+    AnyArg (T* value)
+        : m_tmpValue(std::make_shared<T*>(value))
+        , m_valuePtr(m_tmpValue.get())
+        , m_typeId(getTypeId<T*>())
     {}
 
     AnyArg(void* valuePtr, TypeId typeId)
         : m_valuePtr(valuePtr)
-        , m_argInfo(typeId)
+        , m_typeId(typeId)
     {}
 
     // FIXME: Looks like as() functions for pointers and references could be unified
-    template <typename T, typename = std::enable_if_t<!std::is_pointer_v<T>> >
+    template <typename T>
     std::decay_t<T>& as(const Reflection& reflection) const {
-        if (getTypeId<std::decay_t<T>>() != m_argInfo) {
+        if (getTypeId<T>() != m_typeId) {
             try {
-                m_constructedValue = reflection.getType(getTypeId<std::decay_t<T>>())->construct(*this);
+                m_constructedValue = reflection.getType(getTypeId<T>())->construct(*this);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<std::decay_t<T>>())," from type " + getTypeName(m_argInfo)));
+                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_typeId)));
             }
         }
-        if (m_argInfo.isPointer())
-            throw std::runtime_error(sstr("Reference required, but pointer type provided ", getTypeName(m_argInfo)));
-        return *static_cast<std::decay_t<T>*>(m_valuePtr);
+        return *static_cast<std::remove_reference_t<T>*>(const_cast<void*>(m_valuePtr));
     }
 
-    template <typename T, typename = std::enable_if_t<std::is_pointer_v<T>>>
-    T as(const Reflection& reflection) const {
-        if (!m_argInfo.isPointer())
-            throw std::runtime_error(sstr("Pointer required, but reference type provided ", getTypeName(m_argInfo)));
-        if (m_valuePtr != nullptr && getTypeId<T>() != m_argInfo)
-            throw std::runtime_error(sstr("Wrong pointer type ", getTypeName(getTypeId<T>()), " from type ", getTypeName(m_argInfo)));
-        return static_cast<T>(m_valuePtr);
-    }
-
-    const TypeId& argInfo() const { return m_argInfo; }
-    void* voidPointer() const { return m_valuePtr; }
+    const TypeId& typeId() const { return m_typeId; }
+    void* voidPointer() const { return const_cast<void*>(m_valuePtr); }
 
 private:
-    void* m_valuePtr = nullptr;
-    TypeId m_argInfo;
+    std::shared_ptr<void> m_tmpValue;
+    const void* m_valuePtr = nullptr;
+    TypeId m_typeId;
     mutable Value m_constructedValue;
 };
 
@@ -214,9 +212,9 @@ AnyArg addressOf(const Value& value) {
 }
 
 AnyArg dereference(const AnyArg& pointer) {
-    if (!pointer.argInfo().isPointer())
-        throw std::runtime_error(sstr("Can't dereference non pointer type ", getTypeName(pointer.argInfo())));
-    return AnyArg(pointer.voidPointer(), TypeId(pointer.argInfo(), false, pointer.argInfo().isConst()));
+    if (!pointer.typeId().isPointer())
+        throw std::runtime_error(sstr("Can't dereference non pointer type ", getTypeName(pointer.typeId())));
+    return AnyArg(pointer.voidPointer(), TypeId(pointer.typeId(), false, pointer.typeId().isConst()));
 }
 
 class Function {
@@ -254,7 +252,7 @@ public:
     Value operator()(ArgT&& ... anyArgs) const {
         if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId.isValid() ? 1 : 0))
             throw std::runtime_error(sstr("Wrong number of arguments. Expected: ", m_argumentTypeIds.size(), " Received: ", sizeof...(ArgT)));
-        return m_function(std::vector<AnyArg>{AnyArg(std::forward<ArgT>(anyArgs)) ...});
+        return m_function(std::vector<AnyArg>{ AnyArg(std::forward<ArgT>(anyArgs)) ...});
     }
 
     template <typename ... ArgT>
@@ -287,9 +285,9 @@ private:
     template <typename FrontArgT, typename ... ArgT>
     bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
         if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
-            return frontArg.argInfo() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
+            return frontArg.typeId().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
         else
-            return getTypeId<FrontArgT>() == m_argumentTypeIds[index] && fitArgsInternal<ArgT...>(index + 1, args...);
+            return getTypeId<FrontArgT>().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
     }
 };
 
