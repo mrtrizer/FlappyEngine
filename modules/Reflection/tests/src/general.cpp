@@ -101,36 +101,69 @@ std::string sstr(Args &&... args) noexcept
     return sstr.str();
 }
 
+class Value;
+
+class ValueRef {
+public:
+    ValueRef() = default;
+    ValueRef(const ValueRef&) = default;
+    ValueRef& operator=(const ValueRef&) = default;
+    ValueRef(ValueRef&&) = default;
+    ValueRef& operator=(ValueRef&&) = default;
+
+    TypeId typeId() const { return m_typeId; }
+
+    void* voidPointer() const { return m_valuePtr; }
+
+    template <typename T>
+    ValueRef(const T& value, std::enable_if_t<!std::is_convertible<T, Value>::value>* = 0)
+        : m_valuePtr(&value)
+        , m_typeId(getTypeId<T>())
+    {}
+
+    template <typename T>
+    ValueRef(const T& value, std::enable_if_t<std::is_convertible<T, Value>::value>* = 0)
+        : m_valuePtr(value.voidPtr())
+        , m_typeId(value.typeId())
+    {}
+
+    template <typename T>
+    T& as() const {
+        if (getTypeId<T>() != m_typeId)
+            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<T>()), " Passed: ", getTypeName(m_typeId)));
+        return *static_cast<std::remove_reference_t<T>*>(m_valuePtr);
+    }
+
+protected:
+    void setValuePtr(void* valuePtr, TypeId typeId) {
+        m_valuePtr = valuePtr;
+        m_typeId = typeId;
+    }
+
+private:
+    void* m_valuePtr = nullptr;
+    TypeId m_typeId;
+};
+
 // FIXME: Value should be defined after AnyArg. But now it's impossible
 // FIXME: Value should be deeply copied
-class Value {
+class Value : public ValueRef {
 public:
     Value() = default;
     Value(const Value&) = default;
-    Value& operator=(const Value&) = default;
+    Value& operator=(const Value& other) = default;
     Value(Value&&) = default;
     Value& operator=(Value&&) = default;
 
     template <typename T, typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
     Value(T&& value)
         : m_value(std::make_shared<std::decay_t<T>>(std::forward<T>(value)))
-        , m_typeId(getTypeId<T>())
-    {}
-
-    TypeId typeId() const { return m_typeId; }
-
-    void* voidPointer() const { return m_value.get(); }
-
-    template <typename T>
-    std::remove_reference_t<T>& as() const {
-        if (getTypeId<T>() != m_typeId)
-            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<T>()), " Passed: ", getTypeName(m_typeId)));
-        return *static_cast<std::remove_reference_t<T>*>(m_value.get());
+    {
+        setValuePtr(m_value.get(), getTypeId<T>());
     }
 
 private:
     std::shared_ptr<void> m_value;
-    TypeId m_typeId;
 };
 
 class Type;
