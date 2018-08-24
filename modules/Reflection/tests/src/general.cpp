@@ -113,7 +113,12 @@ public:
 
     TypeId typeId() const { return m_typeId; }
 
-    void* voidPointer() const { return m_valuePtr; }
+    void* voidPointer() const { return const_cast<void*>(m_valuePtr); }
+
+    ValueRef(void* pointer, TypeId typeId)
+        : m_valuePtr(pointer)
+        , m_typeId(typeId)
+    {}
 
     template <typename T>
     ValueRef(const T& value, std::enable_if_t<!std::is_convertible<T, Value>::value>* = 0)
@@ -123,7 +128,7 @@ public:
 
     template <typename T>
     ValueRef(const T& value, std::enable_if_t<std::is_convertible<T, Value>::value>* = 0)
-        : m_valuePtr(value.voidPtr())
+        : m_valuePtr(value.voidPointer())
         , m_typeId(value.typeId())
     {}
 
@@ -131,7 +136,7 @@ public:
     T& as() const {
         if (getTypeId<T>() != m_typeId)
             throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<T>()), " Passed: ", getTypeName(m_typeId)));
-        return *static_cast<std::remove_reference_t<T>*>(m_valuePtr);
+        return *static_cast<std::remove_reference_t<T>*>(const_cast<void*>(m_valuePtr));
     }
 
 protected:
@@ -141,12 +146,11 @@ protected:
     }
 
 private:
-    void* m_valuePtr = nullptr;
+    const void* m_valuePtr = nullptr;
     TypeId m_typeId;
 };
 
-// FIXME: Value should be defined after AnyArg. But now it's impossible
-// FIXME: Value should be deeply copied
+// FIXME: Value should be deeply copied. Automatic operator detection needed.
 class Value : public ValueRef {
 public:
     Value() = default;
@@ -192,71 +196,50 @@ public:
 
     template <typename T>
     AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && !std::is_rvalue_reference_v<T&&>>* = 0)
-        : m_valuePtr(&value)
-        , m_typeId(getTypeId<T>())
+        : m_valueRef(value)
     {}
 
     template <typename T>
     AnyArg (T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && std::is_rvalue_reference_v<T&&>>* = 0)
-        : m_tmpValue(std::make_shared<T>(std::forward<T>(value)))
-        , m_valuePtr(m_tmpValue.get())
-        , m_typeId(getTypeId<T>())
+        : m_tmpValue(std::forward<T>(value))
+        , m_valueRef(m_tmpValue)
     {}
 
     template <typename T>
     AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, Value>>* = 0)
-        : m_valuePtr(value.voidPointer())
-        , m_typeId(value.typeId())
+        : m_valueRef(value)
     {}
-
-    // FIXME: Add constructor for rvalues. Without it, as() method will read to crash with rvalues.
 
     template <typename T>
     AnyArg (T* value)
-        : m_tmpValue(std::make_shared<T*>(value))
-        , m_valuePtr(m_tmpValue.get())
-        , m_typeId(getTypeId<T*>())
+        : m_tmpValue(value)
+        , m_valueRef(m_tmpValue)
     {}
 
     AnyArg(void* valuePtr, TypeId typeId)
-        : m_valuePtr(valuePtr)
-        , m_typeId(typeId)
+        : m_valueRef(valuePtr, typeId)
     {}
 
-    // FIXME: Looks like as() functions for pointers and references could be unified
     template <typename T>
     std::decay_t<T>& as(const Reflection& reflection) const {
-        if (getTypeId<T>() != m_typeId) {
+        if (getTypeId<T>() != m_valueRef.typeId()) {
             try {
                 m_constructedValue = reflection.getType(getTypeId<T>())->construct(*this);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_typeId)));
+                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
             }
         }
-        return *static_cast<std::remove_reference_t<T>*>(const_cast<void*>(m_valuePtr));
+        return m_valueRef.as<T>();
     }
 
-    const TypeId& typeId() const { return m_typeId; }
-    void* voidPointer() const { return const_cast<void*>(m_valuePtr); }
+    const ValueRef& valueRef() const { return m_valueRef; }
 
 private:
-    std::shared_ptr<void> m_tmpValue;
-    const void* m_valuePtr = nullptr;
-    TypeId m_typeId;
+    Value m_tmpValue;
+    ValueRef m_valueRef;
     mutable Value m_constructedValue;
 };
-
-// FIXME: Could be implemented as addressof operator in Value class
-AnyArg addressOf(const Value& value) {
-    return AnyArg(value.voidPointer(), TypeId(value.typeId(), true, value.typeId().isConst()));
-}
-
-AnyArg dereference(const AnyArg& pointer) {
-    if (!pointer.typeId().isPointer())
-        throw std::runtime_error(sstr("Can't dereference non pointer type ", getTypeName(pointer.typeId())));
-    return AnyArg(pointer.voidPointer(), TypeId(pointer.typeId(), false, pointer.typeId().isConst()));
-}
 
 class Function {
 public:
@@ -326,7 +309,7 @@ private:
     template <typename FrontArgT, typename ... ArgT>
     bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
         if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
-            return frontArg.typeId().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
+            return frontArg.valueRef().typeId().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
         else
             return getTypeId<FrontArgT>().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
     }
