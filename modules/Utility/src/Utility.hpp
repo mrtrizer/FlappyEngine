@@ -50,15 +50,6 @@ std::string sstr(Args &&... args) noexcept
     return sstr.str();
 }
 
-using TypeId = intptr_t;
-constexpr TypeId UnknownType = 0;
-
-template <typename TypeT>
-TypeId getTypeId() noexcept {
-    static int dummy;
-    return reinterpret_cast<TypeId>(&dummy);
-}
-
 template <typename BaseT, typename DerivedT>
 constexpr void assertDerived() {
     static_assert(std::is_base_of<BaseT, DerivedT>::value, "DerivedT should be derived from BaseT");
