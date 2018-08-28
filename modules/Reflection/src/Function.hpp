@@ -14,13 +14,13 @@ class Function {
 public:
     // Constructor for non-member functions
     template <typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
-    Function(const std::shared_ptr<Reflection>& reflection, ResultT (* func) (ArgT ...))
+    Function(const Reflection& reflection, ResultT (* func) (ArgT ...))
         : m_function([func, reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return call<ArgsTuple>(*reflection, func, anyArgs,Indices{}), AnyArg();
+                return call<ArgsTuple>(reflection, func, anyArgs,Indices{}), AnyArg();
             else
-                return call<ArgsTuple>(*reflection, func, anyArgs, Indices{});
+                return call<ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
         , m_argumentTypeIds {getTypeId<ArgT>()...}
         , m_resultTypeId (getTypeId<ResultT>())
@@ -28,13 +28,13 @@ public:
 
     // Constructor for member functions
     template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
-    Function(const std::shared_ptr<Reflection>& reflection, ResultT (TypeT::*func) (ArgT ...))
+    Function(const Reflection& reflection, ResultT (TypeT::*func) (ArgT ...))
         : m_function([func, reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return callMember<TypeT, ArgsTuple>(*reflection, func, anyArgs, Indices{}), AnyArg();
+                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), AnyArg();
             else
-                return callMember<TypeT, ArgsTuple>(*reflection, func, anyArgs, Indices{});
+                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
         , m_argumentTypeIds {getTypeId<ArgT>()...}
         , m_classTypeId (getTypeId<TypeT>())

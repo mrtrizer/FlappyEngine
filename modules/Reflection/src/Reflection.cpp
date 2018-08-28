@@ -8,7 +8,7 @@ namespace flappy {
 // the best solution I think.
 
 std::shared_ptr<Type> Reflection::createType(const TypeId& typeId) {
-    return std::make_shared<Type>(typeId);
+    return std::make_shared<Type>(typeId, *this);
 }
 
 } // flappy

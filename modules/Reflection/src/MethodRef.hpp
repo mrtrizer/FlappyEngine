@@ -28,15 +28,15 @@ public:
         , m_wrappedMethod(method)
     {}
 
-    Function generate(const std::shared_ptr<Reflection>& reflection) const {
+    Function generate(const Reflection& reflection) const {
         return m_wrappedMethod ? Function(reflection, m_wrappedMethod) : Function(reflection, m_method);
     }
 
     const std::string& name() const { return m_name; }
 
 private:
-    FunctionPointer m_method;
-    Lambda m_wrappedMethod;
+    FunctionPointer m_method = nullptr;
+    Lambda m_wrappedMethod = nullptr;
     std::string m_name;
 };
 

@@ -11,7 +11,7 @@ template <typename ... ArgT>
 class ConstructorRef {
 public:
     template <typename ResultT>
-    Function generate(const std::shared_ptr<Reflection>& reflection) const {
+    Function generate(const Reflection& reflection) const {
         auto lambda = [](ArgT...args) { return ResultT(args...); };
         using Func = ResultT (*) (ArgT...);
         return Function(reflection, static_cast<Func>(lambda) );

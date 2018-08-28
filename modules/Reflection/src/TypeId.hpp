@@ -75,7 +75,7 @@ TypeId getTypeId() {
 }
 
 // FIXME: Remove
-std::string getTypeName(TypeId id) {
+inline std::string getTypeName(TypeId id) {
     return id.name;
 }
 

@@ -7,13 +7,15 @@
 #include "Function.hpp"
 #include "ConstructorRef.hpp"
 #include "MethodRef.hpp"
+#include "Reflection.hpp"
 
 namespace flappy {
 
 class Type {
 public:
-    Type(TypeId typeId)
+    Type(TypeId typeId, const Reflection& reflection)
         : m_typeId(typeId)
+        , m_reflection(reflection)
     {}
 
     const std::vector<Function>& constructors() const { return m_constructors; }
@@ -33,16 +35,17 @@ public:
     TypeId typeId() const { return m_typeId; }
 
     template <typename ReturnT, typename ... ArgT>
-    void registerMember(const ConstructorRef<ArgT...>& constructorRef, const std::shared_ptr<Reflection>& reflection) {
-        m_constructors.emplace_back(constructorRef.template generate<ReturnT>(reflection));
+    void registerMember(const ConstructorRef<ArgT...>& constructorRef) {
+        m_constructors.emplace_back(constructorRef.template generate<ReturnT>(m_reflection));
     }
 
     template <typename ReturnT, typename ... ArgT>
-    void registerMember(const MethodRef<ArgT...>& methodRef, const std::shared_ptr<Reflection>& reflection) {
-        m_methodsMap.emplace(methodRef.name(), methodRef.generate(reflection));
+    void registerMember(const MethodRef<ArgT...>& methodRef) {
+        m_methodsMap.emplace(methodRef.name(), methodRef.generate(m_reflection));
     }
 private:
     TypeId m_typeId;
+    const Reflection& m_reflection;
     std::vector<Function> m_constructors;
     std::unordered_map<std::string, Function> m_methodsMap;
 };

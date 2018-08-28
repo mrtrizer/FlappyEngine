@@ -17,9 +17,9 @@ public:
 
     template <typename TypeT, typename ... ArgT>
     std::shared_ptr<Type> registerType(const ArgT&... args) {
-        auto type = std::make_shared<Type>(getTypeId<TypeT>());
+        auto type = createType(getTypeId<TypeT>());
         [this, args...] (const auto& type) {
-            (type->template registerMember<TypeT>(args, shared_from_this()), ...);
+            (type->template registerMember<TypeT>(args), ...);
         } (type);
 
         m_typesMap.emplace(type->typeId(), type);
