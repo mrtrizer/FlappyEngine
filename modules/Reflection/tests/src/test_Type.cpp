@@ -28,6 +28,7 @@ TEST_CASE("Type") {
     auto reflection = std::make_shared<Reflection>();
 
     auto type = reflection->registerType<TestClass>(
+                            ConstructorRef<int>(),
                             MethodRef("testMethod", &TestClass::testMethod),
                             MethodRef("testMethodConst", &TestClass::testMethod)
                 );
@@ -40,12 +41,12 @@ TEST_CASE("Type") {
                 );
 
     TestClass testClass(30);
-    REQUIRE(type->method("testMethod")(testClass, 10, 20).as<int>() == 6000);
+    REQUIRE(type.method("testMethod")(testClass, 10, 20).as<int>() == 6000);
 
     auto wrappedFunc2 = Function(*reflection, &testFunc);
     wrappedFunc2("Hello, World!");
-    auto str = reflection->getType(getTypeId<std::string>())->construct(size_t(10), 'a');
+    auto str = reflection->getType(getTypeId<std::string>()).construct(size_t(10), 'a');
     auto& strRef = str;
     wrappedFunc2(str);
-    std::cout << reflection->getType(getTypeId<std::string>())->method("capacity")(strRef).as<unsigned long>() << std::endl;
+    std::cout << reflection->getType(getTypeId<std::string>()).method("capacity")(strRef).as<unsigned long>() << std::endl;
 }

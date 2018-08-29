@@ -3,9 +3,10 @@
 #include "Value.hpp"
 #include "ValueRef.hpp"
 #include "TypeId.hpp"
-#include "Reflection.hpp"
 
 namespace flappy {
+
+class Reflection;
 
 class AnyArg {
 public:
@@ -43,7 +44,7 @@ public:
     std::decay_t<T>& as(const Reflection& reflection) const {
         if (getTypeId<T>() != m_valueRef.typeId()) {
             try {
-                m_constructedValue = reflection.getType(getTypeId<T>())->construct(*this);
+                [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).construct(*this); } (reflection);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
                 throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
