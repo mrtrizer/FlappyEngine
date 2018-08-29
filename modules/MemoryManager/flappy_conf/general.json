@@ -3,6 +3,9 @@
     "modules": [
 	{
         "path":"../Utility"
+	},
+	{
+        "path":"../Reflection"
 	}
     ],
     "cxx":{

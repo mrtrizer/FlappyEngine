@@ -2,6 +2,8 @@
 
 #include "ObjectPool.hpp"
 
+namespace flappy {
+
 #ifndef NDEBUG
 class ObjectPoolDebugger {
 public:
@@ -29,3 +31,5 @@ private:
     ObjectPool& m_objectPool;
 };
 #endif
+
+} // flappy

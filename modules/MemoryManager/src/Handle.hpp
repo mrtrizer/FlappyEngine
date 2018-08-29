@@ -6,6 +6,8 @@
 #include "StrongHandle.hpp"
 #include "AnyHandle.hpp"
 
+namespace flappy {
+
 template <typename DataT>
 class Handle : public AnyHandle {
     template <typename T>
@@ -80,3 +82,5 @@ public:
         return chank()->template data<DataT>();
     }
 };
+
+} // flappy

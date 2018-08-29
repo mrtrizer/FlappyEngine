@@ -5,6 +5,8 @@
 #include "Chank.hpp"
 #include "Handle.hpp"
 
+namespace flappy {
+
 template <typename ObjectT>
 class EnableSelfHandle {
     friend class ObjectPool; // to assign self handle
@@ -24,7 +26,7 @@ public:
     ObjectPool& operator= (const ObjectPool&) = delete;
     ObjectPool(ObjectPool&&) = delete;
     ObjectPool& operator= (ObjectPool&&) = delete;
-    ~ObjectPool();
+    ~ObjectPool() noexcept;
 
     template <typename DataT, typename...Args>
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
@@ -76,3 +78,5 @@ private:
         return nullptr;
     }
 };
+
+} // flappy

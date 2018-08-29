@@ -4,6 +4,9 @@
 #include <cstdint>
 
 #include <Utility.hpp>
+#include <TypeId.hpp>
+
+namespace flappy {
 
 class Chank;
 class AnyStrongHandle;
@@ -77,3 +80,5 @@ private:
 
 static_assert(!std::is_polymorphic<AnyHandle>(), "AnyHandle should not be a polymorphic!");
 static_assert(sizeof(AnyHandle) == sizeof(intptr_t), "AnyHandle should consist of a single pointer.");
+
+} // flappy

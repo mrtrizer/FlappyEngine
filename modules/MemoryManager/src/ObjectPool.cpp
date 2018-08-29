@@ -2,6 +2,8 @@
 
 #include <memory>
 
+namespace flappy {
+
 ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
     : m_maxObjectSize(maxObjectSize)
     , m_bytes()
@@ -17,7 +19,7 @@ ObjectPool::ObjectPool(size_t maxObjectSize, size_t capacity)
         std::allocator_traits<ChankAllocatorT>::construct(m_chankAllocator, m_chanks + i, this, &m_bytes[maxObjectSize * i], maxObjectSize);
 }
 
-ObjectPool::~ObjectPool() {
+ObjectPool::~ObjectPool() noexcept {
     if (m_chanks == nullptr)
         return;
     for (size_t i = 0; i < m_capacity; ++i)
@@ -35,4 +37,4 @@ void ObjectPool::onDestroyed (Chank* chank) noexcept {
     }
 }
 
-
+} // flappy

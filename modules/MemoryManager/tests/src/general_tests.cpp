@@ -9,6 +9,7 @@
 #include <ObjectPoolDebugger.hpp>
 #include <Heap.hpp>
 
+using namespace flappy;
 using namespace fakeit;
 using namespace std;
 

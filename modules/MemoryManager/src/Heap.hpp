@@ -2,6 +2,8 @@
 
 #include "ObjectPool.hpp"
 
+namespace flappy {
+
 template <typename ObjectT>
 class ConcreteHeap {
 public:
@@ -34,3 +36,5 @@ public:
         return ConcreteHeap<DataT>::instance().objectPool().template create<DataT>(std::forward<Args>(args)...);
     }
 };
+
+} // flappy

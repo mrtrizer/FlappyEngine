@@ -2,6 +2,8 @@
 
 #include "AnyStrongHandle.hpp"
 
+namespace flappy {
+
 template <typename DataT>
 class Handle;
 
@@ -60,3 +62,5 @@ private:
         : AnyStrongHandle(dataPointer, chank)
     {}
 };
+
+} // flappy

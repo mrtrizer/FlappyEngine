@@ -3,6 +3,9 @@
 #include <list>
 
 #include "Utility.hpp"
+#include "TypeId.hpp"
+
+namespace flappy {
 
 class Chank;
 class AnyHandle;
@@ -22,7 +25,7 @@ public:
     AnyStrongHandle& operator=(AnyStrongHandle&& strongHandle) noexcept;
 
     // Not virtual because the only derived class has no data members
-    ~AnyStrongHandle();
+    ~AnyStrongHandle() noexcept;
 
     bool isValid() const noexcept;
 
@@ -40,7 +43,9 @@ private:
     Chank* m_chank = nullptr;
 
     void reset() noexcept;
-    void moveFromStrongHandle(AnyStrongHandle&& strongHandle);
+    void moveFromStrongHandle(AnyStrongHandle&& strongHandle) noexcept;
 };
 
 static_assert(!std::is_polymorphic<AnyStrongHandle>(), "AnyStrongHandle should not be a polymorphic!");
+
+} // flappy

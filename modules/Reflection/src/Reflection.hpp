@@ -18,7 +18,12 @@ public:
         return *type;
     }
 
-    const Type& getType(TypeId typeId) const {
+    bool hasType(const TypeId& typeId) {
+        return m_typesMap.find(typeId) != m_typesMap.end();
+    }
+
+    // FIXME: Do something with this. Register type by name maybe? Or introduce function to search TypeId by name.
+    const Type& getType(const TypeId& typeId) const {
         auto iter = m_typesMap.find(typeId);
         if (iter != m_typesMap.end())
             return *iter->second;
@@ -32,7 +37,11 @@ public:
         return *function;
     }
 
-    const Function& getFunction(std::string name) const {
+    bool hasFunction(const std::string& name) const {
+        return m_functionMap.find(name) != m_functionMap.end();
+    }
+
+    const Function& getFunction(const std::string& name) const {
         auto iter = m_functionMap.find(name);
         if (iter != m_functionMap.end())
             return *iter->second;

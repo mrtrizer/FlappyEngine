@@ -2,6 +2,8 @@
 
 #include "ObjectPool.hpp"
 
+namespace flappy {
+
 Chank::Chank(ObjectPool* objectPool, std::byte* data, size_t size)
     : m_data(data)
     , m_size(size)
@@ -12,7 +14,7 @@ Chank::Chank(ObjectPool* objectPool, std::byte* data, size_t size)
     DEBUG_ASSERT(size > 0);
 }
 
-Chank::~Chank() {
+Chank::~Chank() noexcept {
     if (m_dataDescructor != nullptr) {
         m_dataDescructor(m_data);
         m_objectPool->onDestroyed(this);
@@ -59,3 +61,5 @@ void Chank::unregisterHandle(void* handle) noexcept {
         return item == handle;
     });
 }
+
+} // flappy

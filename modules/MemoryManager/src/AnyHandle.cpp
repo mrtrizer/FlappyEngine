@@ -3,6 +3,8 @@
 #include "Chank.hpp"
 #include "AnyStrongHandle.hpp"
 
+namespace flappy {
+
 template <typename T>
 class Handle;
 
@@ -46,3 +48,5 @@ void AnyHandle::invalidate() noexcept {
 
     setNewChank(nullptr);
 }
+
+} // flappy

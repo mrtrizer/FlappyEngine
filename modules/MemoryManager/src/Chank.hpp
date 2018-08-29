@@ -5,6 +5,8 @@
 
 #include "StrongHandle.hpp"
 
+namespace flappy {
+
 class ObjectPool;
 
 /// The class holds object of any type within size limit
@@ -21,7 +23,7 @@ class Chank {
     friend class Handle;
 
     Chank(ObjectPool* objectPool, std::byte* data, size_t size);
-    ~Chank();
+    ~Chank() noexcept;
 
     /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
     /// @param destroyedCallback Called when underlying class is destroyed
@@ -77,3 +79,5 @@ class Chank {
     std::list<AnyHandle*> m_handles;
     TypeId m_typeId;
 };
+
+} // flappy
