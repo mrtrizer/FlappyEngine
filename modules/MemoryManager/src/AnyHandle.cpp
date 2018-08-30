@@ -31,7 +31,7 @@ bool AnyHandle::isValid() noexcept {
 
 TypeId AnyHandle::typeId() const noexcept {
     if (m_chank == nullptr)
-        return UnknownType;
+        return {};
     return m_chank->typeId();
 }
 

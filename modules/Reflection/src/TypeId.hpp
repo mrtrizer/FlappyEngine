@@ -12,31 +12,31 @@ namespace flappy {
 
 class TypeId {
     friend class std::hash<TypeId>; // To calculate hash
+    template <typename T>
+    friend TypeId getTypeId() noexcept;
 public:
     TypeId() = default;
-    bool isPointer() const { return m_bitset & (intptr_t)1 << PointerFlagIndex; }
-    bool isConst() const { return m_bitset & (intptr_t)1 << ConstFlagIndex; }
-    bool canAssignTo(const TypeId& target) const {
+    bool isPointer() const noexcept { return m_bitset & (intptr_t)1 << PointerFlagIndex; }
+    bool isConst() const noexcept { return m_bitset & (intptr_t)1 << ConstFlagIndex; }
+    bool canAssignTo(const TypeId& target) const noexcept {
         return (target.m_bitset & FlagsSet) == (m_bitset & FlagsSet)
             && target.isPointer() == isPointer()
             && (target.isConst() || isConst() == target.isConst());
     }
-    bool operator==(const TypeId& other) const {
+    bool operator==(const TypeId& other) const noexcept {
         return m_bitset == other.m_bitset;
     }
-    bool operator!=(const TypeId& other) const {
+    bool operator!=(const TypeId& other) const noexcept {
         return !operator==(other);
     }
 
-    bool isValid() const { return m_bitset != 0; }
+    bool isValid() const noexcept { return m_bitset != 0; }
 
-    TypeId(intptr_t serial, bool pointerFlag, bool constFlag)
-        : m_bitset((serial & ~FlagsSet) | ((intptr_t)pointerFlag << PointerFlagIndex | (intptr_t)constFlag << ConstFlagIndex))
-    {}
-
-    TypeId(TypeId typeId, bool pointerFlag, bool constFlag)
+    TypeId(TypeId typeId, bool pointerFlag, bool constFlag) noexcept
         : TypeId(typeId.m_bitset, pointerFlag, constFlag)
     {}
+
+    operator intptr_t() const { return m_bitset; }
 
 #ifdef DEBUG_TYPE_NAMES
     std::string name;
@@ -47,6 +47,10 @@ private:
     static constexpr size_t ConstFlagIndex = sizeof(intptr_t) * 8 - 2;
     static constexpr intptr_t FlagsSet = (intptr_t)1 << PointerFlagIndex | (intptr_t)1 << ConstFlagIndex;
 
+    TypeId(intptr_t serial, bool pointerFlag, bool constFlag) noexcept
+        : m_bitset((serial & ~FlagsSet) | ((intptr_t)pointerFlag << PointerFlagIndex | (intptr_t)constFlag << ConstFlagIndex))
+    {}
+
     intptr_t m_bitset = 0;
 };
 
@@ -55,13 +59,13 @@ static_assert(sizeof(TypeId) == sizeof(intptr_t), "Should fit into intptr_t size
 #endif
 
 template <typename T>
-intptr_t getTypeSerial() {
+intptr_t getTypeSerial() noexcept {
     static int placeholder;
     return reinterpret_cast<intptr_t>(&placeholder);
 }
 
 template <typename T>
-TypeId getTypeId() {
+TypeId getTypeId() noexcept {
     TypeId typeId(getTypeSerial<std::remove_pointer_t<std::decay_t<T>>>(),
                   std::is_pointer_v<std::decay_t<T>>,
                   std::is_const_v<std::remove_pointer_t<std::remove_reference_t<T>>>);
@@ -79,15 +83,13 @@ TypeId getTypeId() {
 }
 
 // FIXME: Remove
-inline std::string getTypeName(TypeId id) {
+inline std::string getTypeName(TypeId id) noexcept {
 #ifdef DEBUG_TYPE_NAMES
     return id.name;
 #else
-    return "";
+    return std::to_string(id);
 #endif
 }
-
-inline const static TypeId UnknownType = getTypeId<void>();
 
 } // flappy
 
