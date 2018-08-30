@@ -23,6 +23,7 @@ public:
             && target.isPointer() == isPointer()
             && (target.isConst() || isConst() == target.isConst());
     }
+    TypeId pureTypeId() { return TypeId(m_bitset, false, false); }
     bool operator==(const TypeId& other) const noexcept {
         return m_bitset == other.m_bitset;
     }

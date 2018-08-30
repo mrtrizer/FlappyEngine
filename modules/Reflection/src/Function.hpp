@@ -12,6 +12,7 @@ class Reflection;
 
 class Function {
 public:
+    // FIXME: Make constructors private
     // Constructor for non-member functions
     template <typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
     Function(const Reflection& reflection, ResultT (* func) (ArgT ...))

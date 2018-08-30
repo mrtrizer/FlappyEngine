@@ -10,25 +10,35 @@ class Type;
 
 class Reflection : public std::enable_shared_from_this<Reflection> {
 public:
+    Reflection(const std::shared_ptr<Reflection>& baseReflection = nullptr)
+        : m_baseReflection(baseReflection)
+    {}
+
     template <typename TypeT, typename ... ArgT>
-    const Type& registerType(const ArgT&... args) {
+    const Type& registerType(const std::string& name, const ArgT&... args) {
         auto type = std::make_shared<Type>(getTypeId<TypeT>(), *this);
         (type->template registerMember<TypeT>(args), ...);
-        m_typesMap.emplace(type->typeId(), type);
+        m_typesMap.emplace(name, type);
+        m_typeNameMap.emplace(getTypeId<TypeT>(), name);
         return *type;
     }
 
-    bool hasType(const TypeId& typeId) {
-        return m_typesMap.find(typeId) != m_typesMap.end();
+    bool hasType(const std::string& name) const {
+        return m_typesMap.find(name) != m_typesMap.end();
     }
 
-    // FIXME: Do something with this. Register type by name maybe? Or introduce function to search TypeId by name.
-    const Type& getType(const TypeId& typeId) const {
-        auto iter = m_typesMap.find(typeId);
+    bool hasType(TypeId typeId) const { return hasType(m_typeNameMap.at(typeId)); }
+
+    const Type& getType(const std::string& name) const {
+        auto iter = m_typesMap.find(name);
         if (iter != m_typesMap.end())
             return *iter->second;
-        throw std::runtime_error(sstr("Type is not registered. Requested: ", getTypeName(typeId)));
+        if (m_baseReflection != nullptr)
+            return m_baseReflection->getType(name);
+        throw std::runtime_error(sstr("Type \"", name, "\" is not registered"));
     }
+
+    const Type& getType(TypeId typeId) const { return getType(m_typeNameMap.at(typeId)); }
 
     template <typename FunctionT>
     const Function& registerFunction(const std::string& name, FunctionT functionPtr) {
@@ -45,14 +55,18 @@ public:
         auto iter = m_functionMap.find(name);
         if (iter != m_functionMap.end())
             return *iter->second;
-        throw std::runtime_error(sstr("Type is not registered. Requested: ", name));
+        if (m_baseReflection != nullptr)
+            return m_baseReflection->getFunction(name);
+        throw std::runtime_error(sstr("Function \"", name, "\" is not registered."));
     }
 
 private:
-    std::unordered_map<TypeId, std::shared_ptr<Type>> m_typesMap;
+    std::unordered_map<TypeId, std::string> m_typeNameMap;
+    // FIXME: Use unique_ptr
+    std::unordered_map<std::string, std::shared_ptr<Type>> m_typesMap;
+    // FIXME: Use unique_ptr
     std::unordered_map<std::string, std::shared_ptr<Function>> m_functionMap;
-
-    std::shared_ptr<Type> createType(const TypeId& typeId);
+    std::shared_ptr<Reflection> m_baseReflection;
 };
 
 } // flappy

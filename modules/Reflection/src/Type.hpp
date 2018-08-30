@@ -13,6 +13,7 @@ namespace flappy {
 
 class Type {
 public:
+    // FIXME: Make constructor private
     Type(TypeId typeId, const Reflection& reflection)
         : m_typeId(typeId)
         , m_reflection(reflection)
