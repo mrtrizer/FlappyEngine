@@ -3,29 +3,73 @@
 
 #include "Function.hpp"
 #include "Type.hpp"
+#include "BasicTypesReflection.hpp"
 
 using namespace flappy;
 
 // Test functions
 
-static int somePrettyFunction(int a, int b, int& result) {
-    std::cout << a << " " << b << std::endl;
-    result = a + b;
-    return a + b;
+struct TestClass {
+    TestClass(int c)
+        : m_c(c)
+    {}
+    int testMethodConst(int a, int b) const {
+        return a * b * m_c;
+    }
+
+    int testMethod(int a, int b) {
+        return a * b * m_c;
+    }
+
+    int m_c = 0;
+};
+
+static std::string lastCalledFuncName;
+
+static void voidReturnNoArgsFunc() {
+    lastCalledFuncName = "voidReturnNoArgsFunc";
 }
+
+static void voidReturnBasicArgFunc(int) {
+    lastCalledFuncName = "voidReturnBasicArgFunc";
+}
+
+static int basicReturnFunc() {
+    lastCalledFuncName = "basicReturnFunc";
+    return 1000;
+}
+
+static TestClass classReturnFunc() {
+    lastCalledFuncName = "classReturnFunc";
+    return TestClass(10);
+}
+
+static TestClass* pointerReturnFunc() {
+    lastCalledFuncName = "classReturnFunc";
+    static TestClass test(10);
+    return &test;
+}
+
+static TestClass& refReturnFunc() {
+    lastCalledFuncName = "refReturnFunc";
+    static TestClass test(10);
+    return test;
+}
+
+static int multiArgFunc(int a, TestClass test, TestClass* testPtr, TestClass& testRef) {
+    testRef.m_c = testPtr->m_c = a + test.m_c;
+    return testRef.m_c;
+}
+
 
 static void testFunc(std::string str) {
     std::cout << str << std::endl;
 }
 
 TEST_CASE("Function") {
-    auto reflection = std::make_shared<Reflection>();
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
 
-    auto wrappedFunc1 = reflection->registerFunction("somePrettyFunction", &somePrettyFunction);
-    int result = 0;
-    REQUIRE(wrappedFunc1(10, 20, result).as<int>() == 30);
-    REQUIRE(result == 30);
-
-    auto wrappedFunc2 = reflection->registerFunction("testFunc", &testFunc);
-    wrappedFunc2(std::string("Hello, World!"));
+    reflection->registerFunction("voidReturnNoArgsFunc", &voidReturnNoArgsFunc);
+    REQUIRE_NOTHROW(reflection->getFunction("voidReturnNoArgsFunc")());
+    REQUIRE(lastCalledFuncName == "voidReturnNoArgsFunc");
 }

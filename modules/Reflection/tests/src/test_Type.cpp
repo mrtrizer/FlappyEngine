@@ -2,6 +2,7 @@
 #include <catch.h>
 
 #include "Type.hpp"
+#include "BasicTypesReflection.hpp"
 
 using namespace flappy;
 
@@ -25,19 +26,12 @@ static void testFunc(std::string str) {
 }
 
 TEST_CASE("Type") {
-    auto reflection = std::make_shared<Reflection>();
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
 
     auto type = reflection->registerType<TestClass>("TestClass",
                             ConstructorRef<int>(),
                             MethodRef("testMethod", &TestClass::testMethod),
                             MethodRef("testMethodConst", &TestClass::testMethod)
-                );
-
-    auto stringType = reflection->registerType<std::string>("std::string",
-                            ConstructorRef<const char*>(),
-                            ConstructorRef<std::string>(),
-                            ConstructorRef<size_t, char>(),
-                            MethodRef<std::string, unsigned long>("capacity", [](std::string& obj){ return obj.capacity(); } )
                 );
 
     TestClass testClass(30);

@@ -27,7 +27,12 @@ public:
         return m_typesMap.find(name) != m_typesMap.end();
     }
 
-    bool hasType(TypeId typeId) const { return hasType(m_typeNameMap.at(typeId)); }
+    // FIXME: Check order
+    bool hasType(TypeId typeId) const {
+        if (m_baseReflection != nullptr)
+            return m_baseReflection->hasType(typeId);
+        return hasType(m_typeNameMap.at(typeId));
+    }
 
     const Type& getType(const std::string& name) const {
         auto iter = m_typesMap.find(name);
@@ -38,7 +43,12 @@ public:
         throw std::runtime_error(sstr("Type \"", name, "\" is not registered"));
     }
 
-    const Type& getType(TypeId typeId) const { return getType(m_typeNameMap.at(typeId)); }
+    // FIXME: Check order
+    const Type& getType(TypeId typeId) const {
+        if (m_baseReflection != nullptr)
+            return m_baseReflection->getType(typeId);
+        return getType(m_typeNameMap.at(typeId));
+    }
 
     template <typename FunctionT>
     const Function& registerFunction(const std::string& name, FunctionT functionPtr) {
