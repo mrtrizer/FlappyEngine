@@ -41,6 +41,7 @@ before_install:
  - popd
  - git clone https://github.com/KhronosGroup/SPIRV-Cross.git
  - pushd SPIRV-Cross
+ - git checkout 2018-08-07
  - make
  - sudo ln -s `pwd`/spirv-cross /usr/local/bin/spirv-cross
  - popd
