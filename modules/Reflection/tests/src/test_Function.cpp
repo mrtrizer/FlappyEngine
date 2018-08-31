@@ -24,36 +24,76 @@ struct TestClass {
     int m_c = 0;
 };
 
-static std::string lastCalledFuncName;
+static void* lastCalledFunc;
+static int lastPassedIntValue = 0;
 
 static void voidReturnNoArgsFunc() {
-    lastCalledFuncName = "voidReturnNoArgsFunc";
+    lastCalledFunc = (void*)&voidReturnNoArgsFunc;
 }
 
-static void voidReturnBasicArgFunc(int) {
-    lastCalledFuncName = "voidReturnBasicArgFunc";
+TEST_CASE("Function_voidReturnNoArgsFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("voidReturnNoArgsFunc", &voidReturnNoArgsFunc);
+    reflection->getFunction("voidReturnNoArgsFunc")();
+    REQUIRE(lastCalledFunc == (void*)&voidReturnNoArgsFunc);
+}
+
+static void voidReturnBasicArgFunc(int value) {
+    lastCalledFunc = (void*)&voidReturnBasicArgFunc;
+    lastPassedIntValue = value;
+}
+
+TEST_CASE("Function_voidReturnBasicArgFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("voidReturnBasicArgFunc", &voidReturnBasicArgFunc);
+    reflection->getFunction("voidReturnBasicArgFunc")(10);
+    REQUIRE(lastPassedIntValue == 10);
 }
 
 static int basicReturnFunc() {
-    lastCalledFuncName = "basicReturnFunc";
+    lastCalledFunc = (void*)&basicReturnFunc;
     return 1000;
 }
 
+TEST_CASE("Function_basicReturnFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("basicReturnFunc", &basicReturnFunc);
+    REQUIRE(reflection->getFunction("basicReturnFunc")().as<int>() == 1000);
+}
+
 static TestClass classReturnFunc() {
-    lastCalledFuncName = "classReturnFunc";
-    return TestClass(10);
+    lastCalledFunc = (void*)&classReturnFunc;
+    return TestClass(20);
+}
+
+TEST_CASE("Function_classReturnFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("classReturnFunc", &classReturnFunc);
+    REQUIRE(reflection->getFunction("classReturnFunc")().as<TestClass&>().m_c == 20);
 }
 
 static TestClass* pointerReturnFunc() {
-    lastCalledFuncName = "classReturnFunc";
-    static TestClass test(10);
+    lastCalledFunc = (void*)&classReturnFunc;
+    static TestClass test(100);
     return &test;
 }
 
+TEST_CASE("Function_pointerReturnFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("pointerReturnFunc", &pointerReturnFunc);
+    REQUIRE(reflection->getFunction("pointerReturnFunc")().as<TestClass*>()->m_c == 100);
+}
+
 static TestClass& refReturnFunc() {
-    lastCalledFuncName = "refReturnFunc";
-    static TestClass test(10);
+    lastCalledFunc = (void*)&refReturnFunc;
+    static TestClass test(1000);
     return test;
+}
+
+TEST_CASE("Function_refReturnFunc") {
+    auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
+    reflection->registerFunction("refReturnFunc", &refReturnFunc);
+    REQUIRE(reflection->getFunction("refReturnFunc")().as<TestClass&>().m_c == 1000);
 }
 
 static int multiArgFunc(int a, TestClass test, TestClass* testPtr, TestClass& testRef) {
@@ -61,15 +101,13 @@ static int multiArgFunc(int a, TestClass test, TestClass* testPtr, TestClass& te
     return testRef.m_c;
 }
 
-
-static void testFunc(std::string str) {
-    std::cout << str << std::endl;
-}
-
-TEST_CASE("Function") {
+TEST_CASE("Function_multiArgFunc") {
     auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
-
-    reflection->registerFunction("voidReturnNoArgsFunc", &voidReturnNoArgsFunc);
-    REQUIRE_NOTHROW(reflection->getFunction("voidReturnNoArgsFunc")());
-    REQUIRE(lastCalledFuncName == "voidReturnNoArgsFunc");
+    reflection->registerFunction("multiArgFunc", &multiArgFunc);
+    TestClass test1(1);
+    TestClass test2(2);
+    TestClass test3(3);
+    REQUIRE_NOTHROW(reflection->getFunction("multiArgFunc")(10, test1, &test2, test3));
+    REQUIRE(test2.m_c == 11);
+    REQUIRE(test3.m_c == 11);
 }
