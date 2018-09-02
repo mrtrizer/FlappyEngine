@@ -23,6 +23,12 @@ public:
         setValuePtr(m_value.get(), getTypeId<T>());
     }
 
+    ValueRef deref() {
+        if (!typeId().isPointer())
+            throw FlappyException("Type is not a pointer");
+        return ValueRef(*std::static_pointer_cast<void*>(m_value), TypeId(typeId(), false, typeId().isConst()));
+    }
+
 private:
     std::shared_ptr<void> m_value;
 };

@@ -15,18 +15,18 @@ public:
     AnyArg(AnyArg&&) = default;
 
     template <typename T>
-    AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && !std::is_rvalue_reference_v<T&&>>* = 0)
+    AnyArg(T&& value, std::enable_if_t<!std::is_convertible_v<T, ValueRef> && !std::is_rvalue_reference_v<T&&>>* = 0)
         : m_valueRef(value)
     {}
 
     template <typename T>
-    AnyArg (T&& value, std::enable_if_t<!std::is_convertible_v<T, Value> && std::is_rvalue_reference_v<T&&>>* = 0)
+    AnyArg (T&& value, std::enable_if_t<!std::is_convertible_v<T, ValueRef> && std::is_rvalue_reference_v<T&&>>* = 0)
         : m_tmpValue(std::forward<T>(value))
         , m_valueRef(m_tmpValue)
     {}
 
     template <typename T>
-    AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, Value>>* = 0)
+    AnyArg (T&& value, std::enable_if_t<std::is_convertible_v<T, ValueRef>>* = 0)
         : m_valueRef(value)
     {}
 
@@ -44,7 +44,7 @@ public:
     std::decay_t<T>& as(const Reflection& reflection) const {
         if (getTypeId<T>() != m_valueRef.typeId()) {
             try {
-                [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).construct(*this); } (reflection);
+                [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).constructOnStack(*this); } (reflection);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
                 throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));

@@ -8,6 +8,8 @@
 
 #include <Utility.hpp>
 
+#define DEBUG_TYPE_NAMES
+
 namespace flappy {
 
 class TypeId {
