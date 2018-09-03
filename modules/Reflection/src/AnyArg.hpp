@@ -44,6 +44,7 @@ public:
     std::decay_t<T>& as(const Reflection& reflection) const {
         if (getTypeId<T>() != m_valueRef.typeId()) {
             try {
+                // FIXME: Implement pointer conversion
                 [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).constructOnStack(*this); } (reflection);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {

@@ -15,13 +15,11 @@ public:
     {}
 
     template <typename TypeT, typename ... ArgT>
-    Type& registerType(const std::string& name, std::vector<TypeId> parents, const ArgT&... args) {
-        // TODO: Support parents
-        auto type = std::shared_ptr<Type>(new Type(getTypeId<TypeT>(), *this));
-        (type->template registerMember<TypeT>(args), ...);
-        m_typesMap.emplace(name, type);
+    Type& registerType(const std::string& name, const std::vector<TypeId>& parents, const ArgT&... args) {
+        auto typePtr = new Type(getTypeId<TypeT>(), parents, *this);
+        m_typesMap.emplace(name, std::shared_ptr<Type>(typePtr));
         m_typeNameMap.emplace(getTypeId<TypeT>(), name);
-        return *type;
+        return *typePtr;
     }
 
     template <typename TypeT, typename ... ArgT>

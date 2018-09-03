@@ -36,11 +36,11 @@ static void testFunc(std::string str) {
 TEST_CASE("Type") {
     auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
 
-    auto type = reflection->registerType<TestClass>("TestClass",
-                            ConstructorRef<int>(),
-                            MethodRef("testMethod", &TestClass::testMethod),
-                            MethodRef("testMethodConst", &TestClass::testMethod)
-                );
+    auto type = reflection->registerType<TestClass>("TestClass")
+            .addConstructor<TestClass, int>()
+            .addFunction("testMethod", &TestClass::testMethod)
+            .addFunction("testMethodConst", &TestClass::testMethod)
+            .addFunction("c", &TestClass::c);
 
     TestClass testClass(30);
     REQUIRE(type.method("testMethod")(testClass, 10, 20).as<int>() == 6000);
@@ -56,27 +56,15 @@ TEST_CASE("Type") {
 TEST_CASE("Type constructors") {
     auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
 
-//    auto type = reflection->registerType<TestClass>("TestClass",
-//                            ConstructorRef<int>(),
-//                            MethodRef("testMethod", &TestClass::testMethod),
-//                            MethodRef("testMethodConst", &TestClass::testMethod),
-//                            MethodRef("c", &TestClass::c)
-//                );
-
     auto type = reflection->registerType<TestClass>("TestClass")
             .addConstructor<TestClass, int>()
             .addFunction("testMethod", &TestClass::testMethod)
             .addFunction("testMethodConst", &TestClass::testMethod)
             .addFunction("c", &TestClass::c);
-//            .addStaticFunction("c", &TestClass::staticFunction)
-//            .addField("m_c", &TestClass::m_c);
 
-
-
-    auto typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>",
-                            ConstructorRef<TestClass*>(),
-                            MethodRef<std::shared_ptr<TestClass>, TestClass*>("get", [](std::shared_ptr<TestClass>& v) { return v.get(); })
-                );
+    auto typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>")
+            .addConstructor<std::shared_ptr<TestClass>, TestClass*>()
+            .addFunction<std::shared_ptr<TestClass>, TestClass*>("get", [](auto v) { return v.get(); });
 
     auto rawPointer1 = type.constructOnHeap(10);
     auto value = typeSharedPtr.constructOnStack(rawPointer1);
