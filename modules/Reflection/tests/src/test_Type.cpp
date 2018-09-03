@@ -17,6 +17,11 @@ struct TestClass {
     int testMethod(int a, int b) {
         return a * b * m_c;
     }
+
+    static void staticFunction() {
+
+    }
+
     int c() const {
         return m_c;
     }
@@ -51,19 +56,31 @@ TEST_CASE("Type") {
 TEST_CASE("Type constructors") {
     auto reflection = std::make_shared<Reflection>(BasicTypesReflection::instance().reflection());
 
-    auto type = reflection->registerType<TestClass>("TestClass",
-                            ConstructorRef<int>(),
-                            MethodRef("testMethod", &TestClass::testMethod),
-                            MethodRef("testMethodConst", &TestClass::testMethod),
-                            MethodRef("c", &TestClass::c)
-                );
+//    auto type = reflection->registerType<TestClass>("TestClass",
+//                            ConstructorRef<int>(),
+//                            MethodRef("testMethod", &TestClass::testMethod),
+//                            MethodRef("testMethodConst", &TestClass::testMethod),
+//                            MethodRef("c", &TestClass::c)
+//                );
 
-    auto typePtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>",
+    auto type = reflection->registerType<TestClass>("TestClass")
+            .addConstructor<TestClass, int>()
+            .addFunction("testMethod", &TestClass::testMethod)
+            .addFunction("testMethodConst", &TestClass::testMethod)
+            .addFunction("c", &TestClass::c);
+//            .addStaticFunction("c", &TestClass::staticFunction)
+//            .addField("m_c", &TestClass::m_c);
+
+
+
+    auto typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>",
+                            ConstructorRef<TestClass*>(),
                             MethodRef<std::shared_ptr<TestClass>, TestClass*>("get", [](std::shared_ptr<TestClass>& v) { return v.get(); })
                 );
 
-    auto value = type.constructSharedPtr(10);
-    auto rawPointer = typePtr.method("get")(value);
+    auto rawPointer1 = type.constructOnHeap(10);
+    auto value = typeSharedPtr.constructOnStack(rawPointer1);
+    auto rawPointer = typeSharedPtr.method("get")(value);
     auto ref = rawPointer.deref();
     REQUIRE(type.method("c")(ref).as<int>() == 10);
 }

@@ -3,6 +3,7 @@
 #include "TypeId.hpp"
 #include "Function.hpp"
 #include "Type.hpp"
+#include "Reflection.hpp"
 
 namespace flappy {
 

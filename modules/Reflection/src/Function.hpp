@@ -42,6 +42,12 @@ public:
         , m_resultTypeId (getTypeId<ResultT>())
     {}
 
+    // Constructor for const member functions
+    template <typename TypeT, typename ResultT, typename ... ArgT>
+    Function(const Reflection& reflection, ResultT (TypeT::*func) (ArgT ...) const)
+        : Function(reflection, reinterpret_cast<ResultT (TypeT::*) (ArgT ...)>(func))
+    {}
+
     template <typename ... ArgT>
     Value operator()(ArgT&& ... anyArgs) const {
         if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId.isValid() ? 1 : 0))
@@ -51,7 +57,7 @@ public:
 
     template <typename ... ArgT>
     bool fitArgs(const ArgT& ... args) const {
-        return sizeof...(ArgT) == m_argumentTypeIds.size() && fitArgsInternal<ArgT...>(0, args ...);
+        return sizeof...(ArgT) == m_argumentTypeIds.size() && fitArgsInternal(0, args ...);
     }
 
     const std::vector<TypeId>& argumentTypeIds() const { return m_argumentTypeIds; }
@@ -78,8 +84,10 @@ private:
 
     template <typename FrontArgT, typename ... ArgT>
     bool fitArgsInternal(size_t index, const FrontArgT& frontArg, const ArgT& ... args) const {
-        if constexpr (std::is_same<std::decay_t<FrontArgT>, AnyArg>::value)
+        if constexpr (std::is_same_v<std::decay_t<FrontArgT>, AnyArg>)
             return frontArg.valueRef().typeId().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
+        else if constexpr (std::is_convertible_v<std::decay_t<FrontArgT>&, ValueRef&>)
+            return frontArg.typeId().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
         else
             return getTypeId<FrontArgT>().canAssignTo(m_argumentTypeIds[index]) && fitArgsInternal<ArgT...>(index + 1, args...);
     }
