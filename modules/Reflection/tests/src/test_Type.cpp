@@ -66,6 +66,11 @@ TEST_CASE("Type constructors") {
             .addConstructor<std::shared_ptr<TestClass>, TestClass*>()
             .addFunction<std::shared_ptr<TestClass>, TestClass*>("get", [](auto v) { return v.get(); });
 
+//    typeSharedPtr = reflection->registerType("std::shared_ptr<TestClass>",
+//                                             TypeBuilder<std::shared_ptr<TestClass>>()
+//                                             .addConstructor<TestClass*>()
+//                                             .addInlineFunction<TestClass*>("get", [](auto v) { return v.get(); });
+
     auto rawPointer1 = type.constructOnHeap(10);
     auto value = typeSharedPtr.constructOnStack(rawPointer1);
     auto rawPointer = typeSharedPtr.method("get")(value);
