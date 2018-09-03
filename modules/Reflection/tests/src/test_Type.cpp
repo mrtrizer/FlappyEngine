@@ -60,14 +60,14 @@ TEST_CASE("Type constructors") {
             .addConstructor<TestClass, int>()
             .addFunction("testMethod", &TestClass::testMethod)
             .addFunction("testMethodConst", &TestClass::testMethod)
-            .addFunction("c", &TestClass::c);
+            .addFunction("c", &TestClass::c)
+            .addField("m_c", &TestClass::m_c);
 
     auto typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>")
             .addConstructor<std::shared_ptr<TestClass>, TestClass*>()
             .addFunction<std::shared_ptr<TestClass>, TestClass*>("get", [](auto v) { return v.get(); });
 
-//    typeSharedPtr = reflection->registerType("std::shared_ptr<TestClass>",
-//                                             TypeBuilder<std::shared_ptr<TestClass>>()
+//    typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>")
 //                                             .addConstructor<TestClass*>()
 //                                             .addInlineFunction<TestClass*>("get", [](auto v) { return v.get(); });
 
@@ -76,4 +76,7 @@ TEST_CASE("Type constructors") {
     auto rawPointer = typeSharedPtr.method("get")(value);
     auto ref = rawPointer.deref();
     REQUIRE(type.method("c")(ref).as<int>() == 10);
+    REQUIRE(type.field("m_c").getValue(ref).as<int>() == 10);
+    type.field("m_c").setValue(ref, 20);
+    REQUIRE(type.field("m_c").getValue(ref).as<int>() == 20);
 }
