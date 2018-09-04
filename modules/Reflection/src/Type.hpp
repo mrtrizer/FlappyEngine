@@ -69,11 +69,6 @@ public:
 
     const Field& field(const std::string& name) const { return m_fieldsMap.at(name); }
 
-    Type& addStaticFunction(std::string) {
-        // FIXME: Implement me
-        return *this;
-    }
-
 private:
     TypeId m_typeId;
     std::vector<TypeId> m_parents;

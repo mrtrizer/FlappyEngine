@@ -7,6 +7,7 @@
     ],
     "cxx":{
         "flags": ["--std=c++17"],
+        "flags_msvc": ["/std:c++17"],
         "header_dirs": [
             "./src"
         ],
