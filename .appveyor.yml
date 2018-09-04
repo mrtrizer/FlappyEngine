@@ -31,6 +31,6 @@ build_script:
   - cd FlappyTools2\scripts
   - npm install
   - cd C:\projects\flappyengine
-  - cd modules\MemoryManager\tests\
+  - cd modules\Utility\tests\
   - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
-  - .\generated\cmake\build\Release\TestProject1.exe
+  - .\generated\cmake\build\Release\tests_Utility.exe

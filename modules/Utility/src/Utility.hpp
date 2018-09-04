@@ -4,6 +4,8 @@
 #include <string>
 #include <cassert>
 
+namespace flappy {
+
 class FlappyException : public std::exception {
 public:
     FlappyException(std::string message) noexcept : m_message(std::move(message))  {
@@ -55,4 +57,4 @@ constexpr void assertDerived() {
     static_assert(std::is_base_of<BaseT, DerivedT>::value, "DerivedT should be derived from BaseT");
 }
 
-
+} // flappy
