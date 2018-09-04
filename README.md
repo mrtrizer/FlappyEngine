@@ -2,8 +2,8 @@
 ## Tests:
 | Module | Status |
 | --- | --- |
-| FlappyEngine | [![status](https://travis-ci.org/mrtrizer/FlappyEngine.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) [![codecov](https://codecov.io/gh/mrtrizer/FlappyEngine/branch/master/graph/badge.svg)](https://codecov.io/gh/mrtrizer/FlappyEngine) |
-| FlappyTools2 | [![status](https://travis-ci.org/mrtrizer/FlappyTools2.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) |
+| FlappyEngine | [![status](https://travis-ci.org/mrtrizer/FlappyEngine.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) [![codecov](https://codecov.io/gh/mrtrizer/FlappyEngine/branch/master/graph/badge.svg)](https://codecov.io/gh/mrtrizer/FlappyEngine) [![Build status](https://ci.appveyor.com/api/projects/status/4xxkhek40a57m8mx?svg=true)](https://ci.appveyor.com/project/mrtrizer/flappyengine) |
+| FlappyTools2 | [![status](https://travis-ci.org/mrtrizer/FlappyTools2.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) | 
 
 ## Installation
 The engine itself is not an application, it's just a list of modules for FlappyTools2 template processor. To start using of FlappyEngine, install FlappyTools2 first. Follow instructions here https://github.com/mrtrizer/FlappyTools2
