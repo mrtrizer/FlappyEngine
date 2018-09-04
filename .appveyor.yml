@@ -1,0 +1,36 @@
+environment:
+  matrix:
+  - COMPILER: MSVC_15
+    ARCHITECTURE: x64
+    TESTS_ONLY: true
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
+build:
+  verbosity: detailed
+  parallel: true
+
+install:
+  - cmake --version
+  - node --version
+
+before_build:
+  - cmd: cd C:\projects\flappyengine
+  - IF "%ARCHITECTURE%" == "x86" IF "%COMPILER%" == "MSVC_15" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\vsdevcmd.bat" -arch=x86 -host_arch=x64
+  - IF "%ARCHITECTURE%" == "x64" IF "%COMPILER%" == "MSVC_15" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\vsdevcmd.bat" -arch=x64 -host_arch=x64
+  - IF "%ARCHITECTURE%" == "x86" IF "%COMPILER%" == "MSVC_14" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\vsvars32.bat"
+  - IF "%ARCHITECTURE%" == "x64" IF "%COMPILER%" == "MSVC_14" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
+  - IF "%ARCHITECTURE%" == "x86" IF "%COMPILER%" == "MSVC_12" call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\vsvars32.bat"
+  - IF "%ARCHITECTURE%" == "x64" IF "%COMPILER%" == "MSVC_12" call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
+  - IF "%ARCHITECTURE%" == "x86" IF "%COMPILER%" == "MINGW_482" set PATH=C:\Qt\Tools\mingw482_32\bin;%PATH%
+  - IF "%ARCHITECTURE%" == "x86" IF "%COMPILER%" == "MINGW_492" set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
+  - IF "%ARCHITECTURE%" == "x64" IF "%COMPILER%" == "MINGW_W64" set PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+
+build_script:
+  - cd C:\projects\flappyengine
+  - git clone https://github.com/mrtrizer/FlappyTools2.git
+  - cd FlappyTools2\scripts
+  - npm install
+  - cd C:\projects\flappyengine
+  - cd modules\MemoryManager\tests\
+  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
+  - .\generated\cmake\build\Release\TestProject1.exe
