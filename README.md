@@ -2,8 +2,8 @@
 ## Tests:
 | Module | Status |
 | --- | --- |
-| FlappyEngine | [![status](https://travis-ci.org/mrtrizer/FlappyEngine.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) [![codecov](https://codecov.io/gh/mrtrizer/FlappyEngine/branch/master/graph/badge.svg)](https://codecov.io/gh/mrtrizer/FlappyEngine) [![Build status](https://ci.appveyor.com/api/projects/status/4xxkhek40a57m8mx?svg=true)](https://ci.appveyor.com/project/mrtrizer/flappyengine) |
-| FlappyTools2 | [![status](https://travis-ci.org/mrtrizer/FlappyTools2.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) | 
+| FlappyEngine | [![status](https://travis-ci.org/mrtrizer/FlappyEngine.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) [![Build status](https://ci.appveyor.com/api/projects/status/4xxkhek40a57m8mx?svg=true)](https://ci.appveyor.com/project/mrtrizer/flappyengine) [![codecov](https://codecov.io/gh/mrtrizer/FlappyEngine/branch/master/graph/badge.svg)](https://codecov.io/gh/mrtrizer/FlappyEngine)  |
+| FlappyTools2 | [![status](https://travis-ci.org/mrtrizer/FlappyTools2.svg?branch=master)](https://travis-ci.org/mrtrizer/FlappyEngine) [![Build status](https://ci.appveyor.com/api/projects/status/9bqsa6v6fgrvcbaw?svg=true)](https://ci.appveyor.com/project/mrtrizer/flappytools2) | 
 
 ## Installation
 The engine itself is not an application, it's just a list of modules for FlappyTools2 template processor. To start using of FlappyEngine, install FlappyTools2 first. Follow instructions here https://github.com/mrtrizer/FlappyTools2
@@ -49,3 +49,9 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /u
 4. Download SDL2 and SDL2_image here: https://www.libsdl.org/download-2.0.php#source and https://www.libsdl.org/projects/SDL_image/.
 
 5. Copy SDL2.framework and SDL2_image.framework to ~/Library/Frameworks (create the folder if needed)
+
+## Windows
+I'm only in the very beginning of porting engine to Windows. It was developed only with Unix systems in mind just to check ideas. Now project generator FlappyTools2 works on windows and provieds oppotunities to build everything under it.
+1. Install Node.js, Cmake, VS17 Build Tools
+2. Install FlappyTools2
+3. Follow instructions on FlappyTools2 to build modules.
