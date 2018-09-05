@@ -30,10 +30,15 @@ build_script:
   - git clone https://github.com/mrtrizer/FlappyTools2.git
   - cd FlappyTools2\scripts
   - npm install
-  - cd C:\projects\flappyengine
-  - cd modules\Utility\tests\
+
+  - cd C:\projects\flappyengine\modules\Utility\tests\
   - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
   - .\generated\cmake\build\Release\tests_Utility.exe
-  - cd modules\Reflection\tests\
+
+  - cd C:\projects\flappyengine\modules\Reflection\tests\
   - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
   - .\generated\cmake\build\Release\tests_Reflection.exe
+
+  - cd C:\projects\flappyengine\modules\MemoryManager\tests\
+  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
+  - .\generated\cmake\build\Release\tests_MemoryManager.exe
