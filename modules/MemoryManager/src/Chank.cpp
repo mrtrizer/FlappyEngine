@@ -14,7 +14,7 @@ Chank::Chank(ObjectPool* objectPool, std::byte* data, size_t size)
     DEBUG_ASSERT(size > 0);
 }
 
-Chank::~Chank() noexcept {
+Chank::~Chank() {
     if (m_dataDescructor != nullptr) {
         m_dataDescructor(m_data);
         m_objectPool->onDestroyed(this);

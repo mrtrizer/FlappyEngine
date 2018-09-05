@@ -40,5 +40,8 @@ build_script:
   - .\generated\cmake\build\Release\tests_Reflection.exe
 
   - cd C:\projects\flappyengine\modules\MemoryManager\tests\
-  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
-  - .\generated\cmake\build\Release\tests_MemoryManager.exe
+  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js gen cmake
+  - cd generated\cmake\
+  - cmake -G "Visual Studio 15 2017"
+  - cmake --build . --target ALL_BUILD --config Debug
+  - .\Debug\tests_MemoryManager.exe

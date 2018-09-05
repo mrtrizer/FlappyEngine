@@ -12,8 +12,6 @@ class ObjectPool;
 /// The class holds object of any type within size limit
 class Chank {
     FORDEBUG(friend class ObjectPoolDebugger);
-    template <typename T>
-    friend class std::allocator; // to construct
     friend class ObjectPool; // to create instance and call methods
     friend class AnyStrongHandle; // to update strong handle
     friend class AnyHandle; // to register/unregister handles
@@ -22,9 +20,11 @@ class Chank {
     template <typename T>
     friend class Handle;
 
+public:
     Chank(ObjectPool* objectPool, std::byte* data, size_t size);
-    ~Chank() noexcept;
+    ~Chank();
 
+private:
     /// Instantiates object in chank and returns a strong handle. Underlying instance exists until the strong handle is destroyed.
     /// @param destroyedCallback Called when underlying class is destroyed
     template <typename DataT, typename ... Args>
