@@ -27,6 +27,22 @@ public:
         , m_resultTypeId (getTypeId<ResultT>())
     {}
 
+    // Constructor for purely inline member functions (usually a lambda taking object refference as an argument)
+    // Typically inline member function in standard library don't have an address at all, that's why this hack is needed.
+    template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
+    Function(const Reflection& reflection, const std::function<ResultT(TypeT&, ArgT ...)>& func)
+        : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
+            using ArgsTuple = std::tuple<ArgT...>;
+            if constexpr (std::is_same<ResultT, void>::value)
+                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), AnyArg();
+            else
+                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
+        })
+        , m_argumentTypeIds {getTypeId<ArgT>()...}
+        , m_classTypeId (getTypeId<TypeT>())
+        , m_resultTypeId (getTypeId<ResultT>())
+    {}
+
     // Constructor for member functions
     template <typename TypeT, typename ResultT, typename ... ArgT, typename Indices = std::make_index_sequence<sizeof...(ArgT)>>
     Function(const Reflection& reflection, ResultT (TypeT::*func) (ArgT ...))
@@ -77,6 +93,11 @@ private:
     template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
     static auto callMember(const Reflection& reflection, FuncT&& func, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
         return (args.front().as<TypeT&>(reflection).*func)(args[I + 1].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
+    }
+
+    template<typename TypeT, typename ArgsTupleT, typename FuncT,  std::size_t... I>
+    static auto callInlineMember(const Reflection& reflection, FuncT&& func, const std::vector<AnyArg>& args, std::index_sequence<I...>) {
+        return func(args.front().as<TypeT&>(reflection), args[I + 1].as<typename std::tuple_element<I, ArgsTupleT>::type>(reflection)...);
     }
 
     template <typename...>

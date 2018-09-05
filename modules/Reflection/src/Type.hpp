@@ -57,7 +57,7 @@ public:
 
     template <typename TypeT, typename ResultT, typename ... ArgT, typename FuncT>
     Type& addFunction(const std::string& name, FuncT lambda) {
-        m_methodsMap.emplace(name, Function(m_reflection, LambdaHelper<ResultT, TypeT&, ArgT...>(lambda).func));
+        m_methodsMap.emplace(name, Function(m_reflection, std::function<ResultT(TypeT&, ArgT...)>(lambda)));
         return *this;
     }
 
@@ -91,16 +91,6 @@ private:
             return *iter;
         throw FlappyException("Can't construct");
     }
-
-    // Lambda helper helps to pass lambda into Function constructor. Without it, variadic args don't
-    // work by some reason. If you know a simpler solution, I would appreciate it.
-    template <typename ResultT, typename ... ArgT>
-    struct LambdaHelper {
-        LambdaHelper(ResultT(*lambda)(ArgT...))
-            : func(lambda)
-        {}
-        ResultT(*func)(ArgT...);
-    };
 };
 
 } // flappy
