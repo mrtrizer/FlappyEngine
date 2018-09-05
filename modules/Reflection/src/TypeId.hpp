@@ -13,7 +13,7 @@
 namespace flappy {
 
 class TypeId {
-    friend class std::hash<TypeId>; // To calculate hash
+    friend struct std::hash<TypeId>; // To calculate hash
     template <typename T>
     friend TypeId getTypeId() noexcept;
 public:
@@ -76,7 +76,11 @@ TypeId getTypeId() noexcept {
     // FIXME: Remove name parsing
     std::regex regex("Type = ([0-9A-Za-z:<>, ]*)");
     std::smatch match;
+#ifdef __FUNCTION__
+    std::string str(__FUNCTION__);
+#else
     std::string str(__PRETTY_FUNCTION__);
+#endif
     std::regex_search(str, match, regex);
     typeId.name = str
             + std::to_string(typeId.isPointer())
