@@ -19,7 +19,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return call<ArgsTuple>(reflection, func, anyArgs,Indices{}), AnyArg();
+                return call<ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
             else
                 return call<ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
@@ -34,7 +34,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), AnyArg();
+                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
             else
                 return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
@@ -49,7 +49,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), AnyArg();
+                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
             else
                 return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
