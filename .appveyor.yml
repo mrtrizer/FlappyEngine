@@ -34,3 +34,6 @@ build_script:
   - cd modules\Utility\tests\
   - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
   - .\generated\cmake\build\Release\tests_Utility.exe
+  - cd modules\Reflection\tests\
+  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
+  - .\generated\cmake\build\Release\tests_Reflection.exe

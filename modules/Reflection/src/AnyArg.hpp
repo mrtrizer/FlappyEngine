@@ -48,7 +48,7 @@ public:
                 [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).constructOnStack(*this); } (reflection);
                 return m_constructedValue.as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr("No convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
+                throw std::runtime_error(sstr(e.what(), "\nNo convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
             }
         }
         return m_valueRef.as<T>();
