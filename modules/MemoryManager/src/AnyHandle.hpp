@@ -19,9 +19,9 @@ class AnyHandle {
 public:
     AnyHandle() = default;
 
-    AnyHandle(AnyStrongHandle& strongHandle) noexcept;
+    AnyHandle(const AnyStrongHandle &strongHandle) noexcept;
 
-    AnyHandle& operator=(AnyStrongHandle& strongHandle) noexcept;
+    AnyHandle& operator=(const AnyStrongHandle& strongHandle) noexcept;
 
     AnyHandle(std::nullptr_t) noexcept
     {}
@@ -56,7 +56,9 @@ public:
     // Not virtual because the only derived class has no data members
     ~AnyHandle();
 
-    bool isValid() noexcept;
+    bool isValid() const noexcept;
+
+    operator bool() const { return isValid(); }
 
     template <typename DataT>
     const Handle<DataT>& get() const {

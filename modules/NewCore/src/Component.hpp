@@ -2,6 +2,8 @@
 
 #include <Handle.hpp>
 
+namespace flappy {
+
 class Entity;
 
 template <typename ... Args>
@@ -11,8 +13,8 @@ class PutAfter {
 
 class Component {
 public:
-    Component()
-        : m_entity(lastEntity())
+    Component(const Handle<Entity>& entity)
+        : m_entity(entity)
     {}
 
     Handle<Entity> entity() { return m_entity; }
@@ -20,3 +22,5 @@ public:
 private:
     Handle<Entity> m_entity;
 };
+
+} // flappy

@@ -18,6 +18,8 @@ class AnyStrongHandle {
     friend class AnyHandle; // to register/unregister handles
     friend class Chank; // for access to updatePointer()
 public:
+    AnyStrongHandle(std::nullptr_t) noexcept {}
+
     AnyStrongHandle& operator=(std::nullptr_t) noexcept;
 
     AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept;
@@ -28,6 +30,8 @@ public:
     ~AnyStrongHandle() noexcept;
 
     bool isValid() const noexcept;
+
+    operator bool() const noexcept { return isValid(); }
 
     TypeId typeId() const noexcept;
 

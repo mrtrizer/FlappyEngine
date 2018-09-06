@@ -12,6 +12,8 @@ class StrongHandle : public AnyStrongHandle {
     FORDEBUG(friend class ObjectPoolDebugger); // to access handles and a chank
     friend class Chank; // to construct
 public:
+    StrongHandle() = default;
+
     StrongHandle& operator=(std::nullptr_t) noexcept {
         AnyStrongHandle::operator=(nullptr);
         return *this;

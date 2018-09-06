@@ -33,7 +33,7 @@ private:
         DEBUG_ASSERT(m_dataDescructor == nullptr);
         DEBUG_ASSERT(m_objectPool == nullptr);
 
-        static_assert(noexcept(DataT(std::declval<DataT>())), "DataT(DataT&&) should be noexcept.");
+//        static_assert(noexcept(DataT(std::declval<DataT>())), "DataT(DataT&&) should be noexcept.");
 
         try {
             auto data = new (m_data) DataT(std::forward<Args>(args)...);

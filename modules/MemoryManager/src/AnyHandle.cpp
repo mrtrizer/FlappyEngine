@@ -8,14 +8,14 @@ namespace flappy {
 template <typename T>
 class Handle;
 
-AnyHandle::AnyHandle(AnyStrongHandle& strongHandle) noexcept
+AnyHandle::AnyHandle(const AnyStrongHandle& strongHandle) noexcept
     : m_chank(strongHandle.m_chank)
 {
     if (m_chank != nullptr)
         m_chank->registerHandle(this);
 }
 
-AnyHandle& AnyHandle::operator=(AnyStrongHandle& strongHandle) noexcept {
+AnyHandle& AnyHandle::operator=(const AnyStrongHandle& strongHandle) noexcept {
     setNewChank(strongHandle.m_chank);
     return *this;
 }
@@ -25,7 +25,7 @@ AnyHandle::~AnyHandle() {
         m_chank->unregisterHandle(this);
 }
 
-bool AnyHandle::isValid() noexcept {
+bool AnyHandle::isValid() const noexcept {
     return m_chank != nullptr;
 }
 

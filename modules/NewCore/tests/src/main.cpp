@@ -9,6 +9,7 @@
 
 using namespace fakeit;
 using namespace std;
+using namespace flappy;
 
 class OtherTestComponent {
 public:
@@ -41,14 +42,28 @@ private:
 //    // ...
 //}
 
+class ITestManager : public IManager {
+public:
+    void setSomething(int) {
+
+    }
+};
+
+class TestManager : public ITestManager {
+public:
+    TestManager(Handle<Hierarchy>) {
+
+    }
+
+    void update(float) override {
+
+    }
+};
 
 TEST_CASE( "Hierarchy") {
     auto hierarchy = Heap::create<Hierarchy>();
     auto testManager = hierarchy->initManager<ITestManager, TestManager>();
     testManager->setSomething(100);
-
-    auto appManager = hierarchy->initManager<AppManager>();
-    appManager->setArgs(argv, argc);
 
     auto entity1 = hierarchy->rootEntity()->createEntity();
     entity1->component<TestComponent>()->setSomething(100);

@@ -44,7 +44,7 @@ void Chank::clear() noexcept {
 }
 
 bool Chank::constructed() const noexcept {
-    return m_dataDescructor != nullptr;
+    return m_data != nullptr;
 }
 
 void Chank::registerHandle(AnyHandle* handle) noexcept {

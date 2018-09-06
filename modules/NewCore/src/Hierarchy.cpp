@@ -2,9 +2,13 @@
 
 #include "Entity.hpp"
 
-void Hierarchy::updateEntity(const StrongHandle<Entity>& entity, float dt) {
+namespace flappy {
+
+void Hierarchy::updateEntity(const Handle<Entity>& entity, float dt) {
     for (auto updateFunction : entity->updateFunctions())
         updateFunction(dt);
-    for (const auto& subEntity : entity->children())
+    for (const auto& subEntity : entity->entities())
         updateEntity(subEntity, dt);
 }
+
+} // flappy

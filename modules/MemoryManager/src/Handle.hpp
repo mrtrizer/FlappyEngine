@@ -16,14 +16,14 @@ public:
     Handle() = default;
 
     template <typename DerivedT>
-    Handle(StrongHandle<DerivedT>& strongHandle) noexcept
+    Handle(const StrongHandle<DerivedT>& strongHandle) noexcept
         : AnyHandle(strongHandle)
     {
         assertDerived<DataT, DerivedT>();
     }
 
     template <typename DerivedT>
-    Handle& operator=(StrongHandle<DerivedT>& strongHandle) noexcept {
+    Handle& operator=(const StrongHandle<DerivedT>& strongHandle) noexcept {
         assertDerived<DataT, DerivedT>();
         AnyHandle::operator=(strongHandle);
         return *this;

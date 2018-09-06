@@ -45,3 +45,8 @@ build_script:
   - cmake -G "Visual Studio 15 2017"
   - cmake --build . --target ALL_BUILD --config Debug
   - .\Debug\tests_MemoryManager.exe
+
+  - cd C:\projects\flappyengine\modules\NewCore\tests\
+  - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
+  - .\generated\cmake\build\Release\tests_Core.exe
+

@@ -4,47 +4,60 @@
 
 #include "IManager.hpp"
 #include "ObjectPool.hpp"
+#include "Entity.hpp"
+
+namespace flappy {
 
 class Entity;
 
 class Hierarchy : public EnableSelfHandle<Hierarchy> {
 public:
-    Hierarchy()
-        : m_rootEntity(m_entityPool.create<Entity>())
-    {}
+    Hierarchy() {}
 
     void update(float dt) {
         for (const auto& manager : m_managers)
             manager->update(dt);
-        updateEntity(m_rootEntity, dt);
+        updateEntity(rootEntity(), dt);
     }
 
     template <typename ManagerT, typename DerivedServiceT = ManagerT>
     Handle<ManagerT> initManager() {
         auto iter = std::find_if(m_managers.begin(), m_managers.end(), [](const auto& handle) {
-            handle.id() == getTypeId<ManagerT>();
+            return handle.typeId() == getTypeId<ManagerT>();
         });
+        // Be aware of tricky implicit typecasts
+        auto manager = create<DerivedServiceT>(selfHandle());
+        auto managerHandle = manager.handle();
         if (iter != m_managers.end())
-            *iter = create<DerivedServiceT>(selfHandle());
+            *iter = std::move(manager);
         else
-            m_managers.emplace_back(create<DerivedServiceT>(selfHandle()));
+            m_managers.emplace_back(std::move(manager));
+        return managerHandle;
     }
 
     template <typename DataT, typename...Args>
     [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
         size_t size = sizeof(DataT);
-        for (const auto& objectPool : m_objectPools) {
+        for (auto& objectPool : m_objectPools) {
             if (objectPool.maxObjectSize() >= size)
                 return objectPool.create<DataT>(std::forward<Args>(args)...);
         }
         throw std::runtime_error(sstr("Can't find appropriate object pool for object of size ", size));
     }
 
+    Handle<Entity> rootEntity() {
+        if (!m_rootEntity)
+            m_rootEntity = m_entityPool.create<Entity>(selfHandle());
+        return m_rootEntity;
+    }
+
 private:
     std::vector<StrongHandle<IManager>> m_managers;
-    StrongHandle<Entity> m_rootEntity;
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
+    StrongHandle<Entity> m_rootEntity;
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };
 
-    void updateEntity(const StrongHandle<Entity> &entity, float dt);
+    void updateEntity(const Handle<Entity> &entity, float dt);
 };
+
+} // flappy
