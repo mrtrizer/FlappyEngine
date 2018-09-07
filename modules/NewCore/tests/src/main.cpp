@@ -27,8 +27,10 @@ public:
     }
 
     void setSomething(int something) {
-
+        m_something = something;
     }
+
+    int something() { return m_something; }
 
     void update(float dt) {
         m_entity->component<OtherTestComponent>()->move(dt);
@@ -36,6 +38,7 @@ public:
 
 private:
     Handle<Entity> m_entity;
+    int m_something = 0;
 };
 
 //EntityBlueprint createButton() {
@@ -44,9 +47,8 @@ private:
 
 class ITestManager : public IManager {
 public:
-    void setSomething(int) {
-
-    }
+    virtual void setSomething(int something) = 0;
+    virtual int something() = 0;
 };
 
 class TestManager : public ITestManager {
@@ -55,19 +57,30 @@ public:
 
     }
 
+    void setSomething(int something) override { m_something = something; }
+    int something() override { return m_something; }
+
     void update(float) override {
 
     }
+
+private:
+    int m_something = 0;
 };
 
 TEST_CASE( "Hierarchy") {
     auto hierarchy = Heap::create<Hierarchy>();
+    //{
     auto testManager = hierarchy->initManager<ITestManager, TestManager>();
-    testManager->setSomething(100);
+    testManager->setSomething(200);
 
     auto entity1 = hierarchy->rootEntity()->createEntity();
     entity1->component<TestComponent>()->setSomething(100);
     //entity1->insertSubtree(createButton());
 
+    REQUIRE(entity1->findComponent<TestComponent>()->something() == 100);
+    REQUIRE(hierarchy->manager<ITestManager>()->something() == 200);
+
     hierarchy->update(1.0f);
+    //}
 }

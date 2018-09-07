@@ -15,12 +15,8 @@ Chank::Chank(ObjectPool* objectPool, std::byte* data, size_t size)
 }
 
 Chank::~Chank() {
-    if (m_dataDescructor != nullptr) {
-        m_dataDescructor(m_data);
-        m_objectPool->onDestroyed(this);
-    }
-    for (auto handle : m_handles)
-        handle->invalidate();
+    if (m_strongHandle != nullptr)
+        m_strongHandle->reset();
 }
 
 /// Method destroys underlaying instance if it is was initialized.
@@ -30,21 +26,21 @@ void Chank::clear() noexcept {
     DEBUG_ASSERT(m_strongHandle != nullptr);
     DEBUG_ASSERT(m_dataDescructor != nullptr);
 
+    for (auto handle : m_handles)
+        handle->invalidate();
+    m_handles.clear();
+
     m_dataDescructor(m_data);
 
     m_strongHandle = nullptr;
     m_dataDescructor = nullptr;
-
-    for (auto handle : m_handles)
-        handle->invalidate();
-    m_handles.clear();
 
     // onDestroyed() should be called in the end
     m_objectPool->onDestroyed(this);
 }
 
 bool Chank::constructed() const noexcept {
-    return m_data != nullptr;
+    return m_dataDescructor != nullptr;
 }
 
 void Chank::registerHandle(AnyHandle* handle) noexcept {

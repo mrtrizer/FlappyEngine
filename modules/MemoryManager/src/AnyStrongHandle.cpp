@@ -56,6 +56,8 @@ void AnyStrongHandle::reset() noexcept {
 }
 
 void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
+    // Reset first. AnyStrongHandle can already hold some data.
+    reset();
     m_dataPointer = strongHandle.m_dataPointer;
     strongHandle.m_dataPointer = nullptr;
     auto chank = m_chank = strongHandle.m_chank;

@@ -40,7 +40,7 @@ public:
     template <typename ComponentT>
     Handle<ComponentT> findComponent() const {
         auto strongHandlePtr = findComponentInternal<ComponentT>();
-        return strongHandlePtr != nullptr ? *strongHandlePtr : nullptr;
+        return strongHandlePtr ? *strongHandlePtr : Handle<ComponentT>();
     }
 
     const std::vector<AnyStrongHandle>& components() const noexcept {

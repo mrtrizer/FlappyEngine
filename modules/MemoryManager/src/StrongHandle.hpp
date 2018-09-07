@@ -47,8 +47,10 @@ public:
     StrongHandle(const StrongHandle&) = delete;
     StrongHandle& operator=(const StrongHandle&) = delete;
 
-    Handle<DataT> handle() noexcept {
-        return Handle<DataT>(*this);
+    template <typename T = DataT>
+    Handle<T> handle() noexcept {
+        static_assert(std::is_base_of_v<DataT, T> || std::is_base_of_v<T, DataT>, "Should be inherited types");
+        return Handle<T>(*reinterpret_cast<StrongHandle<T>*>(this));
     }
 
     DataT* operator->() const {

@@ -15,7 +15,7 @@ public:
     int getChankIndex(StrongHandleT& strongHandle) {
         if (!strongHandle.isValid())
             return -1;
-        return size_t(strongHandle.m_chank->m_data - m_objectPool.m_bytes) / m_objectPool.m_maxObjectSize;
+        return size_t(strongHandle.m_chank->m_data - m_objectPool.m_bytes.data()) / m_objectPool.m_maxObjectSize;
         return 0;
     }
 
