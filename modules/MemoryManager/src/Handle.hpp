@@ -15,6 +15,10 @@ class Handle : public AnyHandle {
 public:
     Handle() = default;
 
+    Handle(Chank* chank)
+        : AnyHandle(chank)
+    {}
+
     template <typename DerivedT>
     Handle(const StrongHandle<DerivedT>& strongHandle) noexcept
         : AnyHandle(strongHandle)

@@ -19,6 +19,8 @@ class AnyHandle {
 public:
     AnyHandle() = default;
 
+    AnyHandle(Chank* chank) noexcept;
+
     AnyHandle(const AnyStrongHandle& strongHandle) noexcept;
 
     AnyHandle& operator=(const AnyStrongHandle& strongHandle) noexcept;

@@ -8,6 +8,11 @@ namespace flappy {
 template <typename T>
 class Handle;
 
+AnyHandle::AnyHandle(Chank* chank) noexcept {
+    chank->registerHandle(this);
+    m_chank = chank;
+}
+
 AnyHandle::AnyHandle(const AnyStrongHandle& strongHandle) noexcept
     : m_chank(strongHandle.m_chank)
 {

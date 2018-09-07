@@ -26,9 +26,7 @@ void Chank::clear() noexcept {
     DEBUG_ASSERT(m_strongHandle != nullptr);
     DEBUG_ASSERT(m_dataDescructor != nullptr);
 
-    for (auto handle : m_handles)
-        handle->invalidate();
-    m_handles.clear();
+    clearHandles();
 
     m_dataDescructor(m_data);
 
@@ -45,17 +43,30 @@ bool Chank::constructed() const noexcept {
 
 void Chank::registerHandle(AnyHandle* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
+    m_handles.emplace_back(handle);
 
-   m_handles.emplace_back(handle);
+    if (m_hasRemovedHandles && m_handles.size() > 20)
+        m_handles.remove_if([](auto itemPtr) { return itemPtr == nullptr; });
 }
 
 void Chank::unregisterHandle(void* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
     DEBUG_ASSERT(!m_handles.empty());
 
-    m_handles.remove_if([handle](const auto& item) {
-        return item == handle;
+    auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](auto itemPtr) {
+        return itemPtr == handle;
     });
+    DEBUG_ASSERT(iter != m_handles.end());
+    *iter = nullptr;
+
+    m_hasRemovedHandles = true;
+}
+
+void Chank::clearHandles() noexcept {
+    for (auto handle : m_handles)
+        if (handle != nullptr)
+            handle->invalidate(); // invalidation turns handle into nullptr
+    m_handles.clear();
 }
 
 } // flappy

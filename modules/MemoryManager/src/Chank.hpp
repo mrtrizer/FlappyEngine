@@ -49,6 +49,8 @@ private:
         } catch(...) {
             m_strongHandle = nullptr;
             m_dataDescructor = nullptr;
+            // Self handles could be created during construction, so, removing them
+            clearHandles();
             throw;
         }
     }
@@ -64,6 +66,7 @@ private:
 
     void registerHandle(AnyHandle* handle) noexcept;
     void unregisterHandle(void* handle) noexcept;
+    void clearHandles() noexcept;
 
     template <typename DataT>
     DataT* data() noexcept {
@@ -78,6 +81,7 @@ private:
     ObjectPool* m_objectPool = nullptr;
     std::list<AnyHandle*> m_handles;
     TypeId m_typeId;
+    bool m_hasRemovedHandles = false;
 };
 
 } // flappy

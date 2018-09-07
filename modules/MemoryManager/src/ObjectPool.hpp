@@ -4,18 +4,9 @@
 
 #include "Chank.hpp"
 #include "Handle.hpp"
+#include "EnableSelfHandle.hpp"
 
 namespace flappy {
-
-template <typename ObjectT>
-class EnableSelfHandle {
-    friend class ObjectPool; // to assign self handle
-protected:
-    Handle<ObjectT> selfHandle() { return *static_cast<StrongHandle<ObjectT>*>(m_selfChankPtr->m_strongHandle); }
-private:
-    // Pointer to chank allows me access an actual pointer to a StrongHandle
-    Chank* m_selfChankPtr;
-};
 
 class ObjectPool {
     FORDEBUG(friend class ObjectPoolDebugger);
@@ -39,9 +30,9 @@ public:
         if (emptyChank == nullptr)
             throw FlappyException("No empty memory chanks left. Review parameters of the object pool!");
         try {
-            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
             if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
-                strongHandle->m_selfChankPtr = emptyChank;
+                emptyChank->data<EnableSelfHandle<DataT>>()->m_selfChankPtr = emptyChank;
+            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;
             return strongHandle;

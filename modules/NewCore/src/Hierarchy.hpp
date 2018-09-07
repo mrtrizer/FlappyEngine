@@ -12,7 +12,9 @@ class Entity;
 
 class Hierarchy : public EnableSelfHandle<Hierarchy> {
 public:
-    Hierarchy() {}
+    Hierarchy()
+        : m_rootEntity(m_entityPool.create<Entity>(selfHandle()))
+    {}
 
     ~Hierarchy() {}
 
@@ -52,8 +54,6 @@ public:
     }
 
     Handle<Entity> rootEntity() {
-        if (!m_rootEntity)
-            m_rootEntity = m_entityPool.create<Entity>(selfHandle());
         return m_rootEntity;
     }
 
