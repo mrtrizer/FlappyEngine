@@ -57,4 +57,18 @@ constexpr void assertDerived() {
     static_assert(std::is_base_of<BaseT, DerivedT>::value, "DerivedT should be derived from BaseT");
 }
 
+#define HAS_METHOD(type, signature) \
+    []() { \
+        template<typename T> \
+        struct hasMethod \
+        { \
+            template<typename U> static auto test(int) -> decltype(std::declval<U>().size(), std::true_type()); \
+            template<typename> static no test(...); \
+        public: \
+            static constexpr bool value = std::is_same<decltype(test<T>(0)), std::true_type>::value; \
+        }; \
+        return value; \
+    }();
+
+
 } // flappy

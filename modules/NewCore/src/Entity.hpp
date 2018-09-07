@@ -22,9 +22,9 @@ public:
             else
                 return hierarchy->template create<ComponentT>();
         } (m_hierarchy);
-        if constexpr (hasUpdate<ComponentT>()) {
-            m_updateFunctions.emplace_back([component](float dt) {
-               component->update(dt);
+        if constexpr (hasUpdate<ComponentT>(0)) {
+            m_updateFunctions.emplace_back([componentHandle = component.handle()](float dt) {
+               componentHandle->update(dt);
             });
         }
 
@@ -65,10 +65,10 @@ private:
     std::vector<std::function<void(float)>> m_updateFunctions;
 
     template <typename ComponentT>
-    static constexpr bool hasUpdate() { return false; }
+    static constexpr bool hasUpdate(...) { return false; }
 
-    template <typename ComponentT, void (ComponentT::*update)(float)>
-    static constexpr bool hasUpdate() { return true; }
+    template <typename ComponentT>
+    static constexpr bool hasUpdate(int, decltype((std::declval<ComponentT>().update(float() )))* = 0) { return true; }
 
     template <typename T>
     static constexpr bool constructedWithEntity(decltype(T(std::declval<Handle<Entity>>()))* = 0) { return true; }
