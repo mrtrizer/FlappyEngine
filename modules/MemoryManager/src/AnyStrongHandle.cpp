@@ -15,7 +15,8 @@ AnyStrongHandle::AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
 }
 
 AnyStrongHandle& AnyStrongHandle::operator=(AnyStrongHandle&& strongHandle) noexcept {
-    moveFromStrongHandle(std::move(strongHandle));
+    if (&strongHandle != this)
+        moveFromStrongHandle(std::move(strongHandle));
     return *this;
 }
 

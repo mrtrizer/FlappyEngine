@@ -31,7 +31,7 @@ public:
             throw FlappyException("No empty memory chanks left. Review parameters of the object pool!");
         try {
             if constexpr (std::is_base_of<EnableSelfHandle<DataT>, DataT>::value)
-                emptyChank->data<EnableSelfHandle<DataT>>()->m_selfChankPtr = emptyChank;
+                emptyChank->data<DataT>()->m_selfChankPtr = emptyChank;
             auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;

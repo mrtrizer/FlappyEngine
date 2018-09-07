@@ -15,7 +15,7 @@ public:
     {}
 
     template <typename ComponentT>
-    const StrongHandle<ComponentT>& createComponent() {
+    Handle<ComponentT> createComponent() {
         auto component = [this](auto& hierarchy) {
             if constexpr (constructedWithEntity<ComponentT>())
                 return hierarchy->template create<ComponentT>(selfHandle());
@@ -31,8 +31,20 @@ public:
         return static_cast<const StrongHandle<ComponentT>&>(m_components.emplace_back(std::move(component)));
     }
 
+    bool removeComponent(const AnyHandle& handle) {
+        auto componentIter = std::find_if(m_components.begin(), m_components.end(), [&handle](const auto& strongHandle) {
+            return handle == strongHandle;
+        });
+        if (componentIter != m_components.end()) {
+            m_components.erase(componentIter);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     template <typename ComponentT>
-    const StrongHandle<ComponentT>& component() {
+    Handle<ComponentT> component() {
         auto strongHandlePtr = findComponentInternal<ComponentT>();
         return strongHandlePtr != nullptr ? *strongHandlePtr : createComponent<ComponentT>();
     }
@@ -57,6 +69,9 @@ public:
         return m_updateFunctions;
     }
 
+    Handle<Hierarchy> hierarchy() {
+        return m_hierarchy;
+    }
 
 private:
     Handle<Hierarchy> m_hierarchy;

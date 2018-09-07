@@ -37,7 +37,8 @@ public:
 
     template <typename DerivedT>
     AnyHandle& operator=(const Handle<DerivedT>& handle) noexcept {
-        setNewChank(handle.m_chank);
+        if (&handle != this)
+            setNewChank(handle.m_chank);
         return *this;
     }
 
@@ -50,7 +51,7 @@ public:
 
     template <typename DerivedT>
     AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
-        operator=(handle); // explicit call assignment operator
+        operator=(handle); // explicit call copy assignment operator
         handle.invalidate();
         return *this;
     }
@@ -60,7 +61,9 @@ public:
 
     bool isValid() const noexcept;
 
-    operator bool() const { return isValid(); }
+    bool operator==(const AnyHandle& other) const { return m_chank == other.m_chank; }
+
+    bool operator!=(const AnyHandle& other) const { return !operator==(other); }
 
     template <typename DataT>
     const Handle<DataT>& get() const {

@@ -5,7 +5,7 @@ namespace flappy {
 class IManager {
 public:
     virtual ~IManager() = default;
-    virtual void update(float dt) = 0;
+    virtual void update(float dt) {}
 };
 
 } // flappy

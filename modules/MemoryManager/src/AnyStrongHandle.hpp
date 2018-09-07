@@ -31,7 +31,9 @@ public:
 
     bool isValid() const noexcept;
 
-    operator bool() const noexcept { return isValid(); }
+    bool operator==(const AnyStrongHandle& other) const { return m_chank == other.m_chank; }
+
+    bool operator!=(const AnyStrongHandle& other) const { return !operator==(other); }
 
     TypeId typeId() const noexcept;
 

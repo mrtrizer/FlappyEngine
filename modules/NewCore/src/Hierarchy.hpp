@@ -58,10 +58,11 @@ public:
     }
 
 private:
+    // Order of members is important as it affects order of destruction. m_rootEntity should be the last member.
     std::unordered_map<TypeId, StrongHandle<IManager>> m_managers;
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
-    StrongHandle<Entity> m_rootEntity;
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };
+    StrongHandle<Entity> m_rootEntity;
 
     void updateEntity(const Handle<Entity> &entity, float dt);
 };

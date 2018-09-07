@@ -26,9 +26,10 @@ void Chank::clear() noexcept {
     DEBUG_ASSERT(m_strongHandle != nullptr);
     DEBUG_ASSERT(m_dataDescructor != nullptr);
 
-    clearHandles();
-
     m_dataDescructor(m_data);
+
+    // Clear handles after calling destructor because handles could be accessed during destruction.
+    clearHandles();
 
     m_strongHandle = nullptr;
     m_dataDescructor = nullptr;
