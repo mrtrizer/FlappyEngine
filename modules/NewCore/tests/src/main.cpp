@@ -11,6 +11,29 @@ using namespace fakeit;
 using namespace std;
 using namespace flappy;
 
+class Updatable;
+
+class IUpdateManager {
+public:
+    virtual void registerComponent(const Handle<Updatable>& component) = 0;
+    virtual void unregisterComponent(const Handle<Updatable>& component) = 0;
+};
+
+class Updatable : public EnableSelfHandle<Updatable> {
+public:
+    Updatable(const Handle<Hierarchy>& hierarchy)
+        : m_hierarchy(hierarchy)
+    {
+        m_hierarchy->manager<IUpdateManager>()->registerComponent(selfHandle());
+    }
+    ~Updatable() {
+        m_hierarchy->manager<IUpdateManager>()->unregisterComponent(selfHandle());
+    }
+    virtual void update(float dt) = 0;
+private:
+    Handle<Hierarchy> m_hierarchy;
+};
+
 class IOtherTestComponent {
 public:
     virtual ~IOtherTestComponent() = default;
@@ -19,7 +42,7 @@ public:
     }
 };
 
-class ITestManager : public IManager {
+class ITestManager {
 public:
     virtual ~ITestManager() = default;
     virtual void setSomething(int something) = 0;
@@ -30,7 +53,7 @@ public:
     virtual int componentsRegistered() = 0;
 };
 
-class SomeRenderManager : public IManager {
+class SomeRenderManager {
 public:
     SomeRenderManager(const Handle<Hierarchy>&) {}
 
@@ -71,10 +94,9 @@ private:
     Handle<Entity> m_entity;
 };
 
-class TestManager : public ITestManager {
+class TestManager : public ITestManager, public Updatable {
 public:
-    TestManager(Handle<Hierarchy>)
-    {}
+    using Updatable::Updatable;
 
     void setSomething(int something) override { m_something = something; }
     int something() override { return m_something; }
@@ -108,10 +130,10 @@ private:
     std::vector<Handle<IOtherTestComponent>> m_components;
 };
 
-class TestComponent : public PutAfter<OtherTestComponent> {
+class TestComponent : public PutAfter<OtherTestComponent>, public Updatable {
 public:
     TestComponent(Handle<Entity> entity)
-        : m_entity(entity)
+        : Updatable(entity->hierarchy()), m_entity(entity)
     {}
 
     void setSomething(int something) {
@@ -120,7 +142,7 @@ public:
 
     int something() { return m_something; }
 
-    void update(float dt) {
+    void update(float dt) override {
         m_entity->component<OtherTestComponent>()->move(dt);
         m_updateTime += dt;
     }
@@ -133,19 +155,41 @@ private:
     float m_updateTime = 0.0f;
 };
 
+class DebugUpdateManager : public IUpdateManager {
+public:
+    void update(float dt) {
+        for (auto component : m_components) {
+            component->update(dt);
+        }
+    }
+
+    void registerComponent(const Handle<Updatable>& component) override {
+        m_components.push_back(component);
+    }
+
+    void unregisterComponent(const Handle<Updatable>& component) override {
+        m_components.remove(component);
+    }
+
+private:
+    std::list<Handle<Updatable>> m_components;
+};
+
 TEST_CASE( "Hierarchy") {
-//    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>();
 
-//    auto testManager = hierarchy->initManager<ITestManager, TestManager>();
-//    testManager->setSomething(200);
+    hierarchy->initManager<IUpdateManager, DebugUpdateManager>();
 
-//    hierarchy->initManager<SomeRenderManager>();
+    auto testManager = hierarchy->initManager<ITestManager, TestManager>();
+    testManager->setSomething(200);
 
-//    auto entity1 = hierarchy->rootEntity()->createEntity();
-//    entity1->component<TestComponent>()->setSomething(100);
+    hierarchy->initManager<SomeRenderManager>();
 
-//    REQUIRE(entity1->findComponent<TestComponent>()->something() == 100);
-//    REQUIRE(hierarchy->manager<ITestManager>()->something() == 200);
+    auto entity1 = hierarchy->rootEntity()->createEntity();
+    entity1->component<TestComponent>()->setSomething(100);
+
+    REQUIRE(entity1->findComponent<TestComponent>()->something() == 100);
+    REQUIRE(hierarchy->manager<ITestManager>()->something() == 200);
 
 //    //hierarchy->update(1.0f);
 

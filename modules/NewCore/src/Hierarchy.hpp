@@ -1,8 +1,6 @@
 #pragma once
 
 #include <array>
-
-#include "IManager.hpp"
 #include "ObjectPool.hpp"
 #include "Entity.hpp"
 
@@ -63,7 +61,7 @@ private:
     static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
 
     template <typename ManagerT>
-    AnyStrongHandle createManager() {
+    StrongHandle<ManagerT> createManager() {
         if constexpr (constructedWithHierarchy<ManagerT>())
             return create<ManagerT>(selfHandle());
         else

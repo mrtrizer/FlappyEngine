@@ -4,8 +4,18 @@
 
 namespace flappy {
 
+class __EnableSelfHandleMarker {
+protected:
+    __EnableSelfHandleMarker() = default;
+    __EnableSelfHandleMarker(__EnableSelfHandleMarker&) = default;
+    __EnableSelfHandleMarker(__EnableSelfHandleMarker&&) = default;
+    __EnableSelfHandleMarker& operator=(__EnableSelfHandleMarker&) = default;
+    __EnableSelfHandleMarker& operator=(__EnableSelfHandleMarker&&) = default;
+    ~__EnableSelfHandleMarker() = default;
+};
+
 template <typename ObjectT>
-class EnableSelfHandle {
+class EnableSelfHandle : public __EnableSelfHandleMarker {
     friend class ObjectPool; // to set m_selfChankPtr
 protected:
     EnableSelfHandle() {
