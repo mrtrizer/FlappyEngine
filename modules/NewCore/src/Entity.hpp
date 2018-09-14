@@ -22,11 +22,6 @@ public:
             else
                 return hierarchy->template create<ComponentT>();
         } (m_hierarchy);
-        if constexpr (hasUpdate<ComponentT>(0)) {
-            m_updateFunctions.emplace_back([componentHandle = component.handle()](float dt) {
-               componentHandle->update(dt);
-            });
-        }
 
         return static_cast<const StrongHandle<ComponentT>&>(m_components.emplace_back(std::move(component)));
     }
@@ -65,10 +60,6 @@ public:
 
     Handle<Entity> createEntity() noexcept;
 
-    const std::vector<std::function<void(float)>>& updateFunctions() const noexcept {
-        return m_updateFunctions;
-    }
-
     Handle<Hierarchy> hierarchy() {
         return m_hierarchy;
     }
@@ -77,13 +68,6 @@ private:
     Handle<Hierarchy> m_hierarchy;
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
-    std::vector<std::function<void(float)>> m_updateFunctions;
-
-    template <typename ComponentT>
-    static constexpr bool hasUpdate(...) { return false; }
-
-    template <typename ComponentT>
-    static constexpr bool hasUpdate(int, decltype((std::declval<ComponentT>().update(float() )))* = 0) { return true; }
 
     template <typename T>
     static constexpr bool constructedWithEntity(decltype(T(std::declval<Handle<Entity>>()))* = 0) { return true; }

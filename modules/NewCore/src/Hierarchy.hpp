@@ -18,29 +18,9 @@ public:
 
     ~Hierarchy() {}
 
-    void update(float dt) {
-        for (const auto& manager : m_managers)
-            manager.second->update(dt);
-        updateEntity(rootEntity(), dt);
-    }
-
-    template <typename ManagerT, typename DerivedServiceT = ManagerT>
-    Handle<ManagerT> initManager() {
-        auto iter = m_managers.find(getTypeId<ManagerT>());
-        // Be aware of tricky implicit typecasts
-        auto manager = create<DerivedServiceT>(selfHandle());
-        auto managerHandle = manager.handle();
-        if (iter != m_managers.end())
-            iter->second = std::move(manager);
-        else
-            m_managers.emplace(getTypeId<ManagerT>(), std::move(manager));
-        return managerHandle;
-    }
-
     template <typename ManagerT>
     Handle<ManagerT> manager() {
-        auto iter = m_managers.find(getTypeId<ManagerT>());
-        return iter != m_managers.end() ? iter->second.template handle<ManagerT>() : Handle<ManagerT>();
+        return static_cast<StrongHandle<ManagerT>*>(&m_managers.at(getTypeId<ManagerT>()))->handle();
     }
 
     template <typename DataT, typename...Args>
@@ -57,14 +37,38 @@ public:
         return m_rootEntity;
     }
 
+    template <typename ManagerT, typename DerivedT = ManagerT>
+    Handle<ManagerT> initManager() {
+        auto manager = createManager<DerivedT>();
+        auto managerHandle = manager.handle();
+        auto iter = m_managers.find(getTypeId<ManagerT>());
+        if (iter != m_managers.end())
+            iter->second = std::move(manager);
+        else
+            m_managers.emplace(getTypeId<ManagerT>(), std::move(manager));
+        return managerHandle;
+    }
+
 private:
     // Order of members is important as it affects order of destruction. m_rootEntity should be the last member.
-    std::unordered_map<TypeId, StrongHandle<IManager>> m_managers;
+    std::unordered_map<TypeId, AnyStrongHandle> m_managers;
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };
     StrongHandle<Entity> m_rootEntity;
 
-    void updateEntity(const Handle<Entity> &entity, float dt);
+    template <typename T>
+    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
+
+    template <typename T>
+    static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
+
+    template <typename ManagerT>
+    AnyStrongHandle createManager() {
+        if constexpr (constructedWithHierarchy<ManagerT>())
+            return create<ManagerT>(selfHandle());
+        else
+            return create<ManagerT>();
+    }
 };
 
 } // flappy
