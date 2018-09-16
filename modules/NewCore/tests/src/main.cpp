@@ -11,27 +11,44 @@ using namespace fakeit;
 using namespace std;
 using namespace flappy;
 
-class Updatable;
-
-class IUpdateManager {
+class UpdateManager {
 public:
-    virtual void registerComponent(const Handle<Updatable>& component) = 0;
-    virtual void unregisterComponent(const Handle<Updatable>& component) = 0;
+    void update(float dt) {
+        for (const auto& updateFunction : m_updateFunctions) {
+            updateFunction.second(dt);
+        }
+    }
+
+    int registerUpdateFunction(const std::function<void(float dt)>& updateFunction) {
+        m_updateFunctions.emplace(++idCounter, updateFunction);
+        return idCounter;
+    }
+
+    void unregisterUpdateFunction(int id) {
+        m_updateFunctions.erase(id);
+    }
+
+private:
+    std::unordered_map<int, std::function<void(float dt)>> m_updateFunctions;
+    int idCounter = 0;
 };
 
-class Updatable : public EnableSelfHandle<Updatable> {
+template <typename DerivedT>
+class Updatable {
 public:
     Updatable(const Handle<Hierarchy>& hierarchy)
-        : m_hierarchy(hierarchy)
-    {
-        m_hierarchy->manager<IUpdateManager>()->registerComponent(selfHandle());
-    }
+        : m_updateManager(hierarchy->manager<UpdateManager>())
+        , m_functionId(m_updateManager->registerUpdateFunction([this](float dt){
+                static_cast<DerivedT*>(this)->update(dt);
+            }))
+    {}
     ~Updatable() {
-        m_hierarchy->manager<IUpdateManager>()->unregisterComponent(selfHandle());
+        if (m_updateManager.isValid())
+            m_updateManager->unregisterUpdateFunction(m_functionId);
     }
-    virtual void update(float dt) = 0;
 private:
-    Handle<Hierarchy> m_hierarchy;
+    Handle<UpdateManager> m_updateManager;
+    int m_functionId = 0;
 };
 
 class IOtherTestComponent {
@@ -94,14 +111,14 @@ private:
     Handle<Entity> m_entity;
 };
 
-class TestManager : public ITestManager, public Updatable {
+class TestManager : public ITestManager, public Updatable<TestManager> {
 public:
     using Updatable::Updatable;
 
     void setSomething(int something) override { m_something = something; }
     int something() override { return m_something; }
 
-    void update(float dt) override {
+    void update(float dt) {
         m_updateTime += dt;
         for (auto component : m_components) {
             component->draw();
@@ -130,7 +147,7 @@ private:
     std::vector<Handle<IOtherTestComponent>> m_components;
 };
 
-class TestComponent : public PutAfter<OtherTestComponent>, public Updatable {
+class TestComponent : public PutAfter<OtherTestComponent>, public Updatable<TestComponent> {
 public:
     TestComponent(Handle<Entity> entity)
         : Updatable(entity->hierarchy()), m_entity(entity)
@@ -142,7 +159,7 @@ public:
 
     int something() { return m_something; }
 
-    void update(float dt) override {
+    void update(float dt) {
         m_entity->component<OtherTestComponent>()->move(dt);
         m_updateTime += dt;
     }
@@ -155,30 +172,10 @@ private:
     float m_updateTime = 0.0f;
 };
 
-class DebugUpdateManager : public IUpdateManager {
-public:
-    void update(float dt) {
-        for (auto component : m_components) {
-            component->update(dt);
-        }
-    }
-
-    void registerComponent(const Handle<Updatable>& component) override {
-        m_components.push_back(component);
-    }
-
-    void unregisterComponent(const Handle<Updatable>& component) override {
-        m_components.remove(component);
-    }
-
-private:
-    std::list<Handle<Updatable>> m_components;
-};
-
 TEST_CASE( "Hierarchy") {
     auto hierarchy = Heap::create<Hierarchy>();
 
-    hierarchy->initManager<IUpdateManager, DebugUpdateManager>();
+    hierarchy->initManager<UpdateManager>();
 
     auto testManager = hierarchy->initManager<ITestManager, TestManager>();
     testManager->setSomething(200);
@@ -191,24 +188,24 @@ TEST_CASE( "Hierarchy") {
     REQUIRE(entity1->findComponent<TestComponent>()->something() == 100);
     REQUIRE(hierarchy->manager<ITestManager>()->something() == 200);
 
-//    //hierarchy->update(1.0f);
+    hierarchy->manager<UpdateManager>()->update(1.0f);
 
-//    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 1);
+    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 1);
 
-//    auto secondComponent = entity1->createComponent<OtherTestComponent>();
+    auto secondComponent = entity1->createComponent<OtherTestComponent>();
 
-//    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 2);
+    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 2);
 
-//    entity1->removeComponent(secondComponent);
+    entity1->removeComponent(secondComponent);
 
-//    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 1);
+    REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 1);
 
-//    REQUIRE(entity1->component<TestComponent>()->updateTime() == 1.0f);
-//    REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 1.0f);
+    REQUIRE(entity1->component<TestComponent>()->updateTime() == 1.0f);
+    REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 1.0f);
 
-//    //hierarchy->update(1.0f);
-//    REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 1);
+    hierarchy->manager<UpdateManager>()->update(1.0f);
+    REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 2);
 
-//    REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
-//    REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);
+    REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
+    REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);
 }

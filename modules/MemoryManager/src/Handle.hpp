@@ -33,8 +33,9 @@ public:
         return *this;
     }
 
+    // Extra arg for distinguisnig from Handl& constructor
     template <typename DerivedT>
-    Handle(const Handle<DerivedT>& handle, int i = 0) noexcept
+    Handle(const Handle<DerivedT>& handle, int = 0) noexcept
         : AnyHandle(handle)
     {
         assertDerived<DataT, DerivedT>();
@@ -47,8 +48,9 @@ public:
         return *this;
     }
 
+    // Extra arg for distinguisnig from Handl&& constructor
     template <typename DerivedT>
-    Handle(Handle<DerivedT>&& handle, int i = 0) noexcept
+    Handle(Handle<DerivedT>&& handle, int = 0) noexcept
         : AnyHandle(std::move(handle))
     {
         assertDerived<DataT, DerivedT>();
