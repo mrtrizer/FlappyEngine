@@ -6,50 +6,12 @@
 #include <Hierarchy.hpp>
 #include <Heap.hpp>
 #include <Component.hpp>
+#include <Updatable.hpp>
+#include <UpdataManager.hpp>
 
 using namespace fakeit;
 using namespace std;
 using namespace flappy;
-
-class UpdateManager {
-public:
-    void update(float dt) {
-        for (const auto& updateFunction : m_updateFunctions) {
-            updateFunction.second(dt);
-        }
-    }
-
-    int registerUpdateFunction(const std::function<void(float dt)>& updateFunction) {
-        m_updateFunctions.emplace(++idCounter, updateFunction);
-        return idCounter;
-    }
-
-    void unregisterUpdateFunction(int id) {
-        m_updateFunctions.erase(id);
-    }
-
-private:
-    std::unordered_map<int, std::function<void(float dt)>> m_updateFunctions;
-    int idCounter = 0;
-};
-
-template <typename DerivedT>
-class Updatable {
-public:
-    Updatable(const Handle<Hierarchy>& hierarchy)
-        : m_updateManager(hierarchy->manager<UpdateManager>())
-        , m_functionId(m_updateManager->registerUpdateFunction([this](float dt){
-                static_cast<DerivedT*>(this)->update(dt);
-            }))
-    {}
-    ~Updatable() {
-        if (m_updateManager.isValid())
-            m_updateManager->unregisterUpdateFunction(m_functionId);
-    }
-private:
-    Handle<UpdateManager> m_updateManager;
-    int m_functionId = 0;
-};
 
 class IOtherTestComponent {
 public:
@@ -204,7 +166,7 @@ TEST_CASE( "Hierarchy") {
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 1.0f);
 
     hierarchy->manager<UpdateManager>()->update(1.0f);
-    REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 2);
+    REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 1);
 
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);

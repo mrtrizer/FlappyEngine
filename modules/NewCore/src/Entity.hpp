@@ -9,9 +9,10 @@ namespace flappy {
 class Hierarchy;
 
 class Entity : public EnableSelfHandle<Entity> {
+    friend class Chank; // for construction with deepness
 public:
     explicit Entity(const Handle<Hierarchy>& hierarchy) noexcept
-        : m_hierarchy(std::move(hierarchy))
+        : Entity(hierarchy, 0)
     {}
 
     template <typename ComponentT>
@@ -64,10 +65,18 @@ public:
         return m_hierarchy;
     }
 
+    int deepness() const noexcept { return m_deepness; }
+
 private:
     Handle<Hierarchy> m_hierarchy;
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
+    int m_deepness = 0;
+
+    explicit Entity(const Handle<Hierarchy>& hierarchy, int deepness) noexcept
+        : m_hierarchy(std::move(hierarchy))
+        , m_deepness(deepness)
+    {}
 
     template <typename T>
     static constexpr bool constructedWithEntity(decltype(T(std::declval<Handle<Entity>>()))* = 0) { return true; }
