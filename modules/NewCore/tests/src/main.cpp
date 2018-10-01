@@ -180,8 +180,10 @@ TEST_CASE( "Hierarchy") {
     hierarchy->manager<UpdateManager>()->update(1.0f);
     REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 1);
 
+#ifndef NDEBUG
     std::cout << UpdateManagerDebugger::componentOrderFull(hierarchy->manager<UpdateManager>()) << std::endl;
     REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "01122122");
+#endif
 
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);
