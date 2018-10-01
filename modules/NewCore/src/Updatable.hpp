@@ -13,19 +13,19 @@ class Updatable {
 public:
     Updatable(const Handle<Hierarchy>& hierarchy)
         : m_updateManager(hierarchy->manager<UpdateManager>())
-        , m_functionId(m_updateManager->registerUpdateFunction(0, [this](float dt){
+        , m_functionId(m_updateManager->registerUpdateFunction<DerivedT>(0, [this](float dt){
                 static_cast<DerivedT*>(this)->update(dt);
             }))
     {}
     Updatable(const Handle<Entity>& entity)
         : m_updateManager(entity->hierarchy()->manager<UpdateManager>())
-        , m_functionId(m_updateManager->registerUpdateFunction(entity->depth(), [this](float dt){
+        , m_functionId(m_updateManager->registerUpdateFunction<DerivedT>(entity->depth(), [this](float dt){
                 static_cast<DerivedT*>(this)->update(dt);
             }))
     {}
     ~Updatable() {
         if (m_updateManager.isValid())
-            m_updateManager->unregisterUpdateFunction(m_functionId);
+            m_updateManager->unregisterUpdateFunction<DerivedT>(m_functionId);
     }
 private:
     Handle<UpdateManager> m_updateManager;

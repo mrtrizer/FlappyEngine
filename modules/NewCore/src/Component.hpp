@@ -6,9 +6,13 @@ namespace flappy {
 
 class Entity;
 
-template <typename ... Args>
-class PutAfter {
-    std::vector<TypeId> previousObjects() { return std::vector { getTypeId<Args>()... }; }
+class PutAfterMarker {
+};
+
+template <typename TypeT>
+class PutAfter : public PutAfterMarker {
+public:
+    using PutAfterType = TypeT;
 };
 
 class Component {

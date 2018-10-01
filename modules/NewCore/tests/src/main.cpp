@@ -49,16 +49,21 @@ private:
     int m_drawTimes;
 };
 
-class OtherTestComponent : public IOtherTestComponent, public EnableSelfHandle<OtherTestComponent> {
+class OtherTestComponent : public IOtherTestComponent, public EnableSelfHandle<OtherTestComponent>, public Updatable<OtherTestComponent> {
 public:
     OtherTestComponent(const Handle<Entity>& entity)
         : m_entity(entity)
+        , Updatable(entity)
     {
         entity->hierarchy()->manager<ITestManager>()->registerComponent(selfHandle());
     }
 
     ~OtherTestComponent() {
         m_entity->hierarchy()->manager<ITestManager>()->unregisterComponent(selfHandle());
+    }
+
+    void update(float dt) {
+
     }
 
     void move(float dt) {
@@ -175,7 +180,8 @@ TEST_CASE( "Hierarchy") {
     hierarchy->manager<UpdateManager>()->update(1.0f);
     REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 1);
 
-    REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "0122");
+    std::cout << UpdateManagerDebugger::componentOrderFull(hierarchy->manager<UpdateManager>()) << std::endl;
+    REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "01122122");
 
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);
