@@ -7,21 +7,22 @@
 namespace flappy {
 
 class UpdateManager {
+    friend class UpdateManagerDebugger;
 public:
     void update(float dt) {
         for (const auto& updateFunction : m_updateFunctions) {
-            if (updateFunction.deepness != -1)
+            if (updateFunction.depth != -1)
                 updateFunction.updateFunction(dt);
         }
         std::cout << std::endl;
     }
 
-    int registerUpdateFunction(int deepness, const std::function<void(float dt)>& updateFunction) {
+    int registerUpdateFunction(int depth, const std::function<void(float dt)>& updateFunction) {
         auto destination = std::adjacent_find(m_updateFunctions.begin(), m_updateFunctions.end(),
-            [deepness](const auto& first, const auto& second) {
-                return first.deepness < deepness && deepness <= second.deepness;
+            [depth](const auto& first, const auto& second) {
+                return first.depth <= depth && depth < second.depth;
             });
-        m_updateFunctions.insert(destination, UpdateFunction{++m_idCounter, deepness, updateFunction});
+        m_updateFunctions.insert(destination, UpdateFunction{++m_idCounter, depth, updateFunction});
         return m_idCounter;
     }
 
@@ -33,7 +34,7 @@ public:
 private:
     struct UpdateFunction {
         int id = 0;
-        int deepness = -1;
+        int depth = -1;
         std::function<void(float dt)> updateFunction;
     };
 

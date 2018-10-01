@@ -65,17 +65,17 @@ public:
         return m_hierarchy;
     }
 
-    int deepness() const noexcept { return m_deepness; }
+    int depth() const noexcept { return m_depth; }
 
 private:
     Handle<Hierarchy> m_hierarchy;
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
-    int m_deepness = 0;
+    int m_depth = 0;
 
     explicit Entity(const Handle<Hierarchy>& hierarchy, int deepness) noexcept
         : m_hierarchy(std::move(hierarchy))
-        , m_deepness(deepness)
+        , m_depth(deepness)
     {}
 
     template <typename T>

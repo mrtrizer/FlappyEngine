@@ -19,7 +19,7 @@ public:
     {}
     Updatable(const Handle<Entity>& entity)
         : m_updateManager(entity->hierarchy()->manager<UpdateManager>())
-        , m_functionId(m_updateManager->registerUpdateFunction(entity->deepness(), [this](float dt){
+        , m_functionId(m_updateManager->registerUpdateFunction(entity->depth(), [this](float dt){
                 static_cast<DerivedT*>(this)->update(dt);
             }))
     {}

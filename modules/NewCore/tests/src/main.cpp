@@ -8,6 +8,7 @@
 #include <Component.hpp>
 #include <Updatable.hpp>
 #include <UpdataManager.hpp>
+#include <UpdateManagerDebugger.hpp>
 
 using namespace fakeit;
 using namespace std;
@@ -112,7 +113,7 @@ private:
 class TestComponent : public PutAfter<OtherTestComponent>, public Updatable<TestComponent> {
 public:
     TestComponent(Handle<Entity> entity)
-        : Updatable(entity->hierarchy()), m_entity(entity)
+        : Updatable(entity), m_entity(entity)
     {}
 
     void setSomething(int something) {
@@ -162,11 +163,19 @@ TEST_CASE( "Hierarchy") {
 
     REQUIRE(hierarchy->manager<ITestManager>()->componentsRegistered() == 1);
 
+    auto nestedEntity1 = entity1->createEntity();
+    nestedEntity1->createComponent<TestComponent>();
+    REQUIRE(nestedEntity1->depth() == 2);
+    auto nestedEntity2 = entity1->createEntity();
+    nestedEntity2->createComponent<TestComponent>();
+
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 1.0f);
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 1.0f);
 
     hierarchy->manager<UpdateManager>()->update(1.0f);
     REQUIRE(hierarchy->manager<SomeRenderManager>()->drawTimes() == 1);
+
+    REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "0122");
 
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);
     REQUIRE(hierarchy->manager<ITestManager>()->updateTime() == 2.0f);
