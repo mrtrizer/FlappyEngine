@@ -4,7 +4,7 @@
 
 #include "Hierarchy.hpp"
 #include "Entity.hpp"
-#include "UpdataManager.hpp"
+#include "UpdateManager.hpp"
 
 namespace flappy {
 

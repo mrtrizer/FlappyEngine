@@ -1,0 +1,19 @@
+{
+    "name":"test_Math",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Catch"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

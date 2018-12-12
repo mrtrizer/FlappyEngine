@@ -7,7 +7,7 @@
 #include <Heap.hpp>
 #include <Component.hpp>
 #include <Updatable.hpp>
-#include <UpdataManager.hpp>
+#include <UpdateManager.hpp>
 #include <UpdateManagerDebugger.hpp>
 
 using namespace fakeit;

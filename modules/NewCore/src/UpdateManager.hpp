@@ -5,6 +5,7 @@
 #include <queue>
 
 #include <TypeId.hpp>
+#include <Component.hpp>
 
 namespace flappy {
 
@@ -69,7 +70,8 @@ public:
     void unregisterUpdateFunction(int id) {
         // FIXME: Could be optimized if remove only first found element
         auto iter = findTypeFunctionList<TypeT>();
-        std::remove_if(iter->updateFunctions.begin(), iter->updateFunctions.end(), [id](auto& item) { return item.id == id; });
+        std::remove_if(iter->updateFunctions.begin(), iter->updateFunctions.end(),
+                       [id](auto& item) { return item.id == id; });
     }
 
 private:

@@ -4,7 +4,7 @@
 
 #include <Handle.hpp>
 
-#include "UpdataManager.hpp"
+#include "UpdateManager.hpp"
 
 namespace flappy {
 

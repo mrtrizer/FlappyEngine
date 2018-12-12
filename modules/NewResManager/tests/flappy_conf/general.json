@@ -1,0 +1,25 @@
+{
+    "name":"tests_ResManager",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../Catch"
+        },
+        {
+            "path":"../../Std"
+        }
+    ],
+    "res_dirs": [
+        "res_src"
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

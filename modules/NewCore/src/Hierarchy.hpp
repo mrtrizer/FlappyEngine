@@ -18,7 +18,12 @@ public:
 
     template <typename ManagerT>
     Handle<ManagerT> manager() {
-        return static_cast<StrongHandle<ManagerT>*>(&m_managers.at(getTypeId<ManagerT>()))->handle();
+        auto typeId = getTypeId<ManagerT>();
+        try {
+            return static_cast<StrongHandle<ManagerT>*>(&m_managers.at(typeId))->handle();
+        } catch (const std::exception&) {
+            throw FlappyException("Can't find manager " + typeId.name);
+        }
     }
 
     template <typename DataT, typename...Args>

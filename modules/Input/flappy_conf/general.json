@@ -1,0 +1,25 @@
+{
+    "name":"Input",
+    "modules": [
+        {
+            "path":"../NewCore"
+        },
+        {
+            "path":"../Utility"
+        },
+        {
+            "path":"../Math"
+        },
+        {
+            "path":"../NewEventBus"
+        }
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
