@@ -30,8 +30,8 @@ public:
     void setConsole(std::shared_ptr<IConsoleService> consoleManager) { m_console = consoleManager; }
 
 private:
-    std::shared_ptr<ILoggerService> m_logger;
     std::shared_ptr<IConsoleService> m_console;
+    std::shared_ptr<ILoggerService> m_logger;
 };
 
 }

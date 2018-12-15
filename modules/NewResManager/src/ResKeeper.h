@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <SafePtr.h>
+#include <Handle.hpp>
 
 #include "ResInfo.h"
 #include "ExecType.h"
@@ -20,7 +20,7 @@ class IResFactory;
 class ResKeeper
 {
 public:
-    ResKeeper(SafePtr<flappy::IResFactory> resFactory, std::string name);
+    ResKeeper(Handle<IResFactory> resFactory, std::string name);
     virtual ~ResKeeper() = default;
     ResKeeper(const ResKeeper&) = delete;
     ResKeeper& operator=(const ResKeeper&) & = delete;
@@ -34,7 +34,7 @@ public:
     std::shared_ptr<ResBase> actualRes(ExecType execType);
 
 private:
-    SafePtr<IResFactory> m_resFactory;
+    Handle<IResFactory> m_resFactory;
     std::string m_name;
     std::shared_ptr<ResBase> m_res;
     bool m_loaded = false;

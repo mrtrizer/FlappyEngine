@@ -6,8 +6,9 @@
 
 namespace flappy {
 
-class IConsoleService{
+class IConsoleService {
 public:
+    virtual ~IConsoleService() = default;
     virtual void print(LogMessageType, const char *) = 0;
 };
 

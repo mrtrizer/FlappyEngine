@@ -40,9 +40,10 @@ public:
         return m_rootEntity;
     }
 
-    template <typename ManagerT, typename DerivedT = ManagerT>
-    Handle<ManagerT> initManager() {
-        auto manager = createManager<DerivedT>();
+    template <typename ManagerT, typename DerivedT = ManagerT, typename ... ArgT>
+    Handle<ManagerT> initManager(ArgT&& ... args) {
+        static_assert(!std::is_abstract<DerivedT>(), "Can't construct manager of abstract type.");
+        auto manager = createManager<DerivedT>(std::forward<ArgT>(args)...);
         auto managerHandle = manager.handle();
         auto iter = m_managers.find(getTypeId<ManagerT>());
         if (iter != m_managers.end())
@@ -59,18 +60,18 @@ private:
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };
     StrongHandle<Entity> m_rootEntity;
 
-    template <typename T>
-    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
+    template <typename T, typename ... ArgT>
+    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>(), std::declval<ArgT>()...))* = 0) { return true; }
 
-    template <typename T>
-    static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
+    template <typename T, typename ... ArgT>
+    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<ArgT>()...))* = 0) { return false; }
 
-    template <typename ManagerT>
-    StrongHandle<ManagerT> createManager() {
-        if constexpr (constructedWithHierarchy<ManagerT>())
-            return create<ManagerT>(selfHandle());
+    template <typename ManagerT, typename ... ArgT>
+    StrongHandle<ManagerT> createManager(ArgT&& ... args) {
+        if constexpr (constructedWithHierarchy<ManagerT, ArgT...>())
+            return create<ManagerT>(selfHandle(), std::forward<ArgT>(args)...);
         else
-            return create<ManagerT>();
+            return create<ManagerT>(std::forward<ArgT>(args)...);
     }
 };
 

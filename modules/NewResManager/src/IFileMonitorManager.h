@@ -1,10 +1,8 @@
 #pragma once
 
-#include <Manager.h>
-
 namespace flappy {
 
-class IFileMonitorManager: public Manager<IFileMonitorManager>
+class [[manager]] IFileMonitorManager
 {
 public:
     IFileMonitorManager() = default;

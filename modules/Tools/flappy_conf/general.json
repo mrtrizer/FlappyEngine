@@ -1,5 +1,13 @@
 {
     "name":"Tools",
+    "modules": [
+        {
+            "path":"../Utility"
+        },
+        {
+            "path":"../Json"
+        }
+    ],
     "cxx":{
         "header_dirs": [
             "./src",

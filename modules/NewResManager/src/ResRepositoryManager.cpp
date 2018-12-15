@@ -1,6 +1,8 @@
 #include "ResRepositoryManager.h"
 
 #include <json/json.hpp>
+#include <DebugServices.h>
+#include <StringUtils.hpp>
 
 #include "Res.h"
 #include "IFileLoadManager.h"
@@ -27,36 +29,33 @@ std::unordered_map<std::string, std::string> jsonToMap(const nlohmann::json &jso
 
 }
 
-ResRepositoryManager::ResRepositoryManager(std::string resRespositoryPath)
-    : m_resRepositoryPath(resRespositoryPath)
+ResRepositoryManager::ResRepositoryManager(Handle<Hierarchy> hierarchy, std::string resRespositoryPath)
+    : Updatable<ResRepositoryManager>(hierarchy)
+    , m_resRepositoryPath(resRespositoryPath)
+    , m_fileMonitorManager(hierarchy->manager<IFileMonitorManager>())
+    , m_fileLoadManager(hierarchy->manager<IFileLoadManager>())
 {
-    addDependency(IFileLoadManager::id());
-    addDependency(IFileMonitorManager::id());
-
-    subscribe([this](InitEvent) {
+    loadFileList();
+    m_fileMonitorManager->registerFile(fileListFilePath());
+    loadResMeta();
+    m_fileMonitorManager->registerFile(resMetaFilePath());
+}
+    
+void ResRepositoryManager::update(float dt) {
+    if (m_fileMonitorManager->changed(fileListFilePath())) {
         loadFileList();
-        manager<IFileMonitorManager>()->registerFile(fileListFilePath());
+    }
+    if (m_fileMonitorManager->changed(resMetaFilePath())) {
         loadResMeta();
-        manager<IFileMonitorManager>()->registerFile(resMetaFilePath());
-    });
-
-    subscribe([this](UpdateEvent) {
-        if (manager<IFileMonitorManager>()->changed(fileListFilePath())) {
-            loadFileList();
-        }
-        if (manager<IFileMonitorManager>()->changed(resMetaFilePath())) {
-            loadResMeta();
-        }
-    });
-
+    }
 }
 
 std::string ResRepositoryManager::fileListFilePath() {
-    return Tools::joinPath({m_resRepositoryPath, "file_list.json"});
+    return StringUtils::joinPath({m_resRepositoryPath, "file_list.json"});
 }
 
 std::string ResRepositoryManager::resMetaFilePath() {
-    return Tools::joinPath({m_resRepositoryPath, "cache_meta.json"});
+    return StringUtils::joinPath({m_resRepositoryPath, "cache_meta.json"});
 }
 
 void ResRepositoryManager::loadFileList() {
@@ -64,13 +63,13 @@ void ResRepositoryManager::loadFileList() {
 
     m_resInfoMap.clear();
     auto filePath = fileListFilePath();
-    auto jsonStr = manager<IFileLoadManager>()->loadTextFile(filePath);
+    auto jsonStr = m_fileLoadManager->loadTextFile(filePath);
     auto json = json::parse(jsonStr);
     for (json::iterator jsonIterator = json.begin(); jsonIterator != json.end(); ++jsonIterator) {
         std::string name = jsonIterator.key();
         std::string path = jsonIterator.value().at("path");
         std::string type = jsonIterator.value().at("type");
-        auto resPath = Tools::joinPath({m_resRepositoryPath, path});
+        auto resPath = StringUtils::joinPath({m_resRepositoryPath, path});
         m_resInfoMap[name] = FileInfo {name, resPath, type};
     }
 }
@@ -80,7 +79,7 @@ void ResRepositoryManager::loadResMeta() {
 
     m_resMetaMap.clear();
     auto filePath = resMetaFilePath();
-    auto jsonStr = manager<IFileLoadManager>()->loadTextFile(filePath);
+    auto jsonStr = m_fileLoadManager->loadTextFile(filePath);
     auto json = json::parse(jsonStr);
     for (json::iterator jsonIterator = json.begin(); jsonIterator != json.end(); ++jsonIterator) {
         m_resMetaMap[jsonIterator.key()] = ResMeta { jsonToMap(jsonIterator.value()) };
@@ -92,7 +91,7 @@ FileInfo ResRepositoryManager::findFileInfo(std::string name) const {
         return m_resInfoMap.at(name);
     } else {
         LOGE("Can't find information about resource in resource repository list. Name: %s", name.c_str());
-        auto resPath = Tools::joinPath({m_resRepositoryPath, name});
+        auto resPath = StringUtils::joinPath({m_resRepositoryPath, name});
         return FileInfo{ name, resPath, "*" };
     }
 }

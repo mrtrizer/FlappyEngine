@@ -1,14 +1,11 @@
 {
-    "name":"tests_ResManager",
+    "name":"tests_Std",
     "modules": [
         {
             "path":"../"
         },
         {
             "path":"../../Catch"
-        },
-        {
-            "path":"../../NewStd"
         }
     ],
     "res_dirs": [

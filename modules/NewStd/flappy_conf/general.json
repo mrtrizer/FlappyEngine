@@ -1,15 +1,12 @@
 {
-    "name":"ResManager",
+    "name":"Std",
     "modules": [
         {
+            "path":"../NewResManager"
+        },
+        {
             "path":"../Utility"
-        },
-        {
-            "path":"../NewCore"
-        },
-        {
-            "path":"../Json"
-        }
+        }    
     ],
     "cxx":{
         "header_dirs": [

@@ -1,22 +1,20 @@
 #include "TextResFactory.h"
-
-#include <Entity.h>
-
+#include <Hierarchy.hpp>
 
 namespace flappy {
 
-TextResFactory::TextResFactory()
+TextResFactory::TextResFactory(Handle<Hierarchy> hierarchy)
+    : m_resRepoManager(hierarchy->manager<ResRepositoryManager>())
+    , m_fileLoadManager(hierarchy->manager<IFileLoadManager>())
+    , m_fileMonitorManager(hierarchy->manager<IFileMonitorManager>())
 {
-    this->addDependency(ResRepositoryManager::id());
-    this->addDependency(IFileMonitorManager::id());
-    this->addDependency(IFileLoadManager::id());
+
 }
 
 std::shared_ptr<ResBase> TextResFactory::load(const std::string& name, ExecType) {
-    auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
-    auto fileLoadManager = this->template manager<IFileLoadManager>();
-    return std::make_shared<TextRes>(fileLoadManager->loadTextFile(fileInfo.path));
+    auto resMeta = m_resRepoManager->findResMeta(name);
+    auto fileInfo = m_resRepoManager->findFileInfo(resMeta.data["input"]);
+    return std::make_shared<TextRes>(m_fileLoadManager->loadTextFile(fileInfo.path));
 }
 
 std::shared_ptr<ResBase> TextResFactory::create(const std::string& name) {
@@ -24,9 +22,9 @@ std::shared_ptr<ResBase> TextResFactory::create(const std::string& name) {
 }
 
 bool TextResFactory::changed(const std::string& name) {
-    auto resMeta = this->template manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = this->template manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
-    return this->template manager<IFileMonitorManager>()->changed(fileInfo.path);
+    auto resMeta = m_resRepoManager->findResMeta(name);
+    auto fileInfo = m_resRepoManager->findFileInfo(resMeta.data["input"]);
+    return m_fileMonitorManager->changed(fileInfo.path);
 }
 
 } // flappy

@@ -12,6 +12,7 @@ class IConsoleService;
 class DefaultLoggerService : public ILoggerService {
 public:
     DefaultLoggerService(std::shared_ptr<flappy::IConsoleService> consoleManager);
+    virtual ~DefaultLoggerService() = default;
 
     void log(LogMessageType, const char* format, ...) final;
     void logVArg(LogMessageType, const char* format, va_list arglist) final;

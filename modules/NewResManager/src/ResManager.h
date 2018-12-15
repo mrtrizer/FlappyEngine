@@ -5,8 +5,9 @@
 #include <list>
 
 #include <Res.h>
-#include <Manager.h>
 #include <ResRepositoryManager.h>
+#include <Hierarchy.hpp>
+#include <Updatable.hpp>
 
 #include "IFileMonitorManager.h"
 #include "ResKeeper.h"
@@ -19,27 +20,27 @@ namespace flappy {
 /// @{
 
 template <typename ResT>
-class ResManager final: public Manager<ResManager<ResT>>
+class [[manager]] ResManager final : public Updatable<ResManager<ResT>>
 {
 public:
-    ResManager()
-    {
-        this->addDependency(ResRepositoryManager::id());
-        this->addDependency(ResFactory<ResT>::id());
-        this->addDependency(IFileMonitorManager::id());
-
-        this->subscribe([this](ComponentBase::UpdateEvent) {
-            for (auto resPairIter = m_resMap.begin(); resPairIter != m_resMap.end();) {
-                resPairIter->second.cleanUpRes();
-                if (resPairIter->second.needRemove()) {
-                    resPairIter = m_resMap.erase(resPairIter);
-                } else {
-                    auto name = resPairIter->first;
-                    resPairIter->second.updateRes();
-                    resPairIter++;
-                }
+    ResManager(Handle<Hierarchy> hierarchy)
+    : Updatable<ResManager<ResT>>(hierarchy)
+    , m_resRepoManager(hierarchy->manager<ResRepositoryManager>())
+    , m_resFactory(hierarchy->manager<ResFactory<ResT>>())
+    , m_fileMonitor(hierarchy->manager<IFileMonitorManager>())
+    {}
+    
+    void update(float dt) {
+        for (auto resPairIter = m_resMap.begin(); resPairIter != m_resMap.end();) {
+            resPairIter->second.cleanUpRes();
+            if (resPairIter->second.needRemove()) {
+                resPairIter = m_resMap.erase(resPairIter);
+            } else {
+                auto name = resPairIter->first;
+                resPairIter->second.updateRes();
+                resPairIter++;
             }
-        });
+        }
     }
 
     /// @brief If resource is not loaded yet, method returns default
@@ -57,6 +58,9 @@ public:
 
 private:
     std::map<std::string, ResKeeper> m_resMap;
+    Handle<ResRepositoryManager> m_resRepoManager;
+    Handle<ResFactory<ResT>> m_resFactory;
+    Handle<IFileMonitorManager> m_fileMonitor;
 
     ResKeeper& getResKeeper(const std::string& name);
 };
@@ -67,7 +71,7 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 {
     auto resIter = m_resMap.find(name);
     if (resIter == m_resMap.end()) {
-        auto resKeeper = ResKeeper(this->template manager<ResFactory<ResT>>(), name);
+        auto resKeeper = ResKeeper(m_resFactory, name);
         auto iter = m_resMap.emplace(name, std::move(resKeeper)).first;
         return iter->second;
     } else {
@@ -77,8 +81,6 @@ ResKeeper& ResManager<ResT>::getResKeeper(const std::string& name)
 
 template<typename ResT>
 std::shared_ptr<ResT> ResManager<ResT>::getRes(const std::string& name, ExecType execType) {
-    if (!this->template isInitialized())
-        throw std::runtime_error(std::string("ResManager for ") + typeName<ResT>() + " is not initialized.");
     return std::static_pointer_cast<ResT>(getResKeeper(name).actualRes(execType));
 }
 
