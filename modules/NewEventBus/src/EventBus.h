@@ -8,6 +8,7 @@
 #include <functional>
 
 #include <FuncSignature.h>
+#include <Utility.hpp>
 
 #include "ISubscription.h"
 
@@ -52,7 +53,14 @@ private:
 template <typename FuncT>
 std::shared_ptr<ISubscription> EventBus::subscribe(FuncT&& func) {
     using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-    return subscribeList(std::forward<FuncT>(func), m_inSubscriptions.at(getTypeId<EventT>()));
+    auto typeId = getTypeId<EventT>();
+    auto subscriptionIter = m_inSubscriptions.find(typeId);
+    if (subscriptionIter == m_inSubscriptions.end()) {
+        auto result = m_inSubscriptions.emplace(typeId, std::list<std::weak_ptr<ISubscription>>());
+        USER_ASSERT(result.second); // successfully added
+        subscriptionIter = result.first;
+    }
+    return subscribeList(std::forward<FuncT>(func), subscriptionIter->second);
 }
 
 template <typename FuncT>

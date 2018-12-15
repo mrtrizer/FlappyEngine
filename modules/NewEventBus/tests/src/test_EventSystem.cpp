@@ -3,7 +3,7 @@
 #include <memory>
 
 #include <EventBus.h>
-#include <Tools.h>
+#include <TypeId.hpp>
 
 using namespace flappy;
 
@@ -45,7 +45,7 @@ TEST_CASE( "EventSystem::subscription() EventSystem::FlowStatus") {
 
         auto subscriptionAll = eventBus.subscribeAll(
             [&callCounter](const EventHandle& handle) {
-                if (handle.id() == GetTypeId<EventHandle, TestEvent>::value())
+                if (handle.id() == getTypeId<TestEvent>())
                     callCounter++;
             });
 
@@ -65,7 +65,7 @@ TEST_CASE( "EventSystem::subscribeAll() EventSystem::post()") {
     EventBus eventBus;
 
     auto subscriptionAll = eventBus.subscribeAll([&callCounter](const EventHandle& handle) {
-        if (handle.id() == GetTypeId<EventHandle, TestEvent1>::value())
+        if (handle.id() == getTypeId<TestEvent1>())
             callCounter++;
     });
 

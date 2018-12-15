@@ -3,7 +3,7 @@
 namespace flappy {
 
 /// Gives some common tools
-namespace Math
+namespace MathUtils
 {
     /// Check is unsigned int a power of two
     bool isPowOfTwo(unsigned x);

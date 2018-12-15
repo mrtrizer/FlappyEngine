@@ -1,9 +1,9 @@
-#include "FlappyMath.h"
+#include "MathUtils.h"
 
 namespace flappy {
 
 /// Common tools for model
-namespace Tools {
+namespace MathUtils {
     
 /// http://stackoverflow.com/questions/108318/whats-the-simplest-way-to-test-whether-a-number-is-a-power-of-2-in-c
 bool isPowOfTwo(unsigned x) {

@@ -3,11 +3,11 @@
 
 #include <memory>
 
-#include <Math.h>
+#include <MathUtils.h>
 
 using namespace flappy;
 
 TEST_CASE("Math::isPowOfTwo()") {
-    REQUIRE(Math::isPowOfTwo(8) == true);
-    REQUIRE(Math::isPowOfTwo(13) == false);
+    REQUIRE(MathUtils::isPowOfTwo(8) == true);
+    REQUIRE(MathUtils::isPowOfTwo(13) == false);
 }
