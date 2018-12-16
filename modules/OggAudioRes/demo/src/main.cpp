@@ -1,5 +1,4 @@
-#include <DesktopThread.h>
-#include <Entity.h>
+#include <Entity.hpp>
 #include <OpenALManager.h>
 #include <OpenALAudioRes.h>
 #include <OpenALListenerComponent.h>
@@ -10,32 +9,31 @@
 #include <StdFileLoadManager.h>
 #include <ResRepositoryManager.h>
 #include <TransformComponent.h>
+#include <Heap.hpp>
+#include <UpdateManager.hpp>
 
 using namespace flappy;
 
 int main(int, char*[]) {
 
-    auto thread = std::make_shared<DesktopThread>([](SafePtr<Entity> rootEntity) {
-            rootEntity->createComponent<OpenALManager>();
-            rootEntity->createComponent<OggAudioResFactory>();
-            rootEntity->createComponent<StdFileLoadManager>();
-            rootEntity->createComponent<ResRepositoryManager>("./resources");
-            rootEntity->createComponent<StdFileMonitorManager>();
-            auto audioResManager = rootEntity->createComponent<ResManager<OpenALAudioRes>>();
-            auto listenerEntity = rootEntity->createEntity();
-            listenerEntity->createComponent<OpenALListenerComponent>();
-            listenerEntity->createComponent<TransformComponent>();
-            auto sourceEntity = rootEntity->createEntity();
-            auto source = sourceEntity->createComponent<OpenALSourceComponent>();
-            auto audioRes = audioResManager->getRes("boom", ExecType::ASYNC);
-            source->setAudioRes(audioRes);
-            source->play();
-            source->setGain(0.5f);
-            source->setLooping(true);
-    });
-
-    auto rootEntity = std::make_shared<Entity>();
-    thread->run(rootEntity);
+    auto hierarchy = Heap::create<Hierarchy>();
+    hierarchy->initManager<UpdateManager>();
+    hierarchy->initManager<OpenALManager>();
+    hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
+    hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
+    hierarchy->initManager<ResRepositoryManager>("./resources");
+    hierarchy->initManager<ResFactory<OpenALAudioRes>, OggAudioResFactory>();
+    auto audioResManager = hierarchy->initManager<ResManager<OpenALAudioRes>>();
+    auto listenerEntity = hierarchy->rootEntity()->createEntity();
+    listenerEntity->createComponent<OpenALListenerComponent>();
+    listenerEntity->createComponent<TransformComponent>();
+    auto sourceEntity = hierarchy->rootEntity()->createEntity();
+    auto source = sourceEntity->createComponent<OpenALSourceComponent>();
+    auto audioRes = audioResManager->getRes("boom", ExecType::ASYNC);
+    source->setAudioRes(audioRes);
+    source->play();
+    source->setGain(0.5f);
+    source->setLooping(true);
 
     return 0;
 }

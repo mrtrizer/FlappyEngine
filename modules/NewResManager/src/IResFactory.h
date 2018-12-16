@@ -16,6 +16,7 @@ class Entity;
 
 class [[manager]] IResFactory {
 public:
+    virtual ~IResFactory() = default;
     virtual std::shared_ptr<ResBase> load(const std::string& resInfo, ExecType execType) = 0;
     virtual std::shared_ptr<ResBase> create(const std::string& name) = 0;
     virtual bool changed(const std::string& name) { return false; }

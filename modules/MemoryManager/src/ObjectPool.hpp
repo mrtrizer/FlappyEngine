@@ -32,9 +32,14 @@ public:
         try {
             if constexpr (std::is_base_of<__EnableSelfHandleMarker, DataT>::value)
                 emptyChank->data<DataT>()->m_selfChankPtr = emptyChank;
-            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
+            
+            // We should increment length before construction because
+            // a new object can be constructed during the current cunstruction.
+            // I also don't decrement m_length in catch block because
+            // a new object can already be constructed after the current one.
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;
+            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
             return strongHandle;
         } catch (...) {
             throw;

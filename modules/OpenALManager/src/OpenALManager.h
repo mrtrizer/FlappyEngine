@@ -1,22 +1,21 @@
 #pragma once
 
-#include <Manager.h>
+#include <Handle.hpp>
 
 namespace flappy {
 
 class OpenALListenerComponent;
 
-class OpenALManager: public Manager<OpenALManager> {
+class [[manager]] OpenALManager {
 public:
     OpenALManager();
+    ~OpenALManager();
 
-    void registerListener(SafePtr<OpenALListenerComponent> listener);
-    void unregisterListener(SafePtr<OpenALListenerComponent> listener);
+    void registerListener(Handle<OpenALListenerComponent> listener);
+    void unregisterListener(Handle<OpenALListenerComponent> listener);
 
 protected:
-    bool isReady() const final;
-
-    SafePtr<OpenALListenerComponent> m_listener;
+    Handle<OpenALListenerComponent> m_listener;
 };
 
 } // flappy

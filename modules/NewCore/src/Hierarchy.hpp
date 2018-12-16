@@ -14,7 +14,7 @@ public:
         : m_rootEntity(m_entityPool.create<Entity>(selfHandle()))
     {}
 
-    ~Hierarchy() {}
+    ~Hierarchy() = default;
 
     template <typename ManagerT>
     Handle<ManagerT> manager() {
@@ -54,7 +54,7 @@ public:
     }
 
 private:
-    // Order of members is important as it affects order of destruction. m_rootEntity should be the last member.
+    // Order of members is important as it affects order of destruction
     std::unordered_map<TypeId, AnyStrongHandle> m_managers;
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 100), ObjectPool(256, 50), ObjectPool(1024, 20) };

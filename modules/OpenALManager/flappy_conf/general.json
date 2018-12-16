@@ -2,14 +2,14 @@
     "name":"OpenALManager",
     "modules": [
         {
-            "path":"../Core"
+            "path":"../NewCore"
         },
-	{
-	    "path":"../ResManager"
-	},
-	{
-	    "path":"../CoreComponents"
-	}
+        {
+            "path":"../NewResManager"
+        },
+        {
+            "path":"../Math"
+        }
     ],
     "cxx":{
         "flags": [

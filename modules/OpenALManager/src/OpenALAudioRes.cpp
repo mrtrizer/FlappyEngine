@@ -1,23 +1,15 @@
 #include "OpenALAudioRes.h"
 
-#include <Entity.h>
-
 #include "OpenALManager.h"
 #include "OpenALUtils.h"
 
 namespace flappy {
 
-OpenALAudioRes::OpenALAudioRes(SafePtr<Entity> rootEntity, std::vector<char> &&data, ALenum format, ALsizei freq)
-    : m_rootEntity(rootEntity)
-    , m_buffer(std::move(data))
+OpenALAudioRes::OpenALAudioRes(std::vector<char> &&data, ALenum format, ALsizei freq)
+    : m_buffer(std::move(data))
     , m_format(format)
     , m_freq(freq)
-{
-    m_rootEntity->events()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
-        if (e.id == OpenALManager::id())
-            deinitOpenALBuffer();
-    });
-}
+{}
 
 ALuint OpenALAudioRes::bufferId() {
     initOpenALBuffer();

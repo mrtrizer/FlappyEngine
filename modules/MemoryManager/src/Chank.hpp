@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <limits>
 
 #include "StrongHandle.hpp"
 
@@ -36,6 +37,9 @@ private:
 //        static_assert(noexcept(DataT(std::declval<DataT>())), "DataT(DataT&&) should be noexcept.");
 
         try {
+            // temporary value to make chank busy during construction
+            m_strongHandle = reinterpret_cast<AnyStrongHandle*>(std::numeric_limits<intptr_t>::max());
+            
             auto data = new (m_data) DataT(std::forward<Args>(args)...);
 
             StrongHandle<DataT> strongHandle(data, this);

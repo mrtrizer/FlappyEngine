@@ -7,24 +7,22 @@
 #include <ResRepositoryManager.h>
 #include <IFileMonitorManager.h>
 #include <OpenALAudioRes.h>
-#include <ThreadManager.h>
 
 namespace flappy {
 
-OggAudioResFactory::OggAudioResFactory() {
-    addDependency(ResRepositoryManager::id());
-    addDependency(IFileMonitorManager::id());
-    addDependency(ThreadManager::id());
-}
+OggAudioResFactory::OggAudioResFactory(Handle<Hierarchy> hierarchy)
+    : m_resRepositoryManager(hierarchy->manager<ResRepositoryManager>())
+    , m_fileMonitorManager(hierarchy->manager<IFileMonitorManager>())
+{}
 
 // Based on https://www.gamedev.net/articles/programming/general-and-gameplay-programming/introduction-to-ogg-vorbis-r2031/
 std::shared_ptr<ResBase> OggAudioResFactory::load(const std::string& name, ExecType) {
     const unsigned BUFFER_SIZE = 1024 * 32; // 32 KB buffers
 
-    auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
+    auto resMeta = m_resRepositoryManager->findResMeta(name);
+    auto fileInfo = m_resRepositoryManager->findFileInfo(resMeta.data["input"]);
     std::string fullPath = fileInfo.path;
-    manager<IFileMonitorManager>()->registerFile(fullPath);
+    m_fileMonitorManager->registerFile(fullPath);
 
     int endian = 0;             // 0 for Little-Endian, 1 for Big-Endian
     int bitStream;
@@ -65,22 +63,20 @@ std::shared_ptr<ResBase> OggAudioResFactory::load(const std::string& name, ExecT
 
     ov_clear(&oggFile);
 
-    auto rootEntity = manager<ThreadManager>()->entityPtr();
-    return std::make_shared<OpenALAudioRes>(rootEntity, std::move(buffer), format, freq);
+    return std::make_shared<OpenALAudioRes>(std::move(buffer), format, freq);
 }
 
 std::shared_ptr<ResBase> OggAudioResFactory::create(const std::string&) {
     ALenum format = AL_FORMAT_MONO8;
     ALsizei freq = 22050;
     std::vector<char> buffer(2205);
-    auto rootEntity = manager<ThreadManager>()->entityPtr();
-    return std::make_shared<OpenALAudioRes>(rootEntity, std::move(buffer), format, freq);
+    return std::make_shared<OpenALAudioRes>(std::move(buffer), format, freq);
 }
 
 bool OggAudioResFactory::changed(const std::string & name) {
-    auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
-    return manager<IFileMonitorManager>()->changed(fileInfo.path);
+    auto resMeta = m_resRepositoryManager->findResMeta(name);
+    auto fileInfo = m_resRepositoryManager->findFileInfo(resMeta.data["input"]);
+    return m_fileMonitorManager->changed(fileInfo.path);
 }
 
 } // flappy

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <Entity.h>
+#include <Entity.hpp>
 
 #include <OpenAL.h>
 #include <al.h>

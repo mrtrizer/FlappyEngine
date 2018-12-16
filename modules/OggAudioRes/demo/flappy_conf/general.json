@@ -1,11 +1,11 @@
 {
-    "name":"tests_OggResFactory",
+    "name":"tests_OggAudioRes",
     "modules": [
         {
             "path":"../"
         },
     	{
-    	    "path":"../../Std"
+    	    "path":"../../NewStd"
     	}
     ],
     "res_dirs": [

@@ -68,6 +68,7 @@ public:
     int depth() const noexcept { return m_depth; }
 
 private:
+    // Order of members is important as it affects order of destruction
     Handle<Hierarchy> m_hierarchy;
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
