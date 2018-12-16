@@ -1,10 +1,11 @@
 #pragma once
 
+#include <Component.h>
 #include <Entity.h>
 
 namespace flappy {
 
-class [[component]] EventRedirectComponent
+class EventRedirectComponent : public Component<EventRedirectComponent>
 {
 public:
     template <typename InputEventType, typename OutputEventType>

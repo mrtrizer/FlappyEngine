@@ -8,8 +8,8 @@
 namespace flappy {
 
 DesktopThread::DesktopThread(std::function<void(SafePtr<Entity>)> initCallback)
-    : m_lastTime(std::chrono::steady_clock::now())
-    , m_initCallback(initCallback)
+    : m_initCallback(initCallback)
+    , m_lastTime(std::chrono::steady_clock::now())
 {}
 
 DeltaTime DesktopThread::calcTimeDelta() {

@@ -1,11 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <string>
+#include <Manager.h>
 
 namespace flappy {
 
-class [[manager]] AppManager
+class AppManager: public Manager<AppManager>
 {
 public:
     AppManager(int argc = 1, const char* const* argv = nullptr);
