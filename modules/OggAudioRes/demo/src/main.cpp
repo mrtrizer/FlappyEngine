@@ -11,6 +11,7 @@
 #include <TransformComponent.h>
 #include <Heap.hpp>
 #include <UpdateManager.hpp>
+#include <BasicLoop.hpp>
 
 using namespace flappy;
 
@@ -35,5 +36,5 @@ int main(int, char*[]) {
     source->setGain(0.5f);
     source->setLooping(true);
 
-    return 0;
+    return BasicLoop(30, hierarchy).run();
 }

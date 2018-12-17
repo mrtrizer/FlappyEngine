@@ -9,13 +9,15 @@
 
 namespace flappy {
 
+using DeltaTime = float;
+    
 class UpdateManager {
     friend class UpdateManagerDebugger;
 
     struct UpdateFunction {
         int id = 0;
         int depth = -1;
-        std::function<void(float dt)> updateFunction;
+        std::function<void(DeltaTime dt)> updateFunction;
     };
 
     struct UpdateFunctionList {
@@ -23,7 +25,7 @@ class UpdateManager {
         std::list<UpdateFunction> updateFunctions;
     };
 public:
-    void update(float dt) {
+    void update(DeltaTime dt) {
         for (const auto& updateFunctionList : m_updateFunctionLists) {
             for (const auto& updateFunction : updateFunctionList.updateFunctions)
                 if (updateFunction.depth != -1)
@@ -54,7 +56,7 @@ public:
     }
 
     template <typename TypeT>
-    int registerUpdateFunction(int depth, const std::function<void(float dt)>& updateFunction) {
+    int registerUpdateFunction(int depth, const std::function<void(DeltaTime dt)>& updateFunction) {
         auto iter = findTypeFunctionList<TypeT>();
         if (iter == m_updateFunctionLists.end())
             iter = initFunctionList<TypeT>();
