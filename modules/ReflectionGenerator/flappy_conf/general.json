@@ -1,0 +1,29 @@
+{
+    "name":"ReflectionGenerator",
+    "modules": [
+        {
+            "path":"../Core"
+        },
+        {
+            "path":"../Tools"
+        },
+        {
+            "path":"../CoreResources"
+        },
+        {
+            "path":"../CoreComponents"
+        },
+        {
+            "path":"../Reflection"
+        }
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
