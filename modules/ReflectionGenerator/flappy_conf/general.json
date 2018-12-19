@@ -2,18 +2,6 @@
     "name":"ReflectionGenerator",
     "modules": [
         {
-            "path":"../Core"
-        },
-        {
-            "path":"../Tools"
-        },
-        {
-            "path":"../CoreResources"
-        },
-        {
-            "path":"../CoreComponents"
-        },
-        {
             "path":"../Reflection"
         }
 

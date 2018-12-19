@@ -1,11 +1,11 @@
 {
-    "name":"tests_RTTR",
+    "name":"tests_ReflectionGenerator",
     "modules": [
         {
             "path":"../"
         },
         {
-            "path":"../../Std"
+            "path":"../../NewStd"
         },
         {
             "path":"../../Catch"
@@ -17,11 +17,11 @@
         ],
         "header_dirs": [
             "./src",
-	    "^/RTTRWrappers"
+	        "^/GeneratedReflection"
         ],
         "src_dirs": [
             "./src",
-	    "^/RTTRWrappers"
+	        "^/GeneratedReflection"
         ]
     }
 }

@@ -42,18 +42,21 @@ function call(command, cwd) {
     childProcess.execSync(command, {"cwd": cwd, stdio: "inherit"});
 }
 
-function findLLVMDir() {
+function findLLVMDir(context) {
     const fs = require('fs');
+    if (typeof context.config.llvmDir === "string")
+        console.log("User defined llvmDir: " + context.config.llvmDir);
     const possibleDirs = [
         "/usr/local/Cellar/llvm/5.0.0/",
-        "/usr/lib/llvm-5.0/"
+        "/usr/lib/llvm-5.0/",
+        context.config.llvmDir
     ];
     for (const i in possibleDirs) {
         const dir = possibleDirs[i];
         if (fs.existsSync(dir))
             return dir;
     }
-    throw new Error("Can't find llvm-5.0 library.");
+    throw new Error("Can't find llvm-5.0 library. Plese define path to llvm in .flappy/flappy_conf/general.json \"llvmDir\":\"<path>\"");
 }
 
 function generateCompilationDB(context) {
@@ -98,7 +101,7 @@ module.exports.run = function (context) {
     // Build
     const buildDir = path.join(__dirname, "ClangASTGenerator/src/build");
     console.log("Build dir: " + buildDir);
-    const llvmDir = findLLVMDir();
+    const llvmDir = findLLVMDir(context);
     console.log("LLVM found: " + llvmDir);
     const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
     fse.mkdirsSync(buildDir);
@@ -127,7 +130,7 @@ module.exports.run = function (context) {
     }
     console.log("allHeaders: " + JSON.stringify(allHeaders));
     const fileList = [];
-    const outputDir = path.join(context.cacheDir, "RTTRWrappers");
+    const outputDir = path.join(context.cacheDir, "GeneratedReflection");
     const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
     if (fs.existsSync(outputDir) && fs.existsSync(rttrToSourcesPath)) {
         fs.readdirSync(outputDir).forEach(file => {
@@ -179,10 +182,11 @@ module.exports.run = function (context) {
     // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
         fse.mkdirsSync(outputDir);
+        fse.mkdirsSync(path.join(outputDir, "../Tmp"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
-        const clangIncludes2 = path.join(llvmDir, "lib/clang/7.0.0_1/include");
+        const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
 
-        const generateCommand = `./rttr_generator `
+        const generateCommand = `./reflection_generator `
                                 + ` -extra-arg \"-I${clangIncludes1}\"`
                                 + ` -extra-arg \"-I${clangIncludes2}\"`
                                 + ` -p \"${context.projectRoot}\"`

@@ -26,6 +26,31 @@ using namespace clang::tooling;
 using namespace llvm;
 using namespace nlohmann;
 
+std::string createGeneratedReflectionHpp() {
+    return
+        "#include <Reflection.hpp>\n"
+        "\n"
+        "flappy::Reflection extractReflectionDb();";
+}
+
+std::string createGeneratedReflectionCpp(std::unordered_set<std::string> wrappedClasses) {
+    std::stringstream ss;
+    ss << "#include \"GeneratedReflection.hpp\"\n";
+    ss << "\n";
+    ss << "// Unity build: \n";
+    for (auto wrappedClass : wrappedClasses)
+        ss << "#include \"../Tmp/RR_" << wrappedClass << ".cpp\"\n";
+    ss << "\n";
+    ss << "flappy::Reflection extractReflectionDb() {\n";
+    ss << " flappy::Reflection reflection;\n";
+    for (auto wrappedClass : wrappedClasses)
+        ss << " register" << wrappedClass << "(reflection);\n";
+    ss << "return reflection;\n";
+    ss << "}\n";
+    ss << "\n";
+    return ss.str();
+}
+
 std::string generateWrapperCpp(std::string className, GeneratedMethods generatedMethods) {
     std::vector<char> output(50000);
     snprintf(output.data(), output.size(),
@@ -34,10 +59,10 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
             "#include <%s.h>\n"
             "\n"
             "namespace flappy {\n"
-            "void register%s(Reflection& reflection) {"
-            "  reflection.registerType<%s>(\"%s\")"
-            "%s"
-            "}"
+            "void register%s(Reflection& reflection) {\n"
+             "  reflection.registerType<%s>(\"%s\")\n"
+             "%s;\n"
+            "} \n"
             "} \n"
             "\n"
             "",
@@ -107,8 +132,12 @@ public :
         }
     }
 
-    std::map<std::string, std::string> sourcesToGeneratedMap() {
+    const std::map<std::string, std::string>& sourcesToGeneratedMap() const {
         return m_sourcesToGeneratedMap;
+    }
+    
+    const std::unordered_set<std::string>& wrappedClasses() const {
+        return m_wrappedClasses;
     }
 
 private:
@@ -134,7 +163,7 @@ int main(int argc, const char **argv) {
 
     MatchFinder finder;
     auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
-    ClassHandler printer(outputPath.getValue());
+    ClassHandler printer(outputPath.getValue() + "/../Tmp");
     finder.addMatcher(methodMatcher, &printer);
 
     tool.run(newFrontendActionFactory(&finder).get());
@@ -159,6 +188,9 @@ int main(int argc, const char **argv) {
     std::cout << "RTTR to CPP Map after: "<< newJsonText;
 
     writeTextFile(rttrToSourcesPath, newJsonText);
+    
+    writeTextFile(outputPath.getValue() + "/GeneratedReflection.hpp", createGeneratedReflectionHpp());
+    writeTextFile(outputPath.getValue() + "/GeneratedReflection.cpp", createGeneratedReflectionCpp(printer.wrappedClasses()));
 
     return 0;
 }
