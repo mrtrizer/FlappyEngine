@@ -1,5 +1,9 @@
 #include "Sdl2Utils.h"
 
+#include <string>
+
+#include <DebugServices.h>
+
 namespace flappy {
 
 void checkSdlError(const char * file, const char * func, int line)

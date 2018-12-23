@@ -4,13 +4,11 @@
 
 #include <glm/vec2.hpp>
 
-#include <Manager.h>
-
 #include "CameraComponent.h"
 
 namespace flappy {
 
-class ScreenManager: public Manager<ScreenManager>
+class [[manager]] ScreenManager
 {
 public:
     ScreenManager(int width, int height);

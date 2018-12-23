@@ -5,62 +5,58 @@
 
 namespace flappy {
 
-TextComponent::TextComponent()
-{
-    addDependency(RenderElementFactory::id());
-    addDependency(ResManager<FontRes>::id());
+TextComponent::TextComponent(Handle<Hierarchy> hierarchy)
+    : m_renderElementFactory(hierarchy->manager<RenderElementFactory>())
+    , m_fontResManager(hierarchy->manager<ResManager<FontRes>>())
+{}
+    
+void TextComponent::setEntity(Handle<Entity> entity) {
+    m_entity = entity;
+    m_renderElement = m_renderElementFactory->createTextRender(entity);
+    if (!m_fontResPath.empty()) {
+        m_fontRes = m_fontResManager->getRes(m_fontResPath, ExecType::ASYNC);
+        m_eventBus.post(TextChangedEvent());
+    }
+}
 
-    subscribe([this](InitEvent) {
-        m_renderElement = manager<RenderElementFactory>()->createTextRender(selfPointer());
-        entity()->addComponent(m_renderElement);
-        if (!m_fontResPath.empty()) {
-            m_fontRes = manager<ResManager<FontRes>>()->getRes(m_fontResPath, ExecType::ASYNC);
-            entity()->events()->post(TextChangedEvent());
-        }
-    });
-
-    subscribe([this](DeinitEvent) {
-        entity()->removeComponent(m_renderElement);
-        m_renderElement.reset();
-    });
+TextComponent::~TextComponent() {
+    m_entity->removeComponent(m_renderElement);
 }
 
 void TextComponent::setSize(int size) {
     m_size = size;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setAlign(Align align) {
     m_align = align;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setMaxWidth(int maxWidth) {
     m_maxWidth = maxWidth;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setColor(Color color) {
     m_color = color;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setText(std::string text) {
     m_text = text;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setFontRes(std::shared_ptr<FontRes> fontRes) {
     m_fontRes = fontRes;
-    entity()->events()->post(TextChangedEvent());
+    m_eventBus.post(TextChangedEvent());
 }
 
 void TextComponent::setFontResPath(std::string fontResPath) {
     m_fontResPath = fontResPath;
-    if (isInitialized()) {
-        m_fontRes = manager<ResManager<FontRes>>()->getRes(fontResPath, ExecType::ASYNC);
-        entity()->events()->post(TextChangedEvent());
-    }
+    m_fontRes = m_fontResManager->getRes(fontResPath, ExecType::ASYNC);
+    m_eventBus.post(TextChangedEvent());
 }
 
 std::shared_ptr<FontRes> TextComponent::fontRes() {
@@ -94,7 +90,7 @@ TextComponent::BoxedLexem TextComponent::genBoxedLexem(std::string lexemStr, con
         auto kerning = glyphSheet.kerning(glyph.id,  prevCode);
         const float kerningAmount = (kerning.amount * size) / base;
         Box box;
-        box.rect = Tools::Rect(newXOffset + offsetX + kerningAmount,
+        box.rect = MathUtils::Rect(newXOffset + offsetX + kerningAmount,
                                 newYOffset,
                                 newXOffset + offsetX + newWidth + kerningAmount,
                                 newYOffset + newHeight);

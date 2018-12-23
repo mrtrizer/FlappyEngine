@@ -1,7 +1,7 @@
 #include "ResKeeper.h"
 
-#include <Entity.h>
 #include <IFileMonitorManager.h>
+#include <DebugServices.h>
 
 #include "Res.h"
 #include "IResFactory.h"
@@ -9,7 +9,7 @@
 
 namespace flappy {
 
-ResKeeper::ResKeeper(SafePtr<IResFactory> resFactory, std::string name)
+ResKeeper::ResKeeper(Handle<IResFactory> resFactory, std::string name)
     : m_resFactory (resFactory)
     , m_name(name)
 {

@@ -2,7 +2,6 @@
 
 #include <glm/vec2.hpp>
 
-#include <Tools.h>
 #include <ResManager.h>
 
 #include "AtlasRes.h"

@@ -5,12 +5,8 @@
             "path":"../ResManager"
         },
         {
-            "path":"../Tools"
-        },
-	{
-	    "path":"../CoreComponents"
-	}
-
+            "path":"../Utility"
+        }    
     ],
     "cxx":{
         "header_dirs": [

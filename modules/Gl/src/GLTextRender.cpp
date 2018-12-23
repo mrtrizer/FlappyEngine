@@ -8,28 +8,29 @@
 #include <TextComponent.h>
 #include <GlyphSheetRes.h>
 #include <FontRes.h>
+#include <MathUtils.h>
 
 namespace flappy {
 
 using namespace glm;
 using namespace std;
 
-GLTextRender::GLTextRender(SafePtr<TextComponent> textComponent):
-    m_rect(GL_TRIANGLE_STRIP),
-    m_textComponent(textComponent),
-    m_fontRes(textComponent->fontRes())
+GLTextRender::GLTextRender(Handle<Hierarchy> hierarchy)
+    : GLRender(hierarchy)
+    , m_rect(GL_TRIANGLE_STRIP)
+    , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
 {
-    addDependency(TextComponent::id());
-
-    subscribe([this](InitEvent) {
-        setShader(manager<ResManager<ShaderRes>>()->getRes("msdf_shader", ExecType::ASYNC));
-    });
-
-    subscribe([this](TextComponent::TextChangedEvent) {
+    setShader(m_shaderResManager->getRes("msdf_shader", ExecType::ASYNC));
+}
+    
+void GLTextRender::setEntity(Handle<Entity> entity) {
+    m_textComponent = entity->component<TextComponent>();
+    m_fontRes = entity->component<TextComponent>()->fontRes();
+    m_subscription = m_textComponent->eventBus().subscribe([this](TextComponent::TextChangedEvent) {
         m_textChanged = true;
     });
+    GLRender::setEntity(entity);
 }
-
 
 void GLTextRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
     if (m_textChanged) {
@@ -66,7 +67,7 @@ void GLTextRender::updateFrame() {
         int xOffset = TextComponent::calcLineOffset(m_textComponent->align(), boxedText, boxedLine);
         for (auto lexem : boxedLine.boxedLexems) {
             for (auto box : lexem.boxes) {
-                auto rectInAtlas = Tools::Rect(box.glyph.x / texture->size().x,
+                auto rectInAtlas = MathUtils::Rect(box.glyph.x / texture->size().x,
                                                box.glyph.y / texture->size().y,
                                                (box.glyph.x + box.glyph.width) / texture->size().x,
                                                (box.glyph.y + box.glyph.height) / texture->size().y);

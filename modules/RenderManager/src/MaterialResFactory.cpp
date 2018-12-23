@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <regex>
 
+#include <DebugServices.h>
 #include <MaterialRes.h>
 #include <ResManager.h>
 #include <JsonRes.h>
@@ -11,19 +12,18 @@
 
 namespace flappy {
 
-MaterialResFactory::MaterialResFactory()
-{
-    this->addDependency(ResManager<JsonRes>::id());
-    this->addDependency(ResManager<TextureRes>::id());
-    this->addDependency(ResManager<ShaderRes>::id());
-}
+MaterialResFactory::MaterialResFactory(Handle<Hierarchy> hierarchy)
+    : m_jsonResManager(hierarchy->manager<ResManager<JsonRes>>())
+    , m_textureResManager(hierarchy->manager<ResManager<TextureRes>>())
+    , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
+{}
 
 std::shared_ptr<ResBase> MaterialResFactory::load(const std::string& name, ExecType execType) {
-    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name, ExecType::SYNC);
+    auto jsonRes = m_jsonResManager->getRes(name, ExecType::SYNC);
 
     const auto& jsonObject = jsonRes->json();
     std::string shaderName = jsonObject["shader"];
-    auto shaderRes = manager<ResManager<ShaderRes>>()->getRes(shaderName, ExecType::SYNC);
+    auto shaderRes = m_shaderResManager->getRes(shaderName, ExecType::SYNC);
     auto materialRes = std::make_shared<MaterialRes>(jsonRes, shaderRes);
     try {
         std::string renderMode = jsonObject.at("render_mode");
@@ -43,7 +43,7 @@ std::shared_ptr<ResBase> MaterialResFactory::load(const std::string& name, ExecT
         LOG("%s : %s", type.c_str(), name.c_str());
         if (type == "texture") {
             std::string textureName = value;
-            auto texture = manager<ResManager<TextureRes>>()->getRes(textureName, execType);
+            auto texture = m_textureResManager->getRes(textureName, execType);
             materialRes->setTextureRes(name, texture);
         }
         if (type == "vec4") {

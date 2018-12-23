@@ -1,10 +1,8 @@
-﻿#pragma once
+#pragma once
 
 #include <memory>
 #include <chrono>
 #include "EventBus.h"
-
-#include <SafePtr.h>
 
 namespace flappy {
 
@@ -26,14 +24,14 @@ public:
     /// Subscribe to concrete event.
     /// Use unsubscribe() method to unsubscribe.
     template <typename FuncT>
-    SafePtr<ISubscription> subscribe(FuncT&& func);
+    std::weak_ptr<ISubscription> subscribe(FuncT&& func);
 
     /// Subscribe to all events in event bus. Useful for event forwarding.
     /// Use unsubscribe() method to unsubscribe.
-    SafePtr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler);
+    std::weak_ptr<ISubscription> subscribeAll(std::function<void(const EventHandle& event)> handler);
 
     /// Unsubscribe of event
-    void unsubscribe(SafePtr<ISubscription> subscription);
+    void unsubscribe(std::weak_ptr<ISubscription> subscription);
 
     /// Post event to all subscribers.
     template<typename EventT>
@@ -49,7 +47,7 @@ private:
 };
 
 template <typename FuncT>
-SafePtr<ISubscription> EventController::subscribe(FuncT&& func)
+std::weak_ptr<ISubscription> EventController::subscribe(FuncT&& func)
 {
     auto subscription = m_eventBus->subscribe(std::forward<FuncT>(func));
     m_subscriptionVector.push_back(subscription);

@@ -5,7 +5,7 @@
             "path":"../Core"
         },
         {
-            "path":"../Tools"
+            "path":"../Utility"
         },
         {
             "path":"../CoreResources"
@@ -16,7 +16,6 @@
         {
             "path":"../TextComponents"
         }
-
     ],
     "res_dirs": [
         "res_src"

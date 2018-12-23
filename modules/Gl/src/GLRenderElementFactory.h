@@ -8,15 +8,11 @@ namespace flappy {
 
 class GLRenderElementFactory : public RenderElementFactory {
 public:
-
-    GLRenderElementFactory()
-    {
-        addDependency(RenderManager::id());
-    }
-
-    std::shared_ptr<Render> createSpriteRender(SafePtr<SpriteComponent>) final;
-    std::shared_ptr<Render> createMeshRender(SafePtr<MeshComponent>) final;
-    std::shared_ptr<Render> createTextRender(SafePtr<TextComponent>) final;
+    GLRenderElementFactory(Handle<Hierarchy> hierarchy);
+    
+    AnyHandle createSpriteRender(Handle<Entity>) final;
+    AnyHandle createMeshRender(Handle<Entity>) final;
+    AnyHandle createTextRender(Handle<Entity>) final;
 
 };
 

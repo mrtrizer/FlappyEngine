@@ -6,9 +6,6 @@
 
 #include <GLIncludes.h>
 
-#include <Tools.h>
-
-
 namespace flappy {
 
 class Color;
@@ -32,7 +29,6 @@ namespace GLTools {
     };
 
     void checkOpenGLerror(const char * = "", const char * = "", int = 0);
-
 }
 
 } // flappy

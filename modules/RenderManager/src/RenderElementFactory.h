@@ -2,23 +2,19 @@
 
 #include <memory>
 
-#include <Manager.h>
 #include <Color.h>
+#include <Handle.hpp>
 
 namespace  flappy {
 
-class MeshComponent;
-class SpriteComponent;
-class TextComponent;
-class Render;
+class Entity;
 
-class RenderElementFactory : public Manager<RenderElementFactory> {
+class RenderElementFactory {
 public:
-    using Manager::Manager;
-
-    virtual std::shared_ptr<Render> createSpriteRender(SafePtr<SpriteComponent>) = 0;
-    virtual std::shared_ptr<Render> createMeshRender(SafePtr<MeshComponent>) = 0;
-    virtual std::shared_ptr<Render> createTextRender(SafePtr<TextComponent>) = 0;
+    virtual ~RenderElementFactory() = default;
+    virtual AnyHandle createSpriteRender(Handle<Entity>) = 0;
+    virtual AnyHandle createMeshRender(Handle<Entity>) = 0;
+    virtual AnyHandle createTextRender(Handle<Entity>) = 0;
 
 };
 

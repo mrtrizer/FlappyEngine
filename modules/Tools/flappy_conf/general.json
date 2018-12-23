@@ -14,8 +14,7 @@
             "./libs"
         ],
         "src_dirs": [
-            "./src",
-            "./libs/glm"
+            "./src"
         ],
         "src_exclude": [
             "./libs/glm/detail"

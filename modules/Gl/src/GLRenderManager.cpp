@@ -10,6 +10,7 @@
 #include <Render.h>
 #include <ScreenManager.h>
 #include <IGLManager.h>
+#include <DebugServices.h>
 
 #include "GLShaderRes.h"
 #include "GLTools.h"
@@ -20,21 +21,19 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLRenderManager::GLRenderManager(): RenderManager()
+GLRenderManager::GLRenderManager(Handle<Hierarchy> hierarchy)
+    : RenderManager(hierarchy)
+    , m_glManager(hierarchy->manager<IGLManager>())
+    , m_screenManager(hierarchy->manager<ScreenManager>())
 {
-    addDependency(IGLManager::id());
-    addDependency(ScreenManager::id());
-
-    subscribe([this](InitEvent) {
-        LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
-        glClearColor(0.0, 0.0, 0.0, 0.0);
-        CHECK_GL_ERROR;
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        CHECK_GL_ERROR;
-        glEnable (GL_BLEND);
-        CHECK_GL_ERROR;
-        updateViewPort();
-    });
+    LOGI("OpenGL Version: %s\n", glGetString(GL_VERSION));
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    CHECK_GL_ERROR;
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR;
+    glEnable (GL_BLEND);
+    CHECK_GL_ERROR;
+    updateViewPort();
 }
 
 void GLRenderManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
@@ -58,7 +57,7 @@ void GLRenderManager::redraw(list<Visual> &presenterList, mat4 &pMatrix) {
 }
 
 void GLRenderManager::updateViewPort() {
-    glViewport(0, 0, manager<ScreenManager>()->width(), manager<ScreenManager>()->height());
+    glViewport(0, 0, m_screenManager->width(), m_screenManager->height());
     CHECK_GL_ERROR;
 }
 

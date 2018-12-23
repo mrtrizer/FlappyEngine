@@ -30,10 +30,9 @@ public:
 
     template <typename DerivedT>
     AnyHandle(const Handle<DerivedT>& handle) noexcept
-        : m_chank(handle.m_chank)
+        : m_chank(nullptr)
     {
-        if (handle.m_chank != nullptr)
-            handle.m_chank->registerHandle(this);
+        setNewChank(handle.m_chank);
     }
 
     template <typename DerivedT>

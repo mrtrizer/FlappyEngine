@@ -10,7 +10,7 @@ namespace flappy
     
 class EventBus;
 
-class [[mgr, requie_mgr("EventBus")]] MouseInputManager : public Updatable<MouseInputManager>
+class [[manager]] MouseInputManager : public Updatable<MouseInputManager>
 {
 public:
     enum class MouseButton {

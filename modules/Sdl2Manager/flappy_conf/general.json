@@ -8,7 +8,7 @@
             "path":"../ResManager"
         },
         {
-            "path":"../CoreComponents"
+            "path":"../Input"
         }
     ],
     "res_dirs": [

@@ -1,5 +1,7 @@
 #include "MaterialRes.h"
 
+#include <DebugServices.h>
+
 namespace flappy {
 
 void MaterialRes::setRenderModeFromStr(std::string mode) {

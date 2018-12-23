@@ -1,15 +1,24 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-
-#include <Manager.h>
+#include <Handle.hpp>
+#include <ISubscription.h>
 
 namespace flappy {
 
-class Sdl2KeyboardInput : public Manager<Sdl2KeyboardInput>
+class Hierarchy;
+class Sdl2Manager;
+class KeyboardInputManager;
+    
+class [[manager]] Sdl2KeyboardInput
 {
 public:
-    Sdl2KeyboardInput();
+    Sdl2KeyboardInput(Handle<Hierarchy> hierarchy);
+    
+private:
+    Handle<Sdl2Manager> m_sdl2Manager;
+    Handle<KeyboardInputManager> m_keyboardInputManager;
+    std::shared_ptr<ISubscription> m_subscription;
 };
 
 } // flappy

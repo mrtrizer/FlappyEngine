@@ -6,13 +6,13 @@
 
 namespace flappy {
 
-GlyphSheetResFactory::GlyphSheetResFactory() {
-    addDependency(ResManager<JsonRes>::id());
-}
+GlyphSheetResFactory::GlyphSheetResFactory(Handle<Hierarchy> hierarchy)
+    : m_jsonResManager(hierarchy->manager<ResManager<JsonRes>>())
+{}
 
 std::shared_ptr<ResBase> GlyphSheetResFactory::load(const std::string& name, ExecType execType) {
     using namespace nlohmann;
-    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name, execType);
+    auto jsonRes = m_jsonResManager->getRes(name, execType);
     auto glyphSheetRes = std::make_shared<GlyphSheetRes>(jsonRes);
     auto jsonData = jsonRes->json();
 
@@ -75,7 +75,7 @@ std::shared_ptr<ResBase> GlyphSheetResFactory::load(const std::string& name, Exe
 }
 
 std::shared_ptr<ResBase> GlyphSheetResFactory::create(const std::string& name) {
-    auto jsonRes = manager<ResManager<JsonRes>>()->getRes(name, ExecType::ASYNC);
+    auto jsonRes = m_jsonResManager->getRes(name, ExecType::ASYNC);
     return std::make_shared<GlyphSheetRes>(jsonRes);
 }
 

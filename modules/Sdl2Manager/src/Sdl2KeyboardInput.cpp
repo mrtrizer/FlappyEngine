@@ -1,22 +1,23 @@
 #include "Sdl2KeyboardInput.h"
 
-#include <Entity.h>
+#include <Hierarchy.hpp>
 #include <KeyboardInputManager.h>
+#include <EventBus.h>
 
 #include "Sdl2Manager.h"
 
 namespace flappy {
 
-Sdl2KeyboardInput::Sdl2KeyboardInput() {
-    addDependency(Sdl2Manager::id());
-    addDependency(KeyboardInputManager::id());
-
-    subscribe([this](Sdl2Manager::Sdl2Event e) {
+Sdl2KeyboardInput::Sdl2KeyboardInput(Handle<Hierarchy> hierarchy)
+    : m_sdl2Manager(hierarchy->manager<Sdl2Manager>())
+    , m_keyboardInputManager(hierarchy->manager<KeyboardInputManager>())
+{
+    m_subscription = m_sdl2Manager->eventBus().subscribe([this](Sdl2Manager::Sdl2Event e) {
         if (e.event.type == SDL_KEYDOWN) {
-            manager<KeyboardInputManager>()->setKeyDown((KeyCode)e.event.key.keysym.scancode);
+            m_keyboardInputManager->setKeyDown((KeyCode)e.event.key.keysym.scancode);
         }
         if (e.event.type == SDL_KEYUP) {
-            manager<KeyboardInputManager>()->setKeyUp((KeyCode)e.event.key.keysym.scancode);
+            m_keyboardInputManager->setKeyUp((KeyCode)e.event.key.keysym.scancode);
         }
     });
 }

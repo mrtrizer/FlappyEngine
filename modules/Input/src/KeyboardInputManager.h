@@ -12,7 +12,7 @@ namespace flappy
 {
     class EventBus;
     
-    class [[mgr, require_mgr("EventBus")]] KeyboardInputManager : public Updatable<KeyboardInputManager>
+    class [[manager]] KeyboardInputManager : public Updatable<KeyboardInputManager>
     {
     public:
         struct KeyDownEvent: public IEvent {

@@ -10,7 +10,7 @@ namespace flappy
 class EventBus;
 class Hierarchy;
 
-class [[mgr]] TouchInputManager
+class [[manager]] TouchInputManager
 {
 public:
 

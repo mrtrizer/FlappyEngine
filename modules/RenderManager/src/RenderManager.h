@@ -3,9 +3,10 @@
 #include <memory>
 #include <glm/mat4x4.hpp>
 
-#include <Manager.h>
+#include <IEvent.h>
 #include <CameraComponent.h>
 #include <TransformComponent.h>
+#include <Updatable.hpp>
 
 #include "Render.h"
 
@@ -16,9 +17,8 @@ class ScreenManager;
 
 /// @brief Abstract base for Render implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class RenderManager: public Manager<RenderManager> {
+class [[manager]] RenderManager : public Updatable<RenderManager> {
 private:
-
     class IViewFactory {
     public:
         virtual ~IViewFactory() = default;
@@ -37,17 +37,17 @@ public:
         float height;
     };
 
-    RenderManager();
+    RenderManager(Handle<Hierarchy> hierarchy);
 
     void update(DeltaTime dt);
 
-    void registerRenderElement(const SafePtr<Render> renderElement);
+    void registerRenderElement(const Handle<Render> renderElement);
 
-    void unregisterRenderElement(const SafePtr<Render> renderElement);
+    void unregisterRenderElement(const Handle<Render> renderElement);
 
 protected:
     struct Visual {
-        SafePtr<Render> view;
+        Handle<Render> view;
         glm::mat4 pos;
         float z;
     };
@@ -57,6 +57,7 @@ protected:
 private:
     virtual void updateViewPort() = 0;
 
+    Handle<SceneManager> m_sceneManager;
     std::list<Visual> m_visuals;
 };
 

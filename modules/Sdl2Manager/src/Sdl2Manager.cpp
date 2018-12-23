@@ -9,47 +9,32 @@
 #include <GLIncludes.h>
 #include <GLTools.h>
 #include <GLRenderManager.h>
-#include <Entity.h>
-#include <ThreadManager.h>
-#include <Application.h>
+#include <BasicLoopManager.hpp>
+#include <DebugServices.h>
 
 #include "Sdl2Utils.h"
 
 namespace flappy {
 
-Sdl2Manager::Sdl2Manager()
+Sdl2Manager::Sdl2Manager(Handle<Hierarchy> hierarchy)
+    : m_basicLoopManager(hierarchy->manager<BasicLoopManager>())
 {
-    addDependency(ThreadManager::id());
-
-    subscribe([this](InitEvent) {
-        initWindow("FlappyEngine", 600, 600);
-
-        m_updateEvent = subscribe([this](UpdateEvent) {
-            update();
-        });
-    });
-
-    subscribe([this](DeinitEvent) {
-        cleanup();
-
-        unsubscribe(m_updateEvent);
-    });
-
+    initWindow("FlappyEngine", 600, 600);
 }
-
-bool Sdl2Manager::isReady() const {
-    return entity()->parent() == nullptr;
+    
+Sdl2Manager::~Sdl2Manager() {
+    cleanup();
 }
-
-void Sdl2Manager::update() {
+    
+void Sdl2Manager::update(DeltaTime dt) {
     SDL_Event event;
     while (SDL_PollEvent(&event) == 1)
     {
         if (event.type == SDL_QUIT) {
-            manager<ThreadManager>()->quit();
+            m_basicLoopManager->stop();
             break;
         } else {
-            entity()->events()->post(Sdl2Event(event));
+            m_eventBus.post(Sdl2Event(event));
         }
     }
 
@@ -62,7 +47,7 @@ void Sdl2Manager::resizeWindow(int width, int height) {
     RenderManager::OnWindowResize onWindowResizeEvent;
     onWindowResizeEvent.width = width;
     onWindowResizeEvent.height = height;
-    events()->post(onWindowResizeEvent);
+    m_eventBus.post(onWindowResizeEvent);
 }
 
 void Sdl2Manager::setAttribute(SDL_GLattr attribute, int value)

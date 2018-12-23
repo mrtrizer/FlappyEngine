@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include <Tools.h>
+#include <MathUtils.h>
 #include <Res.h>
 #include <JsonRes.h>
 
@@ -12,14 +12,14 @@ class AtlasRes: public Res<AtlasRes>
 {
 public:
     struct SpriteInfo {
-        SpriteInfo(const Tools::Rect& rectInAtlas, glm::vec2 size):
+        SpriteInfo(const MathUtils::Rect& rectInAtlas, glm::vec2 size):
             rectInAtlas(rectInAtlas),
             size(size)
         {}
 
         // TODO: Rename to rect
         /// Sprite position and size in atlas
-        Tools::Rect rectInAtlas;
+        MathUtils::Rect rectInAtlas;
         /// Sprite size in logical coordinates
         glm::vec2 size;
     };

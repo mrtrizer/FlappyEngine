@@ -5,31 +5,27 @@
 #include <TransformComponent.h>
 #include <ScreenManager.h>
 #include <SceneManager.h>
+#include <Hierarchy.hpp>
+#include <Entity.hpp>
 
 namespace flappy {
 
 using namespace std;
 using namespace glm;
-using namespace Tools;
 
-CameraComponent::CameraComponent() {
-    addDependency(SceneManager::id());
-    addDependency(ScreenManager::id());
+CameraComponent::CameraComponent(Handle<Hierarchy> hierarchy)
+    : m_sceneManager(hierarchy->manager<SceneManager>())
+    , m_screenManager(hierarchy->manager<ScreenManager>())
+{
+    m_sceneManager->setMainCamera(selfHandle());
 }
-
-void CameraComponent::init() {
-    subscribe([this](ManagerAddedEvent e) {
-        if (e.castTo<SceneManager>() != nullptr) {
-            manager<SceneManager>()->setMainCamera(selfPointer());
-        }
-    });
+    
+void CameraComponent::setEntity(Handle<Entity> entity) {
+    m_transformComponent = entity->component<TransformComponent>();
 }
-
-Rect CameraComponent::rect() const {
-    auto screenManager = manager<ScreenManager>();
-    if (screenManager == nullptr)
-        return {0,0,0,0};
-    auto screenSize = screenManager->screenSize();
+    
+MathUtils::Rect CameraComponent::rect() const {
+    auto screenSize = m_screenManager->screenSize();
     float ratio = screenSize.x / screenSize.y;
     float offset = m_height / 2;
     return {
@@ -41,8 +37,8 @@ Rect CameraComponent::rect() const {
 }
 
 vec3 CameraComponent::screenToScene(const vec2 &pos) const {
-    float coeff = this->m_height / manager<ScreenManager>()->screenSize().y;
-    vec2 screenSize = manager<ScreenManager>()->screenSize() * 0.5f;
+    float coeff = this->m_height / m_screenManager->screenSize().y;
+    vec2 screenSize = m_screenManager->screenSize() * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }
@@ -52,10 +48,7 @@ mat4 CameraComponent::pMatrix() {
     static const float near = -1.0f;
     static const float far = 99.0f;
 
-    mat4 mvMatrix;
-    auto transform = entity()->component<TransformComponent>();
-    if (transform != nullptr)
-        mvMatrix = transform->transformMatrix();
+    mat4 mvMatrix = m_transformComponent->transformMatrix();
 
     return ortho(curRect.x1, curRect.x2, curRect.y2, curRect.y1, near, far) * mvMatrix;
 }

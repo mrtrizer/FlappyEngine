@@ -1,5 +1,10 @@
 {
     "name":"Math",
+    "modules": [
+        {
+            "path":"../Core"
+        }
+    ],
     "cxx":{
         "header_dirs": [
             "./src",

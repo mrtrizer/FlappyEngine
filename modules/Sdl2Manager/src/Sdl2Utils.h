@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL.h>
 
-#include <Manager.h>
 #include <IGLManager.h>
 
 namespace flappy {

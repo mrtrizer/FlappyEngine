@@ -1,10 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
-#include <Component.h>
+#include <IEvent.h>
 #include <Render.h>
-#include <Entity.h>
+#include <EventBus.h>
 
 #include "MaterialRes.h"
 #include "RenderElementFactory.h"
@@ -12,14 +10,21 @@
 namespace flappy {
 
 class MaterialRes;
+class RenderElementFactory;
+template <typename T>
+class ResManager;
 
-class MeshComponent: public Component<MeshComponent> {
+class [[component]] MeshComponent : public EnableSelfHandle<MeshComponent> {
 public:
     struct MeshChangedEvent : public IEvent {};
 
-    MeshComponent();
+    MeshComponent(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
+    ~MeshComponent();
+    
+    void update(DeltaTime dt);
 
-    void setVertices(std::vector<glm::vec3> vertices);
+    void setVertices(const std::vector<glm::vec3>& vertices);
     const std::vector<glm::vec3>& vertices() const { return m_vertices; }
 
     void setUVs(std::vector<glm::vec2> uvs);
@@ -27,9 +32,15 @@ public:
 
     void setMaterialRes(std::shared_ptr<MaterialRes> materialRes);
     std::shared_ptr<MaterialRes> materialRes() { return m_materialRes; }
+    
+    EventBus& eventBus() { return m_eventBus; }
 
 private:
-    std::shared_ptr<Render> m_renderElement;
+    EventBus m_eventBus;
+    Handle<Entity> m_entity;
+    Handle<RenderElementFactory> m_renderElementFactory;
+    Handle<ResManager<MaterialRes>> m_materialResManager;
+    AnyHandle m_renderElement;
     std::shared_ptr<MaterialRes> m_materialRes;
     std::vector<glm::vec3> m_vertices = {{-0.5f,-0.5f, 0.0f},
                                          {-0.5f,0.5f, 0.0f},

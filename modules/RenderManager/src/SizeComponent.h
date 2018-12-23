@@ -1,12 +1,11 @@
 #pragma once
 
 #include <glm/vec3.hpp>
-#include <Component.h>
 #include <SpriteRes.h>
 
 namespace flappy {
 
-class SizeComponent : public Component<SizeComponent>
+class [[component]] SizeComponent
 {
 public:
     SizeComponent();

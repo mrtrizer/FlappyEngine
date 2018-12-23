@@ -9,7 +9,7 @@
 #define stat _stat
 #endif
 
-#include <Tools.h>
+#include <DebugServices.h>
 
 namespace flappy {
 

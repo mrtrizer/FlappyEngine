@@ -2,7 +2,6 @@
 
 #include <sstream>
 
-#include <Entity.h>
 #include <ResRepositoryManager.h>
 
 #include "FontRes.h"
@@ -13,21 +12,19 @@ namespace flappy {
 
 using namespace std;
 
-FontResFactory::FontResFactory() {
-    addDependency(ResManager<TextureRes>::id());
-    addDependency(ResManager<GlyphSheetRes>::id());
-    addDependency(ResRepositoryManager::id());
-}
+FontResFactory::FontResFactory(Handle<Hierarchy> hierarchy)
+    : m_textureResManager(hierarchy->manager<ResManager<TextureRes>>())
+    , m_glyphSheetResManager(hierarchy->manager<ResManager<GlyphSheetRes>>())
+    , m_resRepositoryManager(hierarchy->manager<ResRepositoryManager>())
+{}
 
 std::shared_ptr<ResBase> FontResFactory::load(const std::string& name, ExecType execType)  {
-    auto repository = manager<ResRepositoryManager>();
-    auto meta = repository->findResMeta(name);
+    auto meta = m_resRepositoryManager->findResMeta(name);
 
-    auto textureResManager = manager<ResManager<TextureRes>>();
     std::string textureName = meta.data["image"];
-    auto texture = textureResManager->getRes(textureName, execType);
+    auto texture = m_textureResManager->getRes(textureName, execType);
 
-    auto atlasResManager = manager<ResManager<GlyphSheetRes>>();
+    auto atlasResManager = m_glyphSheetResManager;
     std::string glyphSheetName = meta.data["meta"];
     auto glyphSheet = atlasResManager->getRes(glyphSheetName, ExecType::SYNC);
 

@@ -7,8 +7,8 @@
 #include <vector>
 #include <functional>
 
-#include <TypeMap.h>
 #include <FuncSignature.h>
+#include <Utility.hpp>
 
 #include "ISubscription.h"
 
@@ -31,7 +31,8 @@ public:
     void post(const EventHandle& event);
 
 private:
-    TypeMap<EventHandle, std::list<std::weak_ptr<ISubscription>>> m_inSubscriptions;
+    // FIXME: Could be replaced with multimap
+    std::unordered_map<TypeId, std::list<std::weak_ptr<ISubscription>>> m_inSubscriptions;
     std::list<std::weak_ptr<ISubscription>> m_abstractSubscriptions;
 
     void postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription> > &subscriptions);
@@ -52,7 +53,14 @@ private:
 template <typename FuncT>
 std::shared_ptr<ISubscription> EventBus::subscribe(FuncT&& func) {
     using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-    return subscribeList(std::forward<FuncT>(func), m_inSubscriptions.get<EventT>());
+    auto typeId = getTypeId<EventT>();
+    auto subscriptionIter = m_inSubscriptions.find(typeId);
+    if (subscriptionIter == m_inSubscriptions.end()) {
+        auto result = m_inSubscriptions.emplace(typeId, std::list<std::weak_ptr<ISubscription>>());
+        USER_ASSERT(result.second); // successfully added
+        subscriptionIter = result.first;
+    }
+    return subscribeList(std::forward<FuncT>(func), subscriptionIter->second);
 }
 
 template <typename FuncT>

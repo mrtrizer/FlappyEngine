@@ -10,39 +10,32 @@
 
 namespace flappy {
 
-template<typename Derived>
+class IGLManager;
+    
 class GLRender: public Render
 {
 public:
-    GLRender();
-    void setShader(std::shared_ptr<ShaderRes> shaderRes);
-    std::shared_ptr<GLShaderRes> shader();
+    GLRender(Handle<Hierarchy> hierarchy)
+        : Render(hierarchy)
+        , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
+        , m_glManager(hierarchy->manager<IGLManager>())
+    {
+        setShader(m_shaderResManager->getRes("shape_shader", ExecType::ASYNC));
+    }
+    
+    void setShader(std::shared_ptr<ShaderRes> shaderRes) {
+        m_shaderRes = std::dynamic_pointer_cast<GLShaderRes>(shaderRes);
+    }
+    std::shared_ptr<GLShaderRes> shader() {
+        if (m_shaderRes->resUpdated())
+            m_shaderRes = std::static_pointer_cast<GLShaderRes>(m_shaderRes->lastRes());
+        return m_shaderRes;
+    }
 
 private:
     std::shared_ptr<GLShaderRes> m_shaderRes;
+    Handle<ResManager<ShaderRes>> m_shaderResManager;
+    Handle<IGLManager> m_glManager;
 };
-
-template<typename Derived>
-GLRender<Derived>::GLRender()
-{
-    addDependency(ResManager<ShaderRes>::id());
-    addDependency(IGLManager::id());
-
-    subscribe([this](InitEvent) {
-        setShader(manager<ResManager<ShaderRes>>()->getRes("shape_shader", ExecType::ASYNC));
-    });
-}
-
-template<typename Derived>
-void GLRender<Derived>::setShader(std::shared_ptr<ShaderRes> shaderRes) {
-    m_shaderRes = std::dynamic_pointer_cast<GLShaderRes>(shaderRes);
-}
-
-template<typename Derived>
-std::shared_ptr<GLShaderRes> GLRender<Derived>::shader() {
-    if (m_shaderRes->resUpdated())
-        m_shaderRes = std::static_pointer_cast<GLShaderRes>(m_shaderRes->lastRes());
-    return m_shaderRes;
-}
 
 } // flappy

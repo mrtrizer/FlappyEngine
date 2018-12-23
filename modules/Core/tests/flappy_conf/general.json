@@ -2,13 +2,14 @@
     "name":"tests_Core",
     "modules": [
         {
-            "path":"../"
+            "path":".."
         },
         {
             "path":"../../Catch"
         }
     ],
     "cxx":{
+        "flags": ["--std=c++17"],
         "header_dirs": [
             "./src"
         ],

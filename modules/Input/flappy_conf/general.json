@@ -2,7 +2,7 @@
     "name":"Input",
     "modules": [
         {
-            "path":"../NewCore"
+            "path":"../Core"
         },
         {
             "path":"../Utility"
@@ -11,7 +11,7 @@
             "path":"../Math"
         },
         {
-            "path":"../NewEventBus"
+            "path":"../EventBus"
         }
     ],
     "cxx":{

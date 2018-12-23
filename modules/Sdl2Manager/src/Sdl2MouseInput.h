@@ -1,15 +1,24 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-
-#include <Manager.h>
+#include <Handle.hpp>
+#include <ISubscription.h>
 
 namespace flappy {
 
-class Sdl2MouseInput : public Manager<Sdl2MouseInput>
+class Hierarchy;
+class Sdl2Manager;
+class MouseInputManager;
+    
+class Sdl2MouseInput
 {
 public:
-    Sdl2MouseInput();
+    Sdl2MouseInput(Handle<Hierarchy> hierarchy);
+    
+private:
+    Handle<Sdl2Manager> m_sdl2Manager;
+    Handle<MouseInputManager> m_mouseInputManager;
+    Handle<ISubscription> m_subscription;
 };
 
 } // flappy

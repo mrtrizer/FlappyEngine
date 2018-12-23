@@ -1,16 +1,19 @@
 #pragma once
 
-#include <Component.h>
 #include <Color.h>
 #include <SpriteRes.h>
 #include <RenderElementFactory.h>
-#include <Entity.h>
+#include <Handle.hpp>
 
 namespace flappy {
 
-class SpriteComponent: public Component<SpriteComponent> {
+class Render;
+    
+class SpriteComponent {
 public:
-    SpriteComponent();
+    SpriteComponent(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
+    ~SpriteComponent();
 
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }
     Color& colorRGBA() { return m_colorRGBA; }
@@ -21,7 +24,9 @@ public:
 private:
     Color m_colorRGBA;
     std::shared_ptr<SpriteRes> m_quadRes;
-    std::shared_ptr<Render> m_renderElement;
+    AnyHandle m_renderElement;
+    Handle<Entity> m_entity;
+    Handle<RenderElementFactory> m_renderElementFactory;
 };
 
 } // flappy

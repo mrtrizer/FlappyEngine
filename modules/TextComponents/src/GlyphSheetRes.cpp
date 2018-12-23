@@ -1,9 +1,10 @@
 #include "GlyphSheetRes.h"
 
+#include <DebugServices.h>
+
 namespace flappy {
 
 using namespace std;
-using namespace Tools;
 
 GlyphSheetRes::GlyphSheetRes(std::shared_ptr<JsonRes> jsonRes)
     : m_jsonRes(jsonRes)

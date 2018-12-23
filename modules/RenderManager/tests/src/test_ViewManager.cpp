@@ -3,8 +3,6 @@
 
 #include <memory>
 
-#include <ViewManager.h>
-#include <PresenterComponent.h>
 #include <ScreenManager.h>
 #include <SceneManager.h>
 
@@ -16,17 +14,17 @@ using namespace fakeit;
 using namespace glm;
 
 
-class TestViewManager: public ViewManager {
-protected:
-    virtual void redraw(std::list<Visual> & list, glm::mat4 & pMatrix) {
-        for (auto visual: list)
-            visual.view->redraw(pMatrix, visual.pos);
-    }
-
-private:
-    virtual void updateViewPort() {
-    }
-};
+//class TestViewManager: public ViewManager {
+//protected:
+//    virtual void redraw(std::list<Visual> & list, glm::mat4 & pMatrix) {
+//        for (auto visual: list)
+//            visual.view->redraw(pMatrix, visual.pos);
+//    }
+//
+//private:
+//    virtual void updateViewPort() {
+//    }
+//};
 
 TEST_CASE( "ViewManager::update()") {
 //    Mock<TestView::IMock> mock;

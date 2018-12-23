@@ -14,17 +14,20 @@ class FontRes;
 class TextComponent;
 
 /// Contains shaders and vbos to draw textures on a rectangle.
-class GLTextRender : public GLRender<GLTextRender>
+class GLTextRender : public GLRender
 {
 public:
-    GLTextRender(SafePtr<TextComponent> textComponent);
+    GLTextRender(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:
     GLAttribArray m_rect;
-    SafePtr<TextComponent> m_textComponent;
+    Handle<TextComponent> m_textComponent;
     std::shared_ptr<FontRes> m_fontRes;
     bool m_textChanged = false;
+    Handle<ResManager<ShaderRes>> m_shaderResManager;
+    std::shared_ptr<ISubscription> m_subscription;
 
     void updateFrame();
 };

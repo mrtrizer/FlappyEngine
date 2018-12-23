@@ -1,6 +1,6 @@
 #include "RenderManager.h"
 
-#include <Tools.h>
+#include <Updatable.hpp>
 #include <SceneManager.h>
 #include <ScreenManager.h>
 #include <TransformComponent.h>
@@ -11,14 +11,10 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-RenderManager::RenderManager()
-{
-    addDependency(SceneManager::id());
-
-    subscribe([this](UpdateEvent e) {
-        update(e.dt);
-    });
-}
+RenderManager::RenderManager(Handle<Hierarchy> hierarchy)
+    : Updatable<RenderManager>(hierarchy)
+    , m_sceneManager(hierarchy->manager<SceneManager>())
+{}
 
 void RenderManager::update(DeltaTime dt) {
 
@@ -26,13 +22,14 @@ void RenderManager::update(DeltaTime dt) {
         auto& visual = *i;
         mat4 transformMatrix;
         float z = 0;
-        auto curTransform = visual.view->entityPtr()->component<TransformComponent>();
+        auto curTransform = visual.view->entity()->component<TransformComponent>();
         while (curTransform != nullptr) {
             transformMatrix = curTransform->transformMatrix() * transformMatrix;
             z += curTransform->pos().z;
-            auto entityPtr = curTransform->entityPtr();
-            if (auto parentPtr = entityPtr->parent())
-                curTransform = parentPtr->component<TransformComponent>();
+            auto entityPtr = curTransform->entity();
+            auto parent = entityPtr->parent();
+            if (parent.isValid())
+                curTransform = parent->component<TransformComponent>();
             else
                 curTransform = nullptr;
         }
@@ -40,26 +37,22 @@ void RenderManager::update(DeltaTime dt) {
         visual.z = z;
     };
 
-    auto scene = manager<SceneManager>();
-    if (scene == nullptr)
-        return ERROR_MSG(VOID_VALUE, "No scene is set!\n");
-
-    auto camera = scene->mainCamera();
+    auto camera = m_sceneManager->mainCamera();
 
     if (camera == nullptr)
-        return ERROR_MSG(VOID_VALUE, "No main camera in scene!\n");
+        throw FlappyException("No main camera in scene!");
 
     auto pMatrix = camera->pMatrix();
 
     redraw(m_visuals, pMatrix);
 }
 
-void RenderManager::registerRenderElement(const SafePtr<Render> renderElement) {
+void RenderManager::registerRenderElement(const Handle<Render> renderElement) {
     auto visual = Visual{renderElement, {}, 0};
     m_visuals.push_back(visual);
 }
 
-void RenderManager::unregisterRenderElement(const SafePtr<Render> renderElement) {
+void RenderManager::unregisterRenderElement(const Handle<Render> renderElement) {
     m_visuals.remove_if([&renderElement](const Visual& i){ return i.view == renderElement; });
 }
 

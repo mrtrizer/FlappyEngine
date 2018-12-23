@@ -11,11 +11,11 @@
             "path":"../CoreResources"
         },
         {
-            "path":"../CoreComponents"
+            "path":"../JsonRes"
         },
-	{
-	    "path":"../JsonRes"
-	}
+        {
+            "path":"../EventBus"
+        }
     ],
     "res_dirs": [
         "res_src"

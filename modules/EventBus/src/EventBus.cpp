@@ -22,7 +22,9 @@ std::shared_ptr<ISubscription> EventBus::subscribeAll(std::function<void(const E
 
 void EventBus::post(const EventHandle& event) {
     auto id = event.id();
-    postInList(event, m_inSubscriptions.getById(id));
+    auto subscriptionsIter = m_inSubscriptions.find(id);
+    if (subscriptionsIter != m_inSubscriptions.end())
+        postInList(event, subscriptionsIter->second);
     postInList(event, m_abstractSubscriptions);
 }
 

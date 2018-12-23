@@ -2,7 +2,10 @@
     "name":"EventBus",
     "modules":[
         {
-            "path":"../Tools"
+            "path":"../Utility"
+        },
+        {
+            "path":"../Reflection"
         }
     ],
     "cxx":{

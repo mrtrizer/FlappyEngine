@@ -2,12 +2,14 @@
     "name":"ResManager",
     "modules": [
         {
-            "path":"../Tools"
+            "path":"../Utility"
         },
         {
             "path":"../Core"
+        },
+        {
+            "path":"../Json"
         }
-
     ],
     "cxx":{
         "header_dirs": [

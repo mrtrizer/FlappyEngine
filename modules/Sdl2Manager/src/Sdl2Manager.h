@@ -1,18 +1,24 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <EventBus.h>
+#include <ISubscription.h>
+#include <Updatable.hpp>
 
-#include <Manager.h>
 #include <IGLManager.h>
 
 namespace flappy {
+    
+class BasicLoopManager;
 
-class Sdl2Manager : public IGLManager
+class [[manager]] Sdl2Manager : public IGLManager
 {
 public:
-    Sdl2Manager();
-    bool isReady() const;
+    Sdl2Manager(Handle<Hierarchy> hierarchy);
+    ~Sdl2Manager();
     void setMaxFps(int fps) { m_maxFps = fps; }
+    EventBus& eventBus() { return m_eventBus; }
+    void update(DeltaTime dt);
 
     struct Sdl2Event : IEvent {
         Sdl2Event(SDL_Event event): event(event) {}
@@ -23,9 +29,10 @@ private:
     int m_maxFps = 60;
     SDL_Window* m_mainWindow;
     SDL_GLContext m_mainContext;
-    SafePtr<ISubscription> m_updateEvent;
+    Handle<ISubscription> m_updateEvent;
+    Handle<BasicLoopManager> m_basicLoopManager;
+    EventBus m_eventBus;
 
-    void update();
     DeltaTime calcTimeDelta();
     void resizeWindow(int width, int height);
     void setAttribute(SDL_GLattr attribute, int value);

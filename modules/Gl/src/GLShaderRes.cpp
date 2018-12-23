@@ -3,9 +3,8 @@
 #include <string>
 #include <iostream>
 
-#include <Application.h>
 #include <IGLManager.h>
-#include <Entity.h>
+#include <Entity.hpp>
 
 #include "GLAttribArray.h"
 
@@ -27,21 +26,12 @@ using namespace std;
 /// Takes GLSL sources from nullterm strings.
 /// Prints logs if build problems.
 /// @throw shader_init_failed Initialization filed. See debug output.
-GLShaderRes::GLShaderRes(SafePtr<Entity> rootEntity, string vertexShaderStr, string fragmentShaderStr)
-    : m_rootEntity(rootEntity)
+GLShaderRes::GLShaderRes(Handle<Entity> rootEntity, string vertexShaderStr, string fragmentShaderStr)
+    : m_fragmentShaderStr(fragmentShaderStr)
     , m_vertexShaderStr(vertexShaderStr)
-    , m_fragmentShaderStr(fragmentShaderStr)
+    , m_rootEntity(rootEntity)
 {
-
-    m_initSubscription = m_rootEntity->events()->eventBus()->subscribe([this](const ManagerBase::ManagerAddedEvent& e) {
-        if (e.id == IGLManager::id())
-            initShader();
-    });
-
-    m_deinitSubscription = m_rootEntity->events()->eventBus()->subscribe([this](const ManagerBase::ManagerRemovedEvent& e) {
-        if (e.id == IGLManager::id())
-            deinitShader();
-    });
+    initShader();
 }
 
 GLShaderRes::~GLShaderRes() {
@@ -68,10 +58,6 @@ GLuint GLShaderRes::loadShader(ShaderType shaderType, const string& source) {
 }
 
 void GLShaderRes::initShader() {
-    auto glManager = m_rootEntity->manager<IGLManager>();
-    if (glManager == nullptr)
-        return;
-
     deinitShader();
 
     m_vertexShader = loadShader(GL_VERTEX_SHADER, m_vertexShaderStr);

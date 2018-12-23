@@ -17,21 +17,18 @@ const std::unordered_map<MaterialRes::RenderMode, GLenum> GLMeshRender::m_glRend
     {MaterialRes::RenderMode::TRIANGLE_FAN, GL_TRIANGLE_FAN}
 };
 
-GLMeshRender::GLMeshRender(SafePtr<MeshComponent> meshComponent):
-    m_attribArray(GL_TRIANGLE_STRIP)
-{
-    addDependency(MeshComponent::id());
-
-    m_meshComponent = meshComponent;
-
-    subscribe([this, meshComponent](InitEvent) {
-        m_attribArray = genAttribArray();
-        m_meshChanged = false;
-    });
-
-    subscribe([this](MeshComponent::MeshChangedEvent) {
+GLMeshRender::GLMeshRender(Handle<Hierarchy> hierarchy)
+    : GLRender(hierarchy)
+    , m_attribArray(GL_TRIANGLE_STRIP)
+{}
+    
+void GLMeshRender::setEntity(Handle<Entity> entity) {
+    auto meshComponent = m_meshComponent = entity->component<MeshComponent>();
+    m_attribArray = genAttribArray();
+    m_subscription = meshComponent->eventBus().subscribe([this](MeshComponent::MeshChangedEvent) {
         m_meshChanged = true;
     });
+    GLRender::setEntity(entity);
 }
 
 GLAttribArray GLMeshRender::genAttribArray() {

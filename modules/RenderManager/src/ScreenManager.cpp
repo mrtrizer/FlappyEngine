@@ -4,9 +4,10 @@ namespace flappy {
 
 using namespace glm;
 
-ScreenManager::ScreenManager(int width, int height): m_width(width), m_height(height) {
-
-}
+ScreenManager::ScreenManager(int width, int height)
+    : m_width(width)
+    , m_height(height)
+{}
 
 vec2 ScreenManager::screenSize() const {
     return vec2(m_width, m_height);

@@ -1,9 +1,10 @@
 #include "AtlasRes.h"
 
+#include <DebugServices.h>
+
 namespace flappy {
 
 using namespace std;
-using namespace Tools;
 
 AtlasRes::AtlasRes(std::shared_ptr<JsonRes> jsonRes)
     : m_jsonRes(jsonRes)

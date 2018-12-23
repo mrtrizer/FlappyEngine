@@ -2,8 +2,6 @@
 
 #include <sstream>
 
-#include <Entity.h>
-#include <ThreadManager.h>
 #include <IRgbaBitmapRes.h>
 #include <ResManager.h>
 #include <GLTextureRes.h>
@@ -12,15 +10,14 @@ namespace flappy {
 
 using namespace std;
 
-GLTextureResFactory::GLTextureResFactory() {
-    addDependency(ResManager<IRgbaBitmapRes>::id());
-    addDependency(ThreadManager::id());
-}
+GLTextureResFactory::GLTextureResFactory(Handle<Hierarchy> hierarchy)
+    : m_bitmapResManager(hierarchy->manager<ResManager<IRgbaBitmapRes>>())
+    , m_rootEntity(hierarchy->rootEntity())
+{}
 
 std::shared_ptr<ResBase> GLTextureResFactory::load(const std::string& name, ExecType execType)  {
-    auto rootEntity = manager<ThreadManager>()->entityPtr();
-    auto bitmapRes = manager<ResManager<IRgbaBitmapRes>>()->getRes(name, execType);
-    auto res = std::make_shared<GLTextureRes>(rootEntity, bitmapRes);
+    auto bitmapRes = m_bitmapResManager->getRes(name, execType);
+    auto res = std::make_shared<GLTextureRes>(m_rootEntity, bitmapRes);
     return res;
 }
 

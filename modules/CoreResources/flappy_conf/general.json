@@ -5,16 +5,17 @@
             "path":"../Core"
         },
         {
-            "path":"../Tools"
+            "path":"../Utility"
         },
         {
             "path":"../ResManager"
         },
         {
             "path":"../JsonRes"
+        },
+        {
+            "path":"../Math"
         }
-
-
     ],
     "cxx":{
         "header_dirs": [

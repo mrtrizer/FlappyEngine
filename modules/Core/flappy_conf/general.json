@@ -1,12 +1,9 @@
 {
     "name":"Core",
-    "modules":[
-        {
-            "path":"../Tools"
-        },
-        {
-            "path":"../EventBus"
-        }
+    "modules": [
+	{
+	    "path":"../MemoryManager"
+	}
     ],
     "cxx":{
         "header_dirs": [

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <Entity.h>
-#include <ThreadManager.h>
-
 #include "ResFactory.h"
 #include "ResManager.h"
 
@@ -25,27 +22,32 @@ public:
 
     // for empty dependencies
     template <typename EmptyT>
-    void addDependencies() {
+    void addDependencies(Handle<Hierarchy> hierarchy) {
     }
 
     // for the rest dependencies
     template <typename EmptyT, typename FirstDependT, typename ... RestDependT>
-    void addDependencies() {
-        this->template addDependency(ResManager<FirstDependT>::id());
-        addDependencies<Empty, RestDependT...>();
+    void addDependencies(Handle<Hierarchy> hierarchy) {
+        USER_ASSERT(hierarchy->manager<ResManager<FirstDependT>>().isValid());
+        addDependencies<Empty, RestDependT...>(hierarchy);
     }
 
-    DefaultResFactory() {
-        addDependencies<Empty, DependT...>();
+    DefaultResFactory(Handle<Hierarchy> hierarchy)
+    : m_hierarchy(hierarchy)
+    {
+        addDependencies<Empty, DependT...>(hierarchy);
     }
 
-    virtual std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final {
-        return std::make_shared<ResT>(this->template manager<ResManager<DependT>>()->template getRes(name, execType) ...);
+    std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final {
+        return std::make_shared<ResT>(m_hierarchy->manager<ResManager<DependT>>()->template getRes(name, execType) ...);
     }
 
-    virtual std::shared_ptr<ResBase> create(const std::string& name) final {
+    std::shared_ptr<ResBase> create(const std::string& name) final {
         return load(name, ExecType::ASYNC);
     }
+    
+private:
+    Handle<Hierarchy> m_hierarchy;
 };
 
 /// @}

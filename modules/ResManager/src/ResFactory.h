@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include <Manager.h>
-#include <SafePtr.h>
 #include <ResInfo.h>
 
 #include "IResFactory.h"
@@ -22,7 +20,7 @@ namespace flappy {
 /// load() method should provide synchronious loading of
 /// requested resource. It's usially called in a separate thread.
 template <typename ResT>
-class ResFactory: public Manager<ResFactory<ResT>>, public IResFactory {
+class [[manager]] ResFactory: public IResFactory {
 
 };
 

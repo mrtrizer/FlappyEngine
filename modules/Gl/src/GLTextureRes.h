@@ -6,8 +6,6 @@
 // FIXME: Strange includes
 #include <GLTools.h>
 #include <GLShaderRes.h>
-#include <SafePtr.h>
-
 
 namespace flappy {
 
@@ -20,15 +18,15 @@ class Entity;
 /// of image corners.
 class GLTextureRes: public TextureRes {
 public:
-    GLTextureRes(SafePtr<Entity> rootEntity, std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
+    GLTextureRes(Handle<Entity> rootEntity, std::shared_ptr<IRgbaBitmapRes> rgbaBitmapRes);
     ~GLTextureRes();
     void bind(GLShaderRes::UniformLocation uniformLoc, int n);
-    std::list<std::shared_ptr<ResBase> > dependencyList();
+    std::list<std::shared_ptr<ResBase> > dependencyList() const override;
 
 private:
     GLuint m_texture = -1;
 
-    SafePtr<Entity> m_rootEntity;
+    Handle<Entity> m_rootEntity;
     std::shared_ptr<IRgbaBitmapRes> m_rgbaBitmapRes;
 
     void deinitGLTexture();

@@ -13,19 +13,19 @@ namespace flappy {
 
 using namespace std;
 
-Sdl2RgbaBitmapResFactory::Sdl2RgbaBitmapResFactory() {
-    addDependency(ResRepositoryManager::id());
-    addDependency(IFileMonitorManager::id());
-}
+Sdl2RgbaBitmapResFactory::Sdl2RgbaBitmapResFactory(Handle<Hierarchy> hierarchy)
+    : m_resRepositoryManager(hierarchy->manager<ResRepositoryManager>())
+    , m_fileMonitorManager(hierarchy->manager<IFileMonitorManager>())
+{}
 
 // http://www.libpng.org/pub/png/book/chapter13.html
 /// @param path Relative path to image in resource dir without extension.
 /// An image has to be saved with alpha chanel.
 std::shared_ptr<ResBase> Sdl2RgbaBitmapResFactory::load(const std::string& name, ExecType) {
-    auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
+    auto resMeta = m_resRepositoryManager->findResMeta(name);
+    auto fileInfo = m_resRepositoryManager->findFileInfo(resMeta.data["input"]);
     string fullPath = fileInfo.path;
-    manager<IFileMonitorManager>()->registerFile(fullPath);
+    m_fileMonitorManager->registerFile(fullPath);
 
     SDL_Surface* sdlSurfacePtr;
     if(!( sdlSurfacePtr = IMG_Load(fullPath.data()))) {
@@ -59,9 +59,9 @@ std::shared_ptr<ResBase> Sdl2RgbaBitmapResFactory::create(const std::string&) {
 }
 
 bool Sdl2RgbaBitmapResFactory::changed(const string & name) {
-    auto resMeta = manager<ResRepositoryManager>()->findResMeta(name);
-    auto fileInfo = manager<ResRepositoryManager>()->findFileInfo(resMeta.data["input"]);
-    return manager<IFileMonitorManager>()->changed(fileInfo.path);
+    auto resMeta = m_resRepositoryManager->findResMeta(name);
+    auto fileInfo = m_resRepositoryManager->findFileInfo(resMeta.data["input"]);
+    return m_fileMonitorManager->changed(fileInfo.path);
 }
 
 }

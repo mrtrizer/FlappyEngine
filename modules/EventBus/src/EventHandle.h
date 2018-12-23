@@ -1,22 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <type_traits>
 
-#include <TypeId.h>
-#include <TypeTraits.h>
+#include <TypeId.hpp>
+
+#include "IEvent.h"
 
 namespace flappy {
-
-class IEvent {
-public:
-    IEvent() = default;
-    IEvent(const IEvent&) = default;
-    IEvent& operator=(const IEvent&) & = default;
-    IEvent(IEvent&&) = default;
-    IEvent& operator=(IEvent&&) & = default;
-    virtual ~IEvent() = default;
-};
 
 class EventBus;
 
@@ -24,10 +14,10 @@ class EventHandle {
 public:
     template <typename EventT>
     EventHandle(EventT&& event):
-        m_id(GetTypeId<EventHandle, EventT>::value()),
+        m_id(getTypeId<EventT>()),
         m_eventStructPtr(new std::decay_t<EventT>(std::forward<EventT>(event)))
     {
-        static_assert(isBaseOf<IEvent, EventT>(), "Event must be a descendant of IEvent");
+        static_assert(std::is_base_of<IEvent, std::decay_t<EventT>>::value, "Event must be a descendant of IEvent");
     }
 
     EventHandle(const EventHandle&) = delete;
@@ -36,10 +26,10 @@ public:
     EventHandle& operator=(EventHandle&&) & = default;
 
     IEvent* eventPtr() const { return m_eventStructPtr.get(); }
-    TypeId<EventHandle> id() const { return m_id; }
+    TypeId id() const { return m_id; }
 
 private:
-    TypeId<EventHandle> m_id;
+    TypeId m_id;
     std::unique_ptr<IEvent> m_eventStructPtr;
 };
 

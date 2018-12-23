@@ -7,15 +7,19 @@
 namespace flappy {
 
 class GLRenderFactory;
+class IGLManager;
 
 /// Render implementation for work with OpenGL.
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
-class GLRenderManager : public RenderManager {
+class [[manager]] GLRenderManager : public RenderManager {
 public:
-    GLRenderManager();
+    GLRenderManager(Handle<Hierarchy> hierarchy);
+    virtual ~GLRenderManager() = default;
 protected:
     void updateViewPort() final;
     void redraw(std::list<Visual> &, glm::mat4 &) final;
+    Handle<IGLManager> m_glManager;
+    Handle<ScreenManager> m_screenManager;
 };
 
 } // flappy

@@ -12,33 +12,30 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLSpriteRender::GLSpriteRender(SafePtr<SpriteComponent> spriteComponent):
-    m_rect(GL_TRIANGLE_STRIP),
-    m_spriteComponent(spriteComponent),
-    m_vertexList{ {-0.5f, -0.5f},
+GLSpriteRender::GLSpriteRender(Handle<Hierarchy> hierarchy)
+    : GLRender(hierarchy)
+    , m_rect(GL_TRIANGLE_STRIP)
+    , m_vertexList{ {-0.5f, -0.5f},
                 {-0.5f, 0.5f},
                 {0.5f, -0.5f},
-                {0.5f, 0.5f} },
-    m_quadRes(spriteComponent->quadRes())
+                {0.5f, 0.5f} }
+    , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
 {
-    addDependency(SpriteComponent::id());
-
-    subscribe([this](InitEvent) {
-        setShader(manager<ResManager<ShaderRes>>()->getRes("texture_shader", ExecType::ASYNC));
-    });
+    setShader(m_shaderResManager->getRes("texture_shader", ExecType::ASYNC));
 }
-
+    
 void GLSpriteRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    if (m_quadRes != m_spriteComponent->quadRes()) {
+    auto spriteComponent = entity()->component<SpriteComponent>();
+    if (m_quadRes != spriteComponent->quadRes()) {
         updateFrame();
-        m_quadRes = m_spriteComponent->quadRes();
+        m_quadRes = spriteComponent->quadRes();
     }
     if (m_quadRes != nullptr) {
-        shader()->render(m_rect, [this, mvMatrix, pMartrix](){
+        shader()->render(m_rect, [this, mvMatrix, pMartrix, spriteComponent](){
             auto texture = m_quadRes->texture();
             glUniformMatrix4fv(shader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(shader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-            glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
+            glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&spriteComponent->colorRGBA()));
             auto glTexture = static_pointer_cast<GLTextureRes>(texture);
             glTexture->bind(shader()->findUniform("uTex"), 0);
         });
@@ -46,9 +43,11 @@ void GLSpriteRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
 }
 
 void GLSpriteRender::updateFrame() {
-    auto texture = m_spriteComponent->quadRes()->texture();
+    auto spriteComponent = entity()->component<SpriteComponent>();
+    
+    auto texture = spriteComponent->quadRes()->texture();
 
-    auto spriteInfo = m_spriteComponent->quadRes()->spriteInfo();
+    auto spriteInfo = spriteComponent->quadRes()->spriteInfo();
 
     auto rectInAtlas = spriteInfo.rectInAtlas;
 

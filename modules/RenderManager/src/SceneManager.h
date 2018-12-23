@@ -5,39 +5,23 @@
 #include <map>
 #include <functional>
 
-#include <Manager.h>
+#include <Entity.hpp>
 
-#include "Entity.h"
 #include "CameraComponent.h"
 
 namespace flappy
 {
 
-class CameraComponent;
-
-class SceneManager: public Manager<SceneManager>
+class [[manager]] SceneManager
 {
 public:
 
-    void setMainCamera(const SafePtr<CameraComponent>& camera);
+    void setMainCamera(const Handle<CameraComponent>& camera);
 
-    SafePtr<CameraComponent> mainCamera() const;
+    Handle<CameraComponent> mainCamera() const { return m_camera; }
 
 private:
-    SafePtr<CameraComponent> m_camera;
-    std::list<SafePtr<Entity>> m_entities;
-
-    template <typename ComponentT = void, typename ... Components>
-    bool check(std::shared_ptr<Entity> entity)
-    {
-        return check<Components...>(entity) && (entity->findComponent<ComponentT>());
-    }
+    Handle<CameraComponent> m_camera;
 };
-
-template <> inline
-bool SceneManager::check <void> (std::shared_ptr<Entity>)
-{
-    return true;
-}
 
 } // flappy

@@ -6,17 +6,21 @@
 
 namespace flappy {
 
-std::shared_ptr<Render> GLRenderElementFactory::createSpriteRender(SafePtr<SpriteComponent> spriteComponent) {
-    return std::make_shared<GLSpriteRender>(spriteComponent);
-
+GLRenderElementFactory::GLRenderElementFactory(Handle<Hierarchy> hierarchy)
+{
+    USER_ASSERT(hierarchy->manager<RenderManager>().isValid());
+}
+    
+AnyHandle GLRenderElementFactory::createSpriteRender(Handle<Entity> entity) {
+    return entity->createComponent<GLSpriteRender>();
 }
 
-std::shared_ptr<Render> GLRenderElementFactory::createMeshRender(SafePtr<MeshComponent> meshComponent) {
-    return std::make_shared<GLMeshRender>(meshComponent);
+AnyHandle GLRenderElementFactory::createMeshRender(Handle<Entity> entity) {
+    return entity->createComponent<GLMeshRender>();
 }
 
-std::shared_ptr<Render> GLRenderElementFactory::createTextRender(SafePtr<TextComponent> textComponent) {
-    return std::make_shared<GLTextRender>(textComponent);
+AnyHandle GLRenderElementFactory::createTextRender(Handle<Entity> entity) {
+    return entity->createComponent<GLTextRender>();
 }
 
 } // flappy

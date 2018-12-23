@@ -4,19 +4,17 @@
 
 namespace flappy {
 
-SpriteComponent::SpriteComponent()
-{
-    addDependency(RenderElementFactory::id());
-
-    subscribe([this](InitEvent) {
-        m_renderElement = manager<RenderElementFactory>()->createSpriteRender(selfPointer());
-        entity()->addComponent(m_renderElement);
-    });
-
-    subscribe([this](DeinitEvent) {
-        entity()->removeComponent(m_renderElement);
-        m_renderElement.reset();
-    });
+SpriteComponent::SpriteComponent(Handle<Hierarchy> hierarchy)
+    : m_renderElementFactory(hierarchy->manager<RenderElementFactory>())
+{}
+    
+void SpriteComponent::setEntity(Handle<Entity> entity) {
+    m_entity = entity;
+    m_renderElement = m_renderElementFactory->createSpriteRender(entity);
+}
+    
+SpriteComponent::~SpriteComponent() {
+    m_entity->removeComponent(m_renderElement);
 }
 
 std::shared_ptr<SpriteRes> SpriteComponent::quadRes() {

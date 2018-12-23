@@ -1,19 +1,19 @@
 #pragma once
 
-#include <Component.h>
 #include <Color.h>
 #include <TextureRes.h>
 #include <RenderElementFactory.h>
-#include <Entity.h>
 #include <GlyphSheetRes.h>
 #include <FontRes.h>
-#include <Tools.h>
+#include <IEvent.h>
+#include <MathUtils.h>
+#include <EventBus.h>
 
 namespace flappy {
 
 class Render;
 
-class TextComponent: public Component<TextComponent> {
+class TextComponent {
 public:
 
     struct TextChangedEvent : public IEvent {
@@ -27,7 +27,7 @@ public:
     };
 
     struct Box {
-        Tools::Rect rect;
+        MathUtils::Rect rect;
         GlyphSheetRes::Glyph glyph;
     };
 
@@ -51,7 +51,9 @@ public:
         std::vector<BoxedLine> boxedLines;
     };
 
-    TextComponent();
+    TextComponent(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
+    ~TextComponent();
 
     void setSize(int size);
     int size() { return m_size; }
@@ -79,6 +81,7 @@ public:
     static BoxedText genBoxedText(std::string text, const GlyphSheetRes& glyphSheet, int maxWidth, int size);
     static std::vector<std::string> splitIntoLexems(std::string str);
     static int calcLineOffset(Align align, BoxedText boxedText, BoxedLine boxedLine);
+    EventBus& eventBus() { return m_eventBus; }
 
 private:
     static constexpr int DEFAULT_WIDTH = 99999;
@@ -90,7 +93,11 @@ private:
     std::string m_fontResPath;
     BoxedText m_boxedText;
     std::shared_ptr<FontRes> m_fontRes;
-    std::shared_ptr<Render> m_renderElement;
+    AnyHandle m_renderElement;
+    EventBus m_eventBus;
+    Handle<Entity> m_entity;
+    Handle<RenderElementFactory> m_renderElementFactory;
+    Handle<ResManager<FontRes>> m_fontResManager;
 };
 
 } // flappy

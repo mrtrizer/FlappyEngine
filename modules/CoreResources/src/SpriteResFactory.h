@@ -11,7 +11,7 @@ namespace flappy {
 
 class SpriteResFactory: public ResFactory<SpriteRes> {
 public:
-    SpriteResFactory();
+    SpriteResFactory(Handle<Hierarchy> hierarchy);
 
     /// @brief Loads sprite by path in atlas or file name.
     /// @details Always loads atlas synchronous.
@@ -20,6 +20,11 @@ public:
     /// Image file name: "file_name"
     std::shared_ptr<ResBase> load(const std::string& name, ExecType execType) final;
     std::shared_ptr<ResBase> create(const std::string& name) final;
+    
+private:
+    Handle<ResManager<TextureRes>> m_textureResManager;
+    Handle<ResManager<AtlasRes>> m_atlasResManager;
+    Handle<ResRepositoryManager> m_resRepositoryManager;
 };
 
 } // flappy

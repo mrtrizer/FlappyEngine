@@ -9,22 +9,25 @@
 #include <GLTools.h>
 #include <Color.h>
 #include <MaterialRes.h>
+#include <ISubscription.h>
 
 namespace flappy {
 
 class MeshComponent;
-
+    
 /// Contains a shader for all shapes and draw implementation.
 /// All derived classes have to impmelent getAttribArray().
-class GLMeshRender: public GLRender<GLMeshRender> {
+class GLMeshRender: public GLRender {
 public:
-    GLMeshRender(SafePtr<MeshComponent>);
+    GLMeshRender(Handle<Hierarchy> hierarchy);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
+    void setEntity(Handle<Entity> entity);
 
 private:
     GLAttribArray m_attribArray;
     bool m_meshChanged = false;
-    SafePtr<MeshComponent> m_meshComponent;
+    Handle<MeshComponent> m_meshComponent;
+    std::shared_ptr<ISubscription> m_subscription;
     static const std::unordered_map<MaterialRes::RenderMode, GLenum> m_glRenderModes;
 
     GLAttribArray genAttribArray();

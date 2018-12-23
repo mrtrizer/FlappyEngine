@@ -7,12 +7,23 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <Handle.hpp>
+
 namespace flappy
 {
+    
+class Entity;
+class Hierarchy;
 
-class TransformComponent
+class [[component]] TransformComponent
 {
 public:
+    TransformComponent(Handle<Hierarchy>) {}
+    
+    void setEntity(Handle<Entity> entity) { m_entity = entity; }
+    
+    Handle<Entity> entity() { return m_entity; }
+    
     glm::mat4x4 transformMatrix();
 
     void setPos(const glm::vec3& pos) {m_pos = pos;}
@@ -39,6 +50,7 @@ private:
     glm::vec3 m_pos = {0.0f, 0.0f, 0.0f};
     glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};
     glm::quat m_quat;
+    Handle<Entity> m_entity;
 };
 
 } // flappy
