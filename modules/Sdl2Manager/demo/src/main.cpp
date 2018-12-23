@@ -60,14 +60,18 @@ std::vector<glm::vec3> genSinCircleVertices(float r, int vertexN, float offset)
 
 int main(int argc, char *argv[])
 {
+    const glm::uvec2 screenSize {600, 600};
+    
     // Sdl2 and render
     auto hierarchy = Heap::create<Hierarchy>();
     auto rootEntity = hierarchy->rootEntity();
     hierarchy->initManager<UpdateManager>();
-    hierarchy->initManager<ScreenManager>(600, 600);
+    auto screenManager = hierarchy->initManager<ScreenManager>();
+    screenManager->resize(screenSize);
     hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
     hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
-    auto repoManager = hierarchy->initManager<ResRepositoryManager>("./resources");
+    auto repoManager = hierarchy->initManager<ResRepositoryManager>();
+    repoManager->setRepositoryPath("./resources");
     hierarchy->initManager<ResFactory<TextRes>, TextResFactory>();
     hierarchy->initManager<ResManager<TextRes>> ();
     hierarchy->initManager<ResFactory<JsonRes>, DefaultResFactory<JsonRes, JsonRes, TextRes>>();
@@ -96,7 +100,7 @@ int main(int argc, char *argv[])
 
     // Scene
     sceneManager->setMainCamera(rootEntity->component<CameraComponent>());
-    rootEntity->component<CameraComponent>()->setSize({600, 600});
+    rootEntity->component<CameraComponent>()->setSize(screenSize);
 
     // Sprite
     {
@@ -134,10 +138,7 @@ int main(int argc, char *argv[])
     auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
     textEntity->component<TextComponent>()->setFontRes(fontRes);
 
-    return BasicLoop(30, basicLoopManager).run([&hierarchy
-                                                ,&circleEntity
-                                                ,&sdl2Manager
-                                                ](float dt) {
+    return BasicLoop(30, basicLoopManager).run([&hierarchy, &circleEntity, &sdl2Manager](float dt) {
         hierarchy->manager<UpdateManager>()->update(dt);
         sdl2Manager->update(dt);
         circleEntity->component<TransformComponent>()->rotate2DRad(dt);

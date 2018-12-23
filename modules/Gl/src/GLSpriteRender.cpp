@@ -24,18 +24,22 @@ GLSpriteRender::GLSpriteRender(Handle<Hierarchy> hierarchy)
     setShader(m_shaderResManager->getRes("texture_shader", ExecType::ASYNC));
 }
     
+void GLSpriteRender::setEntity(Handle<Entity> entity) {
+    m_spriteComponent = entity->component<SpriteComponent>();
+    GLRender::setEntity(entity);
+}
+    
 void GLSpriteRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
-    auto spriteComponent = entity()->component<SpriteComponent>();
-    if (m_quadRes != spriteComponent->quadRes()) {
+    if (m_quadRes != m_spriteComponent->quadRes()) {
         updateFrame();
-        m_quadRes = spriteComponent->quadRes();
+        m_quadRes = m_spriteComponent->quadRes();
     }
     if (m_quadRes != nullptr) {
-        shader()->render(m_rect, [this, mvMatrix, pMartrix, spriteComponent](){
+        shader()->render(m_rect, [this, mvMatrix, pMartrix](){
             auto texture = m_quadRes->texture();
             glUniformMatrix4fv(shader()->findUniform("uMVMatrix"),1,false,value_ptr(mvMatrix));
             glUniformMatrix4fv(shader()->findUniform("uPMatrix"),1,false,value_ptr(pMartrix));
-            glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&spriteComponent->colorRGBA()));
+            glUniform4fv(shader()->findUniform("uColor"), 1, reinterpret_cast<GLfloat *>(&m_spriteComponent->colorRGBA()));
             auto glTexture = static_pointer_cast<GLTextureRes>(texture);
             glTexture->bind(shader()->findUniform("uTex"), 0);
         });

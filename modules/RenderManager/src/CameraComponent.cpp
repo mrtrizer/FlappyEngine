@@ -38,7 +38,7 @@ MathUtils::Rect CameraComponent::rect() const {
 
 vec3 CameraComponent::screenToScene(const vec2 &pos) const {
     float coeff = this->m_height / m_screenManager->screenSize().y;
-    vec2 screenSize = m_screenManager->screenSize() * 0.5f;
+    vec2 screenSize = glm::vec2(m_screenManager->screenSize()) * 0.5f;
     vec3 scenePos(pos.x - screenSize.x, screenSize.y - pos.y, 0);
     return scenePos * coeff;
 }

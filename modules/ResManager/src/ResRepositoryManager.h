@@ -22,12 +22,14 @@ class IFileLoadManager;
 class [[manager]] ResRepositoryManager : public Updatable<ResRepositoryManager>
 {
 public:
-    ResRepositoryManager(Handle<Hierarchy> hierarchy, std::string resRespositoryPath);
+    ResRepositoryManager(Handle<Hierarchy> hierarchy);
 
+    void setRepositoryPath(const std::string& path);
+    
     void update(float dt);
     
-    FileInfo findFileInfo(std::string name) const;
-    ResMeta findResMeta(std::string name) const;
+    FileInfo findFileInfo(const std::string& name) const;
+    ResMeta findResMeta(const std::string& name) const;
 
 private:
     std::string m_resRepositoryPath;
@@ -35,11 +37,11 @@ private:
     Handle<IFileLoadManager> m_fileLoadManager;
     std::map<std::string, FileInfo> m_resInfoMap;
     std::map<std::string, ResMeta> m_resMetaMap;
+    std::string m_fileListPath;
+    std::string m_resMetaFilePath;
 
-    void loadFileList();
-    void loadResMeta();
-    std::string fileListFilePath();
-    std::string resMetaFilePath();
+    void loadFileList(const std::string& repoPath, const std::string& filePath);
+    void loadResMeta(const std::string& repoPath, const std::string& filePath);
 };
 
 /// @}

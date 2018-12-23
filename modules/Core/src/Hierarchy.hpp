@@ -61,10 +61,10 @@ private:
     StrongHandle<Entity> m_rootEntity;
 
     template <typename T, typename ... ArgT>
-    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>(), std::declval<ArgT>()...))* = 0) { return true; }
+    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
 
     template <typename T, typename ... ArgT>
-    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<ArgT>()...))* = 0) { return false; }
+    static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
 
     template <typename ManagerT, typename ... ArgT>
     StrongHandle<ManagerT> createManager(ArgT&& ... args) {
