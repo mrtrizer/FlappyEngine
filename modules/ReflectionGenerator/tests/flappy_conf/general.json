@@ -1,0 +1,27 @@
+{
+    "name":"tests_ReflectionGenerator",
+    "modules": [
+        {
+            "path":"../"
+        },
+        {
+            "path":"../../NewStd"
+        },
+        {
+            "path":"../../Catch"
+        }
+    ],
+    "cxx":{
+        "flags": [
+            "-std=c++14"
+        ],
+        "header_dirs": [
+            "./src",
+	        "^/GeneratedReflection"
+        ],
+        "src_dirs": [
+            "./src",
+	        "^/GeneratedReflection"
+        ]
+    }
+}

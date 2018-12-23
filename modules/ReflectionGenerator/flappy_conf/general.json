@@ -1,0 +1,17 @@
+{
+    "name":"ReflectionGenerator",
+    "modules": [
+        {
+            "path":"../Reflection"
+        }
+
+    ],
+    "cxx":{
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}
