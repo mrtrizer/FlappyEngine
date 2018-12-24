@@ -40,10 +40,10 @@ public:
         return m_rootEntity;
     }
 
-    template <typename ManagerT, typename DerivedT = ManagerT, typename ... ArgT>
-    Handle<DerivedT> initManager(ArgT&& ... args) {
+    template <typename ManagerT, typename DerivedT = ManagerT>
+    Handle<DerivedT> initManager() {
         static_assert(!std::is_abstract<DerivedT>(), "Can't construct manager of abstract type.");
-        auto manager = createManager<DerivedT>(std::forward<ArgT>(args)...);
+        auto manager = createManager<DerivedT>();
         auto managerHandle = manager.handle();
         auto iter = m_managers.find(getTypeId<ManagerT>());
         if (iter != m_managers.end())
@@ -60,18 +60,18 @@ private:
     std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 2000), ObjectPool(256, 1500), ObjectPool(1024, 200) };
     StrongHandle<Entity> m_rootEntity;
 
-    template <typename T, typename ... ArgT>
+    template <typename T>
     static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
 
-    template <typename T, typename ... ArgT>
+    template <typename T>
     static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
 
-    template <typename ManagerT, typename ... ArgT>
-    StrongHandle<ManagerT> createManager(ArgT&& ... args) {
-        if constexpr (constructedWithHierarchy<ManagerT, ArgT...>())
-            return create<ManagerT>(selfHandle(), std::forward<ArgT>(args)...);
+    template <typename ManagerT>
+    StrongHandle<ManagerT> createManager() {
+        if constexpr (constructedWithHierarchy<ManagerT>())
+            return create<ManagerT>(selfHandle());
         else
-            return create<ManagerT>(std::forward<ArgT>(args)...);
+            return create<ManagerT>();
     }
 };
 

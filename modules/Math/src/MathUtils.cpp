@@ -12,7 +12,7 @@ bool isPowOfTwo(unsigned x) {
 }
 
 /// http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2Float
-unsigned nextHighestPowOfTwo32(unsigned v) {
+uint32_t nextHighestPowOfTwo32(uint32_t v) {
     v--;
     v |= v >> 1;
     v |= v >> 2;

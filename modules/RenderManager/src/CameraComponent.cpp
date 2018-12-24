@@ -25,15 +25,10 @@ void CameraComponent::setEntity(Handle<Entity> entity) {
 }
     
 MathUtils::Rect CameraComponent::rect() const {
-    auto screenSize = m_screenManager->screenSize();
-    float ratio = screenSize.x / screenSize.y;
-    float offset = m_height / 2;
-    return {
-        -offset * ratio,
-        offset,
-        offset * ratio,
-        -offset,
-    };
+    auto screenSize = glm::vec2(m_screenManager->screenSize());
+    float yOffset = m_height / 2;
+    float xOffset = (yOffset * screenSize.x) / screenSize.y;
+    return { -xOffset, yOffset, xOffset, -yOffset };
 }
 
 vec3 CameraComponent::screenToScene(const vec2 &pos) const {

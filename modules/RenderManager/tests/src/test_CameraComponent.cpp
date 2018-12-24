@@ -1,7 +1,7 @@
 #include "catch.h"
 #include "fakeit.h"
 
-#include <memory>
+#include <limits>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,11 +15,18 @@
 
 using namespace flappy;
 using namespace std;
-using namespace glm;
 
 TEST_CASE( "CameraComponent::rect()") {
     auto hierarchy = Heap::create<Hierarchy>();
-    hierarchy->rootEntity()->component<MeshComponent>()->setVertices(std::vector<glm::vec3>());
+    hierarchy->initManager<SceneManager>();
+    auto screenManager = hierarchy->initManager<ScreenManager>();
+    screenManager->resize({120, 200});
+    glm::vec2 cameraSize{100, 200};
+    hierarchy->rootEntity()->component<CameraComponent>()->setSize(cameraSize);
+    auto cameraRect = hierarchy->rootEntity()->component<CameraComponent>()->rect();
+    std::numeric_limits<glm::vec2::type>::epsilon();
+    REQUIRE(cameraRect.size().x == screenManager->screenSize().x);
+    REQUIRE(cameraRect.size().y == cameraSize.y);
 }
 
 TEST_CASE( "CameraComponent::pMatrix()") {
