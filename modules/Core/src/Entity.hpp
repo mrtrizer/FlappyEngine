@@ -12,6 +12,8 @@ class Hierarchy;
 class Entity : public EnableSelfHandle<Entity> {
     friend class Chank; // for construction with deepness
 public:
+    constexpr static unsigned MaxDepth = 9999;
+    
     explicit Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy) noexcept
         : Entity(parent, hierarchy, 0)
     {}
@@ -32,7 +34,10 @@ public:
     Handle<ComponentT> createComponent() {
         // Template lambda calls a member of Hierarchy whithout it's defenition to avoid cross-reference
         auto component = [](auto& hierarchy) {
-            return hierarchy->template create<ComponentT>(hierarchy);
+            if constexpr (constructedWithHierarchy<ComponentT>())
+                return hierarchy->template create<ComponentT>(hierarchy);
+            else
+                return hierarchy->template create<ComponentT>();
         } (m_hierarchy);
         
         auto& componentInList = m_components.emplace_back(std::move(component));
@@ -59,14 +64,29 @@ public:
 
     template <typename ComponentT>
     Handle<ComponentT> component() {
-        auto strongHandlePtr = findComponentInternal<ComponentT>();
+        auto strongHandlePtr = findComponentInternal<ComponentT>(0);
         return strongHandlePtr != nullptr ? *strongHandlePtr : createComponent<ComponentT>();
     }
 
     template <typename ComponentT>
-    Handle<ComponentT> findComponent() const {
-        auto strongHandlePtr = findComponentInternal<ComponentT>();
+    Handle<ComponentT> findComponent(unsigned depth = 0) const {
+        auto strongHandlePtr = findComponentInternal<ComponentT>(depth);
         return strongHandlePtr ? *strongHandlePtr : Handle<ComponentT>();
+    }
+    
+    template <typename ComponentT>
+    std::list<Handle<ComponentT>> findComponents(unsigned depth = 0) const {
+        std::list<Handle<ComponentT>> found;
+        
+        std::copy_if(m_components.begin(), m_components.end(), std::back_inserter(found), [](const auto& strongHandle) {
+            return strongHandle.typeId() == getTypeId<ComponentT>();
+        });
+        if (depth > 0)
+            for (const auto& entity : m_entities) {
+                auto nextFound = entity->findComponents<ComponentT>(depth - 1);
+                found.insert(found.end(), nextFound.begin(), nextFound.end());
+            }
+        return found;
     }
 
     const std::vector<AnyStrongHandle>& components() const noexcept {
@@ -94,7 +114,12 @@ private:
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
     int m_depth = 0;
+
+    template <typename T>
+    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
     
+    template <typename T>
+    static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
 
     explicit Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy, int deepness) noexcept
         : m_parent(parent)
@@ -103,11 +128,19 @@ private:
     {}
 
     template <typename ComponentT>
-    const StrongHandle<ComponentT>* findComponentInternal() const noexcept {
+    const StrongHandle<ComponentT>* findComponentInternal(unsigned depth) const noexcept {
         auto componentIter = std::find_if(m_components.begin(), m_components.end(), [](const auto& strongHandle) {
             return strongHandle.typeId() == getTypeId<ComponentT>();
         });
-        return componentIter != m_components.end() ? static_cast<const StrongHandle<ComponentT>*>(&*componentIter) : nullptr;
+        if (componentIter != m_components.end())
+            return static_cast<const StrongHandle<ComponentT>*>(&*componentIter);
+        if (depth > 0)
+            for (const auto& entity : m_entities) {
+                auto result = entity->findComponentInternal<ComponentT>(depth - 1);
+                if (result != nullptr)
+                    return result;
+            }
+        return nullptr;
     }
 };
 

@@ -6,12 +6,18 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Component.h>
+#include <Handle.hpp>
+#include <EnableSelfHandle.hpp>
+#include <EventBus.h>
 
 namespace flappy
 {
+class Entity;
+class Box2DBodyManager;
+class UIManager;
+class Hierarchy;
 
-class TouchComponent: public Component<TouchComponent>
+class [[component]] TouchComponent : public EnableSelfHandle<TouchComponent>
 {
 public:
     struct TouchEvent: public IEvent {
@@ -34,13 +40,21 @@ public:
         using TouchEvent::TouchEvent;
     };
 
-    TouchComponent();
+    TouchComponent(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
+    ~TouchComponent();
 
     void touchDown(glm::vec2 pos, int index);
     void touchUp(glm::vec2 pos, int index);
     void touchMove(glm::vec2 pos, int index);
 
     bool testPoint(glm::vec2 pos);
+    EventBus& eventBus() { return m_eventBus; }
+    
+private:
+    Handle<UIManager> m_uiManager;
+    Handle<Box2DBodyManager> m_box2dBodyComponent;
+    EventBus m_eventBus;
 };
 
 } // flappy

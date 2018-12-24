@@ -1,8 +1,12 @@
 #pragma once
 
-#include <Manager.h>
+#include <glm/vec2.hpp>
+
+#include <Updatable.hpp>
 #include <Box2DContactListener.h>
 #include <EventHandle.h>
+#include <Handle.hpp>
+#include <EventBus.h>
 
 #include <Box2D/Box2D.h>
 
@@ -10,27 +14,20 @@ namespace flappy {
 
 class Box2DFixtureComponent;
 
-class Box2DWorldManager: public Manager<Box2DWorldManager> {
+class [[manager]] Box2DWorldManager : public Updatable<Box2DWorldManager> {
 public:
 
     struct RayCastData {
-        std::vector<Box2DFixtureComponent*> fixtures;
+        std::vector<Handle<Box2DFixtureComponent>> fixtures;
     };
 
-    struct Box2DWorldScaleChanged : public IEvent{};
+    struct ScaleChangedEvent : public IEvent{};
 
-    struct ContactEvent : public IEvent {
-        SafePtr<Box2DFixtureComponent> fixture;
-        glm::vec2 pos;
-    };
+    Box2DWorldManager(Handle<Hierarchy> hierarchy);
+    
+    void update(DeltaTime dt);
 
-    struct ContactStartEvent : public ContactEvent {};
-
-    struct ContactEndEvent : public ContactEvent {};
-
-    Box2DWorldManager();
-
-    b2World& world() { return m_world; }
+    b2World& world() { return *m_world.get(); }
 
     b2Joint* createJoint(std::shared_ptr<b2JointDef> jointDef);
     void destroyJoint(b2Joint*);
@@ -47,26 +44,20 @@ public:
     void setPositionIterations(int positionIterations);
 
     RayCastData rayCast(glm::vec2 start, glm::vec2 end);
+    
+    EventBus& eventBus() { return m_eventBus; }
 
 private:
     struct ContactEventHolder {
-        SafePtr<Entity> entity;
         EventHandle eventHandle;
     };
 
-    template <typename ContactEventT>
-    EventHandle createContactEvent(b2Contact* contact, SafePtr<Box2DFixtureComponent> otherFixture);
-    template <typename ContactEventT>
-    void sendContactEvent(b2Contact* contact);
-    void sendContactEvents();
-    void update(DeltaTime dt);
-
+    EventBus m_eventBus;
     Box2DContactListener m_contactListener;
-    b2World m_world;
+    std::unique_ptr<b2World> m_world;
     int m_velocityIterations = 6;
     int m_positionIterations = 2;
     float m_sizeFactor = 1.0f;
-    std::list<ContactEventHolder> m_contactEventHolders;
 };
 
 } // flappy

@@ -17,12 +17,6 @@ public:
                 static_cast<DerivedT*>(this)->update(dt);
             }))
     {}
-    Updatable(const Handle<Entity>& entity)
-        : m_updateManager(entity->hierarchy()->manager<UpdateManager>())
-        , m_functionId(m_updateManager->registerUpdateFunction<DerivedT>(entity->depth(), [this](float dt){
-                static_cast<DerivedT*>(this)->update(dt);
-            }))
-    {}
     ~Updatable() {
         if (m_updateManager.isValid())
             m_updateManager->unregisterUpdateFunction<DerivedT>(m_functionId);

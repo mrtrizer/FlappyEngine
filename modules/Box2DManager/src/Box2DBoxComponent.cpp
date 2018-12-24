@@ -5,18 +5,12 @@
 
 namespace flappy {
 
-Box2DBoxComponent::Box2DBoxComponent() {
-
-    addDependency(Box2DBodyManager::id());
-    addDependency(Box2DWorldManager::id());
-
-    events()->subscribe([this](InitEvent) {
-        init(m_size);
-    });
-}
+Box2DBoxComponent::Box2DBoxComponent(Handle<Hierarchy> hierarchy)
+    : m_box2DWorldManager(hierarchy->manager<Box2DWorldManager>())
+{}
 
 void Box2DBoxComponent::init(glm::vec2 size) {
-    float sizeFactor = manager<Box2DWorldManager>()->sizeFactor();
+    float sizeFactor = m_box2DWorldManager->sizeFactor();
     auto dynamicBox = std::make_shared<b2PolygonShape>();
     dynamicBox->SetAsBox(size.x * sizeFactor * 0.5f, size.y * sizeFactor * 0.5f);
     setShape(dynamicBox);
@@ -24,9 +18,7 @@ void Box2DBoxComponent::init(glm::vec2 size) {
 
 void Box2DBoxComponent::setSize(glm::vec2 size) {
     m_size = size;
-    if (isInitialized()) {
-        init(size);
-    }
+    init(size);
 }
 
 }

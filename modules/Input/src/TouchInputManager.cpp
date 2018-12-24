@@ -10,7 +10,6 @@ namespace flappy
 using namespace glm;
 
 TouchInputManager::TouchInputManager(Handle<Hierarchy> hierarchy)
-    : m_eventBus(hierarchy->manager<EventBus>())
 {}
     
 void TouchInputManager::update(float dt) {
@@ -49,7 +48,7 @@ void TouchInputManager::setTouchDown(const vec2 &touchPos, int index)
     TouchDownEvent touchDownEvent;
     touchDownEvent.pos = touchPos;
     touchDownEvent.index = index;
-    m_eventBus->post(touchDownEvent);
+    m_eventBus.post(touchDownEvent);
 }
 
 void TouchInputManager::setTouchUp(const vec2 &touchPos, int index)
@@ -61,7 +60,7 @@ void TouchInputManager::setTouchUp(const vec2 &touchPos, int index)
     TouchUpEvent touchUpEvent;
     touchUpEvent.pos = touchPos;
     touchUpEvent.index = index;
-    m_eventBus->post(touchUpEvent);
+    m_eventBus.post(touchUpEvent);
 }
 
 void TouchInputManager::setTouchPos(const vec2 &touchPos, int index)
@@ -71,7 +70,7 @@ void TouchInputManager::setTouchPos(const vec2 &touchPos, int index)
     TouchMoveEvent touchMoveEvent;
     touchMoveEvent.pos = touchPos;
     touchMoveEvent.index = index;
-    m_eventBus->post(touchMoveEvent);
+    m_eventBus.post(touchMoveEvent);
 }
 
 } // flappy

@@ -1,17 +1,30 @@
 #pragma once
 
-#include <Manager.h>
-
 #include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
+#include <Updatable.hpp>
+#include <EnableSelfHandle.hpp>
 #include <Box2D/Box2D.h>
+#include <Handle.hpp>
+#include <ISubscription.h>
 
 namespace flappy {
+    
+class Hierarchy;
+class Box2DWorldManager;
+class TransformComponent;
 
-class Box2DBodyManager: public Manager<Box2DBodyManager> {
+class [[component]] Box2DBodyManager
+    : public Updatable<Box2DBodyManager>
+    , public EnableSelfHandle<Box2DBodyManager> {
 public:
-    Box2DBodyManager();
+    Box2DBodyManager(Handle<Hierarchy> hierarchy);
+    void setEntity(Handle<Entity> entity);
+    ~Box2DBodyManager();
 
+    void update(DeltaTime dt);
+    
     b2Body* body() { return m_body; }
 
     void setMass(float mass);
@@ -57,6 +70,9 @@ public:
     void applyAngularImpulse(float impulse);
 
 private:
+    Handle<Box2DWorldManager> m_box2dWorldManager;
+    Handle<TransformComponent> m_transformComponent;
+    std::shared_ptr<ISubscription> m_subscription;
     b2Body* m_body = nullptr;
     glm::vec3 m_lastTransformPos;
     float m_lastTransformAngle = 0.0f;
@@ -74,7 +90,6 @@ private:
     bool m_fixedRotation = false;
 
     void updatePos();
-    void update(DeltaTime dt);
     void setMassInternal(float mass);
 };
 

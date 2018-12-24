@@ -1,22 +1,29 @@
 #pragma once
 
-#include <Manager.h>
+#include <glm/vec2.hpp>
+
+#include <Handle.hpp>
+#include <ISubscription.h>
 
 namespace flappy {
 
 class TouchComponent;
+class Hierarchy;
 
-class UIManager: public Manager<UIManager>
+class [[manager]] UIManager
 {
 public:
-    UIManager();
-    void registerTouchComponent(SafePtr<TouchComponent> touchComponent);
-    void unregisterTouchComponent(SafePtr<TouchComponent> touchComponent);
+    UIManager(Handle<Hierarchy> hierarchy);
+    void registerTouchComponent(Handle<TouchComponent> touchComponent);
+    void unregisterTouchComponent(Handle<TouchComponent> touchComponent);
 
 private:
-    SafePtr<TouchComponent> findTouchComponentInPoint(glm::vec2 point);
+    Handle<TouchComponent> findTouchComponentInPoint(glm::vec2 point);
 
-    std::list<SafePtr<TouchComponent>> m_touchComponentList;
+    std::list<Handle<TouchComponent>> m_touchComponentList;
+    std::shared_ptr<ISubscription> m_downSubscription;
+    std::shared_ptr<ISubscription> m_upSubscription;
+    std::shared_ptr<ISubscription> m_moveSubscription;
 };
 
 } // flappy

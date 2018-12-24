@@ -11522,9 +11522,7 @@ public:
         e.setFileInfo(evt.file(), evt.line(), evt.callingMethod());
         throw e;
     }
-
 };
-
 
 class CatchFakeit: public DefaultFakeit {
 

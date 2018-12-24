@@ -53,7 +53,7 @@ private:
 template <typename FuncT>
 std::shared_ptr<ISubscription> EventBus::subscribe(FuncT&& func) {
     using EventT = typename FuncSignature<FuncT>::template arg<0>::type;
-    auto typeId = getTypeId<EventT>();
+    auto typeId = getTypeId<std::decay_t<EventT>>();
     auto subscriptionIter = m_inSubscriptions.find(typeId);
     if (subscriptionIter == m_inSubscriptions.end()) {
         auto result = m_inSubscriptions.emplace(typeId, std::list<std::weak_ptr<ISubscription>>());

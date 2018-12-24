@@ -5,12 +5,14 @@
             "path":"../Core"
         },
         {
-            "path":"../Tools"
+            "path":"../Utility"
         },
         {
-            "path":"../CoreComponents"
+            "path":"../Math"
+        },
+        {
+            "path":"../EventBus"
         }
-
     ],
     "cxx":{
         "header_dirs": [

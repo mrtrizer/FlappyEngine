@@ -1,44 +1,44 @@
 #include "TouchComponent.h"
 
-#include <Entity.h>
+#include <Hierarchy.hpp>
 #include <Box2DBodyManager.h>
 
 #include "UIManager.h"
 
 namespace flappy {
 
-TouchComponent::TouchComponent()
+TouchComponent::TouchComponent(Handle<Hierarchy> hierarchy)
+    : m_uiManager(hierarchy->manager<UIManager>())
 {
-    addDependency(UIManager::id());
-    addDependency(Box2DBodyManager::id());
-
-    events()->subscribe([this](InitEvent) {
-        manager<UIManager>()->registerTouchComponent(selfPointer());
-    });
-
-    events()->subscribe([this](DeinitEvent) {
-        manager<UIManager>()->unregisterTouchComponent(selfPointer());
-    });
+    m_uiManager->registerTouchComponent(selfHandle());
+}
+    
+void TouchComponent::setEntity(Handle<Entity> entity) {
+    m_box2dBodyComponent = entity->component<Box2DBodyManager>();
+}
+    
+TouchComponent::~TouchComponent() {
+    m_uiManager->unregisterTouchComponent(selfHandle());
 }
 
 void TouchComponent::touchDown(glm::vec2 pos, int index)
 {
-    entity()->events()->post(TouchDownEvent(pos, index));
+    m_eventBus.post(TouchDownEvent(pos, index));
 }
 
 void TouchComponent::touchUp(glm::vec2 pos, int index)
 {
-    entity()->events()->post(TouchUpEvent(pos, index));
+    m_eventBus.post(TouchUpEvent(pos, index));
 }
 
 void TouchComponent::touchMove(glm::vec2 pos, int index)
 {
-    entity()->events()->post(TouchMoveEvent(pos, index));
+    m_eventBus.post(TouchMoveEvent(pos, index));
 }
 
 bool TouchComponent::testPoint(glm::vec2 pos)
 {
-    return entity()->manager<Box2DBodyManager>()->testPoint(pos);
+    return m_box2dBodyComponent->testPoint(pos);
 }
 
 } // flappy

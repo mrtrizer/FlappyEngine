@@ -5,13 +5,13 @@
             "path":"../Core"
         },
         {
-            "path":"../Tools"
+            "path":"../Utility"
         },
         {
             "path":"../Box2DManager"
         },
         {
-            "path":"../CoreComponents"
+            "path":"../Input"
         }
     ],
     "cxx":{

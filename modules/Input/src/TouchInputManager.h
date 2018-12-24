@@ -4,6 +4,7 @@
 
 #include <IEvent.h>
 #include <Handle.hpp>
+#include <EventBus.h>
 
 namespace flappy
 {
@@ -41,8 +42,11 @@ public:
     void setTouchDown(const glm::vec2 &touchPos, int index);
     void setTouchUp(const glm::vec2 &touchPos, int index);
     void setTouchPos(const glm::vec2 &touchPos, int index);
+    
+    EventBus& eventBus() { return m_eventBus; }
+    
 private:
-    Handle<EventBus> m_eventBus;
+    EventBus m_eventBus;
     glm::vec2 m_touchPos;
     int m_touchDown = 0;
     int m_touchUp = 0;

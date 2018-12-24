@@ -1,66 +1,99 @@
 #include "Box2DFixtureComponent.h"
 
-#include <Entity.h>
-
 #include "Box2DBodyManager.h"
 #include "Box2DFixtureComponent.h"
 
 namespace flappy {
 
-Box2DFixtureComponent::Box2DFixtureComponent() {
-
-    addDependency(Box2DBodyManager::id());
-
-    events()->subscribe([this](InitEvent) {
-        if ((m_shape != nullptr))
-            m_fixture = initFixture(m_shape);
-    });
-
-    events()->subscribe([this](DeinitEvent) {
-        deinitFixture(m_fixture);
-        m_fixture = nullptr;
-    });
-
+void Box2DFixtureComponent::setEntity(Handle<Entity> entity) {
+    while (entity != nullptr) {
+        auto body = entity->findComponent<Box2DBodyManager>();
+        if (body != nullptr) {
+            m_box2dBodyComponent = body;
+            break;
+        }
+        entity = entity->parent();
+    }
+}
+    
+void Box2DFixtureComponent::setBodyComponent(Handle<Box2DBodyManager> body) {
+    m_box2dBodyComponent = body;
+    initFixture(body, m_shape);
 }
 
-void Box2DFixtureComponent::deinitFixture(b2Fixture* fixture) {
-    if (fixture != nullptr) {
-        auto bodyComponent = manager<Box2DBodyManager>();
-        bodyComponent->destroyFixture(fixture);
+void Box2DFixtureComponent::resetBodyComponent(Handle<Box2DBodyManager> body) {
+    m_box2dBodyComponent = nullptr;
+    deinitFixture(body);
+}
+
+Box2DFixtureComponent::~Box2DFixtureComponent() {
+    deinitFixture(m_box2dBodyComponent);
+    m_fixture = nullptr;
+}
+    
+template<typename ContactEventT>
+EventHandle createContactEvent(b2Contact* contact, Handle<Box2DFixtureComponent> otherFixture) {
+    ContactEventT contactEvent;
+    contactEvent.fixture = otherFixture;
+    auto manifold = contact->GetManifold();
+    contactEvent.pos = {manifold->localPoint.x, manifold->localPoint.y};
+    return EventHandle(contactEvent);
+}
+    
+void Box2DFixtureComponent::handleContact(b2Contact* contact,
+                                          Box2DContactListener::ContactPhase contactPhase,
+                                          Handle<Box2DFixtureComponent> other)
+{
+    switch (contactPhase) {
+        case Box2DContactListener::ContactPhase::BEGIN:
+            m_eventBus.post(createContactEvent<ContactStartEvent>(contact, other));
+            break;
+        case Box2DContactListener::ContactPhase::END:
+            m_eventBus.post(createContactEvent<ContactEndEvent>(contact, other));
+            break;
+    }
+    
+}
+    
+void Box2DFixtureComponent::deinitFixture(Handle<Box2DBodyManager> body) {
+    if (body != nullptr && m_fixture != nullptr) {
+        body->destroyFixture(m_fixture);
     }
 }
 
-b2Fixture* Box2DFixtureComponent::initFixture(std::shared_ptr<b2Shape> shape) {
-    b2FixtureDef fixtureDef;
+void Box2DFixtureComponent::initFixture(Handle<Box2DBodyManager> body, std::shared_ptr<b2Shape> shape) {
+    if (body == nullptr)
+        return;
+    
+    deinitFixture(body);
+    
+    if (shape != nullptr) {
+        b2FixtureDef fixtureDef;
 
-    fixtureDef.shape = shape.get();
+        fixtureDef.shape = shape.get();
 
-    // physics params
-    fixtureDef.friction = m_friction;
-    fixtureDef.restitution = m_elasticity;
-    fixtureDef.density = m_density;
-    fixtureDef.isSensor = m_isSensor;
+        // physics params
+        fixtureDef.friction = m_friction;
+        fixtureDef.restitution = m_elasticity;
+        fixtureDef.density = m_density;
+        fixtureDef.isSensor = m_isSensor;
 
-    // filter
-    fixtureDef.filter.categoryBits = m_categoryBits;
-    fixtureDef.filter.maskBits = m_maskBits;
-    fixtureDef.filter.groupIndex = m_groupIndex;
+        // filter
+        fixtureDef.filter.categoryBits = m_categoryBits;
+        fixtureDef.filter.maskBits = m_maskBits;
+        fixtureDef.filter.groupIndex = m_groupIndex;
 
-    //user data
-    fixtureDef.userData = (void*)this;
+        //user data
+        m_selfHandle = selfHandle();
+        fixtureDef.userData = (void*)&m_selfHandle;
 
-    auto bodyComponent = entity()->manager<Box2DBodyManager>();
-    return bodyComponent->createFixture(&fixtureDef);
+        m_fixture = body->createFixture(&fixtureDef);
+    }
 }
 
 void Box2DFixtureComponent::setShape(std::shared_ptr<b2Shape> shape) {
     m_shape = shape;
-    if (isInitialized()) {
-        if (m_fixture != nullptr) {
-            deinitFixture(m_fixture);
-        }
-        m_fixture = initFixture(shape);
-    }
+    initFixture(m_box2dBodyComponent, shape);
 }
 
 void Box2DFixtureComponent::setGroupIndex(const int16_t &groupIndex)

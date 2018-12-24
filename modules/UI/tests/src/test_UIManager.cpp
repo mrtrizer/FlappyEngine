@@ -3,7 +3,9 @@
 
 #include <memory>
 
-#include <Entity.h>
+#include <Hierarchy.hpp>
+#include <Handle.hpp>
+#include <Heap.hpp>
 #include <TransformComponent.h>
 #include <UIManager.h>
 #include <TouchComponent.h>
@@ -13,6 +15,7 @@
 #include <MouseInputManager.h>
 #include <TouchInputManager.h>
 #include <MouseToTouchConvertComponent.h>
+#include <UpdateManager.hpp>
 
 #include "ButtonListenerComponent.h"
 
@@ -22,23 +25,25 @@ using namespace std;
 using namespace glm;
 
 TEST_CASE("UIManager") {
-    auto rootEntity = std::make_shared<Entity>();
-    rootEntity->createComponent<UIManager>();
-    auto touchInputManager = rootEntity->createComponent<TouchInputManager>();
-    rootEntity->createComponent<Box2DWorldManager>();
+    auto hierarchy = Heap::create<Hierarchy>();
+    hierarchy->initManager<UpdateManager>();
+    auto touchInputManager = hierarchy->initManager<TouchInputManager>();
+    hierarchy->initManager<UIManager>();
+    hierarchy->initManager<Box2DWorldManager>();
 
-    auto buttonEntity = rootEntity->createEntity();
-    buttonEntity->createComponent<TransformComponent>();
-    buttonEntity->createComponent<Box2DBodyManager>();
+    auto buttonEntity = hierarchy->rootEntity()->createEntity();
+    buttonEntity->component<TransformComponent>();
+    buttonEntity->component<Box2DBodyManager>();
     buttonEntity->component<Box2DBoxComponent>()->setSize({100, 50});
-    auto touchComponent = buttonEntity->createComponent<TouchComponent>();
+    auto touchComponent = buttonEntity->component<TouchComponent>();
 
     Mock<ButtonListenerComponent::IMock> mock;
     Fake(Method(mock,onTouchDown));
     Fake(Method(mock,onTouchUp));
     Fake(Method(mock,onTouchMove));
 
-    auto buttonListenerComponent = buttonEntity->createComponent<ButtonListenerComponent>(&mock.get());
+    auto buttonListenerComponent = buttonEntity->createComponent<ButtonListenerComponent>();
+    buttonListenerComponent->setMock(&mock.get());
 
     // button hit
 

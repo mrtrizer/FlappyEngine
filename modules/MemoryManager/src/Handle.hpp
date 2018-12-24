@@ -19,6 +19,12 @@ public:
         : AnyHandle(chank)
     {}
 
+    Handle(const AnyStrongHandle& strongHandle) noexcept
+    : AnyHandle(strongHandle)
+    {
+        USER_ASSERT_MSG(strongHandle.typeId() == typeId(), "Assigning pointers of different type.");
+    }
+    
     template <typename DerivedT>
     Handle(const StrongHandle<DerivedT>& strongHandle) noexcept
         : AnyHandle(strongHandle)
