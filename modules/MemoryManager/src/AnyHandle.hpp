@@ -16,6 +16,9 @@ class Handle;
 
 class AnyHandle {
     friend class Chank; // to access invalidate() and setNewHandle()
+    friend bool operator==(const AnyStrongHandle&, const AnyHandle&);
+    friend bool operator==(const AnyHandle&, const AnyStrongHandle&);
+    friend bool operator==(const AnyHandle&, const AnyHandle&);
 public:
     AnyHandle() = default;
 
@@ -61,10 +64,6 @@ public:
 
     bool isValid() const noexcept;
 
-    bool operator==(const AnyHandle& other) const { return m_chank == other.m_chank; }
-
-    bool operator!=(const AnyHandle& other) const { return !operator==(other); }
-
     template <typename DataT>
     const Handle<DataT>& get() const {
         if (typeId() == getTypeId<DataT>())
@@ -80,6 +79,8 @@ protected:
 
 private:
     Chank* m_chank = nullptr;
+    
+    bool isSame(const AnyStrongHandle& strongHandle) const;
 
     void setNewChank(Chank* chank) noexcept;
     void invalidate() noexcept;
@@ -87,5 +88,19 @@ private:
 
 static_assert(!std::is_polymorphic<AnyHandle>(), "AnyHandle should not be a polymorphic!");
 static_assert(sizeof(AnyHandle) == sizeof(intptr_t), "AnyHandle should consist of a single pointer.");
+
+inline bool operator==(const AnyHandle& a, std::nullptr_t) { return !a.isValid(); }
+inline bool operator==(std::nullptr_t, const AnyHandle& a) { return !a.isValid(); }
+
+inline bool operator!=(const AnyHandle& a, std::nullptr_t) { return a.isValid(); }
+inline bool operator!=(std::nullptr_t, const AnyHandle& a) { return a.isValid(); }
+
+inline bool operator==(const AnyHandle& a, const AnyHandle& b) { return a.m_chank == b.m_chank; }
+
+inline bool operator!=(const AnyHandle& a, const AnyHandle& b) { return !operator==(a, b); }
+
+bool operator==(const AnyStrongHandle& a, const AnyHandle& b);
+
+bool operator==(const AnyHandle& a, const AnyStrongHandle& b);
 
 } // flappy

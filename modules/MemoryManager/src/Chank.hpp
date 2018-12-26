@@ -32,7 +32,6 @@ private:
     [[nodiscard]] StrongHandle<DataT> construct(Args&& ... args) {
         DEBUG_ASSERT(m_strongHandle == nullptr);
         DEBUG_ASSERT(m_dataDescructor == nullptr);
-        DEBUG_ASSERT(m_objectPool == nullptr);
 
 //        static_assert(noexcept(DataT(std::declval<DataT>())), "DataT(DataT&&) should be noexcept.");
 

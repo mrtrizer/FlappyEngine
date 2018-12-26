@@ -6,7 +6,6 @@ namespace flappy
 {
     KeyboardInputManager::KeyboardInputManager(Handle<Hierarchy> hierarchy)
         : Updatable<KeyboardInputManager>(hierarchy)
-        , m_eventBus(hierarchy->manager<EventBus>())
     {}
     
     void KeyboardInputManager::update(float dt) {
@@ -24,7 +23,7 @@ namespace flappy
         m_keyStatus[(int)keyCode].pressedFlag = true;
         KeyDownEvent keyDownEvent;
         keyDownEvent.keyCode = keyCode;
-        m_eventBus->post(keyDownEvent);
+        m_eventBus.post(keyDownEvent);
     }
 
     void KeyboardInputManager::setKeyUp(KeyCode keyCode)
@@ -33,7 +32,7 @@ namespace flappy
         m_keyStatus[(int)keyCode].pressedFlag = false;
         KeyUpEvent keyUpEvent;
         keyUpEvent.keyCode = keyCode;
-        m_eventBus->post(keyUpEvent);
+        m_eventBus.post(keyUpEvent);
     }
 
     bool KeyboardInputManager::isKeyDown(KeyCode keyCode)

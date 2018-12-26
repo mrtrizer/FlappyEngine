@@ -34,6 +34,10 @@ bool AnyHandle::isValid() const noexcept {
     return m_chank != nullptr;
 }
 
+bool AnyHandle::isSame(const AnyStrongHandle& other) const {
+    return m_chank == other.m_chank;
+}
+
 TypeId AnyHandle::typeId() const noexcept {
     if (m_chank == nullptr)
         return {};
@@ -53,5 +57,9 @@ void AnyHandle::invalidate() noexcept {
 
     setNewChank(nullptr);
 }
+
+bool operator==(const AnyStrongHandle& a, const AnyHandle& b) { return a.m_chank == b.m_chank; }
+
+bool operator==(const AnyHandle& a, const AnyStrongHandle& b) { return a.m_chank == b.m_chank; }
 
 } // flappy

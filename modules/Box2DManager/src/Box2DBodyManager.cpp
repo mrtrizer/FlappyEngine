@@ -18,6 +18,8 @@ Box2DBodyManager::Box2DBodyManager(Handle<Hierarchy> hierarchy)
 }
 
 void Box2DBodyManager::setEntity(Handle<Entity> entity) {
+    auto transform = m_transformComponent = entity->component<TransformComponent>();
+
     b2BodyDef bodyDef;
     bodyDef.linearDamping = m_linearDamping;
     bodyDef.linearVelocity = b2Vec2(m_linearVelocity.x, m_linearVelocity.y);
@@ -32,11 +34,11 @@ void Box2DBodyManager::setEntity(Handle<Entity> entity) {
     
     float sizeFactor = m_box2dWorldManager->sizeFactor();
     
-    auto pos = entity->component<TransformComponent>()->pos();
+    auto pos = transform->pos();
     bodyDef.position = b2Vec2(pos.x * sizeFactor, pos.y * sizeFactor);
-    m_lastTransformPos = entity->component<TransformComponent>()->pos();
+    m_lastTransformPos = transform->pos();
     
-    auto angle = entity->component<TransformComponent>()->angle2DRad();
+    auto angle = transform->angle2DRad();
     bodyDef.angle = angle;
     m_lastTransformAngle = angle;
     

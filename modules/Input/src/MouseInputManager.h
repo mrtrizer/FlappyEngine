@@ -4,11 +4,10 @@
 
 #include <IEvent.h>
 #include <Updatable.hpp>
+#include <EventBus.h>
 
 namespace flappy
 {
-    
-class EventBus;
 
 class [[manager]] MouseInputManager : public Updatable<MouseInputManager>
 {
@@ -47,14 +46,15 @@ public:
     bool isMouseDown(MouseButton mouseButton = MouseButton::LEFT) const;
     bool isMouseUp(MouseButton mouseButton = MouseButton::LEFT) const;
     bool isMousePressed(MouseButton mouseButton = MouseButton::LEFT) const;
-    glm::vec2 mousePos() const;
+    const glm::vec2& mousePos() const { return m_mousePos; }
 
     void setMouseDown(MouseButton mouseButton, const glm::vec2 &mousePos);
     void setMouseUp(MouseButton mouseButton, const glm::vec2 &mousePos);
     void setMousePos(MouseButton mouseButton, const glm::vec2& m_mousePos);
+    
+    EventBus& eventBus() { return m_eventBus; }
 private:
-
-    Handle<EventBus> m_eventBus;
+    EventBus m_eventBus;
     glm::vec2 m_mousePos;
     int m_mouseDown = 0;
     int m_mouseUp = 0;

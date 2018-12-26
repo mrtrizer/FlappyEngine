@@ -9,7 +9,6 @@ using namespace glm;
 
 MouseInputManager::MouseInputManager(Handle<Hierarchy> hierarchy)
     : Updatable<MouseInputManager>(hierarchy)
-    , m_eventBus(hierarchy->manager<EventBus>())
 {}
     
 void MouseInputManager::update(float dt) {
@@ -37,11 +36,6 @@ bool MouseInputManager::isMousePressed(MouseButton mouseButton) const
     return m_mousePressed;
 }
 
-vec2 MouseInputManager::mousePos() const
-{
-    return m_mousePos;
-}
-
 void MouseInputManager::setMouseDown(MouseButton mouseButton, const vec2 &mousePos)
 {
     (void)mouseButton;
@@ -53,7 +47,7 @@ void MouseInputManager::setMouseDown(MouseButton mouseButton, const vec2 &mouseP
     MouseInputManager::MouseDownEvent mouseDownEvent;
     mouseDownEvent.pos = mousePos;
     mouseDownEvent.button = MouseInputManager::MouseButton::LEFT;
-    m_eventBus->post(mouseDownEvent);
+    m_eventBus.post(mouseDownEvent);
 }
 
 void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos)
@@ -67,7 +61,7 @@ void MouseInputManager::setMouseUp(MouseButton mouseButton, const vec2 &mousePos
     MouseInputManager::MouseUpEvent mouseUpEvent;
     mouseUpEvent.pos = mousePos;
     mouseUpEvent.button = MouseInputManager::MouseButton::LEFT;
-    m_eventBus->post(mouseUpEvent);
+    m_eventBus.post(mouseUpEvent);
 }
 
 void MouseInputManager::setMousePos(MouseButton mouseButton, const vec2 &mousePos)
@@ -78,7 +72,7 @@ void MouseInputManager::setMousePos(MouseButton mouseButton, const vec2 &mousePo
 
     MouseInputManager::MouseMoveEvent mouseMoveEvent;
     mouseMoveEvent.pos = mousePos;
-    m_eventBus->post(mouseMoveEvent);
+    m_eventBus.post(mouseMoveEvent);
 }
 
 } // flappy

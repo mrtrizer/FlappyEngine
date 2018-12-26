@@ -17,12 +17,14 @@ AnyStrongHandle::AnyStrongHandle(AnyStrongHandle&& strongHandle) noexcept {
 AnyStrongHandle& AnyStrongHandle::operator=(AnyStrongHandle&& strongHandle) noexcept {
     if (&strongHandle != this)
         moveFromStrongHandle(std::move(strongHandle));
+    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
     return *this;
 }
 
 AnyStrongHandle::~AnyStrongHandle() noexcept {
     if (m_chank != nullptr)
         m_chank->clear();
+    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
 }
 
 bool AnyStrongHandle::isValid() const noexcept {
@@ -50,6 +52,7 @@ void AnyStrongHandle::updatePointer(void* dataPointer, Chank* chank) noexcept {
 }
 
 void AnyStrongHandle::reset() noexcept {
+    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
     if (m_chank != nullptr)
         m_chank->clear();
     m_chank = nullptr;
@@ -65,6 +68,7 @@ void AnyStrongHandle::moveFromStrongHandle(AnyStrongHandle&& strongHandle) noexc
     strongHandle.m_chank = nullptr;
     if (chank != nullptr)
         chank->m_strongHandle = this;
+    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
 }
 
 } // flappy

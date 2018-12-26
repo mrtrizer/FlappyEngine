@@ -1,8 +1,10 @@
 #pragma once
 
 #include <array>
+#include <unordered_set>
 #include "ObjectPool.hpp"
 #include "Entity.hpp"
+#include <AnyStrongHandle.hpp>
 
 namespace flappy {
 
@@ -20,7 +22,7 @@ public:
     Handle<ManagerT> manager() {
         auto typeId = getTypeId<ManagerT>();
         try {
-            return static_cast<StrongHandle<ManagerT>*>(&m_managers.at(typeId))->handle();
+            return m_managerHandles.at(typeId);
         } catch (const std::exception&) {
             throw FlappyException("Can't find manager " + typeId.name);
         }
@@ -43,21 +45,42 @@ public:
     template <typename ManagerT, typename DerivedT = ManagerT>
     Handle<DerivedT> initManager() {
         static_assert(!std::is_abstract<DerivedT>(), "Can't construct manager of abstract type.");
-        auto manager = createManager<DerivedT>();
-        auto managerHandle = manager.handle();
-        auto iter = m_managers.find(getTypeId<ManagerT>());
-        if (iter != m_managers.end())
-            iter->second = std::move(manager);
+        
+        auto managerIter = m_managerHandles.find(getTypeId<ManagerT>());
+        auto derivedIter = m_managerHandles.find(getTypeId<DerivedT>());
+        auto iter = managerIter;
+        if (iter == m_managerHandles.end())
+            iter = derivedIter;
+        
+        auto strongIter = m_managers.end();
+        if (iter != m_managerHandles.end()) {
+            strongIter = std::find_if(m_managers.begin(), m_managers.end(), [iter](const auto& i) {
+                return iter->second == i;
+            });
+            if (strongIter != m_managers.end())
+                m_managers.erase(strongIter);
+        }
+        
+        strongIter = m_managers.insert(createManager<DerivedT>()).first;
+        
+        if (managerIter != m_managerHandles.end())
+            managerIter->second = *strongIter;
         else
-            m_managers.emplace(getTypeId<ManagerT>(), std::move(manager));
-        return managerHandle;
+            m_managerHandles.emplace(getTypeId<ManagerT>(), *strongIter);
+        if (derivedIter != m_managerHandles.end())
+            managerIter->second = *strongIter;
+        else
+            m_managerHandles.emplace(getTypeId<DerivedT>(), *strongIter);
+        
+        return *strongIter;
     }
 
 private:
     // Order of members is important as it affects order of destruction
-    std::unordered_map<TypeId, AnyStrongHandle> m_managers;
+    std::unordered_set<AnyStrongHandle> m_managers;
+    std::unordered_map<TypeId, AnyHandle> m_managerHandles;
     ObjectPool m_entityPool { sizeof(Entity), 1000 };
-    std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 2000), ObjectPool(256, 1500), ObjectPool(1024, 200) };
+    std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 200), ObjectPool(256, 150), ObjectPool(1024, 100) };
     StrongHandle<Entity> m_rootEntity;
 
     template <typename T>

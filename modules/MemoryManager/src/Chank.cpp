@@ -12,9 +12,11 @@ Chank::Chank(ObjectPool* objectPool, std::byte* data, size_t size)
     DEBUG_ASSERT(m_objectPool != nullptr);
     DEBUG_ASSERT(m_data != nullptr);
     DEBUG_ASSERT(size > 0);
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
 }
 
 Chank::~Chank() {
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
     if (m_strongHandle != nullptr)
         m_strongHandle->reset();
 }
@@ -36,9 +38,11 @@ void Chank::clear() noexcept {
 
     // onDestroyed() should be called in the end
     m_objectPool->onDestroyed(this);
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
 }
 
 bool Chank::constructed() const noexcept {
+DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
     return m_dataDescructor != nullptr;
 }
 
@@ -64,10 +68,12 @@ void Chank::unregisterHandle(void* handle) noexcept {
 }
 
 void Chank::clearHandles() noexcept {
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
     for (auto handle : m_handles)
         if (handle != nullptr)
             handle->invalidate(); // invalidation turns handle into nullptr
     m_handles.clear();
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
 }
 
 } // flappy

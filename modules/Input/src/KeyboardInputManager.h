@@ -7,6 +7,7 @@
 #include <IEvent.h>
 #include <Updatable.hpp>
 #include <Handle.hpp>
+#include <EventBus.h>
 
 namespace flappy
 {
@@ -33,6 +34,7 @@ namespace flappy
         bool isKeyDown(KeyCode keyCode);
         bool isKeyUp(KeyCode keyCode);
         bool isKeyPressed(KeyCode keyCode);
+        EventBus& eventBus() { return m_eventBus; }
 
     private:
         struct KeyStatus {
@@ -41,8 +43,8 @@ namespace flappy
             bool pressedFlag = false;
         };
 
-        KeyStatus m_keyStatus[(unsigned)KeyCode::__ENUM_SIZE__];
-        Handle<EventBus> m_eventBus;
+        std::vector<KeyStatus> m_keyStatus {(unsigned)KeyCode::__ENUM_SIZE__};
+        EventBus m_eventBus;
     };
 
 } // flappy

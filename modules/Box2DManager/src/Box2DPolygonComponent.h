@@ -4,17 +4,19 @@
 
 namespace flappy {
 
-//class Box2DPolygonComponent: public Box2DFixtureComponent {
-//public:
-//    Box2DPolygonComponent();
-//
-//    void setVertices(std::vector<glm::vec2> vertices);
-//    std::vector<glm::vec2> vertices() { return m_vertices; }
-//
-//private:
-//    std::vector<glm::vec2> m_vertices;
-//
-//    void init(std::vector<glm::vec2> vertices);
-//};
+class Box2DWorldManager;
+class Hierarchy;
+
+class Box2DPolygonComponent: public Box2DFixtureComponent {
+public:
+    Box2DPolygonComponent(Handle<Hierarchy> hierarchy);
+
+    void setVertices(const std::vector<glm::vec2>& vertices);
+    const std::vector<glm::vec2>& vertices() { return m_vertices; }
+
+private:
+    std::vector<glm::vec2> m_vertices;
+    Handle<Box2DWorldManager> m_worldManager;
+};
 
 } // flappy

@@ -1,8 +1,7 @@
 #include <memory>
 
+#include <BasicLoopManager.hpp>
 #include <Sdl2Manager.h>
-#include <Entity.h>
-#include <AppManager.h>
 #include <SceneManager.h>
 #include <GLRenderManager.h>
 #include <GLRenderElementFactory.h>
@@ -16,8 +15,6 @@
 #include <DefaultResFactory.h>
 #include <GLShaderResFactory.h>
 #include <TextResFactory.h>
-#include <DesktopThread.h>
-#include <PosixApplication.h>
 #include <GLTextureResFactory.h>
 #include <Box2DWorldManager.h>
 #include <Box2DBodyManager.h>
@@ -35,176 +32,201 @@
 #include <KeyboardInputManager.h>
 #include <Sdl2KeyboardInput.h>
 #include <MaterialResFactory.h>
+#include <DebugServices.h>
+#include <Hierarchy.hpp>
+#include <Heap.hpp>
+#include <Entity.hpp>
+#include <BasicLoop.hpp>
 
 using namespace flappy;
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-    PosixApplication application;
-    auto currentThread = std::make_shared<DesktopThread>(
-                [argc, argv](SafePtr<Entity> rootEntity) {
+    // Sdl2 and render
+    auto hierarchy = Heap::create<Hierarchy>();
+    
+    hierarchy->initManager<BasicLoopManager>();
+    hierarchy->initManager<UpdateManager>();
+    auto sdl2Manager = hierarchy->initManager<IGLManager, Sdl2Manager>();
+    auto mouseInputManager = hierarchy->initManager<MouseInputManager> ();
+    hierarchy->initManager<Sdl2MouseInput> ();
+    auto keyboardInputManager = hierarchy->initManager<KeyboardInputManager> ();
+    hierarchy->initManager<Sdl2KeyboardInput> ();
 
-                        // Sdl2 and render
-                        auto sdl2Manager = rootEntity->createComponent<Sdl2Manager>();
-                        rootEntity->createComponent<ScreenManager>(600, 600);
-                        rootEntity->createComponent<AppManager>(argc, argv);
-                        rootEntity->createComponent<ResRepositoryManager>("./resources");
-                        rootEntity->createComponent<StdFileMonitorManager>();
-                        rootEntity->createComponent<StdFileLoadManager>();
-                        rootEntity->createComponent<TextResFactory>();
-                        rootEntity->createComponent<ResManager<TextRes>> ();
-                        rootEntity->createComponent<GLShaderResFactory> ();
-                        rootEntity->createComponent<ResManager<ShaderRes>> ();
-                        rootEntity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
-                        rootEntity->createComponent<ResManager<JsonRes>>();
-                        rootEntity->createComponent<MouseInputManager> ();
-                        rootEntity->createComponent<Sdl2MouseInput> ();
-                        rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
-                        rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
-                        rootEntity->createComponent<GLTextureResFactory>();
-                        rootEntity->createComponent<ResManager<TextureRes>> ();
-                        rootEntity->createComponent<GlyphSheetResFactory> ();
-                        rootEntity->createComponent<ResManager<GlyphSheetRes>> ();
-                        rootEntity->createComponent<FontResFactory> ();
-                        rootEntity->createComponent<Sdl2KeyboardInput> ();
-                        rootEntity->createComponent<KeyboardInputManager> ();
-                        rootEntity->createComponent<MaterialResFactory> ();
-                        rootEntity->createComponent<ResManager<MaterialRes>> ();
-                        auto fontResManager = rootEntity->createComponent<ResManager<FontRes>>();
+    auto sceneManager = hierarchy->initManager<SceneManager>();
+    auto screenManager = hierarchy->initManager<ScreenManager>();
+    screenManager->resize({600, 600});
 
-                        // Box2D world
-                        rootEntity->component<Box2DWorldManager>()->setVelocityIterations(6);
-                        rootEntity->component<Box2DWorldManager>()->setPositionIterations(2);
-                        rootEntity->component<Box2DWorldManager>()->setGravity({0.0f, -10.0f});
-                        rootEntity->component<Box2DWorldManager>()->setSizeFactor(0.1f);
+    hierarchy->initManager<RenderManager, GLRenderManager>();
+    hierarchy->initManager<RenderElementFactory, GLRenderElementFactory>();
 
-                        // Scene
-                        auto sceneEntity = rootEntity->createEntity();
-                        sceneEntity->component<SceneManager>()->setMainCamera(sceneEntity->component<CameraComponent>());
-                        sceneEntity->component<CameraComponent>()->setSize({300, 300});
-                        sceneEntity->component<GLRenderManager>();
-                        sceneEntity->component<GLRenderElementFactory>();
+    hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
+    hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
 
-                        // Dynamic box
-                        auto rectEntity = sceneEntity->createEntity();
-                        rectEntity->component<MeshComponent>();
-                        rectEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-                        rectEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
-                        rectEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
-                        rectEntity->component<Box2DBoxComponent>()->setDensity(10.0f);
-                        rectEntity->component<Box2DBoxComponent>()->setFriction(0.3f);
-                        rectEntity->component<Box2DBoxComponent>()->setSize({20.0f, 20.0f});
+    auto resRepository = hierarchy->initManager<ResRepositoryManager>();
+    resRepository->setRepositoryPath("./resources");
 
-                        // Dynamic circle
-                        auto wheelAEntity = sceneEntity->createEntity();
-                        wheelAEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
-                        wheelAEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-                        wheelAEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
-                        wheelAEntity->component<TransformComponent>()->setPos({20.0f, -10.0f, 0.0f});
-                        wheelAEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-                        wheelAEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
-                        wheelAEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelAEntity->component<Box2DBodyManager>());
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyManager>());
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({20, -10});
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                        wheelAEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+    hierarchy->initManager<ResFactory<TextRes>, TextResFactory>();
+    hierarchy->initManager<ResManager<TextRes>> ();
 
-                        // Dynamic circle
-                        auto wheelBEntity = sceneEntity->createEntity();
-                        wheelBEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
-                        wheelBEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-                        wheelBEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
-                        wheelBEntity->component<TransformComponent>()->setPos({-20.0f, -10.0f, 0.0f});
-                        wheelBEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-                        wheelBEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
-                        wheelBEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelBEntity->component<Box2DBodyManager>());
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyManager>());
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({-20, -10});
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                        wheelBEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+    hierarchy->initManager<ResFactory<ShaderRes>, GLShaderResFactory> ();
+    hierarchy->initManager<ResManager<ShaderRes>> ();
 
-                        // Counter
-                        auto counterEntity = sceneEntity->createEntity();
-                        counterEntity->component<TextComponent>()->setText("0");
-                        counterEntity->component<TransformComponent>()->setPos({-140.0f, 140.0f, 0.0f});
-                        auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
-                        counterEntity->component<TextComponent>()->setFontRes(fontRes);
+    hierarchy->initManager<ResFactory<JsonRes>, DefaultResFactory<JsonRes, JsonRes, TextRes>>();
+    hierarchy->initManager<ResManager<JsonRes>>();
 
-                        // Box2D ground
-                        {
-                            std::vector<glm::vec2> vertices(50);
-                            float width = 320.0f;
-                            float height = 300.0f;
-                            float xStep = width / vertices.size();
-                            for (int i = 0; i < vertices.size(); i++) {
-                                vertices[i] = {i * xStep, std::sin(i * 0.2) * 10};
-                            }
-                            std::vector<glm::vec3> meshVertices(vertices.size() * 6);
-                            for (int i = 0; i < vertices.size() - 1; i++) {
-                                meshVertices[i * 6 + 0] = glm::vec3(vertices[i].x, vertices[i].y, 0.0f);
-                                meshVertices[i * 6 + 1] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
-                                meshVertices[i * 6 + 2] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
-                                meshVertices[i * 6 + 3] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
-                                meshVertices[i * 6 + 4] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
-                                meshVertices[i * 6 + 5] = glm::vec3(vertices[i + 1].x, -height * 0.5f, 0.0f);
-                            }
-                            auto groundEntity = sceneEntity->createEntity();
-                            groundEntity->component<MeshComponent>()->setVertices(meshVertices);
-                            groundEntity->component<Box2DBodyManager>()->setType(b2_staticBody);
-                            groundEntity->component<TransformComponent>()->setPos({-150.0f, -100.0f, 0.0f});
-                            groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
-                        }
+    hierarchy->initManager<ResFactory<IRgbaBitmapRes>, Sdl2RgbaBitmapResFactory> ();
+    hierarchy->initManager<ResManager<IRgbaBitmapRes>> ();
 
-                        rootEntity->events()->subscribe([sceneEntity, counterEntity](MouseInputManager::MouseDownEvent e) {
-                            float x = (e.pos.x - 300) * 0.5f;
-                            float y = (300 - e.pos.y) * 0.5f;
-                            LOG("Pos %f, %f", x, y);
-                            auto circleEntity = sceneEntity->createEntity();
-                            circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
-                            circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-                            circleEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
-                            circleEntity->component<TransformComponent>()->setPos({x, y, 0.0f});
-                            circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-                            circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
-                            circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-                            circleEntity->events()->subscribe([circleEntityPtr = std::weak_ptr<Entity>(circleEntity), sceneEntity](Box2DWorldManager::ContactStartEvent) {
-                                sceneEntity->removeEntity(circleEntityPtr.lock());
-                            });
-                            int count = std::stoi(counterEntity->component<TextComponent>()->text());
-                            count++;
-                            counterEntity->component<TextComponent>()->setText(std::to_string(count));
-                        });
+    hierarchy->initManager<ResFactory<TextureRes>, GLTextureResFactory>();
+    hierarchy->initManager<ResManager<TextureRes>> ();
 
-                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity, rectEntity](KeyboardInputManager::KeyDownEvent e) {
-                            if (e.keyCode == KeyCode::LEFT) {
-                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
-                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
-                            }
-                            if (e.keyCode == KeyCode::RIGHT) {
-                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
-                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
-                            }
-                            if (e.keyCode == KeyCode::SPACE) {
-                                rectEntity->component<Box2DBodyManager>()->applyForce({0.0f, 10000.0f}, {0.0f, 0.0f});
-                            }
-                        });
+    hierarchy->initManager<ResFactory<GlyphSheetRes>, GlyphSheetResFactory> ();
+    hierarchy->initManager<ResManager<GlyphSheetRes>> ();
 
-                        rootEntity->events()->subscribe([wheelAEntity, wheelBEntity](KeyboardInputManager::KeyUpEvent e) {
-                            if (e.keyCode == KeyCode::LEFT) {
-                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                            }
-                            if (e.keyCode == KeyCode::RIGHT) {
-                                wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                                wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
-                            }
-                        });
+    hierarchy->initManager<ResFactory<FontRes>, FontResFactory> ();
+    auto fontResManager = hierarchy->initManager<ResManager<FontRes>>();
 
-                    });
-    return application.runThread(currentThread);
+    hierarchy->initManager<ResFactory<MaterialRes>, MaterialResFactory> ();
+    hierarchy->initManager<ResManager<MaterialRes>> ();
+
+
+    // Box2D world
+    auto box2dWorldManager = hierarchy->initManager<Box2DWorldManager>();
+    box2dWorldManager->setVelocityIterations(6);
+    box2dWorldManager->setPositionIterations(2);
+    box2dWorldManager->setGravity({0.0f, -10.0f});
+    box2dWorldManager->setSizeFactor(0.1f);
+
+    // Scene
+    auto sceneEntity = hierarchy->rootEntity()->createEntity();
+    sceneManager->setMainCamera(sceneEntity->component<CameraComponent>());
+    sceneEntity->component<CameraComponent>()->setSize({300, 300});
+
+    // Dynamic box
+    auto rectEntity = sceneEntity->createEntity();
+    rectEntity->component<MeshComponent>();
+    rectEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+    rectEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
+    rectEntity->component<TransformComponent>()->setPos({0.0f, 0.0f, 0.0f});
+    rectEntity->component<Box2DBoxComponent>()->setDensity(10.0f);
+    rectEntity->component<Box2DBoxComponent>()->setFriction(0.3f);
+    rectEntity->component<Box2DBoxComponent>()->setSize({20.0f, 20.0f});
+
+    // Dynamic circle
+    auto wheelAEntity = sceneEntity->createEntity();
+    wheelAEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+    wheelAEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+    wheelAEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
+    wheelAEntity->component<TransformComponent>()->setPos({20.0f, -10.0f, 0.0f});
+    wheelAEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+    wheelAEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
+    wheelAEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelAEntity->component<Box2DBodyManager>());
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyManager>());
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({20, -10});
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+    wheelAEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+
+    // Dynamic circle
+    auto wheelBEntity = sceneEntity->createEntity();
+    wheelBEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+    wheelBEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+    wheelBEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
+    wheelBEntity->component<TransformComponent>()->setPos({-20.0f, -10.0f, 0.0f});
+    wheelBEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+    wheelBEntity->component<Box2DCircleComponent>()->setFriction(5.0f);
+    wheelBEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyA(wheelBEntity->component<Box2DBodyManager>());
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setBodyB(rectEntity->component<Box2DBodyManager>());
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setLocalAnchorB({-20, -10});
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setEnableMotor(true);
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+    wheelBEntity->component<Box2DRevoluteJointComponent>()->setMaxMotorTorque(1000.0f);
+
+    // Counter
+    auto counterEntity = sceneEntity->createEntity();
+    counterEntity->component<TextComponent>()->setText("0");
+    counterEntity->component<TransformComponent>()->setPos({-140.0f, 140.0f, 0.0f});
+    auto fontRes = fontResManager->getRes("irohamaru-mikami-Medium", ExecType::ASYNC);
+    counterEntity->component<TextComponent>()->setFontRes(fontRes);
+
+    // Box2D ground
+    {
+        std::vector<glm::vec2> vertices(50);
+        float width = 320.0f;
+        float height = 300.0f;
+        float xStep = width / vertices.size();
+        for (int i = 0; i < vertices.size(); i++) {
+            vertices[i] = {i * xStep, std::sin(i * 0.2) * 10};
+        }
+        std::vector<glm::vec3> meshVertices(vertices.size() * 6);
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            meshVertices[i * 6 + 0] = glm::vec3(vertices[i].x, vertices[i].y, 0.0f);
+            meshVertices[i * 6 + 1] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
+            meshVertices[i * 6 + 2] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
+            meshVertices[i * 6 + 3] = glm::vec3(vertices[i + 1].x, vertices[i + 1].y, 0.0f);
+            meshVertices[i * 6 + 4] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
+            meshVertices[i * 6 + 5] = glm::vec3(vertices[i + 1].x, -height * 0.5f, 0.0f);
+        }
+        auto groundEntity = sceneEntity->createEntity();
+        groundEntity->component<MeshComponent>()->setVertices(meshVertices);
+        groundEntity->component<Box2DBodyManager>()->setType(b2_staticBody);
+        groundEntity->component<TransformComponent>()->setPos({-150.0f, -100.0f, 0.0f});
+        groundEntity->component<Box2DChainComponent>()->setVertices(vertices);
+    }
+
+    std::list<shared_ptr<ISubscription>> contactSubscriptions;
+    auto downSub = mouseInputManager->eventBus().subscribe([sceneEntity, counterEntity, &contactSubscriptions](MouseInputManager::MouseDownEvent e) {
+        float x = (e.pos.x - 300) * 0.5f;
+        float y = (300 - e.pos.y) * 0.5f;
+        LOG("Pos %f, %f", x, y);
+        auto circleEntity = sceneEntity->createEntity();
+        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+        circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+        circleEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
+        circleEntity->component<TransformComponent>()->setPos({x, y, 0.0f});
+        circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+        circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
+        circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+        auto shape = circleEntity->component<Box2DCircleComponent>();
+        contactSubscriptions.emplace_back(shape->eventBus().subscribe([circleEntity, sceneEntity](Box2DFixtureComponent::ContactStartEvent) {
+            circleEntity->remove();
+        }));
+        int count = std::stoi(counterEntity->component<TextComponent>()->text());
+        count++;
+        counterEntity->component<TextComponent>()->setText(std::to_string(count));
+    });
+
+    auto keyDownSub = keyboardInputManager->eventBus().subscribe([wheelAEntity, wheelBEntity, rectEntity](KeyboardInputManager::KeyDownEvent e) {
+        if (e.keyCode == KeyCode::LEFT) {
+            wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
+            wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(-10.0f);
+        }
+        if (e.keyCode == KeyCode::RIGHT) {
+            wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+            wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(10.0f);
+        }
+        if (e.keyCode == KeyCode::SPACE) {
+            rectEntity->component<Box2DBodyManager>()->applyForce({0.0f, 10000.0f}, {0.0f, 0.0f});
+        }
+    });
+
+    auto keyUpSub = keyboardInputManager->eventBus().subscribe([wheelAEntity, wheelBEntity](KeyboardInputManager::KeyUpEvent e) {
+        if (e.keyCode == KeyCode::LEFT) {
+            wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+            wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+        }
+        if (e.keyCode == KeyCode::RIGHT) {
+            wheelAEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+            wheelBEntity->component<Box2DRevoluteJointComponent>()->setMotorSpeed(0.0f);
+        }
+    });
+
+    return BasicLoop(30, hierarchy->manager<BasicLoopManager>()).run([&hierarchy](DeltaTime dt) {
+        hierarchy->manager<UpdateManager>()->update(dt);
+        hierarchy->manager<Sdl2Manager>()->update(dt);
+    });
 }

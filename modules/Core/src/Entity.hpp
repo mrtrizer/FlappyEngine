@@ -61,6 +61,18 @@ public:
             return false;
         }
     }
+    
+    void removeEntity(const Handle<Entity>& handle) {
+        auto entityIter = std::find_if(m_entities.begin(), m_entities.end(), [&handle](const auto& strongHandle) {
+            return handle == strongHandle;
+        });
+        if (entityIter != m_entities.end())
+            m_entities.erase(entityIter);
+    }
+    
+    void remove() {
+        m_parent->removeEntity(selfHandle());
+    }
 
     template <typename ComponentT>
     Handle<ComponentT> component() {
