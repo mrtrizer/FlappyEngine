@@ -37,8 +37,6 @@ private:
 
         try {
             // temporary value to make chank busy during construction
-            m_strongHandle = reinterpret_cast<AnyStrongHandle*>(std::numeric_limits<intptr_t>::max());
-            
             auto data = new (m_data) DataT(std::forward<Args>(args)...);
 
             StrongHandle<DataT> strongHandle(data, this);

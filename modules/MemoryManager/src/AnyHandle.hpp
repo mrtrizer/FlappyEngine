@@ -21,7 +21,7 @@ class AnyHandle {
     friend bool operator==(const AnyHandle&, const AnyHandle&);
 public:
     AnyHandle() = default;
-
+    
     AnyHandle(Chank* chank) noexcept;
 
     AnyHandle(const AnyStrongHandle& strongHandle) noexcept;
@@ -31,29 +31,24 @@ public:
     AnyHandle(std::nullptr_t) noexcept
     {}
 
-    template <typename DerivedT>
-    AnyHandle(const Handle<DerivedT>& handle) noexcept
-        : m_chank(nullptr)
+    AnyHandle(const AnyHandle& handle) noexcept
     {
         setNewChank(handle.m_chank);
     }
 
-    template <typename DerivedT>
-    AnyHandle& operator=(const Handle<DerivedT>& handle) noexcept {
+    AnyHandle& operator=(const AnyHandle& handle) noexcept {
         if (&handle != this)
             setNewChank(handle.m_chank);
         return *this;
     }
 
-    template <typename DerivedT>
-    AnyHandle(Handle<DerivedT>&& handle) noexcept
+    AnyHandle(AnyHandle&& handle) noexcept
         : AnyHandle(handle) // explicit call copy constructor
     {
         handle.invalidate();
     }
 
-    template <typename DerivedT>
-    AnyHandle& operator=(Handle<DerivedT>&& handle) noexcept {
+    AnyHandle& operator=(AnyHandle&& handle) noexcept {
         operator=(handle); // explicit call copy assignment operator
         handle.invalidate();
         return *this;

@@ -22,9 +22,9 @@ AnyStrongHandle& AnyStrongHandle::operator=(AnyStrongHandle&& strongHandle) noex
 }
 
 AnyStrongHandle::~AnyStrongHandle() noexcept {
+    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
     if (m_chank != nullptr)
         m_chank->clear();
-    DEBUG_ASSERT(m_chank == nullptr || this == m_chank->m_strongHandle);
 }
 
 bool AnyStrongHandle::isValid() const noexcept {

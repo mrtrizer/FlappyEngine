@@ -48,6 +48,7 @@ DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
 
 void Chank::registerHandle(AnyHandle* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
     m_handles.emplace_back(handle);
 
     if (m_hasRemovedHandles && m_handles.size() > 20)
@@ -57,6 +58,7 @@ void Chank::registerHandle(AnyHandle* handle) noexcept {
 void Chank::unregisterHandle(void* handle) noexcept {
     DEBUG_ASSERT(handle != nullptr);
     DEBUG_ASSERT(!m_handles.empty());
+    DEBUG_ASSERT(m_strongHandle == nullptr || this == m_strongHandle->m_chank);
 
     auto iter = std::find_if(m_handles.begin(), m_handles.end(), [handle](auto itemPtr) {
         return itemPtr == handle;
