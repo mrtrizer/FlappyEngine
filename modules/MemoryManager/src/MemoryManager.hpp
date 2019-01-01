@@ -24,7 +24,7 @@ public:
         size_t size = sizeof(DataT);
         for (auto& objectPool : m_objectPools) {
             if (objectPool.maxObjectSize() >= size) {
-                auto strongHandle = objectPool.create<DataT>(objectId, std::forward<ArgT>(args)...);
+                auto strongHandle = objectPool.createWithId<DataT>(objectId, std::forward<ArgT>(args)...);
                 m_objectHandleMap.emplace(objectId, strongHandle);
                 return strongHandle;
             }

@@ -2,23 +2,23 @@
 
 namespace flappy {
 
-static bool interruptPost = false;
+// FIXME: Check if EventBus was not destroyed in the middle of sending events
+FORDEBUG(static bool interruptPost = false;)
 
 EventBus::~EventBus() {
-    interruptPost = true;
+    FORDEBUG(interruptPost = true;)
 }
 
 void EventBus::postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions)
 {
+    interruptPost = false;
     for (auto subscriptionIter = subscriptions.begin(); subscriptionIter != subscriptions.end(); ) {
         if (subscriptionIter->expired())
             subscriptionIter = subscriptions.erase(subscriptionIter);
         else {
             subscriptionIter->lock()->call(event);
-            if (interruptPost) {
-                interruptPost = false;
-                break;
-            }
+            
+            DEBUG_ASSERT(!interruptPost);
             subscriptionIter++;
         }
     }

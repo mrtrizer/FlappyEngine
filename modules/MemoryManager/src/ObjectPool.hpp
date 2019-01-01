@@ -20,7 +20,12 @@ public:
     ~ObjectPool() noexcept;
 
     template <typename DataT, typename...ArgT>
-    [[nodiscard]] StrongHandle<DataT> create(ObjectId objectId, ArgT&& ... args) {
+    [[nodiscard]] StrongHandle<DataT> create(ArgT&& ... args) {
+        return createWithId<DataT>(0, std::forward<ArgT>(args)...);
+    }
+
+    template <typename DataT, typename...ArgT>
+    [[nodiscard]] StrongHandle<DataT> createWithId(ObjectId objectId, ArgT&& ... args) {
         static_assert(std::is_class<DataT>(), "ObjectPool doesn't support basic types.");
         USER_ASSERT_MSG(sizeof(DataT) <= m_maxObjectSize, "DataT exeeds max size (", sizeof(DataT), " > ",  m_maxObjectSize, ")");
         DEBUG_ASSERT(m_length <= m_capacity);

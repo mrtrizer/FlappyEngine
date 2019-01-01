@@ -8,6 +8,7 @@
 #include <TransformComponent.h>
 #include <ScreenManager.h>
 #include <MeshComponent.h>
+#include <CoreUtils.hpp>
 #include <ResManager.h>
 #include <StdFileMonitorManager.h>
 #include <ResRepositoryManager.h>
@@ -197,7 +198,7 @@ int main(int argc, char *argv[])
             contactSubscriptions.emplace_back(shape->eventBus().subscribe(
                 [circleEntity, groundEntity](Box2DFixtureComponent::ContactStartEvent e) {
                     if (groundEntity->component<Box2DChainComponent>().objectId() == e.otherFixtureId)
-                        circleEntity->parent()->removeEntity(circleEntity);
+                        CoreUtils::removeEntityDelayed(circleEntity);
                 }));
             int count = std::stoi(counterEntity->component<TextComponent>()->text());
             count++;

@@ -16,8 +16,10 @@ using DeltaTime = float;
 class UpdateManager {
     friend class UpdateManagerDebugger;
 
+    using FunctionId = int;
+
     struct UpdateFunction {
-        int id = 0;
+        FunctionId id = 0;
         int depth = -1;
         std::function<void(DeltaTime dt)> updateFunction;
     };
@@ -55,7 +57,7 @@ public:
     }
 
     template <typename TypeT>
-    int registerUpdateFunction(int depth, const std::function<void(DeltaTime dt)>& updateFunction) {
+    FunctionId registerUpdateFunction(int depth, const std::function<void(DeltaTime dt)>& updateFunction) {
         auto iter = findTypeFunctionList<TypeT>();
         if (iter == m_updateFunctionLists.end())
             iter = initFunctionList<TypeT>();
@@ -68,17 +70,19 @@ public:
     }
 
     template <typename TypeT>
-    void unregisterUpdateFunction(int id) {
+    void unregisterUpdateFunction(FunctionId id) {
         // FIXME: Could be optimized if remove only first found element
-        auto iter = findTypeFunctionList<TypeT>();
-        std::remove_if(iter->updateFunctions.begin(), iter->updateFunctions.end(),
-                       [id](auto& item) { return item.id == id; });
+        auto listIter = findTypeFunctionList<TypeT>();
+        auto& functions = listIter->updateFunctions;
+        auto funcIter = std::find_if(functions.begin(), functions.end(), [id](const auto& item) { return item.id == id; });
+        DEBUG_ASSERT(funcIter != functions.end());
+        funcIter->depth = -1;
     }
 
 private:
     Handle<Hierarchy> m_hierarchy;
     std::vector<UpdateFunctionList> m_updateFunctionLists;
-    int m_idCounter = 0;
+    FunctionId m_idCounter = 0;
 };
 
 }
