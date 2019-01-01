@@ -2,18 +2,21 @@
 
 #include <array>
 #include <unordered_set>
+#include <AnyStrongHandle.hpp>
+#include <MemoryManager.hpp>
 #include "ObjectPool.hpp"
 #include "Entity.hpp"
-#include <AnyStrongHandle.hpp>
 
 namespace flappy {
 
 class Entity;
 
 class Hierarchy : public EnableSelfHandle<Hierarchy> {
+    friend class Entity; // for postponed entity removing via addRemovedEntity()
 public:
-    Hierarchy()
-        : m_rootEntity(m_entityPool.create<Entity>(nullptr, selfHandle()))
+    Hierarchy(MemoryManager& memoryManager)
+        : m_rootEntity(memoryManager.create<Entity>(nullptr, selfHandle(), memoryManager))
+        , m_memoryManager(memoryManager)
     {}
 
     ~Hierarchy() = default;
@@ -28,15 +31,7 @@ public:
         }
     }
 
-    template <typename DataT, typename...Args>
-    [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
-        size_t size = sizeof(DataT);
-        for (auto& objectPool : m_objectPools) {
-            if (objectPool.maxObjectSize() >= size)
-                return objectPool.create<DataT>(std::forward<Args>(args)...);
-        }
-        throw std::runtime_error(sstr("Can't find appropriate object pool for object of size ", size));
-    }
+    MemoryManager& memoryManager() { return m_memoryManager; }
 
     Handle<Entity> rootEntity() {
         return m_rootEntity;
@@ -79,9 +74,8 @@ private:
     // Order of members is important as it affects order of destruction
     std::unordered_set<AnyStrongHandle> m_managers;
     std::unordered_map<TypeId, AnyHandle> m_managerHandles;
-    ObjectPool m_entityPool { sizeof(Entity), 1000 };
-    std::array<ObjectPool, 3> m_objectPools { ObjectPool(64, 200), ObjectPool(256, 150), ObjectPool(1024, 100) };
     StrongHandle<Entity> m_rootEntity;
+    MemoryManager& m_memoryManager;
 
     template <typename T>
     static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
@@ -92,9 +86,9 @@ private:
     template <typename ManagerT>
     StrongHandle<ManagerT> createManager() {
         if constexpr (constructedWithHierarchy<ManagerT>())
-            return create<ManagerT>(selfHandle());
+            return m_memoryManager.create<ManagerT>(selfHandle());
         else
-            return create<ManagerT>();
+            return m_memoryManager.create<ManagerT>();
     }
 };
 

@@ -50,7 +50,7 @@ void Box2DBodyManager::setEntity(Handle<Entity> entity) {
 }
     
 Box2DBodyManager::~Box2DBodyManager() {
-    m_box2dWorldManager->world().DestroyBody(m_body);
+    m_box2dWorldManager->destroyBody(m_body);
 }
 
 void Box2DBodyManager::setMass(float mass) {

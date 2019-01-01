@@ -11,11 +11,15 @@ Box2DWorldManager::Box2DWorldManager(Handle<Hierarchy> hierarchy)
     , m_world(std::make_unique<b2World>(b2Vec2(0.0f, -9.8f)))
 {
     m_world->SetContactListener(&m_contactListener);
-    m_contactListener.setContactCallback([](b2Contact* contact, Box2DContactListener::ContactPhase constactPhase) {
-        auto& fixtureComponentA = *reinterpret_cast<Handle<Box2DFixtureComponent>*>(contact->GetFixtureA()->GetUserData());
-        auto& fixtureComponentB = *reinterpret_cast<Handle<Box2DFixtureComponent>*>(contact->GetFixtureB()->GetUserData());
-        fixtureComponentA->handleContact(contact, constactPhase, fixtureComponentB);
-        fixtureComponentB->handleContact(contact, constactPhase, fixtureComponentA);
+    m_contactListener.setContactCallback([hierarchy](b2Contact* contact, Box2DContactListener::ContactPhase constactPhase) {
+        auto objectIdA = reinterpret_cast<ObjectId>(contact->GetFixtureA()->GetUserData());
+        auto objectIdB = reinterpret_cast<ObjectId>(contact->GetFixtureB()->GetUserData());
+        Handle<Box2DFixtureComponent> fixtureComponentA = hierarchy->memoryManager().findObject(objectIdA);
+        Handle<Box2DFixtureComponent> fixtureComponentB = hierarchy->memoryManager().findObject(objectIdB);
+        if (fixtureComponentA.isValid())
+            fixtureComponentA->handleContact(contact, constactPhase, objectIdB);
+        if (fixtureComponentB.isValid())
+            fixtureComponentB->handleContact(contact, constactPhase, objectIdA);
     });
 }
 
@@ -24,8 +28,12 @@ b2Joint* Box2DWorldManager::createJoint(std::shared_ptr<b2JointDef> jointDef) {
     return joint;
 }
 
-void Box2DWorldManager::destroyJoint(b2Joint* joint) {
-    m_world->DestroyJoint(joint);
+void Box2DWorldManager::destroyJoint(b2Joint* jointPtr) {
+    m_world->DestroyJoint(jointPtr);
+}
+
+void Box2DWorldManager::destroyBody(b2Body* bodyPtr) {
+    m_bodiesToDestroy.emplace_back(bodyPtr);
 }
 
 void Box2DWorldManager::setGravity(glm::vec2 gravity) {
@@ -76,6 +84,13 @@ Box2DWorldManager::RayCastData Box2DWorldManager::rayCast(glm::vec2 start, glm::
 
 void Box2DWorldManager::update(DeltaTime dt) {
     m_world->Step((float32)dt, (int32)m_velocityIterations, (int32)m_positionIterations);
+    destroyWaitingObjects();
+}
+
+void Box2DWorldManager::destroyWaitingObjects() {
+    for (auto bodyPtr : m_bodiesToDestroy)
+        m_world->DestroyBody(bodyPtr);
+    m_bodiesToDestroy.clear();
 }
 
 } // flappy

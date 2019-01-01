@@ -18,7 +18,7 @@ class [[component]] Box2DFixtureComponent
 {
 public:
     struct ContactEvent : public IEvent {
-        Handle<Box2DFixtureComponent> fixture;
+        ObjectId otherFixtureId;
         glm::vec2 pos;
     };
     
@@ -54,7 +54,7 @@ public:
     int16_t groupIndex() const { return m_groupIndex; }
     void setGroupIndex(const int16_t &groupIndex);
     
-    void handleContact(b2Contact* contact, Box2DContactListener::ContactPhase contactPhase, Handle<Box2DFixtureComponent> other);
+    void handleContact(b2Contact* contact, Box2DContactListener::ContactPhase contactPhase, ObjectId otherId);
 
     EventBus& eventBus() { return m_eventBus; }
     

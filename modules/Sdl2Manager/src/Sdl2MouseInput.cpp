@@ -9,7 +9,7 @@ Sdl2MouseInput::Sdl2MouseInput(Handle<Hierarchy> hierarchy)
     : m_sdl2Manager(hierarchy->manager<Sdl2Manager>())
     , m_mouseInputManager(hierarchy->manager<MouseInputManager>())
 {
-    auto m_subscription = m_sdl2Manager->eventBus().subscribe([this](Sdl2Manager::Sdl2Event e) {
+    m_subscription = m_sdl2Manager->eventBus().subscribe([this](Sdl2Manager::Sdl2Event e) {
         if (e.event.type == SDL_MOUSEMOTION) {
             m_mouseInputManager->setMousePos(MouseInputManager::MouseButton::LEFT, {e.event.motion.x, e.event.motion.y});
         }

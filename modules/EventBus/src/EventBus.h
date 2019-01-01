@@ -17,7 +17,7 @@ namespace flappy {
 class EventBus {
 public:
     EventBus() = default;
-    virtual ~EventBus() = default;
+    ~EventBus();
     EventBus(const EventBus&) = delete;
     EventBus& operator=(const EventBus&) & = delete;
     EventBus(EventBus&&) = delete;

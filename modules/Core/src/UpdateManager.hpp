@@ -9,6 +9,8 @@
 
 namespace flappy {
 
+class Hierarchy;
+
 using DeltaTime = float;
     
 class UpdateManager {
@@ -25,14 +27,11 @@ class UpdateManager {
         std::list<UpdateFunction> updateFunctions;
     };
 public:
-    void update(DeltaTime dt) {
-        for (const auto& updateFunctionList : m_updateFunctionLists) {
-            for (const auto& updateFunction : updateFunctionList.updateFunctions)
-                if (updateFunction.depth != -1)
-                    updateFunction.updateFunction(dt);
-        }
-        std::cout << std::endl;
-    }
+    UpdateManager(Handle<Hierarchy> hierarchy)
+        : m_hierarchy(hierarchy)
+    {}
+
+    void update(DeltaTime dt);
 
     template <typename TypeT>
     std::vector<UpdateFunctionList>::iterator findTypeFunctionList() {
@@ -77,7 +76,7 @@ public:
     }
 
 private:
-
+    Handle<Hierarchy> m_hierarchy;
     std::vector<UpdateFunctionList> m_updateFunctionLists;
     int m_idCounter = 0;
 };

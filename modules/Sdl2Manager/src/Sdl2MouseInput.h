@@ -18,7 +18,7 @@ public:
 private:
     Handle<Sdl2Manager> m_sdl2Manager;
     Handle<MouseInputManager> m_mouseInputManager;
-    Handle<ISubscription> m_subscription;
+    std::shared_ptr<ISubscription> m_subscription;
 };
 
 } // flappy

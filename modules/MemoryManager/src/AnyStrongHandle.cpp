@@ -31,8 +31,12 @@ bool AnyStrongHandle::isValid() const noexcept {
     return m_dataPointer != nullptr;
 }
 
-TypeId AnyStrongHandle::typeId() const noexcept{
+TypeId AnyStrongHandle::typeId() const noexcept {
     return m_chank->typeId();
+}
+
+ObjectId AnyStrongHandle::objectId() const noexcept {
+    return m_chank->objectId();
 }
 
 AnyStrongHandle::AnyStrongHandle(void* dataPointer,

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ObjectPool.hpp"
+#include <MemoryManager.hpp>
+#include <ObjectPool.hpp>
 
 #include <vector>
 #include <unordered_set>
@@ -14,12 +15,12 @@ class Entity : public EnableSelfHandle<Entity> {
 public:
     constexpr static unsigned MaxDepth = 9999;
     
-    explicit Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy) noexcept
-        : Entity(parent, hierarchy, 0)
+    Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy, MemoryManager& memoryManager) noexcept
+        : Entity(parent, hierarchy, memoryManager, 0)
     {}
 
     template <typename T>
-    class HasComplete {
+    class HasSetEntity {
     private:
         template<typename C>
         static std::true_type Test(decltype(std::declval<C>().template setEntity(Handle<Entity>()))*);
@@ -32,19 +33,9 @@ public:
     
     template <typename ComponentT>
     Handle<ComponentT> createComponent() {
-        // Template lambda calls a member of Hierarchy whithout it's defenition to avoid cross-reference
-        auto component = [](auto& hierarchy) {
-            if constexpr (constructedWithHierarchy<ComponentT>())
-                return hierarchy->template create<ComponentT>(hierarchy);
-            else
-                return hierarchy->template create<ComponentT>();
-        } (m_hierarchy);
+        Handle<ComponentT> componentHandle = m_components.emplace_back(constructComponent<ComponentT>(m_hierarchy));
         
-        auto& componentInList = m_components.emplace_back(std::move(component));
-        // Operate weak handle to prevent memory reallocation effects
-        const Handle<ComponentT>& componentHandle = static_cast<const StrongHandle<ComponentT>&>(componentInList);
-        
-        if constexpr (HasComplete<ComponentT>::value)
+        if constexpr (HasSetEntity<ComponentT>::value)
             componentHandle->setEntity(selfHandle());
         
         return componentHandle;
@@ -62,17 +53,7 @@ public:
         }
     }
     
-    void removeEntity(const Handle<Entity>& handle) {
-        auto entityIter = std::find_if(m_entities.begin(), m_entities.end(), [&handle](const auto& strongHandle) {
-            return handle == strongHandle;
-        });
-        if (entityIter != m_entities.end())
-            m_entities.erase(entityIter);
-    }
-    
-    void remove() {
-        m_parent->removeEntity(selfHandle());
-    }
+    void removeEntity(const Handle<Entity>& handle);
 
     template <typename ComponentT>
     Handle<ComponentT> component() {
@@ -109,7 +90,7 @@ public:
         return m_entities;
     }
 
-    Handle<Entity> createEntity() noexcept;
+    Handle<Entity> createEntity();
 
     Handle<Hierarchy> hierarchy() {
         return m_hierarchy;
@@ -123,6 +104,7 @@ private:
     // Order of members is important as it affects order of destruction
     Handle<Entity> m_parent;
     Handle<Hierarchy> m_hierarchy;
+    MemoryManager& m_memoryManager;
     std::vector<AnyStrongHandle> m_components;
     std::vector<StrongHandle<Entity>> m_entities;
     int m_depth = 0;
@@ -133,9 +115,10 @@ private:
     template <typename T>
     static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
 
-    explicit Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy, int deepness) noexcept
+    Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy, MemoryManager& memoryManager, int deepness) noexcept
         : m_parent(parent)
         , m_hierarchy(std::move(hierarchy))
+        , m_memoryManager(memoryManager)
         , m_depth(deepness)
     {}
 
@@ -154,6 +137,14 @@ private:
             }
         return nullptr;
     }
+    
+    template <typename ComponentT>
+    StrongHandle<ComponentT> constructComponent(Handle<Hierarchy>& hierarchy) {
+        if constexpr (constructedWithHierarchy<ComponentT>())
+            return m_memoryManager.template create<ComponentT>(hierarchy);
+        else
+            return m_memoryManager.template create<ComponentT>();
+    };
 };
 
 } // flappy

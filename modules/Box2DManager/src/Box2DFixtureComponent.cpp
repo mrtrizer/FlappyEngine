@@ -32,9 +32,9 @@ Box2DFixtureComponent::~Box2DFixtureComponent() {
 }
     
 template<typename ContactEventT>
-EventHandle createContactEvent(b2Contact* contact, Handle<Box2DFixtureComponent> otherFixture) {
+EventHandle createContactEvent(b2Contact* contact, ObjectId otherFixtureId) {
     ContactEventT contactEvent;
-    contactEvent.fixture = otherFixture;
+    contactEvent.otherFixtureId = otherFixtureId;
     auto manifold = contact->GetManifold();
     contactEvent.pos = {manifold->localPoint.x, manifold->localPoint.y};
     return EventHandle(contactEvent);
@@ -42,14 +42,14 @@ EventHandle createContactEvent(b2Contact* contact, Handle<Box2DFixtureComponent>
     
 void Box2DFixtureComponent::handleContact(b2Contact* contact,
                                           Box2DContactListener::ContactPhase contactPhase,
-                                          Handle<Box2DFixtureComponent> other)
+                                          ObjectId otherId)
 {
     switch (contactPhase) {
         case Box2DContactListener::ContactPhase::BEGIN:
-            m_eventBus.post(createContactEvent<ContactStartEvent>(contact, other));
+            m_eventBus.post(createContactEvent<ContactStartEvent>(contact, otherId));
             break;
         case Box2DContactListener::ContactPhase::END:
-            m_eventBus.post(createContactEvent<ContactEndEvent>(contact, other));
+            m_eventBus.post(createContactEvent<ContactEndEvent>(contact, otherId));
             break;
     }
     
@@ -85,7 +85,7 @@ void Box2DFixtureComponent::initFixture(Handle<Box2DBodyManager> body, std::shar
 
         //user data
         m_selfHandle = selfHandle();
-        fixtureDef.userData = (void*)&m_selfHandle;
+        fixtureDef.userData = reinterpret_cast<void*>(m_selfHandle.objectId());
 
         m_fixture = body->createFixture(&fixtureDef);
     }

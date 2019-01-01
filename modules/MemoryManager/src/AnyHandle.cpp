@@ -9,6 +9,7 @@ template <typename T>
 class Handle;
 
 AnyHandle::AnyHandle(Chank* chank) noexcept {
+    DEBUG_ASSERT(chank != nullptr);
     chank->registerHandle(this);
     m_chank = chank;
 }
@@ -42,6 +43,10 @@ TypeId AnyHandle::typeId() const noexcept {
     if (m_chank == nullptr)
         return {};
     return m_chank->typeId();
+}
+
+ObjectId AnyHandle::objectId() const noexcept {
+    return m_chank->objectId();
 }
 
 void AnyHandle::setNewChank(Chank* chank) noexcept {

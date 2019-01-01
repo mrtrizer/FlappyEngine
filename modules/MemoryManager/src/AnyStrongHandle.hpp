@@ -2,6 +2,8 @@
 
 #include <list>
 
+#include <ObjectId.hpp>
+
 #include "Utility.hpp"
 #include "TypeId.hpp"
 
@@ -36,6 +38,8 @@ public:
     bool isValid() const noexcept;
 
     TypeId typeId() const noexcept;
+    
+    ObjectId objectId() const noexcept;
 
 protected:
     AnyStrongHandle(void* dataPointer = nullptr,

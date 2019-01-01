@@ -31,6 +31,8 @@ public:
 
     b2Joint* createJoint(std::shared_ptr<b2JointDef> jointDef);
     void destroyJoint(b2Joint*);
+    
+    void destroyBody(b2Body* body);
 
     void setGravity(glm::vec2 gravity);
 
@@ -58,6 +60,9 @@ private:
     int m_velocityIterations = 6;
     int m_positionIterations = 2;
     float m_sizeFactor = 1.0f;
+    std::vector<b2Body*> m_bodiesToDestroy;
+    
+    void destroyWaitingObjects();
 };
 
 } // flappy

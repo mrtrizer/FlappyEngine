@@ -19,8 +19,8 @@ public:
     ObjectPool& operator= (ObjectPool&&) = delete;
     ~ObjectPool() noexcept;
 
-    template <typename DataT, typename...Args>
-    [[nodiscard]] StrongHandle<DataT> create(Args ... args) {
+    template <typename DataT, typename...ArgT>
+    [[nodiscard]] StrongHandle<DataT> create(ObjectId objectId, ArgT&& ... args) {
         static_assert(std::is_class<DataT>(), "ObjectPool doesn't support basic types.");
         USER_ASSERT_MSG(sizeof(DataT) <= m_maxObjectSize, "DataT exeeds max size (", sizeof(DataT), " > ",  m_maxObjectSize, ")");
         DEBUG_ASSERT(m_length <= m_capacity);
@@ -39,7 +39,8 @@ public:
             // a new object can already be constructed after the current one.
             if (&m_chanks[m_length] == emptyChank)
                 ++m_length;
-            auto strongHandle = emptyChank->construct<DataT>(std::forward<Args>(args)...);
+            auto strongHandle = emptyChank->construct<DataT>(std::forward<ArgT>(args)...);
+            emptyChank->m_objectId = objectId;
             return strongHandle;
         } catch (...) {
             throw;

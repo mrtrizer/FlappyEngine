@@ -44,7 +44,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // Sdl2 and render
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     
     hierarchy->initManager<BasicLoopManager>();
     hierarchy->initManager<UpdateManager>();
@@ -154,6 +154,7 @@ int main(int argc, char *argv[])
     counterEntity->component<TextComponent>()->setFontRes(fontRes);
 
     // Box2D ground
+    auto groundEntity = sceneEntity->createEntity();
     {
         std::vector<glm::vec2> vertices(50);
         float width = 320.0f;
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
             meshVertices[i * 6 + 4] = glm::vec3(vertices[i].x, -height * 0.5f, 0.0f);
             meshVertices[i * 6 + 5] = glm::vec3(vertices[i + 1].x, -height * 0.5f, 0.0f);
         }
-        auto groundEntity = sceneEntity->createEntity();
+        
         groundEntity->component<MeshComponent>()->setVertices(meshVertices);
         groundEntity->component<Box2DBodyManager>()->setType(b2_staticBody);
         groundEntity->component<TransformComponent>()->setPos({-150.0f, -100.0f, 0.0f});
@@ -179,26 +180,29 @@ int main(int argc, char *argv[])
     }
 
     std::list<shared_ptr<ISubscription>> contactSubscriptions;
-    auto downSub = mouseInputManager->eventBus().subscribe([sceneEntity, counterEntity, &contactSubscriptions](MouseInputManager::MouseDownEvent e) {
-        float x = (e.pos.x - 300) * 0.5f;
-        float y = (300 - e.pos.y) * 0.5f;
-        LOG("Pos %f, %f", x, y);
-        auto circleEntity = sceneEntity->createEntity();
-        circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
-        circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
-        circleEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
-        circleEntity->component<TransformComponent>()->setPos({x, y, 0.0f});
-        circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
-        circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
-        circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
-        auto shape = circleEntity->component<Box2DCircleComponent>();
-        contactSubscriptions.emplace_back(shape->eventBus().subscribe([circleEntity, sceneEntity](Box2DFixtureComponent::ContactStartEvent) {
-            circleEntity->remove();
-        }));
-        int count = std::stoi(counterEntity->component<TextComponent>()->text());
-        count++;
-        counterEntity->component<TextComponent>()->setText(std::to_string(count));
-    });
+    auto downSub = mouseInputManager->eventBus().subscribe(
+        [sceneEntity, counterEntity, groundEntity, &contactSubscriptions] (MouseInputManager::MouseDownEvent e) {
+            float x = (e.pos.x - 300) * 0.5f;
+            float y = (300 - e.pos.y) * 0.5f;
+            LOG("Pos %f, %f", x, y);
+            auto circleEntity = sceneEntity->createEntity();
+            circleEntity->component<MeshComponent>()->setVertices(genCircleVertices(0.5f,10));
+            circleEntity->component<TransformComponent>()->setScale({20.0f, 20.0f});
+            circleEntity->component<Box2DBodyManager>()->setType(b2_dynamicBody);
+            circleEntity->component<TransformComponent>()->setPos({x, y, 0.0f});
+            circleEntity->component<Box2DCircleComponent>()->setDensity(10.0f);
+            circleEntity->component<Box2DCircleComponent>()->setFriction(0.3f);
+            circleEntity->component<Box2DCircleComponent>()->setRadius(10.0f);
+            auto shape = circleEntity->component<Box2DCircleComponent>();
+            contactSubscriptions.emplace_back(shape->eventBus().subscribe(
+                [circleEntity, groundEntity](Box2DFixtureComponent::ContactStartEvent e) {
+                    if (groundEntity->component<Box2DChainComponent>().objectId() == e.otherFixtureId)
+                        circleEntity->parent()->removeEntity(circleEntity);
+                }));
+            int count = std::stoi(counterEntity->component<TextComponent>()->text());
+            count++;
+            counterEntity->component<TextComponent>()->setText(std::to_string(count));
+        });
 
     auto keyDownSub = keyboardInputManager->eventBus().subscribe([wheelAEntity, wheelBEntity, rectEntity](KeyboardInputManager::KeyDownEvent e) {
         if (e.keyCode == KeyCode::LEFT) {

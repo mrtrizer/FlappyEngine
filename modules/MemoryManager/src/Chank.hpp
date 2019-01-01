@@ -62,6 +62,8 @@ private:
     bool empty() const noexcept { return m_strongHandle == nullptr; }
 
     TypeId typeId() const noexcept { return m_typeId; }
+    
+    ObjectId objectId() const noexcept { return m_objectId; }
 
     [[nodiscard]] bool constructed() const noexcept;
 
@@ -75,6 +77,7 @@ private:
         return reinterpret_cast<DataT*>(m_data);
     }
 
+    ObjectId m_objectId = {};
     std::byte* m_data = nullptr;
     size_t m_size;
     AnyStrongHandle* m_strongHandle = nullptr;

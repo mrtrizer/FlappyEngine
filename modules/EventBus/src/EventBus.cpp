@@ -2,6 +2,12 @@
 
 namespace flappy {
 
+static bool interruptPost = false;
+
+EventBus::~EventBus() {
+    interruptPost = true;
+}
+
 void EventBus::postInList(const EventHandle& event, std::list<std::weak_ptr<ISubscription>>& subscriptions)
 {
     for (auto subscriptionIter = subscriptions.begin(); subscriptionIter != subscriptions.end(); ) {
@@ -9,6 +15,10 @@ void EventBus::postInList(const EventHandle& event, std::list<std::weak_ptr<ISub
             subscriptionIter = subscriptions.erase(subscriptionIter);
         else {
             subscriptionIter->lock()->call(event);
+            if (interruptPost) {
+                interruptPost = false;
+                break;
+            }
             subscriptionIter++;
         }
     }

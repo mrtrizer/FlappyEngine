@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
+#include <ObjectId.hpp>
 #include <Utility.hpp>
 #include <TypeId.hpp>
 
@@ -68,6 +69,8 @@ public:
     }
 
     TypeId typeId() const noexcept;
+    
+    ObjectId objectId() const noexcept;
 
 protected:
     Chank* chank() const noexcept { return m_chank; }
