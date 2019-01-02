@@ -46,7 +46,7 @@ build_script:
   - cmake --build . --target ALL_BUILD --config Debug
   - .\Debug\tests_MemoryManager.exe
 
-  - cd C:\projects\flappyengine\modules\NewCore\tests\
+  - cd C:\projects\flappyengine\modules\Core\tests\
   - node C:\projects\flappyengine\FlappyTools2\scripts\flappy.js build cmake
   - .\generated\cmake\build\Release\tests_Core.exe
 
