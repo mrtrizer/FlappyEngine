@@ -25,7 +25,7 @@ using namespace std;
 using namespace glm;
 
 TEST_CASE("UIManager") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<UpdateManager>();
     auto touchInputManager = hierarchy->initManager<TouchInputManager>();
     hierarchy->initManager<UIManager>();

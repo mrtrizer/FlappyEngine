@@ -5,9 +5,9 @@
 
 namespace flappy {
 
-TextComponent::TextComponent(Handle<Hierarchy> hierarchy)
-    : m_renderElementFactory(hierarchy->manager<RenderElementFactory>())
-    , m_fontResManager(hierarchy->manager<ResManager<FontRes>>())
+TextComponent::TextComponent(Handle<Entity> entity)
+    : m_renderElementFactory(entity->hierarchy()->manager<RenderElementFactory>())
+    , m_fontResManager(entity->hierarchy()->manager<ResManager<FontRes>>())
 {}
     
 void TextComponent::setEntity(Handle<Entity> entity) {

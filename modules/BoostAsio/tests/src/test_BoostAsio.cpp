@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <Entity.h>
+#include <Entity.hpp>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
@@ -11,9 +11,8 @@ using namespace flappy;
 using namespace std;
 using boost::asio::ip::tcp;
 
-void test() {
-    try
-      {
+TEST_CASE( "BoostAsio::asio()") {
+    try {
 
         boost::asio::io_service io_service;
 
@@ -26,25 +25,19 @@ void test() {
 
         for (;;)
         {
-          boost::array<char, 128> buf;
-          boost::system::error_code error;
+            boost::array<char, 128> buf;
+            boost::system::error_code error;
 
-          size_t len = socket.read_some(boost::asio::buffer(buf), error);
+            size_t len = socket.read_some(boost::asio::buffer(buf), error);
 
-          if (error == boost::asio::error::eof)
+            if (error == boost::asio::error::eof)
             break; // Connection closed cleanly by peer.
-          else if (error)
+            else if (error)
             throw boost::system::system_error(error); // Some other error.
 
-          std::cout.write(buf.data(), len);
+            std::cout.write(buf.data(), len);
         }
-      }
-      catch (std::exception& e)
-      {
+    } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
-      }
-}
-
-TEST_CASE( "BoostAsio::asio()") {
-    test();
+    }
 }

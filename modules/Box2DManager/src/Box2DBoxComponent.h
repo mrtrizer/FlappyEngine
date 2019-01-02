@@ -13,7 +13,7 @@ class Box2DWorldManager;
 
 class Box2DBoxComponent: public Box2DFixtureComponent {
 public:
-    Box2DBoxComponent(Handle<Hierarchy> hierarchy);
+    Box2DBoxComponent(Handle<Entity> entity);
 
     void setSize(glm::vec2 size);
     glm::vec2 size() { return m_size; }

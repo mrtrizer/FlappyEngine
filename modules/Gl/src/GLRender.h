@@ -15,10 +15,10 @@ class IGLManager;
 class GLRender: public Render
 {
 public:
-    GLRender(Handle<Hierarchy> hierarchy)
-        : Render(hierarchy)
-        , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
-        , m_glManager(hierarchy->manager<IGLManager>())
+    GLRender(Handle<Entity> entity)
+        : Render(entity)
+        , m_shaderResManager(entity->hierarchy()->manager<ResManager<ShaderRes>>())
+        , m_glManager(entity->hierarchy()->manager<IGLManager>())
     {
         setShader(m_shaderResManager->getRes("shape_shader", ExecType::ASYNC));
     }

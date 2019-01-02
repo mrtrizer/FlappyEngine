@@ -8,7 +8,7 @@
             "path":"../../Catch"
         },
         {
-            "path":"../../NewStd"
+            "path":"../../Std"
         }
     ],
     "res_dirs": [

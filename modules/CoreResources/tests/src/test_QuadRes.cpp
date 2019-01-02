@@ -10,32 +10,35 @@
 #include <IRgbaBitmapRes.h>
 #include <Sdl2RgbaBitmapResFactory.h>
 #include <DefaultResFactory.h>
-#include <Entity.h>
+#include <Entity.hpp>
 #include <StdFileMonitorManager.h>
 #include <StdFileLoadManager.h>
 #include <ResRepositoryManager.h>
 #include <ResManager.h>
 #include <GLTextureRes.h>
 #include <GLTextureResFactory.h>
+#include <Heap.hpp>
+#include <Hierarchy.hpp>
 
 using namespace flappy;
 using namespace std;
 
 TEST_CASE( "SpriteResManager::getRes") {
-    auto rootEntity = std::make_shared<Entity>();
-    rootEntity->createComponent<StdFileMonitorManager>();
-    rootEntity->createComponent<StdFileLoadManager>();
-
-    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-
-    rootEntity->createComponent<DefaultResFactory<AtlasRes, AtlasRes>> ();
-    rootEntity->createComponent<ResManager<AtlasRes>> ();
-    rootEntity->createComponent<Sdl2RgbaBitmapResFactory> ();
-    rootEntity->createComponent<ResManager<IRgbaBitmapRes>> ();
-    rootEntity->createComponent<GLTextureResFactory>();
-    rootEntity->createComponent<ResManager<TextureRes>> ();
-    rootEntity->createComponent<SpriteResFactory> ();
-    rootEntity->createComponent<ResManager<SpriteRes>> ();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
+    hierarchy->initManager<UpdateManager>();
+    hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
+    hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
+    
+    hierarchy->initManager<ResFactory<AtlasRes>, DefaultResFactory<AtlasRes, AtlasRes>> ();
+    hierarchy->initManager<ResManager<AtlasRes>> ();
+    hierarchy->initManager<ResFactory<IRgbaBitmapRes>, Sdl2RgbaBitmapResFactory> ();
+    hierarchy->initManager<ResManager<IRgbaBitmapRes>> ();
+    hierarchy->initManager<ResFactory<TextureRes>, GLTextureResFactory>();
+    hierarchy->initManager<ResManager<TextureRes>> ();
+    hierarchy->initManager<ResFactory<SpriteRes>, SpriteResFactory> ();
+    hierarchy->initManager<ResManager<SpriteRes>> ();
 
     // We can't get this resource without Sdl2Manager initialization
 //    rootEntity->manager<ResManager<SpriteRes>>()->getRes("test_img");

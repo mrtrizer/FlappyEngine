@@ -57,7 +57,7 @@ void LoadOGG(char *fileName, vector < char > &buffer, ALenum &format, ALsizei &f
       ov_clear(&oggFile);
 }
 
-void test() {
+TEST_CASE("OpenAL") {
     ALCdevice *device;
     device = alcOpenDevice(NULL);
     if (!device)
@@ -102,9 +102,4 @@ void test() {
     // Clean up sound buffer and source
     alDeleteBuffers(1, &bufferID);
     alDeleteSources(1, &sourceID);
-
-}
-
-TEST_CASE("OpenAL") {
-    test();
 }

@@ -18,7 +18,7 @@ class Hierarchy;
 class [[component]] TransformComponent
 {
 public:
-    TransformComponent(Handle<Hierarchy>) {}
+    TransformComponent() = default;
     
     void setEntity(Handle<Entity> entity) { m_entity = entity; }
     

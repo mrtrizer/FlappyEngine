@@ -19,7 +19,7 @@ class [[component]] Box2DBodyManager
     : public Updatable<Box2DBodyManager>
     , public EnableSelfHandle<Box2DBodyManager> {
 public:
-    Box2DBodyManager(Handle<Hierarchy> hierarchy);
+    Box2DBodyManager(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
     ~Box2DBodyManager();
 

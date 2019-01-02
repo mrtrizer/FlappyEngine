@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <Entity.h>
+#include <Entity.hpp>
 #include <AtlasRes.h>
 #include <AtlasResFactory.h>
 #include <ResManager.h>
@@ -14,26 +14,31 @@
 #include <TextRes.h>
 #include <DefaultResFactory.h>
 #include <TextResFactory.h>
-#include <Tools.h>
+#include <Utility.hpp>
+#include <Heap.hpp>
+#include <Hierarchy.hpp>
+#include <MathUtils.h>
 
 using namespace flappy;
 using namespace std;
-using namespace Tools;
 
 TEST_CASE( "AtlasResFactory loading from file") {
-    auto entity = std::make_shared<Entity>();
-    entity->createComponent<StdFileLoadManager>();
-    entity->createComponent<StdFileMonitorManager>();
-    entity->createComponent<TextResFactory>();
-    entity->createComponent<ResManager<TextRes>>();
-    entity->createComponent<DefaultResFactory<JsonRes, JsonRes, TextRes>>();
-    entity->createComponent<ResManager<JsonRes>>();
-    entity->createComponent<ResRepositoryManager>("./resources/");
-    entity->createComponent<AtlasResFactory>();
-    auto atlasResManager = entity->createComponent<ResManager<AtlasRes>>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
+    hierarchy->initManager<UpdateManager>();
+    hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
+    hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
+    hierarchy->initManager<ResFactory<TextRes>, TextResFactory>();
+    auto textResManager = hierarchy->initManager<ResManager<TextRes>>();
+    hierarchy->initManager<ResFactory<JsonRes>, DefaultResFactory<JsonRes, JsonRes, TextRes>>();
+    auto jsonResManager = hierarchy->initManager<ResManager<JsonRes>>();
+    auto updateManager = hierarchy->initManager<UpdateManager>();
+    hierarchy->initManager<ResFactory<AtlasRes>, AtlasResFactory>();
+    auto atlasResManager = hierarchy->initManager<ResManager<AtlasRes>>();
     auto atlasTest = atlasResManager->getRes("test_atlas", ExecType::SYNC);
     atlasTest = atlasTest->lastRes();
-    const auto expectedRect = Tools::Rect(0.1f, 0.2f, 0.3f, 0.4f);
+    const auto expectedRect = MathUtils::Rect(0.1f, 0.2f, 0.3f, 0.4f);
     REQUIRE(atlasTest->spriteInfo("rect1").rectInAtlas == expectedRect);
     const auto expectedSize = glm::vec2(100, 200);
     REQUIRE(atlasTest->spriteInfo("rect1").size == expectedSize);

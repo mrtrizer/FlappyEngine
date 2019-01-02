@@ -11,7 +11,7 @@ class Render;
     
 class SpriteComponent {
 public:
-    SpriteComponent(Handle<Hierarchy> hierarchy);
+    SpriteComponent(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
     ~SpriteComponent();
 

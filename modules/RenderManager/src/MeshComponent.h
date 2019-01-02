@@ -18,7 +18,7 @@ class [[component]] MeshComponent : public EnableSelfHandle<MeshComponent> {
 public:
     struct MeshChangedEvent : public IEvent {};
 
-    MeshComponent(Handle<Hierarchy> hierarchy);
+    MeshComponent(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
     ~MeshComponent();
     

@@ -141,7 +141,7 @@ private:
 };
 
 TEST_CASE( "Hierarchy") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
 
     hierarchy->initManager<UpdateManager>();
 
@@ -182,7 +182,7 @@ TEST_CASE( "Hierarchy") {
 
 #ifndef NDEBUG
     std::cout << UpdateManagerDebugger::componentOrderFull(hierarchy->manager<UpdateManager>()) << std::endl;
-    REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "01122122");
+    REQUIRE(UpdateManagerDebugger::componentOrder(hierarchy->manager<UpdateManager>()) == "0122122");
 #endif
 
     REQUIRE(entity1->component<TestComponent>()->updateTime() == 2.0f);

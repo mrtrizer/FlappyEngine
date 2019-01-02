@@ -17,8 +17,8 @@ const std::unordered_map<MaterialRes::RenderMode, GLenum> GLMeshRender::m_glRend
     {MaterialRes::RenderMode::TRIANGLE_FAN, GL_TRIANGLE_FAN}
 };
 
-GLMeshRender::GLMeshRender(Handle<Hierarchy> hierarchy)
-    : GLRender(hierarchy)
+GLMeshRender::GLMeshRender(Handle<Entity> entity)
+    : GLRender(entity)
     , m_attribArray(GL_TRIANGLE_STRIP)
 {}
     
@@ -28,7 +28,6 @@ void GLMeshRender::setEntity(Handle<Entity> entity) {
     m_subscription = meshComponent->eventBus().subscribe([this](MeshComponent::MeshChangedEvent) {
         m_meshChanged = true;
     });
-    GLRender::setEntity(entity);
 }
 
 GLAttribArray GLMeshRender::genAttribArray() {

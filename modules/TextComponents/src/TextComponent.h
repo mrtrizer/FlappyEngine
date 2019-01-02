@@ -51,7 +51,7 @@ public:
         std::vector<BoxedLine> boxedLines;
     };
 
-    TextComponent(Handle<Hierarchy> hierarchy);
+    TextComponent(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
     ~TextComponent();
 

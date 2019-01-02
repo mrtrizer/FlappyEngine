@@ -17,8 +17,7 @@ class RenderManager;
 /// derived classes.
 class [[component]] Render : public EnableSelfHandle<Render> {
 public:
-    Render(Handle<Hierarchy> hierarchy);
-    void setEntity(Handle<Entity> entity) { m_entity = entity; }
+    Render(Handle<Entity> entity);
     virtual ~Render();
     void redraw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix);
     Handle<Entity> entity() { return m_entity; }

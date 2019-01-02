@@ -31,35 +31,37 @@ public:
 }
 
 TEST_CASE( "ResRepositoryManager::findFileInfo") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
     hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
     hierarchy->initManager<UpdateManager>();
-    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>("./resources");
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
     auto resInfo = resRepositoryManager->findFileInfo("dir/text_res.txt");
     REQUIRE(resInfo.type == "file");
 }
 
 TEST_CASE( "ResRepositoryManager::findResMeta") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
     hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
     hierarchy->initManager<UpdateManager>();
-    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>("./resources");
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
     auto resMeta = resRepositoryManager->findResMeta("dir/text_res");
     REQUIRE(resMeta.data["input"] == "dir/text_res.txt");
     REQUIRE(resMeta.data["type"] == "file");
 }
 
 TEST_CASE( "ResManager::getRes()") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
     hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
     hierarchy->initManager<UpdateManager>();
-    hierarchy->initManager<ResRepositoryManager>("./resources");
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
     hierarchy->initManager<ResFactory<TextRes>, TextResFactory>();
     auto resManager = hierarchy->initManager<ResManager<TextRes>>();
-    hierarchy->initManager<TextResFactory>();
     auto textRes = resManager->getRes("dir/text_res", ExecType::SYNC);
     REQUIRE(textRes->text() == "Abuksigun\n");
 }

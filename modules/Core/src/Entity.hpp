@@ -20,12 +20,13 @@ public:
     {}
 
     template <typename T>
-    class HasSetEntity {
+    class HasInit {
     private:
         template<typename C>
-        static std::true_type Test(decltype(std::declval<C>().template setEntity(Handle<Entity>()))*);
+        static std::true_type Test(decltype(std::declval<C>().template setEntity(std::declval<Handle<Entity>>()))*);
         
-        template<typename> static std::false_type& Test(...);
+        template<typename>
+        static std::false_type& Test(...);
         
     public:
         static bool const value = std::is_same_v<decltype(Test<T>(0)), std::true_type>;
@@ -33,9 +34,9 @@ public:
     
     template <typename ComponentT>
     Handle<ComponentT> createComponent() {
-        Handle<ComponentT> componentHandle = m_components.emplace_back(constructComponent<ComponentT>(m_hierarchy));
+        Handle<ComponentT> componentHandle = m_components.emplace_back(constructComponent<ComponentT>(selfHandle()));
         
-        if constexpr (HasSetEntity<ComponentT>::value)
+        if constexpr (HasInit<ComponentT>::value)
             componentHandle->setEntity(selfHandle());
         
         return componentHandle;
@@ -110,10 +111,10 @@ private:
     int m_depth = 0;
 
     template <typename T>
-    static constexpr bool constructedWithHierarchy(decltype(T(std::declval<Handle<Hierarchy>>()))* = 0) { return true; }
+    static constexpr bool constructedWithEntity(decltype(T(std::declval<Handle<Entity>>()))* = 0) { return true; }
     
     template <typename T>
-    static constexpr bool constructedWithHierarchy(decltype(T())* = 0) { return false; }
+    static constexpr bool constructedWithEntity(decltype(T())* = 0) { return false; }
 
     Entity(Handle<Entity> parent, Handle<Hierarchy> hierarchy, MemoryManager& memoryManager, int deepness) noexcept
         : m_parent(parent)
@@ -139,9 +140,9 @@ private:
     }
     
     template <typename ComponentT>
-    StrongHandle<ComponentT> constructComponent(Handle<Hierarchy>& hierarchy) {
-        if constexpr (constructedWithHierarchy<ComponentT>())
-            return m_memoryManager.template create<ComponentT>(hierarchy);
+    StrongHandle<ComponentT> constructComponent(const Handle<Entity>& entity) {
+        if constexpr (constructedWithEntity<ComponentT>())
+            return m_memoryManager.template create<ComponentT>(entity);
         else
             return m_memoryManager.template create<ComponentT>();
     };

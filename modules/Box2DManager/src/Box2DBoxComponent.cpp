@@ -5,8 +5,8 @@
 
 namespace flappy {
 
-Box2DBoxComponent::Box2DBoxComponent(Handle<Hierarchy> hierarchy)
-    : m_box2DWorldManager(hierarchy->manager<Box2DWorldManager>())
+Box2DBoxComponent::Box2DBoxComponent(Handle<Entity> entity)
+    : m_box2DWorldManager(entity->hierarchy()->manager<Box2DWorldManager>())
 {}
 
 void Box2DBoxComponent::init(glm::vec2 size) {

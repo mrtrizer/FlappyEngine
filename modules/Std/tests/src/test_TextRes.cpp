@@ -6,7 +6,9 @@
 
 #include <ResManager.h>
 #include <TextRes.h>
-#include <Entity.h>
+#include <Entity.hpp>
+#include <Heap.hpp>
+#include <Hierarchy.hpp>
 #include <StdFileMonitorManager.h>
 #include <StdFileLoadManager.h>
 #include <TextResFactory.h>
@@ -27,24 +29,26 @@ void writeToFile(std::string name, std::string text) {
 }
 
 TEST_CASE( "TextRes::text()") {
-    auto rootEntity = std::make_shared<Entity>();
-    rootEntity->createComponent<StdFileMonitorManager>();
-    rootEntity->createComponent<StdFileLoadManager>();
-    auto resRepositoryManager = rootEntity->createComponent<ResRepositoryManager>("./resources");
-    rootEntity->createComponent<TextResFactory>();
-    auto textResManager = rootEntity->createComponent<ResManager<TextRes>>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
+    auto updateManager = hierarchy->initManager<UpdateManager>();
+    hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
+    hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
+    auto resRepositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    resRepositoryManager->setRepositoryPath("./resources");
+    hierarchy->initManager<ResFactory<TextRes>, TextResFactory>();
+    auto textResManager = hierarchy->initManager<ResManager<TextRes>>();
 
-    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    updateManager->update(1.0f);
     writeToFile("./resources/example.txt", "Test text");
     auto textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "");
-    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    updateManager->update(1.0f);
     textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "Test text");
-    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    updateManager->update(1.0f);
     REQUIRE(textFile->nextRes() == textFile); // res should not be updated during update
     writeToFile("./resources/example.txt", "Test text 2");
-    rootEntity->events()->post(ComponentBase::UpdateEvent(1.0f));
+    updateManager->update(1.0f);
     textFile = textResManager->getRes("example", ExecType::ASYNC);
     REQUIRE(textFile->text() == "Test text 2");
 }

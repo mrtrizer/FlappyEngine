@@ -2,10 +2,10 @@
     "name":"OggAudioRes",
     "modules": [
         {
-            "path":"../NewCore"
+            "path":"../Core"
         },
     	{
-    	    "path":"../NewResManager"
+    	    "path":"../ResManager"
     	},
     	{
     	    "path":"../OpenALManager"

@@ -17,7 +17,7 @@ class TextComponent;
 class GLTextRender : public GLRender
 {
 public:
-    GLTextRender(Handle<Hierarchy> hierarchy);
+    GLTextRender(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 

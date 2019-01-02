@@ -1,0 +1,52 @@
+{
+    "name":"tests",
+    "modules": [
+        {
+            "path":"../modules/Core/tests"
+        },
+        {
+            "path":"../modules/MemoryManager/tests"
+        },
+        {
+            "path":"../modules/Input/tests"
+        },
+        {
+            "path":"../modules/Math/tests"
+        },
+        {
+            "path":"../modules/CoreResources/tests"
+        },
+        {
+            "path":"../modules/EventBus/tests"
+        },
+        {
+            "path":"../modules/JsonRes/tests"
+        },
+        {
+            "path":"../modules/Reflection/tests"
+        },
+        {
+            "path":"../modules/ResManager/tests"
+        },
+        {
+            "path":"../modules/Std/tests"
+        },
+        {
+            "path":"../modules/Utility/tests"
+        },
+        {
+            "path":"../modules/UI/tests"
+        }
+    ],
+    "cxx":{
+        "link_flags_clang":["-all_load"],
+        "link_flags_gnu":["-whole-archive"],
+        "link_flags_msvc":["/WHOLEARCHIVE"],
+        "header_dirs": [
+            "./src"
+        ],
+        "src_dirs": [
+            "./src"
+        ]
+    }
+}

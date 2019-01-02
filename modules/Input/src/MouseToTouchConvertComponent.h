@@ -7,12 +7,12 @@
 
 namespace flappy
 {
-class Hierarchy;
+class Entity;
 
 class [[component]] MouseToTouchConvertComponent
 {
 public:
-    MouseToTouchConvertComponent(Handle<Hierarchy> hierarchy);
+    MouseToTouchConvertComponent(const Handle<Entity>& entity);
 
 private:
     std::weak_ptr<ISubscription> m_mouseDownSubscription;

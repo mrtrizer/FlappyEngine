@@ -40,8 +40,7 @@ public:
         using TouchEvent::TouchEvent;
     };
 
-    TouchComponent(Handle<Hierarchy> hierarchy);
-    void setEntity(Handle<Entity> entity);
+    TouchComponent(Handle<Entity> entity);
     ~TouchComponent();
 
     void touchDown(glm::vec2 pos, int index);

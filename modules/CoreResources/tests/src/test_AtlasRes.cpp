@@ -4,15 +4,14 @@
 #include <memory>
 
 #include <AtlasRes.h>
-#include <Tools.h>
+#include <MathUtils.h>
 
 using namespace flappy;
 using namespace std;
-using namespace Tools;
 
 TEST_CASE( "AtlasRes::addRect() AtlasRes::rect() default") {
     AtlasRes atlas;
-    auto defaultRect = Rect{0.0f,0.0f,1.0f,1.0f};
+    auto defaultRect = MathUtils::Rect{0.0f,0.0f,1.0f,1.0f};
     auto defaultSize = glm::vec2{0.0f, 0.0f};
     auto spriteInfo = atlas.spriteInfo("sprite1");
     REQUIRE(spriteInfo.rectInAtlas == defaultRect);

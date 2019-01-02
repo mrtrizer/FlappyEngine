@@ -8,9 +8,9 @@
 
 namespace flappy {
 
-Box2DBodyManager::Box2DBodyManager(Handle<Hierarchy> hierarchy)
-    : Updatable<Box2DBodyManager>(hierarchy)
-    , m_box2dWorldManager(hierarchy->manager<Box2DWorldManager>())
+Box2DBodyManager::Box2DBodyManager(Handle<Entity> entity)
+    : Updatable<Box2DBodyManager>(entity)
+    , m_box2dWorldManager(entity->hierarchy()->manager<Box2DWorldManager>())
 {
     m_subscription = m_box2dWorldManager->eventBus().subscribe([this](Box2DWorldManager::ScaleChangedEvent) {
         updatePos();

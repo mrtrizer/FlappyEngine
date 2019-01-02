@@ -13,7 +13,7 @@ using namespace std;
 using namespace glm;
 
 TEST_CASE( "MouseInputManager::isMouseDown()") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<EventBus>();
     auto updateManager = hierarchy->initManager<UpdateManager>();
     auto inputManager = hierarchy->initManager<MouseInputManager>();
@@ -26,7 +26,7 @@ TEST_CASE( "MouseInputManager::isMouseDown()") {
 }
 
 TEST_CASE( "MouseInputManager::isMouseUp()") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<EventBus>();
     auto updateManager = hierarchy->initManager<UpdateManager>();
     auto inputManager = hierarchy->initManager<MouseInputManager>();
@@ -39,7 +39,7 @@ TEST_CASE( "MouseInputManager::isMouseUp()") {
 }
 
 TEST_CASE( "MouseInputManager::isMousePressed()") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<UpdateManager>();
     hierarchy->initManager<EventBus>();
     auto inputManager = hierarchy->initManager<MouseInputManager>();
@@ -51,7 +51,7 @@ TEST_CASE( "MouseInputManager::isMousePressed()") {
 }
 
 TEST_CASE( "MouseInputManager::getMousePos()") {
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     hierarchy->initManager<EventBus>();
     hierarchy->initManager<UpdateManager>();
     auto inputManager = hierarchy->initManager<MouseInputManager>();

@@ -12,21 +12,20 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLSpriteRender::GLSpriteRender(Handle<Hierarchy> hierarchy)
-    : GLRender(hierarchy)
+GLSpriteRender::GLSpriteRender(Handle<Entity> entity)
+    : GLRender(entity)
     , m_rect(GL_TRIANGLE_STRIP)
     , m_vertexList{ {-0.5f, -0.5f},
                 {-0.5f, 0.5f},
                 {0.5f, -0.5f},
                 {0.5f, 0.5f} }
-    , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
+    , m_shaderResManager(entity->hierarchy()->manager<ResManager<ShaderRes>>())
 {
     setShader(m_shaderResManager->getRes("texture_shader", ExecType::ASYNC));
 }
     
 void GLSpriteRender::setEntity(Handle<Entity> entity) {
     m_spriteComponent = entity->component<SpriteComponent>();
-    GLRender::setEntity(entity);
 }
     
 void GLSpriteRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {

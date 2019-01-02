@@ -5,8 +5,9 @@
 
 namespace flappy {
 
-Render::Render(Handle<Hierarchy> hierarchy)
-    : m_renderManager(hierarchy->manager<RenderManager>())
+Render::Render(Handle<Entity> entity)
+    : m_renderManager(entity->hierarchy()->manager<RenderManager>())
+    , m_entity(entity)
 {
     m_renderManager->registerRenderElement(selfHandle());
 }

@@ -18,6 +18,12 @@ namespace MathUtils
             , x2(x2)
             , y2(y2)
         {}
+        bool operator==(const Rect& other) const noexcept {
+            return x1 == other.x1
+                && x2 == other.x2
+                && y1 == other.y1
+                && y2 == other.y2;
+        }
         glm::vec2 size() const {return {std::fabs(x2 - x1), std::fabs(y2 - y1)};}
         float x1 = 0.0f;
         float y1 = 0.0f;

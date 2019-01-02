@@ -4,8 +4,8 @@
 
 namespace flappy {
 
-SpriteComponent::SpriteComponent(Handle<Hierarchy> hierarchy)
-    : m_renderElementFactory(hierarchy->manager<RenderElementFactory>())
+SpriteComponent::SpriteComponent(Handle<Entity> entity)
+    : m_renderElementFactory(entity->hierarchy()->manager<RenderElementFactory>())
 {}
     
 void SpriteComponent::setEntity(Handle<Entity> entity) {

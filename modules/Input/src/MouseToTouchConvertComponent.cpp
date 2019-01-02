@@ -7,8 +7,9 @@
 
 namespace flappy {
 
-MouseToTouchConvertComponent::MouseToTouchConvertComponent(Handle<Hierarchy> hierarchy)
+MouseToTouchConvertComponent::MouseToTouchConvertComponent(const Handle<Entity>& entity)
 {
+    auto hierarchy = entity->hierarchy();
     auto eventBus = hierarchy->manager<EventBus>();
     m_mouseDownSubscription = eventBus->subscribe([hierarchy](MouseInputManager::MouseDownEvent e){
         if (e.button == MouseInputManager::MouseButton::LEFT)

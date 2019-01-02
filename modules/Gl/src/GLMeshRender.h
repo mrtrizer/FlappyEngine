@@ -19,7 +19,7 @@ class MeshComponent;
 /// All derived classes have to impmelent getAttribArray().
 class GLMeshRender: public GLRender {
 public:
-    GLMeshRender(Handle<Hierarchy> hierarchy);
+    GLMeshRender(Handle<Entity> entity);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
     void setEntity(Handle<Entity> entity);
 

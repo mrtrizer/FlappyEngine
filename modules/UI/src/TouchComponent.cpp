@@ -7,14 +7,11 @@
 
 namespace flappy {
 
-TouchComponent::TouchComponent(Handle<Hierarchy> hierarchy)
-    : m_uiManager(hierarchy->manager<UIManager>())
+TouchComponent::TouchComponent(Handle<Entity> entity)
+    : m_uiManager(entity->hierarchy()->manager<UIManager>())
+    , m_box2dBodyComponent(entity->component<Box2DBodyManager>())
 {
     m_uiManager->registerTouchComponent(selfHandle());
-}
-    
-void TouchComponent::setEntity(Handle<Entity> entity) {
-    m_box2dBodyComponent = entity->component<Box2DBodyManager>();
 }
     
 TouchComponent::~TouchComponent() {

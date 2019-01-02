@@ -5,13 +5,12 @@
 
 namespace flappy {
 
-MeshComponent::MeshComponent(Handle<Hierarchy> hierarchy)
-    : m_renderElementFactory(hierarchy->manager<RenderElementFactory>())
-    , m_materialResManager(hierarchy->manager<ResManager<MaterialRes>>())
+MeshComponent::MeshComponent(Handle<Entity> entity)
+    : m_renderElementFactory(entity->hierarchy()->manager<RenderElementFactory>())
+    , m_materialResManager(entity->hierarchy()->manager<ResManager<MaterialRes>>())
     , m_materialRes(nullptr)
 {
     m_materialRes = m_materialResManager->getRes("default_material", ExecType::SYNC);
-    
 }
 
 void MeshComponent::setEntity(Handle<Entity> entity) {

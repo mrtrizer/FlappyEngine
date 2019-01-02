@@ -15,10 +15,10 @@ namespace flappy {
 using namespace glm;
 using namespace std;
 
-GLTextRender::GLTextRender(Handle<Hierarchy> hierarchy)
-    : GLRender(hierarchy)
+GLTextRender::GLTextRender(Handle<Entity> entity)
+    : GLRender(entity)
     , m_rect(GL_TRIANGLE_STRIP)
-    , m_shaderResManager(hierarchy->manager<ResManager<ShaderRes>>())
+    , m_shaderResManager(entity->hierarchy()->manager<ResManager<ShaderRes>>())
 {
     setShader(m_shaderResManager->getRes("msdf_shader", ExecType::ASYNC));
 }
@@ -29,7 +29,6 @@ void GLTextRender::setEntity(Handle<Entity> entity) {
     m_subscription = m_textComponent->eventBus().subscribe([this](TextComponent::TextChangedEvent) {
         m_textChanged = true;
     });
-    GLRender::setEntity(entity);
 }
 
 void GLTextRender::draw(const mat4 &pMartrix, const mat4 &mvMatrix) {
