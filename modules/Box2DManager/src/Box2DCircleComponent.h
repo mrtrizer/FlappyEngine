@@ -11,7 +11,7 @@ class Box2DWorldManager;
     
 class Box2DCircleComponent: public Box2DFixtureComponent {
 public:
-    Box2DCircleComponent(Handle<Hierarchy> hierarchy);
+    Box2DCircleComponent(Handle<Entity> entity);
 
     void setRadius(float radius);
     float radius() { return m_radius; }

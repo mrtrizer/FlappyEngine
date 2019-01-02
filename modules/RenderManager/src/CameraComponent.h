@@ -17,10 +17,8 @@ class TransformComponent;
 class [[component]] CameraComponent : public EnableSelfHandle<CameraComponent>
 {
 public:
-    CameraComponent(Handle<Hierarchy> hierarchy);
+    CameraComponent(Handle<Entity> entity);
     
-    void setEntity(Handle<Entity> entity);
-
     void setSize(glm::vec2 size)
     {
         m_height = size.y;

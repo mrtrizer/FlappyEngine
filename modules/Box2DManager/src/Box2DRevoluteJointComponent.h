@@ -8,12 +8,12 @@
 
 namespace flappy {
 
-class Hierarchy;
+class Entity;
 class Box2DBodyManager;
 
 class [[component]] Box2DRevoluteJointComponent: public Box2DJointComponent {
 public:
-    Box2DRevoluteJointComponent(Handle<Hierarchy> hierarchy);
+    Box2DRevoluteJointComponent(Handle<Entity> entity);
     
     void setBodyA(Handle<Box2DBodyManager> bodyA) { m_bodyA = bodyA; update(); }
     Handle<Box2DBodyManager> bodyA() { return m_bodyA; }

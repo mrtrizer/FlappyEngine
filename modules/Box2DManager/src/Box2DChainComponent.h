@@ -8,12 +8,12 @@
 
 namespace flappy {
 
-class Hierarchy;
+class Entity;
 class Box2DWorldManager;
 
 class Box2DChainComponent: public Box2DFixtureComponent {
 public:
-    Box2DChainComponent(Handle<Hierarchy> hierarchy);
+    Box2DChainComponent(Handle<Entity> entity);
 
     void setVertices(const std::vector<glm::vec2>& vertices);
     const std::vector<glm::vec2>& vertices() const { return m_vertices; }

@@ -4,8 +4,8 @@
 
 namespace flappy {
 
-Box2DCircleComponent::Box2DCircleComponent(Handle<Hierarchy> hierarchy)
-    : m_worldManager(hierarchy->manager<Box2DWorldManager>())
+Box2DCircleComponent::Box2DCircleComponent(Handle<Entity> entity)
+    : m_worldManager(entity->hierarchy()->manager<Box2DWorldManager>())
 {}
 
 void Box2DCircleComponent::setRadius(float radius) {

@@ -13,15 +13,12 @@ namespace flappy {
 using namespace std;
 using namespace glm;
 
-CameraComponent::CameraComponent(Handle<Hierarchy> hierarchy)
-    : m_sceneManager(hierarchy->manager<SceneManager>())
-    , m_screenManager(hierarchy->manager<ScreenManager>())
+CameraComponent::CameraComponent(Handle<Entity> entity)
+    : m_sceneManager(entity->hierarchy()->manager<SceneManager>())
+    , m_screenManager(entity->hierarchy()->manager<ScreenManager>())
+    , m_transformComponent(entity->component<TransformComponent>())
 {
     m_sceneManager->setMainCamera(selfHandle());
-}
-    
-void CameraComponent::setEntity(Handle<Entity> entity) {
-    m_transformComponent = entity->component<TransformComponent>();
 }
     
 MathUtils::Rect CameraComponent::rect() const {

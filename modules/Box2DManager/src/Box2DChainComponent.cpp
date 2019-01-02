@@ -5,8 +5,8 @@
 
 namespace flappy {
 
-Box2DChainComponent::Box2DChainComponent(Handle<Hierarchy> hierarchy)
-    : m_worldManager(hierarchy->manager<Box2DWorldManager>())
+Box2DChainComponent::Box2DChainComponent(Handle<Entity> entity)
+    : m_worldManager(entity->hierarchy()->manager<Box2DWorldManager>())
 {}
 
 void Box2DChainComponent::setVertices(const std::vector<glm::vec2>& vertices) {

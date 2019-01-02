@@ -7,9 +7,9 @@
 
 namespace flappy {
 
-Box2DRevoluteJointComponent::Box2DRevoluteJointComponent(Handle<Hierarchy> hierarchy)
-    : Box2DJointComponent(hierarchy)
-    , m_worldManager(hierarchy->manager<Box2DWorldManager>())
+Box2DRevoluteJointComponent::Box2DRevoluteJointComponent(Handle<Entity> entity)
+    : Box2DJointComponent(entity->hierarchy())
+    , m_worldManager(entity->hierarchy()->manager<Box2DWorldManager>())
 {}
     
 bool Box2DRevoluteJointComponent::isValid() {
