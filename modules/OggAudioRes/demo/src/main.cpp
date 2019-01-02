@@ -12,17 +12,20 @@
 #include <Heap.hpp>
 #include <UpdateManager.hpp>
 #include <BasicLoop.hpp>
+#include <BasicLoopManager.hpp>
 
 using namespace flappy;
 
 int main(int, char*[]) {
 
-    auto hierarchy = Heap::create<Hierarchy>();
-    hierarchy->initManager<UpdateManager>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
+    auto updateManager = hierarchy->initManager<UpdateManager>();
+    auto basicLoopManager = hierarchy->initManager<BasicLoopManager>();
     hierarchy->initManager<OpenALManager>();
     hierarchy->initManager<IFileLoadManager, StdFileLoadManager>();
     hierarchy->initManager<IFileMonitorManager, StdFileMonitorManager>();
-    hierarchy->initManager<ResRepositoryManager>("./resources");
+    auto repositoryManager = hierarchy->initManager<ResRepositoryManager>();
+    repositoryManager->setRepositoryPath("./resources");
     hierarchy->initManager<ResFactory<OpenALAudioRes>, OggAudioResFactory>();
     auto audioResManager = hierarchy->initManager<ResManager<OpenALAudioRes>>();
     auto listenerEntity = hierarchy->rootEntity()->createEntity();
@@ -36,5 +39,7 @@ int main(int, char*[]) {
     source->setGain(0.5f);
     source->setLooping(true);
 
-    return BasicLoop(30, hierarchy).run();
+    return BasicLoop(30, basicLoopManager).run([&updateManager](DeltaTime dt) {
+        updateManager->update(dt);
+    });
 }

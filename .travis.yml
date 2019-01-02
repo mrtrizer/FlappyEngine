@@ -72,6 +72,14 @@ script:
  - spirv-cross ./texture_shader_frag.spv --hlsl
  - popd
 
+#Unit tests
+ - pushd tests
+ - flappy build cmake
+ - pushd generated/cmake/build
+ - ./tests
+ - popd
+ - popd
+
 #OggAudioRes build
  - pushd modules/OggAudioRes/demo
  - flappy build cmake
@@ -80,14 +88,6 @@ script:
 #Sdl2Manager build
  - pushd modules/Sdl2Manager/demo
  - flappy build cmake
- - popd
-
-#Unit tests
- - pushd tests
- - flappy build cmake
- - pushd generated/cmake/build
- - ./tests
- - popd
  - popd
 
 #Box2DManager tests
