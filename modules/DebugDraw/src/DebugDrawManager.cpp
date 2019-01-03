@@ -2,8 +2,6 @@
 
 #include <RenderElementFactory.h>
 #include <RenderUtils.h>
-#include <Tools.h>
-#include <Entity.h>
 #include <MeshComponent.h>
 #include <TransformComponent.h>
 #include <ResManager.h>
@@ -11,39 +9,18 @@
 #include <ShaderRes.h>
 #include <IGLManager.h>
 #include <RenderManager.h>
+#include <DebugServices.h>
 
 namespace flappy {
 
 DebugDrawManager::DebugDrawManager(Handle<Hierarchy> hierarchy)
-{
-    addDependency(RenderElementFactory::id());
-    addDependency(ResManager<MaterialRes>::id());
-    addDependency(ResManager<ShaderRes>::id());
-    addDependency(IGLManager::id());
-    addDependency(RenderManager::id());
+    : Updatable<DebugDrawManager>(hierarchy)
+    , m_hierarchy(hierarchy)
+{}
 
-    subscribe([this](InitEvent) {
-        for (auto pair : m_debugDrawItems) {
-            sendEvents<ManagerAddedEvent>(pair.second.entity);
-        }
-        for (auto item : m_noNameDebugDrawItems){
-            sendEvents<ManagerAddedEvent>(item.entity);
-        }
-    });
-
-    subscribe([this](DeinitEvent) {
-        for (auto pair : m_debugDrawItems) {
-            sendEvents<ManagerRemovedEvent>(pair.second.entity);
-        }
-        for (auto item : m_noNameDebugDrawItems){
-            sendEvents<ManagerRemovedEvent>(item.entity);
-        }
-    });
-
-    subscribe([this](UpdateEvent e) {
-        m_currentTime += e.dt;
-        cleanUp();
-    });
+void DebugDrawManager::update(DeltaTime dt) {
+    m_currentTime += dt;
+    cleanUp();
 }
 
 void DebugDrawManager::cleanUp() {
@@ -60,22 +37,19 @@ void DebugDrawManager::cleanUp() {
 }
 
 void DebugDrawManager::drawPolygon(std::vector<glm::vec3> vertices, float liveTimeSec, std::string name) {
-    auto meshEntity = std::make_shared<Entity>();
+    auto meshEntity = m_hierarchy->rootEntity()->createEntity();
     auto mesh = meshEntity->component<MeshComponent>();
     mesh->setVertices(vertices);
-    auto material = manager<ResManager<MaterialRes>>()->getRes("wireframe_material", ExecType::ASYNC);
+    auto material = m_hierarchy->manager<ResManager<MaterialRes>>()->getRes("wireframe_material", ExecType::ASYNC);
     mesh->setMaterialRes(material);
 
-    if (isInitialized()) {
-        sendEvents<ManagerAddedEvent>(meshEntity);
-    }
     if (name.empty())
         m_noNameDebugDrawItems.push_back({meshEntity, m_currentTime + liveTimeSec});
     else
         m_debugDrawItems.emplace(name, DebugDrawItem{meshEntity, liveTimeSec});
 }
 
-void DebugDrawManager::drawRect(Tools::Rect rect, float liveTimeSec, std::string name) {
+void DebugDrawManager::drawRect(MathUtils::Rect rect, float liveTimeSec, std::string name) {
     std::vector<glm::vec3> vertices = {
         {rect.x1, rect.y1, 0.0f},
         {rect.x2, rect.y1, 0.0f},
@@ -117,15 +91,6 @@ void DebugDrawManager::drawLine(glm::vec3 from, glm::vec3 to, float liveTimeSec,
 
 void DebugDrawManager::drawText(glm::vec3, std::string, float, std::string) {
     LOGE("DebugDrawManager::drawText is not implemented yet");
-}
-
-template<typename EventT>
-void DebugDrawManager::sendEvents(SafePtr<Entity> entity) {
-    entity->events()->post(EventT(manager<RenderElementFactory>()));
-    entity->events()->post(EventT(manager<ResManager<MaterialRes>>()));
-    entity->events()->post(EventT(manager<ResManager<ShaderRes>>()));
-    entity->events()->post(EventT(manager<IGLManager>()));
-    entity->events()->post(EventT(manager<RenderManager>()));
 }
 
 } // flappy

@@ -6,15 +6,18 @@
 #include <glm/glm.hpp>
 
 #include <Handle.hpp>
-#include <MathUtils.hpp>
+#include <MathUtils.h>
+#include <Updatable.hpp>
 
 namespace flappy {
 
 class Hierarchy;
+class Entity;
 
-class [[manager]] DebugDrawManager {
+class [[manager]] DebugDrawManager : public Updatable<DebugDrawManager> {
 public:
     DebugDrawManager(Handle<Hierarchy> hierarchy);
+    void update(DeltaTime dt);
 
     void drawPolygon(std::vector<glm::vec3>, float liveTimeSec = 0.0f, std::string name = "");
     void drawRect(MathUtils::Rect rect, float liveTimeSec = 0.0f, std::string name = "");
@@ -24,18 +27,16 @@ public:
 
 private:
     struct DebugDrawItem {
-        std::shared_ptr<Entity> entity;
+        Handle<Entity> entity;
         float destroyTime = 0.0f;
     };
 
+    Handle<Hierarchy> m_hierarchy;
     float m_currentTime = 0.0f;
     std::unordered_map<std::string, DebugDrawItem> m_debugDrawItems;
     std::list<DebugDrawItem> m_noNameDebugDrawItems;
 
     void cleanUp();
-
-    template<typename EventT>
-    void sendEvents(SafePtr<Entity>);
 };
 
 } // flappy
