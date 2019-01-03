@@ -39,7 +39,7 @@
         }
     ],
     "cxx":{
-        "flags":["-g", "-O0"],
+        "+flags":["-g", "-O0"],
         "flags_gnu":["-fprofile-arcs", "-ftest-coverage"],
         "flags_clang":["-fcoverage-mapping", "-fprofile-instr-generate"],
         "link_flags_clang":["-all_load", "-fprofile-instr-generate"],
