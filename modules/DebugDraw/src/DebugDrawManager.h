@@ -5,18 +5,19 @@
 
 #include <glm/glm.hpp>
 
-#include <Manager.h>
-
-#include "Tools.h"
+#include <Handle.hpp>
+#include <MathUtils.hpp>
 
 namespace flappy {
 
-class DebugDrawManager : public Manager<DebugDrawManager> {
+class Hierarchy;
+
+class [[manager]] DebugDrawManager {
 public:
-    DebugDrawManager();
+    DebugDrawManager(Handle<Hierarchy> hierarchy);
 
     void drawPolygon(std::vector<glm::vec3>, float liveTimeSec = 0.0f, std::string name = "");
-    void drawRect(Tools::Rect rect, float liveTimeSec = 0.0f, std::string name = "");
+    void drawRect(MathUtils::Rect rect, float liveTimeSec = 0.0f, std::string name = "");
     void drawCircle(glm::vec3 pos, int radius, float liveTimeSec = 0.0f, std::string name = "");
     void drawLine(glm::vec3 from, glm::vec3 to, float liveTimeSec = 0.0f, std::string name = "");
     void drawText(glm::vec3, std::string, float = 0.0f, std::string = "");

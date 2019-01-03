@@ -39,7 +39,10 @@
         }
     ],
     "cxx":{
-        "link_flags_clang":["-all_load"],
+        "flags":["-g", "-O0"],
+        "flags_gnu":["-fprofile-arcs", "-ftest-coverage"],
+        "flags_clang":["-fcoverage-mapping", "-fprofile-instr-generate"],
+        "link_flags_clang":["-all_load", "-fprofile-instr-generate"],
         "link_flags_gnu":["-whole-archive"],
         "link_flags_msvc":["/WHOLEARCHIVE"],
         "header_dirs": [

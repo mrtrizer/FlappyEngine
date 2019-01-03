@@ -69,6 +69,7 @@ script:
  - flappy build cmake
  - pushd generated/cmake/build
  - ./tests
+ - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
  - popd
  - popd
 

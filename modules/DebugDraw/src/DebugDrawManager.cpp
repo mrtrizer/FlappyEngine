@@ -14,7 +14,7 @@
 
 namespace flappy {
 
-DebugDrawManager::DebugDrawManager()
+DebugDrawManager::DebugDrawManager(Handle<Hierarchy> hierarchy)
 {
     addDependency(RenderElementFactory::id());
     addDependency(ResManager<MaterialRes>::id());

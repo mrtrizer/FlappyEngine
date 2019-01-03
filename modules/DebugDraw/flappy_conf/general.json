@@ -11,9 +11,6 @@
             "path":"../CoreResources"
         },
         {
-            "path":"../CoreComponents"
-        },
-        {
             "path":"../Sdl2Manager"
         }
     ],

@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     const glm::uvec2 screenSize {600, 600};
     
     // Sdl2 and render
-    auto hierarchy = Heap::create<Hierarchy>();
+    auto hierarchy = Heap::create<Hierarchy>(Heap::memoryManager());
     auto rootEntity = hierarchy->rootEntity();
     hierarchy->initManager<UpdateManager>();
     auto screenManager = hierarchy->initManager<ScreenManager>();
