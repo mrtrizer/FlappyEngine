@@ -43,7 +43,7 @@
         "flags_gnu":["-fprofile-arcs", "-ftest-coverage"],
         "flags_clang":["-fcoverage-mapping", "-fprofile-instr-generate"],
         "link_flags_clang":["-all_load", "-fprofile-instr-generate"],
-        "link_flags_gnu":["-whole-archive"],
+        "link_flags_gnu":["-Wl,-Ur"],
         "link_flags_msvc":["/WHOLEARCHIVE"],
         "header_dirs": [
             "./src"
