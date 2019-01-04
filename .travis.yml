@@ -21,8 +21,8 @@ before_install:
  - sudo apt-get install ninja-build
  - sudo apt-get install -y ccache
  - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
- - sudo apt-get install -qq gcc-6 g++-6 nodejs
- - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+ - sudo apt-get install -qq gcc-8 g++-8 nodejs
+ - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
  - git submodule update --init --recursive
  - git clone https://github.com/mrtrizer/FlappyTools2.git flappytools
  - pushd flappytools
