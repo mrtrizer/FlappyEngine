@@ -12,9 +12,7 @@
         }
     ],
     "cxx":{
-        "flags": [
-            "-std=c++14"
-        ],
+        "type": "executable",
         "header_dirs": [
             "./src",
 	        "^/GeneratedReflection"

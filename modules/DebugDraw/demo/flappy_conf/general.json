@@ -13,6 +13,7 @@
 
     ],
     "cxx":{
+        "type": "executable",
         "header_dirs": [
             "./src"
         ],

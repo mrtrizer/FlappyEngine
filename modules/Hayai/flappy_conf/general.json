@@ -4,6 +4,7 @@
     "modules": [
     ],
     "cxx":{
+        "type": "static_lib",
         "header_dirs": [
             "./lib/hayai-1.0.2/src",
             "./src"

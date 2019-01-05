@@ -1,6 +1,7 @@
 {
     "name":"Json",
     "cxx":{
+        "type": "static_lib",
         "header_dirs": [
             "./src",
             "./libs"

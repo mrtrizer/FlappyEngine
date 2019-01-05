@@ -15,6 +15,7 @@
         "res_src"
     ],
     "cxx":{
+        "type": "static_lib",
         "flags": [
             "-std=c++1y"
         ],

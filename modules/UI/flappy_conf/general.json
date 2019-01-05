@@ -15,6 +15,7 @@
         }
     ],
     "cxx":{
+        "type": "static_lib",
         "header_dirs": [
             "./src"
         ],

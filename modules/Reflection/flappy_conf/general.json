@@ -6,6 +6,7 @@
         }
     ],
     "cxx":{
+        "type": "static_lib",
         "flags": ["--std=c++17"],
         "flags_msvc": ["/std:c++17"],
         "header_dirs": [

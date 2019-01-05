@@ -37,19 +37,5 @@
         {
             "path":"../modules/UI/tests"
         }
-    ],
-    "cxx":{
-        "+flags":["-g", "-O0", "-Wno-unknown-attributes", "-Wno-attributes"],
-        "flags_gnu":["-fprofile-arcs", "-ftest-coverage"],
-        "flags_clang":["-fcoverage-mapping", "-fprofile-instr-generate"],
-        "link_flags_clang":["-all_load", "-fprofile-instr-generate"],
-        "link_flags_gnu":["-Wl,-Ur"],
-        "link_flags_msvc":["/WHOLEARCHIVE"],
-        "header_dirs": [
-            "./src"
-        ],
-        "src_dirs": [
-            "./src"
-        ]
-    }
+    ]
 }

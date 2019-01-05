@@ -9,6 +9,7 @@
         }
     ],
     "cxx":{
+        "type": "executable",
         "flags": ["--std=c++17"],
         "header_dirs": [
             "./src"
