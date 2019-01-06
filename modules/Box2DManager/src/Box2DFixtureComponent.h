@@ -10,7 +10,7 @@
 
 namespace flappy {
 
-class Box2DBodyManager;
+class Box2DBodyComponent;
 class Entity;
     
 class [[component]] Box2DFixtureComponent
@@ -26,8 +26,8 @@ public:
     
     struct ContactEndEvent : public ContactEvent {};
     
-    void setBodyComponent(Handle<Box2DBodyManager> body);
-    void resetBodyComponent(Handle<Box2DBodyManager> body);
+    void setBodyComponent(Handle<Box2DBodyComponent> body);
+    void resetBodyComponent(Handle<Box2DBodyComponent> body);
     
     void setEntity(Handle<Entity> entity);
     ~Box2DFixtureComponent();
@@ -62,10 +62,10 @@ protected:
     void setShape(std::shared_ptr<b2Shape> shape);
 
 private:
-    void deinitFixture(Handle<Box2DBodyManager> body);
-    void initFixture(Handle<Box2DBodyManager> body, std::shared_ptr<b2Shape> shape);
+    void deinitFixture(Handle<Box2DBodyComponent> body);
+    void initFixture(Handle<Box2DBodyComponent> body, std::shared_ptr<b2Shape> shape);
 
-    Handle<Box2DBodyManager> m_box2dBodyComponent;
+    Handle<Box2DBodyComponent> m_box2dBodyComponent;
     std::shared_ptr<b2Shape> m_shape;
 
     EventBus m_eventBus;

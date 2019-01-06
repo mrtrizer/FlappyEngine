@@ -1,7 +1,7 @@
 #include "TouchComponent.h"
 
 #include <Hierarchy.hpp>
-#include <Box2DBodyManager.h>
+#include <Box2DBodyComponent.h>
 
 #include "UIManager.h"
 
@@ -9,7 +9,7 @@ namespace flappy {
 
 TouchComponent::TouchComponent(Handle<Entity> entity)
     : m_uiManager(entity->hierarchy()->manager<UIManager>())
-    , m_box2dBodyComponent(entity->component<Box2DBodyManager>())
+    , m_box2dBodyComponent(entity->component<Box2DBodyComponent>())
 {
     m_uiManager->registerTouchComponent(selfHandle());
 }

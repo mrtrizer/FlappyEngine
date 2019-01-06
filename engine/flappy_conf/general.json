@@ -1,0 +1,20 @@
+{
+    "name":"tests",
+    "modules": [
+        {
+            "path":"../tests"
+        },
+        {
+            "path":"../modules/Box2DManager/demo"
+        },
+        {
+            "path":"../modules/DebugDraw/demo"
+        },
+        {
+            "path":"../modules/Sdl2Manager/demo"
+        },
+        {
+            "path":"../modules/OggAudioRes/demo"
+        }
+    ]
+}

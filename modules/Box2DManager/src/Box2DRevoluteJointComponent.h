@@ -9,17 +9,17 @@
 namespace flappy {
 
 class Entity;
-class Box2DBodyManager;
+class Box2DBodyComponent;
 
 class [[component]] Box2DRevoluteJointComponent: public Box2DJointComponent {
 public:
     Box2DRevoluteJointComponent(Handle<Entity> entity);
     
-    void setBodyA(Handle<Box2DBodyManager> bodyA) { m_bodyA = bodyA; update(); }
-    Handle<Box2DBodyManager> bodyA() { return m_bodyA; }
+    void setBodyA(Handle<Box2DBodyComponent> bodyA) { m_bodyA = bodyA; update(); }
+    Handle<Box2DBodyComponent> bodyA() { return m_bodyA; }
 
-    void setBodyB(Handle<Box2DBodyManager> bodyB) { m_bodyB = bodyB; update(); }
-    Handle<Box2DBodyManager> bodyB() { return m_bodyB; }
+    void setBodyB(Handle<Box2DBodyComponent> bodyB) { m_bodyB = bodyB; update(); }
+    Handle<Box2DBodyComponent> bodyB() { return m_bodyB; }
 
     glm::vec2 localAnchorA() { return m_localAnchorA; }
     void setLocalAnchorA(const glm::vec2& localAnchorA) { m_localAnchorA = localAnchorA; update(); }
@@ -50,8 +50,8 @@ public:
 
 private:
     Handle<Box2DWorldManager> m_worldManager;
-    Handle<Box2DBodyManager> m_bodyA;
-    Handle<Box2DBodyManager> m_bodyB;
+    Handle<Box2DBodyComponent> m_bodyA;
+    Handle<Box2DBodyComponent> m_bodyB;
     glm::vec2 m_localAnchorA;
     glm::vec2 m_localAnchorB;
     float m_referenceAngle = 0.0f;

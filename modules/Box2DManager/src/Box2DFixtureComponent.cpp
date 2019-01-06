@@ -1,13 +1,13 @@
 #include "Box2DFixtureComponent.h"
 
-#include "Box2DBodyManager.h"
+#include "Box2DBodyComponent.h"
 #include "Box2DFixtureComponent.h"
 
 namespace flappy {
 
 void Box2DFixtureComponent::setEntity(Handle<Entity> entity) {
     while (entity != nullptr) {
-        auto body = entity->findComponent<Box2DBodyManager>();
+        auto body = entity->findComponent<Box2DBodyComponent>();
         if (body != nullptr) {
             m_box2dBodyComponent = body;
             break;
@@ -16,12 +16,12 @@ void Box2DFixtureComponent::setEntity(Handle<Entity> entity) {
     }
 }
     
-void Box2DFixtureComponent::setBodyComponent(Handle<Box2DBodyManager> body) {
+void Box2DFixtureComponent::setBodyComponent(Handle<Box2DBodyComponent> body) {
     m_box2dBodyComponent = body;
     initFixture(body, m_shape);
 }
 
-void Box2DFixtureComponent::resetBodyComponent(Handle<Box2DBodyManager> body) {
+void Box2DFixtureComponent::resetBodyComponent(Handle<Box2DBodyComponent> body) {
     m_box2dBodyComponent = nullptr;
     deinitFixture(body);
 }
@@ -55,13 +55,13 @@ void Box2DFixtureComponent::handleContact(b2Contact* contact,
     
 }
     
-void Box2DFixtureComponent::deinitFixture(Handle<Box2DBodyManager> body) {
+void Box2DFixtureComponent::deinitFixture(Handle<Box2DBodyComponent> body) {
     if (body != nullptr && m_fixture != nullptr) {
         body->destroyFixture(m_fixture);
     }
 }
 
-void Box2DFixtureComponent::initFixture(Handle<Box2DBodyManager> body, std::shared_ptr<b2Shape> shape) {
+void Box2DFixtureComponent::initFixture(Handle<Box2DBodyComponent> body, std::shared_ptr<b2Shape> shape) {
     if (body == nullptr)
         return;
     

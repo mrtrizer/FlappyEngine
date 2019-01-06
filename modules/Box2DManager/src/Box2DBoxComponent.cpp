@@ -1,6 +1,6 @@
 #include "Box2DBoxComponent.h"
 
-#include "Box2DBodyManager.h"
+#include "Box2DBodyComponent.h"
 #include "Box2DWorldManager.h"
 
 namespace flappy {

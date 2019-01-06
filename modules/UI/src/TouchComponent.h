@@ -13,7 +13,7 @@
 namespace flappy
 {
 class Entity;
-class Box2DBodyManager;
+class Box2DBodyComponent;
 class UIManager;
 class Hierarchy;
 
@@ -52,7 +52,7 @@ public:
     
 private:
     Handle<UIManager> m_uiManager;
-    Handle<Box2DBodyManager> m_box2dBodyComponent;
+    Handle<Box2DBodyComponent> m_box2dBodyComponent;
     EventBus m_eventBus;
 };
 

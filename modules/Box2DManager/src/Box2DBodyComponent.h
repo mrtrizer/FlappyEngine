@@ -15,13 +15,13 @@ class Hierarchy;
 class Box2DWorldManager;
 class TransformComponent;
 
-class [[component]] Box2DBodyManager
-    : public Updatable<Box2DBodyManager>
-    , public EnableSelfHandle<Box2DBodyManager> {
+class [[component]] Box2DBodyComponent
+    : public Updatable<Box2DBodyComponent>
+    , public EnableSelfHandle<Box2DBodyComponent> {
 public:
-    Box2DBodyManager(Handle<Entity> entity);
+    Box2DBodyComponent(Handle<Entity> entity);
     void setEntity(Handle<Entity> entity);
-    ~Box2DBodyManager();
+    ~Box2DBodyComponent();
 
     void update(DeltaTime dt);
     
