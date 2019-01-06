@@ -28,14 +28,12 @@ sudo apt-get install libvorbis-dev libopenal-dev
 sudo apt-get install libglew-dev mesa-common-dev freeglut3-dev libxi-dev
 sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential
 ```
-2. Install llvm 5.0 + clang 5.0 and libv8 5.2
+2. Install llvm 5.0 + clang 5.0
 ```
 sudo add-apt-repository ppa:jonathonf/llvm
-sudo add-apt-repository ppa:pinepain/libv8-archived
 sudo apt-get update
 sudo apt-get install llvm-5.0-dev
 sudo apt-get install clang-5.0-dev
-sudo apt-get install libv8-5.2-dev
 ```
 3. Make sure that you have gcc-8 and g++-8 libs installed. If you have previous version, update it:
 ```
@@ -48,7 +46,7 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /u
 ## OS X
 1. Install glew and libvorbis using brew. `brew install glew libvorbis`
 
-2. Install v8 5.1 (optional, if going to code js) and llvm 5.0 using brew. `brew install v8 llvm`
+2. llvm 5.0 using brew. `brew install llvm`
 
 3. Install libraries for font generation and image processing `brew install pkg-config cairo libpng jpeg giflib graphicsmagick`
 
