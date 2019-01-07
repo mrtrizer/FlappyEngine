@@ -7,7 +7,7 @@
 
 namespace flappy {
 
-class StdFileMonitorManager: public IFileMonitorManager
+class REFLECT StdFileMonitorManager: public IFileMonitorManager
 {
 public:
     void registerFile(std::string path) override;

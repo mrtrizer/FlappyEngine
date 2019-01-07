@@ -12,7 +12,7 @@ namespace flappy {
 class Hierarchy;
 class Box2DWorldManager;
 
-class [[component]] Box2DJointComponent {
+class REFLECT Box2DJointComponent {
 public:
     Box2DJointComponent(Handle<Hierarchy> hierarchy);
     ~Box2DJointComponent();

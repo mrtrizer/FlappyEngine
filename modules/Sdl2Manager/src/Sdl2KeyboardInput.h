@@ -10,7 +10,7 @@ class Hierarchy;
 class Sdl2Manager;
 class KeyboardInputManager;
     
-class [[manager]] Sdl2KeyboardInput
+class REFLECT Sdl2KeyboardInput
 {
 public:
     Sdl2KeyboardInput(Handle<Hierarchy> hierarchy);

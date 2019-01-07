@@ -4,12 +4,13 @@
 #include <sstream>
 
 #include <IFileLoadManager.h>
+#include <ReflectionMarkers.hpp>
 
 namespace flappy {
 
 class TextRes;
 
-class StdFileLoadManager: public IFileLoadManager {
+class REFLECT StdFileLoadManager: public IFileLoadManager {
 public:
     std::string loadTextFile(const std::string& filePath) final;
 };

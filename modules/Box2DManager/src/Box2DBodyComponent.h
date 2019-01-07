@@ -15,59 +15,60 @@ class Hierarchy;
 class Box2DWorldManager;
 class TransformComponent;
 
-class [[component]] Box2DBodyComponent
+class REFLECT Box2DBodyComponent
     : public Updatable<Box2DBodyComponent>
     , public EnableSelfHandle<Box2DBodyComponent> {
 public:
     Box2DBodyComponent(Handle<Entity> entity);
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     ~Box2DBodyComponent();
 
     void update(DeltaTime dt);
     
     b2Body* body() { return m_body; }
 
-    void setMass(float mass);
+    PROP void setMass(float mass);
+    PROP float mass() { return m_mass; }
 
-    void setLinearDamping(float linearDamping);
-    float linearDamping() { return m_linearDamping; }
+    PROP void setLinearDamping(float linearDamping);
+    PROP float linearDamping() { return m_linearDamping; }
 
-    void setLinearVelocity(glm::vec2 linearVelocity);
-    glm::vec2 linearVelocity() { return m_linearVelocity; }
+    PROP void setLinearVelocity(glm::vec2 linearVelocity);
+    PROP glm::vec2 linearVelocity() { return m_linearVelocity; }
 
-    void setType(b2BodyType type);
-    b2BodyType type() { return m_type; }
+    PROP void setType(b2BodyType type);
+    PROP b2BodyType type() { return m_type; }
 
-    void setBullet(bool bullet);
-    bool bullet() { return m_bullet; }
+    PROP void setBullet(bool bullet);
+    PROP bool bullet() { return m_bullet; }
 
-    void setAwake(bool awake);
-    bool awake() { return m_awake; }
+    PROP void setAwake(bool awake);
+    PROP bool awake() { return m_awake; }
 
-    void setAngularDamping(float angularDamping);
-    float angularDamping() { return m_angularDamping; }
+    PROP void setAngularDamping(float angularDamping);
+    PROP float angularDamping() { return m_angularDamping; }
 
-    void setAngularVelocity(float angularVelocity);
-    float angularVelocity() { return m_angularVelocity; }
+    PROP void setAngularVelocity(float angularVelocity);
+    PROP float angularVelocity() { return m_angularVelocity; }
 
-    void setGravityScale(float gravityScale);
-    float gravityScale() { return m_gravityScale; }
+    PROP void setGravityScale(float gravityScale);
+    PROP float gravityScale() { return m_gravityScale; }
 
-    void setSleepingAllowed(bool sleepingAllowed);
-    bool sleepingAllowed() { return m_sleepingAllowed; }
+    PROP void setSleepingAllowed(bool sleepingAllowed);
+    PROP bool sleepingAllowed() { return m_sleepingAllowed; }
 
-    void setFixedRotation(bool fixedRotation);
-    bool fixedRotation() { return m_fixedRotation; }
+    PROP void setFixedRotation(bool fixedRotation);
+    PROP bool fixedRotation() { return m_fixedRotation; }
 
     void destroyFixture(b2Fixture *fixture);
     b2Fixture* createFixture(const b2FixtureDef* def);
 
     bool testPoint(glm::vec2 point);
 
-    void applyForce(glm::vec2 force, glm::vec2 point);
-    void applyTorque(float torque);
-    void applyLinearImulse(glm::vec2 impulse, glm::vec2 point);
-    void applyAngularImpulse(float impulse);
+    FUNC void applyForce(glm::vec2 force, glm::vec2 point);
+    FUNC void applyTorque(float torque);
+    FUNC void applyLinearImulse(glm::vec2 impulse, glm::vec2 point);
+    FUNC void applyAngularImpulse(float impulse);
 
 private:
     Handle<Box2DWorldManager> m_box2dWorldManager;

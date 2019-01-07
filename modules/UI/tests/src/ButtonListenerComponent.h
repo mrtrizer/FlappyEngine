@@ -3,7 +3,7 @@
 #include <TouchComponent.h>
 #include <Handle.hpp>
 
-class [[component]] ButtonListenerComponent
+class REFLECT ButtonListenerComponent
 {
 public:
     class IMock
@@ -18,7 +18,7 @@ public:
         m_mockComponent = mockComponent;
     }
     
-    void setEntity(flappy::Handle<flappy::Entity> entity)
+    void addedToEntity(flappy::Handle<flappy::Entity> entity)
     {
         auto touchComponent = entity->component<flappy::TouchComponent>();
         m_touchDownSubscription = touchComponent->eventBus().subscribe(

@@ -11,7 +11,7 @@ class IGLManager;
 
 /// Render implementation for work with OpenGL.
 /// Definitly supports GLES 2.0 (Android) and OpenGL 4.5.
-class [[manager]] GLRenderManager : public RenderManager {
+class REFLECT GLRenderManager : public RenderManager {
 public:
     GLRenderManager(Handle<Hierarchy> hierarchy);
     virtual ~GLRenderManager() = default;

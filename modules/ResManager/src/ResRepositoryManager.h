@@ -19,7 +19,7 @@ class IResFactory;
 class IFileMonitorManager;
 class IFileLoadManager;
 
-class [[manager]] ResRepositoryManager : public Updatable<ResRepositoryManager>
+class REFLECT ResRepositoryManager : public Updatable<ResRepositoryManager>
 {
 public:
     ResRepositoryManager(Handle<Hierarchy> hierarchy);

@@ -13,7 +13,7 @@ namespace flappy {
 class Box2DBodyComponent;
 class Entity;
     
-class [[component]] Box2DFixtureComponent
+class REFLECT Box2DFixtureComponent
     : public EnableSelfHandle<Box2DFixtureComponent>
 {
 public:
@@ -29,7 +29,7 @@ public:
     void setBodyComponent(Handle<Box2DBodyComponent> body);
     void resetBodyComponent(Handle<Box2DBodyComponent> body);
     
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     ~Box2DFixtureComponent();
 
     float friction() const { return m_friction; }

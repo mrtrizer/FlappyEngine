@@ -13,7 +13,7 @@ namespace flappy
 {
     class EventBus;
     
-    class [[manager]] KeyboardInputManager : public Updatable<KeyboardInputManager>
+    class REFLECT KeyboardInputManager : public Updatable<KeyboardInputManager>
     {
     public:
         struct KeyDownEvent: public IEvent {

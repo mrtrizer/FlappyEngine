@@ -56,7 +56,7 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
     snprintf(output.data(), output.size(),
             "#include <Type.hpp>\n"
             "#include <BasicTypesReflection.hpp>\n"
-            "#include <%s.h>\n"
+            "#include \"AllHeaders.hpp\"\n"
             "\n"
             "namespace flappy {\n"
             "void register%s(Reflection& reflection) {\n"
@@ -66,7 +66,6 @@ std::string generateWrapperCpp(std::string className, GeneratedMethods generated
             "} \n"
             "\n"
             "",
-            className.c_str(),
             className.c_str(),
             className.c_str(),
             className.c_str(),
@@ -100,9 +99,34 @@ public :
 
     virtual void run(const MatchFinder::MatchResult &result) {
         if (const CXXRecordDecl *classDecl = result.Nodes.getNodeAs<clang::CXXRecordDecl>("classes")) {
+        
             auto className = classDecl->getNameAsString();
-            if ((className == "Component") || (className== "Manager") || (className == "JSComponent"))
+        
+            if(!classDecl->hasAttrs())
                 return;
+            
+            clang::AttrVec vec = classDecl->getAttrs();
+
+            if (strcmp(vec[0]->getSpelling(), "annotate") != 0)
+                return;
+            
+            
+            SourceLocation startLoc = vec[0]->getRange().getBegin();
+            SourceLocation endLoc = vec[0]->getRange().getEnd();
+  
+            std::cout << "isMacroID: " << startLoc.isMacroID() << std::endl;
+
+            if( startLoc.isMacroID() ) {
+                startLoc = result.SourceManager->getImmediateSpellingLoc( startLoc );
+                endLoc = result.SourceManager->getImmediateSpellingLoc( endLoc );
+            }
+            
+            auto tokenRange = CharSourceRange::getCharRange(startLoc, endLoc);
+            auto annotateValue = Lexer::getSourceText(tokenRange, *result.SourceManager, result.Context->getLangOpts()).str();
+            std::cout << className << " : " << vec[0]->getSpelling() << " : " << annotateValue << std::endl;
+            if (annotateValue != "annotate(\"reflect\"")
+                return;
+        
             if (classDecl->getDescribedClassTemplate() != nullptr) {
                 std::cout << "Skip template class " << classDecl->getNameAsString() << std::endl;
                 return;
@@ -162,7 +186,7 @@ int main(int argc, const char **argv) {
     ClangTool tool(optionsParser.getCompilations(), optionsParser.getSourcePathList());
 
     MatchFinder finder;
-    auto methodMatcher = cxxRecordDecl(isClass(), isDefinition(), matchesName(".*(Component|Manager)$")).bind("classes");
+    auto methodMatcher = cxxRecordDecl(isClass(), isDefinition()).bind("classes");
     ClassHandler printer(outputPath.getValue() + "/../Tmp");
     finder.addMatcher(methodMatcher, &printer);
 

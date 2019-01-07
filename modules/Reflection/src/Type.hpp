@@ -43,7 +43,7 @@ public:
     template <typename ResultT, typename ... ArgT>
     Type& addConstructor() {
         m_constructors.emplace_back(Constructor {
-            Function(m_reflection, static_cast<ResultT (*) (ArgT...)>([](ArgT...args) { return ResultT(args...); }) ),
+            Function(m_reflection, static_cast<Value (*) (ArgT...)>([](ArgT...args) { return Value(new ResultT(args...), getTypeId<ResultT>()); }) ),
             Function(m_reflection, static_cast<ResultT* (*) (ArgT...)>([](ArgT...args) { return new ResultT(args...); }) ),
             Function(m_reflection, static_cast<void (*) (void*, ArgT...)>([](void* ptr, ArgT...args) { new(ptr) ResultT(args...); }) )});
         return *this;

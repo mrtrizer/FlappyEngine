@@ -18,7 +18,7 @@ class GLTextRender : public GLRender
 {
 public:
     GLTextRender(Handle<Entity> entity);
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     void draw(const glm::mat4 & pMartrix, const glm::mat4 & mvMatrix) final;
 
 private:

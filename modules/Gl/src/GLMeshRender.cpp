@@ -22,7 +22,7 @@ GLMeshRender::GLMeshRender(Handle<Entity> entity)
     , m_attribArray(GL_TRIANGLE_STRIP)
 {}
     
-void GLMeshRender::setEntity(Handle<Entity> entity) {
+void GLMeshRender::addedToEntity(Handle<Entity> entity) {
     auto meshComponent = m_meshComponent = entity->component<MeshComponent>();
     m_attribArray = genAttribArray();
     m_subscription = meshComponent->eventBus().subscribe([this](MeshComponent::MeshChangedEvent) {

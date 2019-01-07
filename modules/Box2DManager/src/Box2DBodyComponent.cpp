@@ -17,7 +17,7 @@ Box2DBodyComponent::Box2DBodyComponent(Handle<Entity> entity)
     });
 }
 
-void Box2DBodyComponent::setEntity(Handle<Entity> entity) {
+void Box2DBodyComponent::addedToEntity(Handle<Entity> entity) {
     auto transform = m_transformComponent = entity->component<TransformComponent>();
 
     b2BodyDef bodyDef;

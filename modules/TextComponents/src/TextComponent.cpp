@@ -10,7 +10,7 @@ TextComponent::TextComponent(Handle<Entity> entity)
     , m_fontResManager(entity->hierarchy()->manager<ResManager<FontRes>>())
 {}
     
-void TextComponent::setEntity(Handle<Entity> entity) {
+void TextComponent::addedToEntity(Handle<Entity> entity) {
     m_entity = entity;
     m_renderElement = m_renderElementFactory->createTextRender(entity);
     if (!m_fontResPath.empty()) {

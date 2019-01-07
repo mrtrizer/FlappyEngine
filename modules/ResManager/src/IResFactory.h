@@ -14,7 +14,7 @@ class Entity;
 /// @addtogroup ResManager
 /// @{
 
-class [[manager]] IResFactory {
+class REFLECT IResFactory {
 public:
     virtual ~IResFactory() = default;
     virtual std::shared_ptr<ResBase> load(const std::string& resInfo, ExecType execType) = 0;

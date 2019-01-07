@@ -15,12 +15,12 @@ namespace flappy
 class Entity;
 class Hierarchy;
 
-class [[component]] TransformComponent
+class REFLECT TransformComponent
 {
 public:
     TransformComponent() = default;
     
-    void setEntity(Handle<Entity> entity) { m_entity = entity; }
+    void addedToEntity(Handle<Entity> entity) { m_entity = entity; }
     
     Handle<Entity> entity() { return m_entity; }
     

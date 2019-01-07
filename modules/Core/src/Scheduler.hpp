@@ -15,7 +15,7 @@ namespace flappy {
         
         }
     
-        void setEntity(Handle<Entity> entity) {
+        void addedToEntity(Handle<Entity> entity) {
             m_entity = entity;
         }
     

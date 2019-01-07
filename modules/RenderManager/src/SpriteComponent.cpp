@@ -8,7 +8,7 @@ SpriteComponent::SpriteComponent(Handle<Entity> entity)
     : m_renderElementFactory(entity->hierarchy()->manager<RenderElementFactory>())
 {}
     
-void SpriteComponent::setEntity(Handle<Entity> entity) {
+void SpriteComponent::addedToEntity(Handle<Entity> entity) {
     m_entity = entity;
     m_renderElement = m_renderElementFactory->createSpriteRender(entity);
 }

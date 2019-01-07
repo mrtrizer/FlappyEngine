@@ -17,7 +17,7 @@ class ScreenManager;
 
 /// @brief Abstract base for Render implementations in MVC terms.
 /// @details Holds a pointer to GWorldModel.
-class [[manager]] RenderManager : public Updatable<RenderManager> {
+class REFLECT RenderManager : public Updatable<RenderManager> {
 private:
     class IViewFactory {
     public:

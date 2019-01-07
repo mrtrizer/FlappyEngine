@@ -4,7 +4,7 @@
 namespace flappy {
 
 /// Base class for all GL managers like SDL, GLUT and so on
-class [[manager]] IGLManager {
+class REFLECT IGLManager {
 public:
     virtual ~IGLManager() = default;
 };

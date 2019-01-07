@@ -5,7 +5,7 @@
 
 namespace flappy {
 
-void Box2DFixtureComponent::setEntity(Handle<Entity> entity) {
+void Box2DFixtureComponent::addedToEntity(Handle<Entity> entity) {
     while (entity != nullptr) {
         auto body = entity->findComponent<Box2DBodyComponent>();
         if (body != nullptr) {

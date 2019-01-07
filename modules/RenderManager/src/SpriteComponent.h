@@ -12,7 +12,7 @@ class Render;
 class SpriteComponent {
 public:
     SpriteComponent(Handle<Entity> entity);
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     ~SpriteComponent();
 
     void setColorRGBA(Color colorRGBA) { m_colorRGBA = colorRGBA; }

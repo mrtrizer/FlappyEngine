@@ -20,10 +20,10 @@ public:
     {}
 
     template <typename T>
-    class HasInit {
+    class HasAddedToEntity {
     private:
         template<typename C>
-        static std::true_type Test(decltype(std::declval<C>().template setEntity(std::declval<Handle<Entity>>()))*);
+        static std::true_type Test(decltype(std::declval<C>().template addedToEntity(std::declval<Handle<Entity>>()))*);
         
         template<typename>
         static std::false_type& Test(...);
@@ -36,8 +36,8 @@ public:
     Handle<ComponentT> createComponent() {
         Handle<ComponentT> componentHandle = m_components.emplace_back(constructComponent<ComponentT>(selfHandle()));
         
-        if constexpr (HasInit<ComponentT>::value)
-            componentHandle->setEntity(selfHandle());
+        if constexpr (HasAddedToEntity<ComponentT>::value)
+            componentHandle->addedToEntity(selfHandle());
         
         return componentHandle;
     }

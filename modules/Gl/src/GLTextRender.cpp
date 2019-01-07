@@ -23,7 +23,7 @@ GLTextRender::GLTextRender(Handle<Entity> entity)
     setShader(m_shaderResManager->getRes("msdf_shader", ExecType::ASYNC));
 }
     
-void GLTextRender::setEntity(Handle<Entity> entity) {
+void GLTextRender::addedToEntity(Handle<Entity> entity) {
     m_textComponent = entity->component<TextComponent>();
     m_fontRes = entity->component<TextComponent>()->fontRes();
     m_subscription = m_textComponent->eventBus().subscribe([this](TextComponent::TextChangedEvent) {

@@ -14,7 +14,7 @@ class SceneManager;
 class ScreenManager;
 class TransformComponent;
     
-class [[component]] CameraComponent : public EnableSelfHandle<CameraComponent>
+class REFLECT CameraComponent : public EnableSelfHandle<CameraComponent>
 {
 public:
     CameraComponent(Handle<Entity> entity);

@@ -13,7 +13,7 @@ MeshComponent::MeshComponent(Handle<Entity> entity)
     m_materialRes = m_materialResManager->getRes("default_material", ExecType::SYNC);
 }
 
-void MeshComponent::setEntity(Handle<Entity> entity) {
+void MeshComponent::addedToEntity(Handle<Entity> entity) {
     m_entity = entity;
     m_renderElement = m_renderElementFactory->createMeshRender(entity);
 }

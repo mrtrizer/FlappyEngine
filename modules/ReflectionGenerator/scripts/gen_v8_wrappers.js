@@ -115,7 +115,7 @@ module.exports.run = function (context) {
     for (const i in sourceList) {
         const source = sourceList[i];
         console.log("source: " + source);
-        const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
+        const compileCommandsPath = path.join(context.projectRoot, "/generated/cmake/build/compile_commands.json");
         const compilationDatabase = fse.readJsonSync(compileCommandsPath);
         const unitInfo = compilationDatabase.find(element => element["file"] == source);
         if (!unitInfo)
@@ -128,7 +128,7 @@ module.exports.run = function (context) {
         dependencyMap[source] = dependencies;
         allHeaders = allHeaders.concat(dependencies);
     }
-    console.log("allHeaders: " + JSON.stringify(allHeaders));
+
     const fileList = [];
     const outputDir = path.join(context.cacheDir, "GeneratedReflection");
     const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
@@ -142,9 +142,9 @@ module.exports.run = function (context) {
         // Remove all not in list
         for (const i in fileList) {
             const rttrFilePath = fileList[i];
-            const headerPath = rttrToHMap[rttrFilePath].trim();
-            console.log("headrPIah: " + headerPath);
-            if (typeof(headerPath) === "string") {
+            if (typeof(rttrToHMap[rttrFilePath]) === "string") {
+                const headerPath = rttrToHMap[rttrFilePath].trim();
+                console.log("headrPath: " + headerPath);
                 const index = allHeaders.indexOf(path.normalize(headerPath))
                 console.log("Index:" + index);
                 if (index === -1) {
@@ -174,17 +174,18 @@ module.exports.run = function (context) {
         sourceList = filteredSourceList;
 
     }
-    //
-    // Filter sourceList via cache
-    
 
-    // const filteredSourceList = sourceList.filter(item => cache.indexOf(item) == -1 && isChanged(cache[item]));
-    // console.log("Filtered list: " + JSON.stringify(filteredSourceList));
     if (sourceList.length > 0) {
         fse.mkdirsSync(outputDir);
         fse.mkdirsSync(path.join(outputDir, "../Tmp"));
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
+
+        var allHeadersFileData = "#pragma once\n";
+        for (const i in allHeaders) {
+            allHeadersFileData += `#include <${allHeaders[i]}>\n`;
+        }
+        fse.writeFile(path.join(outputDir, "../Tmp/AllHeaders.hpp"), allHeadersFileData);
 
         const generateCommand = `./reflection_generator `
                                 + ` -extra-arg \"-I${clangIncludes1}\"`

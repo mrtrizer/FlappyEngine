@@ -9,7 +9,7 @@
 namespace flappy
 {
 
-class [[manager]] MouseInputManager : public Updatable<MouseInputManager>
+class REFLECT MouseInputManager : public Updatable<MouseInputManager>
 {
 public:
     enum class MouseButton {

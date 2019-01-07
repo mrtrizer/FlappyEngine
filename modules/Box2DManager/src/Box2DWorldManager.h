@@ -14,7 +14,7 @@ namespace flappy {
 
 class Box2DFixtureComponent;
 
-class [[manager]] Box2DWorldManager : public Updatable<Box2DWorldManager> {
+class REFLECT Box2DWorldManager : public Updatable<Box2DWorldManager> {
 public:
 
     struct RayCastData {

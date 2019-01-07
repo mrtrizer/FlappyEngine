@@ -10,7 +10,7 @@ class Hierarchy;
 class ResRepositoryManager;
 class IFileMonitorManager;
 
-class [[manager]] OggAudioResFactory: public ResFactory<OpenALAudioRes> {
+class REFLECT OggAudioResFactory: public ResFactory<OpenALAudioRes> {
 public:
     OggAudioResFactory(Handle<Hierarchy> hierarchy);
 

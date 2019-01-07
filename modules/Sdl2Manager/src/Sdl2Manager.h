@@ -11,7 +11,7 @@ namespace flappy {
     
 class BasicLoopManager;
 
-class [[manager]] Sdl2Manager : public IGLManager
+class REFLECT Sdl2Manager : public IGLManager
 {
 public:
     Sdl2Manager(Handle<Hierarchy> hierarchy);

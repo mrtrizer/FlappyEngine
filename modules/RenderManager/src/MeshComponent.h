@@ -14,12 +14,12 @@ class RenderElementFactory;
 template <typename T>
 class ResManager;
 
-class [[component]] MeshComponent : public EnableSelfHandle<MeshComponent> {
+class REFLECT MeshComponent : public EnableSelfHandle<MeshComponent> {
 public:
     struct MeshChangedEvent : public IEvent {};
 
     MeshComponent(Handle<Entity> entity);
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     ~MeshComponent();
     
     void update(DeltaTime dt);

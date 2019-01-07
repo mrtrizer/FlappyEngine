@@ -15,7 +15,7 @@ class RenderManager;
 /// @brief Interface for all object views.
 /// Contains abstract draw() method for implementation in
 /// derived classes.
-class [[component]] Render : public EnableSelfHandle<Render> {
+class REFLECT Render : public EnableSelfHandle<Render> {
 public:
     Render(Handle<Entity> entity);
     virtual ~Render();

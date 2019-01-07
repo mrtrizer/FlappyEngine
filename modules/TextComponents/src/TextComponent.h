@@ -52,7 +52,7 @@ public:
     };
 
     TextComponent(Handle<Entity> entity);
-    void setEntity(Handle<Entity> entity);
+    void addedToEntity(Handle<Entity> entity);
     ~TextComponent();
 
     void setSize(int size);

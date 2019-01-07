@@ -6,6 +6,7 @@
 #include <ObjectId.hpp>
 #include <Utility.hpp>
 #include <TypeId.hpp>
+#include <ReflectionMarkers.hpp>
 
 namespace flappy {
 

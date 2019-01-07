@@ -9,7 +9,7 @@ namespace flappy
 {
 class Entity;
 
-class [[component]] MouseToTouchConvertComponent
+class REFLECT MouseToTouchConvertComponent
 {
 public:
     MouseToTouchConvertComponent(const Handle<Entity>& entity);

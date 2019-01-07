@@ -1,8 +1,10 @@
 #pragma once
 
+#include <ReflectionMarkers.hpp>
+
 namespace flappy {
 
-class [[manager]] IFileMonitorManager
+class REFLECT IFileMonitorManager
 {
 public:
     IFileMonitorManager() = default;

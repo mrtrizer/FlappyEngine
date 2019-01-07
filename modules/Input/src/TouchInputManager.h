@@ -11,7 +11,7 @@ namespace flappy
 class EventBus;
 class Hierarchy;
 
-class [[manager]] TouchInputManager
+class REFLECT TouchInputManager
 {
 public:
 

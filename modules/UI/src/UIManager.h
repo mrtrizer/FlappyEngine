@@ -10,7 +10,7 @@ namespace flappy {
 class TouchComponent;
 class Hierarchy;
 
-class [[manager]] UIManager
+class REFLECT UIManager
 {
 public:
     UIManager(Handle<Hierarchy> hierarchy);

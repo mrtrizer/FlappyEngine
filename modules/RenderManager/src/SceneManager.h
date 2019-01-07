@@ -9,7 +9,7 @@
 namespace flappy
 {
 
-class [[manager]] SceneManager
+class REFLECT SceneManager
 {
 public:
     struct CameraChangedEvent : IEvent {};

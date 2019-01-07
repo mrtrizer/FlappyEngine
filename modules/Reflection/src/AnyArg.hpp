@@ -51,7 +51,7 @@ public:
                 throw std::runtime_error(sstr(e.what(), "\nNo convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
             }
         }
-        return m_valueRef.as<T>();
+        return m_valueRef.as<std::decay_t<T>>();
     }
 
     const ValueRef& valueRef() const { return m_valueRef; }

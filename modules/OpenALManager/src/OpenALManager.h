@@ -6,7 +6,7 @@ namespace flappy {
 
 class OpenALListenerComponent;
 
-class [[manager]] OpenALManager {
+class REFLECT OpenALManager {
 public:
     OpenALManager();
     ~OpenALManager();

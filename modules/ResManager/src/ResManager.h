@@ -20,7 +20,7 @@ namespace flappy {
 /// @{
 
 template <typename ResT>
-class [[manager]] ResManager final : public Updatable<ResManager<ResT>>
+class REFLECT ResManager final : public Updatable<ResManager<ResT>>
 {
 public:
     ResManager(Handle<Hierarchy> hierarchy)

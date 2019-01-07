@@ -5,7 +5,7 @@
 
 namespace flappy {
 
-class [[component]] SizeComponent
+class REFLECT SizeComponent
 {
 public:
     SizeComponent();

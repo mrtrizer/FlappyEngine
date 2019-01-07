@@ -24,7 +24,7 @@ GLSpriteRender::GLSpriteRender(Handle<Entity> entity)
     setShader(m_shaderResManager->getRes("texture_shader", ExecType::ASYNC));
 }
     
-void GLSpriteRender::setEntity(Handle<Entity> entity) {
+void GLSpriteRender::addedToEntity(Handle<Entity> entity) {
     m_spriteComponent = entity->component<SpriteComponent>();
 }
     

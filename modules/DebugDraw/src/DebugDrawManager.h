@@ -14,7 +14,7 @@ namespace flappy {
 class Hierarchy;
 class Entity;
 
-class [[manager]] DebugDrawManager : public Updatable<DebugDrawManager> {
+class REFLECT DebugDrawManager : public Updatable<DebugDrawManager> {
 public:
     DebugDrawManager(Handle<Hierarchy> hierarchy);
     void update(DeltaTime dt);

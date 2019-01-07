@@ -6,10 +6,11 @@
 
 #include <EventBus.h>
 #include <IEvent.h>
+#include <ReflectionMarkers.hpp>
 
 namespace flappy {
 
-class [[manager]] ScreenManager
+class REFLECT ScreenManager
 {
 public:
     struct ScreenResizedEvent : public IEvent {};

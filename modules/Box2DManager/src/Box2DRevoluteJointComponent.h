@@ -11,7 +11,7 @@ namespace flappy {
 class Entity;
 class Box2DBodyComponent;
 
-class [[component]] Box2DRevoluteJointComponent: public Box2DJointComponent {
+class REFLECT Box2DRevoluteJointComponent: public Box2DJointComponent {
 public:
     Box2DRevoluteJointComponent(Handle<Entity> entity);
     

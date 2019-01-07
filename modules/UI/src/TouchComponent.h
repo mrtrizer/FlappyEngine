@@ -17,7 +17,7 @@ class Box2DBodyComponent;
 class UIManager;
 class Hierarchy;
 
-class [[component]] TouchComponent : public EnableSelfHandle<TouchComponent>
+class REFLECT TouchComponent : public EnableSelfHandle<TouchComponent>
 {
 public:
     struct TouchEvent: public IEvent {
