@@ -9,9 +9,8 @@ using namespace flappy;
 struct TestClass {
     TestClass(int c)
         : m_c(c)
-    {
+    {}
     
-    }
     int testMethodConst(int a, int b) const {
         return a * b * m_c;
     }
@@ -33,10 +32,6 @@ struct TestClass {
         for (int i = 0; i < n; ++i)
             array[i] = i;
         return array;
-    }
-
-    static void staticFunction() {
-
     }
 
     int c() const {
@@ -82,6 +77,7 @@ TEST_CASE("Type constructors") {
             .addFunction("newArray", &TestClass::newArray)
             .addFunction("c", &TestClass::c)
             .addField("m_c", &TestClass::m_c);
+    REQUIRE(type.functionMap().find("testMethod") != type.functionMap().end());
 
     auto typeSharedPtr = reflection->registerType<std::shared_ptr<TestClass>>("std::shared_ptr<TestClass>")
             .addConstructor<std::shared_ptr<TestClass>, TestClass*>()

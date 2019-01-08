@@ -1,9 +1,7 @@
 "strict"
 
 function isComponentCpp(fileName) {
-    return (fileName.indexOf(".cpp") != -1)
-            && ((fileName.indexOf("Component") != -1)
-            || (fileName.indexOf("Manager") != -1));
+    return (fileName.indexOf(".cpp") != -1);
 }
 
 function getSourceList(context) {
@@ -183,7 +181,9 @@ module.exports.run = function (context) {
 
         var allHeadersFileData = "#pragma once\n";
         for (const i in allHeaders) {
-            allHeadersFileData += `#include <${allHeaders[i]}>\n`;
+            const header = allHeaders[i];
+            if (header.indexOf(".cpp") == -1)
+                allHeadersFileData += `#include <${header}>\n`;
         }
         fse.writeFile(path.join(outputDir, "../Tmp/AllHeaders.hpp"), allHeadersFileData);
 
