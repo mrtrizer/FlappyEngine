@@ -8,7 +8,7 @@ class Value;
 
 class ValueRef {
 public:
-    ValueRef() = default;
+    ValueRef() = delete;
     ValueRef(const ValueRef&) = default;
     ValueRef& operator=(const ValueRef&) = default;
     ValueRef(ValueRef&&) = default;
@@ -37,8 +37,10 @@ public:
 
     template <typename T>
     T& as() const {
-        if (getTypeId<T>() != m_typeId)
-            throw std::runtime_error(sstr("Value of wrong type! Expects: ", getTypeName(getTypeId<T>()), " Passed: ", getTypeName(m_typeId)));
+        auto typeId = getTypeId<T>();
+        if (typeId != m_typeId && !(typeId.isPointer() && m_typeId.isPointer()))
+            throw std::runtime_error(sstr(
+                    "No trivial conversion from ", getTypeName(m_typeId), " to ", getTypeName(typeId)));
         return *static_cast<std::remove_reference_t<T>*>(const_cast<void*>(m_valuePtr));
     }
 

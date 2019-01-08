@@ -19,7 +19,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return call<ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
+                return call<ArgsTuple>(reflection, func, anyArgs, Indices{}), Value::makeVoid();
             else
                 return call<ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
@@ -34,7 +34,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
+                return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value::makeVoid();
             else
                 return callInlineMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
@@ -49,7 +49,7 @@ public:
         : m_function([func, &reflection] (const std::vector<AnyArg>& anyArgs) -> Value {
             using ArgsTuple = std::tuple<ArgT...>;
             if constexpr (std::is_same<ResultT, void>::value)
-                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value();
+                return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{}), Value::makeVoid();
             else
                 return callMember<TypeT, ArgsTuple>(reflection, func, anyArgs, Indices{});
         })
@@ -66,8 +66,9 @@ public:
 
     template <typename ... ArgT>
     Value operator()(ArgT&& ... anyArgs) const {
-        if (sizeof...(ArgT) != m_argumentTypeIds.size() + (m_classTypeId.isValid() ? 1 : 0))
-            throw std::runtime_error(sstr("Wrong number of arguments. Expected: ", m_argumentTypeIds.size(), " Received: ", sizeof...(ArgT)));
+        auto totalArgsNum = m_argumentTypeIds.size() + (m_classTypeId.isValid() ? 1 : 0);
+        if (sizeof...(ArgT) != totalArgsNum)
+            throw std::runtime_error(sstr("Wrong number of arguments. Expected: ", totalArgsNum, " Received: ", sizeof...(ArgT)));
         return m_function(std::vector<AnyArg>{ AnyArg(std::forward<ArgT>(anyArgs)) ...});
     }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "Value.hpp"
 #include "ValueRef.hpp"
 #include "TypeId.hpp"
@@ -22,7 +24,7 @@ public:
     template <typename T>
     AnyArg (T&& value, std::enable_if_t<!std::is_convertible_v<T, ValueRef> && std::is_rvalue_reference_v<T&&>>* = 0)
         : m_tmpValue(std::forward<T>(value))
-        , m_valueRef(m_tmpValue)
+        , m_valueRef(*m_tmpValue)
     {}
 
     template <typename T>
@@ -33,7 +35,7 @@ public:
     template <typename T>
     AnyArg (T* value)
         : m_tmpValue(value)
-        , m_valueRef(m_tmpValue)
+        , m_valueRef(*m_tmpValue)
     {}
 
     AnyArg(void* valuePtr, TypeId typeId)
@@ -42,13 +44,17 @@ public:
 
     template <typename T>
     std::decay_t<T>& as(const Reflection& reflection) const {
-        if (getTypeId<T>() != m_valueRef.typeId()) {
+        auto typeId = getTypeId<std::decay_t<T>>();
+        if (typeId != m_valueRef.typeId() && !(typeId.isPointer() && m_valueRef.typeId().isPointer())) {
             try {
-                // FIXME: Implement pointer conversion
-                [this](auto reflection) { m_constructedValue = reflection.getType(getTypeId<T>()).constructOnStack(*this); } (reflection);
-                return m_constructedValue.as<std::decay_t<T>>();
+                [this, &typeId](auto reflection) {
+                    m_constructedValue = reflection.getType(typeId).constructOnStack(*this);
+                } (reflection);
+                return m_constructedValue->as<std::decay_t<T>>();
             } catch (const std::exception& e) {
-                throw std::runtime_error(sstr(e.what(), "\nNo convertion to type ", getTypeName(getTypeId<T>())," from type " + getTypeName(m_valueRef.typeId())));
+                throw std::runtime_error(sstr(e.what(),
+                            "\nNo convertion to type ", getTypeName(typeId),
+                            " from type " + getTypeName(m_valueRef.typeId())));
             }
         }
         return m_valueRef.as<std::decay_t<T>>();
@@ -57,9 +63,9 @@ public:
     const ValueRef& valueRef() const { return m_valueRef; }
 
 private:
-    Value m_tmpValue;
+    std::optional<Value> m_tmpValue;
     ValueRef m_valueRef;
-    mutable Value m_constructedValue;
+    mutable std::optional<Value> m_constructedValue;
 };
 
 } // flappy

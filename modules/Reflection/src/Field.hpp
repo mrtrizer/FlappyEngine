@@ -16,7 +16,7 @@ public:
         : m_typeId(getTypeId<FieldT>())
         , m_setter([fieldPtr, &reflection](ValueRef& obj, const AnyArg& anyArg)
             { reinterpret_cast<TypeT*>(obj.voidPointer())->*fieldPtr = anyArg.as<FieldT>(reflection); })
-        , m_getter([fieldPtr, &reflection](const ValueRef& obj)
+        , m_getter([fieldPtr](const ValueRef& obj)
             { return Value(reinterpret_cast<TypeT*>(obj.voidPointer())->*fieldPtr); })
     {}
 

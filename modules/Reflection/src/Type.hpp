@@ -21,9 +21,9 @@ public:
 
     const std::vector<Constructor>& constructors() const { return m_constructors; }
 
-    const std::unordered_map<std::string, Function>& methodsMap() const { return m_methodsMap; }
+    const std::unordered_map<std::string, Function>& functionMap() const { return m_functionsMap; }
 
-    const Function& method(const std::string& name) const { return m_methodsMap.at(name); }
+    const Function& function(const std::string& name) const { return m_functionsMap.at(name); }
 
     template <typename ... ArgT>
     Value constructOnStack(ArgT&& ... anyArgs) const {
@@ -51,13 +51,13 @@ public:
 
     template <typename FuncT>
     Type& addFunction(const std::string& name, FuncT func) {
-        m_methodsMap.emplace(name, Function(m_reflection, func) );
+        m_functionsMap.emplace(name, Function(m_reflection, func) );
         return *this;
     }
 
     template <typename TypeT, typename ResultT, typename ... ArgT, typename FuncT>
     Type& addFunction(const std::string& name, FuncT lambda) {
-        m_methodsMap.emplace(name, Function(m_reflection, std::function<ResultT(TypeT&, ArgT...)>(lambda)));
+        m_functionsMap.emplace(name, Function(m_reflection, std::function<ResultT(TypeT&, ArgT...)>(lambda)));
         return *this;
     }
 
@@ -74,7 +74,7 @@ private:
     std::vector<TypeId> m_parents;
     const Reflection& m_reflection;
     std::vector<Constructor> m_constructors;
-    std::unordered_map<std::string, Function> m_methodsMap;
+    std::unordered_map<std::string, Function> m_functionsMap;
     std::unordered_map<std::string, Field> m_fieldsMap;
 
     Type(TypeId typeId, const std::vector<TypeId>& parents, const Reflection& reflection)

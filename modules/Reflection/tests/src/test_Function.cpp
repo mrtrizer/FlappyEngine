@@ -20,7 +20,7 @@ struct TestClass {
     int testMethod(int a, int b) {
         return a * b * m_c;
     }
-
+    
     int m_c = 0;
 };
 

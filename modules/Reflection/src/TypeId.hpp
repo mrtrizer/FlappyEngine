@@ -46,6 +46,7 @@ public:
 #endif
 
 private:
+// Offsets used becase apart of pure type id, bitset also stores flags. Idea is to make type id size of pointer.
     static constexpr size_t PointerFlagIndex = sizeof(intptr_t) * 8 - 1;
     static constexpr size_t ConstFlagIndex = sizeof(intptr_t) * 8 - 2;
     static constexpr intptr_t FlagsSet = (intptr_t)1 << PointerFlagIndex | (intptr_t)1 << ConstFlagIndex;
@@ -54,7 +55,7 @@ private:
         : m_bitset((serial & ~FlagsSet) | ((intptr_t)pointerFlag << PointerFlagIndex | (intptr_t)constFlag << ConstFlagIndex))
     {}
 
-    intptr_t m_bitset = 0;
+    uintptr_t m_bitset = 0;
 };
 
 #ifndef DEBUG_TYPE_NAMES

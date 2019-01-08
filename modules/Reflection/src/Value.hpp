@@ -12,7 +12,7 @@ namespace flappy {
     class name { \
     private: \
         template<typename C> \
-        static std::true_type Test(decltype(std::declval<C>().template signature)*); \
+        static std::true_type Test(std::decay_t<decltype( (signature) )>*); \
         \
         template<typename> \
         static std::false_type& Test(...); \
@@ -21,79 +21,120 @@ namespace flappy {
         static bool const value = std::is_same_v<decltype(Test<T>(0)), std::true_type>; \
     };
 
-CHECK_MEMBER_FUNC(HasCopyConstructor, T(std::declval<T>()))
-CHECK_MEMBER_FUNC(HasCopyAssignOperator, operator=(std::declval<T>()))
-CHECK_MEMBER_FUNC(HasMoveConstructor, T(std::move(std::declval<T>())))
-CHECK_MEMBER_FUNC(HasMoveAssignOperator, operator=(std::move(std::declval<T>())))
+template<typename T, typename U, typename = void>
+struct is_assignable: std::false_type {};
+
+template<typename T, typename U>
+struct is_assignable<T, U, decltype(std::declval<T>() = std::declval<U>(), void())>: std::true_type {};
+
+
+CHECK_MEMBER_FUNC(HasCopyConstructor, C(std::declval<C>()))
+CHECK_MEMBER_FUNC(HasCopyAssignOperator, (std::declval<C>() = std::declval<C>(), void() ) )
+CHECK_MEMBER_FUNC(HasMoveConstructor, C(std::move(std::declval<C>())))
+CHECK_MEMBER_FUNC(HasMoveAssignOperator, std::declval<C>() = std::move(std::declval<C>()))
 
 class Value : public ValueRef {
 private:
-    void* m_object = nullptr;
     std::function<void(void*)> m_deleteObject;
     std::function<void*(const void*)> m_copyObject;
-    std::function<void*(void*, const void*)> m_copyAssignObject;
+    std::function<void(void*, const void*)> m_copyAssignObject;
     std::function<void*(const void*)> m_moveObject;
-    std::function<void*(void*, const void*)> m_moveAssignObject;
+    std::function<void(void*, const void*)> m_moveAssignObject;
 public:
-    Value() = default;
-    Value(const Value& other) {
+    void* callCopyConstructor(const Value& other) {
+        if (other.voidPointer() == nullptr)
+            throw FlappyException("Source value is not initialized");
         if (other.m_copyObject == nullptr)
             throw FlappyException("Value doesn't have a copy constructor");
-        m_object = other.m_copyObject(other.m_object);
+        return other.m_copyObject(other.voidPointer());
     }
+
+    Value(const Value& other) : ValueRef(callCopyConstructor(other), other.typeId()) {
+        copyConstructors(other);
+    }
+    
     Value& operator=(const Value& other) {
+        if (other.voidPointer() == nullptr)
+            throw FlappyException("Source value is not initialized");
+        if (other.typeId() != typeId())
+            throw FlappyException("Assignment of values of different types is not supported yet");
         if (other.m_copyAssignObject == nullptr)
             throw FlappyException("Value doesn't have a copy assignment operator");
-        other.m_copyAssignObject(m_object, other.m_object);
+        if (voidPointer() == nullptr)
+            throw FlappyException("Invalid value");
+        other.m_copyAssignObject(voidPointer(), other.voidPointer());
         return *this;
     }
-    Value(Value&& other) {
+    
+    void* callMoveConstructor(const Value& other) {
+        if (other.voidPointer() == nullptr)
+            throw FlappyException("Source value is not initialized");
         if (other.m_moveObject == nullptr)
             throw FlappyException("Value doesn't have a move constructor");
-        m_object = other.m_moveObject(other.m_object);
+        return other.m_moveObject(other.voidPointer());
     }
+    
+    Value(Value&& other) : ValueRef(callMoveConstructor(other), other.typeId()) {
+        copyConstructors(other);
+    }
+    
     Value& operator=(Value&& other) {
+        if (other.voidPointer() == nullptr)
+            throw FlappyException("Source value is not initialized");
+        if (other.typeId() != typeId())
+            throw FlappyException("Assignment of values of different types is not supported yet");
         if (other.m_moveAssignObject == nullptr)
             throw FlappyException("Value doesn't have a move assignment operator");
-        other.m_moveAssignObject(m_object, other.m_object);
+        if (voidPointer() == nullptr)
+            throw FlappyException("Invalid value");
+        other.m_moveAssignObject(voidPointer(), other.voidPointer());
         return *this;
     }
+    
     ~Value() {
-        if (m_object != nullptr)
-            m_deleteObject(m_object);
+        if (voidPointer() != nullptr)
+            m_deleteObject(voidPointer());
     }
     
     template <typename T, typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
     Value(T* value, TypeId typeId)
-        : m_object(value)
-        , m_deleteObject([](void* obj) { delete static_cast<T*>(obj); } )
+        : ValueRef(value, typeId)
     {
-        if constexpr (HasCopyConstructor<T>::value)
-            m_copyObject = [](void* obj) -> void* { return new T(*static_cast<T*>(obj)); };
-        if constexpr (HasCopyAssignOperator<T>::value)
-            m_copyAssignObject = [](void* to, void* from){ return *static_cast<T*>(to) = *static_cast<T*>(from); };
-        setValuePtr(m_object, typeId);
+        if constexpr (! std::is_same_v<void, T>) {
+            m_deleteObject = [](void* obj) { delete static_cast<T*>(obj); };
+            if constexpr (HasCopyConstructor<T>::value)
+                m_copyObject = [](const void* obj) -> void* { return new T(*static_cast<const T*>(obj)); };
+            if constexpr (HasCopyAssignOperator<T>::value)
+                m_copyAssignObject = [](void* to, const void* from){ *static_cast<T*>(to) = *static_cast<const T*>(from); };
+            if constexpr (HasMoveConstructor<T>::value)
+                m_moveObject = [](const void* obj) -> void* { return new T(std::move(*static_cast<const T*>(obj))); };
+            if constexpr (HasMoveAssignOperator<T>::value)
+                m_moveAssignObject = [](void* to, const void* from){ *static_cast<T*>(to) = std::move(*static_cast<const T*>(from)); };
+        }
     }
 
-    template <typename T, typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
+    template <typename T,typename = std::enable_if_t<!std::is_convertible<T, Value>::value>>
     Value(T&& value)
-        : m_object(new std::decay_t<T>(std::forward<T>(value)))
-        , m_deleteObject([](void* obj) { delete static_cast<T*>(obj); } )
+        : Value(new std::decay_t<T>(std::forward<T>(value)), getTypeId<std::decay_t<T>>())
     {
-        if constexpr (HasCopyConstructor<T>::value)
-            m_copyObject = [](void* obj) -> void* { return new T(*static_cast<T*>(obj)); };
-        if constexpr (HasCopyAssignOperator<T>::value)
-            m_copyAssignObject = [](void* to, void* from){ return *static_cast<T*>(to) = *static_cast<T*>(from); };
-        setValuePtr(m_object, getTypeId<T>());
     }
 
     ValueRef deref() {
         if (!typeId().isPointer())
             throw FlappyException("Type is not a pointer");
-        return ValueRef(m_object, TypeId(typeId(), false, typeId().isConst()));
+        return ValueRef(*static_cast<void**>(voidPointer()), TypeId(typeId(), false, typeId().isConst()));
     }
 
+    static Value makeVoid() { return Value{static_cast<void*>(nullptr), getTypeId<void>()}; }
 
+private:
+    void copyConstructors(const Value& other) {
+        m_deleteObject = other.m_deleteObject;
+        m_copyObject = other.m_copyObject;
+        m_copyAssignObject = other.m_copyAssignObject;
+        m_moveObject = other.m_moveObject;
+        m_moveAssignObject = other.m_moveAssignObject;
+    }
 };
 
 } // flappy
