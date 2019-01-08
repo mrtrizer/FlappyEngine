@@ -23,6 +23,17 @@ struct TestClass {
     std::string testMethodConstRefArg(const std::string& str) {
         return str;
     }
+    
+    std::string testMethodConstPtrArg(const std::string* str) {
+        return *str;
+    }
+    
+    int* newArray(int n) {
+        auto array = new int[n];
+        for (int i = 0; i < n; ++i)
+            array[i] = i;
+        return array;
+    }
 
     static void staticFunction() {
 
@@ -67,6 +78,8 @@ TEST_CASE("Type constructors") {
             .addFunction("testMethod", &TestClass::testMethod)
             .addFunction("testMethodConst", &TestClass::testMethodConst)
             .addFunction("testMethodConstRefArg", &TestClass::testMethodConstRefArg)
+            .addFunction("testMethodConstPtrArg", &TestClass::testMethodConstPtrArg)
+            .addFunction("newArray", &TestClass::newArray)
             .addFunction("c", &TestClass::c)
             .addField("m_c", &TestClass::m_c);
 
@@ -85,4 +98,9 @@ TEST_CASE("Type constructors") {
     REQUIRE(type.function("testMethod")(ref, 10, 20).as<int>() == 4000);
     REQUIRE(type.function("testMethodConst")(ref, 10, 20).as<int>() == 4000);
     REQUIRE(type.function("testMethodConstRefArg")(ref, "test").as<std::string>() == "test");
+    Value testStr(std::string("test"));
+    REQUIRE(type.function("testMethodConstPtrArg")(ref, testStr.addressOf()).as<std::string>() == "test");
+    auto arrayPtr = type.function("newArray")(ref, 2);
+    REQUIRE(arrayPtr.as<int*>()[1] == 1);
+    delete arrayPtr.as<int*>();
 }

@@ -124,6 +124,12 @@ public:
             throw FlappyException("Type is not a pointer");
         return ValueRef(*static_cast<void**>(voidPointer()), TypeId(typeId(), false, typeId().isConst()));
     }
+    
+    Value addressOf() {
+        if (typeId().isPointer())
+            throw FlappyException("Address of pointer is not supported yet!");
+        return Value(new void*(const_cast<void*>(voidPointer())), TypeId(typeId(), true, typeId().isConst()));
+    }
 
     static Value makeVoid() { return Value{static_cast<void*>(nullptr), getTypeId<void>()}; }
 
