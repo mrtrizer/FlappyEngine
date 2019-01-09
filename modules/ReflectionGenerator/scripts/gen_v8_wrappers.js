@@ -72,6 +72,8 @@ function generateCompilationDB(context) {
     const targetUtils = context.requireFlappyScript("target_utils");
     const genTarget = context.requireFlappyScript("gen_target");
 
+    const prevArgs = Object.assign({}, context.args.plainArgs);
+
     context.args.plainArgs = ["cmake"];
     genTarget.run(context);
     const cmakeGenerator = targetUtils.findGenerator(context, "cmake");
@@ -88,6 +90,9 @@ function generateCompilationDB(context) {
     }
     const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
     fse.outputJsonSync(compileCommandsPath, compileCommandsSource,  {"spaces" : 4});
+
+    context.args.plainArgs = prevArgs;
+
     return compileCommandsPath;
 }
 
