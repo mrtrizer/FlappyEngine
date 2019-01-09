@@ -88,21 +88,21 @@ function generateCompilationDB(context) {
     }
     const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
     fse.outputJsonSync(compileCommandsPath, compileCommandsSource,  {"spaces" : 4});
+    return compileCommandsPath;
 }
 
 module.exports.getHelp = function() {
     return "flappy gen_reflection - Generate reflection.";
 }
 
-function genDependencyMap(context, buildDir, sourceList) {
+function genDependencyMap(context, buildDir, sourceList, compilationDBPath) {
     const path = require("path");
     const fse = context.require("fs-extra");
     var dependencyMap = {};
     for (const i in sourceList) {
         const source = sourceList[i];
         console.log("source: " + source);
-        const compileDdPath = path.join(context.projectRoot, "/generated/cmake/build/compile_commands.json");
-        const compilationDatabase = fse.readJsonSync(compileDdPath);
+        compilationDatabase = fse.readJsonSync(compilationDBPath);
         const unitInfo = compilationDatabase.find(element => element["file"] == source);
         if (!unitInfo)
             continue;
@@ -216,10 +216,14 @@ module.exports.run = function (context) {
     console.log("Build dir: " + buildDir);
     const llvmDir = findLLVMDir(context);
     buildGenerator(context, buildDir, llvmDir);
+
+    // Generate compile_commands.json
+    const compilationDBPath = generateCompilationDB(context);
+
     // Generate
     const sourceList = getSourceList(context);
     console.log("sourceList: " + JSON.stringify(sourceList));
-    const dependencyMap = genDependencyMap(context, buildDir, sourceList);
+    const dependencyMap = genDependencyMap(context, buildDir, sourceList, compilationDBPath);
 
     const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
 
@@ -230,9 +234,6 @@ module.exports.run = function (context) {
         allHeaders = allHeaders.concat(dependencyMap[i]);
     fse.mkdirsSync(path.join(outputDir, "../Tmp"));
     fse.writeFile(path.join(outputDir, "../Tmp/AllHeaders.hpp"), generateAllHeadersFile(allHeaders));
-
-    // Generate compile_commands.json
-    generateCompilationDB(context);
 
     const filteredSourceList = filterSourceList(context,
                                                 outputDir,
