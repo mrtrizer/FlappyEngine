@@ -26,13 +26,6 @@ using namespace clang::tooling;
 using namespace llvm;
 using namespace nlohmann;
 
-std::string createGeneratedReflectionHpp() {
-    return
-        "#include <Reflection.hpp>\n"
-        "\n"
-        "flappy::Reflection extractReflectionDb();";
-}
-
 std::string createGeneratedReflectionCpp(std::unordered_set<std::string> wrappedClasses) {
     std::stringstream ss;
     ss << "#include \"GeneratedReflection.hpp\"\n";
@@ -213,7 +206,6 @@ int main(int argc, const char **argv) {
 
     writeTextFile(rttrToSourcesPath, newJsonText);
     
-    writeTextFile(outputPath.getValue() + "/GeneratedReflection.hpp", createGeneratedReflectionHpp());
     writeTextFile(outputPath.getValue() + "/GeneratedReflection.cpp", createGeneratedReflectionCpp(printer.wrappedClasses()));
 
     return 0;

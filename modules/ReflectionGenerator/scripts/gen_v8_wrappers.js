@@ -1,7 +1,28 @@
 "strict"
 
-function isComponentCpp(fileName) {
-    return (fileName.indexOf(".cpp") != -1);
+function getModuleSourceList(context, moduleContext) {
+    const path = require('path');
+    const utils = context.requireFlappyScript("utils");
+    const cxxConfig = moduleContext.config["cxx"];
+    if (typeof(cxxConfig) !== "object")
+        return [];
+    const srcDirs = cxxConfig["src_dirs"];
+    if (typeof(srcDirs) !== "object")
+        return [];
+    let sourceList = [];
+    for (const i in srcDirs) {
+        const srcDir = path.join(moduleContext.moduleRoot, srcDirs[i]);
+        const files = utils.readDirs(srcDir);
+        for (const i in files) {
+            const filePath = files[i];
+            const fileName = path.parse(filePath).base;
+            if (fileName.indexOf(".cpp") != -1) {
+                console.log(filePath);
+                sourceList.push(filePath);
+            }
+        }
+    }
+    return sourceList;
 }
 
 function getSourceList(context) {
@@ -16,20 +37,7 @@ function getSourceList(context) {
     const moduleContexts = modules.findAllModules(context);
     const contexts = [context].concat(moduleContexts);
     for (const i in contexts) {
-        const moduleContext = contexts[i];
-        if (moduleContext.config.name == "RTTR" || moduleContext.config.name == "RTTRGenerator")
-            continue;
-        //console.log(JSON.stringify(moduleContext));
-        const srcDir = path.join(moduleContext.moduleRoot, "src");
-        const files = utils.readDirs(srcDir);
-        for (const i in files) {
-            const filePath = files[i];
-            const fileName = path.parse(filePath).base;
-            if (isComponentCpp(fileName)) {
-                console.log(filePath);
-                sourceList.push(filePath);
-            }
-        }
+        sourceList = sourceList.concat(getModuleSourceList(context, contexts[i]));
     }
 
     return sourceList;
@@ -54,7 +62,7 @@ function findLLVMDir(context) {
         if (fs.existsSync(dir))
             return dir;
     }
-    throw new Error("Can't find llvm-5.0 library. Plese define path to llvm in .flappy/flappy_conf/general.json \"llvmDir\":\"<path>\"");
+    throw new Error("Can't find llvm library. Plese define path to llvm in .flappy/flappy_conf/general.json \"llvmDir\":\"<path>\"");
 }
 
 function generateCompilationDB(context) {
@@ -76,45 +84,25 @@ function generateCompilationDB(context) {
     call(`cmake -G "Unix Makefiles" ..`, buildDir);
     const compileCommandsSource = fse.readJsonSync(path.join(buildDir, "compile_commands.json"));
     for (const i in compileCommandsSource) {
-        const compileCommand = compileCommandsSource[i];
-        compileCommand.directory = context.projectRoot;
+        compileCommandsSource[i].directory = context.projectRoot;
     }
     const compileCommandsPath = path.join(context.projectRoot, "compile_commands.json");
     fse.outputJsonSync(compileCommandsPath, compileCommandsSource,  {"spaces" : 4});
-    //fse.removeSync(buildDir);
 }
 
 module.exports.getHelp = function() {
     return "flappy gen_reflection - Generate reflection.";
 }
 
-module.exports.run = function (context) {
-    const fs = require('fs');
-    const path = require('path');
+function genDependencyMap(context, buildDir, sourceList) {
+    const path = require("path");
     const fse = context.require("fs-extra");
-    const TimestampCache = context.requireFlappyScript("timestamp_cache").TimestampCache;
-    const timestampCache = new TimestampCache(context);
-    // Generate compile_commands.json
-    generateCompilationDB(context);
-    // Build
-    const buildDir = path.join(__dirname, "ClangASTGenerator/src/build");
-    console.log("Build dir: " + buildDir);
-    const llvmDir = findLLVMDir(context);
-    console.log("LLVM found: " + llvmDir);
-    const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
-    fse.mkdirsSync(buildDir);
-    call(`cmake -G \"Unix Makefiles\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
-    call(`make`, buildDir);
-    // Generate
-    var sourceList = getSourceList(context);
     var dependencyMap = {};
-    var allHeaders = [];
-    console.log("sourceList: " + JSON.stringify(sourceList));
     for (const i in sourceList) {
         const source = sourceList[i];
         console.log("source: " + source);
-        const compileCommandsPath = path.join(context.projectRoot, "/generated/cmake/build/compile_commands.json");
-        const compilationDatabase = fse.readJsonSync(compileCommandsPath);
+        const compileDdPath = path.join(context.projectRoot, "/generated/cmake/build/compile_commands.json");
+        const compilationDatabase = fse.readJsonSync(compileDdPath);
         const unitInfo = compilationDatabase.find(element => element["file"] == source);
         if (!unitInfo)
             continue;
@@ -124,36 +112,63 @@ module.exports.run = function (context) {
         const rawDependencies = output.toString().replace(/.*?: \\/, "").split("\\");
         const dependencies = Array.from(rawDependencies, item => path.normalize(item.trim()));
         dependencyMap[source] = dependencies;
-        allHeaders = allHeaders.concat(dependencies);
     }
+    return dependencyMap;
+}
 
+function generateAllHeadersFile(allHeaders) {
+    var allHeadersFileData = "#pragma once\n";
+    for (const i in allHeaders) {
+        const header = allHeaders[i];
+        if (header.indexOf(".cpp") == -1)
+            allHeadersFileData += `#include <${header}>\n`;
+    }
+    return allHeadersFileData;
+}
+
+function buildGenerator(context, buildDir, llvmDir) {
+    const path = require("path");
+    const fse = context.require("fs-extra");
+    console.log("LLVM found: " + llvmDir);
+    const cmakePath = path.join(llvmDir, "lib/cmake/llvm");
+    fse.mkdirsSync(buildDir);
+    call(`cmake -G \"Unix Makefiles\" -DCMAKE_PREFIX_PATH=\"${cmakePath}\" ..`, buildDir);
+    call(`make`, buildDir);
+}
+
+function removeOutdateFiles(context, outputDir, rttrToSourcesPath, timestampCache) {
+    const fse = context.require('fs-extra');
+    const path = require("path");
     const fileList = [];
-    const outputDir = path.join(context.cacheDir, "GeneratedReflection");
-    const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
-    if (fs.existsSync(outputDir) && fs.existsSync(rttrToSourcesPath)) {
-        fs.readdirSync(outputDir).forEach(file => {
-            fileList.push(path.join(outputDir,file));
-        })
-        console.log("fileList: " + JSON.stringify(fileList));
-        const rttrToHMap = fse.readJsonSync(rttrToSourcesPath);
-        console.log("rttrToHMap: " + JSON.stringify(rttrToHMap));
-        // Remove all not in list
-        for (const i in fileList) {
-            const rttrFilePath = fileList[i];
-            if (typeof(rttrToHMap[rttrFilePath]) === "string") {
-                const headerPath = rttrToHMap[rttrFilePath].trim();
-                console.log("headrPath: " + headerPath);
-                const index = allHeaders.indexOf(path.normalize(headerPath))
-                console.log("Index:" + index);
-                if (index === -1) {
-                    console.log("Header: " + path.normalize(headerPath));
-                    fs.unlinkSync(rttrFilePath);
-                    timestampCache.isChanged(headerPath);
-                    console.log("Removed: " + rttrFilePath);
-                }
+    const mapExists = fse.existsSync(rttrToSourcesPath);
+    const rttrToHMap = mapExists ? fse.readJsonSync(rttrToSourcesPath) : {};
+    console.log("rttrToHMap: " + JSON.stringify(rttrToHMap));
+    fse.readdirSync(outputDir).forEach(file => {
+        fileList.push(path.join(outputDir,file));
+    })
+    console.log("fileList: " + JSON.stringify(fileList));
+    for (const i in fileList) {
+        const rttrFilePath = fileList[i];
+        if (typeof(rttrToHMap[rttrFilePath]) === "string") {
+            const headerPath = rttrToHMap[rttrFilePath].trim();
+            console.log("headrPath: " + headerPath);
+            const index = allHeaders.indexOf(path.normalize(headerPath))
+            console.log("Index:" + index);
+            if (index === -1) {
+                console.log("Header: " + path.normalize(headerPath));
+                fs.unlinkSync(rttrFilePath);
+                timestampCache.isChanged(headerPath);
+                console.log("Removed: " + rttrFilePath);
             }
         }
+    }
+}
 
+function filterSourceList(context, outputDir, dependencyMap, timestampCache, rttrToSourcesPath, sourceList) {
+    const fse = context.require('fs-extra');
+    const path = require("path");
+
+    if (fse.existsSync(outputDir) && fse.existsSync(rttrToSourcesPath)) {
         var filteredSourceList = [];
         for (const i in sourceList) {
             const source = sourceList[i];
@@ -167,32 +182,79 @@ module.exports.run = function (context) {
                 }
             }
         }
+        return filteredSourceList;
 
-        console.log("Filtered sources: " + JSON.stringify(filteredSourceList));
-        sourceList = filteredSourceList;
-
+    } else {
+        return sourceList;
     }
+}
 
-    if (sourceList.length > 0) {
+function writeGeneratedReflectionHpp(context, outputDir) {
+    const fse = context.require('fs-extra');
+    const path = require('path');
+
+    const data = `#include <Reflection.hpp>\n
+    \n
+    flappy::Reflection extractReflectionDb();`;
+    fse.mkdirsSync(outputDir);
+    fse.writeFileSync(path.join(outputDir, "GeneratedReflection.hpp"), data);
+}
+
+module.exports.run = function (context) {
+    const fs = require('fs');
+    const path = require('path');
+    const fse = context.require("fs-extra");
+    const TimestampCache = context.requireFlappyScript("timestamp_cache").TimestampCache;
+    const timestampCache = new TimestampCache(context);
+
+    // Should be first because project includes this file
+    const outputDir = path.join(context.cacheDir, "GeneratedReflection");
+    writeGeneratedReflectionHpp(context, outputDir);
+
+    // Build
+    const buildDir = path.join(__dirname, "ClangASTGenerator/src/build");
+    console.log("Build dir: " + buildDir);
+    const llvmDir = findLLVMDir(context);
+    buildGenerator(context, buildDir, llvmDir);
+    // Generate
+    const sourceList = getSourceList(context);
+    console.log("sourceList: " + JSON.stringify(sourceList));
+    const dependencyMap = genDependencyMap(context, buildDir, sourceList);
+
+    const rttrToSourcesPath = path.join(context.cacheDir, "rttr_to_sources.json");
+
+    removeOutdateFiles(context, outputDir, rttrToSourcesPath, timestampCache);
+
+    var allHeaders = [];
+    for (const i in dependencyMap)
+        allHeaders = allHeaders.concat(dependencyMap[i]);
+    fse.mkdirsSync(path.join(outputDir, "../Tmp"));
+    fse.writeFile(path.join(outputDir, "../Tmp/AllHeaders.hpp"), generateAllHeadersFile(allHeaders));
+
+    // Generate compile_commands.json
+    generateCompilationDB(context);
+
+    const filteredSourceList = filterSourceList(context,
+                                                outputDir,
+                                                dependencyMap,
+                                                timestampCache,
+                                                rttrToSourcesPath,
+                                                sourceList);
+
+    console.log("Filtered sources: " + JSON.stringify(filteredSourceList));
+
+    if (filteredSourceList.length > 0) {
         fse.mkdirsSync(outputDir);
-        fse.mkdirsSync(path.join(outputDir, "../Tmp"));
+
         const clangIncludes1 = path.join(llvmDir, "include/c++/v1");
         const clangIncludes2 = path.join(llvmDir, "lib/clang/5.0.0/include");
-
-        var allHeadersFileData = "#pragma once\n";
-        for (const i in allHeaders) {
-            const header = allHeaders[i];
-            if (header.indexOf(".cpp") == -1)
-                allHeadersFileData += `#include <${header}>\n`;
-        }
-        fse.writeFile(path.join(outputDir, "../Tmp/AllHeaders.hpp"), allHeadersFileData);
 
         const generateCommand = `./reflection_generator `
                                 + ` -extra-arg \"-I${clangIncludes1}\"`
                                 + ` -extra-arg \"-I${clangIncludes2}\"`
                                 + ` -p \"${context.projectRoot}\"`
                                 + ` --output \"${outputDir}\"`
-                                + ' ' + sourceList.join(" ");
+                                + ' ' + filteredSourceList.join(" ");
         console.log("Generation command: ", generateCommand);
         call(generateCommand, buildDir);
         // save source list to cache
